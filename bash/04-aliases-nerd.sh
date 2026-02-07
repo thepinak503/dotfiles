@@ -160,7 +160,7 @@ alias awswho='aws sts get-caller-identity'
 # =============================================================================
 
 # Quick server in current directory with SSL
-alias serve-ssl='openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt && python3 -m http.server --bind 127.0.0.1 8443 --directory . &
+alias serve-ssl='openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt && python3 -m http.server --bind 127.0.0.1 8443 --directory . &'
 
 # Development servers
 alias rails-server='bundle exec rails server'
