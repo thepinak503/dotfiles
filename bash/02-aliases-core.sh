@@ -133,7 +133,7 @@ alias svi='sudo $EDITOR'
 # =============================================================================
 alias _='sudo'
 alias please='sudo $(fc -ln -1)'
-alias fuck='sudo $(fc -ln -1)'
+# Note: 'fuck' alias is provided by 'thefuck' tool if installed
 
 # =============================================================================
 # SHELL SHORTCUTS

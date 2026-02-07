@@ -11,12 +11,14 @@
 # =============================================================================
 
 if command -v fzf &>/dev/null; then
-    # Source fzf completions and key bindings
-    [[ -f /usr/share/fzf/key-bindings.bash ]] && source /usr/share/fzf/key-bindings.bash
-    [[ -f /usr/share/fzf/completion.bash ]] && source /usr/share/fzf/completion.bash
-    [[ -f /usr/share/doc/fzf/examples/key-bindings.bash ]] && source /usr/share/doc/fzf/examples/key-bindings.bash
-    [[ -f /usr/share/doc/fzf/examples/completion.bash ]] && source /usr/share/doc/fzf/examples/completion.bash
-    [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash
+    # Source fzf completions and key bindings (bash only)
+    if [[ -n "$BASH_VERSION" ]]; then
+        [[ -f /usr/share/fzf/key-bindings.bash ]] && source /usr/share/fzf/key-bindings.bash 2>/dev/null
+        [[ -f /usr/share/fzf/completion.bash ]] && source /usr/share/fzf/completion.bash 2>/dev/null
+        [[ -f /usr/share/doc/fzf/examples/key-bindings.bash ]] && source /usr/share/doc/fzf/examples/key-bindings.bash 2>/dev/null
+        [[ -f /usr/share/doc/fzf/examples/completion.bash ]] && source /usr/share/doc/fzf/examples/completion.bash 2>/dev/null
+        [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash 2>/dev/null
+    fi
     
     # Advanced fzf functions
     
@@ -161,8 +163,7 @@ if command -v bat &>/dev/null; then
     export MANPAGER="sh -c 'col -bx | bat -l man -p'"
     export MANROFFOPT="-c"
     
-    # Help with bat
-    alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+    # Note: --help alias removed (zsh-specific syntax not compatible with bash)
     
 elif command -v batcat &>/dev/null; then
     # Debian/Ubuntu alternative name

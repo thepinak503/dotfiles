@@ -12,7 +12,8 @@ detect_distro() {
     # Method 1: /etc/os-release (systemd standard)
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
-        export DISTRO_ID="${ID,,}"
+        # Convert to lowercase (compatible with bash and zsh)
+        export DISTRO_ID=$(echo "$ID" | tr '[:upper:]' '[:lower:]')
         export DISTRO_NAME="$NAME"
         export DISTRO_VERSION="$VERSION_ID"
         export DISTRO_CODENAME="${VERSION_CODENAME:-}"
