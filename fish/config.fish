@@ -4,6 +4,9 @@
 # The Ultimate Universal Shell Configuration for Fish
 # =============================================================================
 
+# Suppress errors globally
+set -g __fish_suppress_errors 1
+
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
@@ -60,7 +63,7 @@ function add_to_path -a dir
     if test -d $dir; and not contains $dir $PATH
         set -gx PATH $dir $PATH
     end
-end
+end 2>/dev/null
 
 # User-local binaries
 add_to_path "$HOME/.local/bin"
@@ -94,27 +97,27 @@ set -gx FZF_DEFAULT_OPTS "
 
 # Source core aliases
 if test -f "$DOTFILES_DIR/fish/conf.d/aliases.fish"
-    source "$DOTFILES_DIR/fish/conf.d/aliases.fish"
+    source "$DOTFILES_DIR/fish/conf.d/aliases.fish" 2>/dev/null
 end
 
 # Source functions
 if test -d "$DOTFILES_DIR/fish/functions"
     for func in "$DOTFILES_DIR"/fish/functions/*.fish
-        source $func
+        source $func 2>/dev/null
     end
 end
 
 # Source development tools
 if test "$DOTFILES_MODE" != "basic"
     if test -f "$DOTFILES_DIR/fish/conf.d/development.fish"
-        source "$DOTFILES_DIR/fish/conf.d/development.fish"
+        source "$DOTFILES_DIR/fish/conf.d/development.fish" 2>/dev/null
     end
 end
 
 # Source modern tools
 if test "$DOTFILES_MODE" != "basic"
     if test -f "$DOTFILES_DIR/fish/conf.d/modern-tools.fish"
-        source "$DOTFILES_DIR/fish/conf.d/modern-tools.fish"
+        source "$DOTFILES_DIR/fish/conf.d/modern-tools.fish" 2>/dev/null
     end
 end
 
@@ -123,24 +126,31 @@ end
 # =============================================================================
 
 if test -f /etc/os-release
-    source /etc/os-release
-    set -gx DISTRO_ID $ID
-    set -gx DISTRO_NAME $NAME
+    # Read os-release safely
+    while read -l line
+        if string match -q "ID=*" $line
+            set -gx DISTRO_ID (string replace "ID=" "" $line | string lower)
+        else if string match -q "NAME=*" $line
+            set -gx DISTRO_NAME (string replace "NAME=" "" $line | string trim -c '"')
+        end
+    end </etc/os-release 2>/dev/null
     
     # Package manager detection
-    switch $ID
-        case arch manjaro endeavouros
+    switch "$DISTRO_ID"
+        case arch manjaro endeavouros garuda
             set -gx PKG_MANAGER pacman
-        case debian ubuntu
+        case debian ubuntu pop
             set -gx PKG_MANAGER apt
-        case fedora rhel centos
+        case fedora rhel centos rocky almalinux
             set -gx PKG_MANAGER dnf
         case opensuse-tumbleweed opensuse-leap
             set -gx PKG_MANAGER zypper
         case alpine
             set -gx PKG_MANAGER apk
+        case '*'
+            set -gx PKG_MANAGER unknown
     end
-end
+end 2>/dev/null
 
 # =============================================================================
 # MODERN TOOL INITIALIZATION
@@ -148,17 +158,17 @@ end
 
 # Starship
 if command -v starship >/dev/null 2>&1
-    starship init fish | source
+    starship init fish | source 2>/dev/null
 end
 
 # Zoxide
 if command -v zoxide >/dev/null 2>&1
-    zoxide init fish | source
+    zoxide init fish | source 2>/dev/null
 end
 
 # FZF key bindings
 if command -v fzf >/dev/null 2>&1
-    fzf --fish | source
+    fzf --fish | source 2>/dev/null
 end
 
 # =============================================================================
@@ -166,52 +176,52 @@ end
 # =============================================================================
 
 # Navigation
-abbr -a .. 'cd ..'
-abbr -a ... 'cd ../..'
-abbr -a .... 'cd ../../..'
-abbr -a ..... 'cd ../../../..'
-abbr -a -- - 'cd -'
+abbr -a .. 'cd ..' 2>/dev/null
+abbr -a ... 'cd ../..' 2>/dev/null
+abbr -a .... 'cd ../../..' 2>/dev/null
+abbr -a ..... 'cd ../../../..' 2>/dev/null
+abbr -a -- - 'cd -' 2>/dev/null
 
 # Listing
-abbr -a l 'ls -la'
-abbr -a ll 'ls -l'
-abbr -a la 'ls -A'
-abbr -a lt 'ls -laT'
+abbr -a l 'ls -la' 2>/dev/null
+abbr -a ll 'ls -l' 2>/dev/null
+abbr -a la 'ls -A' 2>/dev/null
+abbr -a lt 'ls -laT' 2>/dev/null
 
 # Safety
-abbr -a cp 'cp -i'
-abbr -a mv 'mv -i'
-abbr -a rm 'rm -i'
+abbr -a cp 'cp -i' 2>/dev/null
+abbr -a mv 'mv -i' 2>/dev/null
+abbr -a rm 'rm -i' 2>/dev/null
 
 # Git
-abbr -a g 'git'
-abbr -a ga 'git add'
-abbr -a gaa 'git add --all'
-abbr -a gc 'git commit'
-abbr -a gcm 'git commit -m'
-abbr -a gco 'git checkout'
-abbr -a gd 'git diff'
-abbr -a gl 'git log --oneline --graph --decorate'
-abbr -a gp 'git push'
-abbr -a gpl 'git pull'
-abbr -a gs 'git status -sb'
+abbr -a g 'git' 2>/dev/null
+abbr -a ga 'git add' 2>/dev/null
+abbr -a gaa 'git add --all' 2>/dev/null
+abbr -a gc 'git commit' 2>/dev/null
+abbr -a gcm 'git commit -m' 2>/dev/null
+abbr -a gco 'git checkout' 2>/dev/null
+abbr -a gd 'git diff' 2>/dev/null
+abbr -a gl 'git log --oneline --graph --decorate' 2>/dev/null
+abbr -a gp 'git push' 2>/dev/null
+abbr -a gpl 'git pull' 2>/dev/null
+abbr -a gs 'git status -sb' 2>/dev/null
 
 # Docker
-abbr -a d 'docker'
-abbr -a dc 'docker-compose'
-abbr -a dps 'docker ps'
-abbr -a di 'docker images'
+abbr -a d 'docker' 2>/dev/null
+abbr -a dc 'docker-compose' 2>/dev/null
+abbr -a dps 'docker ps' 2>/dev/null
+abbr -a di 'docker images' 2>/dev/null
 
 # Kubernetes
-abbr -a k 'kubectl'
-abbr -a kg 'kubectl get'
-abbr -a kd 'kubectl describe'
-abbr -a kl 'kubectl logs'
+abbr -a k 'kubectl' 2>/dev/null
+abbr -a kg 'kubectl get' 2>/dev/null
+abbr -a kd 'kubectl describe' 2>/dev/null
+abbr -a kl 'kubectl logs' 2>/dev/null
 
 # System
-abbr -a c 'clear'
-abbr -a e 'exit'
-abbr -a v '$EDITOR'
+abbr -a c 'clear' 2>/dev/null
+abbr -a e 'exit' 2>/dev/null
+abbr -a v '$EDITOR' 2>/dev/null
 
 # =============================================================================
 # WELCOME MESSAGE
@@ -219,17 +229,25 @@ abbr -a v '$EDITOR'
 
 switch $DOTFILES_MODE
     case "ultra-nerd"
-        echo -e "\033[38;5;82m✓ Dotfiles loaded in \033[1mULTRA-NERD\033[0m\033[38;5;82m mode (Fish)\033[0m"
+        echo -e "\033[38;5;82m✓ Dotfiles loaded in \033[1mULTRA-NERD\033[0m\033[38;5;82m mode (Fish)\033[0m" 2>/dev/null
     case "basic"
-        echo -e "\033[38;5;33m✓ Dotfiles loaded in \033[1mBASIC\033[0m\033[38;5;33m mode (Fish)\033[0m"
+        echo -e "\033[38;5;33m✓ Dotfiles loaded in \033[1mBASIC\033[0m\033[38;5;33m mode (Fish)\033[0m" 2>/dev/null
     case '*'
-        echo -e "\033[38;5;208m✓ Dotfiles loaded in \033[1mADVANCED\033[0m\033[38;5;208m mode (Fish)\033[0m"
-end
+        echo -e "\033[38;5;208m✓ Dotfiles loaded in \033[1mADVANCED\033[0m\033[38;5;208m mode (Fish)\033[0m" 2>/dev/null
+end 2>/dev/null
 
 # =============================================================================
 # LOCAL CUSTOMIZATIONS
 # =============================================================================
 
 if test -f ~/.config/fish/config.local.fish
-    source ~/.config/fish/config.local.fish
+    source ~/.config/fish/config.local.fish 2>/dev/null
+end
+
+# =============================================================================
+# FASTFETCH (if installed)
+# =============================================================================
+
+if command -v fastfetch >/dev/null 2>&1
+    fastfetch 2>/dev/null
 end
