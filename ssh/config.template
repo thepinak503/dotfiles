@@ -1,0 +1,41 @@
+# SSH Config Template
+# Copy this file to ~/.ssh/config and customize it
+
+# Default settings for all hosts
+Host *
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    StrictHostKeyChecking accept-new
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ed25519
+    IdentityFile ~/.ssh/id_rsa
+
+# Example: GitHub
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_github
+    IdentitiesOnly yes
+
+# Example: GitLab
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_gitlab
+    IdentitiesOnly yes
+
+# Example: Personal server
+# Host myserver
+#     HostName 192.168.1.100
+#     User myuser
+#     Port 22
+#     IdentityFile ~/.ssh/id_ed25519_personal
+
+# Example: Work server
+# Host workserver
+#     HostName work.example.com
+#     User workuser
+#     Port 2222
+#     IdentityFile ~/.ssh/id_ed25519_work
+#     ForwardAgent yes

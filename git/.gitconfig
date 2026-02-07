@@ -1,0 +1,83 @@
+# Git Configuration
+# This is a template - update with your information
+
+[user]
+    name = Your Name
+    email = your.email@example.com
+
+[core]
+    editor = nvim
+    autocrlf = input
+    safecrlf = true
+    pager = delta
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = false
+
+[push]
+    default = simple
+    autoSetupRemote = true
+
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
+
+[mergetool]
+    prompt = false
+
+[diff]
+    tool = vimdiff
+    colorMoved = default
+
+[difftool]
+    prompt = false
+
+[color]
+    ui = auto
+
+[alias]
+    # Shortcuts
+    st = status -sb
+    co = checkout
+    br = branch
+    ci = commit
+    cp = cherry-pick
+    
+    # Logs
+    lg = log --oneline --graph --decorate
+    lga = log --oneline --graph --decorate --all
+    lgd = log --stat -p
+    
+    # Information
+    who = shortlog -s --
+    
+    # Stash
+    save = stash push
+    pop = stash pop
+    
+    # Cleanup
+    cleanup = !git branch --merged | grep -v \\* | xargs -n 1 git branch -d
+    
+    # Undo
+    undo = reset HEAD~1 --mixed
+    
+    # Contributions
+    contributions = shortlog --summary --numbered
+
+[delta]
+    navigate = true
+    light = false
+    line-numbers = true
+    side-by-side = false
+
+[interactive]
+    diffFilter = delta --color-only
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true

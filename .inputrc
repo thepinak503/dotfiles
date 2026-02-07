@@ -1,0 +1,46 @@
+# ~/.inputrc: readline configuration
+
+# Enable 8-bit input
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# Enable case-insensitive tab completion
+set completion-ignore-case on
+
+# Treat hyphens and underscores as equivalent
+set completion-map-case on
+
+# Display matches immediately if ambiguous
+set show-all-if-ambiguous on
+
+# Enable colored completion
+set colored-stats on
+
+# Mark symlinked directories
+set mark-symlinked-directories on
+
+# Visible bell (no beep)
+set bell-style visible
+
+# Enable menu complete (cycle through options)
+# set menu-complete-display-prefix on
+
+# Key bindings
+# Arrow keys for history search
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+# Page up/down
+"\e[5~": history-search-backward
+"\e[6~": history-search-forward
+
+# Home/End
+"\e[H": beginning-of-line
+"\e[F": end-of-line
+"\e[OH": beginning-of-line
+"\e[OF": end-of-line
+
+# Ctrl+Arrow
+"\e[1;5D": backward-word
+"\e[1;5C": forward-word
