@@ -2,7 +2,8 @@
 # =============================================================================
 # DOTFILES INSTALLER v2.1.0
 # One-command setup for the ultimate dotfiles configuration
-# Supports: Bash, Zsh, Fish, PowerShell, Nushell
+# Supports: Bash, Zsh, Fish, Nushell
+# PowerShell users: See https://github.com/thepinak503/powerconfig
 # =============================================================================
 
 set -e
@@ -24,7 +25,7 @@ DOTFILES_DIR="$HOME/.dotfiles"
 BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d_%H%M%S)"
 
 # Available shells
-AVAILABLE_SHELLS="bash zsh fish"
+AVAILABLE_SHELLS="bash zsh fish nushell"
 SELECTED_SHELLS=""
 
 # Print functions
@@ -33,7 +34,7 @@ print_header() {
     echo "╔════════════════════════════════════════════════════════════╗"
     echo "║           DOTFILES INSTALLER v2.1.0                        ║"
     echo "║    The Ultimate Universal Shell Configuration              ║"
-    echo "║    Supports: Bash, Zsh, Fish, PowerShell, Nushell          ║"
+    echo "║    Supports: Bash, Zsh, Fish, Nushell                      ║"
     echo "╚════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 }
@@ -114,12 +115,6 @@ detect_shells() {
         print_info "✓ Fish detected"
     fi
     
-    # Check PowerShell
-    if command -v pwsh &>/dev/null; then
-        DETECTED_SHELLS+="powershell "
-        print_info "✓ PowerShell detected"
-    fi
-    
     # Check Nushell
     if command -v nu &>/dev/null; then
         DETECTED_SHELLS+="nushell "
@@ -191,12 +186,6 @@ backup_existing() {
     # Backup Fish files
     if [[ -d ~/.config/fish ]]; then
         cp -r ~/.config/fish "$BACKUP_DIR/" && print_info "Backed up Fish config"
-    fi
-    
-    # Backup PowerShell files
-    if [[ -d ~/.config/powershell ]] || [[ -d ~/.powershell ]]; then
-        cp -r ~/.config/powershell "$BACKUP_DIR/" 2>/dev/null || cp -r ~/.powershell "$BACKUP_DIR/" 2>/dev/null
-        print_info "Backed up PowerShell config"
     fi
     
     # Backup Nushell files
@@ -384,19 +373,6 @@ create_symlinks() {
         done
         
         print_info "Fish configuration linked"
-    fi
-    
-    # PowerShell configuration (Linux/macOS)
-    if [[ "$SELECTED_SHELLS" == *"powershell"* ]]; then
-        if [[ "$OS" == "macos" ]]; then
-            mkdir -p ~/.config/powershell
-            ln -sf "$DOTFILES_DIR/powershell/Microsoft.PowerShell_profile.ps1" ~/.config/powershell/Microsoft.PowerShell_profile.ps1
-        else
-            mkdir -p ~/.config/powershell
-            ln -sf "$DOTFILES_DIR/powershell/Microsoft.PowerShell_profile.ps1" ~/.config/powershell/Microsoft.PowerShell_profile.ps1
-        fi
-        ln -sf "$DOTFILES_DIR/powershell/Aliases.ps1" ~/.config/powershell/Aliases.ps1
-        print_info "PowerShell configuration linked"
     fi
     
     # Nushell configuration

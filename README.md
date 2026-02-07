@@ -5,7 +5,7 @@
 
 <div align="center">
 
-# 🔧 DOTFILES v2.0.0
+# 🔧 DOTFILES v2.1.0
 
 **The world's most advanced dotfiles configuration**  
 Universal support for all Linux distributions + macOS  
@@ -18,6 +18,8 @@ Three modes: Basic | Advanced | Ultra-Nerd
 [Features](#features) • [Installation](#installation) • [Documentation](#documentation) • [Customization](#customization)
 
 </div>
+
+> 🪟 **Windows/PowerShell Users**: Check out [PowerConfig](https://github.com/thepinak503/powerconfig) - our dedicated PowerShell configuration with Scoop, Chocolatey, and Winget support!
 
 ---
 
