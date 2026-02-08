@@ -1,0 +1,48 @@
+# Swaylock Configuration
+# Screen locker for Wayland
+
+# Colors
+color=1a1b26
+color=7aa2f7
+
+# Background
+image=
+scaling=fill
+
+# Ring
+ring-color=7aa2f7
+ring-ver-color=9ece6a
+ring-wrong-color=f7768e
+ring-clear-color=e0af68
+
+# Inside
+inside-color=1a1b26
+inside-ver-color=1a1b26
+inside-wrong-color=1a1b26
+inside-clear-color=1a1b26
+
+# Line
+line-color=00000000
+line-ver-color=00000000
+line-wrong-color=00000000
+line-clear-color=00000000
+
+# Separator
+separator-color=00000000
+
+# Text
+text-color=a9b1d6
+text-ver-color=9ece6a
+text-wrong-color=f7768e
+text-clear-color=e0af68
+
+# Font
+font=JetBrainsMono Nerd Font
+font-size=24
+
+# Other
+indicator-radius=120
+indicator-thickness=10
+ignore-empty-password
+show-failed-attempts
+daemonize

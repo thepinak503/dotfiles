@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Create release archive
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/}
+        tar -czf "dotfiles-${VERSION}.tar.gz" \
+          --exclude='.git' \
+          --exclude='.github' \
+          --exclude='*.md' \
+          --exclude='TODO*' \
+          --exclude='PROGRESS*' \
+          --exclude='SESSION*' \
+          .
+    
+    - name: Upload release artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dotfiles-release
+        path: dotfiles-*.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: dotfiles-release
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dotfiles-*.tar.gz
+        generate_release_notes: true
+        body: |
+          ## Dotfiles Release ${GITHUB_REF#refs/tags/}
+          
+          ### Quick Start
+          ```bash
+          curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/install.sh | bash
+          ```
+          
+          ### Features
+          - 4 Shell support (Bash, Zsh, Fish, Nushell)
+          - Hyprland Wayland compositor setup
+          - 1000+ aliases and 50+ functions
+          - Modern CLI tools (Eza, Bat, FZF, Delta)
+          - Complete development environment
+          
+          ### Installation
+          ```bash
+          git clone https://github.com/${{ github.repository }}.git ~/.dotfiles
+          cd ~/.dotfiles
+          ./install.sh
+          ```

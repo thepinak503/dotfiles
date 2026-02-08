@@ -1,0 +1,220 @@
+# Nano Editor Configuration - Comprehensive Setup
+# Simple and user-friendly terminal-based text editor
+
+# =============================================================================
+# BEHAVIOR
+# =============================================================================
+
+# Use smooth scrolling
+smooth
+
+# Enable mouse support
+mouse
+
+# Enable auto-indentation
+autoindent
+
+# Show line numbers
+linenumbers
+
+# Show column number
+columnumber
+
+# Convert tabs to spaces
+tabstospaces
+
+# Tab size
+tabsize 4
+
+# Enable word wrapping
+wrap
+
+# Hard wrap at 80 characters
+fill 80
+
+# Enable soft wrap indicator
+# softwrap
+
+# Enable constant cursor position display
+constantshow
+
+# Enable mini-bar
+minibar
+
+# Enable title bar
+# titlecolor
+
+# Enable quick blank
+quickblank
+
+# Enable whitespace display
+# whitespace "»·"
+
+# Show guide stripe at 80 columns
+guide 80
+
+# =============================================================================
+# BACKUP & HISTORY
+# =============================================================================
+
+# Enable backups
+backup
+
+# Backup directory
+backupdir "~/.nano/backups"
+
+# History log
+historylog
+
+# Position log (remember cursor position)
+positionlog
+
+# =============================================================================
+# SYNTAX HIGHLIGHTING
+# =============================================================================
+
+# Enable syntax highlighting
+include "/usr/share/nano/*.nanorc"
+
+# Additional syntax files (if they exist)
+include "~/.nano/syntax/*.nanorc" 2>/dev/null || true
+
+# =============================================================================
+# INTERFACE
+# =============================================================================
+
+# Enable bold text
+boldtext
+
+# Enable title bar
+titlecolor brightwhite,blue
+
+# Prompt color
+promptcolor lightwhite,green
+
+# Status bar color
+statuscolor brightwhite,green
+
+# Error color
+errorcolor brightwhite,red
+
+# Spotlight color
+spotlightcolor black,lightyellow
+
+# Selected text color
+selectedcolor lightwhite,cyan
+
+# Stripe color
+stripecolor cyan
+
+# Number color
+numbercolor cyan
+
+# Key color
+keycolor lightwhite
+
+# Function color
+functioncolor lightwhite
+
+# =============================================================================
+# EDITING
+# =============================================================================
+
+# Enable word bounds for word completion
+wordbounds
+
+# Enable smart home key
+smarthome
+
+# Enable zap (delete selected text on backspace)
+zap
+
+# Enable brackets matching
+brackets ""')>]}
+
+# Enable quotes matching
+# quotestr "'"
+
+# Enable regexp search
+regexp
+
+# Enable multibuffer
+multibuffer
+
+# Enable operating directory restriction
+# operatingdir "/home/user"
+
+# Enable view mode
+# view
+
+# Disable help
+# nohelp
+
+# Disable wrapping on specific files
+# nowrap ~/.bashrc
+
+# =============================================================================
+# ADVANCED
+# =============================================================================
+
+# Preserve XON/XOFF
+# preserve
+
+# Enable suspend (allow Ctrl-Z)
+suspendable
+
+# Enable zero-length regex matches
+zero
+
+# Set view mode
+# view
+
+# Enable restricted mode
+# restricted
+
+# Enable rebind delete key
+# rebind delete
+
+# Enable rebind keypad
+# rebindkeypad
+
+# =============================================================================
+# MACROS & SHORTCUTS
+# =============================================================================
+
+# Enable key bindings
+# bind ^W writeout main
+# bind ^Q exit main
+# bind ^S savefile main
+
+# =============================================================================
+# LINTER (if nano supports it)
+# =============================================================================
+
+# Enable linter
+# linter
+
+# Linter for Python
+# linter py "python3 -m py_compile"
+
+# Linter for Bash
+# linter sh "bash -n"
+
+# Linter for JavaScript
+# linter js "node --check"
+
+# =============================================================================
+# FORMATTER
+# =============================================================================
+
+# Enable formatter
+# formatter
+
+# Formatter for Python
+# formatter py "autopep8 -"
+
+# Formatter for JavaScript
+# formatter js "prettier --stdin-filepath -.js"
+
+# Formatter for JSON
+# formatter json "python3 -m json.tool"

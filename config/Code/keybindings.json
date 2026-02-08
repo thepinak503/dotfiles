@@ -1,0 +1,146 @@
+// VS Code: Keybindings
+// Custom keyboard shortcuts for enhanced productivity
+[
+    // Terminal
+    {
+        "key": "ctrl+`",
+        "command": "workbench.action.terminal.toggleTerminal"
+    },
+    {
+        "key": "ctrl+shift+t",
+        "command": "workbench.action.terminal.new"
+    },
+    {
+        "key": "ctrl+shift+w",
+        "command": "workbench.action.terminal.kill"
+    },
+    // File operations
+    {
+        "key": "ctrl+n",
+        "command": "workbench.action.files.newUntitledFile"
+    },
+    {
+        "key": "ctrl+o",
+        "command": "workbench.action.files.openFile"
+    },
+    {
+        "key": "ctrl+s",
+        "command": "workbench.action.files.save"
+    },
+    {
+        "key": "ctrl+shift+s",
+        "command": "workbench.action.files.saveAs"
+    },
+    // Navigation
+    {
+        "key": "ctrl+p",
+        "command": "workbench.action.quickOpen"
+    },
+    {
+        "key": "ctrl+shift+p",
+        "command": "workbench.action.showCommands"
+    },
+    {
+        "key": "ctrl+tab",
+        "command": "workbench.action.nextEditor"
+    },
+    {
+        "key": "ctrl+shift+tab",
+        "command": "workbench.action.previousEditor"
+    },
+    {
+        "key": "ctrl+w",
+        "command": "workbench.action.closeActiveEditor"
+    },
+    {
+        "key": "ctrl+shift+f",
+        "command": "workbench.action.findInFiles"
+    },
+    // Editor
+    {
+        "key": "ctrl+f",
+        "command": "actions.find"
+    },
+    {
+        "key": "ctrl+h",
+        "command": "editor.action.startFindReplaceAction"
+    },
+    {
+        "key": "ctrl+d",
+        "command": "editor.action.addSelectionToNextFindMatch"
+    },
+    {
+        "key": "ctrl+shift+l",
+        "command": "editor.action.selectHighlights"
+    },
+    {
+        "key": "alt+up",
+        "command": "editor.action.moveLinesUpAction"
+    },
+    {
+        "key": "alt+down",
+        "command": "editor.action.moveLinesDownAction"
+    },
+    {
+        "key": "ctrl+/",
+        "command": "editor.action.commentLine"
+    },
+    {
+        "key": "ctrl+shift+/",
+        "command": "editor.action.blockComment"
+    },
+    {
+        "key": "ctrl+space",
+        "command": "editor.action.triggerSuggest"
+    },
+    {
+        "key": "f12",
+        "command": "editor.action.goToDeclaration"
+    },
+    {
+        "key": "ctrl+f12",
+        "command": "editor.action.goToImplementation"
+    },
+    {
+        "key": "shift+f12",
+        "command": "editor.action.goToReferences"
+    },
+    // Git
+    {
+        "key": "ctrl+shift+g",
+        "command": "workbench.view.scm"
+    },
+    // Explorer
+    {
+        "key": "ctrl+shift+e",
+        "command": "workbench.view.explorer"
+    },
+    {
+        "key": "ctrl+b",
+        "command": "workbench.action.toggleSidebarVisibility"
+    },
+    // Extensions
+    {
+        "key": "ctrl+shift+x",
+        "command": "workbench.view.extensions"
+    },
+    // Problems
+    {
+        "key": "ctrl+shift+m",
+        "command": "workbench.actions.view.problems"
+    },
+    // Format
+    {
+        "key": "shift+alt+f",
+        "command": "editor.action.formatDocument"
+    },
+    {
+        "key": "ctrl+k ctrl+f",
+        "command": "editor.action.formatSelection"
+    },
+    // Zen mode
+    {
+        "key": "ctrl+k z",
+        "command": "workbench.action.toggleZenMode"
+    }
+]

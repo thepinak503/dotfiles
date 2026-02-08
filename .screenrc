@@ -1,0 +1,124 @@
+# GNU Screen Configuration
+# Legacy terminal multiplexer (kept for compatibility)
+
+# Change default escape key from Ctrl-a to Ctrl-b (to match Tmux)
+# or keep Ctrl-a for consistency
+escape ^Aa
+
+# Set scrollback buffer
+scrollback 10000
+
+# Enable UTF-8
+defutf8 on
+
+# Enable 256 colors
+term screen-256color
+
+# Set default shell
+shell -$SHELL
+
+# Startup message
+startup_message off
+
+# Visual bell
+vbell off
+
+# Autodetach on hangup
+autodetach on
+
+# Hardstatus line (display at bottom)
+hardstatus alwayslastline
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m/%d %{W}%c %{g}]'
+
+# Alternative hardstatus (simpler)
+# hardstatus string '%{= kg}[%{G}%H%{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f %t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][ %{y}Load: %l %{g}][%{B}%d/%m %c%{g}]'
+
+# Caption line (window list)
+caption always
+
+# Set window title
+title "screen"
+
+# Define windows
+screen -t shell 0
+screen -t editor 1
+
+# Switch windows with F keys
+bindkey -k k1 select 0
+bindkey -k k2 select 1
+bindkey -k k3 select 2
+bindkey -k k4 select 3
+bindkey -k k5 select 4
+bindkey -k k6 select 5
+bindkey -k k7 select 6
+bindkey -k k8 select 7
+bindkey -k k9 select 8
+bindkey -k k0 select 9
+
+# Navigation
+bind ^p prev
+bind ^n next
+
+# Split regions (limited compared to Tmux)
+bind | split -v
+bind - split
+
+# Resize regions
+bind j resize +1
+bind k resize -1
+
+# Remove some default bindings
+bind ^\
+
+# Logging
+logfile $HOME/.screen/log/screen-%Y%m%d-%n.log
+deflog off
+
+# Silence monitoring
+silencewait 15
+
+# Powdetach
+pow_detach_msg "Screen session of \$LOGNAME @ \$HOST: \$CRTIME)"
+
+# Bell
+defmonitor on
+
+# Multiuser
+multiuser off
+
+# Password (uncomment and set if needed)
+# password
+
+# Sudo screen (if needed)
+# su
+
+# Caption format
+caption string '%?%F%{.R.}%?%3n %t%? [%h]%?'
+
+# Show all windows in caption
+windowlist string "%4n %h%=%f"
+
+# Activity message
+activity "Activity in %n (%t) [%w:%h]~"
+
+# Bell message
+bell "Bell in %n (%t) [%w:%h]~"
+
+# Copy mode keys (Vi style)
+markkeys "h=^B:l=^F:$=^E:0=^A"
+bindkey -m ^[: copy
+bindkey -m ^]: paste .
+bindkey -m ^[: stuff "^[[5~"
+
+# Detach on hangup
+autodetach on
+
+# Zombie mode
+zombie qr
+
+# Rlogin and Telnet (if needed)
+# shell -${SHELL}
+# deflogin on
+
+# Xterm scrollbar
+termcapinfo xterm* ti@:te@

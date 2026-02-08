@@ -1,0 +1,59 @@
+# SSH Configuration
+# Secure shell client configuration
+
+# Global settings
+Host *
+    # Use SSH key agent
+    AddKeysToAgent yes
+    UseKeychain yes
+    # Connection settings
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+    # Security
+    HashKnownHosts yes
+    IdentityFile ~/.ssh/id_ed25519
+    IdentityFile ~/.ssh/id_rsa
+    # Compression for slow connections
+    Compression yes
+    # Disable password authentication (use keys only)
+    PasswordAuthentication no
+    # Visual settings
+    VisualHostKey yes
+
+# GitHub
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
+# GitLab
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
+# Bitbucket
+Host bitbucket.org
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
+# Development server example (uncomment and modify)
+# Host dev-server
+#     HostName 192.168.1.100
+#     User developer
+#     Port 22
+#     IdentityFile ~/.ssh/id_ed25519_dev
+#     LocalForward 8080 localhost:8080
+
+# Production server example (uncomment and modify)
+# Host prod-server
+#     HostName example.com
+#     User admin
+#     Port 2222
+#     IdentityFile ~/.ssh/id_ed25519_prod
+#     ProxyJump bastion-server

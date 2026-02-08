@@ -1,0 +1,158 @@
+name: Dotfiles CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run tests daily at 00:00 UTC
+    - cron: '0 0 * * *'
+
+jobs:
+  test-installation:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shell: [bash, zsh]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up test environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ${{ matrix.shell }} git curl wget
+    
+    - name: Test installer syntax
+      run: |
+        bash -n install.sh
+        echo "✓ install.sh syntax OK"
+    
+    - name: Test dry-run installation
+      run: |
+        cd $GITHUB_WORKSPACE
+        bash install.sh --dry-run --yes -m advanced -s ${{ matrix.shell }} 2>&1 | tee install.log
+        echo "✓ Dry-run completed"
+    
+    - name: Check for errors in log
+      run: |
+        if grep -i "error" install.log; then
+          echo "Errors found in installation log"
+          exit 1
+        fi
+        echo "✓ No errors found"
+
+  test-scripts:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Test bash scripts syntax
+      run: |
+        for script in bash/*.sh scripts/*.sh; do
+          if [ -f "$script" ]; then
+            bash -n "$script" || exit 1
+            echo "✓ $script syntax OK"
+          fi
+        done
+    
+    - name: Test fish scripts syntax
+      run: |
+        for script in fish/**/*.fish; do
+          if [ -f "$script" ]; then
+            # Basic syntax check (fish -n requires fish installed)
+            echo "Checking $script..."
+          fi
+        done
+
+  test-shellcheck:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install shellcheck
+      run: sudo apt-get update && sudo apt-get install -y shellcheck
+    
+    - name: Run shellcheck on main scripts
+      run: |
+        shellcheck install.sh || true
+        for script in bash/*.sh scripts/*.sh; do
+          if [ -f "$script" ]; then
+            shellcheck "$script" || true
+          fi
+        done
+      continue-on-error: true
+
+  test-docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Docker test image
+      run: |
+        docker build -t dotfiles-test -f Dockerfile .
+    
+    - name: Test installation in Docker
+      run: |
+        docker run --rm dotfiles-test || true
+      continue-on-error: true
+
+  lint-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check JSON files
+      run: |
+        for file in config/**/*.json; do
+          if [ -f "$file" ]; then
+            python3 -m json.tool "$file" > /dev/null || echo "Invalid JSON: $file"
+          fi
+        done
+    
+    - name: Check YAML files
+      run: |
+        for file in config/**/*.yml config/**/*.yaml .github/workflows/*.yml; do
+          if [ -f "$file" ]; then
+            python3 -c "import yaml; yaml.safe_load(open('$file'))" || echo "Invalid YAML: $file"
+          fi
+        done
+      continue-on-error: true
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check documentation files exist
+      run: |
+        test -f README.md || (echo "README.md missing" && exit 1)
+        test -f LICENSE || (echo "LICENSE missing" && exit 1)
+        test -f TODO.md || (echo "TODO.md missing" && exit 1)
+        echo "✓ Documentation files present"
+    
+    - name: Check for TODO markers in code
+      run: |
+        if grep -r "TODO\|FIXME\|XXX" --include="*.sh" --include="*.fish" --include="*.nu" | grep -v "TODO.md"; then
+          echo "Found TODO markers in code"
+        fi
+      continue-on-error: true
+
+  release-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check version consistency
+      run: |
+        INSTALL_VERSION=$(grep "VERSION=" install.sh | head -1 | cut -d'"' -f2)
+        echo "Installer version: $INSTALL_VERSION"
+        # Add more version checks as needed

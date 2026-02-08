@@ -1,0 +1,246 @@
+# Zellij Configuration
+# A terminal workspace with batteries included
+
+# Keybindings
+# Choose keybinding mode: normal or locked
+keybinds clear-defaults=true {
+    normal {
+        // Global bindings
+        bind "Ctrl a" { SwitchToMode "Tmux"; }
+        bind "Ctrl g" { SwitchToMode "Locked"; }
+        bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
+        bind "Alt l" "Alt Right" { MoveFocusOrTab "Right"; }
+        bind "Alt j" "Alt Down" { MoveFocus "Down"; }
+        bind "Alt k" "Alt Up" { MoveFocus "Up"; }
+        
+        // Pane management
+        bind "Ctrl p" { SwitchToMode "Pane"; }
+        bind "Ctrl n" { NewPane; }
+        bind "Ctrl d" { NewPane "Down"; }
+        bind "Ctrl r" { NewPane "Right"; }
+        bind "Ctrl w" { CloseFocus; }
+        bind "Ctrl f" { ToggleFocusFullscreen; }
+        bind "Ctrl e" { TogglePaneFrames; }
+        
+        // Tab management
+        bind "Ctrl t" { SwitchToMode "Tab"; }
+        bind "Ctrl s" { SwitchToMode "Scroll"; }
+        bind "Ctrl o" { SwitchToMode "Session"; }
+        bind "Ctrl h" { SwitchToMode "Move"; }
+        
+        // Search
+        bind "Ctrl b" { SwitchToMode "Search"; }
+        
+        // Resize mode
+        bind "Ctrl u" { SwitchToMode "Resize"; }
+    }
+    
+    locked {
+        bind "Ctrl g" { SwitchToMode "Normal"; }
+    }
+    
+    tmux {
+        bind "Ctrl a" { Write 2; SwitchToMode "Normal"; }
+        bind "Esc" { SwitchToMode "Normal"; }
+        
+        // Tmux-style bindings
+        bind "c" { NewPane; }
+        bind "n" { NewTab; }
+        bind "x" { CloseFocus; }
+        bind "f" { ToggleFocusFullscreen; }
+        bind "z" { TogglePaneFrames; }
+        bind "w" { CloseTab; }
+        bind "h" { MoveFocus "Left"; }
+        bind "l" { MoveFocus "Right"; }
+        bind "j" { MoveFocus "Down"; }
+        bind "k" { MoveFocus "Up"; }
+        bind "H" { MovePane "Left"; }
+        bind "L" { MovePane "Right"; }
+        bind "J" { MovePane "Down"; }
+        bind "K" { MovePane "Up"; }
+        bind "b" { SwitchToMode "Scroll"; }
+        bind "s" { SwitchToMode "Session"; }
+        bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "d" { Detach; }
+        bind "o" { NextSwapLayout; }
+        bind "[" { PreviousSwapLayout; }
+    }
+    
+    pane {
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "h" "Left" { MoveFocus "Left"; }
+        bind "l" "Right" { MoveFocus "Right"; }
+        bind "j" "Down" { MoveFocus "Down"; }
+        bind "k" "Up" { MoveFocus "Up"; }
+        bind "p" { SwitchFocus; }
+    }
+    
+    tab {
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
+        bind "h" "Left" "Up" { GoToPreviousTab; }
+        bind "l" "Right" "Down" { GoToNextTab; }
+        bind "n" { NewTab; }
+        bind "x" { CloseTab; }
+        bind "s" { ToggleActiveSyncTab; }
+        bind "b" { BreakPane; }
+    }
+    
+    resize {
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "h" "Left" { Resize "Increase Left"; }
+        bind "l" "Right" { Resize "Increase Right"; }
+        bind "j" "Down" { Resize "Increase Down"; }
+        bind "k" "Up" { Resize "Increase Up"; }
+        bind "H" { Resize "Decrease Left"; }
+        bind "L" { Resize "Decrease Right"; }
+        bind "J" { Resize "Decrease Down"; }
+        bind "K" { Resize "Decrease Up"; }
+    }
+    
+    move {
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "h" "Left" { MovePane "Left"; }
+        bind "l" "Right" { MovePane "Right"; }
+        bind "j" "Down" { MovePane "Down"; }
+        bind "k" "Up" { MovePane "Up"; }
+    }
+    
+    scroll {
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "e" { EditScrollback; }
+        bind "s" { SwitchToMode "EnterSearch"; SearchInput 0; }
+        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
+        bind "j" "Down" { ScrollDown; }
+        bind "k" "Up" { ScrollUp; }
+        bind "Ctrl f" "PageDown" "Right" "l" { PageScrollDown; }
+        bind "Ctrl b" "PageUp" "Left" "h" { PageScrollUp; }
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+        bind "g" { ScrollToTop; }
+        bind "G" { ScrollToBottom; }
+    }
+    
+    search {
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
+        bind "j" "Down" { ScrollDown; }
+        bind "k" "Up" { ScrollUp; }
+        bind "Ctrl f" "PageDown" "Right" "l" { PageScrollDown; }
+        bind "Ctrl b" "PageUp" "Left" "h" { PageScrollUp; }
+        bind "d" { HalfPageScrollDown; }
+        bind "u" { HalfPageScrollUp; }
+        bind "n" { Search "down"; }
+        bind "p" { Search "up"; }
+        bind "c" { SearchToggleOption "CaseSensitivity"; }
+        bind "w" { SearchToggleOption "Wrap"; }
+        bind "o" { SearchToggleOption "WholeWord"; }
+    }
+    
+    session {
+        bind "Esc" { SwitchToMode "Normal"; }
+        bind "Ctrl d" { Detach; }
+        bind "Ctrl w" {
+            LaunchOrFocusPlugin "zellij:session-manager" {
+                floating true
+                move_to_focused_tab true
+            }
+            SwitchToMode "Normal"
+        }
+        bind "d" { Detach; }
+    }
+}
+
+# Plugins
+plugins {
+    tab-bar location="zellij:tab-bar"
+    status-bar location="zellij:status-bar"
+    strider location="zellij:strider"
+    compact-bar location="zellij:compact-bar"
+    session-manager location="zellij:session-manager"
+    welcome-screen location="zellij:session-manager" { welcome_screen true }
+    filepicker location="zellij:strider" { cwd true }
+}
+
+# Themes
+// Gruvbox Dark Hard
+themes {
+    gruvbox {
+        bg "#1d2021"
+        red "#cc241d"
+        green "#98971a"
+        yellow "#d79921"
+        blue "#458588"
+        magenta "#b16286"
+        orange "#d65d0e"
+        fg "#ebdbb2"
+        cyan "#689d6a"
+        black "#282828"
+        white "#ebdbb2"
+    }
+}
+
+# Layouts
+layouts {
+    default {
+        pane
+    }
+    
+    split {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        pane {
+            pane
+            pane
+        }
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+}
+
+# Options
+disable_mouse_mode false
+scroll_buffer_size 10000
+show_startup_tips false
+mirror_session false
+styled_underlines true
+support_kitty_keyboard_protocol false
+show_release_notes false
+
+# Copy mode
+copy_command "xclip -selection clipboard"
+copy_clipboard "primary"
+
+# On force close
+donot_config_automatically true
+
+# Simplified UI
+simplified_ui true
+
+# Default shell
+default_shell "fish"
+
+# Pane options
+default_layout "default"
+default_mode "normal"
+
+# Mouse scroll buffer
+mouse_mode true
+scrollback_editor "vim"
+
+# Mirror session
+mirror_session true
+
+# Pane viewport serialization
+pane_viewport_serialization true
+
+# Scrollback lines to serialize
+scrollback_lines_to_serialize 10000
+
+# Keybinding aliases
+keybinds {
+    unbind "Ctrl b"
+    unbind "Ctrl q"
+}

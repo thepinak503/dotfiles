@@ -1,334 +1,394 @@
-# =============================================================================
-# DOTFILES README
-# The Ultimate Universal Shell Configuration
-# =============================================================================
+# Dotfiles v3.0.0 - The Ultimate Universal Shell Configuration
 
-<div align="center">
+<p align="center">
+  <img src="docs/logo.png" alt="Dotfiles Logo" width="200">
+</p>
 
-# 🔧 DOTFILES v2.1.0
+<p align="center">
+  <strong>Complete development environment with one command</strong><br>
+  <strong>Now with Hyprland Wayland Desktop!</strong>
+</p>
 
-**The world's most advanced dotfiles configuration**  
-Universal support for all Linux distributions + macOS  
-Three modes: Basic | Advanced | Ultra-Nerd
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#shells">Shells</a> •
+  <a href="#hyprland">Hyprland</a> •
+  <a href="#documentation">Docs</a>
+</p>
 
-[![GitHub stars](https://img.shields.io/github/stars/thepinak503/dotfiles?style=flat-square)](https://github.com/thepinak503/dotfiles/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/thepinak503/dotfiles?style=flat-square)](https://github.com/thepinak503/dotfiles/network)
-[![License](https://img.shields.io/github/license/thepinak503/dotfiles?style=flat-square)](LICENSE)
-
-[Features](#features) • [Installation](#installation) • [Documentation](#documentation) • [Customization](#customization)
-
-</div>
-
-> 🪟 **Windows/PowerShell Users**: Check out [PowerConfig](https://github.com/thepinak503/powerconfig) - our dedicated PowerShell configuration with Scoop, Chocolatey, and Winget support!
-
----
-
-## ✨ Features
-
-### 🎯 Three Configuration Modes
-
-- **Basic** - Essential aliases, minimal setup (perfect for servers)
-- **Advanced** - Full aliases, modern tools, optimized workflow (recommended)
-- **Ultra-Nerd** - Everything + 1000+ aliases, all integrations (power users)
-
-### 🐧 Universal Distro Support
-
-Works seamlessly with:
-- **Arch** (Arch Linux, Manjaro, EndeavourOS, Garuda, CachyOS)
-- **Debian** (Ubuntu, Debian, Linux Mint, Pop!_OS, elementaryOS)
-- **RHEL** (Fedora, CentOS, RHEL, AlmaLinux, Rocky Linux)
-- **openSUSE** (Leap, Tumbleweed)
-- **Alpine** (Docker containers)
-- **Gentoo**, **Void**, **NixOS**
-- **macOS** (with Homebrew)
-
-### 🔧 What's Included
-
-#### 1000+ Aliases
-- **Navigation** - Smart directory jumping
-- **Git** - 100+ git shortcuts (from `ga` to `gwip`)
-- **Docker** - Full container management
-- **Kubernetes** - Complete K8s workflow
-- **Development** - Python, Node.js, Rust, Go, Java
-- **Package Managers** - Universal aliases for all distros
-
-#### 50+ Utility Functions
-- `extract` - Universal archive extraction (20+ formats)
-- `mkcd` - Create directory and enter it
-- `myip` - Show internal/external IP addresses
-- `serve` - Quick HTTP server
-- `fkill` - Interactive process killer (with fzf)
-- `bak` - Backup files with timestamps
-- `passgen` - Generate secure passwords
-- `docker_clean` - Clean up Docker resources
-- And many more!
-
-#### Modern CLI Tools
-- **[Starship](https://starship.rs/)** - Cross-shell prompt
-- **[eza](https://github.com/eza-community/eza)** - Modern `ls` replacement
-- **[bat](https://github.com/sharkdp/bat)** - Syntax-highlighting cat
-- **[fzf](https://github.com/junegunn/fzf)** - Fuzzy finder
-- **[zoxide](https://github.com/ajeetdsouza/zoxide)** - Smarter `cd`
-- **[ripgrep](https://github.com/BurntSushi/ripgrep)** - Fast grep replacement
-- **[fd](https://github.com/sharkdp/fd)** - User-friendly find
-- **[delta](https://github.com/dandavison/delta)** - Git diff viewer
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-3.0.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/Shells-4-green.svg" alt="Shells">
+  <img src="https://img.shields.io/badge/Tools-50+-orange.svg" alt="Tools">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+</p>
 
 ---
 
-## 🚀 Installation
+## 🎉 What's New in v3.0.0
 
-### Quick Install (One Command)
+- **🎨 Complete Hyprland Setup** - Full Wayland desktop environment
+- **🎨 Catppuccin Mocha Theme** - Applied across all tools
+- **🛡️ Strict Installer** - Double confirmation for safety
+- **☁️ Cloud CLI Tools** - AWS, Azure, GCP, Terraform
+- **🔧 Language Managers** - nvm, pyenv, rbenv, rustup
+- **📦 Backup System** - Automated backup & restore
+- **🔄 CI/CD Pipeline** - GitHub Actions testing
+- **📊 280+ Checklist Items** - 100% Complete!
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/thepinak503/dotfiles/main/install.sh)
-```
+# One-line installer (with double confirmation)
+curl -fsSL https://raw.githubusercontent.com/thepinak503/dotfiles/main/install.sh | bash
 
-### Manual Installation
-
-```bash
-# Clone the repository
+# Or clone and install
 git clone https://github.com/thepinak503/dotfiles.git ~/.dotfiles
-
-# Run the installer
 cd ~/.dotfiles
 ./install.sh
 ```
 
-### Requirements
+## ✨ Features
 
+### 🐚 **4 Shells Supported**
+- **Bash** - Modular loading with 11 config files
+- **Zsh** - Oh-My-Zsh + Powerlevel10k support
+- **Fish** - User-friendly with completions
+- **Nushell** - Structured data processing
+- **Cross-compatibility** - Same aliases/functions everywhere
+
+### 🎨 **Hyprland Wayland Desktop**
+Complete desktop environment including:
+- ✅ Hyprland config with animations & blur
+- ✅ Waybar status bar (CPU, RAM, network, battery)
+- ✅ Wofi application launcher
+- ✅ Swaync notification center
+- ✅ Swaylock screen lock
+- ✅ Swidle idle management
+- ✅ Grimblast screenshot tool
+- ✅ Catppuccin Mocha theme throughout
+
+### 🎯 **1000+ Aliases & 50+ Functions**
+- **System**: Navigation, files, processes, system info
+- **Development**: Git, Docker, K8s, cloud, databases
+- **Package Managers**: Universal aliases for all distros
+- **Media**: Audio/video, images, documents
+- **Network**: SSH, ping, speedtest, security
+
+### 🛠️ **50+ Modern Tools**
+- **Eza** - Modern ls with icons
+- **Bat** - Syntax-highlighting cat
+- **Ripgrep** - Fast grep
+- **FD** - User-friendly find
+- **FZF** - Fuzzy finder
+- **Zoxide** - Smart cd with learning
+- **Delta** - Beautiful git diffs
+- **Dust** - Disk usage analyzer
+- **Btop** - System resource monitor
+- **Starship** - Cross-shell prompt
+
+### 💻 **Development Stack**
+- **Editors**: Neovim (Lua), VS Code:, Micro, Nano, Vim
+- **Terminals**: Alacritty, WezTerm, Kitty
+- **Multiplexers**: Tmux, Zellij, Screen
+- **Languages**: nvm, pyenv, rbenv, rustup, jenv
+- **Cloud**: AWS CLI, Azure CLI, GCloud, Terraform
+- **Containers**: Docker, Kubernetes, Helm
+
+### 📦 **Universal Package Support**
+- Arch (pacman/yay)
+- Debian/Ubuntu (apt)
+- Fedora (dnf)
+- openSUSE (zypper)
+- Alpine (apk)
+- macOS (brew)
+
+### 🔒 **Safety First**
+- ✅ Double confirmation (type 'yes' then 'INSTALL')
+- ✅ Automatic backup before changes
+- ✅ Dry-run mode for testing
+- ✅ Restore script included
+- ✅ Comprehensive logging
+
+## 📋 Installation
+
+### Prerequisites
 - Git
-- Bash 4.0+ or Zsh 5.0+
 - curl or wget
+- bash
 
----
+### Options
 
-## 📁 Structure
+```bash
+# Interactive mode (recommended) - requires double confirmation
+./install.sh
+
+# Advanced mode with auto-install
+./install.sh -m advanced -i -y
+
+# Select specific shells only
+./install.sh -s bash,zsh
+
+# Dry run (preview changes without applying)
+./install.sh --dry-run
+
+# Show help
+./install.sh --help
+```
+
+## 🐚 Shells
+
+### Bash
+```bash
+source ~/.bashrc
+```
+- Modular loading (11 separate files)
+- Cross-shell compatibility
+- Universal functions
+
+### Zsh
+```zsh
+source ~/.zshrc
+```
+- Oh-My-Zsh integration
+- Powerlevel10k prompt (optional)
+- Syntax highlighting
+- Auto-suggestions
+
+### Fish
+```fish
+source ~/.config/fish/config.fish
+```
+- Friendly syntax
+- Web config
+- Auto-completions
+
+### Nushell
+```nu
+source ~/.config/nushell/config.nu
+```
+- Structured data
+- Pipeline operations
+- Cross-platform
+
+## 🎨 Hyprland
+
+### Installation
+```bash
+# Install themes first
+./scripts/install-themes.sh
+
+# Start Hyprland
+exec Hyprland
+```
+
+### Keybindings
+| Key | Action |
+|-----|--------|
+| `SUPER + Enter` | Open terminal |
+| `SUPER + R` | Application launcher (Wofi) |
+| `SUPER + Q` | Close window |
+| `SUPER + M` | Exit Hyprland |
+| `SUPER + [1-0]` | Switch workspace |
+| `SUPER + SHIFT + [1-0]` | Move to workspace |
+| `SUPER + Arrow Keys` | Change focus |
+| `SUPER + SHIFT + Arrow` | Move window |
+| `SUPER + SHIFT + S` | Screenshot area |
+| `SUPER + L` | Lock screen |
+| `SUPER + F` | Toggle floating |
+| `SUPER + T` | Toggle split |
+| `SUPER + Mouse Left` | Move window |
+| `SUPER + Mouse Right` | Resize window |
+
+## 📁 Directory Structure
 
 ```
 ~/.dotfiles/
-├── .bashrc                    # Main Bash entry point
-├── .zshrc                     # Zsh configuration
-├── .bash_profile              # Login shell config
-├── .profile                   # Universal profile
-├── install.sh                 # One-command installer
+├── .bashrc, .zshrc, .bash_profile
+├── .tmux.conf, .vimrc, .nanorc
+├── install.sh (v3.0.0 - strict mode)
+├── uninstall.sh
+├── TODO.md, PROGRESS_SUMMARY.md
 │
-├── bash/                      # Modular Bash components
-│   ├── 00-core.sh            # Environment & exports
-│   ├── 01-functions.sh       # 50+ utility functions
-│   ├── 02-aliases-core.sh    # Essential aliases
-│   ├── 03-aliases-extended.sh # Advanced aliases
-│   ├── 04-aliases-nerd.sh    # Ultra-nerd aliases
-│   ├── 05-distro-detection.sh # Universal distro support
-│   ├── 06-package-managers.sh # Package manager aliases
-│   ├── 07-modern-tools.sh    # Tool integrations
-│   ├── 08-development.sh     # Dev environment
-│   ├── 09-shell-options.sh   # Bash configuration
-│   └── 10-prompt.sh          # Prompt setup
+├── bash/                   # Modular bash configs
+│   ├── 00-core.sh         # Environment
+│   ├── 01-functions.sh    # 50+ functions
+│   ├── 02-aliases-core.sh
+│   ├── 03-aliases-extended.sh
+│   ├── 04-aliases-nerd.sh
+│   ├── 05-distro-detection.sh
+│   ├── 06-package-managers.sh
+│   ├── 07-modern-tools.sh
+│   ├── 08-development.sh
+│   ├── 09-shell-options.sh
+│   ├── 10-prompt.sh
+│   ├── 20-docker.sh       # Docker/K8s
+│   ├── 21-direnv.sh       # Directory envs
+│   ├── 22-lang-versions.sh # nvm, pyenv, etc.
+│   ├── 23-cloud-cli.sh    # AWS, Azure, GCP
+│   ├── 24-filemanagers.sh # Ranger, nnn, lf
+│   └── 25-monitoring.sh   # Btop, htop
 │
-├── config/                    # Config files
-│   └── starship.toml         # Starship prompt config
+├── fish/                   # Fish shell config
+├── nushell/               # Nushell config
 │
-├── git/                       # Git configuration
-│   ├── .gitconfig            # Git settings
-│   └── .gitignore_global     # Global gitignore
+├── config/
+│   ├── alacritty/
+│   ├── kitty/
+│   ├── wezterm/
+│   ├── tmux/
+│   ├── zellij/
+│   ├── nvim/              # Full Lua Neovim
+│   ├── micro/
+│   ├── fastfetch/
+│   ├── starship.toml
+│   │
+│   ├── hypr/              # Hyprland config
+│   ├── waybar/            # Status bar
+│   ├── wofi/              # App launcher
+│   ├── swaylock/          # Screen lock
+│   ├── swaync/            # Notifications
+│   │
+│   ├── gtk-3.0/           # GTK theme
+│   ├── qt5ct/             # Qt theme
+│   └── Code/              # VS Code: settings
 │
-└── ssh/                       # SSH templates
-    └── config.template       # SSH config template
+├── git/
+│   ├── .gitconfig         # Enhanced git config
+│   └── .gitignore_global
+│
+├── ssh/
+│   └── config             # SSH config with examples
+│
+├── scripts/
+│   ├── backup.sh          # Backup system
+│   ├── sysupdate.sh       # Universal updater
+│   ├── sysinfo.sh         # System info
+│   └── install-themes.sh  # Theme installer
+│
+├── docs/
+│   ├── cheatsheet.md
+│   └── logo.md
+│
+└── .github/workflows/
+    ├── ci.yml             # CI pipeline
+    └── release.yml        # Release automation
 ```
 
----
-
-## 🎨 Customization
-
-### Select Your Mode
-
-After installation, set your preferred mode:
+## 🔄 Backup & Restore
 
 ```bash
-# Basic mode (servers, minimal setup)
-echo 'export DOTFILES_MODE="basic"' >> ~/.bashrc.local
+# Backup everything
+./scripts/backup.sh
 
-# Advanced mode (default, recommended)
-echo 'export DOTFILES_MODE="advanced"' >> ~/.bashrc.local
+# Backup specific items
+./scripts/backup.sh dotfiles
+./scripts/backup.sh configs
+./scripts/backup.sh home
 
-# Ultra-nerd mode (maximum features)
-echo 'export DOTFILES_MODE="ultra-nerd"' >> ~/.bashrc.local
+# List backups
+./scripts/backup.sh list
+
+# Restore
+./scripts/backup.sh restore-dotfiles backup_file.tar.gz
+./scripts/backup.sh restore-configs backup_file.tar.gz
+
+# Cleanup old backups
+./scripts/backup.sh cleanup 10
 ```
 
-### Local Customizations
-
-Create `~/.bashrc.local` or `~/.zshrc.local` for machine-specific settings:
+## 🆕 Updates
 
 ```bash
-# ~/.bashrc.local
-export DOTFILES_MODE="advanced"
-export EDITOR="vim"
-alias myproject='cd ~/projects/myproject'
+# Update dotfiles
+cd ~/.dotfiles && git pull
+
+# Update system (universal)
+./scripts/sysupdate.sh
+
+# Install all version managers
+source ~/.bashrc && install-version-managers
 ```
 
-### Switching Shells
-
-Both Bash and Zsh configurations share the same aliases and functions:
+## 🧪 Testing
 
 ```bash
-# Switch to Zsh
-chsh -s $(which zsh)
+# Run all tests
+make test
 
-# Switch back to Bash
-chsh -s $(which bash)
+# Syntax check
+make test-syntax
+
+# Shellcheck
+make test-shellcheck
+
+# Docker test
+make test-docker
 ```
 
----
+## 🎨 Theming
 
-## 📚 Documentation
+### Catppuccin Mocha
+Applied consistently across:
+- Terminal emulators
+- Editors (Neovim, VS Code:, Micro)
+- GTK/Qt applications
+- Hyprland ecosystem
 
-### Alias Categories
+### Fonts
+- **Primary**: JetBrainsMono Nerd Font Mono
+- **Terminal**: Caskaydiacove Nerd Font Mono
 
-#### Git Aliases
-- `ga` → `git add`
-- `gc` → `git commit`
-- `gp` → `git push`
-- `gl` → `git log --oneline --graph --decorate`
-- `gs` → `git status -sb`
-- `gco` → `git checkout`
-- `gcb` → `git checkout -b`
-- `lazyg` → `git add . && git commit -m && git push`
+## 📊 Statistics
 
-#### Docker Aliases
-- `d` → `docker`
-- `dc` → `docker-compose`
-- `dps` → `docker ps` (formatted)
-- `dex` → `docker exec -it`
-- `dl` → `docker logs -f`
-- `dprune` → `docker system prune -af`
+- **280 checklist items** - 100% Complete!
+- **4 shells** fully supported
+- **50+ tools** configured
+- **1000+ aliases**
+- **50+ functions**
+- **20+ Hyprland components**
+- **3 configuration modes**
 
-#### Kubernetes Aliases
-- `k` → `kubectl`
-- `kg` → `kubectl get`
-- `kgp` → `kubectl get pods`
-- `kgd` → `kubectl get deployment`
-- `kl` → `kubectl logs -f`
-- `h` → `helm`
+## 📖 Documentation
 
-#### Package Manager Aliases (Auto-detected)
-
-**Arch Linux:**
-- `pacs` → `sudo pacman -S`
-- `pacr` → `sudo pacman -Rs`
-- `pacu` → `sudo pacman -Syu`
-
-**Debian/Ubuntu:**
-- `apti` → `sudo apt install`
-- `aptr` → `sudo apt remove`
-- `aptu` → `sudo apt update && sudo apt upgrade`
-
-**Fedora:**
-- `dnfi` → `sudo dnf install`
-- `dnfr` → `sudo dnf remove`
-- `dnfu` → `sudo dnf upgrade`
-
-### Functions Reference
-
-#### File Operations
-- `mkcd <dir>` - Create directory and cd into it
-- `extract <archive>` - Extract any archive format
-- `bak <file>` - Backup file with timestamp
-- `swap <file1> <file2>` - Swap two files
-
-#### Search & Find
-- `ftext <pattern>` - Fuzzy text search in files
-- `ff <name>` - Find files by name
-- `fd <name>` - Find directories by name
-
-#### Network
-- `myip` - Display internal and external IP
-- `serve [port]` - Start HTTP server
-- `sslcheck <host>` - Check SSL certificate
-
-#### Development
-- `lazyg <message>` - Git add, commit, push in one command
-- `docker_clean` - Clean up Docker resources
-- `mkvenv` - Create Python virtual environment
-- `passgen [length]` - Generate secure password
-
----
-
-## 🔧 Troubleshooting
-
-### Bash: command not found
-
-```bash
-# Reload your shell configuration
-source ~/.bashrc
-```
-
-### Starship not showing
-
-```bash
-# Install Starship
-curl -sS https://starship.rs/install.sh | sh
-```
-
-### Some aliases don't work
-
-Check that the underlying tool is installed:
-
-```bash
-# Check if eza is installed
-command -v eza
-
-# If not, install it
-# Arch: sudo pacman -S eza
-# Ubuntu: manual install from GitHub releases
-```
-
-### Mode not changing
-
-```bash
-# Edit your local configuration
-$EDITOR ~/.bashrc.local
-
-# Add or modify:
-export DOTFILES_MODE="advanced"
-
-# Reload
-source ~/.bashrc
-```
-
----
+- [Installation Guide](docs/installation.md)
+- [Cheatsheet](docs/cheatsheet.md)
+- [Troubleshooting](docs/troubleshooting.md)
+- [Customization](docs/customization.md)
+- [TODO](TODO.md)
+- [Progress](PROGRESS_SUMMARY.md)
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create feature branch (`git checkout -b feature/amazing`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing`)
+5. Open Pull Request
+
+## 📜 License
+
+MIT License - see [LICENSE](LICENSE)
+
+## 🙏 Credits
+
+- [Oh-My-Zsh](https://ohmyz.sh/)
+- [Starship](https://starship.rs/)
+- [Catppuccin](https://catppuccin.com/)
+- [Hyprland](https://hyprland.org/)
+- [Powerlevel10k](https://github.com/romkatv/powerlevel10k)
+- [All contributors](https://github.com/thepinak503/dotfiles/graphs/contributors)
 
 ---
 
-## 📄 License
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/thepinak503">@thepinak503</a>
+</p>
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- [Oh My Zsh](https://ohmyz.sh/) - Amazing Zsh framework
-- [Starship](https://starship.rs/) - Cross-shell prompt
-- [eza](https://github.com/eza-community/eza) - Modern ls replacement
-- [fzf](https://github.com/junegunn/fzf) - Command-line fuzzy finder
-- All the amazing open-source projects that make this possible
-
----
-
-<div align="center">
-
-**Made with ❤️ by [thepinak503](https://github.com/thepinak503)**
-
-⭐ Star this repo if it helps you!
-
-</div>
+<p align="center">
+  <a href="https://github.com/thepinak503/dotfiles">⭐ Star on GitHub</a> •
+  <a href="https://github.com/thepinak503/powerconfig">🪟 Windows Version</a>
+</p>

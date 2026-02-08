@@ -1,5 +1,5 @@
 # Git Configuration
-# This is a template - update with your information
+# Enhanced git settings with Delta integration
 
 [user]
     name = Your Name
@@ -10,16 +10,29 @@
     autocrlf = input
     safecrlf = true
     pager = delta
+    whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+    excludesfile = ~/.gitignore_global
+    autocrlf = input
 
 [init]
     defaultBranch = main
 
 [pull]
-    rebase = false
+    rebase = true
 
 [push]
     default = simple
     autoSetupRemote = true
+
+[fetch]
+    prune = true
+    pruneTags = true
+    all = true
+
+[rebase]
+    autoStash = true
+    autoSquash = true
+    updateRefs = true
 
 [merge]
     tool = vimdiff
@@ -30,13 +43,32 @@
 
 [diff]
     tool = vimdiff
-    colorMoved = default
+    colorMoved = zebra
+    renames = copies
+    mnemonicPrefix = true
 
 [difftool]
     prompt = false
 
 [color]
     ui = auto
+
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
 
 [alias]
     # Shortcuts
@@ -46,10 +78,28 @@
     ci = commit
     cp = cherry-pick
     
-    # Logs
+    # Logs with graph
     lg = log --oneline --graph --decorate
     lga = log --oneline --graph --decorate --all
     lgd = log --stat -p
+    hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+    last = log -1 HEAD
+    
+    # Branch management
+    ba = branch -a
+    bd = branch -d
+    bD = branch -D
+    bm = branch -m
+    
+    # Commit helpers
+    amend = commit --amend
+    amendne = commit --amend --no-edit
+    
+    # Staging
+    a = add
+    aa = add -A
+    ap = add -p
+    unstage = reset HEAD --
     
     # Information
     who = shortlog -s --
@@ -57,21 +107,49 @@
     # Stash
     save = stash push
     pop = stash pop
+    stashlist = stash list --pretty=format:'%C(yellow)%h%C(reset) %C(green)%ar%C(reset) %s'
     
     # Cleanup
     cleanup = !git branch --merged | grep -v \\* | xargs -n 1 git branch -d
     
-    # Undo
+    # Undo operations
     undo = reset HEAD~1 --mixed
+    uncommit = reset --soft HEAD^
     
     # Contributions
     contributions = shortlog --summary --numbered
+    
+    # Diff
+    d = diff
+    ds = diff --staged
+    dw = diff --word-diff
+    
+    # Remote
+    rv = remote -v
+    fetchall = fetch --all --prune
+    
+    # Submodules
+    subup = submodule update --init --recursive
+    subpull = submodule foreach git pull origin main
+
+[credential]
+    helper = cache --timeout=3600
 
 [delta]
     navigate = true
     light = false
     line-numbers = true
     side-by-side = false
+    features = line-numbers decorations
+
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax
 
 [interactive]
     diffFilter = delta --color-only
@@ -81,3 +159,37 @@
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
+
+[gpg]
+    format = ssh
+
+[commit]
+    gpgsign = false
+    verbose = true
+
+[tag]
+    gpgsign = false
+    sort = version:refname
+
+[apply]
+    whitespace = fix
+
+[help]
+    autocorrect = prompt
+
+[advice]
+    statusHints = false
+    detachedHead = false
+    pushNonFastForward = false
+
+[column]
+    ui = auto
+
+[branch]
+    sort = -committerdate
+
+[maintenance]
+    repo = /home/user/projects/*
+
+[safe]
+    directory = *

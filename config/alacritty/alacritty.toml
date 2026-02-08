@@ -1,0 +1,98 @@
+# Alacritty Configuration
+# Modern terminal emulator with GPU acceleration
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+decorations = "full"
+dynamic_title = true
+opacity = 0.95
+blur = true
+startup_mode = "Windowed"
+title = "Alacritty"
+
+[window.dimensions]
+columns = 120
+lines = 35
+
+[window.padding]
+x = 8
+y = 8
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "Caskaydiacove Nerd Font Mono"
+style = "Regular"
+
+[font.bold]
+family = "Caskaydiacove Nerd Font Mono"
+style = "Bold"
+
+[font.italic]
+family = "Caskaydiacove Nerd Font Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "Caskaydiacove Nerd Font Mono"
+style = "Bold Italic"
+
+[font.offset]
+x = 0
+y = 0
+
+# Gruvbox Dark Hard colors
+colors.primary.background = "#1d2021"
+colors.primary.foreground = "#ebdbb2"
+
+colors.normal.black = "#1d2021"
+colors.normal.red = "#cc241d"
+colors.normal.green = "#98971a"
+colors.normal.yellow = "#d79921"
+colors.normal.blue = "#458588"
+colors.normal.magenta = "#b16286"
+colors.normal.cyan = "#689d6a"
+colors.normal.white = "#a89984"
+
+colors.bright.black = "#928374"
+colors.bright.red = "#fb4934"
+colors.bright.green = "#b8bb26"
+colors.bright.yellow = "#fabd2f"
+colors.bright.blue = "#83a598"
+colors.bright.magenta = "#d3869b"
+colors.bright.cyan = "#8ec07c"
+colors.bright.white = "#ebdbb2"
+
+[cursor]
+style = "Block"
+unfocused_hollow = true
+
+[cursor.vi_mode_style]
+style = "Block"
+
+[mouse]
+double_click.threshold = 300
+hide_when_typing = true
+
+[keyboard]
+bindings = [
+  { key = "C", mods = "Control|Shift", action = "Copy" },
+  { key = "V", mods = "Control|Shift", action = "Paste" },
+  { key = "F", mods = "Control|Shift", action = "SearchForward" },
+  { key = "B", mods = "Control|Shift", action = "SearchBackward" },
+  { key = "N", mods = "Control|Shift", action = "SpawnNewInstance" },
+  { key = "T", mods = "Control|Shift", action = "CreateNewWindow" },
+]
+
+[debug]
+render_timer = false
+persistent_logging = false
+
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
