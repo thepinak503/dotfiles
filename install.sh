@@ -1,12 +1,28 @@
 #!/bin/bash
 # =============================================================================
-# DOTFILES INSTALLER v2.1.0
+# DOTFILES INSTALLER v2.2.0
 # One-command setup for the ultimate dotfiles configuration
 # Supports: Bash, Zsh, Fish, Nushell
 # PowerShell users: See https://github.com/thepinak503/powerconfig
+# 
+# Usage: ./install.sh [OPTIONS]
+# 
+# Options:
+#   -h, --help              Show this help message
+#   -v, --version           Show version information
+#   -m, --mode MODE         Set configuration mode (basic|advanced|ultra-nerd)
+#   -s, --shells SHELLS     Specify shells (bash,zsh,fish,nushell)
+#   -f, --force             Force overwrite existing files
+#   -n, --no-backup         Skip backup step
+#   -d, --dry-run           Show what would happen without making changes
+#   -i, --install-deps      Install dependencies automatically
+#   --skip-deps             Skip dependency installation
 # =============================================================================
 
 set -e
+
+# Version
+VERSION="2.2.0"
 
 # Colors
 RED='\033[0;31m'
@@ -24,15 +40,20 @@ DOTFILES_REPO="https://github.com/thepinak503/dotfiles"
 DOTFILES_DIR="$HOME/.dotfiles"
 BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d_%H%M%S)"
 
-# Available shells
-AVAILABLE_SHELLS="bash zsh fish nushell"
+# Default values
+SELECTED_MODE=""
 SELECTED_SHELLS=""
+FORCE_MODE=false
+SKIP_BACKUP=false
+DRY_RUN=false
+INSTALL_DEPS=false
+SKIP_DEPS=false
 
 # Print functions
 print_header() {
     echo -e "${CYAN}${BOLD}"
     echo "╔════════════════════════════════════════════════════════════╗"
-    echo "║           DOTFILES INSTALLER v2.1.0                        ║"
+    echo "║           DOTFILES INSTALLER v${VERSION}                       ║"
     echo "║    The Ultimate Universal Shell Configuration              ║"
     echo "║    Supports: Bash, Zsh, Fish, Nushell                      ║"
     echo "╚════════════════════════════════════════════════════════════╝"
@@ -57,6 +78,101 @@ print_warning() {
 
 print_step() {
     echo -e "${PURPLE}→${NC} $1"
+}
+
+# Help message
+show_help() {
+    cat << EOF
+${BOLD}Dotfiles Installer v${VERSION}${NC}
+
+${BOLD}Usage:${NC} ./install.sh [OPTIONS]
+
+${BOLD}Options:${NC}
+  -h, --help              Show this help message
+  -v, --version           Show version information
+  -m, --mode MODE         Set configuration mode
+                          (basic|advanced|ultra-nerd)
+  -s, --shells SHELLS     Specify shells comma-separated
+                          (bash,zsh,fish,nushell)
+  -f, --force             Force overwrite existing files
+  -n, --no-backup         Skip backup step
+  -d, --dry-run           Show what would happen without changes
+  -i, --install-deps      Install dependencies automatically
+  --skip-deps             Skip dependency installation
+
+${BOLD}Examples:${NC}
+  ./install.sh                          # Interactive mode
+  ./install.sh -m advanced              # Advanced mode
+  ./install.sh -s bash,zsh              # Bash + Zsh only
+  ./install.sh -m ultra-nerd -i         # Ultra-nerd with deps
+  ./install.sh --dry-run                # Preview changes
+  ./install.sh -f --no-backup           # Force, no backup
+
+${BOLD}PowerShell Users:${NC}
+  For Windows PowerShell, use PowerConfig:
+  ${BLUE}https://github.com/thepinak503/powerconfig${NC}
+
+EOF
+}
+
+# Version info
+show_version() {
+    echo "Dotfiles Installer v${VERSION}"
+    echo "Repository: ${DOTFILES_REPO}"
+    echo "License: MIT"
+}
+
+# Parse command line arguments
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            -v|--version)
+                show_version
+                exit 0
+                ;;
+            -m|--mode)
+                SELECTED_MODE="$2"
+                shift 2
+                ;;
+            -s|--shells)
+                SELECTED_SHELLS="${2//,/ }"
+                shift 2
+                ;;
+            -f|--force)
+                FORCE_MODE=true
+                shift
+                ;;
+            -n|--no-backup)
+                SKIP_BACKUP=true
+                shift
+                ;;
+            -d|--dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            -i|--install-deps)
+                INSTALL_DEPS=true
+                shift
+                ;;
+            --skip-deps)
+                SKIP_DEPS=true
+                shift
+                ;;
+            -*)
+                print_error "Unknown option: $1"
+                echo "Use --help for usage information"
+                exit 1
+                ;;
+            *)
+                print_error "Unknown argument: $1"
+                exit 1
+                ;;
+        esac
+    done
 }
 
 # Check prerequisites
@@ -97,25 +213,21 @@ detect_shells() {
     
     DETECTED_SHELLS=""
     
-    # Check Bash
     if command -v bash &>/dev/null; then
         DETECTED_SHELLS+="bash "
         print_info "✓ Bash detected"
     fi
     
-    # Check Zsh
     if command -v zsh &>/dev/null; then
         DETECTED_SHELLS+="zsh "
         print_info "✓ Zsh detected"
     fi
     
-    # Check Fish
     if command -v fish &>/dev/null; then
         DETECTED_SHELLS+="fish "
         print_info "✓ Fish detected"
     fi
     
-    # Check Nushell
     if command -v nu &>/dev/null; then
         DETECTED_SHELLS+="nushell "
         print_info "✓ Nushell detected"
@@ -126,14 +238,27 @@ detect_shells() {
 
 # Select shells to configure
 select_shells() {
+    # If shells specified via command line, use those
+    if [[ -n "$SELECTED_SHELLS" ]]; then
+        # Validate shells
+        for shell in $SELECTED_SHELLS; do
+            case "$shell" in
+                bash|zsh|fish|nushell)
+                    ;;
+                *)
+                    print_error "Unknown shell: $shell"
+                    exit 1
+                    ;;
+            esac
+        done
+        print_success "Will configure: $SELECTED_SHELLS"
+        return
+    fi
+    
     echo ""
     print_step "Select shells to configure:"
     echo ""
     
-    # Detect available shells first
-    detect_shells
-    
-    echo ""
     echo "Which shells would you like to configure?"
     echo "  1) All detected shells"
     echo "  2) Bash only"
@@ -167,33 +292,37 @@ select_shells() {
 
 # Backup existing dotfiles
 backup_existing() {
+    if [[ "$SKIP_BACKUP" == true ]]; then
+        print_warning "Skipping backup (--no-backup specified)"
+        return
+    fi
+    
+    if [[ "$DRY_RUN" == true ]]; then
+        print_info "[DRY RUN] Would backup to: $BACKUP_DIR"
+        return
+    fi
+    
     print_step "Backing up existing dotfiles..."
     
     mkdir -p "$BACKUP_DIR"
     
-    # Backup Bash files
     [[ -f ~/.bashrc ]] && cp ~/.bashrc "$BACKUP_DIR/" && print_info "Backed up ~/.bashrc"
     [[ -f ~/.bash_profile ]] && cp ~/.bash_profile "$BACKUP_DIR/" && print_info "Backed up ~/.bash_profile"
     [[ -f ~/.bash_logout ]] && cp ~/.bash_logout "$BACKUP_DIR/" && print_info "Backed up ~/.bash_logout"
     [[ -f ~/.profile ]] && cp ~/.profile "$BACKUP_DIR/" && print_info "Backed up ~/.profile"
     [[ -f ~/.inputrc ]] && cp ~/.inputrc "$BACKUP_DIR/" && print_info "Backed up ~/.inputrc"
-    
-    # Backup Zsh files
     [[ -f ~/.zshrc ]] && cp ~/.zshrc "$BACKUP_DIR/" && print_info "Backed up ~/.zshrc"
     [[ -f ~/.zshenv ]] && cp ~/.zshenv "$BACKUP_DIR/" && print_info "Backed up ~/.zshenv"
     [[ -f ~/.zprofile ]] && cp ~/.zprofile "$BACKUP_DIR/" && print_info "Backed up ~/.zprofile"
     
-    # Backup Fish files
     if [[ -d ~/.config/fish ]]; then
         cp -r ~/.config/fish "$BACKUP_DIR/" && print_info "Backed up Fish config"
     fi
     
-    # Backup Nushell files
     if [[ -d ~/.config/nushell ]]; then
         cp -r ~/.config/nushell "$BACKUP_DIR/" && print_info "Backed up Nushell config"
     fi
     
-    # Backup Git config
     [[ -f ~/.gitconfig ]] && cp ~/.gitconfig "$BACKUP_DIR/" && print_info "Backed up ~/.gitconfig"
     [[ -f ~/.gitignore_global ]] && cp ~/.gitignore_global "$BACKUP_DIR/" && print_info "Backed up ~/.gitignore_global"
     
@@ -204,10 +333,25 @@ backup_existing() {
 clone_dotfiles() {
     print_step "Cloning dotfiles repository..."
     
+    if [[ "$DRY_RUN" == true ]]; then
+        if [[ -d "$DOTFILES_DIR" ]]; then
+            print_info "[DRY RUN] Would update existing dotfiles"
+        else
+            print_info "[DRY RUN] Would clone to: $DOTFILES_DIR"
+        fi
+        return
+    fi
+    
     if [[ -d "$DOTFILES_DIR" ]]; then
-        print_warning "Dotfiles directory already exists. Updating..."
-        cd "$DOTFILES_DIR"
-        git pull origin main
+        if [[ "$FORCE_MODE" == true ]]; then
+            print_warning "Force mode: Removing existing dotfiles"
+            rm -rf "$DOTFILES_DIR"
+            git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
+        else
+            print_warning "Dotfiles directory already exists. Updating..."
+            cd "$DOTFILES_DIR"
+            git pull origin main
+        fi
     else
         git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
     fi
@@ -217,9 +361,22 @@ clone_dotfiles() {
 
 # Install dependencies based on OS
 install_dependencies() {
-    print_step "Installing dependencies..."
+    if [[ "$SKIP_DEPS" == true ]]; then
+        print_warning "Skipping dependencies (--skip-deps specified)"
+        return
+    fi
     
-    local packages=""
+    if [[ "$DRY_RUN" == true ]]; then
+        print_info "[DRY RUN] Would install dependencies for: $OS"
+        return
+    fi
+    
+    if [[ "$INSTALL_DEPS" == false ]]; then
+        read -p "Install modern CLI tools (fzf, eza, bat, etc.)? [Y/n]: " install_deps
+        [[ "$install_deps" =~ ^[Nn]$ ]] && return
+    fi
+    
+    print_step "Installing dependencies..."
     
     case "$OS" in
         arch|manjaro|endeavouros)
@@ -227,7 +384,6 @@ install_dependencies() {
             print_info "Installing packages with pacman..."
             sudo pacman -S --needed --noconfirm $packages 2>/dev/null || print_warning "Some packages may need manual installation"
             
-            # Install Fish if not present
             if ! command -v fish &>/dev/null; then
                 read -p "Install Fish shell? [Y/n]: " install_fish
                 if [[ ! "$install_fish" =~ ^[Nn]$ ]]; then
@@ -235,7 +391,6 @@ install_dependencies() {
                 fi
             fi
             
-            # Check for AUR helper
             if command -v yay &>/dev/null || command -v paru &>/dev/null; then
                 print_info "Installing AUR packages..."
                 local aur_helper=$(command -v yay || command -v paru)
@@ -249,7 +404,6 @@ install_dependencies() {
             sudo apt-get update
             sudo apt-get install -y $packages 2>/dev/null || print_warning "Some packages may need manual installation"
             
-            # Install Fish
             if ! command -v fish &>/dev/null; then
                 read -p "Install Fish shell? [Y/n]: " install_fish
                 if [[ ! "$install_fish" =~ ^[Nn]$ ]]; then
@@ -257,10 +411,6 @@ install_dependencies() {
                 fi
             fi
             
-            # Install additional tools via other methods
-            print_info "Installing additional tools..."
-            
-            # starship
             if ! command -v starship &>/dev/null; then
                 curl -sS https://starship.rs/install.sh | sh
             fi
@@ -271,7 +421,6 @@ install_dependencies() {
             print_info "Installing packages with dnf..."
             sudo dnf install -y $packages 2>/dev/null || print_warning "Some packages may need manual installation"
             
-            # Install Fish
             if ! command -v fish &>/dev/null; then
                 read -p "Install Fish shell? [Y/n]: " install_fish
                 if [[ ! "$install_fish" =~ ^[Nn]$ ]]; then
@@ -285,7 +434,6 @@ install_dependencies() {
             print_info "Installing packages with zypper..."
             sudo zypper install -y $packages 2>/dev/null || print_warning "Some packages may need manual installation"
             
-            # Install Fish
             if ! command -v fish &>/dev/null; then
                 read -p "Install Fish shell? [Y/n]: " install_fish
                 if [[ ! "$install_fish" =~ ^[Nn]$ ]]; then
@@ -306,7 +454,6 @@ install_dependencies() {
                 print_info "Installing packages with Homebrew..."
                 brew install $packages 2>/dev/null || print_warning "Some packages may need manual installation"
                 
-                # Install Fish
                 if ! command -v fish &>/dev/null; then
                     read -p "Install Fish shell? [Y/n]: " install_fish
                     if [[ ! "$install_fish" =~ ^[Nn]$ ]]; then
@@ -330,7 +477,11 @@ install_dependencies() {
 create_symlinks() {
     print_step "Creating symlinks..."
     
-    # Create config directory
+    if [[ "$DRY_RUN" == true ]]; then
+        print_info "[DRY RUN] Would create symlinks for: $SELECTED_SHELLS"
+        return
+    fi
+    
     mkdir -p ~/.config
     
     # Bash configuration
@@ -358,14 +509,12 @@ create_symlinks() {
         
         ln -sf "$DOTFILES_DIR/fish/config.fish" ~/.config/fish/config.fish
         
-        # Link all fish configuration files
         for file in "$DOTFILES_DIR"/fish/conf.d/*.fish; do
             if [[ -f "$file" ]]; then
                 ln -sf "$file" ~/.config/fish/conf.d/
             fi
         done
         
-        # Link all fish functions
         for file in "$DOTFILES_DIR"/fish/functions/*.fish; do
             if [[ -f "$file" ]]; then
                 ln -sf "$file" ~/.config/fish/functions/
@@ -388,6 +537,13 @@ create_symlinks() {
         mkdir -p ~/.config
         ln -sf "$DOTFILES_DIR/config/starship.toml" ~/.config/starship.toml
         print_info "Starship configuration linked"
+    fi
+    
+    # Fastfetch
+    if [[ -f "$DOTFILES_DIR/config/fastfetch/config.jsonc" ]]; then
+        mkdir -p ~/.config/fastfetch
+        ln -sf "$DOTFILES_DIR/config/fastfetch/config.jsonc" ~/.config/fastfetch/config.jsonc
+        print_info "Fastfetch configuration linked"
     fi
     
     # Git
@@ -415,6 +571,21 @@ create_symlinks() {
 
 # Select mode
 select_mode() {
+    # If mode specified via command line, use that
+    if [[ -n "$SELECTED_MODE" ]]; then
+        case "$SELECTED_MODE" in
+            basic|advanced|ultra-nerd)
+                print_success "Mode set to: $SELECTED_MODE"
+                return
+                ;;
+            *)
+                print_error "Invalid mode: $SELECTED_MODE"
+                print_info "Valid modes: basic, advanced, ultra-nerd"
+                exit 1
+                ;;
+        esac
+    fi
+    
     print_step "Select your dotfiles mode:"
     echo ""
     echo -e "  ${GREEN}1) Basic${NC}       - Essential aliases, minimal configuration"
@@ -430,7 +601,8 @@ select_mode() {
         *) mode="advanced" ;;
     esac
     
-    # Create local configuration file for all shells
+    SELECTED_MODE="$mode"
+    
     echo "export DOTFILES_MODE=\"$mode\"" > ~/.bashrc.local
     echo "set -gx DOTFILES_MODE \"$mode\"" > ~/.config/fish/config.local.fish 2>/dev/null || true
     
@@ -440,6 +612,10 @@ select_mode() {
 # Change default shell
 change_default_shell() {
     if [[ -z "$SELECTED_SHELLS" ]]; then
+        return
+    fi
+    
+    if [[ "$DRY_RUN" == true ]]; then
         return
     fi
     
@@ -473,22 +649,44 @@ change_default_shell() {
     fi
 }
 
+# Print dry run summary
+print_dry_run_summary() {
+    echo ""
+    print_info "${BOLD}DRY RUN SUMMARY${NC}"
+    echo "  Mode: ${SELECTED_MODE:-interactive}"
+    echo "  Shells: ${SELECTED_SHELLS:-detected automatically}"
+    echo "  Backup: $([[ "$SKIP_BACKUP" == true ]] && echo "No" || echo "Yes")"
+    echo "  Force: $([[ "$FORCE_MODE" == true ]] && echo "Yes" || echo "No")"
+    echo "  Dependencies: $([[ "$SKIP_DEPS" == true ]] && echo "Skip" || echo "Install")"
+    echo ""
+    print_info "Run without --dry-run to apply changes"
+}
+
 # Main installation
 main() {
+    # Parse command line arguments
+    parse_args "$@"
+    
     print_header
     
     check_prerequisites
     detect_os
-    select_shells
+    
+    if [[ -z "$SELECTED_SHELLS" ]]; then
+        detect_shells
+        select_shells
+    fi
     
     if [[ -z "$SELECTED_SHELLS" ]]; then
         print_warning "No shells selected. Exiting."
         exit 0
     fi
     
-    echo ""
-    read -p "This will install dotfiles and backup existing configs. Continue? [Y/n]: " confirm
-    [[ "$confirm" =~ ^[Nn]$ ]] && { print_error "Installation cancelled"; exit 0; }
+    if [[ "$DRY_RUN" == false ]]; then
+        echo ""
+        read -p "This will install dotfiles and backup existing configs. Continue? [Y/n]: " confirm
+        [[ "$confirm" =~ ^[Nn]$ ]] && { print_error "Installation cancelled"; exit 0; }
+    fi
     
     backup_existing
     clone_dotfiles
@@ -497,6 +695,11 @@ main() {
     select_mode
     change_default_shell
     
+    if [[ "$DRY_RUN" == true ]]; then
+        print_dry_run_summary
+        exit 0
+    fi
+    
     echo ""
     print_success "Installation completed successfully!"
     echo ""
@@ -504,7 +707,6 @@ main() {
     print_info "Dotfiles location: $DOTFILES_DIR"
     echo ""
     
-    # Show reload commands for configured shells
     print_step "To apply changes, run:"
     if [[ "$SELECTED_SHELLS" == *"bash"* ]]; then
         echo "  Bash:    ${BOLD}source ~/.bashrc${NC}"
