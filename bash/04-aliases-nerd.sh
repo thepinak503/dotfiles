@@ -16,9 +16,8 @@ alias f='fzf --preview "bat --style=numbers --color=always --line-range :500 {}"
 alias fv='fzf --preview "bat --style=numbers --color=always --line-range :500 {}" | xargs -r $EDITOR'
 alias fvim='fzf --preview "bat --style=numbers --color=always --line-range :500 {}" | xargs -r nvim'
 
-# Directory navigation
+# Directory navigation (fcd is defined as a function in 07-modern-tools.sh)
 alias fd='fzf --preview "tree -C {} | head -200"'
-alias fcd='cd $(fzf --preview "tree -C {} | head -200")'
 
 # Git integration with fzf
 alias fbr='git branch -a | fzf | xargs git checkout'
@@ -26,8 +25,7 @@ alias fco='git log --oneline | fzf | cut -d" " -f1 | xargs git checkout'
 alias fshow='git log --oneline | fzf --preview "git show --stat --color {1}"'
 alias fstash='git stash list | fzf --preview "git stash show -p {1}" | cut -d: -f1 | xargs git stash pop'
 
-# Process killer with fzf
-alias fkill='ps aux | fzf --multi | awk "{print \$2}" | xargs -r kill -9'
+# Process killer with fzf (fkill is defined as a function in 07-modern-tools.sh)
 
 # Environment variable viewer
 alias fenv='env | fzf'

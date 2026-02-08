@@ -2,8 +2,8 @@
 # Enhanced git settings with Delta integration
 
 [user]
-    name = Your Name
-    email = your.email@example.com
+	name = Pinak Dhabu
+	email = thepinak503@duck.com
 
 [core]
     editor = nvim
@@ -12,7 +12,6 @@
 	pager = delta
     whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = ~/.gitignore_global
-    autocrlf = input
 
 [init]
     defaultBranch = main
