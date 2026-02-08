@@ -37,6 +37,7 @@ DRY_RUN=false
 INSTALL_DEPS=false
 SKIP_DEPS=false
 CONFIRMED=false
+INSTALL_PACKAGES=false
 
 # Print functions
 print_header() {
@@ -133,6 +134,10 @@ ${BOLD}Dotfiles Installer v${VERSION} - STRICT MODE${NC}
 
 ${BOLD}Usage:${NC} ./install.sh [OPTIONS]
 
+${BOLD}Quick Start (Two-Step Process):${NC}
+  ${GREEN}1. Install system packages:${NC}   ./install_dotfiles.sh --all
+  ${GREEN}2. Configure dotfiles:${NC}       ./install.sh
+
 ${BOLD}Options:${NC}
   -h, --help              Show this help message
   -v, --version           Show version information
@@ -143,14 +148,21 @@ ${BOLD}Options:${NC}
   -d, --dry-run           Show what would happen without changes
   -i, --install-deps      Install dependencies automatically
   --skip-deps             Skip dependency installation
+  --install-packages      Install all packages via install_dotfiles.sh first
   -y, --yes               Skip confirmation (use with caution)
 
 ${BOLD}Examples:${NC}
   ./install.sh                          # Interactive mode with double confirmation
+  ./install.sh --install-packages       # Install packages then configure
   ./install.sh -m advanced              # Advanced mode
   ./install.sh -s bash,zsh              # Bash + Zsh only
   ./install.sh -m ultra-nerd -i -y      # Auto-install with no confirm
   ./install.sh --dry-run                # Preview changes
+
+${BOLD}Two-Step Installation:${NC}
+  For a complete setup, run both scripts:
+  ${PURPLE}./install_dotfiles.sh --all${NC}  # Installs all system packages
+  ${PURPLE}./install.sh${NC}               # Configures dotfiles
 
 ${BOLD}Safety Features:${NC}
   • Double confirmation required by default
@@ -178,6 +190,7 @@ parse_args() {
             -d|--dry-run) DRY_RUN=true; shift ;;
             -i|--install-deps) INSTALL_DEPS=true; shift ;;
             --skip-deps) SKIP_DEPS=true; shift ;;
+            --install-packages) INSTALL_PACKAGES=true; shift ;;
             -y|--yes) CONFIRMED=true; shift ;;
             -*) print_error "Unknown option: $1"; show_help; exit 1 ;;
             *) print_error "Unknown argument: $1"; exit 1 ;;
@@ -471,6 +484,60 @@ install_dependencies() {
     print_success "Dependencies installed!"
 }
 
+# Check for missing modern tools and suggest install_dotfiles.sh
+check_missing_tools() {
+    local missing_tools=()
+    
+    command -v fzf &>/dev/null || missing_tools+=("fzf")
+    command -v eza &>/dev/null || missing_tools+=("eza")
+    command -v bat &>/dev/null || missing_tools+=("bat")
+    command -v zoxide &>/dev/null || missing_tools+=("zoxide")
+    command -v starship &>/dev/null || missing_tools+=("starship")
+    command -v ripgrep &>/dev/null || missing_tools+=("ripgrep")
+    command -v fd &>/dev/null || missing_tools+=("fd")
+    
+    if [ ${#missing_tools[@]} -gt 0 ]; then
+        echo ""
+        print_warning "Some modern tools are not installed: ${missing_tools[*]}"
+        print_info "For the best experience, run: ./install_dotfiles.sh --all"
+        print_info "This will install all packages for all shells."
+        echo ""
+        read -p "Would you like to run install_dotfiles.sh now? [y/N] " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            if [ -f "$DOTFILES_DIR/install_dotfiles.sh" ]; then
+                "$DOTFILES_DIR/install_dotfiles.sh"
+            elif [ -f "./install_dotfiles.sh" ]; then
+                ./install_dotfiles.sh
+            else
+                print_error "install_dotfiles.sh not found!"
+                print_info "Download it from: https://github.com/thepinak503/dotfiles"
+            fi
+        fi
+    fi
+}
+
+# Run install_dotfiles.sh if --install-packages flag is set
+run_install_packages() {
+    if [[ "$INSTALL_PACKAGES" == true ]]; then
+        print_step "Running install_dotfiles.sh to install all packages..."
+        
+        if [ -f "$DOTFILES_DIR/install_dotfiles.sh" ]; then
+            "$DOTFILES_DIR/install_dotfiles.sh" --yes
+        elif [ -f "./install_dotfiles.sh" ]; then
+            ./install_dotfiles.sh --yes
+        else
+            print_error "install_dotfiles.sh not found!"
+            print_info "Please ensure install_dotfiles.sh is in the same directory."
+            print_info "Download it from: https://github.com/thepinak503/dotfiles"
+            exit 1
+        fi
+        
+        print_success "Package installation complete!"
+        echo ""
+    fi
+}
+
 # Create symlinks
 create_symlinks() {
     print_step "Creating symbolic links..."
@@ -653,6 +720,9 @@ print_post_install() {
 main() {
     parse_args "$@"
     
+    # Run package installer if requested
+    run_install_packages
+    
     # Skip confirmation only with -y flag
     if [[ "$CONFIRMED" != true ]]; then
         print_header
@@ -706,6 +776,9 @@ main() {
         print_info "DRY RUN completed. No changes were made."
         exit 0
     fi
+    
+    # Check for missing tools and offer to install them
+    check_missing_tools
     
     print_post_install
 }
