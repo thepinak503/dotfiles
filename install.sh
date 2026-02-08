@@ -546,6 +546,13 @@ create_symlinks() {
         print_info "Fastfetch configuration linked"
     fi
     
+    # VS Code:
+    if [[ -f "$DOTFILES_DIR/config/Code/settings.json" ]]; then
+        mkdir -p ~/.config/Code/User
+        ln -sf "$DOTFILES_DIR/config/Code/settings.json" ~/.config/Code/User/settings.json
+        print_info "VS Code: settings linked"
+    fi
+    
     # Git
     if [[ -f "$DOTFILES_DIR/git/.gitconfig" ]]; then
         ln -sf "$DOTFILES_DIR/git/.gitconfig" ~/.gitconfig

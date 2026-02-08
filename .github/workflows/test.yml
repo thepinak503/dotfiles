@@ -1,0 +1,51 @@
+name: Test Dotfiles
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-shell-syntax:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Test Bash syntax
+      run: |
+        for file in bash/*.sh; do
+          bash -n "$file"
+        done
+    
+    - name: Test install script syntax
+      run: bash -n install.sh && bash -n uninstall.sh
+
+  test-install:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Test dry run install
+      run: |
+        ./install.sh --dry-run --mode basic
+    
+    - name: Test install
+      run: |
+        ./install.sh --force --mode basic --shells bash
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install shellcheck
+      run: sudo apt-get install -y shellcheck
+    
+    - name: Run shellcheck
+      run: |
+        shellcheck install.sh uninstall.sh || true
+        shellcheck bash/*.sh || true
