@@ -471,6 +471,48 @@ install_dependencies() {
     esac
     
     print_success "Dependencies installed (or skipped if unavailable)"
+    
+    # Install Zsh plugins after dependencies
+    if [[ "$DRY_RUN" != true ]]; then
+        install_zsh_plugins
+    fi
+}
+
+# Install Zsh plugins
+install_zsh_plugins() {
+    if [[ "$SELECTED_SHELLS" != *"zsh"* ]]; then
+        return
+    fi
+    
+    if ! command -v git &>/dev/null; then
+        return
+    fi
+    
+    # Check if Oh-My-Zsh is installed
+    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+        return
+    fi
+    
+    print_step "Installing Zsh plugins..."
+    
+    # Create custom plugins directory if it doesn't exist
+    mkdir -p "$HOME/.oh-my-zsh/custom/plugins"
+    
+    # zsh-syntax-highlighting
+    if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]]; then
+        if git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
+            "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" 2>/dev/null; then
+            print_info "Installed: zsh-syntax-highlighting"
+        fi
+    fi
+    
+    # zsh-autosuggestions
+    if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]]; then
+        if git clone https://github.com/zsh-users/zsh-autosuggestions.git \
+            "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" 2>/dev/null; then
+            print_info "Installed: zsh-autosuggestions"
+        fi
+    fi
 }
 
 # Create symlinks for selected shells

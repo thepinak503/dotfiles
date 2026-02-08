@@ -36,6 +36,20 @@ command -v fzf &>/dev/null && plugins+=(fzf)
 command -v docker &>/dev/null && plugins+=(docker)
 command -v kubectl &>/dev/null && plugins+=(kubectl)
 
+# Add zsh-syntax-highlighting if available
+if [[ -d $ZSH/custom/plugins/zsh-syntax-highlighting ]] || \
+   [[ -d /usr/share/zsh/plugins/zsh-syntax-highlighting ]] || \
+   [[ -d /usr/share/zsh-syntax-highlighting ]]; then
+    plugins+=(zsh-syntax-highlighting)
+fi
+
+# Add zsh-autosuggestions if available
+if [[ -d $ZSH/custom/plugins/zsh-autosuggestions ]] || \
+   [[ -d /usr/share/zsh/plugins/zsh-autosuggestions ]] || \
+   [[ -d /usr/share/zsh-autosuggestions ]]; then
+    plugins+=(zsh-autosuggestions)
+fi
+
 source $ZSH/oh-my-zsh.sh
 
 # =============================================================================
@@ -95,6 +109,24 @@ autoload -Uz compinit
 compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# Syntax highlighting (if installed)
+if [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [[ -f ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+# Auto-suggestions (if installed)
+if [[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [[ -f ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
 
 # =============================================================================
 # STARSHIP PROMPT
