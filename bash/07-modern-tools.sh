@@ -19,29 +19,29 @@ if command -v fzf &>/dev/null; then
         [[ -f /usr/share/doc/fzf/examples/completion.bash ]] && source /usr/share/doc/fzf/examples/completion.bash 2>/dev/null
         [[ -f ~/.fzf.bash ]] && source ~/.fzf.bash 2>/dev/null
     fi
-    
+
     # Advanced fzf functions
-    
+
     # Interactive cd
     fcd() {
         local dir
-        dir=$(find ${1:-.} -type d -not -path '*/\.*' 2>/dev/null | fzf --preview 'tree -C {} | head -20') && cd "$dir"
+        dir=$(find "${1:-.}" -type d -not -path '*/.*' 2>/dev/null | fzf --preview 'tree -C {} | head -20') && cd "$dir"
     }
-    
+
     # Interactive file edit
     fe() {
         local files
         IFS=$'\n' files=($(fzf --query="$1" --multi --select-1 --exit-0 --preview 'bat --style=numbers --color=always --line-range :500 {}'))
         [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
     }
-    
+
     # Interactive kill
     fkill() {
         local pid
         pid=$(ps -ef | sed 1d | fzf --multi --header='[kill process]' | awk '{print $2}')
         [[ -n "$pid" ]] && echo "$pid" | xargs kill -${1:-9}
     }
-    
+
     # Git branch checkout
     fbr() {
         local branches branch
@@ -49,7 +49,7 @@ if command -v fzf &>/dev/null; then
         branch=$(echo "$branches" | fzf --height=20 --reverse +m) &&
         git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
     }
-    
+
     # Git commit browser
     fshow() {
         git log --graph --color=always \
@@ -61,12 +61,12 @@ if command -v fzf &>/dev/null; then
                 {}
 FZF-EOF"
     }
-    
+
     # Environment variable viewer
     fenv() {
         printenv | fzf --preview 'echo {}' --preview-window=down:3:wrap
     }
-    
+
     # History search
     fhist() {
         local cmd
@@ -81,7 +81,7 @@ fi
 
 if command -v zoxide &>/dev/null; then
     eval "$(zoxide init bash)"
-    
+
     # Aliases for zoxide
     alias z='__zoxide_z'
     alias zi='__zoxide_zi'
@@ -89,7 +89,7 @@ if command -v zoxide &>/dev/null; then
     alias zq='zoxide query'
     alias zr='zoxide remove'
     alias zl='zoxide list'
-    
+
     # Keep cd as z
     alias cd='z'
 fi
@@ -104,31 +104,31 @@ if command -v eza &>/dev/null; then
     alias l='eza -la --group-directories-first --icons'
     alias la='eza -a --group-directories-first --icons'
     alias ll='eza -l --group-directories-first --icons'
-    
+
     # Advanced eza features
     alias lt='eza --tree --level=2 --icons'
     alias ltt='eza --tree --level=3 --icons'
     alias ltl='eza --tree --level=2 --long --icons'
     alias ltg='eza --tree --level=2 --git --icons'
-    
+
     # Sorting
     alias lsize='eza -la --sort=size --reverse --icons'
     alias ltime='eza -la --sort=modified --reverse --icons'
     alias lold='eza -la --sort=modified --icons'
     alias lext='eza -la --sort=extension --icons'
     alias lname='eza -la --sort=name --icons'
-    
+
     # Git integration
     alias lg='eza -la --git --icons'
     alias lgi='eza -la --git-ignore --icons'
-    
+
     # Hidden files
     alias l.='eza -d --icons .*'
     alias lah='eza -la --icons'
-    
+
     # One column
     alias l1='eza -1 --icons'
-    
+
 elif command -v exa &>/dev/null; then
     # Fallback to exa
     alias ls='exa --group-directories-first --icons'
@@ -146,25 +146,25 @@ fi
 if command -v bat &>/dev/null; then
     # Main cat replacement
     alias cat='bat --style=header,grid'
-    
+
     # Plain mode for scripts
     alias catp='bat --style=plain --paging=never'
-    
+
     # With paging
     alias catl='bat --style=header,grid --paging=always'
-    
+
     # Numbers only
     alias catn='bat --style=numbers'
-    
+
     # Diff mode
     alias batdiff='bat --diff'
-    
+
     # Man pages with bat
     export MANPAGER="sh -c 'col -bx | bat -l man -p'"
     export MANROFFOPT="-c"
-    
+
     # Note: --help alias removed (zsh-specific syntax not compatible with bash)
-    
+
 elif command -v batcat &>/dev/null; then
     # Debian/Ubuntu alternative name
     alias cat='batcat --style=header,grid'
@@ -181,7 +181,7 @@ fi
 if command -v rg &>/dev/null; then
     # Main grep replacement
     alias grep='rg --color=always'
-    
+
     # Common options
     alias rgi='rg -i'
     alias rgv='rg -v'
@@ -193,7 +193,7 @@ if command -v rg &>/dev/null; then
     alias rgff='rg --files-with-matches'
     alias rgno='rg --no-heading'
     alias rgn='rg -n'
-    
+
     # Specific file types
     alias rgpy='rg -t py'
     alias rgjs='rg -t js'
@@ -215,29 +215,29 @@ fi
 if command -v fd &>/dev/null; then
     # Main find replacement
     alias find='fd'
-    
+
     # Files only
     alias ff='fd --type f'
     alias ffind='fd --type f'
-    
+
     # Directories only
     alias fdir='fd --type d'
-    
+
     # Hidden files
     alias fhidden='fd --hidden'
-    
+
     # Case insensitive
     alias ffi='fd -i'
-    
+
     # Absolute path
     alias fabs='fd --absolute-path'
-    
+
     # Follow symlinks
     alias ffollow='fd --follow'
-    
+
     # Execute command
     alias fexec='fd --exec'
-    
+
     # Specific extensions
     alias fpy='fd -e py'
     alias fjs='fd -e js'
