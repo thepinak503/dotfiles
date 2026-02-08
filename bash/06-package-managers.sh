@@ -175,6 +175,32 @@ case "$DISTRO_FAMILY" in
         alias rpminfo='rpm -qi'
         alias rpmfiles='rpm -ql'
         alias rpmwhich='rpm -qf'
+        
+        # Amazon Linux specific
+        if [[ "$DISTRO_ID" == "amzn" ]]; then
+            # Amazon Linux uses yum/dnf but has some specific features
+            alias amazon-update='sudo yum update -y'
+            alias amazon-upgrade='sudo yum upgrade -y'
+            alias al-install='sudo yum install -y'
+            alias al-remove='sudo yum remove -y'
+            alias al-search='yum search'
+            alias al-info='yum info'
+            alias al-list='yum list installed'
+            alias al-clean='sudo yum clean all'
+            
+            # Amazon Linux extras
+            if command -v amazon-linux-extras &>/dev/null; then
+                alias al-extras='amazon-linux-extras'
+                alias al-list-extras='amazon-linux-extras list'
+                alias al-enable='amazon-linux-extras enable'
+                alias al-disable='amazon-linux-extras disable'
+                alias al-install-extras='amazon-linux-extras install'
+            fi
+            
+            # AWS CLI specific
+            alias aws-update='sudo yum update -y aws-cli'
+            alias aws-install='sudo yum install -y aws-cli'
+        fi
         ;;
         
     "suse")

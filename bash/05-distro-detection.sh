@@ -26,7 +26,7 @@ detect_distro() {
             debian|ubuntu|linuxmint|pop|elementary|zorin|kali|parrot|mx)
                 export DISTRO_FAMILY="debian"
                 ;;
-            fedora|rhel|centos|almalinux|rocky|ol)
+            fedora|rhel|centos|almalinux|rocky|ol|amzn)
                 export DISTRO_FAMILY="rhel"
                 ;;
             opensuse*|suse*)
@@ -65,7 +65,7 @@ detect_distro() {
             debian|ubuntu|mint)
                 export DISTRO_FAMILY="debian"
                 ;;
-            fedora|redhat*|centos)
+            fedora|redhat*|centos|amazon)
                 export DISTRO_FAMILY="rhel"
                 ;;
             opensuse*)
@@ -143,6 +143,14 @@ detect_package_manager() {
         export PKG_SEARCH="dnf search"
         export PKG_QUERY="dnf list installed"
         export PKG_CLEAN="sudo dnf autoremove"
+    elif command -v yum &>/dev/null; then
+        export PKG_MANAGER="yum"
+        export PKG_INSTALL="sudo yum install"
+        export PKG_REMOVE="sudo yum remove"
+        export PKG_UPDATE="sudo yum update"
+        export PKG_SEARCH="yum search"
+        export PKG_QUERY="yum list installed"
+        export PKG_CLEAN="sudo yum clean all"
     elif command -v zypper &>/dev/null; then
         export PKG_MANAGER="zypper"
         export PKG_INSTALL="sudo zypper install"

@@ -82,6 +82,16 @@ install_packages() {
             print_step "Installing packages with dnf..."
             sudo dnf install -y $packages 2>/dev/null || print_warning "Some packages may have failed"
             ;;
+        amzn)
+            print_step "Installing packages on Amazon Linux..."
+            if command -v dnf &>/dev/null; then
+                sudo dnf install -y $packages 2>/dev/null || print_warning "Some packages may have failed"
+            elif command -v yum &>/dev/null; then
+                sudo yum install -y $packages 2>/dev/null || print_warning "Some packages may have failed"
+            else
+                print_error "Neither dnf nor yum found on Amazon Linux"
+            fi
+            ;;
         opensuse*)
             print_step "Installing packages with zypper..."
             sudo zypper install -y $packages 2>/dev/null || print_warning "Some packages may have failed"
@@ -398,8 +408,28 @@ install_lang_managers() {
     # Rust
     if ! command -v rustc &>/dev/null; then
         print_step "Installing Rust..."
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        print_success "Rust installed"
+        case "$OS" in
+            amzn)
+                print_step "Installing Rust on Amazon Linux..."
+                # Try package manager first
+                if command -v dnf &>/dev/null; then
+                    sudo dnf install -y rust cargo 2>/dev/null && print_success "Rust installed via dnf"
+                elif command -v yum &>/dev/null; then
+                    sudo yum install -y rust cargo 2>/dev/null && print_success "Rust installed via yum"
+                fi
+                
+                # Fallback to rustup if package manager failed
+                if ! command -v rustc &>/dev/null; then
+                    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+                    print_success "Rust installed via rustup"
+                fi
+                ;;
+            *)
+                # Use rustup for other distros
+                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+                print_success "Rust installed"
+                ;;
+        esac
     fi
     
     # Go

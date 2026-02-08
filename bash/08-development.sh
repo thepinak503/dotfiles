@@ -133,6 +133,100 @@ fi
 # RUST DEVELOPMENT
 # =============================================================================
 
+# Install Cargo/Rust on Amazon Linux if not present
+install_cargo_amazon_linux() {
+    if [[ "$DISTRO_ID" == "amzn" ]] && ! command -v cargo &>/dev/null; then
+        echo "Installing Rust/Cargo on Amazon Linux..."
+        
+        # Method 1: Use yum to install rust (Amazon Linux 2022+)
+        if command -v yum &>/dev/null; then
+            sudo yum install -y rust cargo 2>/dev/null && return 0
+        fi
+        
+        # Method 2: Use dnf to install rust (Amazon Linux 2023+)
+        if command -v dnf &>/dev/null; then
+            sudo dnf install -y rust cargo 2>/dev/null && return 0
+        fi
+        
+        # Method 3: Install via rustup (recommended)
+        echo "Installing Rust via rustup..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source "$HOME/.cargo/env" 2>/dev/null || true
+        
+        # Add to PATH for current session
+        export PATH="$HOME/.cargo/bin:$PATH"
+        
+        if command -v cargo &>/dev/null; then
+            echo "✓ Rust/Cargo installed successfully!"
+            return 0
+        else
+            echo "✗ Failed to install Rust/Cargo"
+            return 1
+        fi
+    fi
+    return 0
+}
+
+# Universal Cargo installation function
+install_cargo() {
+    if command -v cargo &>/dev/null; then
+        echo "Cargo is already installed!"
+        cargo --version
+        return 0
+    fi
+    
+    echo "Installing Rust/Cargo..."
+    
+    case "$DISTRO_FAMILY" in
+        "rhel")
+            # Amazon Linux, RHEL, CentOS, Fedora
+            if command -v dnf &>/dev/null; then
+                sudo dnf install -y rust cargo
+            elif command -v yum &>/dev/null; then
+                sudo yum install -y rust cargo
+            fi
+            ;;
+        "debian")
+            # Debian, Ubuntu
+            sudo apt update
+            sudo apt install -y rustc cargo
+            ;;
+        "arch")
+            # Arch Linux
+            sudo pacman -S rust
+            ;;
+        "suse")
+            # openSUSE
+            sudo zypper install -y rust cargo
+            ;;
+        "alpine")
+            # Alpine Linux
+            sudo apk add rust cargo
+            ;;
+        *)
+            # Fallback to rustup for any other distro
+            echo "Installing via rustup (recommended method)..."
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            source "$HOME/.cargo/env" 2>/dev/null || true
+            export PATH="$HOME/.cargo/bin:$PATH"
+            ;;
+    esac
+    
+    # Verify installation
+    if command -v cargo &>/dev/null; then
+        echo "✓ Rust/Cargo installed successfully!"
+        cargo --version
+    else
+        echo "✗ Failed to install Rust/Cargo. You may need to install it manually."
+        return 1
+    fi
+}
+
+# Auto-install Cargo on Amazon Linux if needed
+if [[ "$DISTRO_ID" == "amzn" ]] && [[ -n "$BASH_VERSION" ]]; then
+    install_cargo_amazon_linux
+fi
+
 if command -v cargo &>/dev/null; then
     alias c='cargo'
     alias cb='cargo build'
