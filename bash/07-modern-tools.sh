@@ -22,11 +22,7 @@ if command -v fzf &>/dev/null; then
 
     # Advanced fzf functions
 
-    # Interactive cd
-    fcd() {
-        local dir
-        dir=$(find "${1:-.}" -type d -not -path '*/.*' 2>/dev/null | fzf --preview 'tree -C {} | head -20') && cd "$dir"
-    }
+
 
     # Interactive file edit
     fe() {
@@ -35,44 +31,15 @@ if command -v fzf &>/dev/null; then
         [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
     }
 
-    # Interactive kill
-    fkill() {
-        local pid
-        pid=$(ps -ef | sed 1d | fzf --multi --header='[kill process]' | awk '{print $2}')
-        [[ -n "$pid" ]] && echo "$pid" | xargs kill -${1:-9}
-    }
 
-    # Git branch checkout
-    fbr() {
-        local branches branch
-        branches=$(git branch -vv) &&
-        branch=$(echo "$branches" | fzf --height=20 --reverse +m) &&
-        git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
-    }
 
-    # Git commit browser
-    fshow() {
-        git log --graph --color=always \
-            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-        fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-            --bind "ctrl-m:execute:
-                (grep -o '[a-f0-9]\{7\}' | head -1 |
-                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
-                {}
-FZF-EOF"
-    }
 
-    # Environment variable viewer
-    fenv() {
-        printenv | fzf --preview 'echo {}' --preview-window=down:3:wrap
-    }
 
-    # History search
-    fhist() {
-        local cmd
-        cmd=$(history | fzf --tac +s --query="$1" | sed 's/^[ ]*[0-9]*[ ]*//')
-        [[ -n "$cmd" ]] && echo "$cmd" && eval "$cmd"
-    }
+
+
+
+
+
 fi
 
 # =============================================================================

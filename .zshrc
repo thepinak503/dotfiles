@@ -50,7 +50,8 @@ if [[ -d $ZSH/custom/plugins/zsh-autosuggestions ]] || \
     plugins+=(zsh-autosuggestions)
 fi
 
-source $ZSH/oh-my-zsh.sh
+# Source Oh-My-Zsh if it exists
+[[ -f "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
 # =============================================================================
 # LOAD DOTFILES BASH COMPONENTS (shared)
@@ -104,9 +105,9 @@ bindkey '^[[F' end-of-line
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
 
-# Completion
+# Completion with security handling
 autoload -Uz compinit
-compinit
+compinit -u 2>/dev/null || compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 

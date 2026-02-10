@@ -5,8 +5,28 @@
 # =============================================================================
 
 # -----------------------------------------------------------------------------
+# SOURCE SHARED LIBRARY
+# -----------------------------------------------------------------------------
+# Load shared colors and utility functions if available
+[[ -f "${DOTFILES_DIR:-$HOME/.dotfiles}/lib/colors.sh" ]] && \
+    source "${DOTFILES_DIR:-$HOME/.dotfiles}/lib/colors.sh"
+
+# -----------------------------------------------------------------------------
 # XDG BASE DIRECTORY SPECIFICATION
 # -----------------------------------------------------------------------------
+# Ensure XDG directories exist
+ensure_xdg_dirs() {
+    local dirs=(
+        "${XDG_DATA_HOME:-$HOME/.local/share}"
+        "${XDG_CONFIG_HOME:-$HOME/.config}"
+        "${XDG_STATE_HOME:-$HOME/.local/state}"
+        "${XDG_CACHE_HOME:-$HOME/.cache}"
+    )
+    for dir in "${dirs[@]}"; do
+        [[ -d "$dir" ]] || mkdir -p "$dir"
+    done
+}
+ensure_xdg_dirs
 export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
@@ -15,15 +35,26 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 # -----------------------------------------------------------------------------
 # HISTORY CONFIGURATION (Universal Best Practices)
 # -----------------------------------------------------------------------------
-export HISTSIZE=10000
+export HISTSIZE=50000
 export HISTFILESIZE=100000
 export HISTTIMEFORMAT="%F %T "
 export HISTCONTROL="erasedups:ignoredups:ignorespace"
-export HISTIGNORE="&:ls:ll:la:cd:cd ..:exit:clear:history:pwd"
+export HISTIGNORE="&:ls:ll:la:l:cd:cd ..:exit:clear:history:pwd:date:* --help"
 
 # Eternal history (survives across sessions)
 export HISTFILE_ETERNAL="$HOME/.bash_eternal_history"
-[[ ! -f "$HISTFILE_ETERNAL" ]] && touch "$HISTFILE_ETERNAL" && chmod 600 "$HISTFILE_ETERNAL"
+if [[ ! -f "$HISTFILE_ETERNAL" ]]; then
+    touch "$HISTFILE_ETERNAL"
+    chmod 600 "$HISTFILE_ETERNAL"
+fi
+
+# Enhanced history with timestamp and command duration (if available)
+if [[ "${BASH_VERSINFO[0]}" -ge 4 ]]; then
+    # Record command start time
+    export HISTFILE="$HOME/.bash_history"
+    # Sync history immediately for better multi-terminal experience
+    shopt -s histappend &>/dev/null
+fi
 
 # -----------------------------------------------------------------------------
 # DEFAULT APPLICATIONS
@@ -93,21 +124,43 @@ export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 # -----------------------------------------------------------------------------
 # PATH MANAGEMENT (Smart Appending)
 # -----------------------------------------------------------------------------
-_path_append() {
-    if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
-        export PATH="${PATH:+$PATH:}$1"
-    fi
+# Note: _path_append and _path_prepend are now in lib/colors.sh
+# Define local versions for standalone usage
+
+if ! declare -f _path_append &>/dev/null; then
+    _path_append() {
+        if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+            export PATH="${PATH:+$PATH:}$1"
+        fi
+    }
+fi
+
+if ! declare -f _path_prepend &>/dev/null; then
+    _path_prepend() {
+        if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+            export PATH="$1${PATH:+:$PATH}"
+        fi
+    }
+fi
+
+# Deduplicate PATH function
+_dedup_path() {
+    local IFS=':'
+    local -a paths=($PATH)
+    local -a unique=()
+    local p
+    for p in "${paths[@]}"; do
+        [[ -z "$p" ]] && continue
+        if [[ ! " ${unique[*]} " =~ " $p " ]]; then
+            unique+=("$p")
+        fi
+    done
+    export PATH="$(IFS=':'; echo "${unique[*]}")"
 }
 
-_path_prepend() {
-    if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
-        export PATH="$1${PATH:+:$PATH}"
-    fi
-}
-
-# User-local binaries
+# User-local binaries (order matters - prepend for priority)
 _path_prepend "$HOME/.local/bin"
-_path_append "$HOME/.cargo/bin"
+_path_prepend "$HOME/.cargo/bin"
 _path_append "$HOME/.dotnet/tools"
 _path_append "$HOME/.npm-global/bin"
 _path_append "$HOME/.poetry/bin"
@@ -119,13 +172,24 @@ _path_append "$HOME/go/bin"
 # Flatpak exports
 [[ -d "/var/lib/flatpak/exports/bin" ]] && _path_append "/var/lib/flatpak/exports/bin"
 
-# Homebrew (Linux/macOS)
-if [[ -d "/home/linuxbrew/.linuxbrew/bin" ]]; then
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-elif [[ -d "/opt/homebrew/bin" ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ -d "/usr/local/bin/brew" ]]; then
-    eval "$(/usr/local/bin/brew shellenv)"
+# Homebrew (Linux/macOS) - only initialize once
+if [[ -z "${HOMEBREW_INITIALIZED:-}" ]]; then
+    if [[ -d "/home/linuxbrew/.linuxbrew/bin" ]]; then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        export HOMEBREW_INITIALIZED=1
+    elif [[ -d "/opt/homebrew/bin" ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+        export HOMEBREW_INITIALIZED=1
+    elif [[ -x "/usr/local/bin/brew" ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+        export HOMEBREW_INITIALIZED=1
+    fi
+fi
+
+# Clean up PATH to remove duplicates (run once per session)
+if [[ -z "${PATH_DEDUPED:-}" ]]; then
+    _dedup_path
+    export PATH_DEDUPED=1
 fi
 
 # -----------------------------------------------------------------------------

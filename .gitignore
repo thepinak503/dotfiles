@@ -1,0 +1,230 @@
+# =============================================================================
+# DOTFILES REPOSITORY GITIGNORE
+# =============================================================================
+# Security: Never commit credentials or sensitive files!
+# =============================================================================
+
+# =============================================================================
+# CREDENTIALS & SECRETS - NEVER COMMIT THESE
+# =============================================================================
+
+# Environment files with credentials
+.env
+.env.local
+.env.*.local
+.envrc
+*.env
+
+# SSH keys and certificates
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.priv
+id_*
+!id_*.pub
+known_hosts
+authorized_keys
+config.local
+
+# GPG
+*.gpg
+*.pgp
+secring.*
+
+# Password files
+*password*
+*secret*
+*credential*
+*token*
+*.secret
+
+# Encrypted files that might contain credentials
+secrets*
+!secrets.template*
+!secrets.example*
+
+# Cloud provider credentials
+.aws/
+.azure/
+.gcp/
+*.tfvars
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Kubernetes
+kubeconfig
+*.kubeconfig
+.kube/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# =============================================================================
+# DOTFILES SPECIFIC - GENERATED/LOCAL FILES
+# =============================================================================
+
+# Local customizations (user-specific)
+*.local
+*.local.sh
+.bashrc.local
+.zshrc.local
+.config.local
+
+# Backup files
+*.bak
+*.backup
+*.orig
+*~
+*.tmp
+
+# Cache directories
+.cache/
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+logs/
+
+# Temporary directories
+tmp/
+temp/
+.tmp/
+
+# =============================================================================
+# EDITOR & IDE FILES
+# =============================================================================
+
+# Vim/Neovim
+*.swp
+*.swo
+*.swn
+*~
+.netrwhist
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+# Emacs
+*~
+\#*\#
+.#*
+
+# =============================================================================
+# OS GENERATED FILES
+# =============================================================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# =============================================================================
+# DEVELOPMENT
+# =============================================================================
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+
+# Ruby
+*.gem
+.bundle/
+vendor/
+
+# Go
+vendor/
+
+# Rust
+target/
+Cargo.lock
+
+# =============================================================================
+# TESTING & COVERAGE
+# =============================================================================
+
+coverage/
+*.cover
+*.coverage
+.nyc_output/
+
+# =============================================================================
+# BUILD OUTPUTS
+# =============================================================================
+
+build/
+dist/
+out/
+*.min.js
+*.min.css
+
+# =============================================================================
+# MISC
+# =============================================================================
+
+# Profiler output
+*.prof
+profile.log
+
+# Session files
+*.session
+*.sess
+
+# History files (already tracked separately)
+# .bash_history
+# .zsh_history
+
+# =============================================================================
+# EXCEPTIONS - DO NOT IGNORE THESE
+# =============================================================================
+
+# Keep these even if they match patterns above
+!.gitkeep
+!.gitignore
+!.editorconfig
+!README.md
+!LICENSE
+!example.env
+!template.env
