@@ -1,16 +1,13 @@
 #!/bin/bash
 # =============================================================================
-# DOTFILES INSTALLER v3.0.0 - STRICT MODE
-# One-command setup with double confirmation for safety
+# DOTFILES INSTALLER v4.0.0 - UNIFIED
+# Supports both traditional and dynamic installation modes
 # =============================================================================
 
 set -euo pipefail
 
 # Version
-VERSION="3.0.0"
-
-# Strict mode - exit on any error
-set -e
+VERSION="4.0.0"
 
 # Colors
 RED='\033[0;31m'
@@ -26,11 +23,13 @@ NC='\033[0m'
 # Configuration
 DOTFILES_REPO="https://github.com/thepinak503/dotfiles"
 DOTFILES_DIR="$HOME/.dotfiles"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d_%H%M%S)"
 
 # Flags
 SELECTED_MODE=""
 SELECTED_SHELLS=""
+INSTALL_METHOD="auto"  # auto, traditional, dynamic
 FORCE_MODE=false
 SKIP_BACKUP=false
 DRY_RUN=false
@@ -45,10 +44,9 @@ print_header() {
     echo -e "${CYAN}${BOLD}"
     echo "╔════════════════════════════════════════════════════════════╗"
     echo "║           DOTFILES INSTALLER v${VERSION}                       ║"
-    echo "║    ⚠️  STRICT MODE - DOUBLE CONFIRMATION REQUIRED           ║"
     echo "║                                                            ║"
     echo "║    The Ultimate Universal Shell Configuration              ║"
-    echo "║    Supports: Bash, Zsh, Fish, Nushell                      ║"
+    echo "║    Traditional & Dynamic Modes Supported                   ║"
     echo "╚════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
     echo ""
@@ -130,49 +128,41 @@ double_confirm() {
 # Help message
 show_help() {
     cat << EOF
-${BOLD}Dotfiles Installer v${VERSION} - STRICT MODE${NC}
+${BOLD}Dotfiles Installer v${VERSION}${NC}
 
 ${BOLD}Usage:${NC} ./install.sh [OPTIONS]
 
-${BOLD}Quick Start (Two-Step Process):${NC}
-  ${GREEN}1. Install system packages:${NC}   ./install_dotfiles.sh --all
-  ${GREEN}2. Configure dotfiles:${NC}       ./install.sh
+${BOLD}Installation Methods:${NC}
+  ${GREEN}Traditional${NC}  - Use existing dotfiles from repo (default)
+  ${GREEN}Dynamic${NC}      - Auto-detect tools and generate configs
+  ${GREEN}Auto${NC}         - Smart selection based on your system
 
 ${BOLD}Options:${NC}
   -h, --help              Show this help message
   -v, --version           Show version information
   -m, --mode MODE         Set configuration mode (basic|advanced|ultra-nerd)
   -s, --shells SHELLS     Specify shells comma-separated
+  --method METHOD         Installation method (traditional|dynamic|auto)
   -f, --force             Force overwrite existing files
   -n, --no-backup         Skip backup step (NOT RECOMMENDED)
   -d, --dry-run           Show what would happen without changes
   -i, --install-deps      Install dependencies automatically
   --skip-deps             Skip dependency installation
-  --install-packages      Install all packages via install_dotfiles.sh first
+  --install-packages      Install all packages first
   -y, --yes               Skip confirmation (use with caution)
 
 ${BOLD}Examples:${NC}
-  ./install.sh                          # Interactive mode with double confirmation
-  ./install.sh --install-packages       # Install packages then configure
+  ./install.sh                          # Interactive mode
+  ./install.sh --method dynamic         # Use dynamic generation
+  ./install.sh --method auto -y         # Auto mode, no confirm
   ./install.sh -m advanced              # Advanced mode
   ./install.sh -s bash,zsh              # Bash + Zsh only
-  ./install.sh -m ultra-nerd -i -y      # Auto-install with no confirm
   ./install.sh --dry-run                # Preview changes
 
-${BOLD}Two-Step Installation:${NC}
-  For a complete setup, run both scripts:
-  ${PURPLE}./install_dotfiles.sh --all${NC}  # Installs all system packages
-  ${PURPLE}./install.sh${NC}               # Configures dotfiles
-
-${BOLD}Safety Features:${NC}
-  • Double confirmation required by default
-  • Automatic backup before any changes
-  • Restore script included (./uninstall.sh)
-  • Dry-run mode available
-
-${BOLD}PowerShell Users:${NC}
-  For Windows PowerShell, use PowerConfig:
-  ${BLUE}https://github.com/thepinak503/powerconfig${NC}
+${BOLD}Post-Installation:${NC}
+  source ~/.bashrc    # Reload bash
+  source ~/.zshrc     # Reload zsh
+  ./uninstall.sh      # Restore original configs
 
 EOF
 }
@@ -185,6 +175,7 @@ parse_args() {
             -v|--version) echo "Dotfiles Installer v${VERSION}"; exit 0 ;;
             -m|--mode) SELECTED_MODE="$2"; shift 2 ;;
             -s|--shells) SELECTED_SHELLS="${2//,/ }"; shift 2 ;;
+            --method) INSTALL_METHOD="$2"; shift 2 ;;
             -f|--force) FORCE_MODE=true; shift ;;
             -n|--no-backup) SKIP_BACKUP=true; shift ;;
             -d|--dry-run) DRY_RUN=true; shift ;;
@@ -263,6 +254,21 @@ detect_shells() {
     print_success "Detected shells: $DETECTED_SHELLS"
 }
 
+# Detect current shell
+detect_current_shell() {
+    if [[ -n "$ZSH_VERSION" ]]; then
+        echo "zsh"
+    elif [[ -n "$BASH_VERSION" ]]; then
+        echo "bash"
+    elif [[ -n "$FISH_VERSION" ]]; then
+        echo "fish"
+    elif command -v nu &>/dev/null && [[ "$SHELL" == *"nu"* ]]; then
+        echo "nushell"
+    else
+        echo "bash"
+    fi
+}
+
 # Select shells
 select_shells() {
     if [[ -n "$SELECTED_SHELLS" ]]; then
@@ -307,6 +313,37 @@ select_shells() {
     else
         print_warning "Skipping shell configuration"
     fi
+}
+
+# Select installation method
+select_install_method() {
+    if [[ "$INSTALL_METHOD" != "auto" ]]; then
+        print_success "Installation method: $INSTALL_METHOD"
+        return
+    fi
+    
+    echo ""
+    print_step "Select installation method:"
+    echo ""
+    echo -e "  ${GREEN}1) Traditional${NC} - Use existing dotfiles from repo"
+    echo "                 Best for: Consistent, tested configurations"
+    echo ""
+    echo -e "  ${YELLOW}2) Dynamic${NC}     - Auto-detect tools and generate configs"
+    echo "                 Best for: Optimized, system-specific setup"
+    echo ""
+    echo -e "  ${CYAN}3) Auto${NC}        - Let installer decide (RECOMMENDED)"
+    echo "                 Uses dynamic if tools vary, traditional otherwise"
+    echo ""
+    
+    read -p "Enter choice [1-3] (default: 3): " choice
+    
+    case "$choice" in
+        1) INSTALL_METHOD="traditional" ;;
+        2) INSTALL_METHOD="dynamic" ;;
+        *) INSTALL_METHOD="auto" ;;
+    esac
+    
+    print_success "Installation method: $INSTALL_METHOD"
 }
 
 # Backup function
@@ -358,36 +395,6 @@ backup_existing() {
     print_info "To restore: ./uninstall.sh or cp -r $BACKUP_DIR/* ~/"
 }
 
-# Clone dotfiles
-clone_dotfiles() {
-    print_step "Setting up dotfiles..."
-    
-    if [[ "$DRY_RUN" == true ]]; then
-        if [[ -d "$DOTFILES_DIR" ]]; then
-            print_info "[DRY RUN] Would update existing dotfiles"
-        else
-            print_info "[DRY RUN] Would clone to: $DOTFILES_DIR"
-        fi
-        return
-    fi
-    
-    if [[ -d "$DOTFILES_DIR" ]]; then
-        if [[ "$FORCE_MODE" == true ]]; then
-            print_warning "Force mode: Removing existing dotfiles..."
-            rm -rf "$DOTFILES_DIR"
-            git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
-        else
-            print_info "Dotfiles directory exists. Updating..."
-            cd "$DOTFILES_DIR"
-            git pull origin main
-        fi
-    else
-        git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
-    fi
-    
-    print_success "Dotfiles ready at: $DOTFILES_DIR"
-}
-
 # Install dependencies
 install_dependencies() {
     if [[ "$SKIP_DEPS" == true ]]; then
@@ -415,14 +422,12 @@ install_dependencies() {
             print_info "Installing packages with pacman..."
             sudo pacman -S --needed --noconfirm $packages 2>/dev/null || print_warning "Some packages failed"
             
-            # Install yay if not present
             if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
                 print_info "Installing yay (AUR helper)..."
                 git clone https://aur.archlinux.org/yay.git /tmp/yay
                 cd /tmp/yay && makepkg -si --noconfirm
             fi
             
-            # Install AUR packages
             if command -v yay &>/dev/null || command -v paru &>/dev/null; then
                 local aur_helper=$(command -v yay || command -v paru)
                 $aur_helper -S --needed --noconfirm dust procs sd micro 2>/dev/null || print_warning "Some AUR packages failed"
@@ -435,12 +440,10 @@ install_dependencies() {
             sudo apt-get update
             sudo apt-get install -y $packages 2>/dev/null || print_warning "Some packages failed"
             
-            # Install starship
             if ! command -v starship &>/dev/null; then
                 curl -sS https://starship.rs/install.sh | sh -s -- -y
             fi
             
-            # Install eza
             if ! command -v eza &>/dev/null; then
                 sudo apt install -y gpg
                 sudo mkdir -p /etc/apt/keyrings
@@ -474,7 +477,6 @@ install_dependencies() {
             ;;
     esac
     
-    # Install micro if not present
     if ! command -v micro &>/dev/null; then
         print_info "Installing micro editor..."
         curl https://getmic.ro | bash
@@ -484,61 +486,165 @@ install_dependencies() {
     print_success "Dependencies installed!"
 }
 
-# Check for missing modern tools and suggest install_dotfiles.sh
-check_missing_tools() {
-    local missing_tools=()
+# Clone dotfiles
+clone_dotfiles() {
+    print_step "Setting up dotfiles..."
     
-    command -v fzf &>/dev/null || missing_tools+=("fzf")
-    command -v eza &>/dev/null || missing_tools+=("eza")
-    command -v bat &>/dev/null || missing_tools+=("bat")
-    command -v zoxide &>/dev/null || missing_tools+=("zoxide")
-    command -v starship &>/dev/null || missing_tools+=("starship")
-    command -v ripgrep &>/dev/null || missing_tools+=("ripgrep")
-    command -v fd &>/dev/null || missing_tools+=("fd")
-    
-    if [ ${#missing_tools[@]} -gt 0 ]; then
-        echo ""
-        print_warning "Some modern tools are not installed: ${missing_tools[*]}"
-        print_info "For the best experience, run: ./install_dotfiles.sh --all"
-        print_info "This will install all packages for all shells."
-        echo ""
-        read -p "Would you like to run install_dotfiles.sh now? [y/N] " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            if [ -f "$DOTFILES_DIR/install_dotfiles.sh" ]; then
-                "$DOTFILES_DIR/install_dotfiles.sh"
-            elif [ -f "./install_dotfiles.sh" ]; then
-                ./install_dotfiles.sh
-            else
-                print_error "install_dotfiles.sh not found!"
-                print_info "Download it from: https://github.com/thepinak503/dotfiles"
-            fi
-        fi
-    fi
-}
-
-# Run install_dotfiles.sh if --install-packages flag is set
-run_install_packages() {
-    if [[ "$INSTALL_PACKAGES" == true ]]; then
-        print_step "Running install_dotfiles.sh to install all packages..."
-        
-        if [ -f "$DOTFILES_DIR/install_dotfiles.sh" ]; then
-            "$DOTFILES_DIR/install_dotfiles.sh" --yes
-        elif [ -f "./install_dotfiles.sh" ]; then
-            ./install_dotfiles.sh --yes
+    if [[ "$DRY_RUN" == true ]]; then
+        if [[ -d "$DOTFILES_DIR" ]]; then
+            print_info "[DRY RUN] Would update existing dotfiles"
         else
-            print_error "install_dotfiles.sh not found!"
-            print_info "Please ensure install_dotfiles.sh is in the same directory."
-            print_info "Download it from: https://github.com/thepinak503/dotfiles"
-            exit 1
+            print_info "[DRY RUN] Would clone to: $DOTFILES_DIR"
         fi
-        
-        print_success "Package installation complete!"
-        echo ""
+        return
+    fi
+    
+    if [[ -d "$DOTFILES_DIR" ]]; then
+        if [[ "$FORCE_MODE" == true ]]; then
+            print_warning "Force mode: Removing existing dotfiles..."
+            rm -rf "$DOTFILES_DIR"
+            git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
+        else
+            print_info "Dotfiles directory exists. Updating..."
+            cd "$DOTFILES_DIR"
+            git pull origin main
+        fi
+    else
+        git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
+    fi
+    
+    print_success "Dotfiles ready at: $DOTFILES_DIR"
+}
+
+# Generate dynamic configurations
+generate_dynamic_configs() {
+    print_step "Generating dynamic configurations..."
+    
+    if [[ "$DRY_RUN" == true ]]; then
+        print_info "[DRY RUN] Would generate dynamic configs"
+        return
+    fi
+    
+    if [[ -f "$SCRIPT_DIR/scripts/generate-configs.sh" ]]; then
+        "$SCRIPT_DIR/scripts/generate-configs.sh" "all" "$DOTFILES_DIR/generated"
+        print_success "Dynamic configurations generated"
+    else
+        print_warning "generate-configs.sh not found, skipping dynamic generation"
     fi
 }
 
-# Create symlinks
+# Install bash configuration (dynamic)
+install_bash_dynamic() {
+    print_step "Installing dynamic Bash configuration..."
+    
+    local config_dir="$DOTFILES_DIR/generated"
+    local bash_config="$config_dir/dynamic-bash.sh"
+    
+    if [[ -f "$bash_config" ]]; then
+        cat > ~/.bashrc << 'EOF'
+#!/usr/bin/env bash
+# =============================================================================
+# DYNAMIC BASH CONFIGURATION
+# Auto-generated based on detected tools
+# =============================================================================
+
+# Source dynamic configuration
+if [[ -f "$HOME/.dotfiles/generated/dynamic-bash.sh" ]]; then
+    source "$HOME/.dotfiles/generated/dynamic-bash.sh"
+fi
+
+# Source local customizations
+if [[ -f "$HOME/.bashrc.local" ]]; then
+    source "$HOME/.bashrc.local"
+fi
+EOF
+        
+        cat > ~/.bash_profile << 'EOF'
+#!/usr/bin/env bash
+# Source .bashrc
+if [[ -f "$HOME/.bashrc" ]]; then
+    source "$HOME/.bashrc"
+fi
+
+# Source local customizations
+if [[ -f "$HOME/.bash_profile.local" ]]; then
+    source "$HOME/.bash_profile.local"
+fi
+EOF
+        
+        print_success "Dynamic Bash configuration installed"
+    else
+        print_error "Dynamic bash configuration not found"
+    fi
+}
+
+# Install zsh configuration (dynamic)
+install_zsh_dynamic() {
+    print_step "Installing dynamic Zsh configuration..."
+    
+    local config_dir="$DOTFILES_DIR/generated"
+    local zsh_config="$config_dir/dynamic-zsh.sh"
+    
+    if [[ -f "$zsh_config" ]]; then
+        cat > ~/.zshrc << 'EOF'
+#!/usr/bin/env zsh
+# =============================================================================
+# DYNAMIC ZSH CONFIGURATION
+# Auto-generated based on detected tools
+# =============================================================================
+
+# Source dynamic configuration
+if [[ -f "$HOME/.dotfiles/generated/dynamic-zsh.sh" ]]; then
+    source "$HOME/.dotfiles/generated/dynamic-zsh.sh"
+fi
+
+# Source local customizations
+if [[ -f "$HOME/.zshrc.local" ]]; then
+    source "$HOME/.zshrc.local"
+fi
+EOF
+        
+        print_success "Dynamic Zsh configuration installed"
+    else
+        print_error "Dynamic zsh configuration not found"
+    fi
+}
+
+# Install fish configuration (dynamic)
+install_fish_dynamic() {
+    print_step "Installing dynamic Fish configuration..."
+    
+    local config_dir="$DOTFILES_DIR/generated"
+    local fish_config="$config_dir/dynamic-fish.fish"
+    local fish_config_dir="$HOME/.config/fish"
+    
+    if [[ -f "$fish_config" ]]; then
+        mkdir -p "$fish_config_dir"
+        cp "$fish_config" "$fish_config_dir/config.fish"
+        print_success "Dynamic Fish configuration installed"
+    else
+        print_error "Dynamic fish configuration not found"
+    fi
+}
+
+# Install nushell configuration (dynamic)
+install_nushell_dynamic() {
+    print_step "Installing dynamic Nushell configuration..."
+    
+    local config_dir="$DOTFILES_DIR/generated"
+    local nu_config="$config_dir/dynamic-nu.nu"
+    local nu_config_dir="$HOME/.config/nushell"
+    
+    if [[ -f "$nu_config" ]]; then
+        mkdir -p "$nu_config_dir"
+        cp "$nu_config" "$nu_config_dir/config.nu"
+        print_success "Dynamic Nushell configuration installed"
+    else
+        print_error "Dynamic nushell configuration not found"
+    fi
+}
+
+# Create symlinks (traditional)
 create_symlinks() {
     print_step "Creating symbolic links..."
     
@@ -654,6 +760,103 @@ create_symlinks() {
     print_success "All configurations linked successfully!"
 }
 
+# Install configurations based on method
+install_configs() {
+    case "$INSTALL_METHOD" in
+        "dynamic")
+            generate_dynamic_configs
+            
+            if [[ "$SELECTED_SHELLS" == *"bash"* ]]; then
+                install_bash_dynamic
+            fi
+            if [[ "$SELECTED_SHELLS" == *"zsh"* ]]; then
+                install_zsh_dynamic
+            fi
+            if [[ "$SELECTED_SHELLS" == *"fish"* ]]; then
+                install_fish_dynamic
+            fi
+            if [[ "$SELECTED_SHELLS" == *"nushell"* ]]; then
+                install_nushell_dynamic
+            fi
+            
+            # Always install common configs via symlinks
+            install_common_configs
+            ;;
+            
+        "traditional"|*)
+            create_symlinks
+            ;;
+    esac
+}
+
+# Install common configs (for dynamic mode)
+install_common_configs() {
+    print_step "Installing common configurations..."
+    
+    local common_configs=(
+        ".vimrc"
+        ".tmux.conf"
+        ".inputrc"
+    )
+    
+    for config in "${common_configs[@]}"; do
+        local source="$DOTFILES_DIR/$config"
+        local target="$HOME/$config"
+        
+        if [[ -f "$source" ]]; then
+            cp "$source" "$target"
+            print_success "Installed $config"
+        fi
+    done
+    
+    # Install starship
+    mkdir -p ~/.config
+    cp "$DOTFILES_DIR/config/starship.toml" ~/.config/starship.toml
+    print_info "✓ Starship configuration installed"
+    
+    # Install git config
+    cp "$DOTFILES_DIR/git/.gitconfig" ~/.gitconfig
+    cp "$DOTFILES_DIR/git/.gitignore_global" ~/.gitignore_global
+    print_info "✓ Git configuration installed"
+}
+
+# Check for missing tools and suggest install_dotfiles.sh
+check_missing_tools() {
+    local missing_tools=()
+    
+    command -v fzf &>/dev/null || missing_tools+=("fzf")
+    command -v eza &>/dev/null || missing_tools+=("eza")
+    command -v bat &>/dev/null || missing_tools+=("bat")
+    command -v zoxide &>/dev/null || missing_tools+=("zoxide")
+    command -v starship &>/dev/null || missing_tools+=("starship")
+    command -v ripgrep &>/dev/null || missing_tools+=("ripgrep")
+    command -v fd &>/dev/null || missing_tools+=("fd")
+    
+    if [ ${#missing_tools[@]} -gt 0 ]; then
+        echo ""
+        print_warning "Some modern tools are not installed: ${missing_tools[*]}"
+        print_info "For the best experience, run: ./install_dotfiles.sh --all"
+        echo ""
+    fi
+}
+
+# Run install_dotfiles.sh if --install-packages flag is set
+run_install_packages() {
+    if [[ "$INSTALL_PACKAGES" == true ]]; then
+        print_step "Running install_dotfiles.sh to install all packages..."
+        
+        if [ -f "$SCRIPT_DIR/install_dotfiles.sh" ]; then
+            "$SCRIPT_DIR/install_dotfiles.sh" --yes
+        else
+            print_error "install_dotfiles.sh not found!"
+            exit 1
+        fi
+        
+        print_success "Package installation complete!"
+        echo ""
+    fi
+}
+
 # Select mode
 select_mode() {
     if [[ -n "$SELECTED_MODE" ]]; then
@@ -699,6 +902,7 @@ print_post_install() {
     echo ""
     print_success "Dotfiles v${VERSION} installed successfully!"
     echo ""
+    print_info "Method: ${INSTALL_METHOD}"
     print_info "Backup location: ${BACKUP_DIR}"
     print_info "Dotfiles location: ${DOTFILES_DIR}"
     echo ""
@@ -736,6 +940,27 @@ main() {
     detect_os
     detect_shells
     
+    # Select installation method
+    select_install_method
+    
+    # Auto-detect method if set to auto
+    if [[ "$INSTALL_METHOD" == "auto" ]]; then
+        # Use dynamic if we have many missing tools or it's a fresh system
+        local tool_count=0
+        command -v fzf &>/dev/null && ((tool_count++))
+        command -v eza &>/dev/null && ((tool_count++))
+        command -v bat &>/dev/null && ((tool_count++))
+        command -v zoxide &>/dev/null && ((tool_count++))
+        
+        if [[ $tool_count -lt 2 ]]; then
+            INSTALL_METHOD="dynamic"
+            print_info "Auto-selected: dynamic mode (system needs optimization)"
+        else
+            INSTALL_METHOD="traditional"
+            print_info "Auto-selected: traditional mode (system is well-equipped)"
+        fi
+    fi
+    
     if [[ -z "$SELECTED_SHELLS" ]]; then
         select_shells
     fi
@@ -748,6 +973,7 @@ main() {
     # Final summary before execution
     echo ""
     print_step "Installation Summary:"
+    echo "  Method: $INSTALL_METHOD"
     echo "  Shells: $SELECTED_SHELLS"
     echo "  Mode: ${SELECTED_MODE:-interactive}"
     echo "  OS: $OS_NAME"
@@ -768,7 +994,7 @@ main() {
     backup_existing
     clone_dotfiles
     install_dependencies
-    create_symlinks
+    install_configs
     select_mode
     
     if [[ "$DRY_RUN" == true ]]; then
@@ -777,7 +1003,7 @@ main() {
         exit 0
     fi
     
-    # Check for missing tools and offer to install them
+    # Check for missing tools
     check_missing_tools
     
     print_post_install
