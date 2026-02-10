@@ -276,7 +276,7 @@ main() {
             
             # Generate configurations
             log_info "Generating dynamic configurations..."
-            "$SCRIPT_DIR/generate-configs.sh" "all" "$DOTFILES_DIR/generated"
+            "$SCRIPT_DIR/scripts/generate-configs.sh" "all" "$DOTFILES_DIR/generated"
             
             if [[ $? -ne 0 ]]; then
                 log_error "Failed to generate configurations"
@@ -329,7 +329,7 @@ main() {
         "generate")
             local gen_shell="${3:-all}"
             log_info "Generating configurations only..."
-            "$SCRIPT_DIR/generate-configs.sh" "$gen_shell" "$DOTFILES_DIR/generated"
+            "$SCRIPT_DIR/scripts/generate-configs.sh" "$gen_shell" "$DOTFILES_DIR/generated"
             ;;
             
         "clean")

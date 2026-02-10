@@ -143,7 +143,7 @@ detect_development_tools() {
     
     detect_command "terraform" "terraform" "Infrastructure as Code" "high"
     detect_command "ansible" "ansible" "Configuration management" "medium"
-    detect_command "packer" "packer "Machine image builder" "medium"
+    detect_command "packer" "packer" "Machine image builder" "medium"
     
     # Editors
     detect_command "vim" "vim" "Vim editor" "high"

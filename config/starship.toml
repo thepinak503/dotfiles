@@ -1,55 +1,113 @@
-# Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Inserts a blank line between shell prompts
+# Prompt format - clean and minimal
+format = """
+$username$hostname $directory$git_branch$git_status$cmd_duration
+$character"""
+
 add_newline = true
+scan_timeout = 30
+command_timeout = 500
 
-# Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
-error_symbol = '[✗](bold red)'
-
-# Disable the package module, hiding it from the prompt completely
-[package]
-disabled = true
+[character]
+success_symbol = '[❯](bold green)'
+error_symbol = '[❯](bold red)'
+vimcmd_symbol = '[❮](bold green)'
 
 [directory]
 truncation_length = 3
-truncation_symbol = "…/"
+truncation_symbol = '…/'
+format = '[$path]($style)[$read_only]($read_only_style) '
+style = 'bold cyan'
+read_only = ' 󰌾'
 
 [git_branch]
-symbol = ""
+symbol = '󰘬 '
+format = '[$symbol$branch]($style) '
+style = 'bold purple'
+truncation_length = 20
+truncation_symbol = '…'
 
 [git_status]
-conflicted = "🏳"
-ahead = "🏎💨"
-behind = "😰"
-diverged = "😵"
-up_to_date = "✓"
-untracked = "🤷"
-stashed = "📦"
-modified = "📝"
-staged = '[++\($count\)](green)'
-renamed = "👅"
-deleted = "🗑"
+format = '([$all_status$ahead_behind]($style) )'
+style = 'bold yellow'
+conflicted = '!=${count} '
+ahead = '⇡${count} '
+behind = '⇣${count} '
+diverged = '⇕${count} '
+up_to_date = ''
+untracked = '?${count} '
+stashed = '$${count} '
+modified = '!${count} '
+staged = '+${count} '
+renamed = '»${count} '
+deleted = '✘${count} '
 
-[python]
-symbol = ""
+[cmd_duration]
+min_time = 2000
+format = '[ $duration]($style) '
+style = 'dimmed white'
+
+[username]
+format = '[$user]($style)'
+style_user = 'bold blue'
+show_always = false
+
+[hostname]
+ssh_only = true
+format = '@[$hostname]($style)'
+style = 'bold dimmed white'
+
+[package]
+disabled = true
 
 [nodejs]
-symbol = ""
+disabled = true
 
-[rust]
-symbol = ""
-
-[golang]
-symbol = ""
+[python]
+disabled = true
 
 [ruby]
-symbol = ""
+disabled = true
+
+[rust]
+disabled = true
+
+[golang]
+disabled = true
 
 [java]
-symbol = ""
+disabled = true
 
 [docker_context]
-symbol = ""
+disabled = true
+
+[lua]
+disabled = true
+
+[aws]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[azure]
+disabled = true
+
+[terraform]
+disabled = true
+
+[kubernetes]
+disabled = true
+
+[line_break]
+disabled = false
+
+[status]
+disabled = true
+
+[time]
+disabled = true
+
+[sudo]
+disabled = true
