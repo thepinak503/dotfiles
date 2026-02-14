@@ -202,3 +202,7 @@ alias path='echo -e ${PATH//:/\\n}'
 alias libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
 alias functions='declare -f | grep -E "^[a-z].*\(\)"'
 alias aliases='alias | sort'
+
+# Emoji picker and calculator
+alias emoji='/home/pinak/.dotfiles/scripts/emoji-picker'
+alias calc='/home/pinak/.dotfiles/scripts/calc'

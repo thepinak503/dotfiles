@@ -152,3 +152,7 @@ fi
 # WELCOME MESSAGE (DISABLED)
 # =============================================================================
 # Welcome message removed for cleaner startup
+
+# Emoji picker and calculator
+alias emoji='/home/pinak/.dotfiles/scripts/emoji-picker'
+alias calc='/home/pinak/.dotfiles/scripts/calc'

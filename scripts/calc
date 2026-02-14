@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# =============================================================================
+# CALCULATOR - Quick calculator with rofi or fzf
+# Usage: calc
+# =============================================================================
+
+if command -v rofi &>/dev/null; then
+    # Get input from rofi
+    expression=$(rofi -dmenu -p "🧮 Calc" -theme-str 'window { width: 400px; }')
+    
+    if [[ -n "$expression" ]]; then
+        # Calculate using bc or python
+        if command -v bc &>/dev/null; then
+            result=$(echo "scale=4; $expression" | bc -l 2>/dev/null)
+        elif command -v python3 &>/dev/null; then
+            result=$(python3 -c "print($expression)" 2>/dev/null)
+        fi
+        
+        if [[ -n "$result" ]]; then
+            # Copy to clipboard
+            if command -v wl-copy &>/dev/null; then
+                echo -n "$result" | wl-copy
+            elif command -v xclip &>/dev/null; then
+                echo -n "$result" | xclip -selection clipboard
+            fi
+            notify-send "Calculator" "$expression = $result"
+        else
+            notify-send "Calculator" "Invalid expression"
+        fi
+    fi
+else
+    # Simple CLI version
+    read -p "Expression: " expression
+    if command -v bc &>/dev/null; then
+        echo "scale=4; $expression" | bc -l
+    elif command -v python3 &>/dev/null; then
+        python3 -c "print($expression)"
+    fi
+fi

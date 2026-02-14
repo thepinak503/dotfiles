@@ -1,183 +1,115 @@
 {
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "padding": {
+            "top": 2,
+            "left": 2
+        },
+        "width": 32,
+        "height": 16
+    },
     "display": {
         "separator": " ➜  ",
         "color": {
-            "keys": "green",
-            "title": "cyan"
-        },
-        "size": {
-            "binaryPrefix": "iec",
-            "ndigits": 2
-        },
-        "bar": {
-            "charelapsed": "=",
-            "chartotal": "-",
-            "width": 20,
-            "borderleft": "[",
-            "borderright": "]"
+            "keys": "cyan",
+            "title": "blue"
         }
     },
     "modules": [
+        "break",
         {
             "type": "title",
-            "format": "{user-name}@{host-name}"
-        },
-        {
-            "type": "separator",
-            "string": "─"
+            "format": "{user-name}@{host-name}",
+            "key": "╭───────────",
+            "keyColor": "magenta"
         },
         {
             "type": "os",
-            "key": " OS",
-            "format": "{pretty-name}"
+            "key": "│ 󰣇 OS",
+            "keyColor": "yellow"
         },
         {
             "type": "kernel",
-            "key": " Kernel",
-            "format": "{sysname} {release}"
+            "key": "│ 󰌽 Kernel",
+            "keyColor": "yellow"
         },
         {
             "type": "uptime",
-            "key": " Uptime"
+            "key": "│ 󰔚 Uptime",
+            "keyColor": "yellow"
         },
         {
             "type": "packages",
-            "key": " Packages"
+            "key": "│ 󰏗 Packages",
+            "keyColor": "yellow"
         },
         {
             "type": "shell",
-            "key": " Shell",
-            "format": "{pretty-name} {version}"
+            "key": "│ 󰆍 Shell",
+            "keyColor": "yellow"
         },
-        {
-            "type": "display",
-            "key": "󰍹 Display",
-            "compactType": "original"
-        },
+        "break",
         {
             "type": "de",
-            "key": "󰨇 DE"
-        },
-        {
-            "type": "wm",
-            "key": " WM"
-        },
-        {
-            "type": "wmtheme",
-            "key": "󰉼 WM Theme"
+            "key": "│ 󰧨 DE/WM",
+            "keyColor": "green"
         },
         {
             "type": "theme",
-            "key": "󰏘 Theme"
+            "key": "│ 󰉼 Theme",
+            "keyColor": "green"
         },
         {
             "type": "icons",
-            "key": "󰏘 Icons"
-        },
-        {
-            "type": "font",
-            "key": " Font"
-        },
-        {
-            "type": "cursor",
-            "key": "󰳽 Cursor"
+            "key": "│ 󰀻 Icons",
+            "keyColor": "green"
         },
         {
             "type": "terminal",
-            "key": " Terminal",
-            "format": "{pretty-name}"
+            "key": "│  Terminal",
+            "keyColor": "green"
         },
+        "break",
         {
-            "type": "terminalfont",
-            "key": " Terminal Font"
+            "type": "host",
+            "key": "│ 󰌢 Host",
+            "keyColor": "blue"
         },
         {
             "type": "cpu",
-            "key": "󰍛 CPU",
-            "format": "{name} @ {base-frequency}",
-            "temp": true
+            "key": "│ 󰻠 CPU",
+            "keyColor": "blue"
         },
         {
             "type": "gpu",
-            "key": "󰍛 GPU",
-            "format": "{name}",
-            "temp": true
+            "key": "│ 󰢮 GPU",
+            "keyColor": "blue"
         },
         {
             "type": "memory",
-            "key": "󰍛 Memory",
-            "format": "{used} / {total} ({percentage}%)"
-        },
-        {
-            "type": "swap",
-            "key": "󰓡 Swap",
-            "format": "{used} / {total}"
+            "key": "│ 󰍛 Memory",
+            "keyColor": "blue"
         },
         {
             "type": "disk",
-            "key": " Disk",
-            "format": "{size-used} / {size-total} ({size-percentage}%)",
-            "folders": "/"
+            "key": "│ 󰋊 Disk",
+            "keyColor": "blue"
         },
         {
             "type": "battery",
-            "key": " Battery",
-            "format": "{capacity}%"
+            "key": "│ 󰁹 Battery",
+            "keyColor": "blue"
         },
         {
-            "type": "poweradapter",
-            "key": "󰚥 Power Adapter"
+            "type": "break",
+            "key": "╰───────────",
+            "keyColor": "magenta"
         },
-        {
-            "type": "locale",
-            "key": " Locale"
-        },
-        {
-            "type": "break"
-        },
+        "break",
         {
             "type": "colors",
-            "symbol": "circle"
-        },
-        {
-            "type": "separator",
-            "string": "─"
-        },
-        {
-            "type": "custom",
-            "key": "System",
-            "format": "{12} {2} on {13}"
-        },
-        {
-            "type": "custom",
-            "key": "Architecture",
-            "format": "{11}"
-        },
-        {
-            "type": "custom",
-            "key": "Hostname",
-            "format": "{6}"
-        },
-        {
-            "type": "custom",
-            "key": "User",
-            "format": "{7}"
-        },
-        {
-            "type": "custom",
-            "key": "Home",
-            "format": "{8}"
-        },
-        {
-            "type": "custom",
-            "key": "Path",
-            "format": "{9}"
-        },
-        {
-            "type": "custom",
-            "key": "Shell Path",
-            "format": "{10}"
+            "symbol": "circle",
+            "paddingLeft": 4
         }
     ]
 }
