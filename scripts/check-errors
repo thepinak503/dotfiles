@@ -1,0 +1,329 @@
+#!/usr/bin/env bash
+# =============================================================================
+# DOTFILES ERROR CHECKER
+# Comprehensive script to check for errors, warnings, and inconsistencies
+# Usage: check-errors
+# =============================================================================
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m'
+
+# Counters
+ERRORS=0
+WARNINGS=0
+NOTES=0
+
+# Header
+print_header() {
+    echo -e "${CYAN}${BOLD}"
+    echo "╔════════════════════════════════════════════════════════════╗"
+    echo "║           DOTFILES ERROR CHECKER                           ║"
+    echo "║     Comprehensive diagnostic tool                          ║"
+    echo "╚════════════════════════════════════════════════════════════╝"
+    echo -e "${NC}"
+}
+
+# Print functions
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+    ((ERRORS++))
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+    ((WARNINGS++))
+}
+
+print_note() {
+    echo -e "${BLUE}[NOTE]${NC} $1"
+    ((NOTES++))
+}
+
+print_success() {
+    echo -e "${GREEN}[OK]${NC} $1"
+}
+
+print_section() {
+    echo ""
+    echo -e "${MAGENA}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${BOLD}$1${NC}"
+    echo -e "${MAGENTA}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+}
+
+# Check if file exists
+check_file() {
+    local file="$1"
+    local desc="${2:-$file}"
+    if [[ -f "$file" ]]; then
+        print_success "$desc exists"
+        return 0
+    else
+        print_error "$desc NOT FOUND: $file"
+        return 1
+    fi
+}
+
+# Check if directory exists
+check_dir() {
+    local dir="$1"
+    local desc="${2:-$dir}"
+    if [[ -d "$dir" ]]; then
+        print_success "$desc exists"
+        return 0
+    else
+        print_error "$dir NOT FOUND: $dir"
+        return 1
+    fi
+}
+
+# Check bash syntax
+check_bash_syntax() {
+    local file="$1"
+    local errors=$(bash -n "$file" 2>&1)
+    if [[ -z "$errors" ]]; then
+        print_success "Syntax OK: $(basename "$file")"
+        return 0
+    else
+        print_error "Syntax error in $(basename "$file"):"
+        echo "$errors" | while read line; do
+            echo "    $line"
+        done
+        return 1
+    fi
+}
+
+# Check for specific patterns
+check_pattern() {
+    local file="$1"
+    local pattern="$2"
+    local desc="$3"
+    local count=$(grep -c "$pattern" "$file" 2>/dev/null || echo "0")
+    if [[ $count -gt 0 ]]; then
+        print_warning "$desc found $count times in $(basename "$file")"
+        return 1
+    fi
+    return 0
+}
+
+# Main checks
+main() {
+    print_header
+    
+    DOTFILES_DIR="${HOME}/.dotfiles"
+    if [[ ! -d "$DOTFILES_DIR" ]]; then
+        DOTFILES_DIR="${HOME}/git/dotfiles"
+    fi
+    
+    print_section "1. DIRECTORY STRUCTURE"
+    check_dir "$DOTFILES_DIR" "Dotfiles directory"
+    check_dir "$DOTFILES_DIR/.git" "Git repository"
+    check_dir "$DOTFILES_DIR/config" "Config directory"
+    check_dir "$DOTFILES_DIR/bash" "Bash directory"
+    check_dir "$DOTFILES_DIR/scripts" "Scripts directory"
+    check_dir "$DOTFILES_DIR/lib" "Lib directory"
+    
+    print_section "2. SHELL CONFIGURATION FILES"
+    check_file "$DOTFILES_DIR/.bashrc" ".bashrc"
+    check_file "$DOTFILES_DIR/.bash_profile" ".bash_profile"
+    check_file "$DOTFILES_DIR/.zshrc" ".zshrc"
+    check_file "$DOTFILES_DIR/fish/config.fish" "Fish config"
+    
+    print_section "3. SYNTAX CHECKS"
+    if [[ -f "$DOTFILES_DIR/.bashrc" ]]; then
+        check_bash_syntax "$DOTFILES_DIR/.bashrc"
+    fi
+    
+    for file in "$DOTFILES_DIR"/bash/*.sh; do
+        if [[ -f "$file" ]]; then
+            check_bash_syntax "$file"
+        fi
+    done
+    
+    for file in "$DOTFILES_DIR"/scripts/*; do
+        if [[ -f "$file" ]] && head -1 "$file" | grep -q "bash\|sh"; then
+            check_bash_syntax "$file"
+        fi
+    done
+    
+    print_section "4. COMMON ERRORS CHECK"
+    
+    # Check for export -f (causes errors in zsh)
+    echo "Checking for 'export -f' (causes errors in zsh)..."
+    export_f_count=$(grep -r "export -f" "$DOTFILES_DIR" --include="*.sh" --include="*.bash" 2>/dev/null | wc -l)
+    if [[ $export_f_count -gt 0 ]]; then
+        print_error "Found 'export -f' $export_f_count times (breaks zsh compatibility)"
+        grep -rn "export -f" "$DOTFILES_DIR" --include="*.sh" --include="*.bash" 2>/dev/null | head -5
+    else
+        print_success "No 'export -f' found"
+    fi
+    
+    # Check for [[ ]] in sh files
+    echo "Checking for bashisms in sh files..."
+    for file in "$DOTFILES_DIR"/scripts/*; do
+        if [[ -f "$file" ]] && [[ "$file" == *.sh ]]; then
+            if grep -q '\[\[' "$file" 2>/dev/null; then
+                print_warning "Bash-specific '[[ ]] found in $file"
+            fi
+        fi
+    done
+    
+    # Check for undefined variables
+    echo "Checking for potentially undefined variables..."
+    for file in "$DOTFILES_DIR"/bash/*.sh "$DOTFILES_DIR"/.bashrc; do
+        if [[ -f "$file" ]]; then
+            # Look for variables that might not be defined
+            undefined=$(grep -o '\$[A-Z_][A-Z_0-9]*' "$file" 2>/dev/null | sort -u | head -10)
+            if [[ -n "$undefined" ]]; then
+                print_note "Variables in $(basename "$file"): $undefined"
+            fi
+        fi
+    done
+    
+    print_section "5. CONSISTENCY CHECKS"
+    
+    # Check starship consistency
+    echo "Checking starship consistency across shells..."
+    bash_starship=$(grep -c "starship" "$DOTFILES_DIR/bash/10-prompt.sh" 2>/dev/null || echo "0")
+    zsh_starship=$(grep -c "starship" "$DOTFILES_DIR/.zshrc" 2>/dev/null || echo "0")
+    fish_starship=$(grep -c "starship" "$DOTFILES_DIR/fish/config.fish" 2>/dev/null || echo "0")
+    
+    if [[ $bash_starship -gt 0 && $zsh_starship -gt 0 && $fish_starship -gt 0 ]]; then
+        print_success "Starship configured in all shells"
+    else
+        print_warning "Starship inconsistency: bash=$bash_starship, zsh=$zsh_starship, fish=$fish_starship"
+    fi
+    
+    # Check for duplicate aliases
+    echo "Checking for duplicate aliases..."
+    for alias_name in ll la lt .. ... c h; do
+        count=$(grep -r "alias $alias_name=" "$DOTFILES_DIR" --include="*.sh" --include="*.bash" --include="*.zsh" 2>/dev/null | wc -l)
+        if [[ $count -gt 1 ]]; then
+            print_warning "Alias '$alias_name' defined $count times"
+        fi
+    done
+    
+    # Check DOTFILES_MODE consistency
+    echo "Checking DOTFILES_MODE handling..."
+    bash_mode=$(grep -c "DOTFILES_MODE" "$DOTFILES_DIR/.bashrc" 2>/dev/null || echo "0")
+    zsh_mode=$(grep -c "DOTFILES_MODE" "$DOTFILES_DIR/.zshrc" 2>/dev/null || echo "0")
+    fish_mode=$(grep -c "DOTFILES_MODE" "$DOTFILES_DIR/fish/config.fish" 2>/dev/null || echo "0")
+    
+    if [[ $bash_mode -eq 0 ]]; then
+        print_warning ".bashrc doesn't reference DOTFILES_MODE"
+    fi
+    if [[ $zsh_mode -eq 0 ]]; then
+        print_warning ".zshrc doesn't reference DOTFILES_MODE"
+    fi
+    if [[ $fish_mode -eq 0 ]]; then
+        print_warning "Fish config doesn't reference DOTFILES_MODE"
+    fi
+    
+    print_section "6. FILE PERMISSIONS"
+    
+    # Check scripts are executable
+    echo "Checking script permissions..."
+    for script in "$DOTFILES_DIR"/scripts/*; do
+        if [[ -f "$script" ]]; then
+            if [[ ! -x "$script" ]]; then
+                print_warning "Not executable: $(basename "$script")"
+            fi
+        fi
+    done
+    
+    # Check for world-writable files
+    world_writable=$(find "$DOTFILES_DIR" -type f -perm -002 2>/dev/null | wc -l)
+    if [[ $world_writable -gt 0 ]]; then
+        print_warning "Found $world_writable world-writable files"
+    else
+        print_success "No world-writable files"
+    fi
+    
+    print_section "7. CONFIGURATION FILES"
+    
+    # Check key config files
+    check_file "$DOTFILES_DIR/config/starship.toml" "Starship config"
+    check_file "$DOTFILES_DIR/config/fastfetch/config.jsonc" "Fastfetch config"
+    check_file "$DOTFILES_DIR/config/btop/btop.conf" "Btop config"
+    
+    # Validate starship.toml
+    if command -v starship &>/dev/null; then
+        echo "Validating starship.toml..."
+        if starship config show &>/dev/null; then
+            print_success "Starship config valid"
+        else
+            print_error "Starship config has errors"
+        fi
+    fi
+    
+    # Check for broken symlinks
+    print_section "8. BROKEN SYMLINKS"
+    broken_links=$(find "$DOTFILES_DIR" -type l ! -exec test -e {} \; -print 2>/dev/null | wc -l)
+    if [[ $broken_links -gt 0 ]]; then
+        print_error "Found $broken_links broken symlinks"
+        find "$DOTFILES_DIR" -type l ! -exec test -e {} \; -print 2>/dev/null | head -5
+    else
+        print_success "No broken symlinks"
+    fi
+    
+    print_section "9. GIT CHECKS"
+    
+    cd "$DOTFILES_DIR"
+    
+    # Check for uncommitted changes
+    if ! git diff-index --quiet HEAD --; then
+        print_warning "Uncommitted changes in repository"
+        git status --short | head -10
+    else
+        print_success "No uncommitted changes"
+    fi
+    
+    # Check for merge conflicts
+    conflicts=$(grep -r "<<<<<<<" "$DOTFILES_DIR" --include="*.sh" --include="*.toml" --include="*.conf" 2>/dev/null | wc -l)
+    if [[ $conflicts -gt 0 ]]; then
+        print_error "Found $conflicts merge conflict markers"
+        grep -rn "<<<<<<<" "$DOTFILES_DIR" --include="*.sh" --include="*.toml" --include="*.conf" 2>/dev/null | head -5
+    else
+        print_success "No merge conflicts"
+    fi
+    
+    print_section "10. DEPENDENCY CHECKS"
+    
+    # Check for required tools
+    for tool in git starship fzf bat eza zoxide; do
+        if command -v "$tool" &>/dev/null; then
+            version=$($tool --version 2>/dev/null | head -1)
+            print_success "$tool installed: $version"
+        else
+            print_note "$tool not installed (optional)"
+        fi
+    done
+    
+    # Summary
+    print_section "SUMMARY"
+    echo ""
+    if [[ $ERRORS -eq 0 && $WARNINGS -eq 0 ]]; then
+        echo -e "${GREEN}${BOLD}✓ ALL CHECKS PASSED!${NC}"
+        echo "No errors or warnings found."
+    else
+        echo -e "${RED}${BOLD}ERRORS: $ERRORS${NC}"
+        echo -e "${YELLOW}${BOLD}WARNINGS: $WARNINGS${NC}"
+        echo -e "${BLUE}NOTES: $NOTES${NC}"
+        echo ""
+        echo "Please fix the errors above and run this script again."
+    fi
+    echo ""
+    
+    return $ERRORS
+}
+
+# Run main function
+main "$@"

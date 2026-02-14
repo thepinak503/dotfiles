@@ -1,0 +1,298 @@
+#!/usr/bin/env bash
+# =============================================================================
+# DROPDOWN TERMINAL - Quake-style terminal for any WM
+# Usage: dropdown-terminal [terminal_command]
+# Example: dropdown-terminal kitty
+#          dropdown-terminal "alacritty --working-directory ~"
+# =============================================================================
+
+# Configuration
+TERMINAL_CMD="${1:-kitty}"
+ADDR_FILE="/tmp/dropdown_terminal_addr"
+
+# Window settings (percentage of screen)
+WIDTH_PERCENT=70
+HEIGHT_PERCENT=60
+Y_OFFSET=5  # From top
+
+# Dynamic detection of window manager
+get_wm() {
+    if [[ -n "$XDG_CURRENT_DESKTOP" ]]; then
+        echo "$XDG_CURRENT_DESKTOP" | tr '[:upper:]' '[:lower:]'
+    elif [[ -n "$DESKTOP_SESSION" ]]; then
+        echo "$DESKTOP_SESSION" | tr '[:upper:]' '[:lower:]'
+    elif pgrep -x "sway" >/dev/null; then
+        echo "sway"
+    elif pgrep -x "hyprland" >/dev/null; then
+        echo "hyprland"
+    elif pgrep -x "i3" >/dev/null; then
+        echo "i3"
+    elif command -v xprop &>/dev/null && xprop -root _NET_WM_NAME 2>/dev/null | grep -q "i3"; then
+        echo "i3"
+    else
+        echo "unknown"
+    fi
+}
+
+WM=$(get_wm)
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+# Debug function
+debug() {
+    [[ "${DEBUG:-false}" == "true" ]] && echo -e "${YELLOW}[DEBUG]${NC} $*"
+}
+
+# Get terminal PID from address file
+get_terminal_pid() {
+    if [[ -f "$ADDR_FILE" ]]; then
+        cat "$ADDR_FILE" 2>/dev/null
+    fi
+}
+
+# Check if terminal is running
+is_terminal_running() {
+    local pid=$(get_terminal_pid)
+    if [[ -n "$pid" ]]; then
+        ps -p "$pid" >/dev/null 2>&1
+    else
+        return 1
+    fi
+}
+
+# Calculate window geometry based on screen size
+calculate_geometry() {
+    local width height x y
+    
+    if command -v xrandr &>/dev/null && [[ -n "$DISPLAY" ]]; then
+        # X11 - get primary monitor resolution
+        local resolution=$(xrandr | grep '*' | head -1 | awk '{print $1}')
+        local screen_width=$(echo "$resolution" | cut -d'x' -f1)
+        local screen_height=$(echo "$resolution" | cut -d'x' -f2)
+        
+        width=$((screen_width * WIDTH_PERCENT / 100))
+        height=$((screen_height * HEIGHT_PERCENT / 100))
+        x=$(((screen_width - width) / 2))
+        y=$Y_OFFSET
+    elif command -v swaymsg &>/dev/null && [[ -n "$WAYLAND_DISPLAY" ]]; then
+        # Sway - get focused output
+        local output=$(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .rect')
+        local screen_width=$(echo "$output" | jq -r '.width')
+        local screen_height=$(echo "$output" | jq -r '.height')
+        
+        width=$((screen_width * WIDTH_PERCENT / 100))
+        height=$((screen_height * HEIGHT_PERCENT / 100))
+        x=$(((screen_width - width) / 2))
+        y=$Y_OFFSET
+    elif command -v hyprctl &>/dev/null; then
+        # Hyprland
+        local monitor=$(hyprctl monitors -j | jq -r '.[] | select(.focused)')
+        local screen_width=$(echo "$monitor" | jq -r '.width')
+        local screen_height=$(echo "$monitor" | jq -r '.height')
+        local scale=$(echo "$monitor" | jq -r '.scale // 1')
+        
+        # Adjust for scale
+        screen_width=$(echo "$screen_width / $scale" | bc -l | cut -d'.' -f1)
+        screen_height=$(echo "$screen_height / $scale" | bc -l | cut -d'.' -f1)
+        
+        width=$((screen_width * WIDTH_PERCENT / 100))
+        height=$((screen_height * HEIGHT_PERCENT / 100))
+        x=$(((screen_width - width) / 2))
+        y=$Y_OFFSET
+    else
+        # Fallback
+        width=1000
+        height=600
+        x=460
+        y=30
+    fi
+    
+    echo "${width}x${height}+${x}+${y}"
+}
+
+# Launch terminal based on WM
+launch_terminal() {
+    local geometry=$(calculate_geometry)
+    local width=$(echo "$geometry" | cut -d'x' -f1)
+    local height=$(echo "$geometry" | cut -d'+' -f1 | cut -d'x' -f2)
+    local x=$(echo "$geometry" | cut -d'+' -f2)
+    local y=$(echo "$geometry" | cut -d'+' -f3)
+    
+    debug "Launching terminal with geometry: ${width}x${height}+${x}+${y}"
+    
+    case "$WM" in
+        "hyprland")
+            # Hyprland specific launch
+            hyprctl dispatch exec "[float; size ${width} ${height}; move ${x} ${y}] $TERMINAL_CMD" &
+            ;;
+        "sway")
+            # Sway specific launch
+            swaymsg "exec $TERMINAL_CMD" &
+            sleep 0.5
+            swaymsg "[app_id=\"$TERMINAL_CMD\"] floating enable, resize set ${width} ${height}, move position ${x} ${y}"
+            ;;
+        "i3")
+            # i3 specific launch
+            i3-msg "exec $TERMINAL_CMD" &
+            sleep 0.5
+            i3-msg "[class=\"$TERMINAL_CMD\"] floating enable, resize set ${width} ${height}, move position ${x} ${y}"
+            ;;
+        *)
+            # Generic X11 launch with xterm or compatible
+            if command -v xterm &>/dev/null; then
+                xterm -geometry "${width}x${height}+${x}+${y}" &
+            else
+                # Try to launch with geometry argument
+                $TERMINAL_CMD --geometry="${width}x${height}+${x}+${y}" 2>/dev/null || \
+                $TERMINAL_CMD -geometry "${width}x${height}+${x}+${y}" 2>/dev/null || \
+                $TERMINAL_CMD &
+            fi
+            ;;
+    esac
+    
+    # Save PID
+    local pid=$!
+    echo "$pid" > "$ADDR_FILE"
+    debug "Terminal launched with PID: $pid"
+}
+
+# Hide terminal (move to scratchpad or minimize)
+hide_terminal() {
+    local pid=$(get_terminal_pid)
+    
+    case "$WM" in
+        "hyprland")
+            hyprctl dispatch movetoworkspace "special:scratchpad,pid:$pid" 2>/dev/null
+            ;;
+        "sway")
+            swaymsg "[pid=$pid] move to scratchpad" 2>/dev/null
+            ;;
+        "i3")
+            i3-msg "[pid=$pid] move to scratchpad" 2>/dev/null
+            ;;
+        *)
+            # Minimize window (X11)
+            if command -v xdotool &>/dev/null; then
+                local window_id=$(xdotool search --pid "$pid" 2>/dev/null | head -1)
+                [[ -n "$window_id" ]] && xdotool windowminimize "$window_id"
+            fi
+            ;;
+    esac
+    
+    debug "Terminal hidden"
+}
+
+# Show terminal
+show_terminal() {
+    local pid=$(get_terminal_pid)
+    
+    case "$WM" in
+        "hyprland")
+            hyprctl dispatch movetoworkspace "1,pid:$pid" 2>/dev/null
+            hyprctl dispatch focuswindow "pid:$pid" 2>/dev/null
+            ;;
+        "sway")
+            swaymsg "[pid=$pid] scratchpad show" 2>/dev/null
+            ;;
+        "i3")
+            i3-msg "[pid=$pid] scratchpad show" 2>/dev/null
+            ;;
+        *)
+            # Raise window (X11)
+            if command -v xdotool &>/dev/null; then
+                local window_id=$(xdotool search --pid "$pid" 2>/dev/null | head -1)
+                [[ -n "$window_id" ]] && xdotool windowactivate "$window_id"
+            fi
+            ;;
+    esac
+    
+    debug "Terminal shown"
+}
+
+# Main toggle function
+toggle_terminal() {
+    if is_terminal_running; then
+        # Terminal exists, check if visible
+        local pid=$(get_terminal_pid)
+        local is_visible=true
+        
+        case "$WM" in
+            "hyprland")
+                hyprctl clients -j | jq -e --argjson pid "$pid" '.[] | select(.pid == $pid and .workspace.name != "special:scratchpad")' >/dev/null 2>&1 || is_visible=false
+                ;;
+            "sway"|"i3")
+                # Check if in scratchpad
+                if swaymsg -t get_tree 2>/dev/null | jq -e --argjson pid "$pid" '.. | select(.pid? == $pid and .scratchpad_state? == "changed")' >/dev/null 2>&1; then
+                    is_visible=false
+                fi
+                ;;
+        esac
+        
+        if [[ "$is_visible" == "true" ]]; then
+            hide_terminal
+        else
+            show_terminal
+        fi
+    else
+        # No terminal, create one
+        launch_terminal
+    fi
+}
+
+# Kill terminal
+kill_terminal() {
+    local pid=$(get_terminal_pid)
+    if [[ -n "$pid" ]]; then
+        kill "$pid" 2>/dev/null
+        rm -f "$ADDR_FILE"
+        echo -e "${GREEN}Dropdown terminal killed${NC}"
+    fi
+}
+
+# Show help
+show_help() {
+    echo "Dropdown Terminal - Quake-style terminal"
+    echo ""
+    echo "Usage: dropdown-terminal [options] [terminal_command]"
+    echo ""
+    echo "Options:"
+    echo "  -k, --kill     Kill the dropdown terminal"
+    echo "  -h, --help     Show this help"
+    echo "  -d, --debug    Enable debug output"
+    echo ""
+    echo "Examples:"
+    echo "  dropdown-terminal           # Launch with default (kitty)"
+    echo "  dropdown-terminal alacritty # Use alacritty"
+    echo "  dropdown-terminal -k        # Kill terminal"
+    echo ""
+    echo "Detected WM: $WM"
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -k|--kill)
+            kill_terminal
+            exit 0
+            ;;
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -d|--debug)
+            DEBUG=true
+            shift
+            ;;
+        *)
+            TERMINAL_CMD="$1"
+            shift
+            ;;
+    esac
+done
+
+# Main
+toggle_terminal

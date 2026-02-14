@@ -14,3 +14,6 @@ if [[ -f "$HOME/.bashrc.local" ]]; then
     source "$HOME/.bashrc.local"
 fi
 
+
+# Load dynamic library
+[[ -f "$HOME/.dotfiles/lib/dynamic.sh" ]] && source "$HOME/.dotfiles/lib/dynamic.sh"

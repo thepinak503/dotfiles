@@ -157,3 +157,9 @@ fi
 alias emoji='/home/pinak/.dotfiles/scripts/emoji-picker'
 alias calc='/home/pinak/.dotfiles/scripts/calc'
 alias keys='/home/pinak/.dotfiles/scripts/keybinding-helper'
+alias check-errors='~/.dotfiles/scripts/check-errors'
+alias clipboard='~/.dotfiles/scripts/clipboard-manager'
+alias dropdown='~/.dotfiles/scripts/dropdown-terminal'
+
+# Load dynamic library
+[[ -f "$HOME/.dotfiles/lib/dynamic.sh" ]] && source "$HOME/.dotfiles/lib/dynamic.sh"
