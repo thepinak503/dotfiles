@@ -75,7 +75,6 @@ alias .. = cd ..
 alias ... = cd ../..
 alias .... = cd ../../..
 alias ..... = cd ../../../..
-alias -- = cd -
 alias home = cd ~
 alias desk = cd ~/Desktop
 alias docs = cd ~/Documents
