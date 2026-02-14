@@ -251,3 +251,5 @@ end
 if command -v fastfetch >/dev/null 2>&1
     fastfetch 2>/dev/null
 end
+
+thefuck --alias | source

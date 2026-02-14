@@ -11,11 +11,11 @@
             "ndigits": 2
         },
         "bar": {
-            "charElapsed": "=",
-            "charTotal": "-",
+            "charelapsed": "=",
+            "chartotal": "-",
             "width": 20,
-            "borderLeft": "[",
-            "borderRight": "]"
+            "borderleft": "[",
+            "borderright": "]"
         }
     },
     "modules": [

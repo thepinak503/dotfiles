@@ -132,7 +132,7 @@
     subpull = submodule foreach git pull origin main
 
 [credential]
-    helper = cache --timeout=3600
+	helper = store
 
 [delta]
 	navigate = true

@@ -1,10 +1,15 @@
-#!/bin/bash
-# ~/.bash_profile: executed by bash(1) for login shells.
+#!/usr/bin/env bash
+# =============================================================================
+# DYNAMIC BASH PROFILE
+# =============================================================================
 
-# Source .profile if it exists
-[[ -f ~/.profile ]] && source ~/.profile
+# Source .bashrc
+if [[ -f "$HOME/.bashrc" ]]; then
+    source "$HOME/.bashrc"
+fi
 
-# Source .bashrc if it exists
-[[ -f ~/.bashrc ]] && source ~/.bashrc
+# Source local customizations
+if [[ -f "$HOME/.bash_profile.local" ]]; then
+    source "$HOME/.bash_profile.local"
+fi
 
-# User-specific environment and startup programs
