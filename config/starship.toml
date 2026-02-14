@@ -6,28 +6,30 @@
 # =============================================================================
 
 format = """
-[](#2E3440)\
-$os\
+[](#3B4252)\
 $username\
-[](bg:#3B4252 fg:#2E3440)\
+[](bg:#434C5E fg:#3B4252)\
 $directory\
-[](fg:#3B4252 bg:#434C5E)\
+[](fg:#434C5E bg:#4C566A)\
 $git_branch\
 $git_status\
-$git_state\
-[](fg:#434C5E bg:#4C566A)\
-$python\
-$nodejs\
-$rust\
+[](fg:#4C566A bg:#86BBD8)\
+$c\
+$elixir\
+$elm\
 $golang\
+$haskell\
 $java\
-$ruby\
-$lua\
-[](fg:#4C566A bg:#5E81AC)\
+$julia\
+$nodejs\
+$nim\
+$python\
+$rust\
+[](fg:#86BBD8 bg:#06969A)\
+$docker_context\
+[](fg:#06969A bg:#33658A)\
 $cmd_duration\
-[](fg:#5E81AC bg:#2E3440)\
-$status\
-[](fg:#2E3440)
+[](fg:#33658A)
 $character"""
 
 add_newline = true
@@ -46,40 +48,24 @@ vimcmd_replace_symbol = '[❮](bold purple)'
 vimcmd_visual_symbol = '[❮](bold yellow)'
 
 # =============================================================================
-# OS - Operating System indicator
-# =============================================================================
-[os]
-disabled = false
-style = "bg:#2E3440 fg:#88C0D0"
-symbols.Arch = " "
-symbols.Debian = " "
-symbols.Fedora = " "
-symbols.Ubuntu = " "
-symbols.Macos = " "
-symbols.Windows = " "
-symbols.Linux = " "
-symbols.Unknown = "❓ "
-format = '[$symbol]($style)'
-
-# =============================================================================
 # USERNAME - User indicator
 # =============================================================================
 [username]
 show_always = true
-style_user = "bg:#2E3440 fg:#E5E9F0"
-style_root = "bg:#BF616A fg:#E5E9F0"
-format = '[$user]($style)'
+style_user = "bg:#3B4252 fg:#ECEFF4"
+style_root = "bg:#BF616A fg:#ECEFF4"
+format = '[ $user ]($style)'
 
 # =============================================================================
 # DIRECTORY - Current path
 # =============================================================================
 [directory]
-style = "bg:#3B4252 fg:#E5E9F0"
+style = "bg:#434C5E fg:#ECEFF4"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 read_only = " 󰌾"
-read_only_style = "bg:#3B4252 fg:#BF616A"
+read_only_style = "bg:#434C5E fg:#BF616A"
 home_symbol = "~"
 fish_style_pwd_dir_length = 1
 use_logical_path = true
@@ -104,14 +90,14 @@ use_logical_path = true
 # =============================================================================
 [git_branch]
 symbol = ""
-style = "bg:#434C5E fg:#A3BE8C"
+style = "bg:#4C566A fg:#A3BE8C"
 format = '[ $symbol $branch ]($style)'
 truncation_length = 25
 truncation_symbol = "…"
 
 [git_status]
-style = "bg:#434C5E fg:#D08770"
-format = '([$all_status$ahead_behind]($style) )'
+style = "bg:#4C566A fg:#D08770"
+format = '[$all_status$ahead_behind ]($style)'
 conflicted = '[ ${count}](fg:#BF616A) '
 ahead = '[ ${count}](fg:#A3BE8C) '
 behind = '[ ${count}](fg:#D08770) '
@@ -125,8 +111,8 @@ renamed = '[ ${count}](fg:#88C0D0) '
 deleted = '[ ${count}](fg:#BF616A) '
 
 [git_state]
-style = "bg:#434C5E fg:#BF616A"
-format = '[\($state( $progress_current/$progress_total)\)]($style) '
+style = "bg:#4C566A fg:#BF616A"
+format = '[\($state( $progress_current/$progress_total)\) ]($style)'
 rebase = "REBASING"
 merge = "MERGING"
 revert = "REVERTING"
@@ -135,69 +121,105 @@ bisect = "BISECTING"
 am = "AM"
 
 # =============================================================================
-# PROGRAMMING LANGUAGES
+# PROGRAMMING LANGUAGES - Only show when in project directories
 # =============================================================================
-[python]
-symbol = ""
-style = "bg:#4C566A fg:#FFBC03"
-format = '[ $symbol ($version) ]($style)'
-pyenv_version_name = true
-pyenv_prefix = ""
-
-[nodejs]
-symbol = ""
-style = "bg:#4C566A fg:#5FA04E"
+[c]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
 
-[rust]
-symbol = ""
-style = "bg:#4C566A fg:#DEA584"
+[elixir]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+
+[elm]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
 
 [golang]
 symbol = ""
-style = "bg:#4C566A fg:#00ADD8"
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+
+[haskell]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
 
 [java]
 symbol = ""
-style = "bg:#4C566A fg:#E76F00"
+style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
+
+[julia]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+
+[nodejs]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+detect_files = ["package.json", ".node-version"]
+detect_folders = ["node_modules"]
+
+[nim]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+
+[python]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+pyenv_version_name = true
+python_binary = ["./venv/bin/python", "python", "python3", "python2"]
+detect_files = [".python-version", "pyproject.toml", "requirements.txt", "setup.py", "Pipfile"]
+detect_folders = [".venv", "venv", "env"]
+
+[rust]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+detect_files = ["Cargo.toml"]
 
 [ruby]
 symbol = ""
-style = "bg:#4C566A fg:#CC342D"
+style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
+detect_files = ["Gemfile", ".ruby-version"]
 
 [lua]
 symbol = ""
-style = "bg:#4C566A fg:#000080"
+style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
+detect_files = [".lua-version"]
 
 [php]
 symbol = ""
-style = "bg:#4C566A fg:#777BB4"
+style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
-disabled = true
+detect_files = ["composer.json"]
 
 # =============================================================================
 # CONTAINERS & CLOUD
 # =============================================================================
 [docker_context]
 symbol = ""
-style = "bg:#4C566A fg:#2496ED"
+style = "bg:#06969A fg:#FFFFFF"
 format = '[ $symbol $context ]($style)'
-disabled = false
 
 [kubernetes]
 symbol = "☸"
-style = "bg:#4C566A fg:#326CE5"
+style = "bg:#06969A fg:#FFFFFF"
 format = '[ $symbol $context( \($namespace\)) ]($style)'
 disabled = true
 
 [aws]
 symbol = ""
-style = "bg:#4C566A fg:#FF9900"
+style = "bg:#06969A fg:#FFFFFF"
 format = '[ $symbol $profile( \($region\)) ]($style)'
 disabled = true
 
@@ -207,7 +229,7 @@ disabled = true
 [cmd_duration]
 min_time = 500
 format = '[  $duration ]($style)'
-style = "bg:#5E81AC fg:#E5E9F0"
+style = "bg:#33658A fg:#FFFFFF"
 disabled = false
 show_milliseconds = false
 
@@ -218,15 +240,15 @@ not_executable_symbol = ""
 not_found_symbol = ""
 sigint_symbol = ""
 signal_symbol = ""
-style = "bg:#2E3440 fg:#BF616A"
-success_style = "bg:#2E3440 fg:#A3BE8C"
+style = "bg:#33658A fg:#BF616A"
+success_style = "bg:#33658A fg:#A3BE8C"
 format = '[ $symbol ]($style)'
 map_symbol = true
-disabled = false
+disabled = true
 
 [time]
 disabled = true
-time_format = "%T"
+time_format = "%R"
 style = "dimmed white"
 format = '[  $time ]($style)'
 
@@ -235,42 +257,15 @@ format = '[  $time ]($style)'
 # =============================================================================
 [package]
 symbol = ""
-style = "bg:#4C566A fg:#D08770"
+style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol $version ]($style)'
 disabled = true
 
-[elixir]
+[os]
 disabled = true
 
-[elm]
-disabled = true
-
-[haskell]
-disabled = true
-
-[julia]
-disabled = true
-
-[nim]
-disabled = true
-
-[terraform]
-disabled = true
-
-[azure]
-disabled = true
-
-[gcloud]
-disabled = true
-
-[memory_usage]
-disabled = true
-
-[battery]
-disabled = true
-
-[sudo]
-disabled = true
+[username]
+disabled = false
 
 [line_break]
 disabled = false
