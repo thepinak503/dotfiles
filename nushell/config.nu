@@ -216,7 +216,7 @@ def mkcd [dir: string] {
 
 # Go up N directories
 def up [n: int = 1] {
-    let path = ("../" | str repeat $n)
+    let path = ("../" | str repeat --count $n)
     cd $path
 }
 
