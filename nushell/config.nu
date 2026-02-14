@@ -246,11 +246,6 @@ alias z = __zoxide_z
 alias zi = __zoxide_zi
 
 # =============================================================================
-# WELCOME MESSAGE
+# WELCOME MESSAGE (DISABLED)
 # =============================================================================
-
-match $env.DOTFILES_MODE {
-    "ultra-nerd" => { echo "✓ Dotfiles loaded in ULTRA-NERD mode (Nushell)" | ansi green }
-    "basic" => { echo "✓ Dotfiles loaded in BASIC mode (Nushell)" | ansi blue }
-    _ => { echo "✓ Dotfiles loaded in ADVANCED mode (Nushell)" | ansi yellow }
-}
+# Welcome message removed for cleaner startup

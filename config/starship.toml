@@ -14,21 +14,18 @@ $directory\
 $git_branch\
 $git_status\
 [](fg:#4C566A bg:#86BBD8)\
-$c\
-$elixir\
-$elm\
-$golang\
-$haskell\
-$java\
-$julia\
-$nodejs\
-$nim\
 $python\
+$nodejs\
 $rust\
+$golang\
+$java\
+$ruby\
+$lua\
 [](fg:#86BBD8 bg:#06969A)\
 $docker_context\
 [](fg:#06969A bg:#33658A)\
 $cmd_duration\
+$time\
 [](fg:#33658A)
 $character"""
 
@@ -123,61 +120,21 @@ am = "AM"
 # =============================================================================
 # PROGRAMMING LANGUAGES - Only show when in project directories
 # =============================================================================
-[c]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-
-[elixir]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-
-[elm]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-
-[golang]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-
-[haskell]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-
-[java]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-
-[julia]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-
-[nodejs]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-detect_files = ["package.json", ".node-version"]
-detect_folders = ["node_modules"]
-
-[nim]
-symbol = ""
-style = "bg:#86BBD8 fg:#000000"
-format = '[ $symbol ($version) ]($style)'
-
 [python]
 symbol = ""
 style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
 pyenv_version_name = true
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
-detect_files = [".python-version", "pyproject.toml", "requirements.txt", "setup.py", "Pipfile"]
+detect_files = [".python-version", "pyproject.toml", "requirements.txt", "setup.py", "Pipfile", "setup.cfg"]
 detect_folders = [".venv", "venv", "env"]
+
+[nodejs]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+detect_files = ["package.json", ".node-version", ".nvmrc"]
+detect_folders = ["node_modules"]
 
 [rust]
 symbol = ""
@@ -185,19 +142,71 @@ style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
 detect_files = ["Cargo.toml"]
 
+[golang]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+detect_files = ["go.mod", "go.sum"]
+
+[java]
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+detect_files = ["pom.xml", "build.gradle", ".java-version"]
+
 [ruby]
 symbol = ""
 style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
-detect_files = ["Gemfile", ".ruby-version"]
+detect_files = ["Gemfile", ".ruby-version", "*.gemspec"]
 
 [lua]
 symbol = ""
 style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
-detect_files = [".lua-version"]
+detect_files = [".lua-version", "*.lua"]
+
+# Disabled languages (enable by removing 'disabled = true' and adding to format)
+[c]
+disabled = true
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+detect_files = ["Makefile", "CMakeLists.txt", "*.c", "*.h"]
+
+[elixir]
+disabled = true
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+
+[elm]
+disabled = true
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+
+[haskell]
+disabled = true
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+detect_files = ["stack.yaml", "*.cabal"]
+
+[julia]
+disabled = true
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
+
+[nim]
+disabled = true
+symbol = ""
+style = "bg:#86BBD8 fg:#000000"
+format = '[ $symbol ($version) ]($style)'
 
 [php]
+disabled = true
 symbol = ""
 style = "bg:#86BBD8 fg:#000000"
 format = '[ $symbol ($version) ]($style)'
@@ -233,6 +242,12 @@ style = "bg:#33658A fg:#FFFFFF"
 disabled = false
 show_milliseconds = false
 
+[time]
+disabled = false
+time_format = "%d/%m %R"
+style = "bg:#33658A fg:#ECEFF4"
+format = '[  $time ]($style)'
+
 [status]
 symbol = "✖"
 success_symbol = ""
@@ -246,14 +261,8 @@ format = '[ $symbol ]($style)'
 map_symbol = true
 disabled = true
 
-[time]
-disabled = true
-time_format = "%R"
-style = "dimmed white"
-format = '[  $time ]($style)'
-
 # =============================================================================
-# OTHER MODULES (Disabled by default for performance)
+# OTHER MODULES
 # =============================================================================
 [package]
 symbol = ""

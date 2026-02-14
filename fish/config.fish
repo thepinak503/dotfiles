@@ -224,17 +224,9 @@ abbr -a e 'exit' 2>/dev/null
 abbr -a v '$EDITOR' 2>/dev/null
 
 # =============================================================================
-# WELCOME MESSAGE
+# WELCOME MESSAGE (DISABLED)
 # =============================================================================
-
-switch $DOTFILES_MODE
-    case "ultra-nerd"
-        echo -e "\033[38;5;82m✓ Dotfiles loaded in \033[1mULTRA-NERD\033[0m\033[38;5;82m mode (Fish)\033[0m" 2>/dev/null
-    case "basic"
-        echo -e "\033[38;5;33m✓ Dotfiles loaded in \033[1mBASIC\033[0m\033[38;5;33m mode (Fish)\033[0m" 2>/dev/null
-    case '*'
-        echo -e "\033[38;5;208m✓ Dotfiles loaded in \033[1mADVANCED\033[0m\033[38;5;208m mode (Fish)\033[0m" 2>/dev/null
-end 2>/dev/null
+# Welcome message removed for cleaner startup
 
 # =============================================================================
 # LOCAL CUSTOMIZATIONS

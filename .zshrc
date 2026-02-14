@@ -149,12 +149,6 @@ fi
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 # =============================================================================
-# WELCOME MESSAGE
+# WELCOME MESSAGE (DISABLED)
 # =============================================================================
-if [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
-    echo -e "\033[38;5;82m✓ Dotfiles loaded in \033[1mULTRA-NERD\033[0m\033[38;5;82m mode (Zsh)\033[0m"
-elif [[ "$DOTFILES_MODE" == "basic" ]]; then
-    echo -e "\033[38;5;33m✓ Dotfiles loaded in \033[1mBASIC\033[0m\033[38;5;33m mode (Zsh)\033[0m"
-else
-    echo -e "\033[38;5;208m✓ Dotfiles loaded in \033[1mADVANCED\033[0m\033[38;5;208m mode (Zsh)\033[0m"
-fi
+# Welcome message removed for cleaner startup
