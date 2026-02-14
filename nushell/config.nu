@@ -114,32 +114,95 @@ alias c = clear
 
 # System
 alias df = df -h
-alias ps = ps auxf
 
-# Git
+# ps with arguments must use external command syntax
+def ps [] {
+    ^ps auxf
+}
+
+# Git - Simple command aliases (no extra args in alias)
 alias g = git
-alias ga = git add
-alias gaa = git add --all
-alias gc = git commit
-alias gcm = git commit -m
-alias gco = git checkout
-alias gd = git diff
-alias gl = git log --oneline --graph --decorate
-alias gp = git push
-alias gpl = git pull
-alias gs = git status -sb
 
-# Docker
+# Git with arguments use custom commands
+def ga [file?: string] {
+    if ($file | is-empty) {
+        git add .
+    } else {
+        git add $file
+    }
+}
+
+def gaa [] {
+    git add --all
+}
+
+def gc [message: string] {
+    git commit -m $message
+}
+
+def gcm [message: string] {
+    git commit -m $message
+}
+
+def gco [branch: string] {
+    git checkout $branch
+}
+
+def gd [...files: string] {
+    if ($files | is-empty) {
+        git diff
+    } else {
+        git diff ...$files
+    }
+}
+
+def gl [] {
+    git log --oneline --graph --decorate
+}
+
+def gp [] {
+    git push
+}
+
+def gpl [] {
+    git pull
+}
+
+def gs [] {
+    git status -sb
+}
+
+# Docker - simple aliases only
 alias d = docker
 alias dc = docker-compose
-alias dps = docker ps
-alias di = docker images
+
+# Docker with arguments use custom commands
+def dps [] {
+    docker ps
+}
+
+def di [] {
+    docker images
+}
 
 # Kubernetes
 alias k = kubectl
-alias kg = kubectl get
-alias kd = kubectl describe
-alias kl = kubectl logs
+
+def kg [resource?: string] {
+    if ($resource | is-empty) {
+        kubectl get all
+    } else {
+        kubectl get $resource
+    }
+}
+
+def kd [resource: string] {
+    kubectl describe $resource
+}
+
+def kl [pod: string] {
+    kubectl logs $pod
+}
 
 # =============================================================================
 # CUSTOM COMMANDS (Functions)
