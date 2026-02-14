@@ -741,4 +741,3 @@ _safe_rm() {
 }
 
 # Export the safe rm function for use as alias
-export -f _safe_rm

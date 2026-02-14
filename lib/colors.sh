@@ -269,11 +269,3 @@ _DOTFILES_COLORS_SOURCED=1
 # EXPORTS
 # =============================================================================
 
-export -f print_success print_error print_info print_warning print_step print_debug
-export -f print_header print_divider
-export -f _die _warn
-export -f _has_command _has_function _has_dir _has_file
-export -f _is_interactive _is_tty _get_os _is_os
-export -f _require_arg _require_cmd _require_file _require_dir
-export -f _path_append _path_prepend _path_remove
-export -f _cache_file _cache_fresh _cache_write _cache_read

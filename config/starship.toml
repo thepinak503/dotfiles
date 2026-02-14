@@ -263,9 +263,3 @@ disabled = true
 
 [os]
 disabled = true
-
-[username]
-disabled = false
-
-[line_break]
-disabled = false
