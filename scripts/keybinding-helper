@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+# =============================================================================
+# KEYBINDING HELPER - Display useful keyboard shortcuts
+# Usage: keys
+# =============================================================================
+
+# Colors
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+BOLD='\033[1m'
+
+# Function to print section headers
+print_header() {
+    echo ""
+    echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${BOLD}${CYAN}  $1${NC}"
+    echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+}
+
+# Function to print key binding
+print_key() {
+    local key="$1"
+    local desc="$2"
+    local color="${3:-$GREEN}"
+    printf "  ${BOLD}%s${NC}  %-20s %s\n" "$color$key$NC" "" "$desc"
+}
+
+# Clear screen for cleaner look
+clear
+
+# Header
+echo -e "${BOLD}${MAGENTA}"
+echo "  ╔══════════════════════════════════════════╗"
+echo "  ║     KEYBOARD SHORTCUTS REFERENCE         ║"
+echo "  ╚══════════════════════════════════════════╝"
+echo -e "${NC}"
+
+# Tmux shortcuts
+print_header "TMUX SHORTCUTS (Prefix: Ctrl+A)"
+print_key "Ctrl+A + C" "Create new window" "$YELLOW"
+print_key "Ctrl+A + N" "Next window" "$YELLOW"
+print_key "Ctrl+A + P" "Previous window" "$YELLOW"
+print_key "Ctrl+A + ," "Rename window" "$YELLOW"
+print_key "Ctrl+A + %" "Split vertical" "$YELLOW"
+print_key "Ctrl+A + \"" "Split horizontal" "$YELLOW"
+print_key "Ctrl+A + Arrow" "Navigate panes" "$YELLOW"
+print_key "Ctrl+A + Z" "Zoom pane" "$YELLOW"
+print_key "Ctrl+A + D" "Detach session" "$YELLOW"
+print_key "Ctrl+A + S" "List sessions" "$YELLOW"
+
+# Zsh/Bash shortcuts
+print_header "SHELL SHORTCUTS"
+print_key "Ctrl+L" "Clear screen" "$GREEN"
+print_key "Ctrl+A" "Beginning of line" "$GREEN"
+print_key "Ctrl+E" "End of line" "$GREEN"
+print_key "Ctrl+K" "Cut to end of line" "$GREEN"
+print_key "Ctrl+U" "Cut to start of line" "$GREEN"
+print_key "Ctrl+W" "Cut previous word" "$GREEN"
+print_key "Ctrl+Y" "Paste cut text" "$GREEN"
+print_key "Ctrl+R" "Search history" "$GREEN"
+print_key "Ctrl+G" "Cancel search" "$GREEN"
+print_key "Ctrl+P" "Previous command" "$GREEN"
+print_key "Ctrl+N" "Next command" "$GREEN"
+print_key "Alt+F" "Forward word" "$GREEN"
+print_key "Alt+B" "Backward word" "$GREEN"
+
+# FZF shortcuts (if available)
+if command -v fzf &>/dev/null; then
+    print_header "FZF SHORTCUTS"
+    print_key "Ctrl+T" "File finder" "$CYAN"
+    print_key "Ctrl+R" "History search" "$CYAN"
+    print_key "Alt+C" "Directory changer" "$CYAN"
+    print_key "Tab" "Select multiple" "$CYAN"
+fi
+
+# Vim shortcuts (if vim/nvim is primary editor)
+if command -v nvim &>/dev/null || command -v vim &>/dev/null; then
+    print_header "VIM/NVIM SHORTCUTS"
+    print_key ":w" "Save file" "$MAGENTA"
+    print_key ":q" "Quit" "$MAGENTA"
+    print_key ":wq" "Save and quit" "$MAGENTA"
+    print_key ":q!" "Quit without saving" "$MAGENTA"
+    print_key "dd" "Delete line" "$MAGENTA"
+    print_key "yy" "Yank line" "$MAGENTA"
+    print_key "p" "Paste" "$MAGENTA"
+    print_key "u" "Undo" "$MAGENTA"
+    print_key "Ctrl+R" "Redo" "$MAGENTA"
+    print_key "gg" "Go to top" "$MAGENTA"
+    print_key "G" "Go to bottom" "$MAGENTA"
+fi
+
+# Custom aliases
+print_header "USEFUL ALIASES"
+print_key "ll" "Detailed listing" "$RED"
+print_key "la" "List all files" "$RED"
+print_key "lt" "Tree listing" "$RED"
+print_key ".." "Go up directory" "$RED"
+print_key "..." "Go up 2 directories" "$RED"
+print_key "~" "Go home" "$RED"
+print_key "c" "Clear screen" "$RED"
+print_key "h" "History" "$RED"
+print_key "emoji" "Emoji picker" "$RED"
+print_key "calc" "Calculator" "$RED"
+
+# System monitoring tools
+print_header "MONITORING TOOLS"
+print_key "btop" "System monitor" "$YELLOW"
+print_key "htop" "Process viewer" "$YELLOW"
+print_key "fastfetch" "System info" "$YELLOW"
+
+# Footer
+echo ""
+echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}  Press any key to exit...${NC}"
+read -n 1 -s

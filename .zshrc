@@ -156,3 +156,4 @@ fi
 # Emoji picker and calculator
 alias emoji='/home/pinak/.dotfiles/scripts/emoji-picker'
 alias calc='/home/pinak/.dotfiles/scripts/calc'
+alias keys='/home/pinak/.dotfiles/scripts/keybinding-helper'

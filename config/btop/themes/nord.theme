@@ -1,0 +1,76 @@
+# Nord-inspired theme for btop
+# A polar-inspired color palette with cool blues and frosty tones
+
+# Main background and foreground
+theme[main_bg]="#2E3440"
+theme[main_fg]="#D8DEE9"
+
+# Title and highlight colors
+theme[title]="#88C0D0"
+theme[hi_fg]="#81A1C1"
+
+# Selection colors
+theme[selected_bg]="#434C5E"
+theme[selected_fg]="#88C0D0"
+
+# Inactive and graph text
+theme[inactive_fg]="#4C566A"
+theme[graph_text]="#D8DEE9"
+
+# Background colors for meters and process misc
+theme[meter_bg]="#434C5E"
+theme[proc_misc]="#B48EAD"
+
+# Box colors - different colors for each section
+theme[cpu_box]="#5E81AC"
+theme[mem_box]="#A3BE8C"
+theme[net_box]="#B48EAD"
+theme[proc_box]="#D08770"
+
+# Divider line
+theme[div_line]="#4C566A"
+
+# Temperature gradient (blue -> yellow -> red)
+theme[temp_start]="#88C0D0"
+theme[temp_mid]="#EBCB8B"
+theme[temp_end]="#BF616A"
+
+# CPU gradient (light blue -> blue -> dark blue)
+theme[cpu_start]="#88C0D0"
+theme[cpu_mid]="#5E81AC"
+theme[cpu_end]="#81A1C1"
+
+# Memory free gradient
+theme[free_start]="#A3BE8C"
+theme[free_mid]="#8FBCBB"
+theme[free_end]="#88C0D0"
+
+# Memory cached gradient
+theme[cached_start]="#D8DEE9"
+theme[cached_mid]="#E5E9F0"
+theme[cached_end]="#ECEFF4"
+
+# Memory available gradient
+theme[available_start]="#A3BE8C"
+theme[available_mid]="#8FBCBB"
+theme[available_end]="#88C0D0"
+
+# Memory used gradient (warning colors)
+theme[used_start]="#EBCB8B"
+theme[used_mid]="#D08770"
+theme[used_end]="#BF616A"
+
+# Network download gradient
+theme[download_start]="#88C0D0"
+theme[download_mid]="#5E81AC"
+theme[download_end]="#81A1C1"
+
+# Network upload gradient
+theme[upload_start]="#B48EAD"
+theme[upload_mid]="#A3BE8C"
+theme[upload_end]="#88C0D0"
+
+# Process list gradient
+theme[process_start]="#88C0D0"
+theme[process_mid]="#5E81AC"
+theme[process_end]="#81A1C1"
