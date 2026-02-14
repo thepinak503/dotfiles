@@ -75,7 +75,7 @@ alias .. = cd ..
 alias ... = cd ../..
 alias .... = cd ../../..
 alias ..... = cd ../../../..
-alias -- - = cd -
+alias -- = cd -
 alias home = cd ~
 alias desk = cd ~/Desktop
 alias docs = cd ~/Documents
@@ -216,7 +216,7 @@ def calc [expression: string] {
 
 # Starship prompt
 if (which starship | is-not-empty) {
-    source (starship init nu | complete | get stdout)
+    use ($nu.default-config-dir | path join starship.nu) *
 }
 
 # Zoxide
@@ -249,3 +249,11 @@ alias zi = __zoxide_zi
 # WELCOME MESSAGE (DISABLED)
 # =============================================================================
 # Welcome message removed for cleaner startup
+
+# =============================================================================
+# LOCAL CUSTOMIZATIONS
+# =============================================================================
+# Load local config if it exists
+if ($"($nu.default-config-dir)/config.local.nu" | path exists) {
+    source config.local.nu
+}
