@@ -9,7 +9,7 @@
     editor = nvim
     autocrlf = input
     safecrlf = true
-    pager = delta
+	pager = delta
     whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
     excludesfile = ~/.gitignore_global
     autocrlf = input
@@ -36,14 +36,14 @@
 
 [merge]
     tool = vimdiff
-    conflictstyle = diff3
+	conflictStyle = diff3
 
 [mergetool]
     prompt = false
 
 [diff]
     tool = vimdiff
-    colorMoved = zebra
+	colorMoved = default
     renames = copies
     mnemonicPrefix = true
 
@@ -136,8 +136,8 @@
     helper = cache --timeout=3600
 
 [delta]
-    navigate = true
-    light = false
+	navigate = true
+	light = false
     line-numbers = true
     side-by-side = false
     features = line-numbers decorations
@@ -152,7 +152,7 @@
     hunk-header-style = file line-number syntax
 
 [interactive]
-    diffFilter = delta --color-only
+	diffFilter = delta --color-only
 
 [filter "lfs"]
     clean = git-lfs clean -- %f
