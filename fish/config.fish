@@ -4,6 +4,11 @@
 # The Ultimate Universal Shell Configuration for Fish
 # =============================================================================
 
+# Run fastfetch on start (interactive only)
+if type -q fastfetch
+    fastfetch 2>/dev/null
+end
+
 # Suppress errors globally
 set -g __fish_suppress_errors 1
 

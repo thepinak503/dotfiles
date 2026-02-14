@@ -4,6 +4,11 @@
 # Universal Zsh configuration with Oh-My-Zsh integration
 # =============================================================================
 
+# Run fastfetch on start (interactive only)
+if [[ -x "$(command -v fastfetch 2>/dev/null)" ]]; then
+    fastfetch 2>/dev/null
+fi
+
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
