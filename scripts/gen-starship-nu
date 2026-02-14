@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Generate starship init for nushell
+
+if command -v starship &>/dev/null; then
+    starship init nu > /tmp/starship-init.nu 2>/dev/null || true
+fi

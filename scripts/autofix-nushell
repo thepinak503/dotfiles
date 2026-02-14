@@ -1,0 +1,175 @@
+#!/usr/bin/env bash
+# =============================================================================
+# AUTO-FIX NUSHELL ERRORS
+# Automatically detects and fixes common nushell configuration errors
+# =============================================================================
+
+set -e
+
+NU_CONFIG="/home/pinak/git/dotfiles/nushell/config.nu"
+FIX_COUNT=0
+
+# Function to run nushell and capture errors
+check_nushell() {
+    local output
+    output=$(timeout 5 /bin/nu -n -c "source $NU_CONFIG" 2>&1) || true
+    echo "$output"
+}
+
+# Function to extract error line number
+get_error_line() {
+    local error_msg="$1"
+    echo "$error_msg" | grep -oP '\d+' | head -1
+}
+
+# Function to fix str repeat error
+fix_str_repeat() {
+    local line_num="$1"
+    echo "  Fixing str repeat syntax at line $line_num..."
+    sed -i "${line_num}s/str repeat --count/str repeat/" "$NU_CONFIG"
+    ((FIX_COUNT++))
+}
+
+# Function to fix extra positional argument
+fix_extra_positional() {
+    local error_msg="$1"
+    local line_num=$(echo "$error_msg" | grep -oP '\d+' | head -1)
+    
+    if [[ -n "$line_num" ]]; then
+        echo "  Fixing extra positional at line $line_num..."
+        # Read the problematic line
+        local line=$(sed -n "${line_num}p" "$NU_CONFIG")
+        
+        # Fix common patterns
+        if echo "$line" | grep -q "str repeat"; then
+            # Try without --count
+            sed -i "${line_num}s/str repeat --count/str repeat/" "$NU_CONFIG"
+        elif echo "$line" | grep -q "str substring"; then
+            # Fix str substring syntax
+            sed -i "${line_num}s/str substring 0\.\.\$length/str substring --end $length/" "$NU_CONFIG"
+        fi
+        ((FIX_COUNT++))
+    fi
+}
+
+# Function to fix alias name issues
+fix_alias_name() {
+    local line_num="$1"
+    echo "  Fixing alias name at line $line_num..."
+    sed -i "${line_num}d" "$NU_CONFIG"
+    ((FIX_COUNT++))
+}
+
+# Function to fix unknown flag
+fix_unknown_flag() {
+    local error_msg="$1"
+    local line_num=$(echo "$error_msg" | grep -oP '\d+' | head -1)
+    
+    if [[ -n "$line_num" ]]; then
+        echo "  Removing unknown flag at line $line_num..."
+        local line=$(sed -n "${line_num}p" "$NU_CONFIG")
+        
+        # Remove common invalid flags
+        if echo "$line" | grep -q "ls -laT"; then
+            sed -i "${line_num}s/ls -laT/ls -la/" "$NU_CONFIG"
+        elif echo "$line" | grep -q "ls -T"; then
+            sed -i "${line_num}s/ls -T/ls/" "$NU_CONFIG"
+        fi
+        ((FIX_COUNT++))
+    fi
+}
+
+# Function to fix variable_not_valid (invalid alias name)
+fix_variable_not_valid() {
+    local line_num="$1"
+    echo "  Removing invalid alias at line $line_num..."
+    sed -i "${line_num}d" "$NU_CONFIG"
+    ((FIX_COUNT++))
+}
+
+# Main fix loop
+main() {
+    echo "╔════════════════════════════════════════════════════════════╗"
+    echo "║     AUTO-FIXING NUSHELL ERRORS                             ║"
+    echo "╚════════════════════════════════════════════════════════════╝"
+    echo ""
+    
+    cd ~/git/dotfiles
+    
+    MAX_ITERATIONS=20
+    ITERATION=0
+    
+    while [[ $ITERATION -lt $MAX_ITERATIONS ]]; do
+        ((ITERATION++))
+        echo "Iteration $ITERATION: Checking nushell..."
+        
+        FIX_COUNT=0
+        local output=$(check_nushell)
+        
+        # Check if there are any errors
+        if [[ -z "$output" ]] || ! echo "$output" | grep -q "Error:"; then
+            echo ""
+            echo "✓ No errors found! Nushell config is clean."
+            break
+        fi
+        
+        echo "Found errors, analyzing..."
+        echo "$output" | head -20
+        echo ""
+        
+        # Process each error type
+        if echo "$output" | grep -q "extra_positional"; then
+            local line=$(echo "$output" | grep -oP '\d+' | head -1)
+            fix_extra_positional "$output"
+        fi
+        
+        if echo "$output" | grep -q "unknown_flag"; then
+            fix_unknown_flag "$output"
+        fi
+        
+        if echo "$output" | grep -q "variable_not_valid"; then
+            local line=$(echo "$output" | grep -oP '\d+' | head -1)
+            fix_variable_not_valid "$line"
+        fi
+        
+        if echo "$output" | grep -q "sourced_file_not_found"; then
+            echo "  Creating missing local.nu files..."
+            touch nushell/config.local.nu
+            touch nushell/env.local.nu
+            touch nushell/starship.nu
+            ((FIX_COUNT++))
+        fi
+        
+        if [[ $FIX_COUNT -eq 0 ]]; then
+            echo "⚠ Unknown error type, manual intervention needed:"
+            echo "$output"
+            break
+        fi
+        
+        echo "  Applied $FIX_COUNT fix(es)"
+        echo ""
+        
+        sleep 1
+    done
+    
+    # Commit if there were changes
+    if [[ $(git diff --name-only | wc -l) -gt 0 ]]; then
+        echo ""
+        echo "Committing changes..."
+        git add nushell/
+        git commit --no-verify -m "Auto-fix nushell errors
+
+Fixed errors detected by automated checker:
+- Syntax issues
+- Invalid aliases
+- Unknown flags
+- Missing files"
+        git push
+        echo "✓ Changes committed and pushed!"
+    fi
+    
+    echo ""
+    echo "Done! Run 'nu' to verify."
+}
+
+main "$@"

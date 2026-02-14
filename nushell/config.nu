@@ -216,7 +216,7 @@ def mkcd [dir: string] {
 
 # Go up N directories
 def up [n: int = 1] {
-    let path = ("../" | str repeat --count $n)
+    let path = (1..$n | each { "../" } | str join)
     cd $path
 }
 
@@ -290,9 +290,10 @@ def calc [expression: string] {
 # MODERN TOOLS INTEGRATION
 # =============================================================================
 
-# Starship prompt
+# Starship prompt - inline initialization to avoid parse-time issues
 if (which starship | is-not-empty) {
-    use ($nu.default-config-dir | path join starship.nu) *
+    # Source starship init directly
+    source /tmp/starship-init.nu
 }
 
 # Zoxide
