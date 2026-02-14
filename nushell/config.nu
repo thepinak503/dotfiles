@@ -81,10 +81,24 @@ alias docs = cd ~/Documents
 alias dl = cd ~/Downloads
 
 # Listing
-alias l = ls -la
+# Backup original ls command
+alias ls-core = ls
+
+# Simple listing aliases
+alias l = ls
 alias la = ls -a
 alias ll = ls -l
-alias lt = ls -laT
+
+# Tree-like listing using custom command (nushell style)
+def lt [path?: string] {
+    let target = ($path | default ".")
+    ls -a $target | sort-by type name -i
+}
+
+# Better ls with sorting by type and name
+def lsg [] {
+    ls | sort-by type name -i | grid -c | str trim
+}
 
 # File operations
 alias mkdir = mkdir -v
