@@ -102,13 +102,24 @@ setopt HIST_IGNORE_SPACE
 setopt SHARE_HISTORY
 setopt EXTENDED_HISTORY
 
-# Key bindings
+# Key bindings - bash-like
+bindkey -e
+
+autoload -U select-word-style
+select-word-style bash
+
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
+bindkey '\e^?' backward-kill-word
+bindkey '^[b' backward-word
+bindkey '^[f' forward-word
+bindkey '^[B' backward-word
+bindkey '^[F' forward-word
+bindkey '^w' backward-kill-word
 
 # Completion with security handling
 autoload -Uz compinit
