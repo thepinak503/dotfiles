@@ -22,7 +22,7 @@ if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
     export C_BLINK='\033[5m'
     export C_REVERSE='\033[7m'
     export C_HIDDEN='\033[8m'
-    
+
     # Standard colors
     export C_BLACK='\033[0;30m'
     export C_RED='\033[0;31m'
@@ -32,7 +32,7 @@ if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
     export C_MAGENTA='\033[0;35m'
     export C_CYAN='\033[0;36m'
     export C_WHITE='\033[0;37m'
-    
+
     # Bright colors
     export C_BBLACK='\033[1;30m'
     export C_BRED='\033[1;31m'
@@ -42,7 +42,7 @@ if [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; then
     export C_BMAGENTA='\033[1;35m'
     export C_BCYAN='\033[1;36m'
     export C_BWHITE='\033[1;37m'
-    
+
     # Background colors
     export C_BG_BLACK='\033[40m'
     export C_BG_RED='\033[41m'
@@ -271,18 +271,18 @@ show_spinner() {
     local message="${2:-Loading...}"
     local spin_chars=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
     local i=0
-    
+
     # Hide cursor
     tput civis 2>/dev/null || true
-    
+
     while ps -p "$pid" &>/dev/null; do
         printf "\r%s %s" "${spin_chars[i]}" "$message"
         i=$(( (i + 1) % 10 ))
         sleep 0.1
     done
-    
+
     printf "\r✓ %s%-20s\n" "$message" ""
-    
+
     # Show cursor
     tput cnorm 2>/dev/null || true
 }
@@ -293,16 +293,16 @@ show_progress_bar() {
     local total=$2
     local width=${3:-40}
     local message="${4:-Progress}"
-    
+
     local percentage=$((current * 100 / total))
     local filled=$((current * width / total))
     local empty=$((width - filled))
-    
+
     printf "\r%s [" "$message"
     printf "%${filled}s" | tr ' ' '█'
     printf "%${empty}s" | tr ' ' '░'
     printf "] %3d%%" "$percentage"
-    
+
     if [[ $current -eq $total ]]; then
         echo ""
     fi
@@ -315,7 +315,7 @@ show_progress_bar() {
 # Auto-select dotfiles mode based on system resources
 auto_select_mode() {
     local mode="advanced"
-    
+
     # If low memory (< 2GB), use basic mode
     if [[ "$TOTAL_MEMORY" != "unknown" ]] && [[ "$TOTAL_MEMORY" -lt 2048 ]]; then
         mode="basic"
@@ -329,7 +329,7 @@ auto_select_mode() {
     elif is_tty; then
         mode="basic"
     fi
-    
+
     echo "$mode"
 }
 

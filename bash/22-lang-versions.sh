@@ -13,7 +13,7 @@ _lazy_load() {
     local cmd="$1"
     local init="$2"
     local extra_init="${3:-}"
-    
+
     eval "${cmd}() {
         unset -f ${cmd}
         ${init}
@@ -39,7 +39,7 @@ if [[ -d "$NVM_DIR" ]] && [[ -s "$NVM_DIR/nvm.sh" ]]; then
         [[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"
         nvm "$@"
     }
-    
+
     # Lazy load node
     node() {
         unset -f nvm node npm npx nvmi nvml nvmu nvmd nvmr
@@ -47,7 +47,7 @@ if [[ -d "$NVM_DIR" ]] && [[ -s "$NVM_DIR/nvm.sh" ]]; then
         [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
         node "$@"
     }
-    
+
     # Lazy load npm
     npm() {
         unset -f nvm node npm npx nvmi nvml nvmu nvmd nvmr
@@ -55,7 +55,7 @@ if [[ -d "$NVM_DIR" ]] && [[ -s "$NVM_DIR/nvm.sh" ]]; then
         [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
         npm "$@"
     }
-    
+
     # Lazy load npx
     npx() {
         unset -f nvm node npm npx nvmi nvml nvmu nvmd nvmr
@@ -63,7 +63,7 @@ if [[ -d "$NVM_DIR" ]] && [[ -s "$NVM_DIR/nvm.sh" ]]; then
         [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
         npx "$@"
     }
-    
+
     # NVM aliases (lazy loaded)
     nvmi() { nvm install "$@"; }
     nvml() { nvm list "$@"; }
@@ -82,7 +82,7 @@ export PYENV_ROOT="${PYENV_ROOT:-$HOME/.pyenv}"
 if [[ -d "$PYENV_ROOT" ]]; then
     # Add pyenv to PATH for initial detection
     _path_prepend "$PYENV_ROOT/bin"
-    
+
     # Lazy load python commands
     python() {
         unset -f python python3 pip pip3 pyi pyl pyu pylocal pyg pyv pyva pyvd
@@ -90,28 +90,28 @@ if [[ -d "$PYENV_ROOT" ]]; then
         eval "$(pyenv virtualenv-init -)" 2>/dev/null || true
         python "$@"
     }
-    
+
     python3() {
         unset -f python python3 pip pip3 pyi pyl pyu pylocal pyg pyv pyva pyvd
         eval "$(pyenv init -)"
         eval "$(pyenv virtualenv-init -)" 2>/dev/null || true
         python3 "$@"
     }
-    
+
     pip() {
         unset -f python python3 pip pip3 pyi pyl pyu pylocal pyg pyv pyva pyvd
         eval "$(pyenv init -)"
         eval "$(pyenv virtualenv-init -)" 2>/dev/null || true
         pip "$@"
     }
-    
+
     pip3() {
         unset -f python python3 pip pip3 pyi pyl pyu pylocal pyg pyv pyva pyvd
         eval "$(pyenv init -)"
         eval "$(pyenv virtualenv-init -)" 2>/dev/null || true
         pip3 "$@"
     }
-    
+
     pyenv() {
         unset -f python python3 pip pip3 pyi pyl pyu pylocal pyg pyv pyva pyvd pyenv
         _path_prepend "$PYENV_ROOT/bin"
@@ -119,7 +119,7 @@ if [[ -d "$PYENV_ROOT" ]]; then
         eval "$(command pyenv virtualenv-init -)" 2>/dev/null || true
         pyenv "$@"
     }
-    
+
     # Pyenv aliases
     pyi() { pyenv install "$@"; }
     pyl() { pyenv versions "$@"; }
@@ -142,33 +142,34 @@ alias pydeact='deactivate'
 
 export RBENV_ROOT="${RBENV_ROOT:-$HOME/.rbenv}"
 
-if [[ -d "$RBENV_ROOT" ]]; then
+if [ -d "$RBENV_ROOT" ]; then
+    # Add rbenv to PATH for initial detection
     _path_prepend "$RBENV_ROOT/bin"
-    
+
     rbenv() {
         unset -f rbenv ruby gem bundle rbi rbl rbu rblocal
         eval "$(command rbenv init -)"
         rbenv "$@"
     }
-    
+
     ruby() {
         unset -f rbenv ruby gem bundle rbi rbl rbu rblocal
         eval "$(rbenv init -)"
         ruby "$@"
     }
-    
+
     gem() {
         unset -f rbenv ruby gem bundle rbi rbl rbu rblocal
         eval "$(rbenv init -)"
         gem "$@"
     }
-    
+
     bundle() {
         unset -f rbenv ruby gem bundle rbi rbl rbu rblocal
         eval "$(rbenv init -)"
         bundle "$@"
     }
-    
+
     # Rbenv aliases
     rbi() { rbenv install "$@"; }
     rbl() { rbenv versions "$@"; }
@@ -184,7 +185,7 @@ if command -v go &>/dev/null || [[ -d "$HOME/go" ]]; then
     export GOPATH="${GOPATH:-$HOME/go}"
     _path_append "$GOPATH/bin"
     [[ -d "/usr/local/go/bin" ]] && _path_prepend "/usr/local/go/bin"
-    
+
     # Go aliases
     alias gocd='cd "$GOPATH"'
     alias gosrc='cd "$GOPATH/src"'
@@ -201,37 +202,57 @@ fi
 # -----------------------------------------------------------------------------
 
 if [[ -d "$HOME/.cargo" ]]; then
+    # Clear any existing cargo aliases to avoid function syntax errors
+    unalias cargo rustc rustup c cb cbr cr ct cc cf cl ccl cu ca cdoc cnew cinit cpub csearch ctree cinstall cuninstall cwatch cbench cfix cupdate cgenerate 2>/dev/null || true
+
     # Lazy load cargo
     cargo() {
-        unset -f cargo rustc rustup ci cb cr ct cc cf ccl cu
+        unset -f cargo rustc rustup
         source "$HOME/.cargo/env" 2>/dev/null || true
         _path_prepend "$HOME/.cargo/bin"
         cargo "$@"
     }
-    
+
     rustc() {
-        unset -f cargo rustc rustup ci cb cr ct cc cf ccl cu
+        unset -f cargo rustc rustup
         source "$HOME/.cargo/env" 2>/dev/null || true
         _path_prepend "$HOME/.cargo/bin"
         rustc "$@"
     }
-    
+
     rustup() {
-        unset -f cargo rustc rustup ci cb cr ct cc cf ccl cu
+        unset -f cargo rustc rustup
         source "$HOME/.cargo/env" 2>/dev/null || true
         _path_prepend "$HOME/.cargo/bin"
         rustup "$@"
     }
-    
-    # Rust aliases
-    ci() { cargo install "$@"; }
+
+    # Rust shortcuts (functions instead of aliases for better lazy-loading support)
+    c() { cargo "$@"; }
     cb() { cargo build "$@"; }
+    cbr() { cargo build --release "$@"; }
     cr() { cargo run "$@"; }
     ct() { cargo test "$@"; }
     cc() { cargo check "$@"; }
     cf() { cargo fmt "$@"; }
+    cl() { cargo clippy "$@"; }
     ccl() { cargo clippy "$@"; }
     cu() { cargo update "$@"; }
+    ca() { cargo add "$@"; }
+    ci() { cargo install "$@"; }
+    cdoc() { cargo doc --open "$@"; }
+    cnew() { cargo new "$@"; }
+    cinit() { cargo init "$@"; }
+    cpub() { cargo publish "$@"; }
+    csearch() { cargo search "$@"; }
+    ctree() { cargo tree "$@"; }
+    cinstall() { cargo install "$@"; }
+    cuninstall() { cargo uninstall "$@"; }
+    cwatch() { cargo watch -x run "$@"; }
+    cbench() { cargo bench "$@"; }
+    cfix() { cargo fix "$@"; }
+    cupdate() { cargo update "$@"; }
+    cgenerate() { cargo generate "$@"; }
 fi
 
 # -----------------------------------------------------------------------------
@@ -242,25 +263,25 @@ export JENV_ROOT="${JENV_ROOT:-$HOME/.jenv}"
 
 if [[ -d "$JENV_ROOT" ]]; then
     _path_prepend "$JENV_ROOT/bin"
-    
+
     jenv() {
         unset -f jenv java javac ji jl ju
         eval "$(command jenv init -)"
         jenv "$@"
     }
-    
+
     java() {
         unset -f jenv java javac ji jl ju
         eval "$(jenv init -)"
         java "$@"
     }
-    
+
     javac() {
         unset -f jenv java javac ji jl ju
         eval "$(jenv init -)"
         javac "$@"
     }
-    
+
     # Jenv aliases
     ji() { jenv add "$@"; }
     jl() { jenv versions "$@"; }
@@ -274,7 +295,7 @@ fi
 if [[ -d "$HOME/.deno" ]]; then
     export DENO_INSTALL="$HOME/.deno"
     _path_append "$DENO_INSTALL/bin"
-    
+
     # Deno aliases
     alias dr='deno run'
     alias db='deno bundle'
@@ -312,37 +333,37 @@ fi
 # Install all version managers
 install-version-managers() {
     echo "Installing language version managers..."
-    
+
     # NVM
     if [[ ! -d "$HOME/.nvm" ]]; then
         echo "Installing NVM..."
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
     fi
-    
+
     # Pyenv
     if ! command -v pyenv &>/dev/null; then
         echo "Installing Pyenv..."
         curl https://pyenv.run | bash
     fi
-    
+
     # Rbenv
     if ! command -v rbenv &>/dev/null; then
         echo "Installing Rbenv..."
         git clone https://github.com/rbenv/rbenv.git ~/.rbenv
         git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
     fi
-    
+
     # Rust
     if ! command -v rustc &>/dev/null; then
         echo "Installing Rust..."
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     fi
-    
+
     # Go (if not present)
     if ! command -v go &>/dev/null; then
         echo "Note: Install Go from https://golang.org/dl/"
     fi
-    
+
     echo "Version managers installation complete!"
     echo "Please restart your shell or source your profile."
 }
@@ -351,38 +372,38 @@ install-version-managers() {
 lang-versions() {
     echo "=== Language Version Managers ==="
     echo ""
-    
+
     if command -v nvm &>/dev/null; then
         echo "Node (NVM):"
         nvm list 2>/dev/null || echo "  nvm not loaded"
         echo ""
     fi
-    
+
     if command -v pyenv &>/dev/null; then
         echo "Python (Pyenv):"
         pyenv versions
         echo ""
     fi
-    
+
     if command -v rbenv &>/dev/null; then
         echo "Ruby (Rbenv):"
         rbenv versions
         echo ""
     fi
-    
+
     if command -v rustc &>/dev/null; then
         echo "Rust:"
         rustc --version
         cargo --version
         echo ""
     fi
-    
+
     if command -v go &>/dev/null; then
         echo "Go:"
         go version
         echo ""
     fi
-    
+
     if command -v jenv &>/dev/null; then
         echo "Java (Jenv):"
         jenv versions
@@ -394,31 +415,31 @@ lang-versions() {
 check-lazy-loading() {
     echo "=== Lazy Loading Status ==="
     echo ""
-    
+
     if declare -f node &>/dev/null && [[ "$(declare -f node)" == *"unset -f"* ]]; then
         echo "✓ NVM: Lazy loaded (node command is wrapped)"
     else
         echo "✗ NVM: Not lazy loaded or already initialized"
     fi
-    
+
     if declare -f python &>/dev/null && [[ "$(declare -f python)" == *"unset -f"* ]]; then
         echo "✓ Pyenv: Lazy loaded (python command is wrapped)"
     else
         echo "✗ Pyenv: Not lazy loaded or already initialized"
     fi
-    
+
     if declare -f cargo &>/dev/null && [[ "$(declare -f cargo)" == *"unset -f"* ]]; then
         echo "✓ Rust: Lazy loaded (cargo command is wrapped)"
     else
         echo "✗ Rust: Not lazy loaded or already initialized"
     fi
-    
+
     if declare -f rbenv &>/dev/null && [[ "$(declare -f rbenv)" == *"unset -f"* ]]; then
         echo "✓ Rbenv: Lazy loaded"
     else
         echo "✗ Rbenv: Not lazy loaded or already initialized"
     fi
-    
+
     echo ""
     echo "Note: Commands will be fully initialized on first use"
 }

@@ -225,7 +225,6 @@ if command -v dust &>/dev/null; then
     alias du1='dust -d 1'
     alias du2='dust -d 2'
     alias du3='dust -d 3'
-    alias dusort='dust -r'
 fi
 
 # =============================================================================

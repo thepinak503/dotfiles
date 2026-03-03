@@ -226,31 +226,10 @@ install_cargo() {
 if [[ "$DISTRO_ID" == "amzn" ]] && [[ -n "$BASH_VERSION" ]]; then
     install_cargo_amazon_linux
 fi
-
 if command -v cargo &>/dev/null; then
-    alias c='cargo'
-    alias cb='cargo build'
-    alias cbr='cargo build --release'
-    alias cr='cargo run'
-    alias ct='cargo test'
-    alias cc='cargo check'
-    alias cf='cargo fmt'
-    alias cl='cargo clippy'
-    alias cu='cargo update'
-    alias ca='cargo add'
-    alias cdoc='cargo doc --open'
-    alias cnew='cargo new'
-    alias cinit='cargo init'
-    alias cpub='cargo publish'
-    alias csearch='cargo search'
-    alias ctree='cargo tree'
-    alias cinstall='cargo install'
-    alias cuninstall='cargo uninstall'
-    alias cwatch='cargo watch -x run'
-    alias cbench='cargo bench'
-    alias cfix='cargo fix'
-    alias cupdate='cargo update'
-    alias cgenerate='cargo generate'
+    # Removed aliases, handled in 22-lang-versions.sh
+    :
+fi
 fi
 
 # rustup

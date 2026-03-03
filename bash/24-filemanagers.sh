@@ -141,6 +141,9 @@ treed() {
     tree -d -L "$depth"
 }
 
+# Clear any existing dusort alias to avoid function syntax error
+unalias dusort 2>/dev/null || true
+
 # Show directory sizes sorted
 dusort() {
     du -sh * 2>/dev/null | sort -rh | head -20
