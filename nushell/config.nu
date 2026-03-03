@@ -209,6 +209,14 @@ alias vi = nvim
 alias vim = nvim
 alias c = clear
 
+# Dotfiles scripts
+alias emoji = ^$"($env.DOTFILES_DIR)/scripts/emoji-picker"
+alias calc = ^$"($env.DOTFILES_DIR)/scripts/calc"
+alias keys = ^$"($env.DOTFILES_DIR)/scripts/keybinding-helper"
+alias check-errors = ^$"($env.DOTFILES_DIR)/scripts/check-errors"
+alias clipboard = ^$"($env.DOTFILES_DIR)/scripts/clipboard-manager"
+alias dropdown = ^$"($env.DOTFILES_DIR)/scripts/dropdown-terminal"
+
 # System
 alias df = df -h
 

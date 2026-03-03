@@ -155,3 +155,14 @@ abbr -a zconf '$EDITOR ~/.zshrc' 2>/dev/null
 abbr -a helpme 'man' 2>/dev/null
 abbr -a path 'echo $PATH | tr " " "\n"' 2>/dev/null
 abbr -a aliases 'alias' 2>/dev/null
+
+# =============================================================================
+# DOTFILES SCRIPTS
+# =============================================================================
+
+alias emoji="$DOTFILES_DIR/scripts/emoji-picker" 2>/dev/null
+alias calc="$DOTFILES_DIR/scripts/calc" 2>/dev/null
+alias keys="$DOTFILES_DIR/scripts/keybinding-helper" 2>/dev/null
+alias check-errors="$DOTFILES_DIR/scripts/check-errors" 2>/dev/null
+alias clipboard="$DOTFILES_DIR/scripts/clipboard-manager" 2>/dev/null
+alias dropdown="$DOTFILES_DIR/scripts/dropdown-terminal" 2>/dev/null
