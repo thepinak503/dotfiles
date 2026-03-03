@@ -249,4 +249,20 @@ if command -v fastfetch >/dev/null 2>&1
     fastfetch 2>/dev/null
 end
 
-thefuck --alias | source
+if command -v thefuck >/dev/null 2>&1
+    thefuck --alias | source 2>/dev/null
+end
+
+# =============================================================================
+# FIND-THE-COMMAND (Arch Linux only)
+# =============================================================================
+
+if type -q ftc
+    if test "$DISTRO_ID" = "arch" -o "$DISTRO_ID" = "manjaro" -o "$DISTRO_ID" = "endeavouros" -o "$DISTRO_ID" = "garuda"
+        abbr -a ftc ftc
+        abbr -a ftcs ftc search
+        abbr -a ftci ftc info
+        abbr -a ftcl ftc list
+        abbr -a ftcf ftc find
+    end
+end

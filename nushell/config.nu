@@ -323,6 +323,19 @@ alias z = __zoxide_z
 alias zi = __zoxide_zi
 
 # =============================================================================
+# FIND-THE-COMMAND (Arch Linux only)
+# =============================================================================
+let ftc_available = (which ftc | is-not-empty)
+let is_arch = ($env.DISTRO_ID? | default "" | str contains "arch")
+if $ftc_available and $is_arch {
+    alias ftc = ftc
+    alias ftcs = ftc search
+    alias ftci = ftc info
+    alias ftcl = ftc list
+    alias ftcf = ftc find
+}
+
+# =============================================================================
 # WELCOME MESSAGE (DISABLED)
 # =============================================================================
 # Welcome message removed for cleaner startup

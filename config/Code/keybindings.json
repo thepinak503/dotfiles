@@ -1,7 +1,4 @@
-// VS Code: Keybindings
-// Custom keyboard shortcuts for enhanced productivity
 [
-    // Terminal
     {
         "key": "ctrl+`",
         "command": "workbench.action.terminal.toggleTerminal"
@@ -14,7 +11,6 @@
         "key": "ctrl+shift+w",
         "command": "workbench.action.terminal.kill"
     },
-    // File operations
     {
         "key": "ctrl+n",
         "command": "workbench.action.files.newUntitledFile"
@@ -31,7 +27,6 @@
         "key": "ctrl+shift+s",
         "command": "workbench.action.files.saveAs"
     },
-    // Navigation
     {
         "key": "ctrl+p",
         "command": "workbench.action.quickOpen"
@@ -56,7 +51,6 @@
         "key": "ctrl+shift+f",
         "command": "workbench.action.findInFiles"
     },
-    // Editor
     {
         "key": "ctrl+f",
         "command": "actions.find"
@@ -105,12 +99,10 @@
         "key": "shift+f12",
         "command": "editor.action.goToReferences"
     },
-    // Git
     {
         "key": "ctrl+shift+g",
         "command": "workbench.view.scm"
     },
-    // Explorer
     {
         "key": "ctrl+shift+e",
         "command": "workbench.view.explorer"
@@ -119,17 +111,14 @@
         "key": "ctrl+b",
         "command": "workbench.action.toggleSidebarVisibility"
     },
-    // Extensions
     {
         "key": "ctrl+shift+x",
         "command": "workbench.view.extensions"
     },
-    // Problems
     {
         "key": "ctrl+shift+m",
         "command": "workbench.actions.view.problems"
     },
-    // Format
     {
         "key": "shift+alt+f",
         "command": "editor.action.formatDocument"
@@ -138,7 +127,6 @@
         "key": "ctrl+k ctrl+f",
         "command": "editor.action.formatSelection"
     },
-    // Zen mode
     {
         "key": "ctrl+k z",
         "command": "workbench.action.toggleZenMode"

@@ -1,5 +1,5 @@
-# WezTerm Configuration
-# GPU-accelerated terminal emulator
+-- WezTerm Configuration
+-- GPU-accelerated terminal emulator
 
 local wezterm = require 'wezterm'
 local config = {}

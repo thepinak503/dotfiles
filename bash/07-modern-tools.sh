@@ -272,3 +272,26 @@ if [[ -f /usr/share/autojump/autojump.bash ]]; then
 elif [[ -f /usr/share/autojump/autojump.sh ]]; then
     source /usr/share/autojump/autojump.sh
 fi
+
+# =============================================================================
+# FIND-THE-COMMAND (Arch Linux only - command search tool)
+# =============================================================================
+
+if command -v ftc &>/dev/null; then
+    if [[ "$DISTRO_FAMILY" == "arch" ]]; then
+        # Main ftc command
+        alias ftc='ftc'
+
+        # Search for command
+        alias ftcs='ftc search'
+
+        # Show command info
+        alias ftci='ftc info'
+
+        # List installed commands
+        alias ftcl='ftc list'
+
+        # Find by description
+        alias ftcf='ftc find'
+    fi
+fi

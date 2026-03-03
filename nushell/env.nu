@@ -60,6 +60,21 @@ $env.RUSTUP_HOME = "~/.rustup"
 $env.GOPATH = "~/go"
 
 # =============================================================================
+# DISTRO DETECTION
+# =============================================================================
+# Parse /etc/os-release for DISTRO_ID
+let os_id = (do { 
+    let content = (open /etc/os-release);
+    let lines = ($content | split row "\n");
+    let id_line = ($lines | where $it =~ "^ID=" | get 0 | default "");
+    let id = ($id_line | str replace -a "^ID=" "");
+    $id
+} | str trim)
+if ($os_id | is-not-empty) {
+    $env.DISTRO_ID = ($os_id | str downcase)
+}
+
+# =============================================================================
 # LOCAL CUSTOMIZATIONS
 # =============================================================================
 

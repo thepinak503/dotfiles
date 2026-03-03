@@ -15,7 +15,7 @@
         "fontFamily": "Caskaydiacove Nerd Font Mono, 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', 'Menlo', 'Consolas', 'Monaco', 'Courier New', monospace",
         "fontSize": 16,
         "lineHeight": 32,
-        "wordSeparators": "`~!@#%^&*()=+[{]}\|;:'",.<>/?",
+        "wordSeparators": "`~!@#%^&*()=+[{]}\\|;:' \",.<>/?",
         "hover": {
             "delay": 1500,
             "enabled": true
