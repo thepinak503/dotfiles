@@ -1,4 +1,9 @@
 # ~/.inputrc: readline configuration
+# Used by Bash and other Readline-enabled applications
+
+# =============================================================================
+# SETTINGS
+# =============================================================================
 
 # Enable 8-bit input
 set input-meta on
@@ -14,8 +19,8 @@ set completion-map-case on
 # Display matches immediately if ambiguous
 set show-all-if-ambiguous on
 
-# Enable colored completion
-set colored-stats on
+# Display matches immediately if unmodified
+set show-all-if-unmodified on
 
 # Mark symlinked directories
 set mark-symlinked-directories on
@@ -23,24 +28,62 @@ set mark-symlinked-directories on
 # Visible bell (no beep)
 set bell-style visible
 
-# Enable menu complete (cycle through options)
-# set menu-complete-display-prefix on
+# Enable colored completion
+set colored-stats on
+set colored-completion-prefix on
 
-# Key bindings
-# Arrow keys for history search
+# Skip completed text
+set skip-completed-text on
+
+# =============================================================================
+# KEY BINDINGS
+# =============================================================================
+
+# History search (based on what's already typed)
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
-# Page up/down
+# Page up/down for history search
 "\e[5~": history-search-backward
 "\e[6~": history-search-forward
 
-# Home/End
+# Home/End keys
 "\e[H": beginning-of-line
 "\e[F": end-of-line
 "\e[OH": beginning-of-line
 "\e[OF": end-of-line
 
-# Ctrl+Arrow
+# Ctrl+Arrow (word movement)
 "\e[1;5D": backward-word
 "\e[1;5C": forward-word
+"\e[1;5A": history-search-backward
+"\e[1;5B": history-search-forward
+
+# Alt+Arrow (word movement)
+"\e[1;3D": backward-word
+"\e[1;3C": forward-word
+
+# Word manipulation
+"\e\b": backward-kill-word
+"\e[127;3u": backward-kill-word
+"\e[3;3~": kill-word
+"\e[3;5~": kill-word
+
+# Ctrl+Backspace
+"\C-h": backward-kill-word
+"\C-?": backward-kill-word
+
+# Ctrl+Delete
+"\e[3;5~": kill-word
+
+# Undo/Redo
+"\C-_": undo
+"\e\C-r": revert-line
+
+# Clear screen
+"\C-l": clear-screen
+
+# Capitalization
+"\e[108;3u": lowercase-word
+"\e[117;3u": uppercase-word
+"\e[99;3u": capitalize-word

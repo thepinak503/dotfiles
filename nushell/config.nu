@@ -24,6 +24,103 @@ $env.config = {
         algorithm: "prefix"
     }
     edit_mode: emacs
+    keybindings: [
+        {
+            name: history_menu
+            modifier: control
+            keycode: char_r
+            mode: [emacs, vi_insert, vi_normal]
+            event: { send: menu name: history_menu }
+        }
+        {
+            name: next_page
+            modifier: control
+            keycode: char_f
+            mode: [emacs, vi_insert, vi_normal]
+            event: { send: pagedown }
+        }
+        {
+            name: prev_page
+            modifier: control
+            keycode: char_b
+            mode: [emacs, vi_insert, vi_normal]
+            event: { send: pageup }
+        }
+        # Word movement - Ctrl + Arrow
+        {
+            name: backward_word
+            modifier: control
+            keycode: left
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: movewordleft }
+        }
+        {
+            name: forward_word
+            modifier: control
+            keycode: right
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: movewordright }
+        }
+        # Word movement - Alt + Arrow
+        {
+            name: backward_word_alt
+            modifier: alt
+            keycode: left
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: movewordleft }
+        }
+        {
+            name: forward_word_alt
+            modifier: alt
+            keycode: right
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: movewordright }
+        }
+        # Deletion shortcuts
+        {
+            name: delete_word_backward
+            modifier: alt
+            keycode: backspace
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: backspaceword }
+        }
+        {
+            name: delete_word_backward_ctrl
+            modifier: control
+            keycode: backspace
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: backspaceword }
+        }
+        {
+            name: delete_word_forward
+            modifier: alt
+            keycode: delete
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: deleteword }
+        }
+        {
+            name: delete_word_forward_ctrl
+            modifier: control
+            keycode: delete
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: deleteword }
+        }
+        # Kill line shortcuts
+        {
+            name: kill_to_end
+            modifier: control
+            keycode: char_k
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: killendofline }
+        }
+        {
+            name: kill_to_start
+            modifier: control
+            keycode: char_u
+            mode: [emacs, vi_insert, vi_normal]
+            event: { edit: killbeginningofline }
+        }
+    ]
 }
 
 # =============================================================================

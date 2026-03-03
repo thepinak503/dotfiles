@@ -108,18 +108,48 @@ bindkey -e
 autoload -U select-word-style
 select-word-style bash
 
+# History navigation
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
+bindkey '^P' up-line-or-history
+bindkey '^N' down-line-or-history
+
+# Line movement
 bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+
+# Word movement (Ctrl + Arrow)
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
-bindkey '\e^?' backward-kill-word
-bindkey '^[b' backward-word
-bindkey '^[f' forward-word
-bindkey '^[B' backward-word
-bindkey '^[F' forward-word
+
+# Word movement (Alt + Arrow)
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;3C' forward-word
+
+# Word manipulation
+# Alt + Backspace
+bindkey '^[^?' backward-kill-word
+bindkey '^[^H' backward-kill-word
+
+# Alt + Delete
+bindkey '^[[3;3~' kill-word
+
+# Ctrl + Backspace
+bindkey '^H' backward-kill-word
+
+# Ctrl + Delete
+bindkey '^[[3;5~' kill-word
+
+# standard bash-like
 bindkey '^w' backward-kill-word
+bindkey '^u' backward-kill-line
+bindkey '^k' kill-line
+bindkey '^y' yank
+
+# Undo
+bindkey '^_' undo
 
 # Completion with security handling
 autoload -Uz compinit
