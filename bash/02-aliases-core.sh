@@ -203,9 +203,9 @@ alias functions='declare -f | grep -E "^[a-z].*\(\)"'
 alias aliases='alias | sort'
 
 # Emoji picker and calculator
-alias emoji='/home/pinak/.dotfiles/scripts/emoji-picker'
-alias calc='/home/pinak/.dotfiles/scripts/calc'
-alias keys='/home/pinak/.dotfiles/scripts/keybinding-helper'
-alias check-errors='~/.dotfiles/scripts/check-errors'
-alias clipboard='~/.dotfiles/scripts/clipboard-manager'
-alias dropdown='~/.dotfiles/scripts/dropdown-terminal'
+alias emoji="$DOTFILES_DIR/scripts/emoji-picker"
+alias calc="$DOTFILES_DIR/scripts/calc"
+alias keys="$DOTFILES_DIR/scripts/keybinding-helper"
+alias check-errors="$DOTFILES_DIR/scripts/check-errors"
+alias clipboard="$DOTFILES_DIR/scripts/clipboard-manager"
+alias dropdown="$DOTFILES_DIR/scripts/dropdown-terminal"

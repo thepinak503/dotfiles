@@ -109,12 +109,17 @@ backup-home() {
     log "Backing up important home files..."
     
     local backup_file="$BACKUP_DIR/home_$DATE.tar.gz"
-    
     # Important files to backup
     local files=(
         ".bashrc"
+        ".bashrc.local"
         ".bash_profile"
+        ".bash_profile.local"
         ".zshrc"
+        ".zshrc.local"
+        ".profile"
+        ".profile.local"
+        ".xinitrc"
         ".vimrc"
         ".tmux.conf"
         ".gitconfig"
@@ -122,7 +127,6 @@ backup-home() {
         ".p10k.zsh"
         ".nvmrc"
         ".python-version"
-        ".ruby-version"
         ".node-version"
     )
     

@@ -6,8 +6,22 @@
 
 set -e
 
-NU_CONFIG="/home/pinak/git/dotfiles/nushell/config.nu"
+# Find dotfiles directory
+DOTFILES_DIR="${HOME}/.dotfiles"
+[[ ! -d "$DOTFILES_DIR" ]] && DOTFILES_DIR="${HOME}/git/dotfiles"
+
+NU_CONFIG="${DOTFILES_DIR}/nushell/config.nu"
 FIX_COUNT=0
+
+# Ensure file exists
+if [[ ! -f "$NU_CONFIG" ]]; then
+    # Fallback search
+    NU_CONFIG=$(find "$DOTFILES_DIR" -name "config.nu" | head -1)
+    if [[ -z "$NU_CONFIG" ]]; then
+        echo "Error: config.nu not found in $DOTFILES_DIR"
+        exit 1
+    fi
+fi
 
 # Function to run nushell and capture errors
 check_nushell() {
