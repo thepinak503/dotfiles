@@ -5,7 +5,7 @@
 # =============================================================================
 
 DOTFILES_UPDATE_INTERVAL="${DOTFILES_UPDATE_INTERVAL:-86400}"  # Default: 1 day
-DOTFILES_AUTO_UPDATE="${DOTFILES_AUTO_UPDATE:-true}"
+DOTFILES_AUTO_UPDATE="${DOTFILES_AUTO_UPDATE:-false}"
 DOTFILES_UPDATE_BRANCH="${DOTFILES_UPDATE_BRANCH:-main}"
 
 dotfiles_autoupdate() {
@@ -116,7 +116,7 @@ dotfiles_update() {
 
 # Check for updates on shell startup (non-blocking)
 if [[ "$DOTFILES_AUTO_UPDATE" != "false" ]]; then
-    # Run in background to not slow down shell startup
-    dotfiles_autoupdate &
-    disown 2>/dev/null || true
+    # Run in background, suppress all output and job notification
+    dotfiles_autoupdate &>/dev/null &
+    setopt NO_HUP 2>/dev/null || true
 fi
