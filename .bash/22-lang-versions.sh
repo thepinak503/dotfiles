@@ -198,60 +198,32 @@ if command -v go &>/dev/null || [[ -d "$HOME/go" ]]; then
 fi
 
 # -----------------------------------------------------------------------------
-# RUST (RUSTUP/CARGO) - LAZY LOADED
+# RUST (CARGO)
 # -----------------------------------------------------------------------------
 
 if [[ -d "$HOME/.cargo" ]]; then
-    # Clear any existing cargo aliases to avoid function syntax errors
-    unalias cargo rustc rustup c cb cbr cr ct cc cf cly cu ca cdoc cnew cinit cpub csearch ctree cinstall cuninstall cwatch cbench cfix cupdate cgenerate 2>/dev/null || true
-
-    # Lazy load cargo
-    cargo() {
-        unset -f cargo rustc rustup
-        source "$HOME/.cargo/env" 2>/dev/null || true
-        _path_prepend "$HOME/.cargo/bin"
-        cargo "$@"
-    }
-
-    rustc() {
-        unset -f cargo rustc rustup
-        source "$HOME/.cargo/env" 2>/dev/null || true
-        _path_prepend "$HOME/.cargo/bin"
-        rustc "$@"
-    }
-
-    rustup() {
-        unset -f cargo rustc rustup
-        source "$HOME/.cargo/env" 2>/dev/null || true
-        _path_prepend "$HOME/.cargo/bin"
-        rustup "$@"
-    }
-
-    # Rust shortcuts (functions instead of aliases for better lazy-loading support)
-    c() { cargo "$@"; }
-    cb() { cargo build "$@"; }
-    cbr() { cargo build --release "$@"; }
-    cr() { cargo run "$@"; }
-    ct() { cargo test "$@"; }
-    cc() { cargo check "$@"; }
-    cf() { cargo fmt "$@"; }
-    cly() { cargo clippy "$@"; }  # Renamed to avoid conflict with 'cl' alias
-    cu() { cargo update "$@"; }
-    ca() { cargo add "$@"; }
-    ci() { cargo install "$@"; }
-    cdoc() { cargo doc --open "$@"; }
-    cnew() { cargo new "$@"; }
-    cinit() { cargo init "$@"; }
-    cpub() { cargo publish "$@"; }
-    csearch() { cargo search "$@"; }
-    ctree() { cargo tree "$@"; }
-    cinstall() { cargo install "$@"; }
-    cuninstall() { cargo uninstall "$@"; }
-    cwatch() { cargo watch -x run "$@"; }
-    cbench() { cargo bench "$@"; }
-    cfix() { cargo fix "$@"; }
-    cupdate() { cargo update "$@"; }
-    cgenerate() { cargo generate "$@"; }
+    # Source cargo env
+    source "$HOME/.cargo/env" 2>/dev/null || true
+    
+    # Rust shortcuts
+    alias c='cargo'
+    alias cb='cargo build'
+    alias cbr='cargo build --release'
+    alias cr='cargo run'
+    alias ct='cargo test'
+    alias cc='cargo check'
+    alias cf='cargo fmt'
+    alias cly='cargo clippy'
+    alias cu='cargo update'
+    alias ca='cargo add'
+    alias ci='cargo install'
+    alias cdoc='cargo doc --open'
+    alias cnew='cargo new'
+    alias cinit='cargo init'
+    alias cpub='cargo publish'
+    alias csearch='cargo search'
+    alias ctree='cargo tree'
+fi
 fi
 
 # -----------------------------------------------------------------------------
