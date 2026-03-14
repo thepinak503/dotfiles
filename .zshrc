@@ -4,6 +4,11 @@
 # Simplified structure with 3 tiers: basic, advanced, ultra-nerd
 # =============================================================================
 
+# Fastfetch on start (if installed)
+if command -v fastfetch &>/dev/null; then
+    fastfetch 2>/dev/null
+fi
+
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
 [[ ! -d "$DOTFILES_DIR" ]] && DOTFILES_DIR="${HOME}/git/dotfiles"
 export DOTFILES_DIR

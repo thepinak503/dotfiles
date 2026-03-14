@@ -4,6 +4,11 @@
 # Simplified with 3 tiers: basic, advanced, ultra-nerd
 # =============================================================================
 
+# Fastfetch on start (if installed)
+if type -q fastfetch
+    fastfetch 2>/dev/null
+end
+
 # Mode
 set -gx DOTFILES_MODE (test -n "$DOTFILES_MODE"; and echo "$DOTFILES_MODE"; or echo "advanced")
 set -gx DOTFILES_DIR (test -n "$DOTFILES_DIR"; and echo "$DOTFILES_DIR"; or echo "$HOME/.dotfiles")

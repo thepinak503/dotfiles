@@ -105,6 +105,10 @@ backup() {
 link_configs() {
     print_info "Linking config files..."
     
+    # Force replace shell configs
+    rm -f "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.bash_profile"
+    rm -rf "$HOME/.config/fish"
+    
     # Shell configs
     ln -nsf "$DOTFILES_DIR/.bashrc" "$HOME/.bashrc"
     ln -nsf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
