@@ -42,8 +42,11 @@
 ## 🚀 Quick Start
 
 ```bash
-# One-line installer (with double confirmation)
-curl -fsSL https://raw.githubusercontent.com/thepinak503/dotfiles/main/install.sh | bash
+# One-line installer (recommended)
+curl -fsSL https://is.gd/install_dotfiles | sh
+
+# With dependencies (modern tools)
+curl -fsSL https://is.gd/install_dotfiles | sh -s -- --install-deps
 
 # Or clone and install
 git clone https://github.com/thepinak503/dotfiles.git ~/.dotfiles
@@ -129,6 +132,12 @@ Complete desktop environment including:
 ### Options
 
 ```bash
+# Quick install (POSIX compatible - recommended!)
+curl -fsSL https://is.gd/install_dotfiles | sh
+
+# Quick install with dependencies
+curl -fsSL https://is.gd/install_dotfiles | sh -s -- --install-deps
+
 # Interactive mode (recommended) - requires double confirmation
 ./install.sh
 
@@ -215,7 +224,8 @@ exec Hyprland
 ~/.dotfiles/
 ├── .bashrc, .zshrc, .bash_profile
 ├── .tmux.conf, .vimrc, .nanorc
-├── install.sh (v3.0.0 - strict mode)
+├── install.sh (v4.0.0 - unified)
+├── install-quick.sh (POSIX compatible)
 ├── uninstall.sh
 ├── TODO.md, PROGRESS_SUMMARY.md
 │
