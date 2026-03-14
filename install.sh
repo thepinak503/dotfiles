@@ -239,6 +239,9 @@ install_other() {
     # Inputrc
     [[ -f "$SCRIPT_DIR/.inputrc" ]] && ln -sf "$SCRIPT_DIR/.inputrc" "$HOME/.inputrc"
     
+    # Starship
+    [[ -f "$SCRIPT_DIR/config/starship.toml" ]] && mkdir -p "$HOME/.config" && ln -sf "$SCRIPT_DIR/config/starship.toml" "$HOME/.config/starship.toml"
+    
     print_success "Other configs installed"
 }
 
