@@ -56,14 +56,6 @@ case "$DOTFILES_MODE" in
     basic)
         ;;
     advanced|ultra-nerd)
-        # Starship
-        if command -v starship &>/dev/null; then
-            eval "$(starship init zsh)"
-        fi
-        # Zoxide
-        if command -v zoxide &>/dev/null; then
-            eval "$(zoxide init zsh)"
-        fi
         ;;
 esac
 
@@ -73,6 +65,16 @@ if [[ -d "$HOME/.oh-my-zsh" ]]; then
     ZSH_THEME="robbyrussell"
     plugins=(git)
     source "$ZSH/oh-my-zsh.sh"
+fi
+
+# Starship (after Oh-My-Zsh to override prompt)
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+# Zoxide
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
 fi
 
 # Scripts
