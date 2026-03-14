@@ -205,8 +205,7 @@ if [[ -d "$HOME/.cargo" ]]; then
     # Source cargo env
     source "$HOME/.cargo/env" 2>/dev/null || true
     
-    # Rust shortcuts
-    alias c='cargo'
+    # Rust shortcuts (c is reserved for clear)
     alias cb='cargo build'
     alias cbr='cargo build --release'
     alias cr='cargo run'
