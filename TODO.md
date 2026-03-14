@@ -312,6 +312,33 @@
 | Zsh | `.zsh/` | `.zshrc` | 00-aliases-unified.sh |
 | Fish | `.fish/` | config.fish | Built-in abbreviations |
 
+### 3-Tier Mode System
+
+```bash
+export DOTFILES_MODE=basic       # Minimal - core + aliases
+export DOTFILES_MODE=advanced   # Full features (DEFAULT)
+export DOTFILES_MODE=ultra-nerd # Maximum productivity
+```
+
+### Simplified Structure
+
+```
+.bash/
+├── 00-core.sh              # Environment, PATH, editor
+├── 00-aliases-unified.sh  # Modern CLI aliases (eza, bat, etc)
+├── 00-ssh-agent.sh         # SSH agent
+├── 01-functions.sh         # Essential functions
+├── 02-mode-basic.sh       # Basic mode
+├── 03-mode-advanced.sh    # Advanced mode
+└── 04-mode-ultra-nerd.sh # Ultra-nerd mode
+```
+
+---
+
+**Last Updated:** 2026-03-14
+**Version:** 4.0.0
+**Status:** ✅ COMPLETE
+
 ### Usage
 
 ```bash

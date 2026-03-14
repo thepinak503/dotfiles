@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# DOTFILES INSTALLER v4.0.0
+# DOTFILES INSTALLER v4.0.0 - FINAL
 # Supports: Bash, Zsh, Fish, Nushell
 # Distros: Arch, Debian, Fedora, macOS
 # Usage: curl -fsSL https://is.gd/install_dotfiles | sh
@@ -21,6 +21,7 @@ NC='\033[0m'
 # Flags
 INSTALL_DEPS=false
 SKIP_BACKUP=false
+FORCE=false
 
 print_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
 print_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
@@ -97,16 +98,7 @@ backup() {
     [ -f "$HOME/.zshrc" ] && cp "$HOME/.zshrc" "$BACKUP_DIR/"
     [ -f "$HOME/.bash_profile" ] && cp "$HOME/.bash_profile" "$BACKUP_DIR/"
     [ -d "$HOME/.config/fish" ] && cp -r "$HOME/.config/fish" "$BACKUP_DIR/"
-    [ -d "$HOME/.config/nushell" ] && cp -r "$HOME/.config/nushell" "$BACKUP_DIR/"
     print_info "Backup saved to: $BACKUP_DIR"
-}
-
-# Remove old dotfiles if exists (in wrong location)
-cleanup_old() {
-    if [ -d "$HOME/dotfiles" ] && [ "$HOME/dotfiles" != "$DOTFILES_DIR" ]; then
-        print_warn "Found old dotfiles at ~/dotfiles, removing..."
-        rm -rf "$HOME/dotfiles"
-    fi
 }
 
 # Link configs
@@ -114,29 +106,17 @@ link_configs() {
     print_info "Linking config files..."
     
     # Shell configs
-    ln -sf "$DOTFILES_DIR/.bashrc" "$HOME/.bashrc"
-    ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
-    ln -sf "$DOTFILES_DIR/.bash_profile" "$HOME/.bash_profile"
-    [ -f "$DOTFILES_DIR/.bash_logout" ] && ln -sf "$DOTFILES_DIR/.bash_logout" "$HOME/.bash_logout"
+    ln -nsf "$DOTFILES_DIR/.bashrc" "$HOME/.bashrc"
+    ln -nsf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+    ln -nsf "$DOTFILES_DIR/.bash_profile" "$HOME/.bash_profile"
+    [ -f "$DOTFILES_DIR/.bash_logout" ] && ln -nsf "$DOTFILES_DIR/.bash_logout" "$HOME/.bash_logout"
     
     # Fish
     mkdir -p "$HOME/.config/fish"
-    ln -sf "$DOTFILES_DIR/.fish/config.fish" "$HOME/.config/fish/config.fish"
-    
-    # Nushell
-    mkdir -p "$HOME/.config/nushell"
-    [ -f "$DOTFILES_DIR/nushell/config.nu" ] && ln -sf "$DOTFILES_DIR/nushell/config.nu" "$HOME/.config/nushell/config.nu"
-    [ -f "$DOTFILES_DIR/nushell/env.nu" ] && ln -sf "$DOTFILES_DIR/nushell/env.nu" "$HOME/.config/nushell/env.nu"
+    ln -nsf "$DOTFILES_DIR/.fish/config.fish" "$HOME/.config/fish/config.fish"
     
     # Starship
-    [ -f "$DOTFILES_DIR/config/starship.toml" ] && mkdir -p "$HOME/.config" && ln -sf "$DOTFILES_DIR/config/starship.toml" "$HOME/.config/starship.toml"
-    
-    # Other configs
-    [ -f "$DOTFILES_DIR/.vimrc" ] && ln -sf "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc"
-    [ -f "$DOTFILES_DIR/.tmux.conf" ] && ln -sf "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
-    [ -f "$DOTFILES_DIR/.nanorc" ] && ln -sf "$DOTFILES_DIR/.nanorc" "$HOME/.nanorc"
-    [ -f "$DOTFILES_DIR/.inputrc" ] && ln -sf "$DOTFILES_DIR/.inputrc" "$HOME/.inputrc"
-    [ -d "$DOTFILES_DIR/git" ] && mkdir -p "$HOME/.config/git" && ln -sf "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
+    [ -f "$DOTFILES_DIR/config/starship.toml" ] && mkdir -p "$HOME/.config" && ln -nsf "$DOTFILES_DIR/config/starship.toml" "$HOME/.config/starship.toml"
     
     print_info "Configs linked"
 }
@@ -153,7 +133,14 @@ main() {
     for arg in "$@"; do
         [ "$arg" = "--install-deps" ] && INSTALL_DEPS=true
         [ "$arg" = "--skip-backup" ] && SKIP_BACKUP=true
+        [ "$arg" = "--force" ] && FORCE=true
     done
+    
+    # Force clean install
+    if [ "$FORCE" = "true" ]; then
+        print_warn "Force install: removing old dotfiles..."
+        rm -rf "$DOTFILES_DIR"
+    fi
     
     # Detect OS
     detect_os
@@ -162,24 +149,17 @@ main() {
     print_info "Detected: $OS ($PKG)"
     print_info "Target: $DOTFILES_DIR"
     
-    # If running via curl (not from existing dotfiles)
-    if [ ! -f "$0" ] || [ "$(dirname "$0")" = "/tmp" ]; then
-        print_info "Running from curl, cloning fresh..."
-        rm -rf "$DOTFILES_DIR" 2>/dev/null || true
-        git clone --depth 1 https://github.com/thepinak503/dotfiles.git "$DOTFILES_DIR"
-    elif [ -d "$DOTFILES_DIR/.git" ]; then
-        print_info "Using existing dotfiles"
-        cd "$DOTFILES_DIR"
-        git pull origin main 2>/dev/null || true
-    else
+    # Clone fresh
+    if [ ! -d "$DOTFILES_DIR/.git" ]; then
         print_info "Cloning dotfiles..."
         git clone --depth 1 https://github.com/thepinak503/dotfiles.git "$DOTFILES_DIR"
+    else
+        cd "$DOTFILES_DIR"
+        print_info "Updating dotfiles..."
+        git pull origin main 2>/dev/null || true
     fi
     
     cd "$DOTFILES_DIR"
-    
-    # Cleanup old locations
-    cleanup_old
     
     # Install deps if requested
     [ "$INSTALL_DEPS" = "true" ] && install_deps
