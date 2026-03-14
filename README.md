@@ -1,4 +1,4 @@
-# Dotfiles v3.0.0 - The Ultimate Universal Shell Configuration
+# Dotfiles v4.0.0 - The Ultimate Universal Shell Configuration
 
 <p align="center">
   <img src="docs/logo.png" alt="Dotfiles Logo" width="200">
@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Complete development environment with one command</strong><br>
-  <strong>Now with Hyprland Wayland Desktop!</strong>
+  <strong>Now with unified shell configs + auto-update!</strong>
 </p>
 
 <p align="center">
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.0.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/Version-4.0.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/Shells-4-green.svg" alt="Shells">
   <img src="https://img.shields.io/badge/Tools-50+-orange.svg" alt="Tools">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
