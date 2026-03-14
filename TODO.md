@@ -274,5 +274,65 @@
 
 ---
 
-**Last Updated:** 2026-02-08
-**Next Review:** After Phase 2 completion
+## v4.0.0 - Shell Restructuring & Modernization (COMPLETED)
+
+### ✅ Completed Tasks
+
+- [x] **Directory Restructuring**
+  - [x] Renamed `bash/` to `.bash/`
+  - [x] Renamed `fish/` to `.fish/`
+  - [x] Created `.zsh/` with shell-specific configs
+
+- [x] **Unified Aliases System**
+  - [x] Created `00-aliases-unified.sh` with modern tool fallbacks
+  - [x] eza → ls, bat → cat, fd → find, etc.
+  - [x] Graceful degradation when tools not installed
+
+- [x] **Shell Support Installer**
+  - [x] Created `install_shell_support.sh` (Bash/Zsh)
+  - [x] Created `install_shell_support.fish` (Fish)
+  - [x] Auto-detects OS and package manager
+  - [x] Installs: eza, bat, starship, zoxide, fzf, delta, fd, procs, tldr, yazi
+
+- [x] **Dynamic Tool Loading**
+  - [x] All shells check if tool exists before initializing
+  - [x] Starship, zoxide, fzf only load if installed
+  - [x] Modern aliases only set if tool available
+
+- [x] **Documentation**
+  - [x] Updated README with shell configuration guide
+  - [x] Documented unified aliases
+  - [x] Documented install_shell_support usage
+
+### Shell Configurations
+
+| Shell | Config Dir | Main File | Unified Aliases |
+|-------|------------|-----------|----------------|
+| Bash | `.bash/` | `.bashrc` | 00-aliases-unified.sh |
+| Zsh | `.zsh/` | `.zshrc` | 00-aliases-unified.sh |
+| Fish | `.fish/` | config.fish | Built-in abbreviations |
+
+### Usage
+
+```bash
+# Install all shells with dependencies
+./install.sh --install-deps
+
+# Install shell support manually
+install-shells
+
+# Set shell mode
+export DOTFILES_MODE=advanced
+```
+
+### Known Issues Fixed
+
+- [x] Fixed duplicate `df` alias conflict
+- [x] Fixed distro-specific alias detection
+- [x] Removed duplicate aliases across configs
+- [x] Fixed sourcing order for unified aliases
+
+---
+
+**Last Updated:** 2026-03-14
+**Version:** 4.0.0

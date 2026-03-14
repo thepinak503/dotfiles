@@ -1,205 +1,41 @@
 #!/usr/bin/env zsh
 # =============================================================================
-# DOTFILES - ZSH CONFIGURATION
-# Universal Zsh configuration with Oh-My-Zsh integration
+# ZSH MAIN CONFIGURATION
+# Unified entry point - sources all shell configs
 # =============================================================================
 
-# Run fastfetch on start (interactive only)
-if [[ -x "$(command -v fastfetch 2>/dev/null)" ]]; then
-    fastfetch 2>/dev/null
-fi
-
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Theme - let Starship handle the prompt
-ZSH_THEME="robbyrussell"
-
-# Dotfiles mode (basic, advanced, ultra-nerd)
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+[[ ! -d "$DOTFILES_DIR" ]] && DOTFILES_DIR="${HOME}/git/dotfiles"
+export DOTFILES_DIR
 export DOTFILES_MODE="${DOTFILES_MODE:-advanced}"
-export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
 
-# =============================================================================
-# PLUGINS
-# =============================================================================
-plugins=(
-    git
-    sudo
-    history
-    colored-man-pages
-    command-not-found
-    copypath
-    copyfile
-    dirhistory
-    jsontools
-    web-search
-    z
-)
+# Source unified aliases FIRST (modern CLI with fallbacks)
+[[ -f "$DOTFILES_DIR/.bash/00-aliases-unified.sh" ]] && source "$DOTFILES_DIR/.bash/00-aliases-unified.sh"
 
-# Conditional plugins
-command -v fzf &>/dev/null && plugins+=(fzf)
-command -v docker &>/dev/null && plugins+=(docker)
-command -v kubectl &>/dev/null && plugins+=(kubectl)
+# Source zsh-specific configs
+for file in "$DOTFILES_DIR/.zsh/"*.zsh; do
+    [[ -f "$file" ]] && source "$file"
+done
 
-# Add zsh-syntax-highlighting if available
-if [[ -d $ZSH/custom/plugins/zsh-syntax-highlighting ]] || \
-   [[ -d /usr/share/zsh/plugins/zsh-syntax-highlighting ]] || \
-   [[ -d /usr/share/zsh-syntax-highlighting ]]; then
-    plugins+=(zsh-syntax-highlighting)
-fi
+# Source shared bash configs (compatible parts)
+[[ -f "$DOTFILES_DIR/.bash/00-core.sh" ]] && source "$DOTFILES_DIR/.bash/00-core.sh"
+[[ -f "$DOTFILES_DIR/.bash/01-functions.sh" ]] && source "$DOTFILES_DIR/.bash/01-functions.sh"
 
-# Add zsh-autosuggestions if available
-if [[ -d $ZSH/custom/plugins/zsh-autosuggestions ]] || \
-   [[ -d /usr/share/zsh/plugins/zsh-autosuggestions ]] || \
-   [[ -d /usr/share/zsh-autosuggestions ]]; then
-    plugins+=(zsh-autosuggestions)
-fi
-
-# Source Oh-My-Zsh if it exists
-[[ -f "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
-
-# =============================================================================
-# LOAD DOTFILES BASH COMPONENTS (shared)
-# =============================================================================
-
-# Source core environment
-[[ -f "$DOTFILES_DIR/bash/00-core.sh" ]] && source "$DOTFILES_DIR/bash/00-core.sh"
-
-# Source functions
-[[ -f "$DOTFILES_DIR/bash/01-functions.sh" ]] && source "$DOTFILES_DIR/bash/01-functions.sh"
-
-# Source aliases based on mode
-[[ -f "$DOTFILES_DIR/bash/02-aliases-core.sh" ]] && source "$DOTFILES_DIR/bash/02-aliases-core.sh"
-
+# Source mode-specific configs
 if [[ "$DOTFILES_MODE" != "basic" ]]; then
-    [[ -f "$DOTFILES_DIR/bash/03-aliases-extended.sh" ]] && source "$DOTFILES_DIR/bash/03-aliases-extended.sh"
+    [[ -f "$DOTFILES_DIR/.bash/03-aliases-extended.sh" ]] && source "$DOTFILES_DIR/.bash/03-aliases-extended.sh"
+    [[ -f "$DOTFILES_DIR/.bash/05-distro-detection.sh" ]] && source "$DOTFILES_DIR/.bash/05-distro-detection.sh"
+    [[ -f "$DOTFILES_DIR/.bash/06-package-managers.sh" ]] && source "$DOTFILES_DIR/.bash/06-package-managers.sh"
+    [[ -f "$DOTFILES_DIR/.bash/07-modern-tools.sh" ]] && source "$DOTFILES_DIR/.bash/07-modern-tools.sh"
+    [[ -f "$DOTFILES_DIR/.bash/08-development.sh" ]] && source "$DOTFILES_DIR/.bash/08-development.sh"
 fi
 
-if [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
-    [[ -f "$DOTFILES_DIR/bash/04-aliases-nerd.sh" ]] && source "$DOTFILES_DIR/bash/04-aliases-nerd.sh"
-fi
+[[ "$DOTFILES_MODE" == "ultra-nerd" ]] && [[ -f "$DOTFILES_DIR/.bash/04-aliases-nerd.sh" ]] && source "$DOTFILES_DIR/.bash/04-aliases-nerd.sh"
 
-# Source distro detection and package managers
-[[ -f "$DOTFILES_DIR/bash/05-distro-detection.sh" ]] && source "$DOTFILES_DIR/bash/05-distro-detection.sh"
-[[ -f "$DOTFILES_DIR/bash/06-package-managers.sh" ]] && source "$DOTFILES_DIR/bash/06-package-managers.sh"
-
-# Source modern tools
-[[ -f "$DOTFILES_DIR/bash/07-modern-tools.sh" ]] && source "$DOTFILES_DIR/bash/07-modern-tools.sh"
-
-# Source development aliases
-[[ -f "$DOTFILES_DIR/bash/08-development.sh" ]] && source "$DOTFILES_DIR/bash/08-development.sh"
-
-# =============================================================================
-# ZSH-SPECIFIC CONFIGURATION
-# =============================================================================
-
-# History
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-setopt SHARE_HISTORY
-setopt EXTENDED_HISTORY
-
-# Key bindings - bash-like
-bindkey -e
-
-autoload -U select-word-style
-select-word-style bash
-
-# History navigation
-bindkey '^[[A' history-search-backward
-bindkey '^[[B' history-search-forward
-bindkey '^P' up-line-or-history
-bindkey '^N' down-line-or-history
-
-# Line movement
-bindkey '^[[H' beginning-of-line
-bindkey '^[[F' end-of-line
-bindkey '^A' beginning-of-line
-bindkey '^E' end-of-line
-
-# Word movement (Ctrl + Arrow)
-bindkey '^[[1;5D' backward-word
-bindkey '^[[1;5C' forward-word
-
-# Word movement (Alt + Arrow)
-bindkey '^[[1;3D' backward-word
-bindkey '^[[1;3C' forward-word
-
-# Word manipulation
-# Alt + Backspace
-bindkey '^[^?' backward-kill-word
-bindkey '^[^H' backward-kill-word
-
-# Alt + Delete
-bindkey '^[[3;3~' kill-word
-
-# Ctrl + Backspace
-bindkey '^H' backward-kill-word
-
-# Ctrl + Delete
-bindkey '^[[3;5~' kill-word
-
-# standard bash-like
-bindkey '^w' backward-kill-word
-bindkey '^u' backward-kill-line
-bindkey '^k' kill-line
-bindkey '^y' yank
-
-# Undo
-bindkey '^_' undo
-
-# Completion with security handling
-autoload -Uz compinit
-compinit -u 2>/dev/null || compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
-# Syntax highlighting (if installed)
-if [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-elif [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-elif [[ -f ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-    source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
-# Auto-suggestions (if installed)
-if [[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-elif [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-elif [[ -f ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-    source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
-
-# =============================================================================
-# STARSHIP PROMPT
-# =============================================================================
-if command -v starship &>/dev/null; then
-    eval "$(starship init zsh)"
-fi
-
-# =============================================================================
-# ZOXIDE
-# =============================================================================
-if command -v zoxide &>/dev/null; then
-    eval "$(zoxide init zsh)"
-fi
-
-# =============================================================================
-# LOCAL CUSTOMIZATIONS
-# =============================================================================
+# Local customizations
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
-# =============================================================================
-# WELCOME MESSAGE (DISABLED)
-# =============================================================================
-# Welcome message removed for cleaner startup
-
-# Emoji picker and calculator
+# Dotfiles scripts
 alias emoji="$DOTFILES_DIR/scripts/emoji-picker"
 alias calc="$DOTFILES_DIR/scripts/calc"
 alias keys="$DOTFILES_DIR/scripts/keybinding-helper"
@@ -207,5 +43,17 @@ alias check-errors="$DOTFILES_DIR/scripts/check-errors"
 alias clipboard="$DOTFILES_DIR/scripts/clipboard-manager"
 alias dropdown="$DOTFILES_DIR/scripts/dropdown-terminal"
 
-# Load dynamic library
-[[ -f "$HOME/.dotfiles/lib/dynamic.sh" ]] && source "$HOME/.dotfiles/lib/dynamic.sh"
+# Install shell support command
+alias install-shells="$DOTFILES_DIR/scripts/install_shell_support.sh"
+
+# Load install_shell_support function
+[[ -f "$DOTFILES_DIR/scripts/install_shell_support.sh" ]] && source "$DOTFILES_DIR/scripts/install_shell_support.sh"
+
+# Auto-update dotfiles
+[[ -f "$DOTFILES_DIR/scripts/autoupdate.sh" ]] && source "$DOTFILES_DIR/scripts/autoupdate.sh"
+
+# Manual update commands
+alias dotfiles-update='dotfiles_update'
+alias dotfiles-status='cd "$DOTFILES_DIR" && git status'
+
+[[ -f "$DOTFILES_DIR/lib/dynamic.sh" ]] && source "$DOTFILES_DIR/lib/dynamic.sh"

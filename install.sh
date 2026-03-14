@@ -1,219 +1,55 @@
 #!/bin/bash
 # =============================================================================
-# DOTFILES INSTALLER v4.0.0 - UNIFIED
-# Supports both traditional and dynamic installation modes
+# DOTFILES INSTALLER - UNIFIED SHELL CONFIGURATION
+# Supports: Bash, Zsh, Fish, Nushell
+# Distros: Arch, Debian, Fedora, macOS
 # =============================================================================
 
 set -euo pipefail
 
-# Version
-VERSION="4.0.0"
+VERSION="5.1.0"
+DOTFILES_REPO="${DOTFILES_DIR:-$HOME/.dotfiles}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d_%H%M%S)"
 
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
-WHITE='\033[1;37m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-# Configuration
-DOTFILES_REPO="https://github.com/thepinak503/dotfiles"
-DOTFILES_DIR="$HOME/.dotfiles"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d_%H%M%S)"
-
 # Flags
-SELECTED_MODE=""
-SELECTED_SHELLS=""
-INSTALL_METHOD="auto"  # auto, traditional, dynamic
-FORCE_MODE=false
 SKIP_BACKUP=false
-DRY_RUN=false
+FORCE=false
+AUTO=false
+SHELLS=""
 INSTALL_DEPS=false
-SKIP_DEPS=false
-CONFIRMED=false
-INSTALL_PACKAGES=false
 
-# Print functions
 print_header() {
-    clear
     echo -e "${CYAN}${BOLD}"
     echo "╔════════════════════════════════════════════════════════════╗"
-    echo "║           DOTFILES INSTALLER v${VERSION}                       ║"
+    echo "║         DOTFILES INSTALLER v${VERSION}                          ║"
     echo "║                                                            ║"
-    echo "║    The Ultimate Universal Shell Configuration              ║"
-    echo "║    Traditional & Dynamic Modes Supported                   ║"
+    echo "║    Unified Shell Configuration for All Shells              ║"
     echo "╚════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
-    echo ""
-}
-
-print_warning_banner() {
-    echo -e "${RED}${BOLD}"
-    echo "╔════════════════════════════════════════════════════════════╗"
-    echo "║                    ⚠️  WARNING ⚠️                           ║"
-    echo "║                                                            ║"
-    echo "║  This installer will modify your shell configuration!      ║"
-    echo "║                                                            ║"
-    echo "║  It will:                                                  ║"
-    echo "║  • Create backups of your existing configs                 ║"
-    echo "║  • Replace .bashrc, .zshrc, .config/fish, etc.             ║"
-    echo "║  • Install modern CLI tools (optional)                     ║"
-    echo "║                                                            ║"
-    echo "║  Your original configs will be backed up to:               ║"
-    echo "║  ${BACKUP_DIR}"
-    echo "║                                                            ║"
-    echo "║  To restore later, run: ./uninstall.sh                     ║"
-    echo "╚════════════════════════════════════════════════════════════╝"
-    echo -e "${NC}"
-    echo ""
 }
 
 print_success() { echo -e "${GREEN}✓${NC} $1"; }
 print_error() { echo -e "${RED}✗${NC} $1"; }
 print_info() { echo -e "${BLUE}ℹ${NC} $1"; }
 print_warning() { echo -e "${YELLOW}⚠${NC} $1"; }
-print_step() { echo -e "${PURPLE}→${NC} $1"; }
-
-# Double confirmation
-double_confirm() {
-    print_warning_banner
-    
-    echo -e "${YELLOW}${BOLD}FIRST CONFIRMATION:${NC}"
-    read -p "Do you understand that this will modify your system? [yes/no]: " first_confirm
-    
-    if [[ "$first_confirm" != "yes" ]]; then
-        echo ""
-        print_error "Installation cancelled. You must type 'yes' to proceed."
-        exit 1
-    fi
-    
-    echo ""
-    echo -e "${RED}${BOLD}SECOND CONFIRMATION:${NC}"
-    echo -e "${RED}This is your last chance to cancel!${NC}"
-    echo ""
-    echo "Configuration that will be modified:"
-    echo "  • ~/.bashrc"
-    echo "  • ~/.bash_profile"
-    echo "  • ~/.zshrc"
-    echo "  • ~/.config/fish/"
-    echo "  • ~/.config/nushell/"
-    echo "  • ~/.gitconfig"
-    echo "  • ~/.tmux.conf"
-    echo "  • ~/.config/nvim/"
-    echo "  • ~/.config/alacritty/"
-    echo "  • ~/.config/kitty/"
-    echo "  • ~/.config/starship.toml"
-    echo "  • And more..."
-    echo ""
-    
-    read -p "Type 'INSTALL' in ALL CAPS to proceed: " second_confirm
-    
-    if [[ "$second_confirm" != "INSTALL" ]]; then
-        echo ""
-        print_error "Installation cancelled. You must type 'INSTALL' in all caps to proceed."
-        exit 1
-    fi
-    
-    CONFIRMED=true
-    echo ""
-    print_success "Double confirmation received. Proceeding with installation..."
-    echo ""
-}
-
-# Help message
-show_help() {
-    cat << EOF
-${BOLD}Dotfiles Installer v${VERSION}${NC}
-
-${BOLD}Usage:${NC} ./install.sh [OPTIONS]
-
-${BOLD}Installation Methods:${NC}
-  ${GREEN}Traditional${NC}  - Use existing dotfiles from repo (default)
-  ${GREEN}Dynamic${NC}      - Auto-detect tools and generate configs
-  ${GREEN}Auto${NC}         - Smart selection based on your system
-
-${BOLD}Options:${NC}
-  -h, --help              Show this help message
-  -v, --version           Show version information
-  -m, --mode MODE         Set configuration mode (basic|advanced|ultra-nerd)
-  -s, --shells SHELLS     Specify shells comma-separated
-  --method METHOD         Installation method (traditional|dynamic|auto)
-  -f, --force             Force overwrite existing files
-  -n, --no-backup         Skip backup step (NOT RECOMMENDED)
-  -d, --dry-run           Show what would happen without changes
-  -i, --install-deps      Install dependencies automatically
-  --skip-deps             Skip dependency installation
-  --install-packages      Install all packages first
-  -y, --yes               Skip confirmation (use with caution)
-
-${BOLD}Examples:${NC}
-  ./install.sh                          # Interactive mode
-  ./install.sh --method dynamic         # Use dynamic generation
-  ./install.sh --method auto -y         # Auto mode, no confirm
-  ./install.sh -m advanced              # Advanced mode
-  ./install.sh -s bash,zsh              # Bash + Zsh only
-  ./install.sh --dry-run                # Preview changes
-
-${BOLD}Post-Installation:${NC}
-  source ~/.bashrc    # Reload bash
-  source ~/.zshrc     # Reload zsh
-  ./uninstall.sh      # Restore original configs
-
-EOF
-}
-
-# Parse arguments
-parse_args() {
-    while [[ $# -gt 0 ]]; do
-        case $1 in
-            -h|--help) show_help; exit 0 ;;
-            -v|--version) echo "Dotfiles Installer v${VERSION}"; exit 0 ;;
-            -m|--mode) SELECTED_MODE="$2"; shift 2 ;;
-            -s|--shells) SELECTED_SHELLS="${2//,/ }"; shift 2 ;;
-            --method) INSTALL_METHOD="$2"; shift 2 ;;
-            -f|--force) FORCE_MODE=true; shift ;;
-            -n|--no-backup) SKIP_BACKUP=true; shift ;;
-            -d|--dry-run) DRY_RUN=true; shift ;;
-            -i|--install-deps) INSTALL_DEPS=true; shift ;;
-            --skip-deps) SKIP_DEPS=true; shift ;;
-            --install-packages) INSTALL_PACKAGES=true; shift ;;
-            -y|--yes) CONFIRMED=true; shift ;;
-            -*) print_error "Unknown option: $1"; show_help; exit 1 ;;
-            *) print_error "Unknown argument: $1"; exit 1 ;;
-        esac
-    done
-}
-
-# Check prerequisites
-check_prerequisites() {
-    print_step "Checking prerequisites..."
-    
-    if ! command -v git &>/dev/null; then
-        print_error "Git is not installed. Please install git first."
-        exit 1
-    fi
-    
-    if ! command -v curl &>/dev/null && ! command -v wget &>/dev/null; then
-        print_error "Neither curl nor wget is installed."
-        exit 1
-    fi
-    
-    print_success "Prerequisites check passed"
-}
+print_step() { echo -e "${CYAN}→${NC} $1"; }
 
 # Detect OS
 detect_os() {
-    print_step "Detecting operating system..."
-    
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
-        OS=$ID
-        OS_NAME=$NAME
+        OS="$ID"
+        OS_NAME="$NAME"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
         OS="macos"
         OS_NAME="macOS"
@@ -221,792 +57,286 @@ detect_os() {
         OS="unknown"
         OS_NAME="Unknown"
     fi
-    
-    print_success "Detected: $OS_NAME"
+    print_info "Detected: $OS_NAME"
+}
+
+# Detect package manager
+detect_pkg_manager() {
+    if command -v brew &>/dev/null; then
+        PKG_MANAGER="brew"
+    elif command -v pacman &>/dev/null; then
+        PKG_MANAGER="pacman"
+    elif command -v apt &>/dev/null; then
+        PKG_MANAGER="apt"
+    elif command -v dnf &>/dev/null; then
+        PKG_MANAGER="dnf"
+    elif command -v zypper &>/dev/null; then
+        PKG_MANAGER="zypper"
+    elif command -v apk &>/dev/null; then
+        PKG_MANAGER="apk"
+    else
+        PKG_MANAGER="unknown"
+    fi
+    print_info "Package manager: $PKG_MANAGER"
 }
 
 # Detect shells
 detect_shells() {
-    print_step "Detecting installed shells..."
+    SHELLS=()
     
-    DETECTED_SHELLS=""
+    command -v bash &>/dev/null && SHELLS+=("bash")
+    command -v zsh &>/dev/null && SHELLS+=("zsh")
+    command -v fish &>/dev/null && SHELLS+=("fish")
+    command -v nu &>/dev/null && SHELLS+=("nushell")
     
-    if command -v bash &>/dev/null; then
-        DETECTED_SHELLS+="bash "
-        print_info "✓ Bash detected"
-    fi
-    
-    if command -v zsh &>/dev/null; then
-        DETECTED_SHELLS+="zsh "
-        print_info "✓ Zsh detected"
-    fi
-    
-    if command -v fish &>/dev/null; then
-        DETECTED_SHELLS+="fish "
-        print_info "✓ Fish detected"
-    fi
-    
-    if command -v nu &>/dev/null; then
-        DETECTED_SHELLS+="nushell "
-        print_info "✓ Nushell detected"
-    fi
-    
-    print_success "Detected shells: $DETECTED_SHELLS"
+    print_info "Detected shells: ${SHELLS[*]-none}"
 }
 
-# Detect current shell
-detect_current_shell() {
-    if [[ -n "$ZSH_VERSION" ]]; then
-        echo "zsh"
-    elif [[ -n "$BASH_VERSION" ]]; then
-        echo "bash"
-    elif [[ -n "$FISH_VERSION" ]]; then
-        echo "fish"
-    elif command -v nu &>/dev/null && [[ "$SHELL" == *"nu"* ]]; then
-        echo "nushell"
-    else
-        echo "bash"
-    fi
-}
-
-# Select shells
-select_shells() {
-    if [[ -n "$SELECTED_SHELLS" ]]; then
-        for shell in $SELECTED_SHELLS; do
-            case "$shell" in
-                bash|zsh|fish|nushell) ;;
-                *) print_error "Unknown shell: $shell"; exit 1 ;;
-            esac
-        done
-        print_success "Will configure: $SELECTED_SHELLS"
-        return
-    fi
+# Install shell support - ALL PACKAGES
+install_shell_support() {
+    print_step "Installing shell support packages..."
     
-    echo ""
-    print_step "Select shells to configure:"
-    echo ""
-    echo "  1) All detected shells"
-    echo "  2) Bash only"
-    echo "  3) Zsh only"
-    echo "  4) Fish only"
-    echo "  5) Bash + Zsh"
-    echo "  6) Bash + Fish"
-    echo "  7) Zsh + Fish"
-    echo "  8) Skip shell configuration"
-    echo ""
-    
-    read -p "Enter your choice [1-8] (default: 1): " choice
-    
-    case "$choice" in
-        2) SELECTED_SHELLS="bash" ;;
-        3) SELECTED_SHELLS="zsh" ;;
-        4) SELECTED_SHELLS="fish" ;;
-        5) SELECTED_SHELLS="bash zsh" ;;
-        6) SELECTED_SHELLS="bash fish" ;;
-        7) SELECTED_SHELLS="zsh fish" ;;
-        8) SELECTED_SHELLS="" ;;
-        *) SELECTED_SHELLS="$DETECTED_SHELLS" ;;
-    esac
-    
-    if [[ -n "$SELECTED_SHELLS" ]]; then
-        print_success "Will configure: $SELECTED_SHELLS"
-    else
-        print_warning "Skipping shell configuration"
-    fi
-}
-
-# Select installation method
-select_install_method() {
-    if [[ "$INSTALL_METHOD" != "auto" ]]; then
-        print_success "Installation method: $INSTALL_METHOD"
-        return
-    fi
-    
-    echo ""
-    print_step "Select installation method:"
-    echo ""
-    echo -e "  ${GREEN}1) Traditional${NC} - Use existing dotfiles from repo"
-    echo "                 Best for: Consistent, tested configurations"
-    echo ""
-    echo -e "  ${YELLOW}2) Dynamic${NC}     - Auto-detect tools and generate configs"
-    echo "                 Best for: Optimized, system-specific setup"
-    echo ""
-    echo -e "  ${CYAN}3) Auto${NC}        - Let installer decide (RECOMMENDED)"
-    echo "                 Uses dynamic if tools vary, traditional otherwise"
-    echo ""
-    
-    read -p "Enter choice [1-3] (default: 3): " choice
-    
-    case "$choice" in
-        1) INSTALL_METHOD="traditional" ;;
-        2) INSTALL_METHOD="dynamic" ;;
-        *) INSTALL_METHOD="auto" ;;
-    esac
-    
-    print_success "Installation method: $INSTALL_METHOD"
-}
-
-# Backup function
-backup_existing() {
-    if [[ "$SKIP_BACKUP" == true ]]; then
-        print_warning "⚠️  Skipping backup (--no-backup specified)"
-        print_warning "This is NOT recommended! You won't be able to restore easily."
-        read -p "Are you sure you want to skip backup? [yes/no]: " skip_confirm
-        if [[ "$skip_confirm" != "yes" ]]; then
-            print_info "Proceeding with backup..."
-        else
-            return
-        fi
-    fi
-    
-    if [[ "$DRY_RUN" == true ]]; then
-        print_info "[DRY RUN] Would backup to: $BACKUP_DIR"
-        return
-    fi
-    
-    print_step "Creating backup of existing configurations..."
-    print_info "Backup location: $BACKUP_DIR"
-    
-    mkdir -p "$BACKUP_DIR"
-    
-    # Backup shell configs
-    [[ -f ~/.bashrc ]] && cp ~/.bashrc "$BACKUP_DIR/" && print_info "✓ Backed up ~/.bashrc"
-    [[ -f ~/.bash_profile ]] && cp ~/.bash_profile "$BACKUP_DIR/" && print_info "✓ Backed up ~/.bash_profile"
-    [[ -f ~/.bash_logout ]] && cp ~/.bash_logout "$BACKUP_DIR/" && print_info "✓ Backed up ~/.bash_logout"
-    [[ -f ~/.profile ]] && cp ~/.profile "$BACKUP_DIR/" && print_info "✓ Backed up ~/.profile"
-    [[ -f ~/.inputrc ]] && cp ~/.inputrc "$BACKUP_DIR/" && print_info "✓ Backed up ~/.inputrc"
-    [[ -f ~/.zshrc ]] && cp ~/.zshrc "$BACKUP_DIR/" && print_info "✓ Backed up ~/.zshrc"
-    [[ -f ~/.zshenv ]] && cp ~/.zshenv "$BACKUP_DIR/" && print_info "✓ Backed up ~/.zshenv"
-    [[ -f ~/.zprofile ]] && cp ~/.zprofile "$BACKUP_DIR/" && print_info "✓ Backed up ~/.zprofile"
-    
-    # Backup directories
-    [[ -d ~/.config/fish ]] && cp -r ~/.config/fish "$BACKUP_DIR/" && print_info "✓ Backed up Fish config"
-    [[ -d ~/.config/nushell ]] && cp -r ~/.config/nushell "$BACKUP_DIR/" && print_info "✓ Backed up Nushell config"
-    [[ -d ~/.config/nvim ]] && cp -r ~/.config/nvim "$BACKUP_DIR/" && print_info "✓ Backed up Neovim config"
-    [[ -d ~/.tmux ]] && cp -r ~/.tmux "$BACKUP_DIR/" && print_info "✓ Backed up Tmux config"
-    
-    # Backup files
-    [[ -f ~/.tmux.conf ]] && cp ~/.tmux.conf "$BACKUP_DIR/" && print_info "✓ Backed up ~/.tmux.conf"
-    [[ -f ~/.vimrc ]] && cp ~/.vimrc "$BACKUP_DIR/" && print_info "✓ Backed up ~/.vimrc"
-    [[ -f ~/.gitconfig ]] && cp ~/.gitconfig "$BACKUP_DIR/" && print_info "✓ Backed up ~/.gitconfig"
-    [[ -f ~/.gitignore_global ]] && cp ~/.gitignore_global "$BACKUP_DIR/" && print_info "✓ Backed up ~/.gitignore_global"
-    
-    print_success "Backup completed successfully!"
-    print_info "To restore: ./uninstall.sh or cp -r $BACKUP_DIR/* ~/"
-}
-
-# Install dependencies
-install_dependencies() {
-    if [[ "$SKIP_DEPS" == true ]]; then
-        print_warning "Skipping dependencies (--skip-deps specified)"
-        return
-    fi
-    
-    if [[ "$DRY_RUN" == true ]]; then
-        print_info "[DRY RUN] Would install dependencies for: $OS"
-        return
-    fi
-    
-    if [[ "$INSTALL_DEPS" == false ]]; then
-        echo ""
-        read -p "Install modern CLI tools (fzf, eza, bat, starship, etc.)? [Y/n]: " install_deps
-        [[ "$install_deps" =~ ^[Nn]$ ]] && return
-    fi
-    
-    print_step "Installing dependencies..."
-    print_info "This may take a few minutes..."
-    
-    case "$OS" in
-        arch|manjaro|endeavouros)
-            packages="git curl wget fzf zoxide eza bat ripgrep fd starship fastfetch tmux kitty alacritty"
-            print_info "Installing packages with pacman..."
-            sudo pacman -S --needed --noconfirm $packages 2>/dev/null || print_warning "Some packages failed"
-            
-            if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
-                print_info "Installing yay (AUR helper)..."
-                git clone https://aur.archlinux.org/yay.git /tmp/yay
-                cd /tmp/yay && makepkg -si --noconfirm
-            fi
-            
-            if command -v yay &>/dev/null || command -v paru &>/dev/null; then
-                local aur_helper=$(command -v yay || command -v paru)
-                $aur_helper -S --needed --noconfirm dust procs sd micro 2>/dev/null || print_warning "Some AUR packages failed"
-            fi
-            ;;
-            
-        debian|ubuntu|pop|linuxmint)
-            packages="git curl wget fzf zoxide bat ripgrep fd-find tmux"
-            print_info "Installing packages with apt..."
-            sudo apt-get update
-            sudo apt-get install -y $packages 2>/dev/null || print_warning "Some packages failed"
-            
-            if ! command -v starship &>/dev/null; then
-                curl -sS https://starship.rs/install.sh | sh -s -- -y
-            fi
-            
-            if ! command -v eza &>/dev/null; then
-                sudo apt install -y gpg
-                sudo mkdir -p /etc/apt/keyrings
-                wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-                echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
-                sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-                sudo apt update
-                sudo apt install -y eza
-            fi
-            ;;
-            
-        fedora|rhel|centos)
-            packages="git curl wget fzf zoxide eza bat ripgrep fd-find starship fastfetch tmux"
-            print_info "Installing packages with dnf..."
-            sudo dnf install -y $packages 2>/dev/null || print_warning "Some packages failed"
-            ;;
-            
-        opensuse*)
-            packages="git curl wget fzf zoxide eza bat ripgrep fd starship fastfetch tmux"
-            print_info "Installing packages with zypper..."
-            sudo zypper install -y $packages 2>/dev/null || print_warning "Some packages failed"
-            ;;
-            
-        macos)
-            if command -v brew &>/dev/null; then
-                packages="git curl wget fzf zoxide eza bat ripgrep fd starship fastfetch tmux micro"
-                brew install $packages 2>/dev/null || print_warning "Some packages failed"
-            else
-                print_error "Homebrew not found. Install from: https://brew.sh"
-            fi
-            ;;
-    esac
-    
-    if ! command -v micro &>/dev/null; then
-        print_info "Installing micro editor..."
-        curl https://getmic.ro | bash
-        sudo mv micro /usr/local/bin/ 2>/dev/null || mv micro ~/.local/bin/
-    fi
-    
-    print_success "Dependencies installed!"
-}
-
-# Clone dotfiles
-clone_dotfiles() {
-    print_step "Setting up dotfiles..."
-    
-    if [[ "$DRY_RUN" == true ]]; then
-        if [[ -d "$DOTFILES_DIR" ]]; then
-            print_info "[DRY RUN] Would update existing dotfiles"
-        else
-            print_info "[DRY RUN] Would clone to: $DOTFILES_DIR"
-        fi
-        return
-    fi
-    
-    if [[ -d "$DOTFILES_DIR" ]]; then
-        if [[ "$FORCE_MODE" == true ]]; then
-            print_warning "Force mode: Removing existing dotfiles..."
-            rm -rf "$DOTFILES_DIR"
-            git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
-        else
-            print_info "Dotfiles directory exists. Updating..."
-            cd "$DOTFILES_DIR"
-            git pull origin main
-        fi
-    else
-        git clone --depth=1 "$DOTFILES_REPO" "$DOTFILES_DIR"
-    fi
-    
-    print_success "Dotfiles ready at: $DOTFILES_DIR"
-}
-
-# Generate dynamic configurations
-generate_dynamic_configs() {
-    print_step "Generating dynamic configurations..."
-    
-    if [[ "$DRY_RUN" == true ]]; then
-        print_info "[DRY RUN] Would generate dynamic configs"
-        return
-    fi
-    
-    if [[ -f "$SCRIPT_DIR/scripts/generate-configs.sh" ]]; then
-        "$SCRIPT_DIR/scripts/generate-configs.sh" "all" "$DOTFILES_DIR/generated"
-        print_success "Dynamic configurations generated"
-    else
-        print_warning "generate-configs.sh not found, skipping dynamic generation"
-    fi
-}
-
-# Install bash configuration (dynamic)
-install_bash_dynamic() {
-    print_step "Installing dynamic Bash configuration..."
-    
-    local config_dir="$DOTFILES_DIR/generated"
-    local bash_config="$config_dir/dynamic-bash.sh"
-    
-    if [[ -f "$bash_config" ]]; then
-        cat > ~/.bashrc << 'EOF'
-#!/usr/bin/env bash
-# =============================================================================
-# DYNAMIC BASH CONFIGURATION
-# Auto-generated based on detected tools
-# =============================================================================
-
-# Source dynamic configuration
-if [[ -f "$HOME/.dotfiles/generated/dynamic-bash.sh" ]]; then
-    source "$HOME/.dotfiles/generated/dynamic-bash.sh"
-fi
-
-# Source local customizations
-if [[ -f "$HOME/.bashrc.local" ]]; then
-    source "$HOME/.bashrc.local"
-fi
-EOF
-        
-        cat > ~/.bash_profile << 'EOF'
-#!/usr/bin/env bash
-# Source .bashrc
-if [[ -f "$HOME/.bashrc" ]]; then
-    source "$HOME/.bashrc"
-fi
-
-# Source local customizations
-if [[ -f "$HOME/.bash_profile.local" ]]; then
-    source "$HOME/.bash_profile.local"
-fi
-EOF
-        
-        print_success "Dynamic Bash configuration installed"
-    else
-        print_error "Dynamic bash configuration not found"
-    fi
-}
-
-# Install zsh configuration (dynamic)
-install_zsh_dynamic() {
-    print_step "Installing dynamic Zsh configuration..."
-    
-    local config_dir="$DOTFILES_DIR/generated"
-    local zsh_config="$config_dir/dynamic-zsh.sh"
-    
-    if [[ -f "$zsh_config" ]]; then
-        cat > ~/.zshrc << 'EOF'
-#!/usr/bin/env zsh
-# =============================================================================
-# DYNAMIC ZSH CONFIGURATION
-# Auto-generated based on detected tools
-# =============================================================================
-
-# Source dynamic configuration
-if [[ -f "$HOME/.dotfiles/generated/dynamic-zsh.sh" ]]; then
-    source "$HOME/.dotfiles/generated/dynamic-zsh.sh"
-fi
-
-# Source local customizations
-if [[ -f "$HOME/.zshrc.local" ]]; then
-    source "$HOME/.zshrc.local"
-fi
-EOF
-        
-        print_success "Dynamic Zsh configuration installed"
-    else
-        print_error "Dynamic zsh configuration not found"
-    fi
-}
-
-# Install fish configuration (dynamic)
-install_fish_dynamic() {
-    print_step "Installing dynamic Fish configuration..."
-    
-    local config_dir="$DOTFILES_DIR/generated"
-    local fish_config="$config_dir/dynamic-fish.fish"
-    local fish_config_dir="$HOME/.config/fish"
-    
-    if [[ -f "$fish_config" ]]; then
-        mkdir -p "$fish_config_dir"
-        cp "$fish_config" "$fish_config_dir/config.fish"
-        print_success "Dynamic Fish configuration installed"
-    else
-        print_error "Dynamic fish configuration not found"
-    fi
-}
-
-# Install nushell configuration (dynamic)
-install_nushell_dynamic() {
-    print_step "Installing dynamic Nushell configuration..."
-    
-    local config_dir="$DOTFILES_DIR/generated"
-    local nu_config="$config_dir/dynamic-nu.nu"
-    local nu_config_dir="$HOME/.config/nushell"
-    
-    if [[ -f "$nu_config" ]]; then
-        mkdir -p "$nu_config_dir"
-        cp "$nu_config" "$nu_config_dir/config.nu"
-        print_success "Dynamic Nushell configuration installed"
-    else
-        print_error "Dynamic nushell configuration not found"
-    fi
-}
-
-# Create symlinks (traditional)
-create_symlinks() {
-    print_step "Creating symbolic links..."
-    
-    if [[ "$DRY_RUN" == true ]]; then
-        print_info "[DRY RUN] Would create symlinks"
-        return
-    fi
-    
-    mkdir -p ~/.config
-    
-    # Bash
-    if [[ "$SELECTED_SHELLS" == *"bash"* ]]; then
-        ln -sf "$DOTFILES_DIR/.bashrc" ~/.bashrc
-        ln -sf "$DOTFILES_DIR/.bash_profile" ~/.bash_profile
-        ln -sf "$DOTFILES_DIR/.bash_logout" ~/.bash_logout
-        ln -sf "$DOTFILES_DIR/.profile" ~/.profile
-        ln -sf "$DOTFILES_DIR/.inputrc" ~/.inputrc
-        print_info "✓ Bash configuration linked"
-    fi
-    
-    # Zsh
-    if [[ "$SELECTED_SHELLS" == *"zsh"* ]]; then
-        ln -sf "$DOTFILES_DIR/.zshrc" ~/.zshrc
-        print_info "✓ Zsh configuration linked"
-    fi
-    
-    # Fish
-    if [[ "$SELECTED_SHELLS" == *"fish"* ]]; then
-        mkdir -p ~/.config/fish/{conf.d,functions,completions}
-        ln -sf "$DOTFILES_DIR/fish/config.fish" ~/.config/fish/config.fish
-        for file in "$DOTFILES_DIR"/fish/conf.d/*.fish; do
-            [[ -f "$file" ]] && ln -sf "$file" ~/.config/fish/conf.d/
-        done
-        for file in "$DOTFILES_DIR"/fish/functions/*.fish; do
-            [[ -f "$file" ]] && ln -sf "$file" ~/.config/fish/functions/
-        done
-        print_info "✓ Fish configuration linked"
-    fi
-    
-    # Nushell
-    if [[ "$SELECTED_SHELLS" == *"nushell"* ]]; then
-        mkdir -p ~/.config/nushell
-        ln -sf "$DOTFILES_DIR/nushell/config.nu" ~/.config/nushell/config.nu
-        ln -sf "$DOTFILES_DIR/nushell/env.nu" ~/.config/nushell/env.nu
-        print_info "✓ Nushell configuration linked"
-    fi
-    
-    # Terminal emulators
-    mkdir -p ~/.config/alacritty
-    ln -sf "$DOTFILES_DIR/config/alacritty/alacritty.toml" ~/.config/alacritty/alacritty.toml
-    print_info "✓ Alacritty configuration linked"
-    
-    mkdir -p ~/.config/kitty
-    ln -sf "$DOTFILES_DIR/config/kitty/kitty.conf" ~/.config/kitty/kitty.conf
-    print_info "✓ Kitty configuration linked"
-    
-    mkdir -p ~/.config/wezterm
-    ln -sf "$DOTFILES_DIR/config/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
-    print_info "✓ WezTerm configuration linked"
-    
-    mkdir -p ~/.config/zellij
-    ln -sf "$DOTFILES_DIR/config/zellij/config.kdl" ~/.config/zellij/config.kdl
-    print_info "✓ Zellij configuration linked"
-    
-    # Tmux
-    ln -sf "$DOTFILES_DIR/.tmux.conf" ~/.tmux.conf
-    print_info "✓ Tmux configuration linked"
-    
-    # Screen
-    ln -sf "$DOTFILES_DIR/.screenrc" ~/.screenrc
-    print_info "✓ Screen configuration linked"
-    
-    # Editors
-    ln -sf "$DOTFILES_DIR/.vimrc" ~/.vimrc
-    ln -sf "$DOTFILES_DIR/.nanorc" ~/.nanorc
-    print_info "✓ Vim and Nano configurations linked"
-    
-    mkdir -p ~/.config/micro
-    ln -sf "$DOTFILES_DIR/config/micro/settings.json" ~/.config/micro/settings.json
-    print_info "✓ Micro configuration linked"
-    
-    # Neovim
-    mkdir -p ~/.config/nvim
-    ln -sf "$DOTFILES_DIR/config/nvim/init.lua" ~/.config/nvim/init.lua
-    ln -sf "$DOTFILES_DIR/config/nvim/lua" ~/.config/nvim/lua
-    print_info "✓ Neovim configuration linked"
-    
-    # VS Code:
-    mkdir -p ~/.config/Code/User
-    ln -sf "$DOTFILES_DIR/config/Code/settings.json" ~/.config/Code/User/settings.json
-    print_info "✓ VS Code: settings linked"
-    
-    # Modern tools
-    mkdir -p ~/.config/fastfetch
-    ln -sf "$DOTFILES_DIR/config/fastfetch/config.jsonc" ~/.config/fastfetch/config.jsonc
-    
-    mkdir -p ~/.config
-    ln -sf "$DOTFILES_DIR/config/starship.toml" ~/.config/starship.toml
-    print_info "✓ Starship configuration linked"
-    
-    # Git
-    ln -sf "$DOTFILES_DIR/git/.gitconfig" ~/.gitconfig
-    ln -sf "$DOTFILES_DIR/git/.gitignore_global" ~/.gitignore_global
-    print_info "✓ Git configuration linked"
-    
-    # SSH
-    if [[ -d ~/.ssh ]]; then
-        cp -n "$DOTFILES_DIR/ssh/config.template" ~/.ssh/config 2>/dev/null || true
-        chmod 600 ~/.ssh/config 2>/dev/null || true
-        print_info "✓ SSH config template copied"
-    fi
-    
-    print_success "All configurations linked successfully!"
-}
-
-# Install configurations based on method
-install_configs() {
-    case "$INSTALL_METHOD" in
-        "dynamic")
-            generate_dynamic_configs
-            
-            if [[ "$SELECTED_SHELLS" == *"bash"* ]]; then
-                install_bash_dynamic
-            fi
-            if [[ "$SELECTED_SHELLS" == *"zsh"* ]]; then
-                install_zsh_dynamic
-            fi
-            if [[ "$SELECTED_SHELLS" == *"fish"* ]]; then
-                install_fish_dynamic
-            fi
-            if [[ "$SELECTED_SHELLS" == *"nushell"* ]]; then
-                install_nushell_dynamic
-            fi
-            
-            # Always install common configs via symlinks
-            install_common_configs
-            ;;
-            
-        "traditional"|*)
-            create_symlinks
-            ;;
-    esac
-}
-
-# Install common configs (for dynamic mode)
-install_common_configs() {
-    print_step "Installing common configurations..."
-    
-    local common_configs=(
-        ".vimrc"
-        ".tmux.conf"
-        ".inputrc"
+    local packages=(
+        git curl wget vim neovim fzf ripgrep tree htop
+        tar gzip unzip zip
     )
     
-    for config in "${common_configs[@]}"; do
-        local source="$DOTFILES_DIR/$config"
-        local target="$HOME/$config"
-        
-        if [[ -f "$source" ]]; then
-            cp "$source" "$target"
-            print_success "Installed $config"
-        fi
-    done
+    # Modern tools
+    local modern=(
+        eza bat starship zoxide delta fd procs dust
+        duf bottom yazi tldr httpie
+    )
     
-    # Install starship
-    mkdir -p ~/.config
-    cp "$DOTFILES_DIR/config/starship.toml" ~/.config/starship.toml
-    print_info "✓ Starship configuration installed"
+    case "$PKG_MANAGER" in
+        brew)
+            brew install "${packages[@]}" "${modern[@]}" 2>/dev/null || true
+            brew install zsh fish nushell 2>/dev/null || true
+            ;;
+        pacman)
+            sudo pacman -Sy --noconfirm "${packages[@]}" 2>/dev/null || true
+            # Install modern tools
+            curl -Ls https://github.com/eza-community/eza/releases/download/v0.20.0/eza_v0.20.0_x86_64-unknown-linux-gnu.tar.gz | sudo tar xzf - -C /usr/local/bin eza 2>/dev/null || true
+            curl -Ls https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz | sudo tar xzf - -C /usr/local/bin bat 2>/dev/null || true
+            curl -sS https://starship.rs/install.sh | sh -s -- -y 2>/dev/null || true
+            curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh 2>/dev/null || true
+            ;;
+        apt)
+            sudo apt update -qq
+            sudo apt install -y "${packages[@]}" 2>/dev/null || true
+            # Add modern tools via cargo or binary
+            curl -Ls https://github.com/eza-community/eza/releases/download/v0.20.0/eza_v0.20.0_x86_64-unknown-linux-gnu.tar.gz | sudo tar xzf - -C /usr/local/bin eza 2>/dev/null || true
+            curl -Ls https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz | sudo tar xzf - -C /usr/local/bin bat 2>/dev/null || true
+            curl -sS https://starship.rs/install.sh | sh -s -- -y 2>/dev/null || true
+            ;;
+        dnf)
+            sudo dnf install -y "${packages[@]}" 2>/dev/null || true
+            ;;
+    esac
     
-    # Install git config
-    cp "$DOTFILES_DIR/git/.gitconfig" ~/.gitconfig
-    cp "$DOTFILES_DIR/git/.gitignore_global" ~/.gitignore_global
-    print_info "✓ Git configuration installed"
-}
-
-# Check for missing tools and suggest install_dotfiles.sh
-check_missing_tools() {
-    local missing_tools=()
-    
-    command -v fzf &>/dev/null || missing_tools+=("fzf")
-    command -v eza &>/dev/null || missing_tools+=("eza")
-    command -v bat &>/dev/null || missing_tools+=("bat")
-    command -v zoxide &>/dev/null || missing_tools+=("zoxide")
-    command -v starship &>/dev/null || missing_tools+=("starship")
-    command -v ripgrep &>/dev/null || missing_tools+=("ripgrep")
-    command -v fd &>/dev/null || missing_tools+=("fd")
-    
-    if [ ${#missing_tools[@]} -gt 0 ]; then
-        echo ""
-        print_warning "Some modern tools are not installed: ${missing_tools[*]}"
-        print_info "For the best experience, run: ./install_dotfiles.sh --all"
-        echo ""
+    # Install Oh-My-Zsh if using zsh
+    if command -v zsh &>/dev/null && [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+        print_info "Installing Oh-My-Zsh..."
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended 2>/dev/null || true
     fi
+    
+    # Install fzf
+    if ! command -v fzf &>/dev/null; then
+        [[ -d ~/.fzf ]] || git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+        ~/.fzf/install --all 2>/dev/null || true
+    fi
+    
+    print_success "Shell support packages installed"
 }
 
-# Run install_dotfiles.sh if --install-packages flag is set
-run_install_packages() {
-    if [[ "$INSTALL_PACKAGES" == true ]]; then
-        print_step "Running install_dotfiles.sh to install all packages..."
-        
-        if [ -f "$SCRIPT_DIR/install_dotfiles.sh" ]; then
-            "$SCRIPT_DIR/install_dotfiles.sh" --yes
+# Backup existing configs
+backup_configs() {
+    [[ "$SKIP_BACKUP" == true ]] && return
+    
+    print_step "Backing up existing configs..."
+    mkdir -p "$BACKUP_DIR"
+    
+    [[ -f "$HOME/.bashrc" ]] && cp "$HOME/.bashrc" "$BACKUP_DIR/"
+    [[ -f "$HOME/.bash_profile" ]] && cp "$HOME/.bash_profile" "$BACKUP_DIR/"
+    [[ -f "$HOME/.zshrc" ]] && cp "$HOME/.zshrc" "$BACKUP_DIR/"
+    [[ -f "$HOME/.zshenv" ]] && cp "$HOME/.zshenv" "$BACKUP_DIR/"
+    [[ -d "$HOME/.config/fish" ]] && cp -r "$HOME/.config/fish" "$BACKUP_DIR/"
+    [[ -d "$HOME/.config/nushell" ]] && cp -r "$HOME/.config/nushell" "$BACKUP_DIR/"
+    
+    print_success "Backup saved to: $BACKUP_DIR"
+}
+
+# Link bash config
+install_bash() {
+    [[ ! " ${SHELLS[*]} " =~ " bash " ]] && return
+    
+    print_step "Installing Bash configuration..."
+    
+    mkdir -p "$HOME"
+    ln -sf "$SCRIPT_DIR/.bashrc" "$HOME/.bashrc"
+    ln -sf "$SCRIPT_DIR/.bash_profile" "$HOME/.bash_profile"
+    [[ -f "$SCRIPT_DIR/.bash_logout" ]] && ln -sf "$SCRIPT_DIR/.bash_logout" "$HOME/.bash_logout"
+    
+    print_success "Bash configured"
+}
+
+# Link zsh config
+install_zsh() {
+    [[ ! " ${SHELLS[*]} " =~ " zsh " ]] && return
+    
+    print_step "Installing Zsh configuration..."
+    
+    mkdir -p "$HOME"
+    ln -sf "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
+    
+    print_success "Zsh configured"
+}
+
+# Link fish config
+install_fish() {
+    [[ ! " ${SHELLS[*]} " =~ " fish " ]] && return
+    
+    print_step "Installing Fish configuration..."
+    
+    mkdir -p "$HOME/.config/fish"
+    ln -sf "$SCRIPT_DIR/.fish/config.fish" "$HOME/.config/fish/config.fish"
+    [[ -d "$SCRIPT_DIR/.fish/conf.d" ]] && ln -sf "$SCRIPT_DIR/.fish/conf.d" "$HOME/.config/fish/conf.d" 2>/dev/null || true
+    [[ -d "$SCRIPT_DIR/.fish/functions" ]] && ln -sf "$SCRIPT_DIR/.fish/functions" "$HOME/.config/fish/functions" 2>/dev/null || true
+    
+    print_success "Fish configured"
+}
+
+# Link nushell config
+install_nushell() {
+    [[ ! " ${SHELLS[*]} " =~ " nushell " ]] && return
+    
+    print_step "Installing Nushell configuration..."
+    
+    mkdir -p "$HOME/.config/nushell"
+    [[ -f "$SCRIPT_DIR/nushell/config.nu" ]] && ln -sf "$SCRIPT_DIR/nushell/config.nu" "$HOME/.config/nushell/config.nu"
+    [[ -f "$SCRIPT_DIR/nushell/env.nu" ]] && ln -sf "$SCRIPT_DIR/nushell/env.nu" "$HOME/.config/nushell/env.nu"
+    [[ -f "$SCRIPT_DIR/nushell/config.local.nu" ]] && ln -sf "$SCRIPT_DIR/nushell/config.local.nu" "$HOME/.config/nushell/config.local.nu"
+    [[ -f "$SCRIPT_DIR/nushell/env.local.nu" ]] && ln -sf "$SCRIPT_DIR/nushell/env.local.nu" "$HOME/.config/nushell/env.local.nu"
+    
+    print_success "Nushell configured"
+}
+
+# Install other configs
+install_other() {
+    print_step "Installing other configurations..."
+    
+    # Git
+    [[ -d "$SCRIPT_DIR/git" ]] && mkdir -p "$HOME/.config/git" && ln -sf "$SCRIPT_DIR/git/.gitconfig" "$HOME/.gitconfig"
+    
+    # Vim
+    [[ -f "$SCRIPT_DIR/.vimrc" ]] && ln -sf "$SCRIPT_DIR/.vimrc" "$HOME/.vimrc"
+    
+    # Tmux
+    [[ -f "$SCRIPT_DIR/.tmux.conf" ]] && ln -sf "$SCRIPT_DIR/.tmux.conf" "$HOME/.tmux.conf"
+    
+    # Nano
+    [[ -f "$SCRIPT_DIR/.nanorc" ]] && ln -sf "$SCRIPT_DIR/.nanorc" "$HOME/.nanorc"
+    
+    # Inputrc
+    [[ -f "$SCRIPT_DIR/.inputrc" ]] && ln -sf "$SCRIPT_DIR/.inputrc" "$HOME/.inputrc"
+    
+    print_success "Other configs installed"
+}
+
+# Set default shell
+set_default_shell() {
+    if [[ -n "$1" ]] && command -v "$1" &>/dev/null; then
+        print_step "Setting default shell to $1..."
+        if [[ "$OS" == "macos" ]]; then
+            sudo chsh -s "$(command -v "$1")" 2>/dev/null || true
         else
-            print_error "install_dotfiles.sh not found!"
-            exit 1
+            chsh -s "$(command -v "$1")" 2>/dev/null || true
         fi
-        
-        print_success "Package installation complete!"
-        echo ""
+        print_success "Default shell set to $1"
     fi
 }
 
-# Select mode
-select_mode() {
-    if [[ -n "$SELECTED_MODE" ]]; then
-        case "$SELECTED_MODE" in
-            basic|advanced|ultra-nerd)
-                print_success "Mode: $SELECTED_MODE"
-                ;;
-            *)
-                print_error "Invalid mode: $SELECTED_MODE"
-                exit 1
-                ;;
-        esac
-    else
-        echo ""
-        print_step "Select your dotfiles mode:"
-        echo ""
-        echo -e "  ${GREEN}1) Basic${NC}       - Essential only (~200 aliases)"
-        echo -e "  ${YELLOW}2) Advanced${NC}    - Full features (~600 aliases) [RECOMMENDED]"
-        echo -e "  ${RED}3) Ultra-Nerd${NC}  - Everything (~1000+ aliases)"
-        echo ""
-        read -p "Enter choice [1-3] (default: 2): " choice
-        
-        case "$choice" in
-            1) SELECTED_MODE="basic" ;;
-            3) SELECTED_MODE="ultra-nerd" ;;
-            *) SELECTED_MODE="advanced" ;;
-        esac
-        
-        print_success "Mode set to: $SELECTED_MODE"
-    fi
-    
-    # Create local config files
-    echo "export DOTFILES_MODE=\"$SELECTED_MODE\"" > ~/.bashrc.local
-    echo "set -gx DOTFILES_MODE \"$SELECTED_MODE\"" > ~/.config/fish/config.local.fish 2>/dev/null || true
-}
+# Show help
+show_help() {
+    cat << EOF
+${BOLD}Dotfiles Installer v${VERSION}${NC}
 
-# Post-install message
-print_post_install() {
-    echo ""
-    echo -e "${GREEN}${BOLD}╔════════════════════════════════════════════════════════════╗"
-    echo "║           INSTALLATION COMPLETE! 🎉                        ║"
-    echo "╚════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-    print_success "Dotfiles v${VERSION} installed successfully!"
-    echo ""
-    print_info "Method: ${INSTALL_METHOD}"
-    print_info "Backup location: ${BACKUP_DIR}"
-    print_info "Dotfiles location: ${DOTFILES_DIR}"
-    echo ""
-    echo "To apply changes, run:"
-    [[ "$SELECTED_SHELLS" == *"bash"* ]] && echo -e "  ${BOLD}source ~/.bashrc${NC}"
-    [[ "$SELECTED_SHELLS" == *"zsh"* ]] && echo -e "  ${BOLD}source ~/.zshrc${NC}"
-    [[ "$SELECTED_SHELLS" == *"fish"* ]] && echo -e "  ${BOLD}source ~/.config/fish/config.fish${NC}"
-    echo ""
-    echo "Or simply restart your terminal."
-    echo ""
-    print_info "To restore original configs: ./uninstall.sh"
-    print_info "To update dotfiles: cd ~/.dotfiles && git pull"
-    echo ""
-    echo -e "${CYAN}Happy hacking! 🚀${NC}"
-    echo ""
+${BOLD}Usage:${NC} ./install.sh [OPTIONS]
+
+${BOLD}Options:${NC}
+  -h, --help              Show this help
+  -s, --shells SHELLS    Shells to install (bash,zsh,fish,nushell)
+  -d, --default SHELL    Set default shell
+  --skip-backup          Skip backup
+  --force                Force overwrite
+  --install-deps         Install dependencies (modern tools)
+  --no-deps              Skip dependency installation
+  -y, --yes              Skip confirmation
+
+${BOLD}Examples:${NC}
+  ./install.sh                        # Interactive
+  ./install.sh -s bash,zsh,fish       # Specific shells
+  ./install.sh -s all --install-deps  # Install all with deps
+  ./install.sh -d zsh                 # Set zsh as default
+
+EOF
 }
 
 # Main
 main() {
-    parse_args "$@"
+    local default_shell=""
     
-    # Run package installer if requested
-    run_install_packages
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help) show_help; exit 0 ;;
+            -s|--shells) SHELLS="${2//,/ }"; shift 2 ;;
+            -d|--default) default_shell="$2"; shift 2 ;;
+            --skip-backup) SKIP_BACKUP=true; shift ;;
+            --force) FORCE=true; shift ;;
+            --install-deps) INSTALL_DEPS=true; shift ;;
+            --no-deps) INSTALL_DEPS=false; shift ;;
+            -y|--yes) AUTO=true; shift ;;
+            *) shift ;;
+        esac
+    done
     
-    # Skip confirmation only with -y flag
-    if [[ "$CONFIRMED" != true ]]; then
-        print_header
-        double_confirm
-    else
-        print_header
-        print_warning "Running with --yes flag (skipped confirmation)"
-    fi
-    
-    check_prerequisites
+    print_header
     detect_os
-    detect_shells
+    detect_pkg_manager
     
-    # Select installation method
-    select_install_method
-    
-    # Auto-detect method if set to auto
-    if [[ "$INSTALL_METHOD" == "auto" ]]; then
-        # Use dynamic if we have many missing tools or it's a fresh system
-        local tool_count=0
-        command -v fzf &>/dev/null && ((tool_count++))
-        command -v eza &>/dev/null && ((tool_count++))
-        command -v bat &>/dev/null && ((tool_count++))
-        command -v zoxide &>/dev/null && ((tool_count++))
-        
-        if [[ $tool_count -lt 2 ]]; then
-            INSTALL_METHOD="dynamic"
-            print_info "Auto-selected: dynamic mode (system needs optimization)"
-        else
-            INSTALL_METHOD="traditional"
-            print_info "Auto-selected: traditional mode (system is well-equipped)"
-        fi
+    if [[ -z "${SHELLS[*]}" ]]; then
+        detect_shells
+    else
+        SHELLS=($SHELLS)
     fi
     
-    if [[ -z "$SELECTED_SHELLS" ]]; then
-        select_shells
-    fi
-    
-    if [[ -z "$SELECTED_SHELLS" ]]; then
-        print_error "No shells selected. Exiting."
-        exit 1
-    fi
-    
-    # Final summary before execution
-    echo ""
-    print_step "Installation Summary:"
-    echo "  Method: $INSTALL_METHOD"
-    echo "  Shells: $SELECTED_SHELLS"
-    echo "  Mode: ${SELECTED_MODE:-interactive}"
-    echo "  OS: $OS_NAME"
-    echo "  Backup: $([[ "$SKIP_BACKUP" == true ]] && echo "No" || echo "Yes")"
-    echo "  Dependencies: $([[ "$SKIP_DEPS" == true ]] && echo "No" || echo "Yes")"
-    echo "  Dry Run: $([[ "$DRY_RUN" == true ]] && echo "Yes" || echo "No")"
-    echo ""
-    
-    if [[ "$DRY_RUN" != true ]]; then
-        read -p "Proceed with installation? [yes/no]: " final_confirm
-        if [[ "$final_confirm" != "yes" ]]; then
-            print_error "Installation cancelled."
-            exit 1
-        fi
-    fi
-    
-    # Execute installation
-    backup_existing
-    clone_dotfiles
-    install_dependencies
-    install_configs
-    select_mode
-    
-    if [[ "$DRY_RUN" == true ]]; then
+    if [[ "$AUTO" != true ]]; then
         echo ""
-        print_info "DRY RUN completed. No changes were made."
-        exit 0
+        echo "Shells to configure: ${SHELLS[*]-none}"
+        read -p "Continue? [Y/n]: " confirm
+        [[ "$confirm" =~ ^[Nn]$ ]] && exit 0
     fi
     
-    # Check for missing tools
-    check_missing_tools
+    [[ "$INSTALL_DEPS" == true ]] && install_shell_support
     
-    print_post_install
+    backup_configs
+    
+    install_bash
+    install_zsh
+    install_fish
+    install_nushell
+    install_other
+    
+    [[ -n "$default_shell" ]] && set_default_shell "$default_shell"
+    
+    echo ""
+    echo -e "${GREEN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${GREEN}${BOLD}║                 INSTALLATION COMPLETE!                     ║${NC}"
+    echo -e "${GREEN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
+    echo ""
+    echo "Restart your shell or run:"
+    echo "  source ~/.bashrc    # for Bash"
+    echo "  source ~/.zshrc     # for Zsh"
+    echo ""
 }
 
 main "$@"

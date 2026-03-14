@@ -4,6 +4,9 @@
 # The Ultimate Universal Shell Configuration for Fish
 # =============================================================================
 
+# Enable autocd - type directory name to cd into it (enabled by default in Fish)
+set -g autocd true
+
 # Run fastfetch on start (interactive only)
 if type -q fastfetch
     fastfetch 2>/dev/null
@@ -19,6 +22,9 @@ set -g __fish_suppress_errors 1
 # Set dotfiles mode (basic, advanced, ultra-nerd)
 set -gx DOTFILES_MODE (test -n "$DOTFILES_MODE"; and echo "$DOTFILES_MODE"; or echo "advanced")
 set -gx DOTFILES_DIR (test -n "$DOTFILES_DIR"; and echo "$DOTFILES_DIR"; or echo "$HOME/.dotfiles")
+
+# Adjust path for .fish directory
+set -gx DOTFILES_DIR_FISH "$DOTFILES_DIR/.fish"
 
 # =============================================================================
 # CORE ENVIRONMENT
@@ -101,28 +107,33 @@ set -gx FZF_DEFAULT_OPTS "
 # =============================================================================
 
 # Source core aliases
-if test -f "$DOTFILES_DIR/fish/conf.d/aliases.fish"
-    source "$DOTFILES_DIR/fish/conf.d/aliases.fish" 2>/dev/null
+if test -f "$DOTFILES_DIR/.fish/conf.d/aliases.fish"
+    source "$DOTFILES_DIR/.fish/conf.d/aliases.fish" 2>/dev/null
 end
 
 # Source functions
-if test -d "$DOTFILES_DIR/fish/functions"
-    for func in "$DOTFILES_DIR"/fish/functions/*.fish
+if test -d "$DOTFILES_DIR/.fish/functions"
+    for func in "$DOTFILES_DIR"/.fish/functions/*.fish
         source $func 2>/dev/null
     end
 end
 
+# Source keybindings
+if test -f "$DOTFILES_DIR/.fish/conf.d/keybindings.fish"
+    source "$DOTFILES_DIR/.fish/conf.d/keybindings.fish" 2>/dev/null
+end
+
 # Source development tools
 if test "$DOTFILES_MODE" != "basic"
-    if test -f "$DOTFILES_DIR/fish/conf.d/development.fish"
-        source "$DOTFILES_DIR/fish/conf.d/development.fish" 2>/dev/null
+    if test -f "$DOTFILES_DIR/.fish/conf.d/development.fish"
+        source "$DOTFILES_DIR/.fish/conf.d/development.fish" 2>/dev/null
     end
 end
 
 # Source modern tools
 if test "$DOTFILES_MODE" != "basic"
-    if test -f "$DOTFILES_DIR/fish/conf.d/modern-tools.fish"
-        source "$DOTFILES_DIR/fish/conf.d/modern-tools.fish" 2>/dev/null
+    if test -f "$DOTFILES_DIR/.fish/conf.d/modern-tools.fish"
+        source "$DOTFILES_DIR/.fish/conf.d/modern-tools.fish" 2>/dev/null
     end
 end
 
@@ -177,56 +188,140 @@ if command -v fzf >/dev/null 2>&1
 end
 
 # =============================================================================
-# ABBREVIATIONS (Fish-style aliases)
+# MODERN ALIASES (with fallbacks)
 # =============================================================================
 
-# Navigation
-abbr -a .. 'cd ..' 2>/dev/null
-abbr -a ... 'cd ../..' 2>/dev/null
-abbr -a .... 'cd ../../..' 2>/dev/null
-abbr -a ..... 'cd ../../../..' 2>/dev/null
-abbr -a -- - 'cd -' 2>/dev/null
+# LS alternatives (eza -> ls)
+if type -q eza
+    abbr -a ls 'eza --icons --group-directories-first'
+    abbr -a ll 'eza -l --icons --group-directories-first'
+    abbr -a la 'eza -la --icons --group-directories-first'
+    abbr -a lt 'eza --tree --level=2 --icons'
+    abbr -a l. 'eza -d --icons .*'
+    abbr -a llm 'eza -l --sort=modified --icons'
+else if type -q exa
+    abbr -a ls 'exa --icons --group-directories-first'
+    abbr -a ll 'exa -l --icons --group-directories-first'
+    abbr -a la 'exa -la --icons --group-directories-first'
+end
 
-# Listing
-abbr -a l 'ls -la' 2>/dev/null
-abbr -a ll 'ls -l' 2>/dev/null
-abbr -a la 'ls -A' 2>/dev/null
-abbr -a lt 'ls -laT' 2>/dev/null
+# CAT alternatives (bat -> cat)
+if type -q bat
+    abbr -a cat 'bat --style=auto --wrap=never'
+end
 
-# Safety
-abbr -a cp 'cp -i' 2>/dev/null
-abbr -a mv 'mv -i' 2>/dev/null
-abbr -a rm 'rm -i' 2>/dev/null
+# GREP alternatives (ripgrep)
+if type -q rg
+    abbr -a grep 'rg --smart-case --hidden'
+    abbr -a ag 'rg'
+end
 
-# Git
-abbr -a g 'git' 2>/dev/null
-abbr -a ga 'git add' 2>/dev/null
-abbr -a gaa 'git add --all' 2>/dev/null
-abbr -a gc 'git commit' 2>/dev/null
-abbr -a gcm 'git commit -m' 2>/dev/null
-abbr -a gco 'git checkout' 2>/dev/null
-abbr -a gd 'git diff' 2>/dev/null
-abbr -a gl 'git log --oneline --graph --decorate' 2>/dev/null
-abbr -a gp 'git push' 2>/dev/null
-abbr -a gpl 'git pull' 2>/dev/null
-abbr -a gs 'git status -sb' 2>/dev/null
+# DIFF alternatives (delta)
+if type -q delta
+    abbr -a diff 'delta'
+end
 
-# Docker
-abbr -a d 'docker' 2>/dev/null
-abbr -a dc 'docker-compose' 2>/dev/null
-abbr -a dps 'docker ps' 2>/dev/null
-abbr -a di 'docker images' 2>/dev/null
+# PROCESS alternatives
+if type -q procs
+    abbr -a ps 'procs --colour=auto'
+end
 
-# Kubernetes
-abbr -a k 'kubectl' 2>/dev/null
-abbr -a kg 'kubectl get' 2>/dev/null
-abbr -a kd 'kubectl describe' 2>/dev/null
-abbr -a kl 'kubectl logs' 2>/dev/null
+# DU alternatives
+if type -q dust
+    abbr -a du 'dust -d 2'
+end
+
+# DF alternatives
+if type -q duf
+    abbr -a df 'duf'
+end
+
+# Network
+abbr -a ping 'ping -c 5'
+abbr -a ports 'netstat -tulanp'
+abbr -a ip 'ip -color=auto'
 
 # System
-abbr -a c 'clear' 2>/dev/null
-abbr -a e 'exit' 2>/dev/null
-abbr -a v '$EDITOR' 2>/dev/null
+abbr -a update 'sudo apt update && sudo apt upgrade -y'
+abbr -a upgrade 'sudo apt update && sudo apt upgrade -y'
+abbr -a cleanup 'sudo apt autoremove -y && sudo apt autoclean'
+abbr -a df 'df -h'
+abbr -a free 'free -h'
+
+# Safety
+abbr -a rm 'rm -i'
+abbr -a cp 'cp -i'
+abbr -a mv 'mv -i'
+
+# Navigation
+abbr -a .. 'cd ..'
+abbr -a ... 'cd ../..'
+abbr -a .... 'cd ../../..'
+abbr -a ..... 'cd ../../../..'
+abbr -a -- - 'cd -'
+
+# Git
+abbr -a g 'git'
+abbr -a gs 'git status'
+abbr -a ga 'git add'
+abbr -a gaa 'git add --all'
+abbr -a gc 'git commit'
+abbr -a gcm 'git commit -m'
+abbr -a gco 'git checkout'
+abbr -a gp 'git push'
+abbr -a gpl 'git pull'
+abbr -a gl 'git log --oneline --graph --decorate'
+abbr -a gd 'git diff'
+abbr -a gb 'git branch'
+abbr -a gst 'git stash'
+
+# Docker
+abbr -a d 'docker'
+abbr -a dc 'docker-compose'
+abbr -a dps 'docker ps'
+abbr -a di 'docker images'
+abbr -a dex 'docker exec -it'
+
+# Kubernetes
+abbr -a k 'kubectl'
+abbr -a kg 'kubectl get'
+abbr -a kd 'kubectl describe'
+abbr -a kl 'kubectl logs'
+
+# Tmux
+abbr -a t 'tmux'
+abbr -a ta 'tmux attach'
+
+# Editors
+abbr -a v 'vim'
+abbr -a vi 'vim'
+
+# Misc
+abbr -a path 'echo $PATH | tr ":" "\n" | nl'
+abbr -a h 'history'
+abbr -a c 'clear'
+abbr -a please 'sudo'
+abbr -a q 'exit'
+
+# FZF
+if type -q fzf
+    abbr -a fzf-preview 'fzf --preview "bat --style=numbers --color=always {}"'
+end
+
+# Tldr
+if type -q tldr
+    abbr -a help 'tldr'
+end
+
+# Yazi
+if type -q yazi
+    abbr -a y 'yazi'
+end
+
+# Zellij
+if type -q zellij
+    abbr -a zl 'zellij'
+end
 
 # =============================================================================
 # WELCOME MESSAGE (DISABLED)
@@ -266,3 +361,23 @@ if type -q ftc
         abbr -a ftcf ftc find
     end
 end
+
+# =============================================================================
+# INSTALL SHELL SUPPORT COMMAND
+# =============================================================================
+
+# Install shells command
+abbr -a install-shells 'fish ~/.dotfiles/scripts/install_shell_support.fish'
+
+# =============================================================================
+# AUTO-UPDATE DOTFILES
+# =============================================================================
+
+# Source autoupdate script
+if test -f "$HOME/.dotfiles/scripts/autoupdate.fish"
+    source "$HOME/.dotfiles/scripts/autoupdate.fish" 2>/dev/null
+end
+
+# Manual update commands
+abbr -a dotfiles-update 'source ~/.dotfiles/scripts/autoupdate.fish; dotfiles_update'
+abbr -a dotfiles-status 'cd ~/.dotfiles; and git status'

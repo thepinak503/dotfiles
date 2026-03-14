@@ -106,6 +106,12 @@ Complete desktop environment including:
 - Alpine (apk)
 - macOS (brew)
 
+### 🔄 **Auto-Update**
+- Automatic update check on shell startup
+- Configurable update interval (default: 1 day)
+- Manual update with `dotfiles-update`
+- Non-blocking background updates
+
 ### 🔒 **Safety First**
 - ✅ Double confirmation (type 'yes' then 'INSTALL')
 - ✅ Automatic backup before changes
@@ -370,6 +376,158 @@ Applied consistently across:
 5. Open Pull Request
 
 ## 📜 License
+
+MIT License - see [LICENSE](LICENSE)
+
+---
+
+## 📖 Shell Configuration Guide (v4.0.0)
+
+### Directory Structure
+
+```
+.dotfiles/
+├── .bash/              # Bash configurations
+│   ├── 00-aliases-unified.sh   # Modern CLI aliases with fallbacks
+│   ├── 00-core.sh              # Core environment
+│   ├── 01-functions.sh         # Shell functions
+│   ├── 02-aliases-core.sh      # Essential aliases
+│   └── ...
+├── .zsh/               # Zsh configurations
+│   ├── 00-core.zsh             # Zsh environment
+│   ├── 01-keybindings.zsh      # Key bindings
+│   ├── 02-plugins.zsh          # Oh-My-Zsh plugins
+│   └── 03-prompt.zsh           # Starship/Zoxide init
+├── .fish/              # Fish configurations
+│   └── config.fish     # Main Fish config
+├── nushell/           # Nushell configs
+├── scripts/           # Helper scripts
+│   └── install_shell_support.sh  # Install modern tools
+└── install.sh         # Main installer
+```
+
+### Unified Aliases
+
+The `00-aliases-unified.sh` provides modern CLI tool aliases with automatic fallbacks:
+
+| Command | Modern Tool | Fallback |
+|---------|-------------|----------|
+| `ls`, `ll`, `la` | eza | ls |
+| `cat` | bat | cat |
+| `find` | fd | find |
+| `grep` | ripgrep | grep |
+| `diff` | delta | diff |
+| `ps` | procs | ps |
+| `top` | btm | htop |
+| `du` | dust | du |
+| `df` | duf | df |
+
+### Installation
+
+```bash
+# Full installation with dependencies
+./install.sh --install-deps -s bash,zsh,fish
+
+# Shell-specific
+./install.sh -s bash    # Bash only
+./install.sh -s zsh     # Zsh only
+./install.sh -s fish    # Fish only
+
+# Options
+# -s, --shells    : Comma-separated shells
+# -d, --default   : Set default shell
+# --install-deps  : Install modern tools
+# -y, --yes      : Skip confirmation
+```
+
+### Install Shell Support
+
+Install all modern CLI tools with a single command:
+
+```bash
+# Bash/Zsh
+install-shells
+# or
+source install_shell_support.sh && install_shell_support
+
+# Fish
+install-shells
+```
+
+**Tools installed:**
+- eza (ls replacement)
+- bat (cat replacement)
+- starship (prompt)
+- zoxide (cd replacement)
+- fzf (fuzzy finder)
+- delta (git diff)
+- fd (find replacement)
+- procs (ps replacement)
+- tldr (man pages)
+- yazi (file manager)
+
+### Shell Modes
+
+```bash
+export DOTFILES_MODE=basic       # Minimal config
+export DOTFILES_MODE=advanced    # Full features (default)
+export DOTFILES_MODE=ultra-nerd  # Maximum productivity
+```
+
+### Auto-Update Configuration
+
+```bash
+# Update interval (default: 86400 seconds = 1 day)
+export DOTFILES_UPDATE_INTERVAL=86400    # Check every day
+export DOTFILES_UPDATE_INTERVAL=604800   # Check every week
+
+# Disable auto-update
+export DOTFILES_AUTO_UPDATE=false
+
+# Manual update commands
+dotfiles-update       # Check and update now
+dotfiles-status       # Show git status
+```
+
+### Dynamic Loading
+
+All shell configurations auto-detect installed tools and only initialize what's available:
+
+**Bash/Zsh:**
+```bash
+if command -v starship &>/dev/null; then
+    eval "$(starship init bash)"
+fi
+```
+
+**Fish:**
+```bash
+if type -q starship
+    starship init fish | source
+end
+```
+
+### Distro Support
+
+| Distro | Package Manager |
+|--------|---------------|
+| Arch/Manjaro/EndeavourOS | pacman |
+| Debian/Ubuntu/Pop!_OS | apt |
+| Fedora/RHEL/CentOS | dnf |
+| openSUSE | zypper |
+| Alpine | apk |
+| macOS | Homebrew |
+
+The `update`, `upgrade`, and `cleanup` aliases auto-detect your package manager.
+
+### Local Customizations
+
+Create shell-specific local files:
+- `~/.bashrc.local`
+- `~/.zshrc.local`  
+- `~/.config/fish/config.local.fish`
+
+---
 
 MIT License - see [LICENSE](LICENSE)
 
