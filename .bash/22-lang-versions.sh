@@ -203,7 +203,7 @@ fi
 
 if [[ -d "$HOME/.cargo" ]]; then
     # Clear any existing cargo aliases to avoid function syntax errors
-    unalias cargo rustc rustup c cb cbr cr ct cc cf cl ccl cu ca cdoc cnew cinit cpub csearch ctree cinstall cuninstall cwatch cbench cfix cupdate cgenerate 2>/dev/null || true
+    unalias cargo rustc rustup c cb cbr cr ct cc cf cly cu ca cdoc cnew cinit cpub csearch ctree cinstall cuninstall cwatch cbench cfix cupdate cgenerate 2>/dev/null || true
 
     # Lazy load cargo
     cargo() {
@@ -235,8 +235,7 @@ if [[ -d "$HOME/.cargo" ]]; then
     ct() { cargo test "$@"; }
     cc() { cargo check "$@"; }
     cf() { cargo fmt "$@"; }
-    cl() { cargo clippy "$@"; }
-    ccl() { cargo clippy "$@"; }
+    cly() { cargo clippy "$@"; }  # Renamed to avoid conflict with 'cl' alias
     cu() { cargo update "$@"; }
     ca() { cargo add "$@"; }
     ci() { cargo install "$@"; }
