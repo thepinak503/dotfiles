@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
-# BASH/ZSH MAIN CONFIGURATION
-# Unified entry point - sources all shell configs
+# BASH MAIN CONFIGURATION
+# Simplified structure with 3 tiers: basic, advanced, ultra-nerd
 # =============================================================================
 
 DOTFILES_DIR="${HOME}/.dotfiles"
@@ -9,33 +9,39 @@ DOTFILES_DIR="${HOME}/.dotfiles"
 export DOTFILES_DIR
 export DOTFILES_MODE="${DOTFILES_MODE:-advanced}"
 
-# Source unified aliases FIRST (so they can be overridden by more specific configs)
+# Core (always loaded)
+[[ -f "$DOTFILES_DIR/.bash/00-core.sh" ]] && source "$DOTFILES_DIR/.bash/00-core.sh"
 [[ -f "$DOTFILES_DIR/.bash/00-aliases-unified.sh" ]] && source "$DOTFILES_DIR/.bash/00-aliases-unified.sh"
+[[ -f "$DOTFILES_DIR/.bash/01-functions.sh" ]] && source "$DOTFILES_DIR/.bash/01-functions.sh"
 
-# Source all other bash configs in order
-for file in "$DOTFILES_DIR/.bash/"*.sh; do
-    # Skip if it's the unified aliases (already sourced)
-    [[ "$file" == *"00-aliases-unified.sh" ]] && continue
-    [[ -f "$file" ]] && source "$file"
-done
+# Mode-specific
+case "$DOTFILES_MODE" in
+    basic)
+        [[ -f "$DOTFILES_DIR/.bash/02-mode-basic.sh" ]] && source "$DOTFILES_DIR/.bash/02-mode-basic.sh"
+        ;;
+    advanced)
+        [[ -f "$DOTFILES_DIR/.bash/03-mode-advanced.sh" ]] && source "$DOTFILES_DIR/.bash/03-mode-advanced.sh"
+        ;;
+    ultra-nerd)
+        [[ -f "$DOTFILES_DIR/.bash/03-mode-advanced.sh" ]] && source "$DOTFILES_DIR/.bash/03-mode-advanced.sh"
+        [[ -f "$DOTFILES_DIR/.bash/04-mode-ultra-nerd.sh" ]] && source "$DOTFILES_DIR/.bash/04-mode-ultra-nerd.sh"
+        ;;
+esac
 
-# Install shell support command
+# Scripts
 alias install-shells="$DOTFILES_DIR/scripts/install_shell_support.sh"
-
-# Load install_shell_support function
 [[ -f "$DOTFILES_DIR/scripts/install_shell_support.sh" ]] && source "$DOTFILES_DIR/scripts/install_shell_support.sh"
-
-# Auto-update dotfiles
 [[ -f "$DOTFILES_DIR/scripts/autoupdate.sh" ]] && source "$DOTFILES_DIR/scripts/autoupdate.sh"
 
-# Manual update commands
+# Commands
 alias dotfiles-update='dotfiles_update'
 alias dotfiles-status='cd "$DOTFILES_DIR" && git status'
 
-# Ensure clear always works (safeguard)
+# Ensure clear works
 alias clear='/usr/bin/clear'
 alias c='/usr/bin/clear'
 alias cl='/usr/bin/clear'
 alias cls='/usr/bin/clear'
 
+# Local
 [[ -f "$HOME/.bashrc.local" ]] && source "$HOME/.bashrc.local"
