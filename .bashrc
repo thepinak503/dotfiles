@@ -15,21 +15,21 @@ export DOTFILES_DIR
 export DOTFILES_MODE="${DOTFILES_MODE:-advanced}"
 
 # Core (always loaded)
-[[ -f "$DOTFILES_DIR/.bash/00-core.sh" ]] && source "$DOTFILES_DIR/.bash/00-core.sh"
-[[ -f "$DOTFILES_DIR/.bash/00-aliases-unified.sh" ]] && source "$DOTFILES_DIR/.bash/00-aliases-unified.sh"
-[[ -f "$DOTFILES_DIR/.bash/01-functions.sh" ]] && source "$DOTFILES_DIR/.bash/01-functions.sh"
+[[ -f "$DOTFILES_DIR/.bash/00-core.bash" ]] && source "$DOTFILES_DIR/.bash/00-core.bash"
+[[ -f "$DOTFILES_DIR/.bash/00-aliases-unified.bash" ]] && source "$DOTFILES_DIR/.bash/00-aliases-unified.bash"
+[[ -f "$DOTFILES_DIR/.bash/01-functions.bash" ]] && source "$DOTFILES_DIR/.bash/01-functions.bash"
 
 # Mode-specific
 case "$DOTFILES_MODE" in
     basic)
-        [[ -f "$DOTFILES_DIR/.bash/02-mode-basic.sh" ]] && source "$DOTFILES_DIR/.bash/02-mode-basic.sh"
+        [[ -f "$DOTFILES_DIR/.bash/02-mode-basic.bash" ]] && source "$DOTFILES_DIR/.bash/02-mode-basic.bash"
         ;;
     advanced)
-        [[ -f "$DOTFILES_DIR/.bash/03-mode-advanced.sh" ]] && source "$DOTFILES_DIR/.bash/03-mode-advanced.sh"
+        [[ -f "$DOTFILES_DIR/.bash/03-mode-advanced.bash" ]] && source "$DOTFILES_DIR/.bash/03-mode-advanced.bash"
         ;;
     ultra-nerd)
-        [[ -f "$DOTFILES_DIR/.bash/03-mode-advanced.sh" ]] && source "$DOTFILES_DIR/.bash/03-mode-advanced.sh"
-        [[ -f "$DOTFILES_DIR/.bash/04-mode-ultra-nerd.sh" ]] && source "$DOTFILES_DIR/.bash/04-mode-ultra-nerd.sh"
+        [[ -f "$DOTFILES_DIR/.bash/03-mode-advanced.bash" ]] && source "$DOTFILES_DIR/.bash/03-mode-advanced.bash"
+        [[ -f "$DOTFILES_DIR/.bash/04-mode-ultra-nerd.bash" ]] && source "$DOTFILES_DIR/.bash/04-mode-ultra-nerd.bash"
         ;;
 esac
 

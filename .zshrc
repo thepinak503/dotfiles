@@ -48,8 +48,8 @@ _path_prepend "$HOME/.local/bin"
 _path_prepend "$HOME/.cargo/bin"
 
 # Source bash aliases (compatible)
-[[ -f "$DOTFILES_DIR/.bash/00-aliases-unified.sh" ]] && source "$DOTFILES_DIR/.bash/00-aliases-unified.sh"
-[[ -f "$DOTFILES_DIR/.bash/01-functions.sh" ]] && source "$DOTFILES_DIR/.bash/01-functions.sh"
+[[ -f "$DOTFILES_DIR/.bash/00-aliases-unified.bash" ]] && source "$DOTFILES_DIR/.bash/00-aliases-unified.bash"
+[[ -f "$DOTFILES_DIR/.bash/01-functions.bash" ]] && source "$DOTFILES_DIR/.bash/01-functions.bash"
 
 # Mode-specific
 case "$DOTFILES_MODE" in
