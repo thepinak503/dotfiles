@@ -19,9 +19,6 @@ for file in "$DOTFILES_DIR/.bash/"*.sh; do
     [[ -f "$file" ]] && source "$file"
 done
 
-# Load ultra-nerd mode if enabled
-[[ "$DOTFILES_MODE" == "ultra-nerd" ]] && [[ -f "$DOTFILES_DIR/.bash/04-aliases-nerd.sh" ]] && source "$DOTFILES_DIR/.bash/04-aliases-nerd.sh"
-
 # Install shell support command
 alias install-shells="$DOTFILES_DIR/scripts/install_shell_support.sh"
 
@@ -34,5 +31,11 @@ alias install-shells="$DOTFILES_DIR/scripts/install_shell_support.sh"
 # Manual update commands
 alias dotfiles-update='dotfiles_update'
 alias dotfiles-status='cd "$DOTFILES_DIR" && git status'
+
+# Ensure clear always works (safeguard)
+alias clear='/usr/bin/clear'
+alias c='/usr/bin/clear'
+alias cl='/usr/bin/clear'
+alias cls='/usr/bin/clear'
 
 [[ -f "$HOME/.bashrc.local" ]] && source "$HOME/.bashrc.local"
