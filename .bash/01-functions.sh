@@ -198,8 +198,8 @@ ftext() {
 }
 
 # Find file by name
-ff() {
-    [[ -z "$1" ]] && { echo "Usage: ff <filename> [directory]"; return 1; }
+findfile() {
+    [[ -z "$1" ]] && { echo "Usage: findfile <filename> [directory]"; return 1; }
     
     local name="$1"
     local dir="${2:-.}"
