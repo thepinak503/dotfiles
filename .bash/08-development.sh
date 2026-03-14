@@ -226,11 +226,6 @@ install_cargo() {
 if [[ "$DISTRO_ID" == "amzn" ]] && [[ -n "$BASH_VERSION" ]]; then
     install_cargo_amazon_linux
 fi
-if command -v cargo &>/dev/null; then
-    # Removed aliases, handled in 22-lang-versions.sh
-    :
-fi
-fi
 
 # rustup
 if command -v rustup &>/dev/null; then
