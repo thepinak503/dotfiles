@@ -223,7 +223,6 @@ if [[ -d "$HOME/.cargo" ]]; then
     alias csearch='cargo search'
     alias ctree='cargo tree'
 fi
-fi
 
 # -----------------------------------------------------------------------------
 # JAVA (JENV) - LAZY LOADED
