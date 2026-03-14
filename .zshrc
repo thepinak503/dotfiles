@@ -60,5 +60,3 @@ alias dotfiles-status='cd "$DOTFILES_DIR" && git status'
 alias c='clear'
 alias cl='clear'
 alias cls='clear'
-
-[[ -f "$DOTFILES_DIR/lib/dynamic.sh" ]] && source "$DOTFILES_DIR/lib/dynamic.sh"
