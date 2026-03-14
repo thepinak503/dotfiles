@@ -19,6 +19,9 @@ for file in "$DOTFILES_DIR/.bash/"*.sh; do
     [[ -f "$file" ]] && source "$file"
 done
 
+# Load ultra-nerd mode if enabled
+[[ "$DOTFILES_MODE" == "ultra-nerd" ]] && [[ -f "$DOTFILES_DIR/.bash/04-aliases-nerd.sh" ]] && source "$DOTFILES_DIR/.bash/04-aliases-nerd.sh"
+
 # Install shell support command
 alias install-shells="$DOTFILES_DIR/scripts/install_shell_support.sh"
 

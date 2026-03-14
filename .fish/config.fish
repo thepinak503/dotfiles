@@ -300,6 +300,8 @@ abbr -a vi 'vim'
 abbr -a path 'echo $PATH | tr ":" "\n" | nl'
 abbr -a h 'history'
 abbr -a c 'clear'
+abbr -a cl 'clear'
+abbr -a cls 'clear'
 abbr -a please 'sudo'
 abbr -a q 'exit'
 
