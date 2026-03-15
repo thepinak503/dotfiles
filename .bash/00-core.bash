@@ -54,6 +54,9 @@ _path_append() {
 
 _path_prepend "$HOME/.local/bin"
 _path_prepend "$HOME/.cargo/bin"
+
+# WARNING: Be sure to add /home/pinak/.cargo/bin to your PATH to be able to run the installed binaries
+
 _path_append "$HOME/.npm-global/bin"
 _path_append "$HOME/.poetry/bin"
 _path_append "$HOME/go/bin"

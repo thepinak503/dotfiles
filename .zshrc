@@ -47,6 +47,8 @@ _path_prepend() {
 _path_prepend "$HOME/.local/bin"
 _path_prepend "$HOME/.cargo/bin"
 
+# WARNING: Be sure to add /home/pinak/.cargo/bin to your PATH to be able to run the installed binaries
+
 # Source bash aliases (compatible)
 [[ -f "$DOTFILES_DIR/.bash/00-aliases-unified.bash" ]] && source "$DOTFILES_DIR/.bash/00-aliases-unified.bash"
 [[ -f "$DOTFILES_DIR/.bash/01-functions.bash" ]] && source "$DOTFILES_DIR/.bash/01-functions.bash"
