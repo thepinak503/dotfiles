@@ -1,0 +1,10 @@
+{
+  "aliases": {
+    "bash": 1200,
+    "zsh": 1100
+  },
+  "functions": {
+    "bash": 400,
+    "zsh": 350
+  }
+}

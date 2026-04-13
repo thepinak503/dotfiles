@@ -1,0 +1,49 @@
+# =============================================================================
+# Atuin Configuration — Pinak's Dotfiles
+# Docs: https://atuin.sh/docs/config
+# =============================================================================
+
+## Where to store the database
+db_path = "~/.local/share/atuin/history.db"
+
+## Use the "fuzzy" search mode by default
+search_mode = "fuzzy"
+
+## Which filter mode to use by default
+## "global", "host", "session", "directory"
+filter_mode = "global"
+
+## The delay before searching
+search_delay = 0
+
+## The style of the UI
+## "compact" or "full"
+style = "compact"
+
+## The direction of the UI
+## "top" or "bottom"
+inline_height = 15
+
+## Whether to show a preview of the command
+show_preview = true
+
+## How to handle the enter key
+## "execute" or "run" or "accept"
+enter_accept = true
+
+## Keybindings
+[keys]
+# Bind ctrl-r to atuin
+# (Handled by shell hooks usually, but can be defined here)
+
+## Sync settings (User should run 'atuin register' or 'atuin login' manually)
+[sync]
+# enabled = true
+# sync_address = "https://api.atuin.sh"
+# sync_frequency = "1h"
+
+## History settings
+[history]
+# Whether to record commands
+# (Usually you want this on!)
+enabled = true

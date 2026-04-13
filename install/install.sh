@@ -1,0 +1,163 @@
+#!/usr/bin/env sh
+# =============================================================================
+# PINAK'S DOTFILES INSTALLER (v11.0.0)
+# Support: Arch, Debian/Ubuntu, Fedora, OpenSUSE, Alpine, Mac (Brew)
+# =============================================================================
+
+set -e
+
+# --- Configuration ---
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+VERSION="11.0.0"
+BREWFILE="$DOTFILES_DIR/apps/brew/Brewfile"
+
+# --- Colors ---
+if [ -t 1 ]; then
+    RED='\033[0;31m' GREEN='\033[0;32m' YELLOW='\033[1;33m'
+    BLUE='\033[0;34m' PURPLE='\033[0;35m' CYAN='\033[0;36m'
+    BOLD='\033[1m' NC='\033[0m'
+else
+    RED='' GREEN='' YELLOW='' BLUE='' PURPLE='' CYAN='' BOLD='' NC=''
+fi
+
+# --- UI Helpers ---
+info() { printf "  ${GREEN}✓${NC} %s\n" "$1"; }
+warn() { printf "  ${YELLOW}⚠${NC} %s\n" "$1"; }
+error() { printf "  ${RED}✗${NC} %s\n" "$1" >&2; }
+header() {
+    printf "\n${CYAN}═══════════════════════════════════════════${NC}\n"
+    printf "  ${BOLD}%s${NC}\n" "$1"
+    printf "${CYAN}═══════════════════════════════════════════${NC}\n"
+}
+
+# --- Detect Environment ---
+OS="$(uname -s)"
+case "$OS" in
+    Linux)
+        if [ -f /etc/os-release ]; then
+            . /etc/os-release
+            DISTRO=$ID
+        else
+            DISTRO="linux"
+        fi
+        ;;
+    Darwin) DISTRO="macos" ;;
+    *) DISTRO="unknown" ;;
+esac
+
+# Detect PM
+if command -v pacman >/dev/null 2>&1; then PM="pacman";
+elif command -v apt-get >/dev/null 2>&1; then PM="apt";
+elif command -v dnf >/dev/null 2>&1; then PM="dnf";
+elif command -v zypper >/dev/null 2>&1; then PM="zypper";
+elif command -v apk >/dev/null 2>&1; then PM="apk";
+elif command -v xbps-install >/dev/null 2>&1; then PM="xbps";
+elif [ "$DISTRO" = "macos" ] && command -v brew >/dev/null 2>&1; then PM="brew";
+else PM="manual"; fi
+
+# --- Package Installation ---
+install_package() {
+    _pkg=$1
+    if command -v "$_pkg" >/dev/null 2>&1; then
+        return 0
+    fi
+
+    # Map package names if necessary
+    case "$PM" in
+        pacman) sudo pacman -S --noconfirm "$_pkg" >/dev/null 2>&1 || return 1 ;;
+        apt)    sudo apt-get install -y "$_pkg" >/dev/null 2>&1 || return 1 ;;
+        dnf)    sudo dnf install -y "$_pkg" >/dev/null 2>&1 || return 1 ;;
+        brew)
+            if [ -f "$BREWFILE" ]; then
+                info "Installing packages from Brewfile..."
+                brew bundle --file="$BREWFILE" >/dev/null 2>&1 || true
+            else
+                brew install "$_pkg" >/dev/null 2>&1 || return 1
+            fi
+            ;;
+        *)      return 1 ;;
+    esac
+}
+
+# --- Main Logic ---
+header "SYSTEM INFORMATION"
+printf "  ${BOLD}Version:${NC} %s\n" "$VERSION"
+printf "  ${BOLD}Distro:${NC}  %s\n" "$DISTRO"
+printf "  ${BOLD}Manager:${NC} %s\n" "$PM"
+
+header "BOOTSTRAPPING CORE"
+
+# Special case for Homebrew Bundle
+if [ "$PM" = "brew" ] && [ -f "$BREWFILE" ]; then
+    info "Detected Homebrew Bundle. Installing packages..."
+    brew bundle --file="$BREWFILE" >/dev/null 2>&1 || true
+fi
+
+for tool in git curl wget fzf ripgrep starship zoxide eza bat fastfetch atuin; do
+    if install_package "$tool"; then
+        info "Installed $tool"
+    else
+        warn "Could not install $tool via $PM (may need manual install)"
+    fi
+done
+
+# Arch-specific enhancements
+if [ "$DISTRO" = "arch" ] || [ "$DISTRO" = "garuda" ] || [ "$DISTRO" = "manjaro" ] || [ "$DISTRO" = "endeavouros" ]; then
+    info "Arch-based distro detected. Installing find-the-command..."
+    if command -v yay >/dev/null 2>&1; then
+        yay -S --noconfirm find-the-command >/dev/null 2>&1 || warn "Failed to install find-the-command via yay"
+    elif command -v paru >/dev/null 2>&1; then
+        paru -S --noconfirm find-the-command >/dev/null 2>&1 || warn "Failed to install find-the-command via paru"
+    else
+        sudo pacman -S --noconfirm find-the-command >/dev/null 2>&1 || warn "Failed to install find-the-command via pacman"
+    fi
+fi
+
+header "LINKING CONFIGURATIONS"
+mkdir -p "$HOME/.config/fastfetch"
+mkdir -p "$HOME/.config/lazygit"
+mkdir -p "$HOME/.config/atuin"
+mkdir -p "$HOME/.config/fish"
+
+# Helper to link safely
+safe_link() {
+    src="$1"; dst="$2"
+    if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+        mv "$dst" "$dst.bak"
+        warn "Backed up existing $dst to $dst.bak"
+    fi
+    ln -nsf "$src" "$dst"
+    info "Linked $(basename "$dst")"
+}
+
+safe_link "$DOTFILES_DIR/shells/bash/.bashrc" "$HOME/.bashrc"
+safe_link "$DOTFILES_DIR/core/.profile" "$HOME/.profile"
+safe_link "$DOTFILES_DIR/shells/zsh/.zshrc" "$HOME/.zshrc"
+safe_link "$DOTFILES_DIR/shells/zsh/.zprofile" "$HOME/.zprofile"
+safe_link "$DOTFILES_DIR/shells/fish/config.fish" "$HOME/.config/fish/config.fish"
+safe_link "$DOTFILES_DIR/apps/git/gitconfig" "$HOME/.gitconfig"
+safe_link "$DOTFILES_DIR/apps/tmux/tmux.conf" "$HOME/.tmux.conf"
+safe_link "$DOTFILES_DIR/apps/lazygit/config.yml" "$HOME/.config/lazygit/config.yml"
+safe_link "$DOTFILES_DIR/apps/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+safe_link "$DOTFILES_DIR/apps/atuin/config.toml" "$HOME/.config/atuin/config.toml"
+
+if [ "$DISTRO" = "macos" ]; then
+    safe_link "$DOTFILES_DIR/apps/starship-mac.toml" "$HOME/.config/starship.toml"
+else
+    safe_link "$DOTFILES_DIR/apps/starship-linux.toml" "$HOME/.config/starship.toml"
+fi
+
+header "FINALIZING"
+# Ensure sync script is executable and run it
+if [ -f "$DOTFILES_DIR/bin/sync_shells.py" ]; then
+    chmod +x "$DOTFILES_DIR/bin/sync_shells.py"
+    python3 "$DOTFILES_DIR/bin/sync_shells.py" >/dev/null 2>&1
+    info "Re-synced polyglot shells"
+fi
+
+# Cleanup legacy artifacts from system files
+info "Cleaning up legacy Atuin paths from system RC files..."
+sed -i '/\.atuin\/bin\/env/d' "$HOME/.bashrc" "$HOME/.profile" "$HOME/.bash_profile" 2>/dev/null || true
+sed -i '/atuin init bash/d' "$HOME/.bashrc" "$HOME/.profile" "$HOME/.bash_profile" 2>/dev/null || true
+
+printf "\n${GREEN}${BOLD}✓ Setup complete! Run 'exec \$SHELL' to begin.${NC}\n\n"
