@@ -1,15 +1,15 @@
 const DOTFILES_DATA = {
     version: "11.0.0",
-    lastUpdated: "Monday 13 April 2026 12:20:30 PM IST",
+    lastUpdated: "Monday 13 April 2026 12:26:50 PM IST",
     stats: {
         bash: { aliases: 701, functions: 1 },
-        zsh: { aliases: 701, functions: 0 },
-        fish: { abbreviations: 701, functions: 0 }
+        zsh: { aliases: 701, functions: 140 },
+        fish: { abbreviations: 701, functions: 95 }
     },
     features: [
-        { title: "Polyglot Support", desc: "100% parity across Bash, Zsh, and Fish." },
-        { title: "Starship Prompt", desc: "Supreme Powerline Pill design with ultra-telemetry." },
-        { title: "Self-Healing", desc: "Automated error logging and background update checks." },
-        { title: "Distro Agnostic", desc: "Optimized for Arch (Garuda), Debian, Fedora, and macOS." }
+        { title: "One-Line Install", desc: "Automated symlink management and environment detection." },
+        { title: "Ultra Nerd Starship", desc: "600+ line prompt configuration with multi-language telemetry." },
+        { title: "Smart Health Checks", desc: "Real-time diagnostic suite with automated logging." },
+        { title: "Polyglot Parity", desc: "Identical alias and function library across all three shells." }
     ]
 };

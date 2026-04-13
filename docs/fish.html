@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Interface — Pinak's Wiki</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="nord-theme">
+    <nav class="sidebar">
+        <div class="logo"><span>🦅</span> <h1>Pinak's Dotfiles</h1></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Wiki Home</a></li>
+            <li><a href="bash.html">Bash Architecture</a></li>
+            <li><a href="zsh.html">Zsh Optimization</a></li>
+            <li><a href="fish.html" class="active">Fish Interface</a></li>
+            <li><a href="features.html">Universal Features</a></li>
+            <li><a href="diagnostics.html">System Health</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <section class="doc-section">
+            <header><div class="breadcrumb">Wiki / Shells</div><h2>Fish Interface</h2></header>
+            <p>Fish is designed for "out-of-the-box" brilliance. In this project, Fish has been enhanced with "Post-Execution" error capturing logic and 100% parity with the Bash command library.</p>
+            
+            <h3>Implementation Details</h3>
+            <ul>
+                <li><strong>Abbrev System</strong>: Instead of standard aliases, Fish uses <code>abbr</code> which expands commands visually as you type.</li>
+                <li><strong>Event Handlers</strong>: Uses <code>--on-event fish_postexec</code> to automatically log any command failure to <code>errors.log</code>.</li>
+            </ul>
+
+            <div class="info-box caution">
+                <strong>⚠️ Note:</strong> Fish is <i>not</i> POSIX-compliant. For scripting, the project defaults to <code>/bin/bash</code>.
+            </div>
+
+            <h3>Universal Sourcing</h3>
+            <p>Fish shares core logic from the <code>core/</code> directory using a compatibility shim to ensure shared features like <code>battery_warn</code> work natively.</p>
+        </section>
+    </main>
+</body>
+</html>

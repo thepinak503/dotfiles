@@ -3,115 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinak's Dotfiles — Documentation</title>
+    <title>Pinak's Dotfiles — Wiki</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="nord-theme">
     <nav class="sidebar">
-        <div class="logo">
-            <span class="logo-icon">🦅</span>
-            <h1>Pinak's Dotfiles</h1>
-        </div>
+        <div class="logo"><span>🦅</span> <h1>Pinak's Dotfiles</h1></div>
         <ul class="nav-links">
-            <li><a href="#overview" class="active">Overview</a></li>
-            <li><a href="#installation">Installation</a></li>
-            <li><a href="#shells">Shells & Modes</a></li>
-            <li><a href="#aliases">Essential Aliases</a></li>
-            <li><a href="#diagnostics">Diagnostics</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li><a href="index.html" class="active">Wiki Home</a></li>
+            <li><a href="bash.html">Bash Architecture</a></li>
+            <li><a href="zsh.html">Zsh Optimization</a></li>
+            <li><a href="fish.html">Fish Interface</a></li>
+            <li><a href="features.html">Universal Features</a></li>
+            <li><a href="diagnostics.html">System Health</a></li>
         </ul>
-        <div class="sidebar-footer">
-            <p>Version 11.0.0</p>
-        </div>
+        <div class="sidebar-footer">v11.0.0 — Arch Style</div>
     </nav>
-
     <main class="content">
-        <section id="overview" class="doc-section">
-            <header>
-                <div class="breadcrumb">Wiki / Core</div>
-                <h2>Overview</h2>
-            </header>
-            <p class="lead">A professional-grade, polyglot shell environment designed for performance, stability, and extreme productivity.</p>
+        <section class="doc-section">
+            <header><div class="breadcrumb">Wiki / Home</div><h2>Pinak's Dotfiles Wiki</h2></header>
+            <p class="lead">Welcome to the official technical documentation for the Supreme Polyglot Dotfiles ecosystem. This site explains every facet of the configuration, installation, and maintenance.</p>
             
-            <div class="stats-grid" id="stats-grid">
-                <!-- Populated by JS -->
-            </div>
+            <div class="stats-grid" id="stats-grid"></div>
 
-            <div class="info-box tip">
-                <strong>💡 Tip:</strong> Use the <code>dotmode</code> command to switch between modes (minimal, standard, supreme, ultra-nerd) in real-time.
-            </div>
-        </section>
-
-        <section id="installation" class="doc-section">
-            <header>
-                <div class="breadcrumb">Wiki / Setup</div>
-                <h2>Installation</h2>
-            </header>
-            <p>Deploying Pinak's Dotfiles is a single-command process. The installer handles dependencies, symlinks, and environment detection automatically.</p>
-            <div class="code-block">
-                <pre><code>sh -c "$(curl -fsSL https://raw.githubusercontent.com/thepinak503/dotfiles/main/install.sh)"</code></pre>
-                <button class="copy-btn">Copy</button>
-            </div>
-        </section>
-
-        <section id="shells" class="doc-section">
-            <header>
-                <div class="breadcrumb">Wiki / Environment</div>
-                <h2>Shells & Modes</h2>
-            </header>
-            <div class="grid">
-                <div class="card">
-                    <h3>Bash</h3>
-                    <p>The standard. Optimized with Starship and 700+ aliases. Best for legacy compatibility.</p>
+            <div class="card-grid">
+                <div class="card clickable" onclick="location.href='bash.html'">
+                    <h3>Bash Architecture</h3>
+                    <p>Learn about POSIX compatibility, safe sourcing, and the 'Supreme' mode transition.</p>
                 </div>
-                <div class="card">
-                    <h3>Zsh</h3>
-                    <p>High performance. Features advanced autosuggestions and Nord-styled keybindings.</p>
-                </div>
-                <div class="card">
-                    <h3>Fish</h3>
-                    <p>Modern & Friendly. Pure Native implementation with "Post-Exec" error tracking.</p>
+                <div class="card clickable" onclick="location.href='features.html'">
+                    <h3>Core Features</h3>
+                    <p>Discover the 700+ aliases and 160+ functions that power your productivity.</p>
                 </div>
             </div>
-        </section>
-
-        <section id="diagnostics" class="doc-section">
-            <header>
-                <div class="breadcrumb">Wiki / Maintenance</div>
-                <h2>Diagnostics</h2>
-            </header>
-            <p>The ecosystem is equipped with self-monitoring tools to ensure zero-error operation.</p>
-            <ul>
-                <li><strong><code>doterrors</code></strong>: View the centralized error log.</li>
-                <li><strong><code>dothealth</code></strong>: Run a comprehensive environment health check.</li>
-                <li><strong><code>bin/check_startup.sh</code></strong>: Detect silent initialization errors.</li>
-            </ul>
         </section>
     </main>
-
     <script src="data.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const stats = DOTFILES_DATA.stats;
-            const grid = document.getElementById('stats-grid');
-            
-            grid.innerHTML = \`
+            document.getElementById('stats-grid').innerHTML = `
                 <div class="stat-card">
-                    <span class="stat-value">\${stats.bash.aliases}</span>
-                    <span class="stat-label">Bash Aliases</span>
+                    <span class="stat-value">${stats.bash.aliases + stats.zsh.aliases + stats.fish.abbreviations}</span>
+                    <span class="stat-label">Total Shortcuts</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">\${stats.bash.functions}</span>
-                    <span class="stat-label">Bash Functions</span>
+                    <span class="stat-value">600+</span>
+                    <span class="stat-label">Starship Lines</span>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-value">100%</span>
-                    <span class="stat-label">Test Coverage</span>
-                </div>
-            \`;
+            `;
         });
     </script>
 </body>

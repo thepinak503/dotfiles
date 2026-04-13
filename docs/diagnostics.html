@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Health — Pinak's Wiki</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="nord-theme">
+    <nav class="sidebar">
+        <div class="logo"><span>🦅</span> <h1>Pinak's Dotfiles</h1></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Wiki Home</a></li>
+            <li><a href="bash.html">Bash Architecture</a></li>
+            <li><a href="zsh.html">Zsh Optimization</a></li>
+            <li><a href="fish.html">Fish Interface</a></li>
+            <li><a href="features.html">Universal Features</a></li>
+            <li><a href="diagnostics.html" class="active">System Health</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <section class="doc-section">
+            <header><div class="breadcrumb">Wiki / Maintenance</div><h2>System Health</h2></header>
+            <p>Stability is the priority. The project implements multiple layers of automated health checks and error capturing.</p>
+            
+            <h3>Unified Error Logging</h3>
+            <p>All shell initialization errors (from Starship to command sourcing) are redirected to:</p>
+            <div class="code-block">
+                <pre><code>~/.local/share/dotfiles/errors.log</code></pre>
+            </div>
+            <p>Use the <strong><code>doterrors</code></strong> alias to view the log instantly with timestamps.</p>
+
+            <h3>Automated Diagnostics</h3>
+            <ul>
+                <li><strong><code>bin/check_startup.sh</code></strong>: Simulates interactive shell sessions for all 3 shells (Bash, Zsh, Fish) and reports silent errors.</li>
+                <li><strong><code>bin/test_all.sh</code></strong>: The full 85-test suite used to validate changes before deployment.</li>
+                <li><strong><code>dothealth</code></strong>: High-level overview of system status.</li>
+            </ul>
+
+            <div class="info-box important">
+                <strong>🚨 Resolved:</strong> The infamous "Bash exiting immediately" bug was tracked and fixed via the Diagnostic Suite in v11.0.0.
+            </div>
+        </section>
+    </main>
+</body>
+</html>

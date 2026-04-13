@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zsh Optimization — Pinak's Wiki</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="nord-theme">
+    <nav class="sidebar">
+        <div class="logo"><span>🦅</span> <h1>Pinak's Dotfiles</h1></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Wiki Home</a></li>
+            <li><a href="bash.html">Bash Architecture</a></li>
+            <li><a href="zsh.html" class="active">Zsh Optimization</a></li>
+            <li><a href="fish.html">Fish Interface</a></li>
+            <li><a href="features.html">Universal Features</a></li>
+            <li><a href="diagnostics.html">System Health</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <section class="doc-section">
+            <header><div class="breadcrumb">Wiki / Shells</div><h2>Zsh Optimization</h2></header>
+            <p>Zsh is the powerhouse shell of this project. It leverages sub-millisecond completions and advanced syntax highlighting without the bloat of "Oh-My-Zsh" (though it remains compatible).</p>
+            
+            <h3>Key Plugins (Native)</h3>
+            <ul>
+                <li><strong>zsh-syntax-highlighting</strong>: Real-time command validation.</li>
+                <li><strong>zsh-autosuggestions</strong>: Fish-like history completion.</li>
+                <li><strong>Custom Completions</strong>: Optimized for Docker, Kubectl, and Git.</li>
+            </ul>
+
+            <div class="stat-card">
+                <span class="stat-value">Instant</span>
+                <span class="stat-label">Tab Completion Response</span>
+            </div>
+
+            <h3>Keybindings</h3>
+            <p>We use a custom Nord-styled keybinding set defined in <code>01-keybindings.zsh</code>, including:</p>
+            <ul>
+                <li><code>Ctrl+F</code>: Accept suggestion</li>
+                <li><code>Ctrl+Space</code>: Expand alias</li>
+                <li><code>Alt+D</code>: Interactive Directory selection</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

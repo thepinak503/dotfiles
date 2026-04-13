@@ -204,6 +204,28 @@ h2 {
     margin-bottom: 0.75rem;
 }
 
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.clickable {
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.clickable:hover {
+    background-color: var(--nord2);
+    border-bottom-color: var(--nord8);
+}
+
+.breadcrumb:hover {
+    color: var(--nord8);
+    cursor: default;
+}
+
 @media (max-width: 768px) {
     body {
         flex-direction: column;

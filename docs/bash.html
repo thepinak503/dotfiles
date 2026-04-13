@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bash Architecture — Pinak's Wiki</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="nord-theme">
+    <nav class="sidebar">
+        <div class="logo"><span>🦅</span> <h1>Pinak's Dotfiles</h1></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Wiki Home</a></li>
+            <li><a href="bash.html" class="active">Bash Architecture</a></li>
+            <li><a href="zsh.html">Zsh Optimization</a></li>
+            <li><a href="fish.html">Fish Interface</a></li>
+            <li><a href="features.html">Universal Features</a></li>
+            <li><a href="diagnostics.html">System Health</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <section class="doc-section">
+            <header><div class="breadcrumb">Wiki / Shells</div><h2>Bash Architecture</h2></header>
+            <p>The Bash configuration is built for 100% POSIX compliance while layering on modern features. It uses a <strong>modular sourcing strategy</strong> to keep startup times under 100ms.</p>
+            
+            <h3>Core Modules</h3>
+            <ul>
+                <li><code>.bashrc</code>: The main entry point. Sets environment variables and gates mode-specific modules.</li>
+                <li><code>exports.bash</code>: Handles PATH, GPG keys, and tool initializations (Atuin, Mise, Direnv).</li>
+                <li><code>functions.bash</code>: A library of 160+ reusable shell utilities.</li>
+            </ul>
+
+            <div class="info-box tip">
+                <strong>⚡ Performance:</strong> Bash uses lazy-loading for heavy aliases to ensure the prompt appears instantly.
+            </div>
+
+            <h3>Bootstrap Process</h3>
+            <div class="code-block">
+                <pre><code># Order of initialization:
+1. Environment Detection (core/)
+2. Global Exports (shells/bash/exports.bash)
+3. Specialized Aliases (pkg_aliases.bash)
+4. Starship Prompt Hook (Last to ensure PS1 control)</code></pre>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
