@@ -80,5 +80,6 @@ if [[ -f ~/.bashrc.local ]]; then
     source ~/.bashrc.local
 fi
 if command -v starship &>/dev/null; then
+    export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship.toml"
     eval "$(starship init bash)" 2>>"${DOTFILES_LOG_FILE:-$HOME/.local/share/dotfiles/errors.log}"
 fi

@@ -174,11 +174,7 @@ chmode() {
 }
 alias cm='chmode'
 if command -v starship &>/dev/null; then
-    if [[ "$DOTFILES_OS" == "Darwin" ]]; then
-        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
-    else
-        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
-    fi
+    export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship.toml"
     eval "$(starship init zsh)" 2>>"${DOTFILES_LOG_FILE:-$HOME/.local/share/dotfiles/errors.log}"
 fi
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)" 2>/dev/null

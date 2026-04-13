@@ -115,9 +115,8 @@ safe_link "$DOTFILES_DIR/apps/lazygit/config.yml" "$HOME/.config/lazygit/config.
 safe_link "$DOTFILES_DIR/apps/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
 safe_link "$DOTFILES_DIR/apps/atuin/config.toml" "$HOME/.config/atuin/config.toml"
 if [ "$DISTRO" = "macos" ]; then
-    safe_link "$DOTFILES_DIR/apps/starship-mac.toml" "$HOME/.config/starship.toml"
 else
-    safe_link "$DOTFILES_DIR/apps/starship-linux.toml" "$HOME/.config/starship.toml"
+        safe_link "$DOTFILES_DIR/apps/starship.toml" "$HOME/.config/starship.toml"
 fi
 header "FINALIZING"
 info "Cleaning up legacy Atuin paths from system RC files..."

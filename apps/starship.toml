@@ -39,13 +39,13 @@ nord_aurora_purple = "#b48ead"
 [os]
 disabled = false
 style = "bg:nord_polar_night_2 fg:nord_snow_storm_2"
-format = "[$symbol]($style)"
 [os.symbols]
 Arch = "󰣇 "
 Ubuntu = "󰕈 "
 Fedora = "󰣛 "
 Debian = "󰣚 "
 Linux = "󰌽 "
+Macos = " "
 [custom.root]
 command = "echo ' ROOT! '"
 when = "test $(id -u) -eq 0"
@@ -118,41 +118,14 @@ format = "[ \\($state( $progress_current/$progress_total)\\) ]($style)"
 commit_hash_length = 7
 style = "bg:nord_polar_night_2 fg:nord_snow_storm_0"
 format = "[ @$hash ]($style)"
-[hg_branch]
-symbol = ""
-style = "bg:nord_polar_night_2 fg:nord_aurora_green"
-format = "[ on $symbol $branch ]($style)"
-[hg_state]
-style = "bg:nord_polar_night_2 fg:nord_aurora_red"
-format = "[ \\($state( $progress_current/$progress_total)\\) ]($style)"
-[fossil_branch]
-symbol = ""
-style = "bg:nord_polar_night_2 fg:nord_aurora_green"
-format = "[ on $symbol $branch ]($style)"
-[vcsh]
-symbol = ""
-style = "bg:nord_polar_night_2 fg:nord_aurora_green"
-format = "[ on $symbol $repo ]($style)"
-[pijul_channel]
-symbol = ""
-style = "bg:nord_polar_night_2 fg:nord_aurora_green"
-format = "[ on $symbol $channel ]($style)"
 [package]
 symbol = "󰏗 "
 style = "bg:nord_polar_night_1 fg:nord_snow_storm_0"
 format = "[ via $symbol$version ]($style)"
-[c]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_frost_blue"
-format = "[ via $symbol$version ]($style)"
-[cmake]
-symbol = "△ "
-style = "bg:nord_polar_night_1 fg:nord_frost_blue"
-format = "[ via $symbol$version ]($style)"
 [python]
 symbol = " "
 style = "bg:nord_polar_night_1 fg:nord_aurora_yellow"
-format = "[ via $symbol$version$virtualenv ]($style)"
+format = "[ via $symbol$version ]($style)"
 [nodejs]
 symbol = " "
 style = "bg:nord_polar_night_1 fg:nord_aurora_green"
@@ -165,58 +138,6 @@ format = "[ via $symbol$version ]($style)"
 symbol = " "
 style = "bg:nord_polar_night_1 fg:nord_frost_mint"
 format = "[ via $symbol$version ]($style)"
-[lua]
-symbol = "🌙 "
-style = "bg:nord_polar_night_1 fg:nord_frost_blue"
-format = "[ via $symbol$version ]($style)"
-[java]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_aurora_red"
-format = "[ via $symbol$version ]($style)"
-[kotlin]
-symbol = " Kotlin "
-style = "bg:nord_polar_night_1 fg:nord_aurora_purple"
-format = "[ via $symbol$version ]($style)"
-[php]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_frost_deep"
-format = "[ via $symbol$version ]($style)"
-[ruby]
-symbol = "💎 "
-style = "bg:nord_polar_night_1 fg:nord_aurora_red"
-format = "[ via $symbol$version ]($style)"
-[swift]
-symbol = "🍎 "
-style = "bg:nord_polar_night_1 fg:nord_aurora_orange"
-format = "[ via $symbol$version ]($style)"
-[zig]
-symbol = "⚡ "
-style = "bg:nord_polar_night_1 fg:nord_aurora_yellow"
-format = "[ via $symbol$version ]($style)"
-[nix_shell]
-symbol = "❄️  "
-style = "bg:nord_polar_night_1 fg:nord_frost_blue"
-format = "[ via $symbol$state ]($style)"
-[crystal]
-symbol = "💎 "
-style = "bg:nord_polar_night_1 fg:nord_aurora_red"
-format = "[ via $symbol$version ]($style)"
-[elixir]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_aurora_purple"
-format = "[ via $symbol$version ]($style)"
-[elm]
-symbol = "🌳 "
-style = "bg:nord_polar_night_1 fg:nord_aurora_green"
-format = "[ via $symbol$version ]($style)"
-[erlang]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_aurora_red"
-format = "[ via $symbol$version ]($style)"
-[haskell]
-symbol = "λ "
-style = "bg:nord_polar_night_1 fg:nord_aurora_purple"
-format = "[ via $symbol$version ]($style)"
 [docker_context]
 symbol = " "
 style = "bg:nord_polar_night_2 fg:nord_frost_blue"
@@ -225,22 +146,6 @@ format = "[ via $symbol$context ]($style)"
 symbol = "󱃾 "
 style = "bg:nord_polar_night_2 fg:nord_aurora_purple"
 format = "[ via $symbol$context ]($style)"
-[aws]
-symbol = "󰸏 "
-style = "bg:nord_polar_night_2 fg:nord_aurora_orange"
-format = "[ via $symbol$profile(\\($region\\)) ]($style)"
-[gcloud]
-symbol = "☁️  "
-style = "bg:nord_polar_night_2 fg:nord_frost_blue"
-format = "[ via $symbol$project ]($style)"
-[azure]
-symbol = " Azure "
-style = "bg:nord_polar_night_2 fg:nord_frost_blue"
-format = "[ via $symbol$subscription ]($style)"
-[openstack]
-symbol = " OpenStack "
-style = "bg:nord_polar_night_2 fg:nord_frost_blue"
-format = "[ via $symbol$project ]($style)"
 [direnv]
 symbol = "󰉓 "
 style = "bg:nord_polar_night_2 fg:nord_aurora_yellow"
@@ -249,31 +154,15 @@ format = "[ $symbol$allowed ]($style)"
 symbol = "󱗼 "
 style = "bg:nord_polar_night_2 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
-[env_var]
-variable = "STARSHIP_SHELL"
-style = "bg:nord_polar_night_2 fg:nord_snow_storm_0"
-format = "[ via $env_value ]($style)"
-[singularity]
-symbol = " "
-style = "bg:nord_polar_night_2 fg:nord_snow_storm_0"
-format = "[ via $symbol$env ]($style)"
-[container]
-symbol = "⬢ "
-style = "bg:nord_polar_night_2 fg:nord_snow_storm_0"
-format = "[ via $symbol$name ]($style)"
-[netns]
-symbol = "󰩟 "
-style = "bg:nord_polar_night_2 fg:nord_snow_storm_0"
-format = "[ via $symbol$name ]($style)"
 [custom.cpu_load]
 command = "top -bn1 | grep 'Cpu(s)' | awk '{print $2}'"
-when = "true"
+when = "test $(uname) = Linux"
 style = "bg:nord_polar_night_3 fg:nord_aurora_orange"
 format = "[ 󰻠 $output% ]($style)"
 disabled = false
 [custom.shell_mem]
 command = "free -h | awk '/^Mem:/ {print $3 \"/\" $2}'"
-when = "true"
+when = "test $(uname) = Linux"
 style = "bg:nord_polar_night_3 fg:nord_frost_arctic"
 format = "[ 󰍛 $output ]($style)"
 disabled = false
