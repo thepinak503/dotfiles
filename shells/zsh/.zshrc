@@ -1,18 +1,27 @@
 #!/usr/bin/env zsh
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+_BS_FILE="${(%):-%N}"
+while [ -L "$_BS_FILE" ]; do
+    _BS_DIR="$(cd -P "$(dirname "$_BS_FILE")" >/dev/null 2>&1 && pwd)"
+    _BS_FILE="$(readlink "$_BS_FILE")"
+    [[ $_BS_FILE != /* ]] && _BS_FILE="$_BS_DIR/$_BS_FILE"
+done
+DOTFILES_DIR="$(cd -P "$(dirname "$_BS_FILE")/../.." >/dev/null 2>&1 && pwd)"
 if [[ ! -d "$DOTFILES_DIR/shells" ]]; then
     if [[ -d "$HOME/git/dotfiles" ]]; then
         DOTFILES_DIR="$HOME/git/dotfiles"
+    else
+        DOTFILES_DIR="$HOME/.dotfiles"
     fi
 fi
 export DOTFILES_DIR
+unset _BS_FILE _BS_DIR
 export DOTFILES_STATE_DIR="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}"
 [[ -d "$DOTFILES_STATE_DIR" ]] || mkdir -p "$DOTFILES_STATE_DIR" 2>/dev/null
 if [[ -z "$DOTFILES_MODE" ]]; then
     if [[ -f "$DOTFILES_STATE_DIR/mode" ]]; then
         export DOTFILES_MODE="$(<"$DOTFILES_STATE_DIR/mode")"
     else
-        export DOTFILES_MODE="advanced"
+        export DOTFILES_MODE="supreme"
     fi
 fi
 export DOTFILES_VERSION="3.0.0"
@@ -172,12 +181,9 @@ chmode() {
 }
 alias cm='chmode'
 if command -v starship &>/dev/null; then
-    if [[ "$DOTFILES_OS" == "Darwin" ]]; then
-        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
-    else
-        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
-    fi
-    eval "$(starship init zsh)"
+    export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
+    [[ "$DOTFILES_OS" == "Darwin" ]] && export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
+    eval "$(starship init zsh 2>>"$DOTFILES_STATE_DIR/errors.log")"
 fi
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)" 2>/dev/null
 if [[ -f "$DOTFILES_DIR/bin/dotupdate_bg.sh" && "$DOTFILES_MODE" != "minimal" ]]; then
