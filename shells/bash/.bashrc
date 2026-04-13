@@ -63,9 +63,7 @@ _load_mode() {
 }
 _load_mode
 unset -f _load_mode
-if command -v starship &>/dev/null; then
-    eval "$(starship init bash)" 2>>"${DOTFILES_LOG_FILE:-$HOME/.local/share/dotfiles/errors.log}"
-fi
+
 if [[ -f "$DOTFILES_DIR/bin/dotupdate_bg.sh" && "$DOTFILES_MODE" != "minimal" ]]; then
     (bash "$DOTFILES_DIR/bin/dotupdate_bg.sh" &)
     if [[ -f "$DOTFILES_STATE_DIR/update_ready" ]]; then
@@ -80,4 +78,7 @@ if [[ -f /usr/share/doc/find-the-command/ftc.bash ]]; then
 fi
 if [[ -f ~/.bashrc.local ]]; then
     source ~/.bashrc.local
+fi
+if command -v starship &>/dev/null; then
+    eval "$(starship init bash)" 2>>"${DOTFILES_LOG_FILE:-$HOME/.local/share/dotfiles/errors.log}"
 fi

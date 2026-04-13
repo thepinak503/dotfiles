@@ -68,5 +68,5 @@ shopt -s dotglob 2>/dev/null
 shopt -s cdspell 2>/dev/null
 shopt -s checkwinsize 2>/dev/null
 shopt -s histappend 2>/dev/null
-PROMPT_COMMAND='history -a'
+PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 [[ $- == *i* ]] && stty -ixon 2>/dev/null
