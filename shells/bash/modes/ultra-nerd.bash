@@ -16,15 +16,13 @@ if command -v pacman &>/dev/null; then
     alias remove='sudo pacman -Rns'
     alias update='sudo pacman -Syu'
     alias list='pacman -Q'
-fi
-if command -v apt &>/dev/null; then
+elif command -v apt &>/dev/null; then
     alias install='sudo apt install'
     alias search='apt search'
     alias remove='sudo apt remove'
     alias update='sudo apt update && sudo apt upgrade'
     alias list='apt list --installed'
-fi
-if command -v dnf &>/dev/null; then
+elif command -v dnf &>/dev/null; then
     alias install='sudo dnf install'
     alias search='dnf search'
     alias remove='sudo dnf remove'

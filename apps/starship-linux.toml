@@ -1,272 +1,335 @@
 "$schema" = 'https://starship.rs/config-schema.json'
-format = """
-[](nord_polar_night_2)\
-$os${custom.root}${custom.user}\
-[](bg:nord_polar_night_1 fg:nord_polar_night_2)\
-$directory\
-[](bg:nord_polar_night_2 fg:nord_polar_night_1)\
-($git_branch$git_commit$git_state$git_metrics$git_status$hg_branch$hg_state$fossil_branch$vcsh$pijul_channel)\
-[](bg:nord_polar_night_1 fg:nord_polar_night_2)\
-($package$c$cmake$cobol$daml$dart$deno$dotnet$elixir$elm$erlang$fennel$golang$gradle$guix_shell$haskell$haxe$helm$java$julia$kotlin$lua$nim$nodejs$ocaml$opa$perl$php$pulumiscript$python$rlangaku$rlang$rlanguby$rlangust$scala$solidity$swift$terraform$typst$vlang$vagrant$zig$buf$nix_shell$conda$solana$meson$spack$crystal)\
-[](bg:nord_polar_night_2 fg:nord_polar_night_1)\
-($docker_context$kubernetes$aws$gcloud$openstack$azure$direnv$mise$env_var$singularity$container$netns)\
-[](bg:nord_polar_night_3 fg:nord_polar_night_2)\
-(${custom.cpu_load}${custom.shell_mem}${custom.disk_free}${custom.uptime}$sudo$shlvl$memory_usage$localip$shell$time$battery)\
-[](nord_polar_night_3)\
-$line_break\
-$character"""
+format = """[](nord_polar_night_2)$os$hostname${custom.root}${custom.user}[](bg:nord_polar_night_1 fg:nord_polar_night_2)$directory[](bg:nord_polar_night_2 fg:nord_polar_night_1)($git_branch$git_commit$git_state$git_metrics$git_status$hg_branch$hg_state$fossil_branch$vcsh$pijul_channel)[](bg:nord_polar_night_1 fg:nord_polar_night_2)($package$c$cmake$cobol$daml$dart$deno$dotnet$elixir$elm$erlang$fennel$golang$gradle$guix_shell$haskell$haxe$helm$java$julia$kotlin$lua$nim$nodejs$ocaml$opa$perl$php$pulumi$purescript$python$raku$rlang$ruby$rust$scala$solidity$swift$terraform$typst$vlang$vagrant$zig$buf$nix_shell$conda$solana$meson$spack$crystal)[](bg:nord_polar_night_2 fg:nord_polar_night_1)($docker_context$kubernetes$aws$gcloud$openstack$azure$direnv$mise$env_var$singularity$container$netns)[](bg:nord_polar_night_3 fg:nord_polar_night_2)(${custom.cpu_load}${custom.shell_mem}${custom.disk_free}${custom.uptime}$sudo$shlvl$memory_usage$localip$shell$time$battery)[](nord_polar_night_3)$line_break$character"""
 right_format = """$cmd_duration$jobs"""
 add_newline = true
 palette = "nord"
-command_timeout = 5000
+
 [palettes.nord]
-nord_polar_night_0 = "#2e3440"
-nord_polar_night_1 = "#3b4252"
-nord_polar_night_2 = "#434c5e"
-nord_polar_night_3 = "#4c566a"
-nord_snow_storm_0 = "#d8dee9"
-nord_snow_storm_1 = "#e5e9f0"
-nord_snow_storm_2 = "#eceff4"
-nord_frost_mint = "#8fbcbb"
-nord_frost_blue = "#88c0d0"
-nord_frost_arctic = "#81a1c1"
-nord_frost_deep = "#5e81ac"
-nord_aurora_red = "#bf616a"
-nord_aurora_orange = "#d08770"
-nord_aurora_yellow = "#ebcb8b"
-nord_aurora_green = "#a3be8c"
-nord_aurora_purple = "#b48ead"
+nord_polar_night_0 = "#2E3440"
+nord_polar_night_1 = "#3B4252"
+nord_polar_night_2 = "#434C5E"
+nord_polar_night_3 = "#4C566A"
+nord_snow_storm_0 = "#D8DEE9"
+nord_snow_storm_1 = "#E5E9F0"
+nord_snow_storm_2 = "#ECEFF4"
+nord_frost_cyan = "#8FBCBB"
+nord_frost_blue = "#88C0D0"
+nord_frost_arctic = "#81A1C1"
+nord_frost_deep = "#5E81AC"
+nord_aurora_red = "#BF616A"
+nord_aurora_orange = "#D08770"
+nord_aurora_yellow = "#EBCB8B"
+nord_aurora_green = "#A3BE8C"
+nord_aurora_purple = "#B48EAD"
+
+[character]
+success_symbol = "[󰄬 ](bold nord_aurora_green)"
+error_symbol = "[󰅙 ](bold nord_aurora_red)"
+vicmd_symbol = "[󰘳 ](bold nord_frost_blue)"
+
 [os]
 disabled = false
 style = "bg:nord_polar_night_2 fg:nord_snow_storm_2"
+format = "[$symbol]($style)"
+
 [os.symbols]
-Alpaquita = " "
-Alpine = " "
-Amazon = " "
-Android = " "
-Arch = "󰣇 "
-Artix = " "
-CentOS = " "
+Arch = " "
 Debian = " "
-DragonFly = " "
-Emscripten = " "
-EndeavourOS = " "
-Fedora = " "
-FreeBSD = " "
 Garuda = " "
-Gentoo = " "
-HardenedBSD = "󰞇 "
-Illumos = "󰈸 "
-Linux = " "
-Mabox = " "
-Manjaro = " "
-Mariner = " "
-MidnightBSD = " "
-Mint = " "
-NetBSD = " "
-NixOS = " "
-OpenBSD = " "
-openSUSE = " "
-OracleLinux = " "
-Pop = " "
-Raspbian = " "
-Redhat = " "
-RedHatEnterprise = " "
-Redox = "󰀘 "
-Solus = " "
-SUSE = " "
 Ubuntu = " "
-Unknown = " "
-[custom.root]
-command = "echo ' ROOT! '"
-when = "test $(id -u) -eq 0"
-style = "bg:nord_polar_night_2 fg:nord_aurora_red bold"
-format = "[$output]($style)"
-[custom.user]
-command = "echo \"$USER\""
-when = "true"
-style = "bg:nord_polar_night_2 fg:nord_snow_storm_2"
-format = "[ 😎 $output ]($style)"
+Fedora = " "
+CentOS = " "
+Redhat = " "
+OracleLinux = "󰉭 "
+
 [directory]
-style = "bg:nord_polar_night_1 fg:nord_aurora_orange bold"
+style = "bg:nord_polar_night_1 fg:nord_frost_arctic"
 format = "[ $path ]($style)"
 truncation_length = 3
-truncate_to_repo = true
-fish_style_pwd_dir_length = 1
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = "󰇚 "
-"Music" = "󰎄 "
-"Pictures" = "󰉏 "
-"Videos" = "󰕧 "
-"Projects" = "󱂵 "
-"work" = "󰑴 "
-"src" = " "
-"lib" = "󰆧 "
-"test" = "🧪 "
-"bin" = "󰲒 "
-"include" = "󰅴 "
-"venv" = "🐍 "
-".git" = "󰊢 "
-"node_modules" = " "
-"target" = "🎯 "
-"build" = "🏗️ "
-"dist" = "📦 "
-"public" = "🌐 "
-"private" = "🔒 "
-"config" = "⚙️ "
-"scripts" = "📜 "
-"data" = "📊 "
-"assets" = "🎨 "
-"docs" = "📚 "
-"tests" = "🧪 "
-"tools" = "🛠️ "
-"internal" = "🔒 "
-"pkg" = "📦 "
-"cmd" = "󰘳 "
-"api" = "🔌 "
-"web" = "🕸️ "
+truncation_symbol = "…/"
+read_only = " 󰌾"
+home_symbol = "󱂵 "
+
+[hostname]
+ssh_only = false
+format = "[$ssh_symbol$hostname]($style) "
+style = "bg:nord_polar_night_2 fg:nord_aurora_yellow"
+ssh_symbol = "󰣀 "
+
 [git_branch]
-symbol = ""
-style = "bg:nord_polar_night_2 fg:nord_aurora_green"
-format = "[ $symbol $branch ]($style)"
+symbol = " "
+style = "bg:nord_polar_night_2 fg:nord_aurora_purple"
+format = "[[ $symbol$branch ]($style)]"
+
 [git_status]
 style = "bg:nord_polar_night_2 fg:nord_aurora_red"
-format = "[($all_status$ahead_behind )]($style)"
-conflicted = "="
-ahead = "⇡"
-behind = "⇣"
-diverged = "⇕"
-untracked = "?"
-stashed = "$"
-modified = "!"
-staged = "+"
-renamed = "»"
-deleted = "✘"
-[git_state]
-style = "bg:nord_polar_night_2 fg:nord_aurora_yellow"
-format = "[ \\($state( $progress_current/$progress_total)\\) ]($style)"
-[git_metrics]
-added_style = "bold blue"
-deleted_style = "bold red"
-disabled = false
-[git_commit]
-commit_hash_length = 7
-style = "bg:nord_polar_night_2 fg:nord_snow_storm_0"
-format = "[ @$hash ]($style)"
-[package]
-symbol = "󰏗 "
-style = "bg:nord_polar_night_1 fg:nord_snow_storm_0"
+format = "[[($all_status$ahead_behind )]($style)]"
+
+[custom.cpu_load]
+command = "cut -d' ' -f1 /proc/loadavg"
+style = "bg:nord_polar_night_3 fg:nord_aurora_yellow"
+format = "[ 󰻠 $output ]($style)"
+os = "linux"
+
+[custom.shell_mem]
+command = "ps -o rss= -p $$ | awk '{printf \"%.1fMi\", $1/1024}'"
+style = "bg:nord_polar_night_3 fg:nord_frost_blue"
+format = "[ 󰍛 $output ]($style)"
+
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+format = "[ $symbol$percentage ]($style)"
+
+[aws]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
+[azure]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[bun]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
 [c]
-symbol = " "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [cmake]
-symbol = "△ "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [cobol]
-symbol = "⚙️ "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
+[crystal]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
 [daml]
-symbol = "λ "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [dart]
-symbol = "🎯 "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [deno]
-symbol = "🦕 "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [dotnet]
-symbol = "󰪮 "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [elixir]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_aurora_purple"
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [elm]
-symbol = "🌳 "
-style = "bg:nord_polar_night_1 fg:nord_aurora_green"
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [erlang]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_aurora_red"
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [fennel]
-symbol = "果 "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
+[gcloud]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
 [golang]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_frost_mint"
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [gradle]
-symbol = " "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [guix_shell]
-symbol = " "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [haskell]
-symbol = "λ "
-style = "bg:nord_polar_night_1 fg:nord_aurora_purple"
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [haxe]
-symbol = "⌘ "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [helm]
-symbol = "⎈ "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [java]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_aurora_red"
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [julia]
-symbol = " "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [kotlin]
-symbol = "󱈙 "
-style = "bg:nord_polar_night_1 fg:nord_aurora_purple"
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [lua]
-symbol = "🌙 "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
+[meson]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
 [nim]
-symbol = "👑 "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
+[nix_shell]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
 [nodejs]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_aurora_green"
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [ocaml]
-symbol = "🐫 "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [opa]
-symbol = "OPA "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [perl]
-symbol = "🐪 "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
 [php]
-symbol = " "
-style = "bg:nord_polar_night_1 fg:nord_frost_deep"
-format = "[ via $symbol$version ]($style)"
-[pulumi]
-symbol = " "
+symbol = "◆ "
 style = "bg:nord_polar_night_1 fg:nord_frost_blue"
 format = "[ via $symbol$version ]($style)"
+
+[pulumi]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[purescript]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[python]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[raku]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[rlang]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[ruby]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[rust]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[scala]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+
+[solidity]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[spack]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[swift]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[terraform]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[typst]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[vlang]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[vagrant]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
+[zig]
+symbol = "◆ "
+style = "bg:nord_polar_night_1 fg:nord_frost_blue"
+format = "[ via $symbol$version ]($style)"
+
