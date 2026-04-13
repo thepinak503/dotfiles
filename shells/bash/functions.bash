@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# =============================================================================
+# CORE & MODE MANAGEMENT
+# =============================================================================
+#!/usr/bin/env bash
 chmode() {
     local mode="${1:-}"
     case "$mode" in
@@ -7,7 +11,7 @@ chmode() {
             export DOTFILES_MODE="$mode"
             [[ -d "$DOTFILES_STATE_DIR" ]] || mkdir -p "$DOTFILES_STATE_DIR"
             echo "$mode" > "$DOTFILES_STATE_DIR/mode"
-            echo -e "\033[1;32m✓ Mode updated. Restart shell or run 'exec $SHELL' to apply.\033[0m"
+            echo -e "\033[1;32m✓ Mode updated. Restart shell or run 'exec bash' to apply.\033[0m"
             ;;
         *)
             echo "Usage: chmode [basic | minimal | standard | supreme | ultra-nerd]"
@@ -15,8 +19,6 @@ chmode() {
             ;;
     esac
 }
-alias cm='chmode'
-alias dotmode='chmode'
 dotfix() {
     echo "Fixing and re-linking dotfiles..."
     if [ -f "$DOTFILES_DIR/install/install.sh" ]; then
@@ -25,6 +27,288 @@ dotfix() {
         echo "Error: Could not find installer at $DOTFILES_DIR"
     fi
 }
+    alias apkinfo='apk info'
+    alias apki='sudo apk add'
+    alias apkl='apk list --installed'
+    alias apkr='sudo apk del'
+    alias apks='apk search'
+    alias apku='sudo apk upgrade'
+    alias aptclean='sudo apt-get autoremove -y && sudo apt-get autoclean'
+    alias aptfix='sudo apt-get install -f'
+    alias aptfu='sudo apt-get update && sudo apt-get full-upgrade -y'
+    alias aptheld='apt-mark showhold'
+    alias apthold='sudo apt-mark hold'
+    alias aptI='sudo apt-get install'
+    alias apti='sudo apt-get install -y'
+    alias aptl='dpkg -l'
+    alias aptll='apt list --installed 2>/dev/null'
+    alias aptrm='sudo apt-get purge -y'
+    alias aptr='sudo apt-get remove -y'
+    alias apts='apt-cache search'
+    alias aptsh='apt-cache show'
+    alias aptunhold='sudo apt-mark unhold'
+    alias aptu='sudo apt-get update && sudo apt-get upgrade -y'
+    alias artisan='php artisan'
+    alias awscost='aws ce get-cost-and-usage'
+    alias awsec2='aws ec2 describe-instances'
+    alias awsecs='aws ecs list-clusters'
+    alias awseks='aws eks list-clusters'
+    alias awsiam='aws iam list-users'
+    alias awslambda='aws lambda list-functions'
+    alias awslogs='aws logs describe-log-groups'
+    alias awsprofile='aws configure list'
+    alias awsprofiles='aws configure list-profiles'
+    alias awsrds='aws rds describe-db-instances'
+    alias awsregion='aws configure get region'
+    alias awss3='aws s3 ls'
+    alias awss3cp='aws s3 cp'
+    alias awss3sync='aws s3 sync'
+    alias awssm='aws secretsmanager list-secrets'
+    alias awsssm='aws ssm describe-parameters'
+    alias awswho='aws sts get-caller-identity'
+    alias azaks='az aks list'
+    alias azrg='az group list'
+    alias azsub='az account list'
+    alias azvm='az vm list'
+    alias azwho='az account show'
+    alias ba='bun add'
+    alias bad='bun add --dev'
+    alias bench='hyperfine'
+    alias bi='bun install'
+    alias brewcask='brew install --cask'
+    alias brewcasklist='brew list --cask'
+    alias brewcaskr='brew uninstall --cask'
+    alias brewc='brew cleanup'
+    alias brewd='brew doctor'
+    alias brewdep='brew deps --tree'
+    alias brewi='brew install'
+    alias brewinfo='brew info'
+    alias brewl='brew list'
+    alias brewpin='brew pin'
+    alias brewpinned='brew list --pinned'
+    alias brewr='brew uninstall'
+    alias brews='brew search'
+    alias brewu='brew update && brew upgrade'
+    alias brewunpin='brew unpin'
+    alias brm='bun remove'
+    alias brun='bun run'
+    alias bu='bun update'
+    alias bx='bunx'
+    alias cloc='tokei'
+    alias compa='composer dump-autoload'
+    alias compi='composer install'
+    alias compr='composer require'
+    alias compu='composer update'
+    alias conad='conda activate'
+    alias concr='conda create -n'
+    alias conde='conda deactivate'
+    alias conex='conda export > environment.yml'
+    alias confr='conda env create -f environment.yml'
+    alias coni='conda install'
+    alias conl='conda env list'
+    alias conrm='conda env remove -n'
+    alias cons='conda search'
+    alias conu='conda update'
+    alias copy='pbcopy'
+    alias copy='wl-copy'
+    alias copy='xclip -selection clipboard'
+    alias copy='xsel --clipboard --input'
+    alias dig='dog'
+    alias dnfcheck='dnf check-update'
+    alias dnfc='sudo dnf clean all'
+    alias dnfgrp='dnf grouplist'
+    alias dnfh='dnf history'
+    alias dnfinfo='dnf info'
+    alias dnfI='sudo dnf install'
+    alias dnfi='sudo dnf install -y'
+    alias dnfl='dnf list installed'
+    alias dnfr='sudo dnf remove -y'
+    alias dnfs='dnf search'
+    alias dnfu='sudo dnf upgrade -y'
+    alias duff='duf'
+    alias du='gdu'
+    alias duu='dust'
+    alias emerc='sudo eclean-dist && sudo eclean-pkg'
+    alias emeri='sudo emerge -av'
+    alias emerr='sudo emerge --unmerge'
+    alias emers='emerge -s'
+    alias emeru='sudo emerge --update --deep --newuse @world'
+    alias flatc='flatpak uninstall --unused -y'
+    alias flati='flatpak install -y'
+    alias flatl='flatpak list'
+    alias flatr='flatpak uninstall -y'
+    alias flatrun='flatpak run'
+    alias flats='flatpak search'
+    alias flatu='flatpak update -y'
+    alias fuck='thefuck $(history -p !!)'
+    alias gcp='gcloud'
+    alias gcpgke='gcloud container clusters list'
+    alias gcpproj='gcloud config get-value project'
+    alias gcpprojs='gcloud projects list'
+    alias gcprun='gcloud run services list'
+    alias gcpset='gcloud config set project'
+    alias gcpvm='gcloud compute instances list'
+    alias gcpwho='gcloud auth list'
+    alias help='tldr'
+    alias htop='btop'
+    alias jqp='jq --color-output .'
+    alias json='jq .'
+    alias man2='tldr'
+    alias md='glow'
+    alias mongodbs='mongosh --eval "db.adminCommand({listDatabases:1})"'
+    alias mqdbs='mysql -e "SHOW DATABASES;"'
+    alias mqdump='mysqldump'
+    alias nixgc='nix-collect-garbage -d'
+    alias nixi='nix-env -iA'
+    alias nixl='nix-env -q'
+    alias nixrebuild='sudo nixos-rebuild switch'
+    alias nixr='nix-env -e'
+    alias nixs='nix-env -qaP'
+    alias nixtest='sudo nixos-rebuild test'
+    alias nixu='nix-env -u'
+    alias open='open'
+    alias open='xdg-open'
+    alias pacclean='sudo pacman -Rns $(pacman -Qdtq)'
+    alias pacinfo='pacman -Qi'
+    alias paci='sudo pacman -S --noconfirm'
+    alias pacI='sudo pacman -S'              # with confirmation
+    alias packeys='sudo pacman-key --refresh-keys'
+    alias paclf='pacman -Ql'              # files in package
+    alias pacll='pacman -Qe'               # explicitly installed
+    alias paclo='pacman -Qdtq'             # orphans
+    alias pacl='pacman -Q'
+    alias pacmirror='sudo reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist'
+    alias pacown='pacman -Qo'             # which pkg owns file
+    alias pacr='sudo pacman -Rns'
+    alias pacs='pacman -Ss'
+    alias pac='sudo pacman'
+    alias pacu='sudo pacman -Syu'
+    alias par='paru'
+    alias paru='paru -Syu'
+    alias paste='pbpaste'
+    alias paste='wl-paste'
+    alias paste='xclip -selection clipboard -o'
+    alias paste='xsel --clipboard --output'
+    alias pgdbs='psql -c "\l"'
+    alias pgdump='pg_dump'
+    alias pgrestore='pg_restore'
+    alias pgtbls='psql -c "\dt"'
+    alias phpi='php -a'               # interactive REPL
+    alias ping='gping'
+    alias pnad='pnpm add --save-dev'
+    alias pna='pnpm add'
+    alias pnb='pnpm build'
+    alias pnd='pnpm dev'
+    alias pni='pnpm install'
+    alias pnls='pnpm list'
+    alias pnrm='pnpm remove'
+    alias pnr='pnpm run'
+    alias pnt='pnpm test'
+    alias pnu='pnpm update'
+    alias pnx='pnpm dlx'
+    alias poad='poetry add --group dev'
+    alias poa='poetry add'
+    alias poar='poetry add --group test'
+    alias pob='poetry build'
+    alias pock='poetry check'
+    alias poenvl='poetry env list'
+    alias poenv='poetry env info'
+    alias poi='poetry install'
+    alias polock='poetry lock'
+    alias po='poetry'
+    alias popub='poetry publish'
+    alias porm='poetry remove'
+    alias por='poetry run'
+    alias pos='poetry shell'
+    alias pou='poetry update'
+    alias ps='ps auxf'
+    alias ptest='./vendor/bin/phpunit'
+    alias rbe='bundle exec'
+    alias rbi='bundle install'
+    alias rbr='bundle exec rails'
+    alias rbu='bundle update'
+    alias redisflush='redis-cli flushall'
+    alias rediskeys='redis-cli keys "*"'
+    alias redismon='redis-cli monitor'
+    alias redisping='redis-cli ping'
+    alias rspec='bundle exec rspec'
+    alias scra='screen -r'
+    alias scrl='screen -ls'
+    alias scr='screen'
+    alias snapi='sudo snap install'
+    alias snapl='snap list'
+    alias snapr='sudo snap remove'
+    alias snapu='sudo snap refresh'
+    alias sq='sqlite3'
+    alias top='htop'
+    alias uvadd='uv add'
+    alias uvir='uv pip install -r requirements.txt'
+    alias uviu='uv pip install --upgrade'
+    alias uvi='uv pip install'
+    alias uvlock='uv lock'
+    alias uvl='uv pip list'
+    alias uvrem='uv remove'
+    alias uvrun='uv run'
+    alias uvsync='uv sync'
+    alias uvvenv='uv venv'
+    alias xbpsc='sudo xbps-remove -O'
+    alias xbpsi='sudo xbps-install -Sy'
+    alias xbpsl='xbps-query -l'
+    alias xbpsr='sudo xbps-remove -R'
+    alias xbpss='xbps-query -Rs'
+    alias xbpsu='sudo xbps-install -Su'
+    alias xh='curlie'
+    alias yad='yarn add --dev'
+    alias yaml='yq .'
+    alias ya='yarn add'
+    alias yi='yarn install'
+    alias yls='yarn list --depth=0'
+    alias yout='yarn outdated'
+    alias yrb='yarn build'
+    alias yrd='yarn dev'
+    alias yrm='yarn remove'
+    alias yrs='yarn start'
+    alias yrt='yarn test'
+    alias yr='yarn run'
+    alias ys='yay -Ss'
+    alias yumi='sudo yum install -y'
+    alias yuml='yum list installed'
+    alias yumr='sudo yum remove -y'
+    alias yums='yum search'
+    alias yumu='sudo yum update -y'
+    alias yu='yarn upgrade'
+    alias y='yay'
+    alias Y='yazi'                # capital Y = yazi (lowercase y = function that cd's)
+    alias zi='z -i'              # interactive zoxide
+    alias zja='zellij attach'
+    alias zjka='zellij kill-all-sessions'
+    alias zjk='zellij kill-session'
+    alias zjl='zellij list-sessions'
+    alias zj='zellij'
+    alias zypc='sudo zypper clean'
+    alias zypdu='sudo zypper dist-upgrade -y'
+    alias zypinfo='zypper info'
+    alias zypi='sudo zypper install -y'
+    alias zypl='zypper packages --installed-only'
+    alias zypr='sudo zypper remove -y'
+    alias zyps='zypper search'
+    alias zypu='sudo zypper update -y'
+dupl() { history | awk '{print $2}' | sort | uniq -c | sort -rn | head -20; }
+elif command -v wl-copy &>/dev/null; then
+elif command -v xclip &>/dev/null; then
+elif command -v xsel &>/dev/null; then
+fi
+fi
+fi
+fi
+fi
+fi
+fi
+fi
+fi
+# =============================================================================
+# NAVIGATION & FILE OPERATIONS
+# =============================================================================
 cd() { builtin cd "$@" && ls; }
 mkcd()   { mkdir -p "$1" && builtin cd "$1"; }
 groot() { builtin cd "$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "Not a git repo"; return 1; }; }
@@ -58,6 +342,45 @@ swap() {
 cpv() { rsync -ah --info=progress2 "$@"; }
 ff()  { if command -v fd &>/dev/null; then fd "$1" "${2:-.}"; else find "${2:-.}" -type f -iname "*$1*" 2>/dev/null; fi; }
 ffd() { if command -v fd &>/dev/null; then fd --type d "$1" "${2:-.}"; else find "${2:-.}" -type d -iname "*$1*" 2>/dev/null; fi; }
+    alias bh='bat --style=header'
+    alias bp='bat --style=plain'
+  alias cat='bat --style header --style snip --style changes --style header'
+    alias catn='batcat --style=plain'
+    alias catp='bat --style=plain --paging=never'
+    alias diff='delta'
+    alias fdir='fd -t d'
+    alias ff='fd -H'
+    alias ffile='fd -t f'
+    alias find='fd -H'
+    alias fzfp='fzf --preview "bat --style=numbers --color=always {}"'
+  alias la='eza -a --color=always --group-directories-first --icons'
+  alias l.='eza -ald --color=always --group-directories-first --icons .*'
+    alias lle='eza -la --icons --git --sort=extension'
+  alias ll='eza -l --color=always --group-directories-first --icons'
+    alias lll='eza -la --icons --git --color=auto --time-style=long-iso'
+    alias llm='eza -la --icons --git --sort=modified'
+    alias lln='eza -la --icons --git --sort=name'
+    alias lls='eza -la --icons --git --sort=size'
+  alias ls='eza -al --color=always --group-directories-first --icons'
+  alias lt='eza -aT --color=always --group-directories-first --icons'
+    alias ltt='eza --tree --level=3 --icons'
+    alias lttt='eza --tree --level=4 --icons'
+    alias rbrc='bundle exec rails console'
+    alias rbrs='bundle exec rails server'
+    alias rgn='rg --smart-case --hidden -N'     # no line numbers
+    alias rgs='rg --smart-case --hidden -l'     # list files only
+    alias snaps='snap find'
+    alias treea='eza --tree --icons -a'
+    alias tree='exa --tree --icons'
+countfiles() { for t in files links directories; do echo "$(find . -type ${t:0:1} | wc -l)" "$t"; done 2> /dev/null; }
+    alias fetch='neofetch'
+    alias neofetch='fastfetch'
+    alias sf='neofetch'
+    alias sysinfo='neofetch'
+    alias uvf='uv pip freeze'
+# =============================================================================
+# SYSTEM MONITORING & DISK UTILS
+# =============================================================================
 largest()     { find "${1:-.}" -type f -exec du -h {} + 2>/dev/null | sort -rh | head "${2:-10}"; }
 largestdirs() { du -h --max-depth=1 "${1:-.}" 2>/dev/null | sort -rh | head "${2:-10}"; }
 diskusage() {
@@ -84,50 +407,26 @@ xopen() {
         xdg-open "$@" &>/dev/null &
     fi
 }
-note() {
-    local f="$HOME/.notes"
-    if [[ -z "$1" ]]; then
-        [[ -f "$f" ]] && less "$f" || echo "No notes yet."
-    else
-        echo "$(date '+%Y-%m-%d %H:%M') — $*" >> "$f"
-        echo "Note saved."
-    fi
-}
-notes-clear()  { true > "$HOME/.notes" && echo "Notes cleared."; }
-notes-search() { grep -i "$1" "$HOME/.notes" 2>/dev/null; }
-sosgit() {
-    local branch msg
-    branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" || { echo "Not a git repo"; return 1; }
-    msg="${*:-"🚨 EMERGENCY PUSH $(date '+%Y-%m-%d %H:%M:%S') from $(hostname)"}"
-    echo -e "\033[1;31m⚡ EMERGENCY MODE\033[0m"
-    echo "  Branch : $branch"
-    echo "  Message: $msg"
-    git add -A
-    git stash pop 2>/dev/null  # recover any stashed work too
-    git commit -m "$msg" --no-verify
-    git push --force-with-lease origin "$branch" || git push origin "$branch" || {
-        git push --set-upstream origin "$branch"
-    }
-    local status=$?
-    if [[ $status -eq 0 ]]; then
-        echo -e "\033[1;32m✓ Emergency push complete.\033[0m"
-    else
-        echo -e "\033[1;31m✗ Push failed! Try manual push.\033[0m"
-    fi
-    return $status
-}
-gcall() {
-    [[ -z "$1" ]] && { echo "Usage: gcall <message>"; return 1; }
-    git add -A && git commit -m "$*"
-}
-gcmsign() {
-    [[ -z "$1" ]] && { echo "Usage: gcmsign <message>"; return 1; }
-    git add -A && git commit -S -m "$*"
-}
-grib() {
-    [[ -z "$1" ]] && { echo "Usage: grib <N>"; return 1; }
-    git rebase -i "HEAD~$1"
-}
+    alias ld='lazydocker'
+    alias lg='lazygit'
+    alias lle='eza -la --icons --git --sort=extension'
+    alias lll='eza -la --icons --git --color=auto --time-style=long-iso'
+    alias llm='eza -la --icons --git --sort=modified'
+    alias lln='eza -la --icons --git --sort=name'
+    alias lls='eza -la --icons --git --sort=size'
+    alias ta='tmux attach'
+    alias tka='tmux kill-server'
+    alias tk='tmux kill-session -t'
+    alias tls='tmux list-windows'
+    alias tl='tmux list-sessions'
+    alias tn='tmux new-session -s'
+    alias tr='tmux rename-session -t'
+    alias tsh='tmux split-window -h'
+    alias tsv='tmux split-window -v'
+    alias t='tmux'
+# =============================================================================
+# GIT & DEVOPS OPERATIONS
+# =============================================================================
 git-clean() {
     git fetch -p
     git branch --merged | grep -v '\*\|main\|master\|develop' | xargs -r git branch -d
@@ -257,6 +556,18 @@ kctxf() {
     local ctx; ctx="$(kubectl config get-contexts --no-headers | fzf --prompt='context> ' | awk '{print $2}')"
     [[ -n "$ctx" ]] && kubectl config use-context "$ctx"
 }
+if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
+if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
+if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
+if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
+if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
+if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
+if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
+if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
+if [[ "$DOTFILES_OS" == "Darwin" ]]; then
+# =============================================================================
+# NETWORK & SYSTEM UPDATES
+# =============================================================================
 sysupdate() {
     echo "Updating system (${DOTFILES_PKG:-auto-detect})..."
     case "${DOTFILES_PKG:-}" in
@@ -289,7 +600,6 @@ myip() {
     curl -4s --max-time 5 https://ifconfig.me 2>/dev/null || curl -4s --max-time 5 https://icanhazip.com 2>/dev/null || echo "N/A"
     echo
 }
-alias whatismyip='myip'
 portopen() {
     local host="$1" port="$2"
     [[ -z "$host" || -z "$port" ]] && { echo "Usage: portopen <host> <port>"; return 1; }
@@ -348,6 +658,9 @@ genphrase() {
         echo
     else
         genpass "$((words * 8))"
+# =============================================================================
+# SUPREME POWER USER FUNCTIONS
+# =============================================================================
     fi
 }
 hashfile() {
@@ -865,4 +1178,51 @@ fnr() {
         return 1
     fi
     grep -rl "$1" . | xargs sed -i "s/$1/$2/g"
+}
+# =============================================================================
+# PRODUCTIVITY & NOTES
+# =============================================================================
+note() {
+    local f="$HOME/.notes"
+    if [[ -z "$1" ]]; then
+        [[ -f "$f" ]] && less "$f" || echo "No notes yet."
+    else
+        echo "$(date '+%Y-%m-%d %H:%M') — $*" >> "$f"
+        echo "Note saved."
+    fi
+}
+notes-clear()  { true > "$HOME/.notes" && echo "Notes cleared."; }
+notes-search() { grep -i "$1" "$HOME/.notes" 2>/dev/null; }
+sosgit() {
+    local branch msg
+    branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" || { echo "Not a git repo"; return 1; }
+    msg="${*:-"🚨 EMERGENCY PUSH $(date '+%Y-%m-%d %H:%M:%S') from $(hostname)"}"
+    echo -e "\033[1;31m⚡ EMERGENCY MODE\033[0m"
+    echo "  Branch : $branch"
+    echo "  Message: $msg"
+    git add -A
+    git stash pop 2>/dev/null  # recover any stashed work too
+    git commit -m "$msg" --no-verify
+    git push --force-with-lease origin "$branch" || git push origin "$branch" || {
+        git push --set-upstream origin "$branch"
+    }
+    local status=$?
+    if [[ $status -eq 0 ]]; then
+        echo -e "\033[1;32m✓ Emergency push complete.\033[0m"
+    else
+        echo -e "\033[1;31m✗ Push failed! Try manual push.\033[0m"
+    fi
+    return $status
+}
+gcall() {
+    [[ -z "$1" ]] && { echo "Usage: gcall <message>"; return 1; }
+    git add -A && git commit -m "$*"
+}
+gcmsign() {
+    [[ -z "$1" ]] && { echo "Usage: gcmsign <message>"; return 1; }
+    git add -A && git commit -S -m "$*"
+}
+grib() {
+    [[ -z "$1" ]] && { echo "Usage: grib <N>"; return 1; }
+    git rebase -i "HEAD~$1"
 }

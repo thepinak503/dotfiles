@@ -29,7 +29,7 @@ function chmode
             ; set -gx DOTFILES_MODE "$mode"
             test -d "$DOTFILES_STATE_DIR"; or mkdir -p "$DOTFILES_STATE_DIR"
             echo "$mode" > "$DOTFILES_STATE_DIR/mode"
-            echo -e "\033[1;32m✓ Mode updated. Restart shell or run 'exec $SHELL' to apply.\033[0m"
+            echo -e "\033[1;32m✓ Mode updated. Restart shell or run 'exec fish' to apply.\033[0m"
         case '*'
             echo "Usage: chmode [basic | minimal | standard | supreme | ultra-nerd]"
             echo "Current Mode: $DOTFILES_MODE"

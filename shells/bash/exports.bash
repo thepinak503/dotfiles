@@ -1,7 +1,7 @@
 # =============================================================================
 # DOTFILES MODE (minimal | standard | supreme | ultra-nerd)
 # =============================================================================
-[[ "$TERM" == "dumb" ]] && export TERM=xterm-256color
+[[ "$TERM" == "dumb" || -z "$TERM" ]] && export TERM=xterm-256color
 export BROWSER="${BROWSER:-$(command -v xdg-open || command -v open || command -v firefox || command -v google-chrome || echo xdg-open)}"
 export DOTFILES_MODE="${DOTFILES_MODE:-supreme}"
 export HISTFILESIZE=10000

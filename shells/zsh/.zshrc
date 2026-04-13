@@ -127,8 +127,6 @@ if [[ -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" && "${USE_OMZ:-0}" == "1" ]]; then
 fi
 _src "$DOTFILES_DIR/shells/zsh/aliases.zsh"
 _src "$DOTFILES_DIR/shells/zsh/functions.zsh"
-_src "$DOTFILES_DIR/shells/zsh/03-dynamic_aliases.zsh"
-_src "$DOTFILES_DIR/shells/zsh/05-pkg_aliases.zsh"
 _load_mode() {
     local d="$DOTFILES_DIR/shells/zsh/modes"
     case "$DOTFILES_MODE" in
@@ -175,19 +173,11 @@ chmode() {
 alias cm='chmode'
 if command -v starship &>/dev/null; then
     if [[ "$DOTFILES_OS" == "Darwin" ]]; then
-        if [[ "$DOTFILES_OS" == "Darwin" ]]; then
         export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
     else
         export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
     fi
-    else
-        if [[ "$DOTFILES_OS" == "Darwin" ]]; then
-        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
-    else
-        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
-    fi
-    fi
-    eval "$(starship init zsh)" 2>>"${DOTFILES_LOG_FILE:-$HOME/.local/share/dotfiles/errors.log}"
+    eval "$(starship init zsh)"
 fi
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)" 2>/dev/null
 if [[ -f "$DOTFILES_DIR/bin/dotupdate_bg.sh" && "$DOTFILES_MODE" != "minimal" ]]; then

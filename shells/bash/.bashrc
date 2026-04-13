@@ -31,13 +31,6 @@ _src "$DOTFILES_DIR/core/battery.sh"
 _src "$DOTFILES_DIR/shells/bash/exports.bash"
 _src "$DOTFILES_DIR/shells/bash/functions.bash"
 _src "$DOTFILES_DIR/shells/bash/aliases.bash"
-if [[ "$DOTFILES_MODE" =~ ^(minimal|standard|supreme|ultra-nerd)$ ]]; then
-    _src "$DOTFILES_DIR/shells/bash/03-dynamic_aliases.bash"
-    _src "$DOTFILES_DIR/shells/bash/04-pkg_aliases.bash"
-fi
-if [[ "$DOTFILES_MODE" =~ ^(supreme|ultra-nerd)$ ]]; then
-    _src "$DOTFILES_DIR/shells/bash/05-heavy_tools.bash"
-fi
 _load_mode() {
     local d="$DOTFILES_DIR/shells/bash/modes"
     case "$DOTFILES_MODE" in
@@ -81,12 +74,9 @@ if [[ -f ~/.bashrc.local ]]; then
 fi
 if command -v starship &>/dev/null; then
     if [[ "$DOTFILES_OS" == "Darwin" ]]; then
-    else
-    fi
-    if [[ "$DOTFILES_OS" == "Darwin" ]]; then
         export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
     else
         export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
     fi
-    eval "$(starship init bash)" 2>>"${DOTFILES_LOG_FILE:-$HOME/.local/share/dotfiles/errors.log}"
+    eval "$(starship init bash)"
 fi
