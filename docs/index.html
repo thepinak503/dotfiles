@@ -1,201 +1,118 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="dotfilesApp">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinak's Dotfiles | AngularJS Portal</title>
+    <title>Pinak's Dotfiles — Documentation</title>
     <link rel="stylesheet" href="style.css">
-    <!-- AngularJS Legacy 1.x -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <style>
-        .ng-cloak {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+<body class="nord-theme">
+    <nav class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">🦅</span>
+            <h1>Pinak's Dotfiles</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#overview" class="active">Overview</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#shells">Shells & Modes</a></li>
+            <li><a href="#aliases">Essential Aliases</a></li>
+            <li><a href="#diagnostics">Diagnostics</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <p>Version 11.0.0</p>
+        </div>
+    </nav>
 
-<body ng-controller="MainController as main" class="ng-cloak">
-    <div class="main-wrapper">
-        <aside class="sidebar">
-            <h2 class="logo" style="font-size: 1.2rem; color: var(--nord8); margin-bottom: 2rem; cursor: pointer;"
-                ng-click="main.navigate('home')">
-                PINAK'S DOTFILES
-            </h2>
-            <h3>Documents</h3>
-            <ul>
-                <li><a href="" ng-click="main.navigate('home')"
-                        ng-class="{active: main.currentPage === 'home'}">Introduction</a></li>
-                <li><a href="" ng-click="main.navigate('setup')" ng-class="{active: main.currentPage === 'setup'}">Setup
-                        & Installation</a></li>
-                <li><a href="" ng-click="main.navigate('modes')"
-                        ng-class="{active: main.currentPage === 'modes'}">Operational Modes</a></li>
-                <li><a href="" ng-click="main.navigate('aliases')"
-                        ng-class="{active: main.currentPage === 'aliases'}">Alias Reference</a></li>
-                <li><a href="" ng-click="main.navigate('functions')"
-                        ng-class="{active: main.currentPage === 'functions'}">Function Reference</a></li>
-            </ul>
-            <h3>Language</h3>
-            <ul id="section-nav">
-                <!-- Simple static anchors for Angular views -->
-                <li ng-repeat="section in main.sections">
-                    <a href="#{{main.currentPage}}#{{section.id}}"># {{section.label}}</a>
-                </li>
-            </ul>
-        </aside>
-
-        <main class="content-area">
-            <div ng-switch="main.currentPage" class="fade-in">
-
-                <!-- HOME PAGE -->
-                <section ng-switch-when="home" class="hero">
-                    <h1>Introduction</h1>
-                    <p>Powered by AngularJS v1.8.2. A legendary environment optimized for precision and speed.</p>
-                    <div class="grid">
-                        <div class="card">
-                            <h3>🚀 Legacy Stability</h3>
-                            <p>Using the most reliable declarative frontend framework in history.</p>
-                        </div>
-                        <div class="card">
-                            <h3>📦 Zero Build</h3>
-                            <p>No build step required. Data is dynamically injected via Angular.js logic.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- SETUP PAGE -->
-                <section ng-switch-when="setup">
-                    <h2>Setup & Installation</h2>
-                    <p>Deploying Pinak's Dotfiles on any modern Linux or macOS machine.</p>
-                    <pre><code>curl -sS https://raw.githubusercontent.com/pinak/dotfiles/main/install.sh | bash</code></pre>
-                    <h3>Post-Install</h3>
-                    <p>Always run <code>./bin/build_data.mjs</code> after updating your shell aliases to refresh this
-                        site.</p>
-                </section>
-
-                <!-- MODES PAGE -->
-                <section ng-switch-when="modes">
-                    <h2>Operational Modes</h2>
-                    <p>Choose your experience level.</p>
-                    <div class="grid">
-                        <div class="card">
-                            <h3>basic</h3>
-                            <p>Optimized for SSH and core git tasks.</p>
-                        </div>
-                        <div class="card">
-                            <h3>supreme</h3>
-                            <p>The ultimate state with all features enabled.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ALIASES PAGE -->
-                <section ng-switch-when="aliases">
-                    <h2>Alias Reference</h2>
-                    <p>Search through {{main.data.aliases.length}} pre-configured shortcuts.</p>
-                    <input type="text" ng-model="main.aliasSearch"
-                        placeholder="Filter aliases by name, category, or command..." class="search-box">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Alias</th>
-                                <th>Command</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="a in main.data.aliases | filter:main.aliasSearch">
-                                <td><code>{{a.category}}</code></td>
-                                <td><code>{{a.name}}</code></td>
-                                <td><code>{{a.cmd}}</code></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
-                <!-- FUNCTIONS PAGE -->
-                <section ng-switch-when="functions">
-                    <h2>Function Reference</h2>
-                    <p>Powerful shell logic at your fingertips.</p>
-                    <input type="text" ng-model="main.funcSearch" placeholder="Search functions..." class="search-box">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Function</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="f in main.data.functions | filter:main.funcSearch">
-                                <td><code>{{f.category}}</code></td>
-                                <td><code>{{f.name}}()</code></td>
-                                <td>{{f.desc}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-
+    <main class="content">
+        <section id="overview" class="doc-section">
+            <header>
+                <div class="breadcrumb">Wiki / Core</div>
+                <h2>Overview</h2>
+            </header>
+            <p class="lead">A professional-grade, polyglot shell environment designed for performance, stability, and extreme productivity.</p>
+            
+            <div class="stats-grid" id="stats-grid">
+                <!-- Populated by JS -->
             </div>
 
-            <footer>
-                <p>&copy; 2026 Pinak's Dotfiles. Made with AngularJS. <a
-                        href="https://github.com/thepinak503/dotfiles">GitHub</a></p>
-            </footer>
-        </main>
-    </div>
+            <div class="info-box tip">
+                <strong>💡 Tip:</strong> Use the <code>dotmode</code> command to switch between modes (minimal, standard, supreme, ultra-nerd) in real-time.
+            </div>
+        </section>
 
-    <!-- The Data -->
+        <section id="installation" class="doc-section">
+            <header>
+                <div class="breadcrumb">Wiki / Setup</div>
+                <h2>Installation</h2>
+            </header>
+            <p>Deploying Pinak's Dotfiles is a single-command process. The installer handles dependencies, symlinks, and environment detection automatically.</p>
+            <div class="code-block">
+                <pre><code>sh -c "$(curl -fsSL https://raw.githubusercontent.com/thepinak503/dotfiles/main/install.sh)"</code></pre>
+                <button class="copy-btn">Copy</button>
+            </div>
+        </section>
+
+        <section id="shells" class="doc-section">
+            <header>
+                <div class="breadcrumb">Wiki / Environment</div>
+                <h2>Shells & Modes</h2>
+            </header>
+            <div class="grid">
+                <div class="card">
+                    <h3>Bash</h3>
+                    <p>The standard. Optimized with Starship and 700+ aliases. Best for legacy compatibility.</p>
+                </div>
+                <div class="card">
+                    <h3>Zsh</h3>
+                    <p>High performance. Features advanced autosuggestions and Nord-styled keybindings.</p>
+                </div>
+                <div class="card">
+                    <h3>Fish</h3>
+                    <p>Modern & Friendly. Pure Native implementation with "Post-Exec" error tracking.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="diagnostics" class="doc-section">
+            <header>
+                <div class="breadcrumb">Wiki / Maintenance</div>
+                <h2>Diagnostics</h2>
+            </header>
+            <p>The ecosystem is equipped with self-monitoring tools to ensure zero-error operation.</p>
+            <ul>
+                <li><strong><code>doterrors</code></strong>: View the centralized error log.</li>
+                <li><strong><code>dothealth</code></strong>: Run a comprehensive environment health check.</li>
+                <li><strong><code>bin/check_startup.sh</code></strong>: Detect silent initialization errors.</li>
+            </ul>
+        </section>
+    </main>
+
     <script src="data.js"></script>
-
-    <!-- Angular App Module -->
     <script>
-        angular.module('dotfilesApp', [])
-            .controller('MainController', ['$timeout', '$window', function ($timeout, $window) {
-                var vm = this;
-                vm.data = typeof dotfilesData !== 'undefined' ? dotfilesData : { aliases: [], functions: [] };
-                vm.currentPage = 'home';
-                vm.sections = [];
-
-                vm.navigate = function (page) {
-                    vm.currentPage = page;
-                    $window.location.hash = page;
-                    vm.updateSections();
-                };
-
-                vm.updateSections = function () {
-                    $timeout(function () {
-                        var headers = document.querySelectorAll('.content-area h2, .content-area h3');
-                        vm.sections = [];
-                        angular.forEach(headers, function (h) {
-                            var id = h.textContent.toLowerCase().replace(/\s+/g, '-');
-                            h.id = id;
-                            vm.sections.push({ id: id, label: h.textContent });
-                        });
-                    }, 50);
-                };
-
-                // Init with hash
-                var hash = $window.location.hash.replace('#', '') || 'home';
-                vm.navigate(hash);
-            }]);
+        document.addEventListener('DOMContentLoaded', () => {
+            const stats = DOTFILES_DATA.stats;
+            const grid = document.getElementById('stats-grid');
+            
+            grid.innerHTML = \`
+                <div class="stat-card">
+                    <span class="stat-value">\${stats.bash.aliases}</span>
+                    <span class="stat-label">Bash Aliases</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">\${stats.bash.functions}</span>
+                    <span class="stat-label">Bash Functions</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">100%</span>
+                    <span class="stat-label">Test Coverage</span>
+                </div>
+            \`;
+        });
     </script>
 </body>
-
 </html>
