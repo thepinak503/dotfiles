@@ -59,7 +59,6 @@ HardenedBSD = "󰞇 "
 Illumos = "󰈸 "
 Linux = " "
 Mabox = " "
-Macos = " "
 Manjaro = " "
 Mariner = " "
 MidnightBSD = " "
@@ -488,7 +487,7 @@ disabled = false
 [hg_branch]
 symbol = ""
 style = "bg:nord_polar_night_2 fg:nord_aurora_green"
-format = "[ on $symbol $branch ]($style)"
+format = "[ $symbol $branch ]($style)"
 [hg_state]
 style = "bg:nord_polar_night_2 fg:nord_aurora_red"
 format = "[ \\($state( $progress_current/$progress_total)\\) ]($style)"

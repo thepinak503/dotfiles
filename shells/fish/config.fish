@@ -44,7 +44,19 @@ end
 if test -f ~/.fish_profile
     source ~/.fish_profile
 end
-set -gx STARSHIP_CONFIG "$DOTFILES_DIR/apps/starship.toml"
+if test (uname) = "Darwin"
+    if test (uname) = "Darwin"
+    set -gx STARSHIP_CONFIG "$DOTFILES_DIR/apps/starship-mac.toml"
+else
+    set -gx STARSHIP_CONFIG "$DOTFILES_DIR/apps/starship-linux.toml"
+end
+else
+    if test (uname) = "Darwin"
+    set -gx STARSHIP_CONFIG "$DOTFILES_DIR/apps/starship-mac.toml"
+else
+    set -gx STARSHIP_CONFIG "$DOTFILES_DIR/apps/starship-linux.toml"
+end
+end
 if type -q starship
     starship init fish 2>>"$DOTFILES_STATE_DIR/errors.log" | source
 end

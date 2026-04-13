@@ -1,6 +1,6 @@
 const DOTFILES_DATA = {
     version: "11.0.0",
-    lastUpdated: "Monday 13 April 2026 12:26:50 PM IST",
+    lastUpdated: "Monday 13 April 2026 12:29:05 PM IST",
     stats: {
         bash: { aliases: 701, functions: 1 },
         zsh: { aliases: 701, functions: 140 },

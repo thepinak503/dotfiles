@@ -80,6 +80,13 @@ if [[ -f ~/.bashrc.local ]]; then
     source ~/.bashrc.local
 fi
 if command -v starship &>/dev/null; then
-    export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship.toml"
+    if [[ "$DOTFILES_OS" == "Darwin" ]]; then
+    else
+    fi
+    if [[ "$DOTFILES_OS" == "Darwin" ]]; then
+        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
+    else
+        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
+    fi
     eval "$(starship init bash)" 2>>"${DOTFILES_LOG_FILE:-$HOME/.local/share/dotfiles/errors.log}"
 fi
