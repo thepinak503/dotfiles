@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Dotfiles Health & Potential Check (v1.0.0)
-# Checks for missing "Supreme" tools and provides install recommendations.
+# Checks for missing ecosystem tools and provides install recommendations.
 # =============================================================================
 
 RED='\033[0;31m'
@@ -24,7 +24,7 @@ check_tool() {
 }
 
 echo -e "\n${CYAN}═══════════════════════════════════════════${NC}"
-echo -e "${BOLD}   DOTFILES SUPREMACY HEALTH CHECK${NC}"
+echo -e "${BOLD}   PINAK'S DOTFILES HEALTH CHECK${NC}"
 echo -e "${CYAN}═══════════════════════════════════════════${NC}\n"
 
 echo -e "${BOLD}Core Productivity:${NC}"

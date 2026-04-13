@@ -1,7 +1,5 @@
-# ZSH
-#!/usr/bin/env bash
 # =============================================================================
-# .bash/functions.bash — 200+ unique, distro-agnostic shell functions
+# .zsh/functions.zsh — 200+ unique, distro-agnostic shell functions
 # Security-focused, productivity-driven, cross-platform (Linux + macOS).
 # =============================================================================
 
@@ -22,13 +20,11 @@ chmode() {
             echo "$mode" > "$DOTFILES_STATE_DIR/mode"
             
             # Re-sync to other shells
-            if [[ -f "$DOTFILES_DIR/bin/sync_shells.py" ]]; then
-                python3 "$DOTFILES_DIR/bin/sync_shells.py"
-            fi
+
             echo -e "\033[1;32m✓ Mode updated. Restart shell or run 'exec $SHELL' to apply.\033[0m"
             ;;
         *)
-            echo "Usage: chmode [basic | minimal | standard | supreme | ultra-nerd]"
+            echo "Usage: chmode [minimal | standard | supreme | ultra-nerd]"
             echo "Current Mode: $DOTFILES_MODE"
             ;;
     esac

@@ -21,9 +21,7 @@ chmode() {
             echo "$mode" > "$DOTFILES_STATE_DIR/mode"
             
             # Re-sync to other shells
-            if [[ -f "$DOTFILES_DIR/bin/sync_shells.py" ]]; then
-                python3 "$DOTFILES_DIR/bin/sync_shells.py"
-            fi
+
             echo -e "\033[1;32m✓ Mode updated. Restart shell or run 'exec $SHELL' to apply.\033[0m"
             ;;
         *)

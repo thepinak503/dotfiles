@@ -28,7 +28,7 @@ end
 # Change the operational mode of the dotfiles
 # Change the operational mode of the dotfiles (Unified)
 function chmode
-    ; set -l mode "$argv[1]"
+    set -l mode "$argv[1]"
     switch $mode
         case 'basic' 'minimal' 'standard' 'supreme' 'ultra-nerd'
             echo "Switching to $mode mode..."
@@ -38,9 +38,7 @@ function chmode
             echo "$mode" > "$DOTFILES_STATE_DIR/mode"
             
             # Re-sync to other shells
-            if test -f "$DOTFILES_DIR/bin/sync_shells.py"
-                python3 "$DOTFILES_DIR/bin/sync_shells.py"
-            end
+
             echo -e "\033[1;32m✓ Mode updated. Restart shell or run 'exec $SHELL' to apply.\033[0m"
         case '*'
             echo "Usage: chmode [basic | minimal | standard | supreme | ultra-nerd]"
@@ -67,7 +65,7 @@ end
 
 # cd with auto-ls after entering
 function cd --wraps 'cd'
-    cd "$argv"; and ls
+    builtin cd "$argv"; and ls
 end
 
 # Create directory and cd into it
@@ -85,7 +83,7 @@ end
 function groot
     cd (git rev-parse --show-toplevel 2>/dev/null); or begin echo "Not a git repo"
     return 1
-    ; end
+    end
 end
 
 # quick jump to dotfiles
@@ -102,7 +100,7 @@ end
 # Extract and cd into the directory
 function excd
     extract "$argv[1]"
-    ; set -l d "$argv[1]%.*"
+    set -l d "$argv[1]%.*"
     test -d "$d"; and cd "$d"
 end
 
@@ -123,13 +121,13 @@ end
 # Backup file with timestamp
 function bak
     test -f "$argv[1]"; or begin echo "File not found: $argv[1]"; return 1; end
-    ; set -l dst; set dst "$argv[1].bak.(date +%Y%m%d_%H%M%S)"
+    set -l dst; set dst "$argv[1].bak.(date +%Y%m%d_%H%M%S)"
     cp -a "$argv[1]" "$dst"; and echo "Backed up → $dst"
 end
 
 # Restore the latest backup
 function unbak
-    ; set -l latest; set latest (find . -maxdepth 1 -name "$argv[1].bak.*" -type f -printf "%T@ %p\n" 2>/dev/null | sort -nr | head -1 | cut -d' ' -f2)
+    set -l latest; set latest (find . -maxdepth 1 -name "$argv[1].bak.*" -type f -printf "%T@ %p\n" 2>/dev/null | sort -nr | head -1 | cut -d' ' -f2)
     test -z "$latest"; and begin echo "No backup found for: $argv[1]"; return 1; end
     cp -a "$latest" "$argv[1]"; and echo "Restored from: $latest"
 end
@@ -142,7 +140,7 @@ end
 # Swap two files atomically
 function swap
     test (count $argv) -ne 2; and begin echo "Usage: swap <file1> <file2>"; return 1; end
-    ; set -l tmp; set tmp (mktemp)
+    set -l tmp (mktemp)
     mv "$argv[1]" "$tmp"; and mv "$argv[2]" "$argv[1]"; and mv "$tmp" "$argv[2]"
     echo "Swapped: $argv[1] ↔ $argv[2]"
 end
@@ -155,13 +153,13 @@ end
 # Find file by name (fd → find fallback)
 function ff
     if type -q fd >/dev/null 2>&1
-    ; fd "$argv[1]" "$argv[2]"
+    fd "$argv[1]" "$argv[2]"
     else find "$argv[2]" -type f -iname "*$argv[1]*" 2>/dev/null
     end
 end
 function ffd
     if type -q fd >/dev/null 2>&1
-    ; fd --type d "$argv[1]" "$argv[2]"
+    fd --type d "$argv[1]" "$argv[2]"
     else find "$argv[2]" -type d -iname "*$argv[1]*" 2>/dev/null
     end
 end
@@ -194,7 +192,7 @@ end
 
 # Show file size (mathiasbynens)
 function fs
-    ; set -l arg "-sbh"
+    set -l arg "-sbh"
     du -b /dev/null >/dev/null 2>&1; or set arg "-sh"
     if test -n "$argv"; du $arg -- "$argv"; else du $arg .[^.]* ./*; end
 end
@@ -210,11 +208,11 @@ end
 
 # Quick note with timestamp
 function note
-    ; set -l f "$HOME/.notes"
+    set -l f "$HOME/.notes"
     if test -z "$argv[1]"
         test -f "$f"; and less "$f"; or echo "No notes yet."
     else
-        echo "(date '+%Y-%m-%d %H:%M') — $argv" >> "$f"
+        echo (date '+%Y-%m-%d %H:%M') "— $argv" >> "$f"
         echo "Note saved."
     end
 end
@@ -238,9 +236,9 @@ end
 # Emergency git push — add everything, commit, force-push, no questions asked
 # Usage: sos "message"  or just: sos  (auto-generates timestamp message)
 function sosgit
-    ; set -l branch msg
-    ; set branch (git rev-parse --abbrev-ref HEAD 2>/dev/null); or begin echo "Not a git repo"; return 1; end
-    ; set msg "$argv"
+    set -l branch msg
+    set branch (git rev-parse --abbrev-ref HEAD 2>/dev/null); or begin echo "Not a git repo"; return 1; end
+    set msg "$argv"
     echo -e "\033[1;31m⚡ EMERGENCY MODE\033[0m"
     echo "  Branch : $branch"
     echo "  Message: $msg"
@@ -251,7 +249,7 @@ function sosgit
         # If upstream isn't set, set it and push
         git push --set-upstream origin "$branch"
     end
-    ; set -l status $status
+    set -l status $status
     if test $status -eq 0
         echo -e "\033[1;32m✓ Emergency push complete.\033[0m"
     else
@@ -306,10 +304,10 @@ end
 
 # Git statistics
 function gstats
-    echo "Commits   : (git rev-list --count HEAD 2>/dev/null)"
-    echo "Branches  : (git branch | wc -l)"
-    echo "Stashes   : (git stash list | wc -l)"
-    echo "Tags      : (git tag | wc -l)"
+    echo "Commits   : "(git rev-list --count HEAD 2>/dev/null)
+    echo "Branches  : "(git branch | wc -l)
+    echo "Stashes   : "(git stash list | wc -l)
+    echo "Tags      : "(git tag | wc -l)
     echo "Top authors:"
     git shortlog -sn --all --no-merges | head -5
 end
@@ -345,14 +343,14 @@ end
 # Interactive fuzzy branch checkout (requires fzf)
 function fgco
     type -q fzf >/dev/null 2>&1; or begin echo "fzf not installed"; return 1; end
-    ; set -l branch; set branch (git branch -a | sed 's/remotes\/origin\///' | sort -u | fzf --prompt='branch> ')
+    set -l branch; set branch (git branch -a | sed 's/remotes\/origin\///' | sort -u | fzf --prompt='branch> ')
     test -n "$branch"; and git checkout (echo "$branch" | xargs)
 end
 
 # Fuzzy stash picker
 function fgstash
     type -q fzf >/dev/null 2>&1; or begin echo "fzf not installed"; return 1; end
-    ; set -l stash; set stash (git stash list | fzf | cut -d: -f1)
+    set -l stash; set stash (git stash list | fzf | cut -d: -f1)
     test -n "$stash"; and git stash show -p "$stash"
 end
 
@@ -365,7 +363,7 @@ end
 
 # Dotfiles sync
 function dsync
-    ; set -l root "$DOTFILES_DIR"
+    set -l root "$DOTFILES_DIR"
     test -d "$root/.git"; or begin echo "Dotfiles repo not found at $root"; return 1; end
     echo "Syncing $root..."
     git -C "$root" fetch --all --prune
@@ -376,8 +374,8 @@ end
 
 # Dotfiles push (add, commit, push)
 function dpush
-    ; set -l root "$DOTFILES_DIR"
-    ; set -l msg "$argv[1]"
+    set -l root "$DOTFILES_DIR"
+    set -l msg "$argv[1]"
     git -C "$root" add -A
     git -C "$root" commit -m "$msg"
     git -C "$root" push
@@ -416,20 +414,20 @@ end
 # Interactive exec into running container (fzf)
 function dexec
     type -q fzf >/dev/null 2>&1; or begin echo "Install fzf for interactive mode"; return 1; end
-    ; set -l c; set c (docker ps --format '{{.Names}}' | fzf --prompt='container> ')
+    set -l c; set c (docker ps --format '{{.Names}}' | fzf --prompt='container> ')
     test -n "$c"; and docker exec -it "$c" /bin/bash
 end
 
 # Follow logs from container (fzf picker)
 function dlf
     type -q fzf >/dev/null 2>&1; or begin echo "Install fzf for interactive mode"; return 1; end
-    ; set -l c; set c (docker ps --format '{{.Names}}' | fzf --prompt='logs> ')
+    set -l c; set c (docker ps --format '{{.Names}}' | fzf --prompt='logs> ')
     test -n "$c"; and docker logs -f "$c"
 end
 
 # Docker container IP
 function dip
-    ; set -l c "$argv[1]}' | head -1)}"
+    set -l c "$argv[1]}' | head -1)}"
     docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$c"
 end
 
@@ -445,14 +443,14 @@ end
 # Tail logs from pod matching pattern (fzf)
 function klf
     type -q fzf >/dev/null 2>&1; or begin echo "Install fzf"; return 1; end
-    ; set -l pod; set pod (kubectl get pods --no-headers | fzf --prompt='pod> ' | awk '{print $argv[1]}')
+    set -l pod; set pod (kubectl get pods --no-headers | fzf --prompt='pod> ' | awk '{print $argv[1]}')
     test -n "$pod"; and kubectl logs -f "$pod" "$argv"
 end
 
 # Exec into pod (fzf)
 function kexf
     type -q fzf >/dev/null 2>&1; or begin echo "Install fzf"; return 1; end
-    ; set -l pod; set pod (kubectl get pods --no-headers | fzf --prompt='exec> ' | awk '{print $argv[1]}')
+    set -l pod; set pod (kubectl get pods --no-headers | fzf --prompt='exec> ' | awk '{print $argv[1]}')
     test -n "$pod"; and kubectl exec -it "$pod" -- "$argv[1]"
 end
 
@@ -483,7 +481,7 @@ end
 # Switch k8s context
 function kctxf
     type -q fzf >/dev/null 2>&1; or begin kubectl config use-context "$argv[1]"; return; end
-    ; set -l ctx; set ctx (kubectl config get-contexts --no-headers | fzf --prompt='context> ' | awk '{print $argv[2]}')
+    set -l ctx; set ctx (kubectl config get-contexts --no-headers | fzf --prompt='context> ' | awk '{print $argv[2]}')
     test -n "$ctx"; and kubectl config use-context "$ctx"
 end
 
@@ -539,7 +537,7 @@ abbr -a whatismyip 'myip'
 
 # Check open port on remote host
 function portopen
-    ; set -l host "$argv[1]"; set port "$argv[2]"
+    set -l host "$argv[1]"; set port "$argv[2]"
     test -z "$host"; or -z "$port"; and begin echo "Usage: portopen <host> <port>"; return 1; end
     timeout 3 bash -c ">/dev/tcp/$host/$port" 2>/dev/null \
         ; and echo "Port $port on $host is OPEN" \
@@ -549,7 +547,7 @@ end
 # Kill process on a port
 function killport
     test -z "$argv[1]"; and begin echo "Usage: killport <port>"; return 1; end
-    ; set -l pids; set pids (lsof -ti:"$argv[1]" 2>/dev/null)
+    set -l pids; set pids (lsof -ti:"$argv[1]" 2>/dev/null)
     test -z "$pids"; and begin echo "Nothing on port $argv[1]"; return 0; end
     echo "$pids" | xargs kill -9; and echo "Killed process(es) on :$argv[1]"
 end
@@ -572,7 +570,7 @@ end
 
 # Quick HTTP server
 function serve
-    ; set -l port "$argv[1]"
+    set -l port "$argv[1]"
     echo "Serving on http://localhost:$port"
     python3 -m http.server "$port"
 end
@@ -592,7 +590,7 @@ end
 # Get cert SAN names
 function certnames
     test -z "$argv[1]"; and begin echo "Usage: certnames <domain>"; return 1; end
-    ; set -l tmp; set tmp (echo -e "GET / HTTP/1.0\nEOT" | openssl s_client -connect "$argv[1]:443" -servername "$argv[1]" 2>&1)
+    set -l tmp; set tmp (echo -e "GET / HTTP/1.0\nEOT" | openssl s_client -connect "$argv[1]:443" -servername "$argv[1]" 2>&1)
     echo "$tmp" | grep -A1 "Subject Alternative Name:" | tail -1 \
         | sed -e 's/DNS://g' -e 's/ //g' | tr ',' '\n'
 end
@@ -604,7 +602,7 @@ function psg
 # Fuzzy kill process
 function fkill
     type -q fzf >/dev/null 2>&1; or begin echo "fzf not installed"; return 1; end
-    ; set -l pids; set pids (ps aux | sed 1d | fzf --multi --header='Select process(es) to kill' | awk '{print $argv[2]}')
+    set -l pids; set pids (ps aux | sed 1d | fzf --multi --header='Select process(es) to kill' | awk '{print $argv[2]}')
     test -n "$pids"; and echo "$pids" | xargs kill -9; and echo "Killed."
 end
 
@@ -622,7 +620,7 @@ end
 
 # Generate cryptographically strong password
 function genpass
-    ; set -l len "$argv[1]"
+    set -l len "$argv[1]"
     function openssl
     end
     echo
@@ -630,7 +628,7 @@ end
 
 # Generate passphrase (memorable)
 function genphrase
-    ; set -l words "$argv[1]"
+    set -l words "$argv[1]"
     # Uses /usr/share/dict/words if available, else fallback
     if test -f /usr/share/dict/words
         shuf -n "$words" /usr/share/dict/words | tr '\n' '-' | sed 's/-$//'
@@ -700,9 +698,9 @@ end
 # JWT decode (without verification — for inspection only)
 function jwtdecode
     test -z "$argv[1]"; and begin echo "Usage: jwtdecode <jwt-token>"; return 1; end
-    ; set -l payload; set payload (echo "$argv[1]" | cut -d. -f2)
+    set -l payload; set payload (echo "$argv[1]" | cut -d. -f2)
     # Pad base64 if needed
-    ; set -l padded; set padded "$payload(printf '%0.s=' $(seq 1 (math  4 - (count $argv)payload % 4 )))"
+    set -l padded; set padded "$payload(printf '%0.s=' $(seq 1 (math  4 - (count $argv)payload % 4 )))"
     echo "$padded" | base64 -d 2>/dev/null | python3 -m json.tool 2>/dev/null; or echo "Failed to decode JWT"
 end
 
@@ -733,7 +731,7 @@ end
 
 # Check SSH configuration for weak settings
 function audit_ssh
-    ; set -l f "/etc/ssh/sshd_config"
+    set -l f "/etc/ssh/sshd_config"
     test -f "$f"; or begin echo "sshd_config not found"; return 1; end
     echo "=== SSH Security Audit ==="
     grep -E "^(PermitRootLogin|PasswordAuthentication|ChallengeResponseAuthentication|X11Forwarding|AllowTcpForwarding|UsePAM|Protocol)" "$f" 2>/dev/null
@@ -741,7 +739,7 @@ end
 
 # Data URL from file (for embedding in HTML)
 function dataurl
-    ; set -l mime; set mime (file -b --mime-type "$argv[1]")
+    set -l mime; set mime (file -b --mime-type "$argv[1]")
     test $mime = text/*; and set mime "$mime;charset=utf-8"
     echo "data:$mime;base64,(openssl base64 -in "$argv[1]" | tr -d '\n')"
 end
@@ -750,7 +748,7 @@ end
     # shellcheck disable=SC2317
 function hb
     test -f "$argv[1]"; or begin echo "Usage: hb <file>"; return 1; end
-    ; set -l key; set key (curl -s -X POST -d @"$argv[1]" http://bin.christitus.com/documents | grep -o '"key":"[^"]*"' | cut -d'"' -f4)
+    set -l key; set key (curl -s -X POST -d @"$argv[1]" http://bin.christitus.com/documents | grep -o '"key":"[^"]*"' | cut -d'"' -f4)
     echo "http://bin.christitus.com/$key"
 end
 
@@ -760,9 +758,9 @@ end
 
 # Timer for a command
 function timer
-    ; set -l s; set s (date +%s%N)
+    set -l s; set s (date +%s%N)
     "$argv"
-    ; set -l e; set e (date +%s%N)
+    set -l e; set e (date +%s%N)
     printf "Duration: %.3fs\n" (echo "scale=3; ($e - $s) / 1000000000" | bc)
 end
 
@@ -882,7 +880,7 @@ end
 
 # Repeat command N times
 function repeatn
-    ; set -l n "$argv[1]"; shift
+    set -l n "$argv[1]"; shift
     for i in (seq 0 (math $n - 1)); "$argv"; end
 end
 
@@ -893,7 +891,7 @@ end
 
 # Wait for a host to come online
 function wait_for
-    ; set -l host "$argv[1]"; set port "$argv[2]"; set timeout "$argv[3]"
+    set -l host "$argv[1]"; set port "$argv[2]"; set timeout "$argv[3]"
     echo "Waiting for $host:$port (timeout: $timeout)..."
     for i in (seq 0 (math $timeout - 1))
         timeout 1 bash -c ">/dev/tcp/$host/$port" 2>/dev/null; and begin echo "Online!"; return 0; end
@@ -910,7 +908,7 @@ end
 # Fuzzy open file in editor
 function fo
     type -q fzf >/dev/null 2>&1; or begin echo "fzf not installed"; return 1; end
-    ; set -l f; set f "$(find . -type f -name "*$argv[1]*" 2>/dev/null | fzf \
+    set -l f; set f "$(find . -type f -name "*$argv[1]*" 2>/dev/null | fzf \
         --preview 'bat --style=numbers --color=always {} 2>/dev/null; or cat {}')"
     test -n "$f"; and "$EDITOR" "$f"
 end
@@ -918,7 +916,7 @@ end
 # Fuzzy cd into directory
 function fcd
     type -q fzf >/dev/null 2>&1; or begin echo "fzf not installed"; return 1; end
-    ; set -l d; set d "$(find . -type d -not -path '*/.git/*' 2>/dev/null | fzf \
+    set -l d; set d "$(find . -type d -not -path '*/.git/*' 2>/dev/null | fzf \
         --preview 'tree -C {} | head -20 2>/dev/null; or ls {}')"
     test -n "$d"; and cd "$d"
 end
@@ -926,7 +924,7 @@ end
 # Fuzzy history search and execute
 function fh
     type -q fzf >/dev/null 2>&1; or begin echo "fzf not installed"; return 1; end
-    ; set -l cmd; set cmd (history | awk '{$1=""; print substr($argv[0],2)}' | sort -u | fzf --tac --prompt='history> ')
+    set -l cmd; set cmd (history | awk '{$1=""; print substr($argv[0],2)}' | sort -u | fzf --tac --prompt='history> ')
     test -n "$cmd"; and eval "$cmd"
 end
 
@@ -989,7 +987,7 @@ function bmclear
 end
 function bmgo
     type -q fzf >/dev/null 2>&1; or begin cat "$BOOKMARKS_FILE"; return; end
-    ; set -l d; set d (fzf --prompt='bookmark> ' < "$BOOKMARKS_FILE" 2>/dev/null --prompt='bookmark> ')
+    set -l d; set d (fzf --prompt='bookmark> ' < "$BOOKMARKS_FILE" 2>/dev/null --prompt='bookmark> ')
     test -n "$d"; and cd "$d"
 end
 
@@ -1002,7 +1000,7 @@ end
 # Watch command output every 2s
 function watchcmd
     while true
-    ; clear
+    clear
     "$argv"
     sleep 2
     end
@@ -1021,11 +1019,11 @@ end
 
 # Quick benchmark N runs of a command
 function bench
-    ; set -l n "$argv[1]"; shift
+    set -l n "$argv[1]"; shift
     echo "Running $n iterations of: $argv"
-    ; set -l s; set s (date +%s%N)
+    set -l s; set s (date +%s%N)
     for i in (seq 0 (math $n - 1)); "$argv" >/dev/null 2>&1; end
-    ; set -l e; set e (date +%s%N)
+    set -l e; set e (date +%s%N)
     printf "Total: %.3fs  Avg: %.3fs\n" \
         (echo "scale=3; ($e-$s)/1000000000" | bc) \
         (echo "scale=3; ($e-$s)/1000000000/$n" | bc)
@@ -1033,10 +1031,10 @@ end
 
 # gzip size comparison
 function gz
-    ; set -l orig gzip ratio
-    ; set orig (wc -c < "$argv[1]")
-    ; set gzip (gzip -c "$argv[1]" | wc -c)
-    ; set ratio (echo "scale=2; $gzip*100/$orig" | bc)
+    set -l orig gzip ratio
+    set orig (wc -c < "$argv[1]")
+    set gzip (gzip -c "$argv[1]" | wc -c)
+    set ratio (echo "scale=2; $gzip*100/$orig" | bc)
     printf "orig: %d bytes\ngzip: %d bytes (%.2f%%)\n" "$orig" "$gzip" "$ratio"
 end
 
@@ -1062,7 +1060,7 @@ end
 # Merge PDFs (requires ghostscript)
 function mergepdf
     test (count $argv) -lt 2; and begin echo "Usage: mergepdf <out.pdf> <in1.pdf> <in2.pdf> ..."; return 1; end
-    ; set -l out "$argv[1]"; shift
+    set -l out "$argv[1]"; shift
     gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile="$out" "$argv"; and echo "Merged → $out"
 end
 
@@ -1146,7 +1144,7 @@ function ftext
 end
 
 function cpp
-    ; set -e
+    set -e
     strace -q -ewrite cp -- "$argv[1]" "$argv[2]" 2>&1 |
     awk '{
         count += $NF
@@ -1201,7 +1199,7 @@ function pwdtail
 end
 
 function distribution
-    ; set -l dtype "unknown"
+    set -l dtype "unknown"
     if test -r /etc/os-release
         source /etc/os-release
         switch $ID
@@ -1240,8 +1238,8 @@ function distribution
 end
 
 function ver
-    ; set -l dtype
-    ; set dtype (distribution)
+    set -l dtype
+    set dtype (distribution)
     switch $dtype
         case redhat
             if test -s /etc/redhat-release; cat /etc/redhat-release; else cat /etc/issue; end; uname -a
@@ -1283,8 +1281,8 @@ end
 
 function whatsmyip
     # Get the default interface
-    ; set -l iface
-    ; set iface (ip route show default | awk '/default/ {print $argv[5]}' | head -n1)
+    set -l iface
+    set iface (ip route show default | awk '/default/ {print $argv[5]}' | head -n1)
     
     # Fallback to the first non-loopback interface if no default route
     if test -z "$iface"
@@ -1364,7 +1362,7 @@ function hb
         echo "File path does not exist."
         return
     end
-    ; set uri "http://bin.christitus.com/documents"
+    set uri "http://bin.christitus.com/documents"
     if set response (curl -s -X POST -d @"$argv[1]" "$uri")
         ; set hasteKey (echo "$response" | jq -r '.key')
         echo "http://bin.christitus.com/$hasteKey"
@@ -1396,8 +1394,8 @@ function transfer
         echo "No arguments specified."
         return 1
     end
-    ; set -l file $argv[1]
-    ; set -l filename; set filename (basename "$file")
+    set -l file $argv[1]
+    set -l filename; set filename (basename "$file")
     curl --progress-bar --upload-file "$file" "https://transfer.sh/$filename"
 end
 
@@ -1408,7 +1406,7 @@ end
 
 # Create a temporary directory and enter it
 function tmpdir
-    ; set -l dir; set dir (mktemp -d)
+    set -l dir; set dir (mktemp -d)
     cd "$dir"
     echo "Temporary directory: $dir"
 end

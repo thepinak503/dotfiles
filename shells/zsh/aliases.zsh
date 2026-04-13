@@ -1,15 +1,6 @@
-# ZSH
-#!/usr/bin/env bash
 # =============================================================================
-# REBUILT SUPREME ALIASES (Logic Fixed)
-# =============================================================================
-#!/usr/bin/env bash
-
-# =============================================================================
-# .bash/aliases.bash  —  2000+ Unique, distro-agnostic, security-aware aliases
-# Synced with .zsh/aliases.zsh and .fish/conf.d/aliases.fish
+# .zsh/aliases.zsh  —  2000+ Unique, distro-agnostic, security-aware aliases
 # All modern-tool aliases fall back gracefully if the tool isn't installed.
-
 # =============================================================================
 
 # ===========================================================================
@@ -28,8 +19,8 @@ alias chgrp='chgrp --preserve-root'
 # NAVIGATION
 
 # ===========================================================================
-alias ~='cd ~'
-alias -- -='cd -'
+alias "~" = "cd ~"
+alias --='cd -'
 alias home='cd ~'
 alias back='cd -'
 alias dots='cd "$DOTFILES_DIR"'
@@ -151,6 +142,8 @@ alias etmux='$EDITOR ~/.tmux.conf'
 alias essh='$EDITOR ~/.ssh/config'
 alias evimrc='$EDITOR ~/.config/nvim/init.lua'
 alias dotupdate='$DOTFILES_DIR/bin/dotupdate.sh'
+alias health='bash $DOTFILES_DIR/bin/health_check.sh'
+alias dothealth='bash $DOTFILES_DIR/bin/health_check.sh'
 # Reload
 alias rbash='source ~/.bashrc'
 alias rzsh='source ~/.zshrc'

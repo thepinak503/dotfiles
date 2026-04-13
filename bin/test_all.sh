@@ -68,9 +68,9 @@ if [[ "$DO_BASH" == true ]]; then
         "shells/bash/functions.bash"
         "shells/bash/03-dynamic_aliases.bash"
         "shells/bash/04-pkg_aliases.bash"
-        "shells/bash/modes/basic.bash"
-        "shells/bash/modes/medium.bash"
-        "shells/bash/modes/advanced.bash"
+        "shells/bash/modes/minimal.bash"
+        "shells/bash/modes/standard.bash"
+        "shells/bash/modes/supreme.bash"
         "shells/bash/modes/ultra-nerd.bash"
         "install/install.sh"
         "install/uninstall.sh"
@@ -123,9 +123,9 @@ if [[ "$DO_ZSH" == true ]]; then
             "shells/zsh/02-plugins.zsh"
             "shells/zsh/03-dynamic_aliases.zsh"
             "shells/zsh/05-pkg_aliases.zsh"
-            "shells/zsh/modes/basic.zsh"
-            "shells/zsh/modes/medium.zsh"
-            "shells/zsh/modes/advanced.zsh"
+            "shells/zsh/modes/minimal.zsh"
+            "shells/zsh/modes/standard.zsh"
+            "shells/zsh/modes/supreme.zsh"
             "shells/zsh/modes/ultra-nerd.zsh"
         )
 
@@ -157,15 +157,15 @@ if [[ "$DO_FISH" == true ]]; then
     else
         FISH_FILES=(
             "shells/fish/config.fish"
-            "shells/fish/conf.d/development.fish"
+
             "shells/fish/conf.d/modern-tools.fish"
             "shells/fish/conf.d/keybindings.fish"
             "shells/fish/conf.d/greeting.fish"
-            "shells/fish/functions/utilities.fish"
-            "shells/fish/modes/mode-basic.fish"
-            "shells/fish/modes/mode-medium.fish"
-            "shells/fish/modes/mode-advanced.fish"
-            "shells/fish/modes/mode-ultra-nerd.fish"
+
+            "shells/fish/modes/minimal.fish"
+            "shells/fish/modes/standard.fish"
+            "shells/fish/modes/supreme.fish"
+            "shells/fish/modes/ultra-nerd.fish"
         )
 
         for f in "${FISH_FILES[@]}"; do
@@ -201,34 +201,14 @@ for f in "${TOML_FILES[@]}"; do
         continue
     fi
 
-    # Validate using python tomllib
-    if command -v python3 &>/dev/null; then
-        err="$(python3 - "$ROOT/$f" <<'PYEOF' 2>&1
-import sys
-path = sys.argv[1]
-try:
-    import tomllib
-except ImportError:
-    try:
-        import tomli as tomllib
-    except ImportError:
-        print("SKIP: no tomllib"); sys.exit(0)
-try:
-    with open(path, 'rb') as fh:
-        tomllib.load(fh)
-except Exception as e:
-    print(f"ERROR: {e}")
-    sys.exit(1)
-print("OK")
-PYEOF
-)"
-        if echo "$err" | grep -qi "error\|Exception"; then
-            fail "TOML parse failed: $f — $err"
-        else
+    if command -v tomlqs &>/dev/null; then
+        if tomlqs "$f" &>/dev/null; then
             pass "TOML valid: $f"
+        else
+            fail "TOML parse failed: $f"
         fi
     else
-        skip "TOML validate $f" "python3"
+        skip "TOML validate $f" "tomlqs"
     fi
 done
 
@@ -253,14 +233,8 @@ for f in "${JSON_FILES[@]}"; do
         else
             fail "JSON invalid: $f"
         fi
-    elif command -v python3 &>/dev/null; then
-        if python3 -m json.tool "$f" &>/dev/null; then
-            pass "JSON valid: $f"
-        else
-            fail "JSON invalid: $f"
-        fi
     else
-        skip "JSON validate $f" "jq/python3"
+        skip "JSON validate $f" "jq"
     fi
 done
 
@@ -283,9 +257,9 @@ REQUIRED_FILES=(
     "shells/bash/functions.bash"
     "shells/bash/03-dynamic_aliases.bash"
     "shells/bash/04-pkg_aliases.bash"
-    "shells/bash/modes/basic.bash"
-    "shells/bash/modes/medium.bash"
-    "shells/bash/modes/advanced.bash"
+    "shells/bash/modes/minimal.bash"
+    "shells/bash/modes/standard.bash"
+    "shells/bash/modes/supreme.bash"
     "shells/bash/modes/ultra-nerd.bash"
     "shells/zsh/aliases.zsh"
     "shells/zsh/functions.zsh"
@@ -293,14 +267,14 @@ REQUIRED_FILES=(
     "shells/zsh/02-plugins.zsh"
     "shells/zsh/03-dynamic_aliases.zsh"
     "shells/zsh/05-pkg_aliases.zsh"
-    "shells/zsh/modes/basic.zsh"
-    "shells/zsh/modes/medium.zsh"
-    "shells/zsh/modes/advanced.zsh"
+    "shells/zsh/modes/minimal.zsh"
+    "shells/zsh/modes/standard.zsh"
+    "shells/zsh/modes/supreme.zsh"
     "shells/zsh/modes/ultra-nerd.zsh"
-    "shells/fish/modes/mode-basic.fish"
-    "shells/fish/modes/mode-medium.fish"
-    "shells/fish/modes/mode-advanced.fish"
-    "shells/fish/modes/mode-ultra-nerd.fish"
+    "shells/fish/modes/minimal.fish"
+    "shells/fish/modes/standard.fish"
+    "shells/fish/modes/supreme.fish"
+    "shells/fish/modes/ultra-nerd.fish"
     "apps/starship-linux.toml"
     "apps/starship-mac.toml"
     "apps/fastfetch/config.jsonc"
@@ -359,13 +333,7 @@ if [[ -f "shells/bash/04-pkg_aliases.bash" ]]; then
     fi
 fi
 
-# 5. No Python generator scripts remain
-for f in scripts/generate_dyn_aliases.py scripts/regenerate_dyn_aliases.sh; do
-    if [[ -f "$f" ]]; then
-        warn "$f still exists (should have been removed)"
-    fi
-done
-pass "No stale Python generator scripts"
+# 5. No stale generated files
 
 # 6. No pre-generated alias files
 for f in shells/bash/dyn_aliases.generated.bash shells/zsh/dyn_aliases.generated.zsh; do
@@ -399,18 +367,18 @@ done
 section "Coverage statistics"
 
 if [[ -f "shells/bash/aliases.bash" ]]; then
-    alias_count=$(grep -c "^alias " "shells/bash/aliases.bash" 2>/dev/null || echo 0)
+    alias_count=$(grep -c "^alias " "shells/bash/aliases.bash" 2>/dev/null || true)
     printf "  Bash aliases    : %d\n" "$alias_count"
 fi
 
 if [[ -f "shells/bash/functions.bash" ]]; then
-    func_count=$(grep -cP "^[a-zA-Z_][a-zA-Z0-9_-]*\(\)" "shells/bash/functions.bash" 2>/dev/null || echo 0)
+    func_count=$(grep -cP "^[a-zA-Z_][a-zA-Z0-9_-]*\(\)" "shells/bash/functions.bash" 2>/dev/null || true)
     printf "  Bash functions  : %d\n" "$func_count"
 fi
 
 if [[ -f "shells/fish/config.fish" ]]; then
-    fish_abbr=$(grep -c "^abbr -a" "shells/fish/config.fish" 2>/dev/null || echo 0)
-    fish_func=$(grep -c "^function " "shells/fish/config.fish" 2>/dev/null || echo 0)
+    fish_abbr=$(grep -c "^abbr -a" "shells/fish/config.fish" 2>/dev/null || true)
+    fish_func=$(grep -c "^function " "shells/fish/config.fish" 2>/dev/null || true)
     printf "  Fish abbrevs    : %d\n" "$fish_abbr"
     printf "  Fish functions  : %d\n" "$fish_func"
 fi

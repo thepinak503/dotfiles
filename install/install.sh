@@ -8,8 +8,15 @@ set -e
 
 # --- Configuration ---
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+DOTFILES_STATE_DIR="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}"
 VERSION="11.0.0"
 BREWFILE="$DOTFILES_DIR/apps/brew/Brewfile"
+
+# Record installation date if not present
+mkdir -p "$DOTFILES_STATE_DIR"
+if [ ! -f "$DOTFILES_STATE_DIR/install_date" ]; then
+    date "+%Y-%m-%d %H:%M:%S" > "$DOTFILES_STATE_DIR/install_date"
+fi
 
 # --- Colors ---
 if [ -t 1 ]; then
@@ -149,11 +156,7 @@ fi
 
 header "FINALIZING"
 # Ensure sync script is executable and run it
-if [ -f "$DOTFILES_DIR/bin/sync_shells.py" ]; then
-    chmod +x "$DOTFILES_DIR/bin/sync_shells.py"
-    python3 "$DOTFILES_DIR/bin/sync_shells.py" >/dev/null 2>&1
-    info "Re-synced polyglot shells"
-fi
+
 
 # Cleanup legacy artifacts from system files
 info "Cleaning up legacy Atuin paths from system RC files..."

@@ -1,18 +1,6 @@
-# AUTO-GENERATED
-
-status is-interactive; or exit
-
-#!/usr/bin/env bash
 # =============================================================================
-# REBUILT SUPREME ALIASES (Logic Fixed)
-# =============================================================================
-#!/usr/bin/env bash
-
-# =============================================================================
-# .bash/aliases.bash  —  2000+ Unique, distro-agnostic, security-aware aliases
-# Synced with .zsh/aliases.zsh and .fish/conf.d/aliases.fish
+# .fish/aliases.fish  —  2000+ Unique, distro-agnostic, security-aware aliases
 # All modern-tool aliases fall back gracefully if the tool isn't installed.
-
 # =============================================================================
 
 # ===========================================================================
@@ -153,7 +141,9 @@ abbr -a edots '$EDITOR "$DOTFILES_DIR"'
 abbr -a etmux '$EDITOR ~/.tmux.conf'
 abbr -a essh '$EDITOR ~/.ssh/config'
 abbr -a evimrc '$EDITOR ~/.config/nvim/init.lua'
-abbr -a dotupdate '$DOTFILES_DIR/bin/dotupdate.sh'
+abbr -a dotupdate 'bash $DOTFILES_DIR/bin/dotupdate.sh'
+abbr -a health 'bash $DOTFILES_DIR/bin/health_check.sh'
+abbr -a dothealth 'bash $DOTFILES_DIR/bin/health_check.sh'
 # Reload
 abbr -a rbash 'source ~/.bashrc'
 abbr -a rzsh 'source ~/.zshrc'

@@ -29,29 +29,29 @@ BASE=$(git merge-base @ @{u})
 
 if [ "$LOCAL" = "$REMOTE" ]; then
     echo -e "${GREEN}✓ Dotfiles are up to date.${NC}"
-elif [ "$LOCAL" = "$BASE" ]; then
+elif [ "$LOCAL" = "$BASE" ] || [ "$LOCAL" != "$REMOTE" ]; then
     echo -e "${YELLOW}⚡ Updates available!${NC}"
     echo -e "\n${BOLD}New commits since your local version:${NC}"
     git log --oneline --graph --decorate --color HEAD..@{u}
     
-    echo -e "\n${CYAN}Updates since your first install ($(cat "$INSTALL_DATE_FILE" 2>/dev/null)):${NC}"
-    # Find the closest commit to the install date and log forward
-    INSTALL_DATE=$(cat "$INSTALL_DATE_FILE" 2>/dev/null)
-    git log --since="$INSTALL_DATE" --oneline --reverse --color
+    [[ -f "$INSTALL_DATE_FILE" ]] && echo -e "\n${CYAN}Updates since your first install ($(cat "$INSTALL_DATE_FILE")):${NC}"
     
-    echo -e "\nWould you like to pull the updates? [y/N] "
+    echo -e "\nWould you like to pull and auto-resolve any conflicts? [y/N] "
     read -r response
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-        git pull origin main
-        # Run sync after pull
-        if [ -f "bin/sync_shells.py" ]; then
-            python3 bin/sync_shells.py
-        fi
+        echo -e "${CYAN}Pulling with auto-resolution (preferring upstream fixes)...${NC}"
+        # --autostash handles dirty trees, -X theirs resolves conflicts by preferring incoming changes
+        git pull --rebase --autostash -X theirs origin main
+        
+        # Remove the notification flag
+        rm -f "$STATE_DIR/update_ready" 2>/dev/null
+        
         echo -e "${GREEN}✓ Updated and re-synced!${NC}"
     fi
 else
     echo -e "${RED}⚠ Local and Remote have diverged!${NC}"
-    echo "This usually means you have local commits. Manual merge required."
+    echo "Attempting to auto-fix via rebase..."
+    git pull --rebase --autostash -X theirs origin main && echo -e "${GREEN}✓ Auto-fixed.${NC}" || echo -e "${RED}✗ Manual fix still required.${NC}"
 fi
 
 # Update last check timestamp

@@ -6,8 +6,8 @@ status is-interactive; or exit
 # =============================================================================
 # DOTFILES MODE (minimal | standard | supreme | ultra-nerd)
 # =============================================================================
-set -gx BROWSER "$BROWSER"
-set -gx DOTFILES_MODE "$DOTFILES_MODE"
+set -gx BROWSER (command -v xdg-open || command -v open || command -v firefox || command -v google-chrome || echo xdg-open)
+set -gx DOTFILES_MODE "${DOTFILES_MODE:-supreme}"
 
 # =============================================================================
 # EXPORTS & ENV (ZachBrowne / Titus)
@@ -42,7 +42,7 @@ if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
         ssh-agent -c | source >/dev/null
         ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
     end
-    ; set -gx SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
+    set -gx SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
 end
 
 # =============================================================================
@@ -50,7 +50,7 @@ end
 # =============================================================================
 if type -q vivid >/dev/null 2>&1
     # shellcheck disable=SC2155
-    ; set -gx LS_COLORS (vivid generate nord)
+    set -gx LS_COLORS (vivid generate nord)
 end
 
 # =============================================================================

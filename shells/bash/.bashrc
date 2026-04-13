@@ -16,8 +16,6 @@ DOTFILES_DIR="$(cd -P "$(dirname "$_BS_FILE")/../.." >/dev/null 2>&1 && pwd)"
 if [[ ! -d "$DOTFILES_DIR/shells" ]]; then
     if [[ -d "$HOME/git/dotfiles" ]]; then
         DOTFILES_DIR="$HOME/git/dotfiles"
-    elif [[ -d "/home/pinak/git/dotfiles" ]]; then
-        DOTFILES_DIR="/home/pinak/git/dotfiles"
     fi
 fi
 export DOTFILES_DIR
@@ -47,7 +45,7 @@ _src "$DOTFILES_DIR/shells/bash/functions.bash"
 _src "$DOTFILES_DIR/shells/bash/aliases.bash"
 
 # 3. DYNAMIC & PACKAGES (Phase-gated)
-if [[ "$DOTFILES_MODE" =~ ^(basic|standard|advanced|supreme|ultra-nerd)$ ]]; then
+if [[ "$DOTFILES_MODE" =~ ^(minimal|standard|supreme|ultra-nerd)$ ]]; then
     _src "$DOTFILES_DIR/shells/bash/03-dynamic_aliases.bash"
     _src "$DOTFILES_DIR/shells/bash/04-pkg_aliases.bash"
 fi
@@ -56,14 +54,49 @@ if [[ "$DOTFILES_MODE" =~ ^(supreme|ultra-nerd)$ ]]; then
     _src "$DOTFILES_DIR/shells/bash/05-heavy_tools.bash"
 fi
 
-# 4. PROMPT & EXTRA
+# 4. MODES
+_load_mode() {
+    local d="$DOTFILES_DIR/shells/bash/modes"
+    case "$DOTFILES_MODE" in
+        minimal)
+            _src "$d/minimal.bash" ;;
+        standard)
+            _src "$d/minimal.bash"
+            _src "$d/standard.bash" ;;
+        supreme)
+            _src "$d/minimal.bash"
+            _src "$d/standard.bash"
+            _src "$d/supreme.bash" ;;
+        ultra-nerd)
+            _src "$d/minimal.bash"
+            _src "$d/standard.bash"
+            _src "$d/supreme.bash"
+            _src "$d/ultra-nerd.bash" ;;
+        *)
+            _src "$d/minimal.bash"
+            _src "$d/standard.bash"
+            _src "$d/supreme.bash" ;;
+    esac
+}
+_load_mode
+unset -f _load_mode
+
+# 5. PROMPT & EXTRA
 if command -v starship &>/dev/null; then
     eval "$(starship init bash)"
 fi
 
+# 5.1 BACKGROUND UPDATE CHECK (Weekly logic)
+if [[ -f "$DOTFILES_DIR/bin/dotupdate_bg.sh" && "$DOTFILES_MODE" != "minimal" ]]; then
+    (bash "$DOTFILES_DIR/bin/dotupdate_bg.sh" &)
+    if [[ -f "$DOTFILES_STATE_DIR/update_ready" ]]; then
+        echo -e "\n${YELLOW}⚡ Dotfiles updates are available! Run 'dotupdate' to apply.${NC}"
+    fi
+fi
+
 # 5. STARTUP TOOLS
 if [[ -f /usr/bin/fastfetch ]]; then
-    exec fastfetch
+    fastfetch
 fi
 
 if [[ -f /usr/share/doc/find-the-command/ftc.bash ]]; then

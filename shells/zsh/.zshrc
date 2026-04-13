@@ -12,10 +12,6 @@ DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
 if [[ ! -d "$DOTFILES_DIR/shells" ]]; then
     if [[ -d "$HOME/git/dotfiles" ]]; then
         DOTFILES_DIR="$HOME/git/dotfiles"
-    elif [[ -d "/home/pinak/git/dotfiles" ]]; then
-        DOTFILES_DIR="/home/pinak/git/dotfiles"
-    else
-        DOTFILES_DIR="$HOME/git/dotfiles"
     fi
 fi
 export DOTFILES_DIR
@@ -212,25 +208,25 @@ _src "$DOTFILES_DIR/shells/zsh/05-pkg_aliases.zsh"
 _load_mode() {
     local d="$DOTFILES_DIR/shells/zsh/modes"
     case "$DOTFILES_MODE" in
-        basic|minimal)
-            _src "$d/basic.zsh" ;;
+        minimal)
+            _src "$d/minimal.zsh" ;;
         standard)
-            _src "$d/basic.zsh"
-            _src "$d/medium.zsh" ;;
+            _src "$d/minimal.zsh"
+            _src "$d/standard.zsh" ;;
         supreme)
-            _src "$d/basic.zsh"
-            _src "$d/medium.zsh"
-            _src "$d/advanced.zsh" ;;
+            _src "$d/minimal.zsh"
+            _src "$d/standard.zsh"
+            _src "$d/supreme.zsh" ;;
         ultra-nerd)
-            _src "$d/basic.zsh"
-            _src "$d/medium.zsh"
-            _src "$d/advanced.zsh"
+            _src "$d/minimal.zsh"
+            _src "$d/standard.zsh"
+            _src "$d/supreme.zsh"
             _src "$d/ultra-nerd.zsh" ;;
         *)
             # Fallback to supreme if unknown
-            _src "$d/basic.zsh"
-            _src "$d/medium.zsh"
-            _src "$d/advanced.zsh" ;;
+            _src "$d/minimal.zsh"
+            _src "$d/standard.zsh"
+            _src "$d/supreme.zsh" ;;
     esac
 
 }
@@ -243,17 +239,17 @@ unset -f _load_mode
 
 chmode() {
     case "${1:-}" in
-        basic|medium|advanced|ultra-nerd)
+        minimal|standard|supreme|ultra-nerd)
             export DOTFILES_MODE="$1"
             echo "$1" > "$DOTFILES_STATE_DIR/mode" 2>/dev/null
             echo "✓ Mode → $1  (restart shell or run: exec zsh)"
             ;;
         "")
             printf 'Current mode: %s\n' "$DOTFILES_MODE"
-            printf 'Modes: basic | medium | advanced | ultra-nerd\n'
-            printf '  basic       — minimal, SSH-safe\n'
-            printf '  medium      — modern tools, balanced\n'
-            printf '  advanced    — full-featured (default)\n'
+            printf 'Modes: minimal | standard | supreme | ultra-nerd\n'
+            printf '  minimal     — minimal, SSH-safe\n'
+            printf '  standard    — balanced\n'
+            printf '  supreme     — full-featured (default)\n'
             printf '  ultra-nerd  — maximum productivity\n'
             ;;
         *) echo "Unknown mode: $1" >&2; return 1 ;;
@@ -275,6 +271,14 @@ if command -v starship &>/dev/null; then
 fi
 
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)" 2>/dev/null
+
+# 9.1 BACKGROUND UPDATE CHECK (Weekly logic)
+if [[ -f "$DOTFILES_DIR/bin/dotupdate_bg.sh" && "$DOTFILES_MODE" != "minimal" ]]; then
+    (bash "$DOTFILES_DIR/bin/dotupdate_bg.sh" &)
+    if [[ -f "$DOTFILES_STATE_DIR/update_ready" ]]; then
+        echo "\n%F{yellow}⚡ Dotfiles updates are available! Run 'dotupdate' to apply.%f"
+    fi
+fi
 
 # FZF key-bindings
 for _fzf_bind in \

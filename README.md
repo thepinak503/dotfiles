@@ -1,4 +1,4 @@
-# Pinak's Dotfiles (Polyglot Shell Ecosystem)
+# Pinak's Dotfiles
 
 Unified, modular shell configuration ecosystem supporting Bash, Zsh, and Fish with feature parity across all environments.
 
@@ -8,7 +8,7 @@ This repository implements a high-performance shell architecture with native sup
 
 ## Core Features
 
-- **Polyglot Design**: Native implementation of aliases, exports, and functions across all major shell dialects.
+- **Universal Design**: Native implementation of aliases, exports, and functions across all major shell dialects.
 - **Operational Modes**: Native support for cumulative configuration levels: `minimal`, `standard`, `supreme`, and `ultra-nerd`.
 - **Automated Maintenance**:
     - `dotupdate`: Check for upstream changes and view feature history since installation.

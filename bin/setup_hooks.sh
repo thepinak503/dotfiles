@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Git Hooks Setup
-# Ensures polyglot shells are synced before every commit.
+# Ensures all shells are synced before every commit.
 # =============================================================================
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/git/dotfiles}"
@@ -11,9 +11,7 @@ echo "Setting up pre-commit hook..."
 
 cat > "$HOOK_FILE" <<EOF
 #!/usr/bin/env bash
-echo "Running pre-commit sync..."
-python3 bin/sync_shells.py
-git add shells/zsh/*.zsh shells/fish/*.fish history.md llm_state.md
+git add history.md llm_state.md
 EOF
 
 chmod +x "$HOOK_FILE"
