@@ -2170,3 +2170,21 @@ alias whoami='whoami'
 alias cls='clear'
 alias r='exec bash'
 alias rbash='exec bash'
+
+# --- Safety (trash-cli) ---
+if command -v trash &>/dev/null; then
+    alias rm='trash -v'
+else
+    alias rm='rm -i'
+fi
+
+# --- Arch Specific ---
+alias fixpacman='sudo rm /var/lib/pacman/db.lck'
+alias mirror='sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist'
+alias rip='expac --timefmt="%Y-%m-%d %T" "%l\t%n %v" | sort | tail -200 | nl'
+
+# --- MISC ---
+alias starwars='telnet towel.blinkenlights.nl 2>/dev/null'
+alias helpme='cht.sh --shell'
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -o -selection clipboard'

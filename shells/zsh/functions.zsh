@@ -1226,3 +1226,77 @@ grib() {
     [[ -z "$1" ]] && { echo "Usage: grib <N>"; return 1; }
     git rebase -i "HEAD~$1"
 }
+
+# =============================================================================
+# AI & CLOUD HELPERS (ch.at Integration)
+# =============================================================================
+chat() {
+    local response
+    [[ -z "$1" ]] && { echo "Usage: chat <prompt>"; return 1; }
+    response=$(curl -s ch.at/v1/chat/completions --data "{\"messages\":[{\"role\":\"user\",\"content\":\"$1\"}]}" | jq -r '.choices[0].message.content')
+    echo "$response"
+}
+
+coder() {
+    local user_prompt="$1"
+    local outfile="$2"
+    [[ -z "$1" || -z "$2" ]] && { echo "Usage: coder <prompt> <outfile>"; return 1; }
+    local system_prompt="You are a code generator. Always and only output raw, runnable code with no explanations, comments, markdown fences, or prose."
+    local full_prompt="$system_prompt $user_prompt"
+    local response
+    response=$(curl -s ch.at/v1/chat/completions --data "{\"messages\":[{\"role\":\"user\",\"content\":\"$full_prompt\"}]}" | jq -r '.choices[0].message.content')
+    echo "$response" | sed '/^[[:space:]]*$/d' > "$outfile"
+    echo "✅ Code saved to $outfile"
+}
+
+# =============================================================================
+# ADVANCED UTILITIES
+# =============================================================================
+# Copy with Progress (Requires: strace)
+cpp() {
+    set -e
+    strace -q -ewrite cp -- "${1}" "${2}" 2>&1 |
+    awk '{
+        count += $NF
+        if (count % 10 == 0) {
+            percent = count / total_size * 100
+            printf "%3d%% [", percent
+            for (i=0;i<=percent;i++) printf "="
+            printf ">"
+            for (i=percent;i<100;i++) printf " "
+            printf "]\r"
+        }
+    }
+    END { print "" }' total_size="$(stat -c '%s' "${1}")" count=0
+}
+
+# Multi-level Directory Up
+up() {
+    local d=""
+    local limit=${1:-1}
+    for ((i = 1; i <= limit; i++)); do d=$d/..; done
+    d=$(echo $d | sed 's/^\///')
+    [[ -z "$d" ]] && d=..
+    builtin cd $d
+}
+
+# Distro-aware Tool Suite Installer
+dotsuite() {
+    local distro="${DOTFILES_DISTRO:-$(. /home/pinak/git/dotfiles/core/system-detect.sh && echo $DOTFILES_DISTRO)}"
+    echo "Distro detected: $distro"
+    case $distro in
+        *arch*|manjaro|endeavouros|garuda)
+            local tool="pacman"
+            command -v yay &>/dev/null && tool="yay"
+            command -v paru &>/dev/null && tool="paru"
+            local pkgs="neovim trash-cli eza bat zoxide fzf ripgrep ugrep starship fastfetch xclip xdotool hwinfo net-tools strace curl jq multitail expac reflector"
+            if [ "$tool" = "pacman" ]; then sudo pacman -S --noconfirm $pkgs; else $tool -S --noconfirm $pkgs; fi
+            ;;
+        debian|ubuntu|linuxmint|pop)
+            sudo apt update && sudo apt install -y neovim trash-cli bat zoxide fzf ripgrep curl jq net-tools strace xclip xdotool multitail hwinfo
+            ;;
+        fedora|rhel)
+            sudo dnf install -y neovim trash-cli eza bat zoxide fzf ripgrep ugrep starship fastfetch xclip xdotool hwinfo net-tools strace curl jq multitail
+            ;;
+    esac
+}

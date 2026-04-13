@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 [[ $- != *i* ]] && return
+# Keybindings
+bind "set bell-style visible"
+bind "set completion-ignore-case on"
+bind "set show-all-if-ambiguous On"
+bind '"\C-f":"zi\n"'
+bind '"\e[5~": history-search-backward'
+bind '"\e[6~": history-search-forward'
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+bind '"\e[H": beginning-of-line'
+bind '"\e[F": end-of-line'
+bind '"\e[1;5D": backward-word'
+bind '"\e[1;5C": forward-word'
 _BS_FILE="${BASH_SOURCE[0]}"
 while [ -L "$_BS_FILE" ]; do
     _BS_DIR="$(cd -P "$(dirname "$_BS_FILE")" >/dev/null 2>&1 && pwd)"

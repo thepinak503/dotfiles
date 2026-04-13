@@ -52,11 +52,11 @@ ssh_symbol = "󰣀 "
 [git_branch]
 symbol = " "
 style = "bg:nord_polar_night_2 fg:nord_aurora_purple"
-format = "[[ $symbol$branch ]($style)]"
+format = "[$symbol$branch]($style)"
 
 [git_status]
 style = "bg:nord_polar_night_2 fg:nord_aurora_red"
-format = "[[($all_status$ahead_behind )]($style)]"
+format = "[$all_status$ahead_behind]($style)"
 
 [custom.cpu_load]
 command = "cut -d' ' -f1 /proc/loadavg"
