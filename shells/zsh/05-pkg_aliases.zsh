@@ -1,10 +1,4 @@
 #!/usr/bin/env zsh
-# =============================================================================
-# .zsh/05-pkg_aliases.zsh — Cross-distro package manager wrappers
-# Uses DOTFILES_PKG set by lib/system-detect.sh.
-# =============================================================================
-
-# Re-detect at function call time so it works even without system-detect.sh
 _pkg() {
     if   command -v pacman      >/dev/null 2>&1; then echo pacman
     elif command -v apt-get     >/dev/null 2>&1; then echo apt
@@ -18,7 +12,6 @@ _pkg() {
     else echo unknown
     fi
 }
-
 pm_install() {
     local pkgs="$*"
     case "$(_pkg)" in
@@ -34,7 +27,6 @@ pm_install() {
         *)      echo "No supported package manager found"; return 1 ;;
     esac
 }
-
 pm_update() {
     case "$(_pkg)" in
         pacman) sudo pacman -Syu ;;
@@ -49,7 +41,6 @@ pm_update() {
         *)      echo "No supported package manager found" ;;
     esac
 }
-
 pm_search() {
     local term="$1"
     case "$(_pkg)" in
@@ -65,7 +56,6 @@ pm_search() {
         *)      echo "No supported package manager found" ;;
     esac
 }
-
 pm_remove() {
     local pkgs="$*"
     case "$(_pkg)" in
@@ -81,7 +71,6 @@ pm_remove() {
         *)      echo "No supported package manager found"; return 1 ;;
     esac
 }
-
 pm_list() {
     case "$(_pkg)" in
         pacman) pacman -Q ;;
@@ -96,8 +85,6 @@ pm_list() {
         *)      echo "No supported package manager found" ;;
     esac
 }
-
-# Chaotic-AUR helpers (Arch only — NOT auto-executed)
 chaotic_setup() {
     command -v pacman >/dev/null 2>&1 || { echo "Arch-only feature."; return 1; }
     grep -qE '^\[chaotic-aur\]' /etc/pacman.conf 2>/dev/null && { echo "Chaotic-AUR already configured."; return 0; }
@@ -109,7 +96,6 @@ chaotic_setup() {
     echo "  echo -e '[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' | sudo tee -a /etc/pacman.conf"
     echo "  sudo pacman -Syu"
 }
-
 chaotic_install() {
     [[ -z "$1" ]] && { echo "Usage: chaotic_install <pkg>"; return 1; }
     if command -v yay &>/dev/null; then
@@ -120,5 +106,4 @@ chaotic_install() {
         sudo pacman -S "chaotic-aur/$1"
     fi
 }
-
 unset -f _pkg

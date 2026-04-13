@@ -1,12 +1,3 @@
-# =============================================================================
-# .fish/aliases.fish  —  2000+ Unique, distro-agnostic, security-aware aliases
-# All modern-tool aliases fall back gracefully if the tool isn't installed.
-# =============================================================================
-
-# ===========================================================================
-# SAFETY
-
-# ===========================================================================
 abbr -a rm 'rm -i'
 abbr -a cp 'cp -i'
 abbr -a mv 'mv -i'
@@ -14,11 +5,6 @@ abbr -a ln 'ln -i'
 abbr -a chown 'chown --preserve-root'
 abbr -a chmod 'chmod --preserve-root'
 abbr -a chgrp 'chgrp --preserve-root'
-
-# ===========================================================================
-# NAVIGATION
-
-# ===========================================================================
 abbr -a ~ 'cd ~'
 abbr -a - 'cd -'
 abbr -a home 'cd ~'
@@ -36,11 +22,6 @@ abbr -a etc 'cd /etc'
 abbr -a usrbin 'cd /usr/bin'
 abbr -a localbin 'cd ~/.local/bin'
 abbr -a confdir 'cd ~/.config'
-
-# ===========================================================================
-# LISTING  (eza → exa → ls)
-
-# ===========================================================================
         abbr -a ltt 'eza --tree --level=3 --icons'
         abbr -a lttt 'eza --tree --level=4 --icons'
         abbr -a lll 'eza -la --icons --git --color=auto --time-style=long-iso'
@@ -50,20 +31,10 @@ abbr -a confdir 'cd ~/.config'
         abbr -a lln 'eza -la --icons --git --sort=name'
         abbr -a treea 'eza --tree --icons -a'
         abbr -a tree 'exa --tree --icons'
-
-# ===========================================================================
-# FILE VIEWING  (bat → cat)
-
-# ===========================================================================
         abbr -a catp 'bat --style=plain --paging=never'
         abbr -a bh 'bat --style=header'
         abbr -a bp 'bat --style=plain'
         abbr -a catn 'batcat --style=plain'
-
-# ===========================================================================
-# SEARCHING  (fd → find, rg → grep, delta → diff)
-
-# ===========================================================================
         abbr -a find 'fd -H'
         abbr -a ff 'fd -H'
         abbr -a fdir 'fd -t d'
@@ -71,11 +42,6 @@ abbr -a confdir 'cd ~/.config'
         abbr -a rgs 'rg --smart-case --hidden -l'     # list files only
         abbr -a rgn 'rg --smart-case --hidden -N'     # no line numbers
         abbr -a diff 'delta'
-
-# ===========================================================================
-# PROCESS / SYSTEM MONITORING
-
-# ===========================================================================
         abbr -a htop 'btop'
         abbr -a top 'htop'
         abbr -a ps 'ps auxf'
@@ -83,11 +49,6 @@ abbr -a psg 'ps aux | grep -v grep | grep -i'
 abbr -a pstree 'pstree -p'
 abbr -a killi 'kill -9'
 abbr -a killall9 'killall -9'
-
-# ===========================================================================
-# SYSTEM INFO
-
-# ===========================================================================
 abbr -a df 'df -hT'
 abbr -a duh 'du -sh'
 abbr -a free 'free -h'
@@ -105,32 +66,20 @@ abbr -a lsblk 'lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT'
 abbr -a lsusb 'lsusb -v 2>/dev/null | head -50'
 abbr -a lspci 'lspci -v'
 abbr -a dmidecode 'sudo dmidecode'
-# Fastfetch / neofetch
         abbr -a neofetch 'fastfetch'
         abbr -a sf 'neofetch'
         abbr -a sysinfo 'neofetch'
         abbr -a fetch 'neofetch'
-
-# ===========================================================================
-# DISK / STORAGE
-
-# ===========================================================================
 abbr -a dff 'df -hT | grep -v tmpfs'
 abbr -a diskfree 'df -h --total | tail -1'
         abbr -a du 'gdu'
 abbr -a lsblka 'lsblk -a'
 abbr -a mount 'mount | column -t'
-
-# ===========================================================================
-# EDITORS
-
-# ===========================================================================
 abbr -a vi 'nvim'
 abbr -a vim 'nvim'
 abbr -a nv 'nvim'
 abbr -a svim 'sudo nvim'
 abbr -a nano 'nano -l'                     # line numbers in nano
-# Quick config edits
 abbr -a ebash '$EDITOR ~/.bashrc'
 abbr -a ezsh '$EDITOR ~/.zshrc'
 abbr -a efish '$EDITOR ~/.config/fish/config.fish'
@@ -144,29 +93,22 @@ abbr -a evimrc '$EDITOR ~/.config/nvim/init.lua'
 abbr -a dotupdate 'bash $DOTFILES_DIR/bin/dotupdate.sh'
 abbr -a health 'bash $DOTFILES_DIR/bin/health_check.sh'
 abbr -a dothealth 'bash $DOTFILES_DIR/bin/health_check.sh'
-# Reload
+abbr -a doterrors 'tail -n 20 "$DOTFILES_STATE_DIR/errors.log"'
+abbr -a doterrors-clear '> "$DOTFILES_STATE_DIR/errors.log"'
 abbr -a rbash 'source ~/.bashrc'
 abbr -a rzsh 'source ~/.zshrc'
-
-# ===========================================================================
-# GIT  (comprehensive — ~120 aliases)
-
-# ===========================================================================
 abbr -a g 'git'
 abbr -a gi 'git init'
 abbr -a gcl 'git clone'
 abbr -a gcld 'git clone --depth=1'
-# Status
 abbr -a gs 'git status'
 abbr -a gss 'git status -sb'
 abbr -a gsv 'git status -v'
-# Add / stage
 abbr -a ga 'git add'
 abbr -a gaa 'git add --all'
 abbr -a gap 'git add -p'
 abbr -a gau 'git add -u'
 abbr -a gaf 'git add -f'
-# Commit
 abbr -a gc 'git commit -v'
 abbr -a gcm 'git commit -m'
 abbr -a gca 'git commit --amend'
@@ -174,7 +116,6 @@ abbr -a gcan 'git commit --amend --no-edit'
 abbr -a gcas 'git commit --amend --squash'
 abbr -a gcf 'git commit --fixup'
 abbr -a gcs 'git commit -S'            # GPG-signed commit
-# Branch
 abbr -a gb 'git branch'
 abbr -a gba 'git branch -a'
 abbr -a gbr 'git branch -r'
@@ -183,21 +124,18 @@ abbr -a gbD 'git branch -D'
 abbr -a gbm 'git branch -m'
 abbr -a gbsort 'git branch --sort=-committerdate'
 abbr -a gbclean 'git branch --merged | grep -v "\*\|main\|master\|develop" | xargs -r git branch -d'
-# Checkout / Switch
 abbr -a gco 'git checkout'
 abbr -a gcob 'git checkout -b'
 abbr -a gcop 'git checkout -p'
 abbr -a gsw 'git switch'
 abbr -a gswc 'git switch -c'
 abbr -a gswm 'git switch main 2>/dev/null || git switch master'
-# Diff
 abbr -a gd 'git diff'
 abbr -a gds 'git diff --staged'
 abbr -a gdc 'git diff --cached'
 abbr -a gdw 'git diff --word-diff'
 abbr -a gdn 'git diff --name-only'
 abbr -a gdstat 'git diff --stat'
-# Fetch / Pull / Push
 abbr -a gf 'git fetch'
 abbr -a gfa 'git fetch --all --prune'
 abbr -a gpl 'git pull'
@@ -208,7 +146,6 @@ abbr -a gpf 'git push --force-with-lease'   # safe force push
 abbr -a gpt 'git push --tags'
 abbr -a gpu 'git push -u origin HEAD'
 abbr -a gpd 'git push --dry-run'
-# Log
 abbr -a gg 'git log --oneline --graph --decorate'
 abbr -a gga 'git log --oneline --graph --all --decorate'
 abbr -a ggl 'git log --graph --pretty="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
@@ -218,7 +155,6 @@ abbr -a gll 'git log --pretty=fuller'
 abbr -a glp 'git log --patch'
 abbr -a glf 'git log --follow -p'           # follow file history
 abbr -a gwho 'git shortlog -sn --all --no-merges'
-# Rebase
 abbr -a gr 'git rebase'
 abbr -a gri 'git rebase -i'
 abbr -a grim 'git rebase -i origin/main'
@@ -226,17 +162,14 @@ abbr -a grih 'git rebase -i HEAD~'
 abbr -a gra 'git rebase --abort'
 abbr -a grc 'git rebase --continue'
 abbr -a grs 'git rebase --skip'
-# Merge
 abbr -a gm 'git merge'
 abbr -a gma 'git merge --abort'
 abbr -a gmc 'git merge --continue'
 abbr -a gmff 'git merge --ff-only'
 abbr -a gmnff 'git merge --no-ff'
 abbr -a gmsq 'git merge --squash'
-# Cherry-pick
 abbr -a gcpa 'git cherry-pick --abort'
 abbr -a gcpc 'git cherry-pick --continue'
-# Stash
 abbr -a gh 'git stash'
 abbr -a ghs 'git stash show -p'
 abbr -a ghp 'git stash pop'
@@ -244,44 +177,36 @@ abbr -a gha 'git stash apply'
 abbr -a ghd 'git stash drop'
 abbr -a ghl 'git stash list'
 abbr -a ghcl 'git stash clear'
-# Reset
 abbr -a gre 'git reset'
 abbr -a greh 'git reset HEAD'
 abbr -a grehh 'git reset --hard HEAD'
 abbr -a grehs 'git reset --soft HEAD~1'   # undo last commit, keep changes staged
 abbr -a gundo 'git reset --soft HEAD~1'
 abbr -a gnuke 'git reset --hard && git clean -fd'
-# Remote
 abbr -a grm 'git remote'
 abbr -a grma 'git remote add'
 abbr -a grmr 'git remote remove'
 abbr -a grmv 'git remote -v'
 abbr -a grmu 'git remote set-url'
-# Tag
 abbr -a gt 'git tag'
 abbr -a gta 'git tag -a'
 abbr -a gtd 'git tag -d'
 abbr -a gtl 'git tag -l'
 abbr -a gtp 'git push --tags'
-# Worktree
 abbr -a gw 'git worktree'
 abbr -a gwl 'git worktree list'
 abbr -a gwa 'git worktree add'
 abbr -a gwd 'git worktree remove'
-# Submodule
 abbr -a gsm 'git submodule'
 abbr -a gsmu 'git submodule update --init --recursive'
 abbr -a gsms 'git submodule sync'
-# Bisect
 abbr -a gbis 'git bisect'
 abbr -a gbisr 'git bisect reset'
 abbr -a gbiss 'git bisect start'
 abbr -a gbisb 'git bisect bad'
 abbr -a gbisg 'git bisect good'
-# Reflog
 abbr -a gref 'git reflog'
 abbr -a grefl 'git reflog expire --expire=now --all'
-# Misc
 abbr -a gcln 'git clean -fd'
 abbr -a gclnx 'git clean -fdx'
 abbr -a gig 'git ls-files --others --exclude-standard'   # untracked
@@ -291,11 +216,6 @@ abbr -a gcount 'git rev-list --count HEAD'
 abbr -a gsize 'git count-objects -vH'
 abbr -a gfix 'git add -A && git commit --amend --no-edit'
 abbr -a glazyg 'git add . && git commit -m'
-
-# ===========================================================================
-# DOCKER  (~60 aliases)
-
-# ===========================================================================
 if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
 abbr -a d 'docker'
 abbr -a dv 'docker version'
@@ -331,7 +251,6 @@ abbr -a dcprune 'docker container prune -f'
 abbr -a dstats 'docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}"'
 abbr -a dtop 'docker stats --no-stream'
 abbr -a dip 'docker inspect --format "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
-# Docker Compose
 abbr -a dc 'docker compose'           # v2 syntax
 abbr -a dco 'docker-compose'         # v1 fallback
 abbr -a dcu 'docker compose up -d'
@@ -346,13 +265,6 @@ abbr -a dcp2 'docker compose pull'
 abbr -a dcps 'docker compose ps'
 abbr -a dcconfig 'docker compose config'
 end
-
-
-# ===========================================================================
-# CLOUD & DEVOPS (Supreme+ Only)
-
-# ===========================================================================
-# Kubernetes (~70 aliases)
 if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
 abbr -a k 'kubectl'
 abbr -a kv 'kubectl version'
@@ -360,7 +272,6 @@ abbr -a kctx 'kubectl config use-context'
 abbr -a kns 'kubectl config set-context --current --namespace'
 abbr -a kgctx 'kubectl config get-contexts'
 abbr -a kccfg 'kubectl config view'
-# Get
 abbr -a kg 'kubectl get'
 abbr -a kgp 'kubectl get pods'
 abbr -a kgpa 'kubectl get pods -A'
@@ -384,32 +295,27 @@ abbr -a kgrs 'kubectl get replicaset'
 abbr -a kgss 'kubectl get statefulset'
 abbr -a kgds 'kubectl get daemonset'
 abbr -a kghpa 'kubectl get hpa'
-# Describe
 abbr -a kd 'kubectl describe'
 abbr -a kdp 'kubectl describe pod'
 abbr -a kdd 'kubectl describe deployment'
 abbr -a kds 'kubectl describe svc'
 abbr -a kdn 'kubectl describe node'
-# Apply / Create / Delete
 abbr -a ka 'kubectl apply -f'
 abbr -a kar 'kubectl apply -R -f'
 abbr -a kc 'kubectl create'
 abbr -a kdel 'kubectl delete'
 abbr -a kdelp 'kubectl delete pod'
 abbr -a kdeld 'kubectl delete deployment'
-# Logs / Exec
 abbr -a kl 'kubectl logs -f'
 abbr -a kla 'kubectl logs -f --all-containers'
 abbr -a klp 'kubectl logs -f --previous'
 abbr -a kex 'kubectl exec -it'
 abbr -a kpf 'kubectl port-forward'
-# Scale / Rollout
 abbr -a ksc 'kubectl scale'
 abbr -a kro 'kubectl rollout'
 abbr -a kros 'kubectl rollout status'
 abbr -a kroh 'kubectl rollout history'
 abbr -a krou 'kubectl rollout undo'
-# Misc
 abbr -a ktop 'kubectl top'
 abbr -a ktopp 'kubectl top pod'
 abbr -a ktonn 'kubectl top node'
@@ -420,12 +326,6 @@ abbr -a kuncordon 'kubectl uncordon'
 abbr -a kcordon 'kubectl cordon'
 abbr -a ktaint 'kubectl taint'
 end
-
-
-# ===========================================================================
-# TERRAFORM (~30 aliases)
-
-# ===========================================================================
 if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
 abbr -a tf 'terraform'
 abbr -a tfi 'terraform init'
@@ -453,12 +353,6 @@ abbr -a tftaint 'terraform taint'
 abbr -a tfuntaint 'terraform untaint'
 abbr -a tfdoc 'terraform-docs markdown . 2>/dev/null'
 end
-
-
-# ===========================================================================
-# HELM (~25 aliases)
-
-# ===========================================================================
 if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
 abbr -a hls 'helm list'
 abbr -a hlsa 'helm list -A'
@@ -483,12 +377,6 @@ abbr -a hlint 'helm lint'
 abbr -a hdry 'helm install --dry-run --debug'
 abbr -a henv 'helm env'
 end
-
-
-# ===========================================================================
-# ANSIBLE (~20 aliases)
-
-# ===========================================================================
 if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
 abbr -a ans 'ansible'
 abbr -a ansplay 'ansible-playbook'
@@ -502,12 +390,6 @@ abbr -a ansgalaxy 'ansible-galaxy'
 abbr -a ansping 'ansible all -m ping'
 abbr -a ansfacts 'ansible all -m setup'
 end
-
-
-# ===========================================================================
-# NETWORK & SECURITY (~80 aliases)
-
-# ===========================================================================
 abbr -a fastping 'ping -c 100 -s.2'
 abbr -a ping6 'ping6 -c 5'
 abbr -a tracert 'traceroute'
@@ -525,14 +407,12 @@ abbr -a established 'ss -tnp state established'
 abbr -a portcheck 'nc -zv'
 abbr -a curl 'curl -L --retry 3'
 abbr -a httpd 'python3 -m http.server'
-# DNS
         abbr -a dig 'dog'
 abbr -a nsl 'nslookup'
 abbr -a digany 'dig +nocmd any +multiline +noall +answer'
 abbr -a digtrace 'dig +trace'
 abbr -a digshort 'dig +short'
 abbr -a flushDNS 'sudo resolvectl flush-caches 2>/dev/null || sudo systemd-resolve --flush-caches 2>/dev/null || sudo dscacheutil -flushcache 2>/dev/null'
-# SSH
 abbr -a ssha 'ssh-add'
 abbr -a sshl 'ssh-add -l'
 abbr -a sshD 'ssh-add -D'
@@ -541,19 +421,16 @@ abbr -a sshfp 'ssh-keygen -lf'
 abbr -a sshcopy 'ssh-copy-id'
 abbr -a sshrm 'ssh-keygen -R'
 abbr -a sshconfig '$EDITOR ~/.ssh/config'
-# Firewall shortcuts (ufw / iptables / pfctl)
 abbr -a fwstatus 'sudo ufw status verbose 2>/dev/null || sudo iptables -L -n -v 2>/dev/null'
 abbr -a fwenable 'sudo ufw enable'
 abbr -a fwdisable 'sudo ufw disable'
 abbr -a fwall 'sudo ufw allow'
 abbr -a fwdeny 'sudo ufw deny'
-# OpenSSL / TLS
 abbr -a sslcheck 'openssl s_client -connect'
 abbr -a sslcert 'openssl x509 -noout -text -in'
 abbr -a ssldate 'openssl s_client -connect -servername </dev/null 2>/dev/null | openssl x509 -noout -dates'
 abbr -a genkey 'openssl genrsa -out'
 abbr -a gencsr 'openssl req -new -key'
-# GPG / PGP
 abbr -a gpglist 'gpg --list-keys'
 abbr -a gpglistsec 'gpg --list-secret-keys'
 abbr -a gpgenc 'gpg --encrypt --armor'
@@ -565,7 +442,6 @@ abbr -a gpgexport 'gpg --armor --export'
 abbr -a gpgrecv 'gpg --recv-keys'
 abbr -a gpgsend 'gpg --send-keys'
 abbr -a gpgfp 'gpg --fingerprint'
-# Security scanning
 abbr -a nmap 'nmap -v'
 abbr -a nmapfast 'nmap -T4 -F'
 abbr -a nmapfull 'nmap -T4 -A -v'
@@ -573,18 +449,11 @@ abbr -a nmapstealth 'sudo nmap -sS -O'
 abbr -a nmapudp 'sudo nmap -sU'
 abbr -a nmapvuln 'nmap --script vuln'
 abbr -a portscan 'nmap -sV --version-intensity 5'
-# File integrity
 abbr -a sha256 'sha256sum'
 abbr -a sha512 'sha512sum'
 abbr -a md5 'md5sum'
 abbr -a checksum 'sha256sum'
-# Secure delete
 abbr -a srm 'shred -u -z -n 3'   # secure remove (3-pass)
-
-# ===========================================================================
-# SYSTEMD / SERVICE MANAGEMENT
-
-# ===========================================================================
 abbr -a sc 'systemctl'
 abbr -a scs 'systemctl status'
 abbr -a scst 'systemctl start'
@@ -608,18 +477,11 @@ abbr -a jcb 'journalctl -b'
 abbr -a jcp 'journalctl -p err'     # errors only
 abbr -a jcn 'journalctl -n 50'      # last 50 lines
 abbr -a jcclear 'sudo journalctl --vacuum-time=7d'
-# RC/OpenRC (Gentoo/Alpine/Void)
 abbr -a rcs 'rc-service'
 abbr -a rcst 'rc-service start'
 abbr -a rcsp 'rc-service stop'
 abbr -a rcr 'rc-service restart'
 abbr -a rcu 'rc-update'
-
-# ===========================================================================
-# PACKAGE MANAGERS — per-distro  (all conditional on binary existence)
-
-# ===========================================================================
-# ── Arch / Manjaro ──────────────────────────────────────────────────────────
         abbr -a pac 'sudo pacman'
         abbr -a paci 'sudo pacman -S --noconfirm'
         abbr -a pacI 'sudo pacman -S'              # with confirmation
@@ -639,7 +501,6 @@ abbr -a rcu 'rc-update'
         abbr -a ys 'yay -Ss'
         abbr -a par 'paru'
         abbr -a paru 'paru -Syu'
-# ── Debian / Ubuntu ─────────────────────────────────────────────────────────
         abbr -a apti 'sudo apt-get install -y'
         abbr -a aptI 'sudo apt-get install'
         abbr -a aptr 'sudo apt-get remove -y'
@@ -655,7 +516,6 @@ abbr -a rcu 'rc-update'
         abbr -a aptheld 'apt-mark showhold'
         abbr -a apthold 'sudo apt-mark hold'
         abbr -a aptunhold 'sudo apt-mark unhold'
-# ── Fedora / RHEL / CentOS ──────────────────────────────────────────────────
         abbr -a dnfi 'sudo dnf install -y'
         abbr -a dnfI 'sudo dnf install'
         abbr -a dnfr 'sudo dnf remove -y'
@@ -672,7 +532,6 @@ abbr -a rcu 'rc-update'
         abbr -a yumu 'sudo yum update -y'
         abbr -a yums 'yum search'
         abbr -a yuml 'yum list installed'
-# ── openSUSE / SLES ─────────────────────────────────────────────────────────
         abbr -a zypi 'sudo zypper install -y'
         abbr -a zypr 'sudo zypper remove -y'
         abbr -a zypu 'sudo zypper update -y'
@@ -681,27 +540,23 @@ abbr -a rcu 'rc-update'
         abbr -a zypl 'zypper packages --installed-only'
         abbr -a zypc 'sudo zypper clean'
         abbr -a zypinfo 'zypper info'
-# ── Void Linux ──────────────────────────────────────────────────────────────
         abbr -a xbpsi 'sudo xbps-install -Sy'
         abbr -a xbpsr 'sudo xbps-remove -R'
         abbr -a xbpsu 'sudo xbps-install -Su'
         abbr -a xbpss 'xbps-query -Rs'
         abbr -a xbpsl 'xbps-query -l'
         abbr -a xbpsc 'sudo xbps-remove -O'
-# ── Alpine Linux ─────────────────────────────────────────────────────────────
         abbr -a apki 'sudo apk add'
         abbr -a apkr 'sudo apk del'
         abbr -a apku 'sudo apk upgrade'
         abbr -a apks 'apk search'
         abbr -a apkl 'apk list --installed'
         abbr -a apkinfo 'apk info'
-# ── Gentoo ──────────────────────────────────────────────────────────────────
         abbr -a emeri 'sudo emerge -av'
         abbr -a emerr 'sudo emerge --unmerge'
         abbr -a emeru 'sudo emerge --update --deep --newuse @world'
         abbr -a emers 'emerge -s'
         abbr -a emerc 'sudo eclean-dist && sudo eclean-pkg'
-# ── NixOS ───────────────────────────────────────────────────────────────────
         abbr -a nixi 'nix-env -iA'
         abbr -a nixr 'nix-env -e'
         abbr -a nixu 'nix-env -u'
@@ -710,7 +565,6 @@ abbr -a rcu 'rc-update'
         abbr -a nixgc 'nix-collect-garbage -d'
         abbr -a nixrebuild 'sudo nixos-rebuild switch'
         abbr -a nixtest 'sudo nixos-rebuild test'
-# ── macOS Homebrew ───────────────────────────────────────────────────────────
         abbr -a brewi 'brew install'
         abbr -a brewr 'brew uninstall'
         abbr -a brewu 'brew update && brew upgrade'
@@ -726,7 +580,6 @@ abbr -a rcu 'rc-update'
         abbr -a brewpin 'brew pin'
         abbr -a brewunpin 'brew unpin'
         abbr -a brewpinned 'brew list --pinned'
-# ── Flatpak ──────────────────────────────────────────────────────────────────
         abbr -a flati 'flatpak install -y'
         abbr -a flatr 'flatpak uninstall -y'
         abbr -a flatu 'flatpak update -y'
@@ -734,17 +587,11 @@ abbr -a rcu 'rc-update'
         abbr -a flatl 'flatpak list'
         abbr -a flatrun 'flatpak run'
         abbr -a flatc 'flatpak uninstall --unused -y'
-# ── Snap ─────────────────────────────────────────────────────────────────────
         abbr -a snapi 'sudo snap install'
         abbr -a snapr 'sudo snap remove'
         abbr -a snapu 'sudo snap refresh'
         abbr -a snaps 'snap find'
         abbr -a snapl 'snap list'
-
-# ===========================================================================
-# CLOUD — AWS CLI
-
-# ===========================================================================
 if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
         abbr -a awswho 'aws sts get-caller-identity'
         abbr -a awsprofile 'aws configure list'
@@ -763,7 +610,6 @@ if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
         abbr -a awssm 'aws secretsmanager list-secrets'
         abbr -a awsssm 'aws ssm describe-parameters'
         abbr -a awsecs 'aws ecs list-clusters'
-# ── GCP ──────────────────────────────────────────────────────────────────────
         abbr -a gcp 'gcloud'
         abbr -a gcpwho 'gcloud auth list'
         abbr -a gcpproj 'gcloud config get-value project'
@@ -772,19 +618,12 @@ if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
         abbr -a gcpvm 'gcloud compute instances list'
         abbr -a gcpgke 'gcloud container clusters list'
         abbr -a gcprun 'gcloud run services list'
-# ── Azure ─────────────────────────────────────────────────────────────────────
 end
-
         abbr -a azwho 'az account show'
         abbr -a azsub 'az account list'
         abbr -a azrg 'az group list'
         abbr -a azvm 'az vm list'
         abbr -a azaks 'az aks list'
-
-# ===========================================================================
-# DEVELOPMENT — Python / pip / uv / poetry
-
-# ===========================================================================
 abbr -a py 'python3'
 abbr -a py2 'python2'
 abbr -a pip 'pip3'
@@ -838,11 +677,6 @@ abbr -a mkvenv 'python3 -m venv .venv && source .venv/bin/activate'
         abbr -a cons 'conda search'
         abbr -a conex 'conda export > environment.yml'
         abbr -a confr 'conda env create -f environment.yml'
-
-# ===========================================================================
-# DEVELOPMENT — Node.js / npm / yarn / pnpm / bun
-
-# ===========================================================================
 abbr -a node 'node'
 abbr -a ni 'npm install'
 abbr -a nid 'npm install --save-dev'
@@ -897,11 +731,6 @@ abbr -a npx 'npx --yes'
         abbr -a brun 'bun run'
         abbr -a bx 'bunx'
         abbr -a bu 'bun update'
-
-# ===========================================================================
-# DEVELOPMENT — Rust / Cargo
-
-# ===========================================================================
 abbr -a cr 'cargo run'
 abbr -a crr 'cargo run --release'
 abbr -a cb 'cargo build'
@@ -926,11 +755,6 @@ abbr -a clogin 'cargo login'
 abbr -a cinstall 'cargo install'
 abbr -a cben 'cargo bench'
 abbr -a cwatch 'cargo watch -x run'
-
-# ===========================================================================
-# DEVELOPMENT — Go
-
-# ===========================================================================
 abbr -a gor 'go run .'
 abbr -a gob 'go build .'
 abbr -a got 'go test ./...'
@@ -947,11 +771,6 @@ abbr -a gobuild 'CGO_ENABLED=0 go build -ldflags="-s -w"'
 abbr -a goenv 'go env'
 abbr -a gopath 'echo $GOPATH'
 abbr -a gowork 'go work'
-
-# ===========================================================================
-# DEVELOPMENT — Rust / Make / CMake / misc
-
-# ===========================================================================
 abbr -a mk 'make'
 abbr -a mkc 'make clean'
 abbr -a mki 'make install'
@@ -961,11 +780,6 @@ abbr -a cmake 'cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 abbr -a cmakeb 'cmake --build build'
 abbr -a cmakec 'cmake --build build --target clean'
 abbr -a ninja 'ninja -C build'
-
-# ===========================================================================
-# DEVELOPMENT — Java / Maven / Gradle
-
-# ===========================================================================
 abbr -a javac 'javac -encoding UTF-8'
 abbr -a mvnc 'mvn clean'
 abbr -a mvni 'mvn clean install'
@@ -977,11 +791,6 @@ abbr -a gradleb './gradlew build'
 abbr -a gradlet './gradlew test'
 abbr -a gradlec './gradlew clean'
 abbr -a gradlew './gradlew'
-
-# ===========================================================================
-# DEVELOPMENT — Ruby / PHP / Perl
-
-# ===========================================================================
         abbr -a rbi 'bundle install'
         abbr -a rbu 'bundle update'
         abbr -a rbe 'bundle exec'
@@ -996,11 +805,6 @@ abbr -a gradlew './gradlew'
         abbr -a compa 'composer dump-autoload'
         abbr -a artisan 'php artisan'
         abbr -a ptest './vendor/bin/phpunit'
-
-# ===========================================================================
-# DATABASE CLIENTS
-
-# ===========================================================================
         abbr -a pgdbs 'psql -c "\l"'
         abbr -a pgtbls 'psql -c "\dt"'
         abbr -a pgdump 'pg_dump'
@@ -1013,11 +817,6 @@ abbr -a gradlew './gradlew'
         abbr -a redismon 'redis-cli monitor'
         abbr -a mongodbs 'mongosh --eval "db.adminCommand({listDatabases:1})"'
         abbr -a sq 'sqlite3'
-
-# ===========================================================================
-# TMUX
-
-# ===========================================================================
         abbr -a t 'tmux'
         abbr -a ta 'tmux attach'
         abbr -a tl 'tmux list-sessions'
@@ -1028,11 +827,6 @@ abbr -a gradlew './gradlew'
         abbr -a tls 'tmux list-windows'
         abbr -a tsh 'tmux split-window -h'
         abbr -a tsv 'tmux split-window -v'
-
-# ===========================================================================
-# TERMINAL MULTIPLEXERS
-
-# ===========================================================================
         abbr -a zj 'zellij'
         abbr -a zja 'zellij attach'
         abbr -a zjl 'zellij list-sessions'
@@ -1041,16 +835,10 @@ abbr -a gradlew './gradlew'
         abbr -a scr 'screen'
         abbr -a scra 'screen -r'
         abbr -a scrl 'screen -ls'
-
-# ===========================================================================
-# MODERN CLI TOOLS
-
-# ===========================================================================
         abbr -a lg 'lazygit'
 if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
         abbr -a ld 'lazydocker'
 end
-
         abbr -a Y 'yazi'                # capital Y = yazi (lowercase y = function that cd's)
         abbr -a fzfp 'fzf --preview "bat --style=numbers --color=always {}"'
         abbr -a zi 'z -i'              # interactive zoxide
@@ -1067,11 +855,6 @@ end
         abbr -a help 'tldr'
         abbr -a man2 'tldr'
         abbr -a fuck 'thefuck $(history -p !!)'
-
-# ===========================================================================
-# ARCHIVES / COMPRESSION
-
-# ===========================================================================
 abbr -a targz 'tar -zcvf'
 abbr -a tarbz 'tar -jcvf'
 abbr -a tarxz 'tar -Jcvf'
@@ -1081,11 +864,6 @@ abbr -a zip 'zip -r'
 abbr -a mkzip 'zip -r'
 abbr -a mktarbz 'tar -cjvf'
 abbr -a mktarxz 'tar -cJvf'
-
-# ===========================================================================
-# UTILITIES
-
-# ===========================================================================
 abbr -a now 'date +"%Y-%m-%d %H:%M:%S"'
 abbr -a nowutc 'date -u +"%Y-%m-%dT%H:%M:%SZ"'
 abbr -a today 'date +"%Y-%m-%d"'
@@ -1112,11 +890,9 @@ abbr -a ht 'history | tail -20'
 function dupl
     history | awk '{print $argv[2]}' | sort | uniq -c | sort -rn | head -20
 end
-# Weather
 abbr -a weather 'curl -s wttr.in'
 abbr -a wttr 'curl -s "wttr.in?format=3"'
 abbr -a wttrf 'curl -s "wttr.in?format=v2"'
-# Fun / misc
 abbr -a starwars 'telnet towel.blinkenlights.nl 2>/dev/null || echo "telnet not installed"'
 abbr -a matrix 'cmatrix -C cyan 2>/dev/null'
 abbr -a pipes 'pipes.sh 2>/dev/null'
@@ -1124,17 +900,14 @@ abbr -a cowsay 'cowsay -f tux'
 abbr -a sl 'ls'                    # typo fix
 abbr -a Grep 'grep'                # typo fix
 abbr -a GREP 'grep'                # typo fix
-# Dotfiles management
 abbr -a dotlog 'git -C "$DOTFILES_DIR" log --oneline -15'
 abbr -a dotst 'git -C "$DOTFILES_DIR" status'
 abbr -a dotdiff 'git -C "$DOTFILES_DIR" diff'
 abbr -a dotpull 'git -C "$DOTFILES_DIR" pull'
 abbr -a dotpush 'git -C "$DOTFILES_DIR" add -A && git -C "$DOTFILES_DIR" commit && git -C "$DOTFILES_DIR" push'
 abbr -a dotdocs '$BROWSER "$HOME/.dotfiles/docs/index.html"'
-# Quick file/dir sizes
 abbr -a dh 'du -h --max-depth=1 | sort -rh'
 abbr -a biggest 'du -h --max-depth=1 | sort -rh | head 10'
-# Clipboard (Linux xclip/xsel/wl-copy, macOS pbcopy)
 if test "$DOTFILES_OS" = "Darwin"
         abbr -a copy 'pbcopy'
         abbr -a paste 'pbpaste'
@@ -1148,15 +921,9 @@ else if type -q xsel >/dev/null 2>&1
         abbr -a copy 'xsel --clipboard --input'
         abbr -a paste 'xsel --clipboard --output'
 end
-# Open file/URL (cross-platform)
         abbr -a open 'open'
         abbr -a open 'xdg-open'
 abbr -a o 'open'
-
-# ===========================================================================
-# ALIASES (ZachBrowne / Titus)
-
-# ===========================================================================
 abbr -a spico 'sudo pico'
 abbr -a snano 'sudo nano'
 abbr -a web 'cd /var/www/html'
@@ -1217,14 +984,8 @@ abbr -a kssh "kitty +kitten ssh"
 if test "$DOTFILES_MODE" = "supreme"; or test "$DOTFILES_MODE" = "ultra-nerd"
 abbr -a docker-clean ' docker container prune -f ; docker image prune -f ; docker network prune -f ; docker volume prune -f '
 end
-
 abbr -a hug "systemctl --user restart hugo"
 abbr -a lanm "systemctl --user restart lan-mouse"
-
-# ===========================================================================
-# NEW ALIASES (Garuda/Awesome)
-
-# ===========================================================================
     abbr -a ls 'eza -al --color=always --group-directories-first --icons'
     abbr -a la 'eza -a --color=always --group-directories-first --icons'
     abbr -a ll 'eza -l --color=always --group-directories-first --icons'
@@ -1267,23 +1028,14 @@ abbr -a pacdiff 'sudo -H DIFFPROG=meld pacdiff'
 abbr -a cleanup 'sudo pacman -Rns $(pacman -Qtdq)'
 abbr -a jctl "journalctl -p 3 -xb"
 abbr -a rip "expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
-
-# ===========================================================================
-# SUPREME UPGRADE (Paul Irish / Mathias Bynens / Modern)
-
-# ===========================================================================
-# Navigation & System
 abbr -a cdf 'cd "$(osascript -e "tell app \"Finder\" to POSIX path of (insertion location as alias)" 2>/dev/null || echo .)"'
 abbr -a emptytrash "sudo rm -rfv /Volumes/*/.Trashes && sudo rm -rfv ~/.Trash"
 abbr -a showfiles 'defaults write com.apple.finder AppleShowAllFiles YES && killall Finder'
 abbr -a hidefiles 'defaults write com.apple.finder AppleShowAllFiles NO && killall Finder'
-# Project Management Cleanup
 abbr -a pclean 'find . -type d -name "__pycache__" -exec rm -rf {} + && find . -type f -name "*.pyc" -delete'
 abbr -a nuke-node 'find . -name "node_modules" -type d -prune -exec rm -rf "{}" +'
-# Modern Tools Shorthands
 abbr -a v 'fd --type f --hidden --exclude .git | fzf --preview "bat --color=always --style=numbers --line-range=:500 {}" | xargs -r $EDITOR'
 abbr -a fz 'zoxide query -i'
-# Git Refinements
 abbr -a gpristine 'git reset --hard && git clean -fdx'
 abbr -a gwt 'git worktree'
 abbr -a gwta 'git worktree add'

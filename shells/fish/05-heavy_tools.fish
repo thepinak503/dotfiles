@@ -1,7 +1,4 @@
-# AUTO-GENERATED
-
 status is-interactive; or exit
-
 abbr -a tfpl 'terraform plan'
 abbr -a tpl 'terraform plan'
 abbr -a tfap 'terraform apply'
@@ -179,8 +176,6 @@ abbr -a gpushf 'git push --force-with-lease'
 abbr -a gsyncforce 'git fetch --all && git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)'
 abbr -a grune 'git remote prune origin'
 abbr -a glast 'git log -1 HEAD'
-
-# --- FINAL ALIAS EXPANSION TO 2000 ---
 abbr -a py_math_sq_1 'python3 -c "print(1**2)"'
 abbr -a py_math_cu_1 'python3 -c "print(1**3)"'
 abbr -a py_math_sq_2 'python3 -c "print(2**2)"'

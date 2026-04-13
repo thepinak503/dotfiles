@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
-# =============================================================================
-# ~/.bashrc — Bash entry point (thin loader)
-# =============================================================================
-
 [[ $- != *i* ]] && return
-
-# Robustly detect DOTFILES_DIR (resolve symlinks)
 _BS_FILE="${BASH_SOURCE[0]}"
 while [ -L "$_BS_FILE" ]; do
     _BS_DIR="$(cd -P "$(dirname "$_BS_FILE")" >/dev/null 2>&1 && pwd)"
@@ -22,7 +16,6 @@ export DOTFILES_DIR
 unset _BS_FILE _BS_DIR
 export DOTFILES_STATE_DIR="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}"
 mkdir -p "$DOTFILES_STATE_DIR" 2>/dev/null
-
 if [[ -z "$DOTFILES_MODE" ]]; then
     if [[ -f "$DOTFILES_STATE_DIR/mode" ]]; then
         export DOTFILES_MODE="$(<"$DOTFILES_STATE_DIR/mode")"
@@ -31,30 +24,20 @@ if [[ -z "$DOTFILES_MODE" ]]; then
     fi
 fi
 export DOTFILES_VERSION="11.0.0"
-
 _src() { [[ -f "$1" && -r "$1" ]] && source "$1" 2>/dev/null; }
-
-# 1. CORE
 _src "$DOTFILES_DIR/core/system-detect.sh"
 _src "$DOTFILES_DIR/core/tools.sh"
 _src "$DOTFILES_DIR/core/battery.sh"
-
-# 2. SHELL CONFIG
 _src "$DOTFILES_DIR/shells/bash/exports.bash"
 _src "$DOTFILES_DIR/shells/bash/functions.bash"
 _src "$DOTFILES_DIR/shells/bash/aliases.bash"
-
-# 3. DYNAMIC & PACKAGES (Phase-gated)
 if [[ "$DOTFILES_MODE" =~ ^(minimal|standard|supreme|ultra-nerd)$ ]]; then
     _src "$DOTFILES_DIR/shells/bash/03-dynamic_aliases.bash"
     _src "$DOTFILES_DIR/shells/bash/04-pkg_aliases.bash"
 fi
-
 if [[ "$DOTFILES_MODE" =~ ^(supreme|ultra-nerd)$ ]]; then
     _src "$DOTFILES_DIR/shells/bash/05-heavy_tools.bash"
 fi
-
-# 4. MODES
 _load_mode() {
     local d="$DOTFILES_DIR/shells/bash/modes"
     case "$DOTFILES_MODE" in
@@ -80,29 +63,21 @@ _load_mode() {
 }
 _load_mode
 unset -f _load_mode
-
-# 5. PROMPT & EXTRA
 if command -v starship &>/dev/null; then
-    eval "$(starship init bash)"
+    eval "$(starship init bash)" 2>>"${DOTFILES_LOG_FILE:-$HOME/.local/share/dotfiles/errors.log}"
 fi
-
-# 5.1 BACKGROUND UPDATE CHECK (Weekly logic)
 if [[ -f "$DOTFILES_DIR/bin/dotupdate_bg.sh" && "$DOTFILES_MODE" != "minimal" ]]; then
     (bash "$DOTFILES_DIR/bin/dotupdate_bg.sh" &)
     if [[ -f "$DOTFILES_STATE_DIR/update_ready" ]]; then
         echo -e "\n${YELLOW}⚡ Dotfiles updates are available! Run 'dotupdate' to apply.${NC}"
     fi
 fi
-
-# 5. STARTUP TOOLS
 if [[ -f /usr/bin/fastfetch ]]; then
     fastfetch
 fi
-
 if [[ -f /usr/share/doc/find-the-command/ftc.bash ]]; then
     source /usr/share/doc/find-the-command/ftc.bash noprompt quiet
 fi
-
 if [[ -f ~/.bashrc.local ]]; then
     source ~/.bashrc.local
 fi

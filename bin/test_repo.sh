@@ -1,19 +1,11 @@
 #!/usr/bin/env bash
-# =============================================================================
-# Supreme Repo Tester
-# Validates syntax and sanity across all supported shells.
-# =============================================================================
-
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/git/dotfiles}"
 EXIT_CODE=0
-
 header() {
     echo "----------------------------------------------------------------"
     echo "  CHECKING: $1"
     echo "----------------------------------------------------------------"
 }
-
-# 1. BASH SYNTAX
 header "BASH (shells/bash/*.bash)"
 while IFS= read -r -d '' file; do
     if ! bash -n "$file"; then
@@ -23,8 +15,6 @@ while IFS= read -r -d '' file; do
         echo "✓ $file"
     fi
 done < <(find "$DOTFILES_DIR/shells/bash" -name "*.bash" -type f -print0)
-
-# 2. ZSH SYNTAX
 if command -v zsh &>/dev/null; then
     header "ZSH (shells/zsh/*.zsh)"
     while IFS= read -r -d '' file; do
@@ -36,8 +26,6 @@ if command -v zsh &>/dev/null; then
         fi
     done < <(find "$DOTFILES_DIR/shells/zsh" -name "*.zsh" -type f -print0)
 fi
-
-# 3. FISH SYNTAX
 if command -v fish &>/dev/null; then
     header "FISH (shells/fish/*.fish)"
     while IFS= read -r -d '' file; do
@@ -49,8 +37,6 @@ if command -v fish &>/dev/null; then
         fi
     done < <(find "$DOTFILES_DIR/shells/fish" -name "*.fish" -type f -print0)
 fi
-
-# 4. RUNTIME DRY-RUN (Subshell sourcing)
 header "RUNTIME SOURCING (No-op test)"
 if bash -c "source $DOTFILES_DIR/shells/bash/exports.bash && source $DOTFILES_DIR/shells/bash/aliases.bash" 2>/dev/null; then
     echo "✓ Bash sourcing: OK"
@@ -58,11 +44,9 @@ else
     echo "❌ Bash sourcing: FAILED (Runtime error)"
     EXIT_CODE=1
 fi
-
 if [[ $EXIT_CODE -eq 0 ]]; then
     echo -e "\n\033[1;32mALL TESTS PASSED. SAFE TO COMMIT.\033[0m"
 else
     echo -e "\n\033[1;31mTESTS FAILED. DO NOT COMMIT.\033[0m"
 fi
-
 exit $EXIT_CODE

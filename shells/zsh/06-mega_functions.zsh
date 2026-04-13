@@ -1,1278 +1,640 @@
-# ZSH
 #!/usr/bin/env bash
-# SUPREME MEGA FUNCTIONS (665 unique)
 calc_percent_1() { awk "BEGIN {print ($1 * 1) / 100}"; }
-
 check_port_100() { nc -zv localhost 100 2>&1; }
-
 wait_seconds_1() { sleep 1 && notify-send "Timer Done" "1 seconds passed"; }
-
 calc_percent_2() { awk "BEGIN {print ($1 * 2) / 100}"; }
-
 check_port_200() { nc -zv localhost 200 2>&1; }
-
 wait_seconds_2() { sleep 2 && notify-send "Timer Done" "2 seconds passed"; }
-
 calc_percent_3() { awk "BEGIN {print ($1 * 3) / 100}"; }
-
 check_port_300() { nc -zv localhost 300 2>&1; }
-
 wait_seconds_3() { sleep 3 && notify-send "Timer Done" "3 seconds passed"; }
-
 calc_percent_4() { awk "BEGIN {print ($1 * 4) / 100}"; }
-
 check_port_400() { nc -zv localhost 400 2>&1; }
-
 wait_seconds_4() { sleep 4 && notify-send "Timer Done" "4 seconds passed"; }
-
 calc_percent_5() { awk "BEGIN {print ($1 * 5) / 100}"; }
-
 check_port_500() { nc -zv localhost 500 2>&1; }
-
 wait_seconds_5() { sleep 5 && notify-send "Timer Done" "5 seconds passed"; }
-
 calc_percent_6() { awk "BEGIN {print ($1 * 6) / 100}"; }
-
 check_port_600() { nc -zv localhost 600 2>&1; }
-
 wait_seconds_6() { sleep 6 && notify-send "Timer Done" "6 seconds passed"; }
-
 calc_percent_7() { awk "BEGIN {print ($1 * 7) / 100}"; }
-
 check_port_700() { nc -zv localhost 700 2>&1; }
-
 wait_seconds_7() { sleep 7 && notify-send "Timer Done" "7 seconds passed"; }
-
 calc_percent_8() { awk "BEGIN {print ($1 * 8) / 100}"; }
-
 check_port_800() { nc -zv localhost 800 2>&1; }
-
 wait_seconds_8() { sleep 8 && notify-send "Timer Done" "8 seconds passed"; }
-
 calc_percent_9() { awk "BEGIN {print ($1 * 9) / 100}"; }
-
 check_port_900() { nc -zv localhost 900 2>&1; }
-
 wait_seconds_9() { sleep 9 && notify-send "Timer Done" "9 seconds passed"; }
-
 calc_percent_10() { awk "BEGIN {print ($1 * 10) / 100}"; }
-
 check_port_1000() { nc -zv localhost 1000 2>&1; }
-
 wait_seconds_10() { sleep 10 && notify-send "Timer Done" "10 seconds passed"; }
-
 calc_percent_11() { awk "BEGIN {print ($1 * 11) / 100}"; }
-
 check_port_1100() { nc -zv localhost 1100 2>&1; }
-
 wait_seconds_11() { sleep 11 && notify-send "Timer Done" "11 seconds passed"; }
-
 calc_percent_12() { awk "BEGIN {print ($1 * 12) / 100}"; }
-
 check_port_1200() { nc -zv localhost 1200 2>&1; }
-
 wait_seconds_12() { sleep 12 && notify-send "Timer Done" "12 seconds passed"; }
-
 calc_percent_13() { awk "BEGIN {print ($1 * 13) / 100}"; }
-
 check_port_1300() { nc -zv localhost 1300 2>&1; }
-
 wait_seconds_13() { sleep 13 && notify-send "Timer Done" "13 seconds passed"; }
-
 calc_percent_14() { awk "BEGIN {print ($1 * 14) / 100}"; }
-
 check_port_1400() { nc -zv localhost 1400 2>&1; }
-
 wait_seconds_14() { sleep 14 && notify-send "Timer Done" "14 seconds passed"; }
-
 calc_percent_15() { awk "BEGIN {print ($1 * 15) / 100}"; }
-
 check_port_1500() { nc -zv localhost 1500 2>&1; }
-
 wait_seconds_15() { sleep 15 && notify-send "Timer Done" "15 seconds passed"; }
-
 calc_percent_16() { awk "BEGIN {print ($1 * 16) / 100}"; }
-
 check_port_1600() { nc -zv localhost 1600 2>&1; }
-
 wait_seconds_16() { sleep 16 && notify-send "Timer Done" "16 seconds passed"; }
-
 calc_percent_17() { awk "BEGIN {print ($1 * 17) / 100}"; }
-
 check_port_1700() { nc -zv localhost 1700 2>&1; }
-
 wait_seconds_17() { sleep 17 && notify-send "Timer Done" "17 seconds passed"; }
-
 calc_percent_18() { awk "BEGIN {print ($1 * 18) / 100}"; }
-
 check_port_1800() { nc -zv localhost 1800 2>&1; }
-
 wait_seconds_18() { sleep 18 && notify-send "Timer Done" "18 seconds passed"; }
-
 calc_percent_19() { awk "BEGIN {print ($1 * 19) / 100}"; }
-
 check_port_1900() { nc -zv localhost 1900 2>&1; }
-
 wait_seconds_19() { sleep 19 && notify-send "Timer Done" "19 seconds passed"; }
-
 calc_percent_20() { awk "BEGIN {print ($1 * 20) / 100}"; }
-
 check_port_2000() { nc -zv localhost 2000 2>&1; }
-
 wait_seconds_20() { sleep 20 && notify-send "Timer Done" "20 seconds passed"; }
-
 calc_percent_21() { awk "BEGIN {print ($1 * 21) / 100}"; }
-
 check_port_2100() { nc -zv localhost 2100 2>&1; }
-
 wait_seconds_21() { sleep 21 && notify-send "Timer Done" "21 seconds passed"; }
-
 calc_percent_22() { awk "BEGIN {print ($1 * 22) / 100}"; }
-
 check_port_2200() { nc -zv localhost 2200 2>&1; }
-
 wait_seconds_22() { sleep 22 && notify-send "Timer Done" "22 seconds passed"; }
-
 calc_percent_23() { awk "BEGIN {print ($1 * 23) / 100}"; }
-
 check_port_2300() { nc -zv localhost 2300 2>&1; }
-
 wait_seconds_23() { sleep 23 && notify-send "Timer Done" "23 seconds passed"; }
-
 calc_percent_24() { awk "BEGIN {print ($1 * 24) / 100}"; }
-
 check_port_2400() { nc -zv localhost 2400 2>&1; }
-
 wait_seconds_24() { sleep 24 && notify-send "Timer Done" "24 seconds passed"; }
-
 calc_percent_25() { awk "BEGIN {print ($1 * 25) / 100}"; }
-
 check_port_2500() { nc -zv localhost 2500 2>&1; }
-
 wait_seconds_25() { sleep 25 && notify-send "Timer Done" "25 seconds passed"; }
-
 calc_percent_26() { awk "BEGIN {print ($1 * 26) / 100}"; }
-
 check_port_2600() { nc -zv localhost 2600 2>&1; }
-
 wait_seconds_26() { sleep 26 && notify-send "Timer Done" "26 seconds passed"; }
-
 calc_percent_27() { awk "BEGIN {print ($1 * 27) / 100}"; }
-
 check_port_2700() { nc -zv localhost 2700 2>&1; }
-
 wait_seconds_27() { sleep 27 && notify-send "Timer Done" "27 seconds passed"; }
-
 calc_percent_28() { awk "BEGIN {print ($1 * 28) / 100}"; }
-
 check_port_2800() { nc -zv localhost 2800 2>&1; }
-
 wait_seconds_28() { sleep 28 && notify-send "Timer Done" "28 seconds passed"; }
-
 calc_percent_29() { awk "BEGIN {print ($1 * 29) / 100}"; }
-
 check_port_2900() { nc -zv localhost 2900 2>&1; }
-
 wait_seconds_29() { sleep 29 && notify-send "Timer Done" "29 seconds passed"; }
-
 calc_percent_30() { awk "BEGIN {print ($1 * 30) / 100}"; }
-
 check_port_3000() { nc -zv localhost 3000 2>&1; }
-
 wait_seconds_30() { sleep 30 && notify-send "Timer Done" "30 seconds passed"; }
-
 calc_percent_31() { awk "BEGIN {print ($1 * 31) / 100}"; }
-
 check_port_3100() { nc -zv localhost 3100 2>&1; }
-
 wait_seconds_31() { sleep 31 && notify-send "Timer Done" "31 seconds passed"; }
-
 calc_percent_32() { awk "BEGIN {print ($1 * 32) / 100}"; }
-
 check_port_3200() { nc -zv localhost 3200 2>&1; }
-
 wait_seconds_32() { sleep 32 && notify-send "Timer Done" "32 seconds passed"; }
-
 calc_percent_33() { awk "BEGIN {print ($1 * 33) / 100}"; }
-
 check_port_3300() { nc -zv localhost 3300 2>&1; }
-
 wait_seconds_33() { sleep 33 && notify-send "Timer Done" "33 seconds passed"; }
-
 calc_percent_34() { awk "BEGIN {print ($1 * 34) / 100}"; }
-
 check_port_3400() { nc -zv localhost 3400 2>&1; }
-
 wait_seconds_34() { sleep 34 && notify-send "Timer Done" "34 seconds passed"; }
-
 calc_percent_35() { awk "BEGIN {print ($1 * 35) / 100}"; }
-
 check_port_3500() { nc -zv localhost 3500 2>&1; }
-
 wait_seconds_35() { sleep 35 && notify-send "Timer Done" "35 seconds passed"; }
-
 calc_percent_36() { awk "BEGIN {print ($1 * 36) / 100}"; }
-
 check_port_3600() { nc -zv localhost 3600 2>&1; }
-
 wait_seconds_36() { sleep 36 && notify-send "Timer Done" "36 seconds passed"; }
-
 calc_percent_37() { awk "BEGIN {print ($1 * 37) / 100}"; }
-
 check_port_3700() { nc -zv localhost 3700 2>&1; }
-
 wait_seconds_37() { sleep 37 && notify-send "Timer Done" "37 seconds passed"; }
-
 calc_percent_38() { awk "BEGIN {print ($1 * 38) / 100}"; }
-
 check_port_3800() { nc -zv localhost 3800 2>&1; }
-
 wait_seconds_38() { sleep 38 && notify-send "Timer Done" "38 seconds passed"; }
-
 calc_percent_39() { awk "BEGIN {print ($1 * 39) / 100}"; }
-
 check_port_3900() { nc -zv localhost 3900 2>&1; }
-
 wait_seconds_39() { sleep 39 && notify-send "Timer Done" "39 seconds passed"; }
-
 calc_percent_40() { awk "BEGIN {print ($1 * 40) / 100}"; }
-
 check_port_4000() { nc -zv localhost 4000 2>&1; }
-
 wait_seconds_40() { sleep 40 && notify-send "Timer Done" "40 seconds passed"; }
-
 calc_percent_41() { awk "BEGIN {print ($1 * 41) / 100}"; }
-
 check_port_4100() { nc -zv localhost 4100 2>&1; }
-
 wait_seconds_41() { sleep 41 && notify-send "Timer Done" "41 seconds passed"; }
-
 calc_percent_42() { awk "BEGIN {print ($1 * 42) / 100}"; }
-
 check_port_4200() { nc -zv localhost 4200 2>&1; }
-
 wait_seconds_42() { sleep 42 && notify-send "Timer Done" "42 seconds passed"; }
-
 calc_percent_43() { awk "BEGIN {print ($1 * 43) / 100}"; }
-
 check_port_4300() { nc -zv localhost 4300 2>&1; }
-
 wait_seconds_43() { sleep 43 && notify-send "Timer Done" "43 seconds passed"; }
-
 calc_percent_44() { awk "BEGIN {print ($1 * 44) / 100}"; }
-
 check_port_4400() { nc -zv localhost 4400 2>&1; }
-
 wait_seconds_44() { sleep 44 && notify-send "Timer Done" "44 seconds passed"; }
-
 calc_percent_45() { awk "BEGIN {print ($1 * 45) / 100}"; }
-
 check_port_4500() { nc -zv localhost 4500 2>&1; }
-
 wait_seconds_45() { sleep 45 && notify-send "Timer Done" "45 seconds passed"; }
-
 calc_percent_46() { awk "BEGIN {print ($1 * 46) / 100}"; }
-
 check_port_4600() { nc -zv localhost 4600 2>&1; }
-
 wait_seconds_46() { sleep 46 && notify-send "Timer Done" "46 seconds passed"; }
-
 calc_percent_47() { awk "BEGIN {print ($1 * 47) / 100}"; }
-
 check_port_4700() { nc -zv localhost 4700 2>&1; }
-
 wait_seconds_47() { sleep 47 && notify-send "Timer Done" "47 seconds passed"; }
-
 calc_percent_48() { awk "BEGIN {print ($1 * 48) / 100}"; }
-
 check_port_4800() { nc -zv localhost 4800 2>&1; }
-
 wait_seconds_48() { sleep 48 && notify-send "Timer Done" "48 seconds passed"; }
-
 calc_percent_49() { awk "BEGIN {print ($1 * 49) / 100}"; }
-
 check_port_4900() { nc -zv localhost 4900 2>&1; }
-
 wait_seconds_49() { sleep 49 && notify-send "Timer Done" "49 seconds passed"; }
-
 calc_percent_50() { awk "BEGIN {print ($1 * 50) / 100}"; }
-
 check_port_5000() { nc -zv localhost 5000 2>&1; }
-
 wait_seconds_50() { sleep 50 && notify-send "Timer Done" "50 seconds passed"; }
-
 calc_percent_51() { awk "BEGIN {print ($1 * 51) / 100}"; }
-
 check_port_5100() { nc -zv localhost 5100 2>&1; }
-
 wait_seconds_51() { sleep 51 && notify-send "Timer Done" "51 seconds passed"; }
-
 calc_percent_52() { awk "BEGIN {print ($1 * 52) / 100}"; }
-
 check_port_5200() { nc -zv localhost 5200 2>&1; }
-
 wait_seconds_52() { sleep 52 && notify-send "Timer Done" "52 seconds passed"; }
-
 calc_percent_53() { awk "BEGIN {print ($1 * 53) / 100}"; }
-
 check_port_5300() { nc -zv localhost 5300 2>&1; }
-
 wait_seconds_53() { sleep 53 && notify-send "Timer Done" "53 seconds passed"; }
-
 calc_percent_54() { awk "BEGIN {print ($1 * 54) / 100}"; }
-
 check_port_5400() { nc -zv localhost 5400 2>&1; }
-
 wait_seconds_54() { sleep 54 && notify-send "Timer Done" "54 seconds passed"; }
-
 calc_percent_55() { awk "BEGIN {print ($1 * 55) / 100}"; }
-
 check_port_5500() { nc -zv localhost 5500 2>&1; }
-
 wait_seconds_55() { sleep 55 && notify-send "Timer Done" "55 seconds passed"; }
-
 calc_percent_56() { awk "BEGIN {print ($1 * 56) / 100}"; }
-
 check_port_5600() { nc -zv localhost 5600 2>&1; }
-
 wait_seconds_56() { sleep 56 && notify-send "Timer Done" "56 seconds passed"; }
-
 calc_percent_57() { awk "BEGIN {print ($1 * 57) / 100}"; }
-
 check_port_5700() { nc -zv localhost 5700 2>&1; }
-
 wait_seconds_57() { sleep 57 && notify-send "Timer Done" "57 seconds passed"; }
-
 calc_percent_58() { awk "BEGIN {print ($1 * 58) / 100}"; }
-
 check_port_5800() { nc -zv localhost 5800 2>&1; }
-
 wait_seconds_58() { sleep 58 && notify-send "Timer Done" "58 seconds passed"; }
-
 calc_percent_59() { awk "BEGIN {print ($1 * 59) / 100}"; }
-
 check_port_5900() { nc -zv localhost 5900 2>&1; }
-
 wait_seconds_59() { sleep 59 && notify-send "Timer Done" "59 seconds passed"; }
-
 calc_percent_60() { awk "BEGIN {print ($1 * 60) / 100}"; }
-
 check_port_6000() { nc -zv localhost 6000 2>&1; }
-
 wait_seconds_60() { sleep 60 && notify-send "Timer Done" "60 seconds passed"; }
-
 calc_percent_61() { awk "BEGIN {print ($1 * 61) / 100}"; }
-
 check_port_6100() { nc -zv localhost 6100 2>&1; }
-
 wait_seconds_61() { sleep 61 && notify-send "Timer Done" "61 seconds passed"; }
-
 calc_percent_62() { awk "BEGIN {print ($1 * 62) / 100}"; }
-
 check_port_6200() { nc -zv localhost 6200 2>&1; }
-
 wait_seconds_62() { sleep 62 && notify-send "Timer Done" "62 seconds passed"; }
-
 calc_percent_63() { awk "BEGIN {print ($1 * 63) / 100}"; }
-
 check_port_6300() { nc -zv localhost 6300 2>&1; }
-
 wait_seconds_63() { sleep 63 && notify-send "Timer Done" "63 seconds passed"; }
-
 calc_percent_64() { awk "BEGIN {print ($1 * 64) / 100}"; }
-
 check_port_6400() { nc -zv localhost 6400 2>&1; }
-
 wait_seconds_64() { sleep 64 && notify-send "Timer Done" "64 seconds passed"; }
-
 calc_percent_65() { awk "BEGIN {print ($1 * 65) / 100}"; }
-
 check_port_6500() { nc -zv localhost 6500 2>&1; }
-
 wait_seconds_65() { sleep 65 && notify-send "Timer Done" "65 seconds passed"; }
-
 calc_percent_66() { awk "BEGIN {print ($1 * 66) / 100}"; }
-
 check_port_6600() { nc -zv localhost 6600 2>&1; }
-
 wait_seconds_66() { sleep 66 && notify-send "Timer Done" "66 seconds passed"; }
-
 calc_percent_67() { awk "BEGIN {print ($1 * 67) / 100}"; }
-
 check_port_6700() { nc -zv localhost 6700 2>&1; }
-
 wait_seconds_67() { sleep 67 && notify-send "Timer Done" "67 seconds passed"; }
-
 calc_percent_68() { awk "BEGIN {print ($1 * 68) / 100}"; }
-
 check_port_6800() { nc -zv localhost 6800 2>&1; }
-
 wait_seconds_68() { sleep 68 && notify-send "Timer Done" "68 seconds passed"; }
-
 calc_percent_69() { awk "BEGIN {print ($1 * 69) / 100}"; }
-
 check_port_6900() { nc -zv localhost 6900 2>&1; }
-
 wait_seconds_69() { sleep 69 && notify-send "Timer Done" "69 seconds passed"; }
-
 calc_percent_70() { awk "BEGIN {print ($1 * 70) / 100}"; }
-
 check_port_7000() { nc -zv localhost 7000 2>&1; }
-
 wait_seconds_70() { sleep 70 && notify-send "Timer Done" "70 seconds passed"; }
-
 calc_percent_71() { awk "BEGIN {print ($1 * 71) / 100}"; }
-
 check_port_7100() { nc -zv localhost 7100 2>&1; }
-
 wait_seconds_71() { sleep 71 && notify-send "Timer Done" "71 seconds passed"; }
-
 calc_percent_72() { awk "BEGIN {print ($1 * 72) / 100}"; }
-
 check_port_7200() { nc -zv localhost 7200 2>&1; }
-
 wait_seconds_72() { sleep 72 && notify-send "Timer Done" "72 seconds passed"; }
-
 calc_percent_73() { awk "BEGIN {print ($1 * 73) / 100}"; }
-
 check_port_7300() { nc -zv localhost 7300 2>&1; }
-
 wait_seconds_73() { sleep 73 && notify-send "Timer Done" "73 seconds passed"; }
-
 calc_percent_74() { awk "BEGIN {print ($1 * 74) / 100}"; }
-
 check_port_7400() { nc -zv localhost 7400 2>&1; }
-
 wait_seconds_74() { sleep 74 && notify-send "Timer Done" "74 seconds passed"; }
-
 calc_percent_75() { awk "BEGIN {print ($1 * 75) / 100}"; }
-
 check_port_7500() { nc -zv localhost 7500 2>&1; }
-
 wait_seconds_75() { sleep 75 && notify-send "Timer Done" "75 seconds passed"; }
-
 calc_percent_76() { awk "BEGIN {print ($1 * 76) / 100}"; }
-
 check_port_7600() { nc -zv localhost 7600 2>&1; }
-
 wait_seconds_76() { sleep 76 && notify-send "Timer Done" "76 seconds passed"; }
-
 calc_percent_77() { awk "BEGIN {print ($1 * 77) / 100}"; }
-
 check_port_7700() { nc -zv localhost 7700 2>&1; }
-
 wait_seconds_77() { sleep 77 && notify-send "Timer Done" "77 seconds passed"; }
-
 calc_percent_78() { awk "BEGIN {print ($1 * 78) / 100}"; }
-
 check_port_7800() { nc -zv localhost 7800 2>&1; }
-
 wait_seconds_78() { sleep 78 && notify-send "Timer Done" "78 seconds passed"; }
-
 calc_percent_79() { awk "BEGIN {print ($1 * 79) / 100}"; }
-
 check_port_7900() { nc -zv localhost 7900 2>&1; }
-
 wait_seconds_79() { sleep 79 && notify-send "Timer Done" "79 seconds passed"; }
-
 calc_percent_80() { awk "BEGIN {print ($1 * 80) / 100}"; }
-
 check_port_8000() { nc -zv localhost 8000 2>&1; }
-
 wait_seconds_80() { sleep 80 && notify-send "Timer Done" "80 seconds passed"; }
-
 calc_percent_81() { awk "BEGIN {print ($1 * 81) / 100}"; }
-
 check_port_8100() { nc -zv localhost 8100 2>&1; }
-
 wait_seconds_81() { sleep 81 && notify-send "Timer Done" "81 seconds passed"; }
-
 calc_percent_82() { awk "BEGIN {print ($1 * 82) / 100}"; }
-
 check_port_8200() { nc -zv localhost 8200 2>&1; }
-
 wait_seconds_82() { sleep 82 && notify-send "Timer Done" "82 seconds passed"; }
-
 calc_percent_83() { awk "BEGIN {print ($1 * 83) / 100}"; }
-
 check_port_8300() { nc -zv localhost 8300 2>&1; }
-
 wait_seconds_83() { sleep 83 && notify-send "Timer Done" "83 seconds passed"; }
-
 calc_percent_84() { awk "BEGIN {print ($1 * 84) / 100}"; }
-
 check_port_8400() { nc -zv localhost 8400 2>&1; }
-
 wait_seconds_84() { sleep 84 && notify-send "Timer Done" "84 seconds passed"; }
-
 calc_percent_85() { awk "BEGIN {print ($1 * 85) / 100}"; }
-
 check_port_8500() { nc -zv localhost 8500 2>&1; }
-
 wait_seconds_85() { sleep 85 && notify-send "Timer Done" "85 seconds passed"; }
-
 calc_percent_86() { awk "BEGIN {print ($1 * 86) / 100}"; }
-
 check_port_8600() { nc -zv localhost 8600 2>&1; }
-
 wait_seconds_86() { sleep 86 && notify-send "Timer Done" "86 seconds passed"; }
-
 calc_percent_87() { awk "BEGIN {print ($1 * 87) / 100}"; }
-
 check_port_8700() { nc -zv localhost 8700 2>&1; }
-
 wait_seconds_87() { sleep 87 && notify-send "Timer Done" "87 seconds passed"; }
-
 calc_percent_88() { awk "BEGIN {print ($1 * 88) / 100}"; }
-
 check_port_8800() { nc -zv localhost 8800 2>&1; }
-
 wait_seconds_88() { sleep 88 && notify-send "Timer Done" "88 seconds passed"; }
-
 calc_percent_89() { awk "BEGIN {print ($1 * 89) / 100}"; }
-
 check_port_8900() { nc -zv localhost 8900 2>&1; }
-
 wait_seconds_89() { sleep 89 && notify-send "Timer Done" "89 seconds passed"; }
-
 calc_percent_90() { awk "BEGIN {print ($1 * 90) / 100}"; }
-
 check_port_9000() { nc -zv localhost 9000 2>&1; }
-
 wait_seconds_90() { sleep 90 && notify-send "Timer Done" "90 seconds passed"; }
-
 calc_percent_91() { awk "BEGIN {print ($1 * 91) / 100}"; }
-
 check_port_9100() { nc -zv localhost 9100 2>&1; }
-
 wait_seconds_91() { sleep 91 && notify-send "Timer Done" "91 seconds passed"; }
-
 calc_percent_92() { awk "BEGIN {print ($1 * 92) / 100}"; }
-
 check_port_9200() { nc -zv localhost 9200 2>&1; }
-
 wait_seconds_92() { sleep 92 && notify-send "Timer Done" "92 seconds passed"; }
-
 calc_percent_93() { awk "BEGIN {print ($1 * 93) / 100}"; }
-
 check_port_9300() { nc -zv localhost 9300 2>&1; }
-
 wait_seconds_93() { sleep 93 && notify-send "Timer Done" "93 seconds passed"; }
-
 calc_percent_94() { awk "BEGIN {print ($1 * 94) / 100}"; }
-
 check_port_9400() { nc -zv localhost 9400 2>&1; }
-
 wait_seconds_94() { sleep 94 && notify-send "Timer Done" "94 seconds passed"; }
-
 calc_percent_95() { awk "BEGIN {print ($1 * 95) / 100}"; }
-
 check_port_9500() { nc -zv localhost 9500 2>&1; }
-
 wait_seconds_95() { sleep 95 && notify-send "Timer Done" "95 seconds passed"; }
-
 calc_percent_96() { awk "BEGIN {print ($1 * 96) / 100}"; }
-
 check_port_9600() { nc -zv localhost 9600 2>&1; }
-
 wait_seconds_96() { sleep 96 && notify-send "Timer Done" "96 seconds passed"; }
-
 calc_percent_97() { awk "BEGIN {print ($1 * 97) / 100}"; }
-
 check_port_9700() { nc -zv localhost 9700 2>&1; }
-
 wait_seconds_97() { sleep 97 && notify-send "Timer Done" "97 seconds passed"; }
-
 calc_percent_98() { awk "BEGIN {print ($1 * 98) / 100}"; }
-
 check_port_9800() { nc -zv localhost 9800 2>&1; }
-
 wait_seconds_98() { sleep 98 && notify-send "Timer Done" "98 seconds passed"; }
-
 calc_percent_99() { awk "BEGIN {print ($1 * 99) / 100}"; }
-
 check_port_9900() { nc -zv localhost 9900 2>&1; }
-
 wait_seconds_99() { sleep 99 && notify-send "Timer Done" "99 seconds passed"; }
-
 calc_percent_100() { awk "BEGIN {print ($1 * 100) / 100}"; }
-
 check_port_10000() { nc -zv localhost 10000 2>&1; }
-
 wait_seconds_100() { sleep 100 && notify-send "Timer Done" "100 seconds passed"; }
-
 g_push_origin() { git push origin "$@"; }
-
 g_push_origin_force() { git push origin "$@" --force; }
-
 g_push_upstream() { git push upstream "$@"; }
-
 g_push_upstream_force() { git push upstream "$@" --force; }
-
 g_push_main() { git push main "$@"; }
-
 g_push_main_force() { git push main "$@" --force; }
-
 g_push_dev() { git push dev "$@"; }
-
 g_push_dev_force() { git push dev "$@" --force; }
-
 g_push_staging() { git push staging "$@"; }
-
 g_push_staging_force() { git push staging "$@" --force; }
-
 g_push_prod() { git push prod "$@"; }
-
 g_push_prod_force() { git push prod "$@" --force; }
-
 g_pull_origin() { git pull origin "$@"; }
-
 g_pull_origin_force() { git pull origin "$@" --force; }
-
 g_pull_upstream() { git pull upstream "$@"; }
-
 g_pull_upstream_force() { git pull upstream "$@" --force; }
-
 g_pull_main() { git pull main "$@"; }
-
 g_pull_main_force() { git pull main "$@" --force; }
-
 g_pull_dev() { git pull dev "$@"; }
-
 g_pull_dev_force() { git pull dev "$@" --force; }
-
 g_pull_staging() { git pull staging "$@"; }
-
 g_pull_staging_force() { git pull staging "$@" --force; }
-
 g_pull_prod() { git pull prod "$@"; }
-
 g_pull_prod_force() { git pull prod "$@" --force; }
-
 g_fetch_origin() { git fetch origin "$@"; }
-
 g_fetch_origin_force() { git fetch origin "$@" --force; }
-
 g_fetch_upstream() { git fetch upstream "$@"; }
-
 g_fetch_upstream_force() { git fetch upstream "$@" --force; }
-
 g_fetch_main() { git fetch main "$@"; }
-
 g_fetch_main_force() { git fetch main "$@" --force; }
-
 g_fetch_dev() { git fetch dev "$@"; }
-
 g_fetch_dev_force() { git fetch dev "$@" --force; }
-
 g_fetch_staging() { git fetch staging "$@"; }
-
 g_fetch_staging_force() { git fetch staging "$@" --force; }
-
 g_fetch_prod() { git fetch prod "$@"; }
-
 g_fetch_prod_force() { git fetch prod "$@" --force; }
-
 g_commit_origin() { git commit origin "$@"; }
-
 g_commit_origin_force() { git commit origin "$@" --force; }
-
 g_commit_upstream() { git commit upstream "$@"; }
-
 g_commit_upstream_force() { git commit upstream "$@" --force; }
-
 g_commit_main() { git commit main "$@"; }
-
 g_commit_main_force() { git commit main "$@" --force; }
-
 g_commit_dev() { git commit dev "$@"; }
-
 g_commit_dev_force() { git commit dev "$@" --force; }
-
 g_commit_staging() { git commit staging "$@"; }
-
 g_commit_staging_force() { git commit staging "$@" --force; }
-
 g_commit_prod() { git commit prod "$@"; }
-
 g_commit_prod_force() { git commit prod "$@" --force; }
-
 g_checkout_origin() { git checkout origin "$@"; }
-
 g_checkout_origin_force() { git checkout origin "$@" --force; }
-
 g_checkout_upstream() { git checkout upstream "$@"; }
-
 g_checkout_upstream_force() { git checkout upstream "$@" --force; }
-
 g_checkout_main() { git checkout main "$@"; }
-
 g_checkout_main_force() { git checkout main "$@" --force; }
-
 g_checkout_dev() { git checkout dev "$@"; }
-
 g_checkout_dev_force() { git checkout dev "$@" --force; }
-
 g_checkout_staging() { git checkout staging "$@"; }
-
 g_checkout_staging_force() { git checkout staging "$@" --force; }
-
 g_checkout_prod() { git checkout prod "$@"; }
-
 g_checkout_prod_force() { git checkout prod "$@" --force; }
-
 g_merge_origin() { git merge origin "$@"; }
-
 g_merge_origin_force() { git merge origin "$@" --force; }
-
 g_merge_upstream() { git merge upstream "$@"; }
-
 g_merge_upstream_force() { git merge upstream "$@" --force; }
-
 g_merge_main() { git merge main "$@"; }
-
 g_merge_main_force() { git merge main "$@" --force; }
-
 g_merge_dev() { git merge dev "$@"; }
-
 g_merge_dev_force() { git merge dev "$@" --force; }
-
 g_merge_staging() { git merge staging "$@"; }
-
 g_merge_staging_force() { git merge staging "$@" --force; }
-
 g_merge_prod() { git merge prod "$@"; }
-
 g_merge_prod_force() { git merge prod "$@" --force; }
-
 g_rebase_origin() { git rebase origin "$@"; }
-
 g_rebase_origin_force() { git rebase origin "$@" --force; }
-
 g_rebase_upstream() { git rebase upstream "$@"; }
-
 g_rebase_upstream_force() { git rebase upstream "$@" --force; }
-
 g_rebase_main() { git rebase main "$@"; }
-
 g_rebase_main_force() { git rebase main "$@" --force; }
-
 g_rebase_dev() { git rebase dev "$@"; }
-
 g_rebase_dev_force() { git rebase dev "$@" --force; }
-
 g_rebase_staging() { git rebase staging "$@"; }
-
 g_rebase_staging_force() { git rebase staging "$@" --force; }
-
 g_rebase_prod() { git rebase prod "$@"; }
-
 g_rebase_prod_force() { git rebase prod "$@" --force; }
-
 g_reset_origin() { git reset origin "$@"; }
-
 g_reset_origin_force() { git reset origin "$@" --force; }
-
 g_reset_upstream() { git reset upstream "$@"; }
-
 g_reset_upstream_force() { git reset upstream "$@" --force; }
-
 g_reset_main() { git reset main "$@"; }
-
 g_reset_main_force() { git reset main "$@" --force; }
-
 g_reset_dev() { git reset dev "$@"; }
-
 g_reset_dev_force() { git reset dev "$@" --force; }
-
 g_reset_staging() { git reset staging "$@"; }
-
 g_reset_staging_force() { git reset staging "$@" --force; }
-
 g_reset_prod() { git reset prod "$@"; }
-
 g_reset_prod_force() { git reset prod "$@" --force; }
-
 k_get_pods_default() { kubectl get pods -n default "$@"; }
-
 k_desc_pods_default() { kubectl describe pods -n default "$@"; }
-
 k_del_pods_default() { kubectl delete pods -n default "$@"; }
-
 k_get_pods_kube-system() { kubectl get pods -n kube-system "$@"; }
-
 k_desc_pods_kube-system() { kubectl describe pods -n kube-system "$@"; }
-
 k_del_pods_kube-system() { kubectl delete pods -n kube-system "$@"; }
-
 k_get_pods_monitoring() { kubectl get pods -n monitoring "$@"; }
-
 k_desc_pods_monitoring() { kubectl describe pods -n monitoring "$@"; }
-
 k_del_pods_monitoring() { kubectl delete pods -n monitoring "$@"; }
-
 k_get_pods_logging() { kubectl get pods -n logging "$@"; }
-
 k_desc_pods_logging() { kubectl describe pods -n logging "$@"; }
-
 k_del_pods_logging() { kubectl delete pods -n logging "$@"; }
-
 k_get_pods_ingress() { kubectl get pods -n ingress "$@"; }
-
 k_desc_pods_ingress() { kubectl describe pods -n ingress "$@"; }
-
 k_del_pods_ingress() { kubectl delete pods -n ingress "$@"; }
-
 k_get_pods_cert-manager() { kubectl get pods -n cert-manager "$@"; }
-
 k_desc_pods_cert-manager() { kubectl describe pods -n cert-manager "$@"; }
-
 k_del_pods_cert-manager() { kubectl delete pods -n cert-manager "$@"; }
-
 k_get_pods_dev() { kubectl get pods -n dev "$@"; }
-
 k_desc_pods_dev() { kubectl describe pods -n dev "$@"; }
-
 k_del_pods_dev() { kubectl delete pods -n dev "$@"; }
-
 k_get_pods_prod() { kubectl get pods -n prod "$@"; }
-
 k_desc_pods_prod() { kubectl describe pods -n prod "$@"; }
-
 k_del_pods_prod() { kubectl delete pods -n prod "$@"; }
-
 k_get_svc_default() { kubectl get svc -n default "$@"; }
-
 k_desc_svc_default() { kubectl describe svc -n default "$@"; }
-
 k_del_svc_default() { kubectl delete svc -n default "$@"; }
-
 k_get_svc_kube-system() { kubectl get svc -n kube-system "$@"; }
-
 k_desc_svc_kube-system() { kubectl describe svc -n kube-system "$@"; }
-
 k_del_svc_kube-system() { kubectl delete svc -n kube-system "$@"; }
-
 k_get_svc_monitoring() { kubectl get svc -n monitoring "$@"; }
-
 k_desc_svc_monitoring() { kubectl describe svc -n monitoring "$@"; }
-
 k_del_svc_monitoring() { kubectl delete svc -n monitoring "$@"; }
-
 k_get_svc_logging() { kubectl get svc -n logging "$@"; }
-
 k_desc_svc_logging() { kubectl describe svc -n logging "$@"; }
-
 k_del_svc_logging() { kubectl delete svc -n logging "$@"; }
-
 k_get_svc_ingress() { kubectl get svc -n ingress "$@"; }
-
 k_desc_svc_ingress() { kubectl describe svc -n ingress "$@"; }
-
 k_del_svc_ingress() { kubectl delete svc -n ingress "$@"; }
-
 k_get_svc_cert-manager() { kubectl get svc -n cert-manager "$@"; }
-
 k_desc_svc_cert-manager() { kubectl describe svc -n cert-manager "$@"; }
-
 k_del_svc_cert-manager() { kubectl delete svc -n cert-manager "$@"; }
-
 k_get_svc_dev() { kubectl get svc -n dev "$@"; }
-
 k_desc_svc_dev() { kubectl describe svc -n dev "$@"; }
-
 k_del_svc_dev() { kubectl delete svc -n dev "$@"; }
-
 k_get_svc_prod() { kubectl get svc -n prod "$@"; }
-
 k_desc_svc_prod() { kubectl describe svc -n prod "$@"; }
-
 k_del_svc_prod() { kubectl delete svc -n prod "$@"; }
-
 k_get_deploy_default() { kubectl get deploy -n default "$@"; }
-
 k_desc_deploy_default() { kubectl describe deploy -n default "$@"; }
-
 k_del_deploy_default() { kubectl delete deploy -n default "$@"; }
-
 k_get_deploy_kube-system() { kubectl get deploy -n kube-system "$@"; }
-
 k_desc_deploy_kube-system() { kubectl describe deploy -n kube-system "$@"; }
-
 k_del_deploy_kube-system() { kubectl delete deploy -n kube-system "$@"; }
-
 k_get_deploy_monitoring() { kubectl get deploy -n monitoring "$@"; }
-
 k_desc_deploy_monitoring() { kubectl describe deploy -n monitoring "$@"; }
-
 k_del_deploy_monitoring() { kubectl delete deploy -n monitoring "$@"; }
-
 k_get_deploy_logging() { kubectl get deploy -n logging "$@"; }
-
 k_desc_deploy_logging() { kubectl describe deploy -n logging "$@"; }
-
 k_del_deploy_logging() { kubectl delete deploy -n logging "$@"; }
-
 k_get_deploy_ingress() { kubectl get deploy -n ingress "$@"; }
-
 k_desc_deploy_ingress() { kubectl describe deploy -n ingress "$@"; }
-
 k_del_deploy_ingress() { kubectl delete deploy -n ingress "$@"; }
-
 k_get_deploy_cert-manager() { kubectl get deploy -n cert-manager "$@"; }
-
 k_desc_deploy_cert-manager() { kubectl describe deploy -n cert-manager "$@"; }
-
 k_del_deploy_cert-manager() { kubectl delete deploy -n cert-manager "$@"; }
-
 k_get_deploy_dev() { kubectl get deploy -n dev "$@"; }
-
 k_desc_deploy_dev() { kubectl describe deploy -n dev "$@"; }
-
 k_del_deploy_dev() { kubectl delete deploy -n dev "$@"; }
-
 k_get_deploy_prod() { kubectl get deploy -n prod "$@"; }
-
 k_desc_deploy_prod() { kubectl describe deploy -n prod "$@"; }
-
 k_del_deploy_prod() { kubectl delete deploy -n prod "$@"; }
-
 k_get_cm_default() { kubectl get cm -n default "$@"; }
-
 k_desc_cm_default() { kubectl describe cm -n default "$@"; }
-
 k_del_cm_default() { kubectl delete cm -n default "$@"; }
-
 k_get_cm_kube-system() { kubectl get cm -n kube-system "$@"; }
-
 k_desc_cm_kube-system() { kubectl describe cm -n kube-system "$@"; }
-
 k_del_cm_kube-system() { kubectl delete cm -n kube-system "$@"; }
-
 k_get_cm_monitoring() { kubectl get cm -n monitoring "$@"; }
-
 k_desc_cm_monitoring() { kubectl describe cm -n monitoring "$@"; }
-
 k_del_cm_monitoring() { kubectl delete cm -n monitoring "$@"; }
-
 k_get_cm_logging() { kubectl get cm -n logging "$@"; }
-
 k_desc_cm_logging() { kubectl describe cm -n logging "$@"; }
-
 k_del_cm_logging() { kubectl delete cm -n logging "$@"; }
-
 k_get_cm_ingress() { kubectl get cm -n ingress "$@"; }
-
 k_desc_cm_ingress() { kubectl describe cm -n ingress "$@"; }
-
 k_del_cm_ingress() { kubectl delete cm -n ingress "$@"; }
-
 k_get_cm_cert-manager() { kubectl get cm -n cert-manager "$@"; }
-
 k_desc_cm_cert-manager() { kubectl describe cm -n cert-manager "$@"; }
-
 k_del_cm_cert-manager() { kubectl delete cm -n cert-manager "$@"; }
-
 k_get_cm_dev() { kubectl get cm -n dev "$@"; }
-
 k_desc_cm_dev() { kubectl describe cm -n dev "$@"; }
-
 k_del_cm_dev() { kubectl delete cm -n dev "$@"; }
-
 k_get_cm_prod() { kubectl get cm -n prod "$@"; }
-
 k_desc_cm_prod() { kubectl describe cm -n prod "$@"; }
-
 k_del_cm_prod() { kubectl delete cm -n prod "$@"; }
-
 k_get_secret_default() { kubectl get secret -n default "$@"; }
-
 k_desc_secret_default() { kubectl describe secret -n default "$@"; }
-
 k_del_secret_default() { kubectl delete secret -n default "$@"; }
-
 k_get_secret_kube-system() { kubectl get secret -n kube-system "$@"; }
-
 k_desc_secret_kube-system() { kubectl describe secret -n kube-system "$@"; }
-
 k_del_secret_kube-system() { kubectl delete secret -n kube-system "$@"; }
-
 k_get_secret_monitoring() { kubectl get secret -n monitoring "$@"; }
-
 k_desc_secret_monitoring() { kubectl describe secret -n monitoring "$@"; }
-
 k_del_secret_monitoring() { kubectl delete secret -n monitoring "$@"; }
-
 k_get_secret_logging() { kubectl get secret -n logging "$@"; }
-
 k_desc_secret_logging() { kubectl describe secret -n logging "$@"; }
-
 k_del_secret_logging() { kubectl delete secret -n logging "$@"; }
-
 k_get_secret_ingress() { kubectl get secret -n ingress "$@"; }
-
 k_desc_secret_ingress() { kubectl describe secret -n ingress "$@"; }
-
 k_del_secret_ingress() { kubectl delete secret -n ingress "$@"; }
-
 k_get_secret_cert-manager() { kubectl get secret -n cert-manager "$@"; }
-
 k_desc_secret_cert-manager() { kubectl describe secret -n cert-manager "$@"; }
-
 k_del_secret_cert-manager() { kubectl delete secret -n cert-manager "$@"; }
-
 k_get_secret_dev() { kubectl get secret -n dev "$@"; }
-
 k_desc_secret_dev() { kubectl describe secret -n dev "$@"; }
-
 k_del_secret_dev() { kubectl delete secret -n dev "$@"; }
-
 k_get_secret_prod() { kubectl get secret -n prod "$@"; }
-
 k_desc_secret_prod() { kubectl describe secret -n prod "$@"; }
-
 k_del_secret_prod() { kubectl delete secret -n prod "$@"; }
-
 k_get_node_default() { kubectl get node -n default "$@"; }
-
 k_desc_node_default() { kubectl describe node -n default "$@"; }
-
 k_del_node_default() { kubectl delete node -n default "$@"; }
-
 k_get_node_kube-system() { kubectl get node -n kube-system "$@"; }
-
 k_desc_node_kube-system() { kubectl describe node -n kube-system "$@"; }
-
 k_del_node_kube-system() { kubectl delete node -n kube-system "$@"; }
-
 k_get_node_monitoring() { kubectl get node -n monitoring "$@"; }
-
 k_desc_node_monitoring() { kubectl describe node -n monitoring "$@"; }
-
 k_del_node_monitoring() { kubectl delete node -n monitoring "$@"; }
-
 k_get_node_logging() { kubectl get node -n logging "$@"; }
-
 k_desc_node_logging() { kubectl describe node -n logging "$@"; }
-
 k_del_node_logging() { kubectl delete node -n logging "$@"; }
-
 k_get_node_ingress() { kubectl get node -n ingress "$@"; }
-
 k_desc_node_ingress() { kubectl describe node -n ingress "$@"; }
-
 k_del_node_ingress() { kubectl delete node -n ingress "$@"; }
-
 k_get_node_cert-manager() { kubectl get node -n cert-manager "$@"; }
-
 k_desc_node_cert-manager() { kubectl describe node -n cert-manager "$@"; }
-
 k_del_node_cert-manager() { kubectl delete node -n cert-manager "$@"; }
-
 k_get_node_dev() { kubectl get node -n dev "$@"; }
-
 k_desc_node_dev() { kubectl describe node -n dev "$@"; }
-
 k_del_node_dev() { kubectl delete node -n dev "$@"; }
-
 k_get_node_prod() { kubectl get node -n prod "$@"; }
-
 k_desc_node_prod() { kubectl describe node -n prod "$@"; }
-
 k_del_node_prod() { kubectl delete node -n prod "$@"; }
-
 k_get_ns_default() { kubectl get ns -n default "$@"; }
-
 k_desc_ns_default() { kubectl describe ns -n default "$@"; }
-
 k_del_ns_default() { kubectl delete ns -n default "$@"; }
-
 k_get_ns_kube-system() { kubectl get ns -n kube-system "$@"; }
-
 k_desc_ns_kube-system() { kubectl describe ns -n kube-system "$@"; }
-
 k_del_ns_kube-system() { kubectl delete ns -n kube-system "$@"; }
-
 k_get_ns_monitoring() { kubectl get ns -n monitoring "$@"; }
-
 k_desc_ns_monitoring() { kubectl describe ns -n monitoring "$@"; }
-
 k_del_ns_monitoring() { kubectl delete ns -n monitoring "$@"; }
-
 k_get_ns_logging() { kubectl get ns -n logging "$@"; }
-
 k_desc_ns_logging() { kubectl describe ns -n logging "$@"; }
-
 k_del_ns_logging() { kubectl delete ns -n logging "$@"; }
-
 k_get_ns_ingress() { kubectl get ns -n ingress "$@"; }
-
 k_desc_ns_ingress() { kubectl describe ns -n ingress "$@"; }
-
 k_del_ns_ingress() { kubectl delete ns -n ingress "$@"; }
-
 k_get_ns_cert-manager() { kubectl get ns -n cert-manager "$@"; }
-
 k_desc_ns_cert-manager() { kubectl describe ns -n cert-manager "$@"; }
-
 k_del_ns_cert-manager() { kubectl delete ns -n cert-manager "$@"; }
-
 k_get_ns_dev() { kubectl get ns -n dev "$@"; }
-
 k_desc_ns_dev() { kubectl describe ns -n dev "$@"; }
-
 k_del_ns_dev() { kubectl delete ns -n dev "$@"; }
-
 k_get_ns_prod() { kubectl get ns -n prod "$@"; }
-
 k_desc_ns_prod() { kubectl describe ns -n prod "$@"; }
-
 k_del_ns_prod() { kubectl delete ns -n prod "$@"; }
-
 k_get_ing_default() { kubectl get ing -n default "$@"; }
-
 k_desc_ing_default() { kubectl describe ing -n default "$@"; }
-
 k_del_ing_default() { kubectl delete ing -n default "$@"; }
-
 k_get_ing_kube-system() { kubectl get ing -n kube-system "$@"; }
-
 k_desc_ing_kube-system() { kubectl describe ing -n kube-system "$@"; }
-
 k_del_ing_kube-system() { kubectl delete ing -n kube-system "$@"; }
-
 k_get_ing_monitoring() { kubectl get ing -n monitoring "$@"; }
-
 k_desc_ing_monitoring() { kubectl describe ing -n monitoring "$@"; }
-
 k_del_ing_monitoring() { kubectl delete ing -n monitoring "$@"; }
-
 k_get_ing_logging() { kubectl get ing -n logging "$@"; }
-
 k_desc_ing_logging() { kubectl describe ing -n logging "$@"; }
-
 k_del_ing_logging() { kubectl delete ing -n logging "$@"; }
-
 k_get_ing_ingress() { kubectl get ing -n ingress "$@"; }
-
 k_desc_ing_ingress() { kubectl describe ing -n ingress "$@"; }
-
 k_del_ing_ingress() { kubectl delete ing -n ingress "$@"; }
-
 k_get_ing_cert-manager() { kubectl get ing -n cert-manager "$@"; }
-
 k_desc_ing_cert-manager() { kubectl describe ing -n cert-manager "$@"; }
-
 k_del_ing_cert-manager() { kubectl delete ing -n cert-manager "$@"; }
-
 k_get_ing_dev() { kubectl get ing -n dev "$@"; }
-
 k_desc_ing_dev() { kubectl describe ing -n dev "$@"; }
-
 k_del_ing_dev() { kubectl delete ing -n dev "$@"; }
-
 k_get_ing_prod() { kubectl get ing -n prod "$@"; }
-
 k_desc_ing_prod() { kubectl describe ing -n prod "$@"; }
-
 k_del_ing_prod() { kubectl delete ing -n prod "$@"; }
-
 k_get_pv_default() { kubectl get pv -n default "$@"; }
-
 k_desc_pv_default() { kubectl describe pv -n default "$@"; }
-
 k_del_pv_default() { kubectl delete pv -n default "$@"; }
-
 k_get_pv_kube-system() { kubectl get pv -n kube-system "$@"; }
-
 k_desc_pv_kube-system() { kubectl describe pv -n kube-system "$@"; }
-
 k_del_pv_kube-system() { kubectl delete pv -n kube-system "$@"; }
-
 k_get_pv_monitoring() { kubectl get pv -n monitoring "$@"; }
-
 k_desc_pv_monitoring() { kubectl describe pv -n monitoring "$@"; }
-
 k_del_pv_monitoring() { kubectl delete pv -n monitoring "$@"; }
-
 k_get_pv_logging() { kubectl get pv -n logging "$@"; }
-
 k_desc_pv_logging() { kubectl describe pv -n logging "$@"; }
-
 k_del_pv_logging() { kubectl delete pv -n logging "$@"; }
-
 k_get_pv_ingress() { kubectl get pv -n ingress "$@"; }
-
 k_desc_pv_ingress() { kubectl describe pv -n ingress "$@"; }
-
 k_del_pv_ingress() { kubectl delete pv -n ingress "$@"; }
-
 k_get_pv_cert-manager() { kubectl get pv -n cert-manager "$@"; }
-
 k_desc_pv_cert-manager() { kubectl describe pv -n cert-manager "$@"; }
-
 k_del_pv_cert-manager() { kubectl delete pv -n cert-manager "$@"; }
-
 k_get_pv_dev() { kubectl get pv -n dev "$@"; }
-
 k_desc_pv_dev() { kubectl describe pv -n dev "$@"; }
-
 k_del_pv_dev() { kubectl delete pv -n dev "$@"; }
-
 k_get_pv_prod() { kubectl get pv -n prod "$@"; }
-
 k_desc_pv_prod() { kubectl describe pv -n prod "$@"; }
-
 k_del_pv_prod() { kubectl delete pv -n prod "$@"; }
-
 k_get_pvc_default() { kubectl get pvc -n default "$@"; }
-
 k_desc_pvc_default() { kubectl describe pvc -n default "$@"; }
-
 k_del_pvc_default() { kubectl delete pvc -n default "$@"; }
-
 k_get_pvc_kube-system() { kubectl get pvc -n kube-system "$@"; }
-
 k_desc_pvc_kube-system() { kubectl describe pvc -n kube-system "$@"; }
-
 k_del_pvc_kube-system() { kubectl delete pvc -n kube-system "$@"; }
-
 k_get_pvc_monitoring() { kubectl get pvc -n monitoring "$@"; }
-
 k_desc_pvc_monitoring() { kubectl describe pvc -n monitoring "$@"; }
-
 k_del_pvc_monitoring() { kubectl delete pvc -n monitoring "$@"; }
-
 k_get_pvc_logging() { kubectl get pvc -n logging "$@"; }
-
 k_desc_pvc_logging() { kubectl describe pvc -n logging "$@"; }
-
 k_del_pvc_logging() { kubectl delete pvc -n logging "$@"; }
-
 k_get_pvc_ingress() { kubectl get pvc -n ingress "$@"; }
-
 k_desc_pvc_ingress() { kubectl describe pvc -n ingress "$@"; }
-
 k_del_pvc_ingress() { kubectl delete pvc -n ingress "$@"; }
-
 k_get_pvc_cert-manager() { kubectl get pvc -n cert-manager "$@"; }
-
 k_desc_pvc_cert-manager() { kubectl describe pvc -n cert-manager "$@"; }
-
 k_del_pvc_cert-manager() { kubectl delete pvc -n cert-manager "$@"; }
-
 k_get_pvc_dev() { kubectl get pvc -n dev "$@"; }
-
 k_desc_pvc_dev() { kubectl describe pvc -n dev "$@"; }
-
 k_del_pvc_dev() { kubectl delete pvc -n dev "$@"; }
-
 k_get_pvc_prod() { kubectl get pvc -n prod "$@"; }
-
 k_desc_pvc_prod() { kubectl describe pvc -n prod "$@"; }
-
 k_del_pvc_prod() { kubectl delete pvc -n prod "$@"; }
-
 extract_tar() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -1281,9 +643,7 @@ extract_tar() {
         esac
     fi
 }
-
 compress_tar() { tar -caf "$1.tar" "$1"; }
-
 extract_gz() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -1292,9 +652,7 @@ extract_gz() {
         esac
     fi
 }
-
 compress_gz() { tar -caf "$1.gz" "$1"; }
-
 extract_zip() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -1303,9 +661,7 @@ extract_zip() {
         esac
     fi
 }
-
 compress_zip() { tar -caf "$1.zip" "$1"; }
-
 extract_rar() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -1314,9 +670,7 @@ extract_rar() {
         esac
     fi
 }
-
 compress_rar() { tar -caf "$1.rar" "$1"; }
-
 extract_7z() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -1325,9 +679,7 @@ extract_7z() {
         esac
     fi
 }
-
 compress_7z() { tar -caf "$1.7z" "$1"; }
-
 extract_bz2() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -1336,9 +688,7 @@ extract_bz2() {
         esac
     fi
 }
-
 compress_bz2() { tar -caf "$1.bz2" "$1"; }
-
 extract_xz() {
     if [[ -f $1 ]]; then
         case $1 in
@@ -1347,39 +697,22 @@ extract_xz() {
         esac
     fi
 }
-
 compress_xz() { tar -caf "$1.xz" "$1"; }
-
 ping_google_com() { ping -c 5 google.com; }
-
 trace_google_com() { traceroute google.com; }
-
 dig_google_com() { dig google.com ANY; }
-
 ping_github_com() { ping -c 5 github.com; }
-
 trace_github_com() { traceroute github.com; }
-
 dig_github_com() { dig github.com ANY; }
-
 ping_cloudflare_com() { ping -c 5 cloudflare.com; }
-
 trace_cloudflare_com() { traceroute cloudflare.com; }
-
 dig_cloudflare_com() { dig cloudflare.com ANY; }
-
 ping_8_8_8_8() { ping -c 5 8.8.8.8; }
-
 trace_8_8_8_8() { traceroute 8.8.8.8; }
-
 dig_8_8_8_8() { dig 8.8.8.8 ANY; }
-
 ping_1_1_1_1() { ping -c 5 1.1.1.1; }
-
 trace_1_1_1_1() { traceroute 1.1.1.1; }
-
 dig_1_1_1_1() { dig 1.1.1.1 ANY; }
-# --- EXTRA MEGA FUNCTIONS (1200+) ---
 edit_bash_config() { $EDITOR "$HOME/.config/bash/bash.conf" || $EDITOR "$HOME/.bashrc"; }
 view_bash_config() { cat "$HOME/.config/bash/bash.conf" || cat "$HOME/.bashrc"; }
 backup_bash_config() { cp "$HOME/.config/bash/bash.conf" "$HOME/.config/bash/bash.conf.bak" || cp "$HOME/.bashrc" "$HOME/.bashrc.bak"; }
@@ -1792,8 +1125,6 @@ delete_empty_dirs_depth_99() { find . -maxdepth 99 -type d -empty -delete; }
 find_files_larger_than_100M() { find . -type f -size +100M -exec ls -lh {} +; }
 find_files_older_than_100_days() { find . -type f -mtime +100; }
 delete_empty_dirs_depth_100() { find . -maxdepth 100 -type d -empty -delete; }
-
-# --- FINAL PUSH MEGA FUNCTIONS (800+) ---
 convert_to_mp4() { ffmpeg -i "$1" "${1%.*}.mp4"; }
 extract_audio_as_mp4() { ffmpeg -i "$1" -vn "${1%.*}.mp4"; }
 optimize_mp4() { ffmpeg -i "$1" -vcodec libx264 -crf 20 "optimized_${1%.*}.mp4"; }
@@ -2064,8 +1395,6 @@ kill_process_on_port_39000() { lsof -ti:39000 | xargs kill -9; }
 check_process_listening_on_39000() { lsof -i:39000; }
 kill_process_on_port_40000() { lsof -ti:40000 | xargs kill -9; }
 check_process_listening_on_40000() { lsof -i:40000; }
-
-# --- CORE OPTIMIZATION MEGA FUNCTIONS (500+) ---
 clean_disk_space__var_log() { sudo rm -rf /var/log/*; }
 disk_usage_summary__var_log() { du -sh /var/log; }
 list_large_files__var_log_100M() { find /var/log -type f -size +100M; }
@@ -2321,8 +1650,6 @@ format_black_dim_9() { echo -e "\e[2;39m$*\e[0m"; }
 echo_black_line_10() { echo -e "\e[40m$*\e[0m"; }
 print_black_bold_10() { echo -e "\e[1;40m$*\e[0m"; }
 format_black_dim_10() { echo -e "\e[2;40m$*\e[0m"; }
-
-# --- FINAL FUNCTION EXPANSION TO 2000 ---
 regex_search_pattern_1() { grep -rP "$1" . --include="*.1"; }
 regex_replace_pattern_1() { find . -type f -name "*.1" -exec sed -i "s/$1/$2/g" {} +; }
 regex_search_pattern_2() { grep -rP "$1" . --include="*.2"; }

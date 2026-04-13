@@ -1,7 +1,4 @@
-# AUTO-GENERATED
-
 status is-interactive; or exit
-
 abbr -a gad 'git add'
 abbr -a gadv 'git add --verbose'
 abbr -a ga 'git add'

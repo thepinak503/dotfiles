@@ -1,12 +1,3 @@
-# =============================================================================
-# .bash/aliases.bash  —  2000+ Unique, distro-agnostic, security-aware aliases
-# All modern-tool aliases fall back gracefully if the tool isn't installed.
-# =============================================================================
-
-# ===========================================================================
-# SAFETY
-
-# ===========================================================================
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
@@ -14,11 +5,6 @@ alias ln='ln -i'
 alias chown='chown --preserve-root'
 alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
-
-# ===========================================================================
-# NAVIGATION
-
-# ===========================================================================
 alias ~='cd ~'
 alias -- -='cd -'
 alias home='cd ~'
@@ -36,11 +22,6 @@ alias etc='cd /etc'
 alias usrbin='cd /usr/bin'
 alias localbin='cd ~/.local/bin'
 alias confdir='cd ~/.config'
-
-# ===========================================================================
-# LISTING  (eza → exa → ls)
-
-# ===========================================================================
     alias ltt='eza --tree --level=3 --icons'
     alias lttt='eza --tree --level=4 --icons'
     alias lll='eza -la --icons --git --color=auto --time-style=long-iso'
@@ -50,20 +31,10 @@ alias confdir='cd ~/.config'
     alias lln='eza -la --icons --git --sort=name'
     alias treea='eza --tree --icons -a'
     alias tree='exa --tree --icons'
-
-# ===========================================================================
-# FILE VIEWING  (bat → cat)
-
-# ===========================================================================
     alias catp='bat --style=plain --paging=never'
     alias bh='bat --style=header'
     alias bp='bat --style=plain'
     alias catn='batcat --style=plain'
-
-# ===========================================================================
-# SEARCHING  (fd → find, rg → grep, delta → diff)
-
-# ===========================================================================
     alias find='fd -H'
     alias ff='fd -H'
     alias fdir='fd -t d'
@@ -71,11 +42,6 @@ alias confdir='cd ~/.config'
     alias rgs='rg --smart-case --hidden -l'     # list files only
     alias rgn='rg --smart-case --hidden -N'     # no line numbers
     alias diff='delta'
-
-# ===========================================================================
-# PROCESS / SYSTEM MONITORING
-
-# ===========================================================================
     alias htop='btop'
     alias top='htop'
     alias ps='ps auxf'
@@ -83,11 +49,6 @@ alias psg='ps aux | grep -v grep | grep -i'
 alias pstree='pstree -p'
 alias killi='kill -9'
 alias killall9='killall -9'
-
-# ===========================================================================
-# SYSTEM INFO
-
-# ===========================================================================
 alias df='df -hT'
 alias duh='du -sh'
 alias free='free -h'
@@ -105,32 +66,20 @@ alias lsblk='lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT'
 alias lsusb='lsusb -v 2>/dev/null | head -50'
 alias lspci='lspci -v'
 alias dmidecode='sudo dmidecode'
-# Fastfetch / neofetch
     alias neofetch='fastfetch'
     alias sf='neofetch'
     alias sysinfo='neofetch'
     alias fetch='neofetch'
-
-# ===========================================================================
-# DISK / STORAGE
-
-# ===========================================================================
 alias dff='df -hT | grep -v tmpfs'
 alias diskfree='df -h --total | tail -1'
     alias du='gdu'
 alias lsblka='lsblk -a'
 alias mount='mount | column -t'
-
-# ===========================================================================
-# EDITORS
-
-# ===========================================================================
 alias vi='nvim'
 alias vim='nvim'
 alias nv='nvim'
 alias svim='sudo nvim'
 alias nano='nano -l'                     # line numbers in nano
-# Quick config edits
 alias ebash='$EDITOR ~/.bashrc'
 alias ezsh='$EDITOR ~/.zshrc'
 alias efish='$EDITOR ~/.config/fish/config.fish'
@@ -144,29 +93,22 @@ alias evimrc='$EDITOR ~/.config/nvim/init.lua'
 alias dotupdate='$DOTFILES_DIR/bin/dotupdate.sh'
 alias health='bash $DOTFILES_DIR/bin/health_check.sh'
 alias dothealth='bash $DOTFILES_DIR/bin/health_check.sh'
-# Reload
+alias doterrors='tail -n 20 "$DOTFILES_STATE_DIR/errors.log"'
+alias doterrors-clear='> "$DOTFILES_STATE_DIR/errors.log"'
 alias rbash='source ~/.bashrc'
 alias rzsh='source ~/.zshrc'
-
-# ===========================================================================
-# GIT  (comprehensive — ~120 aliases)
-
-# ===========================================================================
 alias g='git'
 alias gi='git init'
 alias gcl='git clone'
 alias gcld='git clone --depth=1'
-# Status
 alias gs='git status'
 alias gss='git status -sb'
 alias gsv='git status -v'
-# Add / stage
 alias ga='git add'
 alias gaa='git add --all'
 alias gap='git add -p'
 alias gau='git add -u'
 alias gaf='git add -f'
-# Commit
 alias gc='git commit -v'
 alias gcm='git commit -m'
 alias gca='git commit --amend'
@@ -174,7 +116,6 @@ alias gcan='git commit --amend --no-edit'
 alias gcas='git commit --amend --squash'
 alias gcf='git commit --fixup'
 alias gcs='git commit -S'            # GPG-signed commit
-# Branch
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbr='git branch -r'
@@ -183,21 +124,18 @@ alias gbD='git branch -D'
 alias gbm='git branch -m'
 alias gbsort='git branch --sort=-committerdate'
 alias gbclean='git branch --merged | grep -v "\*\|main\|master\|develop" | xargs -r git branch -d'
-# Checkout / Switch
 alias gco='git checkout'
 alias gcob='git checkout -b'
 alias gcop='git checkout -p'
 alias gsw='git switch'
 alias gswc='git switch -c'
 alias gswm='git switch main 2>/dev/null || git switch master'
-# Diff
 alias gd='git diff'
 alias gds='git diff --staged'
 alias gdc='git diff --cached'
 alias gdw='git diff --word-diff'
 alias gdn='git diff --name-only'
 alias gdstat='git diff --stat'
-# Fetch / Pull / Push
 alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gpl='git pull'
@@ -208,7 +146,6 @@ alias gpf='git push --force-with-lease'   # safe force push
 alias gpt='git push --tags'
 alias gpu='git push -u origin HEAD'
 alias gpd='git push --dry-run'
-# Log
 alias gg='git log --oneline --graph --decorate'
 alias gga='git log --oneline --graph --all --decorate'
 alias ggl='git log --graph --pretty="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
@@ -218,7 +155,6 @@ alias gll='git log --pretty=fuller'
 alias glp='git log --patch'
 alias glf='git log --follow -p'           # follow file history
 alias gwho='git shortlog -sn --all --no-merges'
-# Rebase
 alias gr='git rebase'
 alias gri='git rebase -i'
 alias grim='git rebase -i origin/main'
@@ -226,17 +162,14 @@ alias grih='git rebase -i HEAD~'
 alias gra='git rebase --abort'
 alias grc='git rebase --continue'
 alias grs='git rebase --skip'
-# Merge
 alias gm='git merge'
 alias gma='git merge --abort'
 alias gmc='git merge --continue'
 alias gmff='git merge --ff-only'
 alias gmnff='git merge --no-ff'
 alias gmsq='git merge --squash'
-# Cherry-pick
 alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
-# Stash
 alias gh='git stash'
 alias ghs='git stash show -p'
 alias ghp='git stash pop'
@@ -244,44 +177,36 @@ alias gha='git stash apply'
 alias ghd='git stash drop'
 alias ghl='git stash list'
 alias ghcl='git stash clear'
-# Reset
 alias gre='git reset'
 alias greh='git reset HEAD'
 alias grehh='git reset --hard HEAD'
 alias grehs='git reset --soft HEAD~1'   # undo last commit, keep changes staged
 alias gundo='git reset --soft HEAD~1'
 alias gnuke='git reset --hard && git clean -fd'
-# Remote
 alias grm='git remote'
 alias grma='git remote add'
 alias grmr='git remote remove'
 alias grmv='git remote -v'
 alias grmu='git remote set-url'
-# Tag
 alias gt='git tag'
 alias gta='git tag -a'
 alias gtd='git tag -d'
 alias gtl='git tag -l'
 alias gtp='git push --tags'
-# Worktree
 alias gw='git worktree'
 alias gwl='git worktree list'
 alias gwa='git worktree add'
 alias gwd='git worktree remove'
-# Submodule
 alias gsm='git submodule'
 alias gsmu='git submodule update --init --recursive'
 alias gsms='git submodule sync'
-# Bisect
 alias gbis='git bisect'
 alias gbisr='git bisect reset'
 alias gbiss='git bisect start'
 alias gbisb='git bisect bad'
 alias gbisg='git bisect good'
-# Reflog
 alias gref='git reflog'
 alias grefl='git reflog expire --expire=now --all'
-# Misc
 alias gcln='git clean -fd'
 alias gclnx='git clean -fdx'
 alias gig='git ls-files --others --exclude-standard'   # untracked
@@ -291,11 +216,6 @@ alias gcount='git rev-list --count HEAD'
 alias gsize='git count-objects -vH'
 alias gfix='git add -A && git commit --amend --no-edit'
 alias glazyg='git add . && git commit -m'
-
-# ===========================================================================
-# DOCKER  (~60 aliases)
-
-# ===========================================================================
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
 alias d='docker'
 alias dv='docker version'
@@ -331,7 +251,6 @@ alias dcprune='docker container prune -f'
 alias dstats='docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}"'
 alias dtop='docker stats --no-stream'
 alias dip='docker inspect --format "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"'
-# Docker Compose
 alias dc='docker compose'           # v2 syntax
 alias dco='docker-compose'         # v1 fallback
 alias dcu='docker compose up -d'
@@ -346,13 +265,6 @@ alias dcp2='docker compose pull'
 alias dcps='docker compose ps'
 alias dcconfig='docker compose config'
 fi
-
-
-# ===========================================================================
-# CLOUD & DEVOPS (Supreme+ Only)
-
-# ===========================================================================
-# Kubernetes (~70 aliases)
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
 alias k='kubectl'
 alias kv='kubectl version'
@@ -360,7 +272,6 @@ alias kctx='kubectl config use-context'
 alias kns='kubectl config set-context --current --namespace'
 alias kgctx='kubectl config get-contexts'
 alias kccfg='kubectl config view'
-# Get
 alias kg='kubectl get'
 alias kgp='kubectl get pods'
 alias kgpa='kubectl get pods -A'
@@ -384,32 +295,27 @@ alias kgrs='kubectl get replicaset'
 alias kgss='kubectl get statefulset'
 alias kgds='kubectl get daemonset'
 alias kghpa='kubectl get hpa'
-# Describe
 alias kd='kubectl describe'
 alias kdp='kubectl describe pod'
 alias kdd='kubectl describe deployment'
 alias kds='kubectl describe svc'
 alias kdn='kubectl describe node'
-# Apply / Create / Delete
 alias ka='kubectl apply -f'
 alias kar='kubectl apply -R -f'
 alias kc='kubectl create'
 alias kdel='kubectl delete'
 alias kdelp='kubectl delete pod'
 alias kdeld='kubectl delete deployment'
-# Logs / Exec
 alias kl='kubectl logs -f'
 alias kla='kubectl logs -f --all-containers'
 alias klp='kubectl logs -f --previous'
 alias kex='kubectl exec -it'
 alias kpf='kubectl port-forward'
-# Scale / Rollout
 alias ksc='kubectl scale'
 alias kro='kubectl rollout'
 alias kros='kubectl rollout status'
 alias kroh='kubectl rollout history'
 alias krou='kubectl rollout undo'
-# Misc
 alias ktop='kubectl top'
 alias ktopp='kubectl top pod'
 alias ktonn='kubectl top node'
@@ -420,12 +326,6 @@ alias kuncordon='kubectl uncordon'
 alias kcordon='kubectl cordon'
 alias ktaint='kubectl taint'
 fi
-
-
-# ===========================================================================
-# TERRAFORM (~30 aliases)
-
-# ===========================================================================
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
 alias tf='terraform'
 alias tfi='terraform init'
@@ -453,12 +353,6 @@ alias tftaint='terraform taint'
 alias tfuntaint='terraform untaint'
 alias tfdoc='terraform-docs markdown . 2>/dev/null'
 fi
-
-
-# ===========================================================================
-# HELM (~25 aliases)
-
-# ===========================================================================
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
 alias hls='helm list'
 alias hlsa='helm list -A'
@@ -483,12 +377,6 @@ alias hlint='helm lint'
 alias hdry='helm install --dry-run --debug'
 alias henv='helm env'
 fi
-
-
-# ===========================================================================
-# ANSIBLE (~20 aliases)
-
-# ===========================================================================
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
 alias ans='ansible'
 alias ansplay='ansible-playbook'
@@ -502,12 +390,6 @@ alias ansgalaxy='ansible-galaxy'
 alias ansping='ansible all -m ping'
 alias ansfacts='ansible all -m setup'
 fi
-
-
-# ===========================================================================
-# NETWORK & SECURITY (~80 aliases)
-
-# ===========================================================================
 alias fastping='ping -c 100 -s.2'
 alias ping6='ping6 -c 5'
 alias tracert='traceroute'
@@ -525,14 +407,12 @@ alias established='ss -tnp state established'
 alias portcheck='nc -zv'
 alias curl='curl -L --retry 3'
 alias httpd='python3 -m http.server'
-# DNS
     alias dig='dog'
 alias nsl='nslookup'
 alias digany='dig +nocmd any +multiline +noall +answer'
 alias digtrace='dig +trace'
 alias digshort='dig +short'
 alias flushDNS='sudo resolvectl flush-caches 2>/dev/null || sudo systemd-resolve --flush-caches 2>/dev/null || sudo dscacheutil -flushcache 2>/dev/null'
-# SSH
 alias ssha='ssh-add'
 alias sshl='ssh-add -l'
 alias sshD='ssh-add -D'
@@ -541,19 +421,16 @@ alias sshfp='ssh-keygen -lf'
 alias sshcopy='ssh-copy-id'
 alias sshrm='ssh-keygen -R'
 alias sshconfig='$EDITOR ~/.ssh/config'
-# Firewall shortcuts (ufw / iptables / pfctl)
 alias fwstatus='sudo ufw status verbose 2>/dev/null || sudo iptables -L -n -v 2>/dev/null'
 alias fwenable='sudo ufw enable'
 alias fwdisable='sudo ufw disable'
 alias fwall='sudo ufw allow'
 alias fwdeny='sudo ufw deny'
-# OpenSSL / TLS
 alias sslcheck='openssl s_client -connect'
 alias sslcert='openssl x509 -noout -text -in'
 alias ssldate='openssl s_client -connect -servername </dev/null 2>/dev/null | openssl x509 -noout -dates'
 alias genkey='openssl genrsa -out'
 alias gencsr='openssl req -new -key'
-# GPG / PGP
 alias gpglist='gpg --list-keys'
 alias gpglistsec='gpg --list-secret-keys'
 alias gpgenc='gpg --encrypt --armor'
@@ -565,7 +442,6 @@ alias gpgexport='gpg --armor --export'
 alias gpgrecv='gpg --recv-keys'
 alias gpgsend='gpg --send-keys'
 alias gpgfp='gpg --fingerprint'
-# Security scanning
 alias nmap='nmap -v'
 alias nmapfast='nmap -T4 -F'
 alias nmapfull='nmap -T4 -A -v'
@@ -573,18 +449,11 @@ alias nmapstealth='sudo nmap -sS -O'
 alias nmapudp='sudo nmap -sU'
 alias nmapvuln='nmap --script vuln'
 alias portscan='nmap -sV --version-intensity 5'
-# File integrity
 alias sha256='sha256sum'
 alias sha512='sha512sum'
 alias md5='md5sum'
 alias checksum='sha256sum'
-# Secure delete
 alias srm='shred -u -z -n 3'   # secure remove (3-pass)
-
-# ===========================================================================
-# SYSTEMD / SERVICE MANAGEMENT
-
-# ===========================================================================
 alias sc='systemctl'
 alias scs='systemctl status'
 alias scst='systemctl start'
@@ -608,18 +477,11 @@ alias jcb='journalctl -b'
 alias jcp='journalctl -p err'     # errors only
 alias jcn='journalctl -n 50'      # last 50 lines
 alias jcclear='sudo journalctl --vacuum-time=7d'
-# RC/OpenRC (Gentoo/Alpine/Void)
 alias rcs='rc-service'
 alias rcst='rc-service start'
 alias rcsp='rc-service stop'
 alias rcr='rc-service restart'
 alias rcu='rc-update'
-
-# ===========================================================================
-# PACKAGE MANAGERS — per-distro  (all conditional on binary existence)
-
-# ===========================================================================
-# ── Arch / Manjaro ──────────────────────────────────────────────────────────
     alias pac='sudo pacman'
     alias paci='sudo pacman -S --noconfirm'
     alias pacI='sudo pacman -S'              # with confirmation
@@ -639,7 +501,6 @@ alias rcu='rc-update'
     alias ys='yay -Ss'
     alias par='paru'
     alias paru='paru -Syu'
-# ── Debian / Ubuntu ─────────────────────────────────────────────────────────
     alias apti='sudo apt-get install -y'
     alias aptI='sudo apt-get install'
     alias aptr='sudo apt-get remove -y'
@@ -655,7 +516,6 @@ alias rcu='rc-update'
     alias aptheld='apt-mark showhold'
     alias apthold='sudo apt-mark hold'
     alias aptunhold='sudo apt-mark unhold'
-# ── Fedora / RHEL / CentOS ──────────────────────────────────────────────────
     alias dnfi='sudo dnf install -y'
     alias dnfI='sudo dnf install'
     alias dnfr='sudo dnf remove -y'
@@ -672,7 +532,6 @@ alias rcu='rc-update'
     alias yumu='sudo yum update -y'
     alias yums='yum search'
     alias yuml='yum list installed'
-# ── openSUSE / SLES ─────────────────────────────────────────────────────────
     alias zypi='sudo zypper install -y'
     alias zypr='sudo zypper remove -y'
     alias zypu='sudo zypper update -y'
@@ -681,27 +540,23 @@ alias rcu='rc-update'
     alias zypl='zypper packages --installed-only'
     alias zypc='sudo zypper clean'
     alias zypinfo='zypper info'
-# ── Void Linux ──────────────────────────────────────────────────────────────
     alias xbpsi='sudo xbps-install -Sy'
     alias xbpsr='sudo xbps-remove -R'
     alias xbpsu='sudo xbps-install -Su'
     alias xbpss='xbps-query -Rs'
     alias xbpsl='xbps-query -l'
     alias xbpsc='sudo xbps-remove -O'
-# ── Alpine Linux ─────────────────────────────────────────────────────────────
     alias apki='sudo apk add'
     alias apkr='sudo apk del'
     alias apku='sudo apk upgrade'
     alias apks='apk search'
     alias apkl='apk list --installed'
     alias apkinfo='apk info'
-# ── Gentoo ──────────────────────────────────────────────────────────────────
     alias emeri='sudo emerge -av'
     alias emerr='sudo emerge --unmerge'
     alias emeru='sudo emerge --update --deep --newuse @world'
     alias emers='emerge -s'
     alias emerc='sudo eclean-dist && sudo eclean-pkg'
-# ── NixOS ───────────────────────────────────────────────────────────────────
     alias nixi='nix-env -iA'
     alias nixr='nix-env -e'
     alias nixu='nix-env -u'
@@ -710,7 +565,6 @@ alias rcu='rc-update'
     alias nixgc='nix-collect-garbage -d'
     alias nixrebuild='sudo nixos-rebuild switch'
     alias nixtest='sudo nixos-rebuild test'
-# ── macOS Homebrew ───────────────────────────────────────────────────────────
     alias brewi='brew install'
     alias brewr='brew uninstall'
     alias brewu='brew update && brew upgrade'
@@ -726,7 +580,6 @@ alias rcu='rc-update'
     alias brewpin='brew pin'
     alias brewunpin='brew unpin'
     alias brewpinned='brew list --pinned'
-# ── Flatpak ──────────────────────────────────────────────────────────────────
     alias flati='flatpak install -y'
     alias flatr='flatpak uninstall -y'
     alias flatu='flatpak update -y'
@@ -734,17 +587,11 @@ alias rcu='rc-update'
     alias flatl='flatpak list'
     alias flatrun='flatpak run'
     alias flatc='flatpak uninstall --unused -y'
-# ── Snap ─────────────────────────────────────────────────────────────────────
     alias snapi='sudo snap install'
     alias snapr='sudo snap remove'
     alias snapu='sudo snap refresh'
     alias snaps='snap find'
     alias snapl='snap list'
-
-# ===========================================================================
-# CLOUD — AWS CLI
-
-# ===========================================================================
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
     alias awswho='aws sts get-caller-identity'
     alias awsprofile='aws configure list'
@@ -763,7 +610,6 @@ if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]
     alias awssm='aws secretsmanager list-secrets'
     alias awsssm='aws ssm describe-parameters'
     alias awsecs='aws ecs list-clusters'
-# ── GCP ──────────────────────────────────────────────────────────────────────
     alias gcp='gcloud'
     alias gcpwho='gcloud auth list'
     alias gcpproj='gcloud config get-value project'
@@ -772,19 +618,12 @@ if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]
     alias gcpvm='gcloud compute instances list'
     alias gcpgke='gcloud container clusters list'
     alias gcprun='gcloud run services list'
-# ── Azure ─────────────────────────────────────────────────────────────────────
 fi
-
     alias azwho='az account show'
     alias azsub='az account list'
     alias azrg='az group list'
     alias azvm='az vm list'
     alias azaks='az aks list'
-
-# ===========================================================================
-# DEVELOPMENT — Python / pip / uv / poetry
-
-# ===========================================================================
 alias py='python3'
 alias py2='python2'
 alias pip='pip3'
@@ -838,11 +677,6 @@ alias mkvenv='python3 -m venv .venv && source .venv/bin/activate'
     alias cons='conda search'
     alias conex='conda export > environment.yml'
     alias confr='conda env create -f environment.yml'
-
-# ===========================================================================
-# DEVELOPMENT — Node.js / npm / yarn / pnpm / bun
-
-# ===========================================================================
 alias node='node'
 alias ni='npm install'
 alias nid='npm install --save-dev'
@@ -897,11 +731,6 @@ alias npx='npx --yes'
     alias brun='bun run'
     alias bx='bunx'
     alias bu='bun update'
-
-# ===========================================================================
-# DEVELOPMENT — Rust / Cargo
-
-# ===========================================================================
 alias cr='cargo run'
 alias crr='cargo run --release'
 alias cb='cargo build'
@@ -926,11 +755,6 @@ alias clogin='cargo login'
 alias cinstall='cargo install'
 alias cben='cargo bench'
 alias cwatch='cargo watch -x run'
-
-# ===========================================================================
-# DEVELOPMENT — Go
-
-# ===========================================================================
 alias gor='go run .'
 alias gob='go build .'
 alias got='go test ./...'
@@ -947,11 +771,6 @@ alias gobuild='CGO_ENABLED=0 go build -ldflags="-s -w"'
 alias goenv='go env'
 alias gopath='echo $GOPATH'
 alias gowork='go work'
-
-# ===========================================================================
-# DEVELOPMENT — Rust / Make / CMake / misc
-
-# ===========================================================================
 alias mk='make'
 alias mkc='make clean'
 alias mki='make install'
@@ -961,11 +780,6 @@ alias cmake='cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 alias cmakeb='cmake --build build'
 alias cmakec='cmake --build build --target clean'
 alias ninja='ninja -C build'
-
-# ===========================================================================
-# DEVELOPMENT — Java / Maven / Gradle
-
-# ===========================================================================
 alias javac='javac -encoding UTF-8'
 alias mvnc='mvn clean'
 alias mvni='mvn clean install'
@@ -977,11 +791,6 @@ alias gradleb='./gradlew build'
 alias gradlet='./gradlew test'
 alias gradlec='./gradlew clean'
 alias gradlew='./gradlew'
-
-# ===========================================================================
-# DEVELOPMENT — Ruby / PHP / Perl
-
-# ===========================================================================
     alias rbi='bundle install'
     alias rbu='bundle update'
     alias rbe='bundle exec'
@@ -996,11 +805,6 @@ alias gradlew='./gradlew'
     alias compa='composer dump-autoload'
     alias artisan='php artisan'
     alias ptest='./vendor/bin/phpunit'
-
-# ===========================================================================
-# DATABASE CLIENTS
-
-# ===========================================================================
     alias pgdbs='psql -c "\l"'
     alias pgtbls='psql -c "\dt"'
     alias pgdump='pg_dump'
@@ -1013,11 +817,6 @@ alias gradlew='./gradlew'
     alias redismon='redis-cli monitor'
     alias mongodbs='mongosh --eval "db.adminCommand({listDatabases:1})"'
     alias sq='sqlite3'
-
-# ===========================================================================
-# TMUX
-
-# ===========================================================================
     alias t='tmux'
     alias ta='tmux attach'
     alias tl='tmux list-sessions'
@@ -1028,11 +827,6 @@ alias gradlew='./gradlew'
     alias tls='tmux list-windows'
     alias tsh='tmux split-window -h'
     alias tsv='tmux split-window -v'
-
-# ===========================================================================
-# TERMINAL MULTIPLEXERS
-
-# ===========================================================================
     alias zj='zellij'
     alias zja='zellij attach'
     alias zjl='zellij list-sessions'
@@ -1041,16 +835,10 @@ alias gradlew='./gradlew'
     alias scr='screen'
     alias scra='screen -r'
     alias scrl='screen -ls'
-
-# ===========================================================================
-# MODERN CLI TOOLS
-
-# ===========================================================================
     alias lg='lazygit'
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
     alias ld='lazydocker'
 fi
-
     alias Y='yazi'                # capital Y = yazi (lowercase y = function that cd's)
     alias fzfp='fzf --preview "bat --style=numbers --color=always {}"'
     alias zi='z -i'              # interactive zoxide
@@ -1067,11 +855,6 @@ fi
     alias help='tldr'
     alias man2='tldr'
     alias fuck='thefuck $(history -p !!)'
-
-# ===========================================================================
-# ARCHIVES / COMPRESSION
-
-# ===========================================================================
 alias targz='tar -zcvf'
 alias tarbz='tar -jcvf'
 alias tarxz='tar -Jcvf'
@@ -1081,11 +864,6 @@ alias zip='zip -r'
 alias mkzip='zip -r'
 alias mktarbz='tar -cjvf'
 alias mktarxz='tar -cJvf'
-
-# ===========================================================================
-# UTILITIES
-
-# ===========================================================================
 alias now='date +"%Y-%m-%d %H:%M:%S"'
 alias nowutc='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias today='date +"%Y-%m-%d"'
@@ -1110,11 +888,9 @@ alias histg='history | grep'
 alias hh='history | head -20'
 alias ht='history | tail -20'
 dupl() { history | awk '{print $2}' | sort | uniq -c | sort -rn | head -20; }
-# Weather
 alias weather='curl -s wttr.in'
 alias wttr='curl -s "wttr.in?format=3"'
 alias wttrf='curl -s "wttr.in?format=v2"'
-# Fun / misc
 alias starwars='telnet towel.blinkenlights.nl 2>/dev/null || echo "telnet not installed"'
 alias matrix='cmatrix -C cyan 2>/dev/null'
 alias pipes='pipes.sh 2>/dev/null'
@@ -1122,17 +898,14 @@ alias cowsay='cowsay -f tux'
 alias sl='ls'                    # typo fix
 alias Grep='grep'                # typo fix
 alias GREP='grep'                # typo fix
-# Dotfiles management
 alias dotlog='git -C "$DOTFILES_DIR" log --oneline -15'
 alias dotst='git -C "$DOTFILES_DIR" status'
 alias dotdiff='git -C "$DOTFILES_DIR" diff'
 alias dotpull='git -C "$DOTFILES_DIR" pull'
 alias dotpush='git -C "$DOTFILES_DIR" add -A && git -C "$DOTFILES_DIR" commit && git -C "$DOTFILES_DIR" push'
 alias dotdocs='$BROWSER "$HOME/.dotfiles/docs/index.html"'
-# Quick file/dir sizes
 alias dh='du -h --max-depth=1 | sort -rh'
 alias biggest='du -h --max-depth=1 | sort -rh | head 10'
-# Clipboard (Linux xclip/xsel/wl-copy, macOS pbcopy)
 if [[ "$DOTFILES_OS" == "Darwin" ]]; then
     alias copy='pbcopy'
     alias paste='pbpaste'
@@ -1146,15 +919,9 @@ elif command -v xsel &>/dev/null; then
     alias copy='xsel --clipboard --input'
     alias paste='xsel --clipboard --output'
 fi
-# Open file/URL (cross-platform)
     alias open='open'
     alias open='xdg-open'
 alias o='open'
-
-# ===========================================================================
-# ALIASES (ZachBrowne / Titus)
-
-# ===========================================================================
 alias spico='sudo pico'
 alias snano='sudo nano'
 alias web='cd /var/www/html'
@@ -1211,14 +978,8 @@ alias kssh="kitty +kitten ssh"
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
 alias docker-clean=' docker container prune -f ; docker image prune -f ; docker network prune -f ; docker volume prune -f '
 fi
-
 alias hug="systemctl --user restart hugo"
 alias lanm="systemctl --user restart lan-mouse"
-
-# ===========================================================================
-# NEW ALIASES (Garuda/Awesome)
-
-# ===========================================================================
   alias ls='eza -al --color=always --group-directories-first --icons'
   alias la='eza -a --color=always --group-directories-first --icons'
   alias ll='eza -l --color=always --group-directories-first --icons'
@@ -1261,23 +1022,14 @@ alias pacdiff='sudo -H DIFFPROG=meld pacdiff'
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 alias jctl="journalctl -p 3 -xb"
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
-
-# ===========================================================================
-# SUPREME UPGRADE (Paul Irish / Mathias Bynens / Modern)
-
-# ===========================================================================
-# Navigation & System
 alias cdf='cd "$(osascript -e "tell app \"Finder\" to POSIX path of (insertion location as alias)" 2>/dev/null || echo .)"'
 alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes && sudo rm -rfv ~/.Trash"
 alias showfiles='defaults write com.apple.finder AppleShowAllFiles YES && killall Finder'
 alias hidefiles='defaults write com.apple.finder AppleShowAllFiles NO && killall Finder'
-# Project Management Cleanup
 alias pclean='find . -type d -name "__pycache__" -exec rm -rf {} + && find . -type f -name "*.pyc" -delete'
 alias nuke-node='find . -name "node_modules" -type d -prune -exec rm -rf "{}" +'
-# Modern Tools Shorthands
 alias v='fd --type f --hidden --exclude .git | fzf --preview "bat --color=always --style=numbers --line-range=:500 {}" | xargs -r $EDITOR'
 alias fz='zoxide query -i'
-# Git Refinements
 alias gpristine='git reset --hard && git clean -fdx'
 alias gwt='git worktree'
 alias gwta='git worktree add'

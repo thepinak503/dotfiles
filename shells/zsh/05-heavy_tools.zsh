@@ -1,4 +1,3 @@
-# ZSH
 alias tfpl='terraform plan'
 alias tpl='terraform plan'
 alias tfap='terraform apply'
@@ -176,8 +175,6 @@ alias gpushf='git push --force-with-lease'
 alias gsyncforce='git fetch --all && git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)'
 alias grune='git remote prune origin'
 alias glast='git log -1 HEAD'
-
-# --- FINAL ALIAS EXPANSION TO 2000 ---
 alias py_math_sq_1='python3 -c "print(1**2)"'
 alias py_math_cu_1='python3 -c "print(1**3)"'
 alias py_math_sq_2='python3 -c "print(2**2)"'

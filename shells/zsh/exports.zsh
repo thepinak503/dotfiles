@@ -1,14 +1,5 @@
-# ZSH
-
-# =============================================================================
-# DOTFILES MODE (minimal | standard | supreme | ultra-nerd)
-# =============================================================================
 export BROWSER="${BROWSER:-$(command -v xdg-open || command -v open || command -v firefox || command -v google-chrome || echo xdg-open)}"
 export DOTFILES_MODE="${DOTFILES_MODE:-supreme}"
-
-# =============================================================================
-# EXPORTS & ENV (ZachBrowne / Titus)
-# =============================================================================
 export HISTFILESIZE=10000
 export HISTSIZE=500
 export HISTTIMEFORMAT="%F %T "
@@ -23,17 +14,9 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
-
-# ===========================================================================
-# SUPREME EXPORTS (FZF & UI)
-# ===========================================================================
 export FZF_DEFAULT_OPTS="--height 50% --layout=reverse --border --border-label='fzf' --color='fg:#bbbbbb,bg:#121212,hl:#ffaf5f,fg+:#eeeeee,bg+:#262626,hl+:#ffaf5f,info:#afaf87,prompt:#d7005f,pointer:#af5fff,marker:#87ff00,spinner:#af5fff,header:#87afaf'"
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :500 {}'"
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
-
-# =============================================================================
-# SUPREME SSH AGENT (Automated & Persistent)
-# =============================================================================
 if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
     if [[ ! -S ~/.ssh/ssh_auth_sock ]]; then
         eval "$(ssh-agent -s)" >/dev/null
@@ -41,26 +24,15 @@ if [[ "$DOTFILES_MODE" == "supreme" ]] || [[ "$DOTFILES_MODE" == "ultra-nerd" ]]
     fi
     export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 fi
-
-# =============================================================================
-# SUPREME LS_COLORS (Vivid Integration)
-# =============================================================================
 if command -v vivid &>/dev/null; then
-    # shellcheck disable=SC2155
     export LS_COLORS="$(vivid generate nord)"
 fi
-
-# =============================================================================
-# SUPREME TOOL HOOKS (Atuin, Direnv, Mise)
-# =============================================================================
 if command -v atuin &>/dev/null; then
     eval "$(atuin init bash --disable-up-arrow)"
 fi
-
 if command -v direnv &>/dev/null; then
     eval "$(direnv hook bash)"
 fi
-
 if command -v mise &>/dev/null; then
     eval "$(mise activate bash)"
 fi

@@ -1,4 +1,3 @@
-# ZSH
 alias gad='git add'
 alias gadv='git add --verbose'
 alias ga='git add'

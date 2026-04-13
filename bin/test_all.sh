@@ -1,36 +1,17 @@
 #!/usr/bin/env bash
-# =============================================================================
-# scripts/test_all.sh — Dotfiles multi-shell syntax & sanity test suite
 #
-# Usage:
-#   ./scripts/test_all.sh              # run all tests
-#   ./scripts/test_all.sh --bash       # bash only
-#   ./scripts/test_all.sh --zsh        # zsh only
-#   ./scripts/test_all.sh --fish       # fish only
-#   ./scripts/test_all.sh --fast       # skip slow checks
-# =============================================================================
-
 set -euo pipefail
-
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-
-# ── Colours ───────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 CYAN='\033[0;36m'; BOLD='\033[1m'; NC='\033[0m'
-
-# ── Counters ──────────────────────────────────────────────────────────────────
 PASS=0; FAIL=0; SKIP=0; WARN=0
-
 pass() { printf "  ${GREEN}✓${NC} %s\n" "$1"; PASS=$(( PASS + 1 )); }
 fail() { printf "  ${RED}✗${NC} %s\n" "$1"; FAIL=$(( FAIL + 1 )); }
 skip() { printf "  ${YELLOW}○${NC} %s\n" "$1 (skipped — $2 not found)"; SKIP=$(( SKIP + 1 )); }
 warn() { printf "  ${YELLOW}⚠${NC} %s\n" "$1"; WARN=$(( WARN + 1 )); }
 section() { printf "\n${BOLD}${CYAN}▶ %s${NC}\n" "$1"; }
-
-# ── Argument parsing ──────────────────────────────────────────────────────────
 DO_BASH=true; DO_ZSH=true; DO_FISH=true; DO_SLOW=true
-
 for arg in "$@"; do
     case "$arg" in
         --bash)  DO_ZSH=false;  DO_FISH=false ;;
@@ -42,21 +23,13 @@ for arg in "$@"; do
             exit 0 ;;
     esac
 done
-
-# ── Header ────────────────────────────────────────────────────────────────────
 printf "\n${BOLD}${CYAN}"
 printf "╔══════════════════════════════════════════════════╗\n"
 printf "║         DOTFILES TEST SUITE                     ║\n"
 printf "╚══════════════════════════════════════════════════╝${NC}\n"
 printf "  Root: %s\n" "$ROOT"
-
-# =============================================================================
-# BASH SYNTAX CHECKS
-# =============================================================================
-
 if [[ "$DO_BASH" == true ]]; then
     section "Bash syntax (bash -n)"
-
     BASH_FILES=(
         "shells/bash/.bashrc"
         "core/system-detect.sh"
@@ -76,7 +49,6 @@ if [[ "$DO_BASH" == true ]]; then
         "install/uninstall.sh"
         "bin/inventory_check.sh"
     )
-
     for f in "${BASH_FILES[@]}"; do
         if [[ ! -f "$f" ]]; then
             warn "MISSING: $f"
@@ -90,13 +62,10 @@ if [[ "$DO_BASH" == true ]]; then
             pass "bash -n $f"
         fi
     done
-
-    # Extra: check for common bashisms that should be avoided in sh files
     section "Bash: core/ files must be sh-compatible (no bashisms)"
     SH_FILES=(core/system-detect.sh core/battery.sh core/ssh-agent.sh)
     for f in "${SH_FILES[@]}"; do
         [[ -f "$f" ]] || { warn "MISSING: $f"; continue; }
-        # Check for bash-specific syntax: [[ ]], (( )), local with assignment
         if grep -Pn '\[\[|\((' "$f" 2>/dev/null | grep -v '^\s*#' | grep -q .; then
             warn "$f contains bash-specific syntax (may not be POSIX sh)"
         else
@@ -104,14 +73,8 @@ if [[ "$DO_BASH" == true ]]; then
         fi
     done
 fi
-
-# =============================================================================
-# ZSH SYNTAX CHECKS
-# =============================================================================
-
 if [[ "$DO_ZSH" == true ]]; then
     section "Zsh syntax (zsh -n)"
-
     if ! command -v zsh &>/dev/null; then
         skip "all zsh files" "zsh"
     else
@@ -128,7 +91,6 @@ if [[ "$DO_ZSH" == true ]]; then
             "shells/zsh/modes/supreme.zsh"
             "shells/zsh/modes/ultra-nerd.zsh"
         )
-
         for f in "${ZSH_FILES[@]}"; do
             if [[ ! -f "$f" ]]; then
                 warn "MISSING: $f"
@@ -144,30 +106,21 @@ if [[ "$DO_ZSH" == true ]]; then
         done
     fi
 fi
-
-# =============================================================================
-# FISH SYNTAX CHECKS
-# =============================================================================
-
 if [[ "$DO_FISH" == true ]]; then
     section "Fish syntax (fish --no-execute)"
-
     if ! command -v fish &>/dev/null; then
         skip "all fish files" "fish"
     else
         FISH_FILES=(
             "shells/fish/config.fish"
-
             "shells/fish/conf.d/modern-tools.fish"
             "shells/fish/conf.d/keybindings.fish"
             "shells/fish/conf.d/greeting.fish"
-
             "shells/fish/modes/minimal.fish"
             "shells/fish/modes/standard.fish"
             "shells/fish/modes/supreme.fish"
             "shells/fish/modes/ultra-nerd.fish"
         )
-
         for f in "${FISH_FILES[@]}"; do
             if [[ ! -f "$f" ]]; then
                 warn "MISSING: $f"
@@ -183,24 +136,16 @@ if [[ "$DO_FISH" == true ]]; then
         done
     fi
 fi
-
-# =============================================================================
-# TOML VALIDATION (starship configs)
-# =============================================================================
-
 section "TOML validation (starship configs)"
-
 TOML_FILES=(
     "apps/starship-linux.toml"
     "apps/starship-mac.toml"
 )
-
 for f in "${TOML_FILES[@]}"; do
     if [[ ! -f "$f" ]]; then
         warn "MISSING: $f"
         continue
     fi
-
     if command -v tomlqs &>/dev/null; then
         if tomlqs "$f" &>/dev/null; then
             pass "TOML valid: $f"
@@ -211,17 +156,10 @@ for f in "${TOML_FILES[@]}"; do
         skip "TOML validate $f" "tomlqs"
     fi
 done
-
-# =============================================================================
-# JSON VALIDATION (fastfetch config)
-# =============================================================================
-
 section "JSON validation (fastfetch config)"
-
 JSON_FILES=(
     "apps/fastfetch/config.jsonc"
 )
-
 for f in "${JSON_FILES[@]}"; do
     if [[ ! -f "$f" ]]; then
         warn "MISSING: $f"
@@ -237,13 +175,7 @@ for f in "${JSON_FILES[@]}"; do
         skip "JSON validate $f" "jq"
     fi
 done
-
-# =============================================================================
-# STRUCTURE CHECKS
-# =============================================================================
-
 section "Repository structure"
-
 REQUIRED_FILES=(
     "shells/bash/.bashrc"
     "shells/zsh/.zshrc"
@@ -281,7 +213,6 @@ REQUIRED_FILES=(
     "install/install.sh"
     "install/uninstall.sh"
 )
-
 for f in "${REQUIRED_FILES[@]}"; do
     if [[ -f "$f" ]]; then
         pass "exists: $f"
@@ -289,14 +220,7 @@ for f in "${REQUIRED_FILES[@]}"; do
         fail "MISSING: $f"
     fi
 done
-
-# =============================================================================
-# ANTI-PATTERN CHECKS
-# =============================================================================
-
 section "Anti-pattern checks"
-
-# 1. No duplicate function definitions in bash functions file
 if [[ -f "shells/bash/functions.bash" ]]; then
     dupes="$(grep -oP '^[a-zA-Z_][a-zA-Z0-9_-]*\(\)' "shells/bash/functions.bash" 2>/dev/null \
         | sort | uniq -d)"
@@ -306,8 +230,6 @@ if [[ -f "shells/bash/functions.bash" ]]; then
         pass "No duplicate functions in shells/bash/functions.bash"
     fi
 fi
-
-# 2. No duplicate alias definitions in bash aliases file
 if [[ -f "shells/bash/aliases.bash" ]]; then
     dupes="$(grep -oP "^alias \K[a-zA-Z0-9_.-]+" "shells/bash/aliases.bash" 2>/dev/null \
         | sort | uniq -d)"
@@ -317,14 +239,10 @@ if [[ -f "shells/bash/aliases.bash" ]]; then
         pass "No duplicate alias names in shells/bash/aliases.bash"
     fi
 fi
-
-# 3. core/ files should not auto-execute side effects
 for f in core/battery.sh core/system-detect.sh core/tools.sh core/logging.sh core/ssh-agent.sh; do
     [[ -f "$f" ]] || continue
     pass "$f present"
 done
-
-# 4. chaotic_setup should NOT auto-run (should be a function only)
 if [[ -f "shells/bash/04-pkg_aliases.bash" ]]; then
     if grep -q "^chaotic_setup$" "shells/bash/04-pkg_aliases.bash" 2>/dev/null; then
         fail "chaotic_setup auto-executes in shells/bash/04-pkg_aliases.bash"
@@ -332,23 +250,13 @@ if [[ -f "shells/bash/04-pkg_aliases.bash" ]]; then
         pass "chaotic_setup is not auto-executed"
     fi
 fi
-
-# 5. No stale generated files
-
-# 6. No pre-generated alias files
 for f in shells/bash/dyn_aliases.generated.bash shells/zsh/dyn_aliases.generated.zsh; do
     if [[ -f "$f" ]]; then
         warn "$f still exists (should have been removed)"
     fi
 done
 pass "No stale generated alias files"
-
-# =============================================================================
-# PERMISSIONS CHECK
-# =============================================================================
-
 section "File permissions"
-
 EXEC_FILES=(install.sh uninstall.sh scripts/test_all.sh scripts/inventory_check.sh)
 for f in "${EXEC_FILES[@]}"; do
     [[ -f "$f" ]] || continue
@@ -359,40 +267,26 @@ for f in "${EXEC_FILES[@]}"; do
         chmod +x "$f" && warn "  → fixed automatically"
     fi
 done
-
-# =============================================================================
-# ALIAS / FUNCTION COUNT
-# =============================================================================
-
 section "Coverage statistics"
-
 if [[ -f "shells/bash/aliases.bash" ]]; then
     alias_count=$(grep -c "^alias " "shells/bash/aliases.bash" 2>/dev/null || true)
     printf "  Bash aliases    : %d\n" "$alias_count"
 fi
-
 if [[ -f "shells/bash/functions.bash" ]]; then
     func_count=$(grep -cP "^[a-zA-Z_][a-zA-Z0-9_-]*\(\)" "shells/bash/functions.bash" 2>/dev/null || true)
     printf "  Bash functions  : %d\n" "$func_count"
 fi
-
 if [[ -f "shells/fish/config.fish" ]]; then
     fish_abbr=$(grep -c "^abbr -a" "shells/fish/config.fish" 2>/dev/null || true)
     fish_func=$(grep -c "^function " "shells/fish/config.fish" 2>/dev/null || true)
     printf "  Fish abbrevs    : %d\n" "$fish_abbr"
     printf "  Fish functions  : %d\n" "$fish_func"
 fi
-
-# =============================================================================
-# SUMMARY
-# =============================================================================
-
 printf "\n${BOLD}${CYAN}"
 printf "══════════════════════════════════════════════════\n"
 printf " RESULTS: ${GREEN}%d passed${CYAN}  ${RED}%d failed${CYAN}  ${YELLOW}%d warned${CYAN}  ${YELLOW}%d skipped${CYAN}\n" \
     "$PASS" "$FAIL" "$WARN" "$SKIP"
 printf "══════════════════════════════════════════════════${NC}\n\n"
-
 if [[ "$FAIL" -gt 0 ]]; then
     echo "  ❌ Some tests failed. Fix the issues above."
     exit 1
