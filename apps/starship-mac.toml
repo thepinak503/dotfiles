@@ -1,160 +1,745 @@
-"$schema" = 'https://starship.rs/config-schema.json'
+"$schema" = "https://starship.rs/config-schema.json"
 
-# The core format string
-format = """
-[🦅 ](bold yellow)\
-${custom.root}\
-$directory \
-$git_branch\
-$git_status\
-$package\
-$c$cmake$cobol$daml$dart$deno$dotnet$elixir$elm$erlang$fennel$golang$gradle$haskell$haxe$helm$java$julia$kotlin$lua$nim$nodejs$ocaml$perl$php$pulumi$python$raku$rlang$ruby$rust$scala$swift$terraform$zig\
-${custom.cpu}\
-$memory_usage\
-${custom.disk}\
-${custom.uptime}\
-$shell\
-$time\
-$line_break\
-$character"""
+# ============================================================
+# ULTRACONFIG: Cross-platform Starship prompt for Linux + macOS
+# Optimized for aesthetics, high information density, and speed.
+# ============================================================
 
-right_format = """$cmd_duration$jobs"""
-
+# --------------------------
+# Core prompt behavior
+# --------------------------
 add_newline = true
-palette = "nord"
+command_timeout = 1200
+scan_timeout = 40
+continuation_prompt = "[∙](dimmed white) "
 
-[palettes.nord]
-nord_polar_night_0 = "#2E3440"
-nord_polar_night_1 = "#3B4252"
-nord_polar_night_2 = "#434C5E"
-nord_polar_night_3 = "#4C566A"
-nord_snow_storm_0 = "#D8DEE9"
-nord_snow_storm_1 = "#E5E9F0"
-nord_snow_storm_2 = "#ECEFF4"
-nord_frost_cyan = "#8FBCBB"
-nord_frost_blue = "#88C0D0"
-nord_frost_arctic = "#81A1C1"
-nord_frost_deep = "#5E81AC"
-nord_aurora_red = "#BF616A"
-nord_aurora_orange = "#D08770"
-nord_aurora_yellow = "#EBCB8B"
-nord_aurora_green = "#A3BE8C"
-nord_aurora_purple = "#B48EAD"
+format = """
+[](lavender)$os$username[](fg:lavender bg:overlay0)$hostname$localip[](fg:overlay0 bg:surface0)$directory$git_branch$git_status$git_state$git_metrics[](fg:surface0 bg:base)$fill$cmd_duration$jobs$battery$time
+$container$shell$nix_shell$kubernetes$docker_context$terraform$pulumi$aws$gcloud$azure
+$c$cmake$cobol$crystal$dart$deno$dotnet$elixir$elm$erlang$fennel$gleam$golang$haskell$haxe$helm$java$julia$kotlin$lua$mojo$nim$nodejs$ocaml$opa$perl$php$purescript$python$quarto$raku$rlang$red$ruby$rust$scala$solidity$swift$typst$vagrant$vlang$zig
+$buf$bun$conda$daml$gradle$meson$spack
+$custom.kernel$custom.distro$custom.desktop$custom.session$custom.root$custom.cpu$custom.mem$custom.disk$custom.uptime
+$line_break$character
+"""
+
+right_format = """
+$status
+"""
+
+palette = "catppuccin_mocha"
+
+# --------------------------
+# Color palette
+# --------------------------
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
+
+# --------------------------
+# Top-level utility modules
+# --------------------------
+[fill]
+symbol = " "
 
 [character]
-success_symbol = "[❯](bold nord_aurora_green)"
-error_symbol = "[❯](bold nord_aurora_red)"
-vicmd_symbol = "[❮](bold nord_frost_blue)"
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vicmd_symbol = "[❮](bold mauve)"
+
+[status]
+disabled = false
+symbol = "✘ "
+success_symbol = ""
+not_executable_symbol = "🚫 "
+not_found_symbol = "🔍 "
+sigint_symbol = "⚡ "
+signal_symbol = "⚠ "
+recognize_signal_code = true
+map_symbol = true
+format = "[$symbol$status]($style) "
+style = "bold red"
+
+[os]
+disabled = false
+format = "[$symbol]($style)"
+style = "bold crust bg:lavender"
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CachyOS = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "﯑ "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = "󰣭 "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+OpenCloudOS = " "
+openEuler = "󰏖 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Solus = " "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "
+
+[username]
+show_always = true
+style_user = "bold crust bg:lavender"
+style_root = "bold red bg:lavender"
+format = "[$user ]($style)"
+detect_env_vars = ["SSH_CONNECTION", "SSH_CLIENT", "SUDO_USER"]
+
+[hostname]
+ssh_only = false
+style = "bold text bg:overlay0"
+trim_at = "."
+format = "[](fg:overlay0 bg:lavender)[󰣀 $hostname ]($style)"
+disabled = false
+
+[localip]
+ssh_only = false
+disabled = false
+style = "bold subtext0 bg:overlay0"
+format = "[($localipv4 )]($style)"
 
 [directory]
-style = "bold nord_frost_arctic"
-format = "[$path]($style) "
-truncation_length = 0
+style = "bold blue bg:surface0"
+format = "[](fg:surface0 bg:overlay0)[ $path ]($style)[$read_only]($read_only_style)"
+read_only = "󰌾"
+read_only_style = "bold red bg:surface0"
+truncation_length = 4
+truncate_to_repo = false
+fish_style_pwd_dir_length = 1
+use_os_path_sep = true
 home_symbol = "~"
+repo_root_style = "bold sky bg:surface0"
+repo_root_format = "[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style) "
 
 [git_branch]
 symbol = " "
-style = "bold nord_aurora_purple"
-format = "on [$symbol$branch]($style) "
+style = "bold mauve bg:surface0"
+format = "[$symbol$branch(:$remote_branch) ]($style)"
+truncation_length = 48
+truncation_symbol = "…"
+ignore_branches = ["master", "main"]
+only_attached = false
+always_show_remote = false
+
+[git_commit]
+commit_hash_length = 8
+only_detached = true
+style = "bold peach"
+format = "[ $hash$tag ]($style)"
+
+[git_state]
+style = "bold yellow bg:surface0"
+format = "[($state( $progress_current/$progress_total)) ]($style)"
+
+[git_metrics]
+disabled = false
+added_style = "bold green bg:surface0"
+deleted_style = "bold red bg:surface0"
+format = "([+$added ]($added_style))([-$deleted ]($deleted_style))"
+ignore_submodules = false
 
 [git_status]
-style = "bold nord_aurora_red"
-format = "([\\[$all_status$ahead_behind\\]]($style) )"
+style = "bold maroon bg:surface0"
+format = "([$all_status$ahead_behind ]($style))"
+conflicted = "⚔️ "
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "*${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+up_to_date = "✓"
 
-[memory_usage]
-disabled = false
-format = "[$mem_used/$total]($style) "
-threshold = 0
-style = "bold nord_frost_blue"
+[cmd_duration]
+min_time = 250
+show_milliseconds = true
+style = "bold yellow"
+format = "[ $duration ]($style)"
+show_notifications = false
 
-[shell]
-disabled = false
-format = "via [$common_name]($style) "
-style = "bold nord_aurora_purple"
+[jobs]
+symbol = ""
+number_threshold = 1
+style = "bold peach"
+format = "[$symbol $number ]($style)"
 
 [time]
 disabled = false
-format = "[$time]($style)"
-time_format = "%r"
-style = "bold nord_aurora_yellow"
+style = "bold crust bg:yellow"
+time_format = "%a %Y-%m-%d %H:%M:%S"
+format = "[](fg:yellow bg:base)[ $time ]($style)"
+utc_time_offset = "local"
+use_12hr = false
 
-# Custom Modules for the "Ultimate" experience
-[custom.root]
-command = "if [ \"$(id -u)\" -eq 0 ]; then echo 'ROOT! '; fi"
-style = "bold nord_aurora_red"
-format = "[$output]($style)"
-when = true
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+unknown_symbol = "󰁽 "
+empty_symbol = "󰂎 "
+format = "[$symbol$percentage ]($style)"
+disabled = false
 
-[custom.cpu]
-command = "top -l 1 | grep 'CPU usage' | awk '{print $3}'"
-style = "bold nord_aurora_orange"
-format = "[$output ]($style)"
-os = "macos"
+[[battery.display]]
+threshold = 15
+style = "bold red"
 
-[custom.disk]
-command = "df -h / | awk 'NR==2 {print $4}'"
-style = "bold nord_frost_cyan"
-format = "[$output ]($style)"
+[[battery.display]]
+threshold = 50
+style = "bold peach"
 
-[custom.uptime]
-command = "uptime | sed 's/.*up //' | sed 's/, [0-9]* user.*//'"
-style = "bold nord_aurora_green"
-format = "[$output   ]($style)"
-os = "macos"
+[[battery.display]]
+threshold = 80
+style = "bold yellow"
 
-# Language specific modules with "via" and icons
-[python]
-symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_aurora_yellow"
+[[battery.display]]
+threshold = 100
+style = "bold green"
 
-[rust]
-symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_aurora_orange"
+# --------------------------
+# Environment and infra
+# --------------------------
+[shell]
+disabled = false
+format = "[󰆍 $indicator ]($style)"
+style = "bold teal"
 
-[nodejs]
-symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_aurora_green"
+[shell.indicator]
+bash = "bash"
+fish = "fish"
+zsh = "zsh"
+nu = "nu"
+cmd = "cmd"
+powershell = "pwsh"
+unknown = "sh"
+
+[container]
+symbol = "⬢ "
+style = "bold maroon"
+format = "[$symbol$name ]($style)"
+
+[docker_context]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$context ]($style)"
+only_with_files = true
+
+[kubernetes]
+disabled = false
+symbol = "󱃾 "
+style = "bold sapphire"
+format = "[$symbol$context( \($namespace\)) ]($style)"
+detect_extensions = ["yaml", "yml", "json"]
+detect_files = ["k8s.yaml", "kubernetes.yml", "Chart.yaml"]
+detect_folders = ["k8s", "helm", ".kube"]
+
+[terraform]
+format = "[󱁢 $workspace ]($style)"
+style = "bold mauve"
+detect_extensions = ["tf", "tfplan", "tfstate"]
+detect_files = [".terraform.lock.hcl"]
+detect_folders = [".terraform"]
+
+[pulumi]
+symbol = " "
+style = "bold lavender"
+format = "[$symbol$stack ]($style)"
+
+[aws]
+symbol = " "
+style = "bold peach"
+format = "[$symbol$profile( @ $region)(\($duration\)) ]($style)"
+expiration_symbol = "X"
+force_display = false
+
+[gcloud]
+symbol = "󱇶 "
+style = "bold sky"
+format = "[$symbol$account(@$domain)(:$project) ]($style)"
+disabled = false
+
+[azure]
+symbol = "󰠅 "
+style = "bold blue"
+format = "[$symbol$subscription ]($style)"
+disabled = false
+
+[nix_shell]
+heuristic = true
+symbol = " "
+style = "bold sky"
+format = "[$symbol$state( \($name\)) ]($style)"
+impure_msg = "impure"
+pure_msg = "pure"
+unknown_msg = ""
+
+# --------------------------
+# Package and build tools
+# --------------------------
+[package]
+symbol = "󰏗 "
+style = "bold flamingo"
+format = "[$symbol$version ]($style)"
+display_private = true
+disabled = false
+
+[buf]
+symbol = " "
+style = "bold lavender"
+format = "[$symbol$version ]($style)"
+
+[bun]
+symbol = " "
+style = "bold yellow"
+format = "[$symbol$version ]($style)"
+
+[conda]
+symbol = " "
+style = "bold green"
+format = "[$symbol$environment ]($style)"
+ignore_base = false
+
+[daml]
+symbol = "Λ "
+style = "bold teal"
+format = "[$symbol$version ]($style)"
+
+[gradle]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$version ]($style)"
+
+[meson]
+symbol = "⬢ "
+style = "bold sky"
+format = "[$symbol$project ]($style)"
+
+[spack]
+symbol = "🅢 "
+style = "bold mauve"
+format = "[$symbol$environment ]($style)"
+
+# --------------------------
+# Language modules
+# --------------------------
+[c]
+symbol = " "
+style = "bold blue"
+format = "[$symbol($version(-$name)) ]($style)"
+
+[cmake]
+symbol = " "
+style = "bold sapphire"
+format = "[$symbol$version ]($style)"
+
+[cobol]
+symbol = "⚙️ "
+style = "bold yellow"
+format = "[$symbol$version ]($style)"
+
+[crystal]
+symbol = " "
+style = "bold sky"
+format = "[$symbol$version ]($style)"
+
+[dart]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$version ]($style)"
+
+[deno]
+symbol = "🦕 "
+style = "bold green"
+format = "[$symbol$version ]($style)"
+
+[dotnet]
+symbol = "󰪮 "
+style = "bold mauve"
+format = "[$symbol$tfm ]($style)"
+heuristic = true
+
+[elixir]
+symbol = " "
+style = "bold mauve"
+format = "[$symbol$version (OTP $otp_version) ]($style)"
+
+[elm]
+symbol = " "
+style = "bold teal"
+format = "[$symbol$version ]($style)"
+
+[erlang]
+symbol = " "
+style = "bold red"
+format = "[$symbol$version ]($style)"
+
+[fennel]
+symbol = " "
+style = "bold green"
+format = "[$symbol$version ]($style)"
+
+[gleam]
+symbol = " "
+style = "bold pink"
+format = "[$symbol$version ]($style)"
 
 [golang]
 symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_frost_blue"
-
-[c]
-symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_frost_blue"
-
-[lua]
-symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_frost_blue"
-
-[java]
-symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_aurora_red"
-
-[php]
-symbol = "󰌟 "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_aurora_purple"
-
-[ruby]
-symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_aurora_red"
+style = "bold sky"
+format = "[$symbol$version ]($style)"
 
 [haskell]
 symbol = " "
-format = "via [${symbol}${version}]($style) "
-style = "bold nord_aurora_purple"
+style = "bold mauve"
+format = "[$symbol$version ]($style)"
 
-# Disable some things to keep it clean but functional
-[cmd_duration]
-min_time = 500
-format = "took [$duration]($style)"
-style = "bold nord_aurora_yellow"
+[haxe]
+symbol = " "
+style = "bold orange"
+format = "[$symbol$version ]($style)"
+
+[helm]
+symbol = "⎈ "
+style = "bold blue"
+format = "[$symbol$version ]($style)"
+
+[java]
+symbol = " "
+style = "bold red"
+format = "[$symbol$version ]($style)"
+
+[julia]
+symbol = " "
+style = "bold purple"
+format = "[$symbol$version ]($style)"
+
+[kotlin]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$version ]($style)"
+
+[lua]
+symbol = " "
+style = "bold sapphire"
+format = "[$symbol$version ]($style)"
+
+[mojo]
+symbol = "🔥 "
+style = "bold red"
+format = "[$symbol$version ]($style)"
+
+[nim]
+symbol = "󰆥 "
+style = "bold yellow"
+format = "[$symbol$version ]($style)"
+
+[nodejs]
+symbol = " "
+style = "bold green"
+format = "[$symbol$version ]($style)"
+detect_extensions = ["js", "mjs", "cjs", "ts", "mts", "cts"]
+detect_files = ["package.json", ".node-version", ".nvmrc"]
+detect_folders = ["node_modules"]
+
+[ocaml]
+symbol = " "
+style = "bold peach"
+format = "[$symbol$version(\($switch_indicator$switch_name\)) ]($style)"
+global_switch_indicator = ""
+local_switch_indicator = "*"
+
+[opa]
+symbol = "🪖 "
+style = "bold lavender"
+format = "[$symbol$version ]($style)"
+
+[perl]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$version ]($style)"
+
+[php]
+symbol = " "
+style = "bold mauve"
+format = "[$symbol$version ]($style)"
+
+[purescript]
+symbol = " "
+style = "bold cyan"
+format = "[$symbol$version ]($style)"
+
+[python]
+symbol = " "
+style = "bold yellow"
+format = "[$symbol$version( \($virtualenv\)) ]($style)"
+pyenv_version_name = true
+python_binary = ["python3", "python", "python2"]
+detect_extensions = ["py", "ipynb", "pyi", "pyx", "pyproject.toml"]
+detect_files = ["requirements.txt", "pyproject.toml", "Pipfile", "poetry.lock", "tox.ini", ".python-version"]
+detect_folders = [".venv", "venv"]
+
+[quarto]
+symbol = "⨁ "
+style = "bold blue"
+format = "[$symbol$version ]($style)"
+
+[raku]
+symbol = " "
+style = "bold mauve"
+format = "[$symbol$version ]($style)"
+
+[rlang]
+symbol = "󰟔 "
+style = "bold sky"
+format = "[$symbol$version ]($style)"
+
+[red]
+symbol = "󱥒 "
+style = "bold red"
+format = "[$symbol$version ]($style)"
+
+[ruby]
+symbol = " "
+style = "bold red"
+format = "[$symbol$version ]($style)"
+detect_extensions = ["rb", "erb", "rake", "gemspec"]
+detect_files = ["Gemfile", ".ruby-version"]
+detect_folders = [".ruby-lsp"]
+
+[rust]
+symbol = " "
+style = "bold peach"
+format = "[$symbol$version ]($style)"
+detect_extensions = ["rs"]
+detect_files = ["Cargo.toml"]
+detect_folders = [".cargo"]
+
+[scala]
+symbol = " "
+style = "bold red"
+format = "[$symbol$version ]($style)"
+
+[solidity]
+symbol = " "
+style = "bold green"
+format = "[$symbol$version ]($style)"
+
+[swift]
+symbol = " "
+style = "bold orange"
+format = "[$symbol$version ]($style)"
+
+[typst]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$version ]($style)"
+
+[vagrant]
+symbol = "⍱ "
+style = "bold cyan"
+format = "[$symbol$version ]($style)"
+
+[vlang]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$version ]($style)"
+
+[zig]
+symbol = "↯ "
+style = "bold yellow"
+format = "[$symbol$version ]($style)"
+
+# --------------------------
+# Custom informational modules
+# --------------------------
+[custom.root]
+when = "test \"$(id -u)\" -eq 0"
+command = "echo ROOT"
+format = "[󰞀 $output ]($style)"
+style = "bold red"
+shell = ["bash", "--noprofile", "--norc"]
+
+[custom.kernel]
+when = true
+command = "uname -r | cut -d- -f1"
+format = "[󰒋 $output ]($style)"
+style = "bold overlay2"
+shell = ["bash", "--noprofile", "--norc"]
+
+[custom.distro]
+when = true
+command = "(source /etc/os-release 2>/dev/null && echo ${PRETTY_NAME:-$NAME}) || sw_vers -productVersion 2>/dev/null || uname -s"
+format = "[󰌽 $output ]($style)"
+style = "bold overlay2"
+shell = ["bash", "--noprofile", "--norc"]
+
+[custom.desktop]
+when = true
+command = "echo ${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-Aqua}}"
+format = "[󰧨 $output ]($style)"
+style = "bold overlay1"
+shell = ["bash", "--noprofile", "--norc"]
+
+[custom.session]
+when = true
+command = "echo ${XDG_SESSION_TYPE:-tty}"
+format = "[󰍹 $output ]($style)"
+style = "bold overlay1"
+shell = ["bash", "--noprofile", "--norc"]
+
+[custom.cpu]
+when = true
+command = "if command -v sysctl >/dev/null 2>&1; then sysctl -n machdep.cpu.brand_string 2>/dev/null | sed 's/(R)//g;s/(TM)//g' | awk '{print $1,$2,$3,$4}'; else lscpu 2>/dev/null | awk -F: '/Model name/{gsub(/^ +/,\"\",$2);print $2;exit}'; fi"
+format = "[󰻠 $output ]($style)"
+style = "bold overlay1"
+shell = ["bash", "--noprofile", "--norc"]
+
+[custom.mem]
+when = true
+command = "if [ \"$(uname)\" = Darwin ]; then vm_stat | awk '/page size of/{ps=$8} /Pages active/{gsub(/\./,\"\",$3);a=$3} /Pages wired down/{gsub(/\./,\"\",$4);w=$4} /Pages occupied by compressor/{gsub(/\./,\"\",$5);c=$5} END{used=(a+w+c)*ps/1024/1024/1024; printf \"%.1fGiB\", used}'; else free -h | awk '/^Mem:/{print $3\"/\"$2}'; fi"
+format = "[󰍛 $output ]($style)"
+style = "bold overlay1"
+shell = ["bash", "--noprofile", "--norc"]
+
+[custom.disk]
+when = true
+command = "df -h / | awk 'NR==2{print $4 \" free\"}'"
+format = "[󰋊 $output ]($style)"
+style = "bold overlay1"
+shell = ["bash", "--noprofile", "--norc"]
+
+[custom.uptime]
+when = true
+command = "if command -v uptime >/dev/null 2>&1; then uptime | sed 's/.*up *//; s/, *[0-9]* users.*//; s/, load.*//'; else echo n/a; fi"
+format = "[󰅐 $output ]($style)"
+style = "bold overlay2"
+shell = ["bash", "--noprofile", "--norc"]
+
+# --------------------------
+# Prompt micro-polish tweaks
+# --------------------------
+[line_break]
+disabled = false
+
+[memory_usage]
+disabled = true
+
+[sudo]
+disabled = false
+symbol = "🧙 "
+style = "bold red"
+format = "[$symbol]($style)"
+
+[env_var.STARSHIP_DISTRO_MODE]
+variable = "STARSHIP_DISTRO_MODE"
+default = "universal"
+format = "[󱓞 $env_value ]($style)"
+style = "bold teal"
+
+[env_var.TERM_PROGRAM]
+variable = "TERM_PROGRAM"
+default = "terminal"
+format = "[ $env_value ]($style)"
+style = "bold overlay1"
+
+[env_var.SSH_TTY]
+variable = "SSH_TTY"
+default = ""
+format = "[󰣀 ssh ]($style)"
+style = "bold peach"
+
+# --------------------------
+# Disabled by default but styled
+# --------------------------
+[hg_branch]
+symbol = " "
+style = "bold mauve"
+format = "[$symbol$branch ]($style)"
+disabled = true
+
+[fossil_branch]
+symbol = " "
+style = "bold mauve"
+format = "[$symbol$branch ]($style)"
+disabled = true
+
+[pijul_channel]
+symbol = " "
+style = "bold mauve"
+format = "[$symbol$channel ]($style)"
+disabled = true
+
+[singularity]
+symbol = "📦 "
+style = "bold maroon"
+format = "[$symbol$env ]($style)"
+disabled = true
+
+[openstack]
+symbol = "☁️ "
+style = "bold peach"
+format = "[$symbol$cloud(\($project\)) ]($style)"
+disabled = true
+
+# --------------------------
+# End ultraconfig
+# --------------------------
