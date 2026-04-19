@@ -287,7 +287,7 @@ only_with_files = true
 disabled = false
 symbol = "󱃾 "
 style = "bold sapphire"
-format = "[$symbol$context( \($namespace\)) ]($style)"
+format = '[$symbol$context( ($namespace)) ]($style)'
 detect_extensions = ["yaml", "yml", "json"]
 detect_files = ["k8s.yaml", "kubernetes.yml", "Chart.yaml"]
 detect_folders = ["k8s", "helm", ".kube"]
@@ -307,7 +307,7 @@ format = "[$symbol$stack ]($style)"
 [aws]
 symbol = " "
 style = "bold peach"
-format = "[$symbol$profile( @ $region)(\($duration\)) ]($style)"
+format = '[$symbol$profile( @ $region)(($duration)) ]($style)'
 expiration_symbol = "X"
 force_display = false
 
@@ -327,7 +327,7 @@ disabled = false
 heuristic = true
 symbol = " "
 style = "bold sky"
-format = "[$symbol$state( \($name\)) ]($style)"
+format = '[$symbol$state( ($name)) ]($style)'
 impure_msg = "impure"
 pure_msg = "pure"
 unknown_msg = ""
@@ -503,7 +503,7 @@ detect_folders = ["node_modules"]
 [ocaml]
 symbol = " "
 style = "bold peach"
-format = "[$symbol$version(\($switch_indicator$switch_name\)) ]($style)"
+format = '[$symbol$version(($switch_indicator$switch_name)) ]($style)'
 global_switch_indicator = ""
 local_switch_indicator = "*"
 
@@ -530,7 +530,7 @@ format = "[$symbol$version ]($style)"
 [python]
 symbol = " "
 style = "bold yellow"
-format = "[$symbol$version( \($virtualenv\)) ]($style)"
+format = '[$symbol$version( ($virtualenv)) ]($style)'
 pyenv_version_name = true
 python_binary = ["python3", "python", "python2"]
 detect_extensions = ["py", "ipynb", "pyi", "pyx", "pyproject.toml"]
@@ -655,7 +655,7 @@ shell = ["bash", "--noprofile", "--norc"]
 
 [custom.mem]
 when = true
-command = "if [ \"$(uname)\" = Darwin ]; then vm_stat | awk '/page size of/{ps=$8} /Pages active/{gsub(/\./,\"\",$3);a=$3} /Pages wired down/{gsub(/\./,\"\",$4);w=$4} /Pages occupied by compressor/{gsub(/\./,\"\",$5);c=$5} END{used=(a+w+c)*ps/1024/1024/1024; printf \"%.1fGiB\", used}'; else free -h | awk '/^Mem:/{print $3\"/\"$2}'; fi"
+command = "if [ \"$(uname)\" = Darwin ]; then vm_stat | awk '/page size of/{ps=$8} /Pages active/{gsub(/\\./,\"\",$3);a=$3} /Pages wired down/{gsub(/\\./,\"\",$4);w=$4} /Pages occupied by compressor/{gsub(/\\./,\"\",$5);c=$5} END{used=(a+w+c)*ps/1024/1024/1024; printf \"%.1fGiB\", used}'; else free -h | awk '/^Mem:/{print $3\"/\"$2}'; fi"
 format = "[󰍛 $output ]($style)"
 style = "bold overlay1"
 shell = ["bash", "--noprofile", "--norc"]
@@ -737,7 +737,7 @@ disabled = true
 [openstack]
 symbol = "☁️ "
 style = "bold peach"
-format = "[$symbol$cloud(\($project\)) ]($style)"
+format = '[$symbol$cloud(($project)) ]($style)'
 disabled = true
 
 # --------------------------
