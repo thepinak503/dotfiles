@@ -1,6 +1,17 @@
 function mkcd
     mkdir -p $argv[1]; and cd $argv[1]
 end
+
+# Auto ls after cd - using cd wrapper
+function cd
+    if count $argv > /dev/null
+        builtin cd $argv
+    else
+        builtin cd
+    end
+    ls
+end
+
 function take
     mkdir -p $argv[1]; and cd $argv[1]
 end

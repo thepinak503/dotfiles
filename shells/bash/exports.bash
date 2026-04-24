@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Clear any inherited dotfiles vars and force local share
+unset DOTFILES_MODE DOTFILES_VERSION DOTFILES_FASTFETCH_ON_STARTUP STARSHIP_CONFIG
+export DOTFILES_DIR="$HOME/.local/share/dotfiles"
+export DOTFILES_STATE_DIR="$HOME/.local/share/dotfiles"
 [[ "$TERM" == "dumb" || -z "$TERM" ]] && export TERM=xterm-256color
 export DOTFILES_MODE="${DOTFILES_MODE:-supreme}"
 # export EDITOR='nvim'
@@ -162,9 +166,9 @@ export DOTFILES_MODE="${DOTFILES_MODE:-supreme}"
 # export PINAK_OPT_IN_158='value_158'
 # Nord LS_COLORS for ls consistency
 export LS_COLORS="di=34;42:ln=35;42:so=33;42:pi=33;42:ex=31;42:bd=34;43:cd=33;43:su=30;41:sg=30;43:tw=30;42:ow=30;42:or=30;41:mi=00;35:st=00;32:do=00;32"
-# export PINAK_OPT_IN_159='value_159'
-if [[ $- == *i* ]]; then
+
+# Lazy load tools for faster startup
+_atuin_init() {
     command -v atuin >/dev/null 2>&1 && eval "$(atuin init bash --disable-up-arrow)"
-    command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
-    command -v mise >/dev/null 2>&1 && eval "$(mise activate bash)"
-fi
+}
+# direnv and mise disabled for faster startup - load manually when needed

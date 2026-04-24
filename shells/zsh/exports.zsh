@@ -1,4 +1,6 @@
 #!/usr/bin/env zsh
+# Clear any inherited dotfiles vars
+unset DOTFILES_MODE DOTFILES_VERSION DOTFILES_FASTFETCH_ON_STARTUP STARSHIP_CONFIG
 [[ "$TERM" == "dumb" || -z "$TERM" ]] && export TERM=xterm-256color
 export DOTFILES_MODE="${DOTFILES_MODE:-supreme}"
 # export EDITOR='nvim'
@@ -161,9 +163,11 @@ export DOTFILES_MODE="${DOTFILES_MODE:-supreme}"
 # export PINAK_OPT_IN_157='value_157'
 # export PINAK_OPT_IN_158='value_158'
 # export PINAK_OPT_IN_159='value_159'
-command -v vivid >/dev/null 2>&1 && export LS_COLORS="$(vivid generate nord)"
-if [[ -o interactive ]]; then
+# Nord LS_COLORS for ls consistency
+export LS_COLORS="di=34;42:ln=35;42:so=33;42:pi=33;42:ex=31;42:bd=34;43:cd=33;43:su=30;41:sg=30;43:tw=30;42:ow=30;42:or=30;41:mi=00;35:st=00;32:do=00;32"
+
+# Lazy load tools only when needed for faster startup
+_atuin_init() {
     command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
-    command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
-    command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
-fi
+}
+# direnv and mise disabled for faster startup - load manually when needed

@@ -1,3 +1,5 @@
+# Clear any inherited dotfiles vars
+set -e DOTFILES_MODE DOTFILES_VERSION STARSHIP_CONFIG DOTFILES_FASTFETCH_ON_STARTUP
 set -q DOTFILES_MODE; or set -gx DOTFILES_MODE supreme
 # set -gx EDITOR "nvim"
 # set -gx VISUAL "nvim"
@@ -159,17 +161,12 @@ set -q DOTFILES_MODE; or set -gx DOTFILES_MODE supreme
 # set -gx PINAK_OPT_IN_157 "value_157"
 # set -gx PINAK_OPT_IN_158 "value_158"
 # set -gx PINAK_OPT_IN_159 "value_159"
-if type -q vivid
-    set -gx LS_COLORS (vivid generate nord)
-end
-if status is-interactive
+# Nord LS_COLORS for ls consistency
+set -gx LS_COLORS "di=34;42:ln=35;42:so=33;42:pi=33;42:ex=31;42:bd=34;43:cd=33;43:su=30;41:sg=30;43:tw=30;42:ow=30;42:or=30;41:mi=00;35:st=00;32:do=00;32"
+
+# Lazy load tools for faster startup - only init when first used
+function _atuin_init
     if type -q atuin
         atuin init fish | source
-    end
-    if type -q direnv
-        direnv hook fish | source
-    end
-    if type -q mise
-        mise activate fish | source
     end
 end
