@@ -1,9 +1,6 @@
 set -g fish_greeting ""
-
-# Minimal fast config
 set -gx DOTFILES_DIR "$HOME/.local/share/dotfiles"
 
-# Simple instant prompt
 function fish_prompt
     set_color green
     echo -n (whoami)@(hostname)
@@ -15,16 +12,12 @@ function fish_prompt
     echo -n '$ '
 end
 
-# Lazy load starship - press Alt+s to enable
 function enable_starship
     type -q starship; and starship init fish | source
     functions -e enable_starship
 end
 bind \es 'enable_starship; commandline -f repaint'
 
-# Fastfetch on startup - runs in background
-if type -q fastfetch
-    fastfetch 2>/dev/null &
-end
+command -v fastfetch >/dev/null; and fastfetch 2>/dev/null &
 
 true
