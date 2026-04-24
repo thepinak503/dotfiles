@@ -16,10 +16,10 @@ export DOTFILES_VERSION="12.1.0"
 d="$DOTFILES_DIR/shells/bash/modes"
 [[ -f "$d/supreme.bash" ]] && source "$d/supreme.bash"
 
-# Starship init - skip if slow
-if command -v starship >/dev/null; then
-    timeout 2 eval "$(starship init bash 2>>${DOTFILES_STATE_DIR:-/tmp}/errors.log)" 2>/dev/null &
-fi
+# Starship init
+command -v starship >/dev/null && eval "$(starship init bash 2>>${DOTFILES_STATE_DIR:-/tmp}/errors.log)"
+
+# Fastfetch
 command -v fastfetch >/dev/null && fastfetch 2>/dev/null &
 
 true
