@@ -12,12 +12,6 @@ function fish_prompt
     echo -n '$ '
 end
 
-function enable_starship
-    type -q starship; and starship init fish | source
-    functions -e enable_starship
-end
-bind \es 'enable_starship; commandline -f repaint'
-
 command -v fastfetch >/dev/null; and fastfetch 2>/dev/null &
 
 true

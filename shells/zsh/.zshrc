@@ -51,10 +51,7 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 d="$DOTFILES_DIR/shells/zsh/modes"
 [[ -f "$d/supreme.zsh" ]] && source "$d/supreme.zsh"
 
-# Starship init - skip if slow
-if command -v starship >/dev/null; then
-    timeout 2 eval "$(starship init zsh 2>>${DOTFILES_STATE_DIR:-/tmp}/errors.log)" 2>/dev/null &
-fi
+# Fastfetch only - no starship
 command -v fastfetch >/dev/null && fastfetch 2>/dev/null &
 
 true
