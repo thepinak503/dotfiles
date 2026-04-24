@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starship - Pinak's Dotfiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<div class="brand">Pinak's Dotfiles</div>
+<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="active">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="">FAQ</a></nav>
+<div class="meta">v12.1.0<br>Arch-style manual</div>
+</aside>
+<main>
+<header class="top"><span>Manual</span><h1>Starship</h1></header>
+
+<section><h2>Prompt Design</h2><p>The prompt is a compact Nord layout: OS and user, host, directory, right-side duration/jobs/battery/time, second-line Git and language context, then a clean prompt character.</p></section>
+<section><h2>Performance</h2><ul><li>No always-on custom shell commands in the default format.</li><li>Git metrics are disabled because they are expensive in large repositories.</li><li>Command timeout and scan timeout are bounded.</li><li>Date and time include seconds using <code>%F %T</code>.</li></ul></section>
+<section><h2>Render Test</h2><pre><code>STARSHIP_CACHE=/tmp/starship-cache STARSHIP_CONFIG=apps/starship-linux.toml starship prompt</code></pre></section>
+</main>
+</body>
+</html>

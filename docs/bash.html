@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bash - Pinak's Dotfiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<div class="brand">Pinak's Dotfiles</div>
+<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="active">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="">FAQ</a></nav>
+<div class="meta">v12.1.0<br>Arch-style manual</div>
+</aside>
+<main>
+<header class="top"><span>Manual</span><h1>Bash</h1></header>
+
+<section><h2>Startup Path</h2><ul><li>Resolves <code>DOTFILES_DIR</code> from the symlink target.</li><li>Loads shared system detection and tool helpers.</li><li>Loads <code>exports.bash</code> and core aliases/functions by default.</li><li>Initializes Starship if available.</li><li>Skips Fastfetch and updater unless explicitly enabled.</li></ul></section>
+<section><h2>Full Library</h2><pre><code>dotloadfull
+DOTFILES_LOAD_FULL=1 exec bash</code></pre></section>
+<section><h2>Validation</h2><pre><code>bash -n shells/bash/.bashrc
+bash -c ". shells/bash/aliases-core.bash; . shells/bash/functions-core.bash; type mkcd"</code></pre></section>
+</main>
+</body>
+</html>

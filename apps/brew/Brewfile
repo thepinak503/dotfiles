@@ -1,0 +1,42 @@
+# =============================================================================
+# Supreme Brewfile
+# Tools for a World-Class Development Environment
+# =============================================================================
+
+# Shells
+brew "bash"
+brew "zsh"
+brew "fish"
+
+# Core CLI Tools
+brew "starship"
+brew "zoxide"
+brew "fzf"
+brew "ripgrep"
+brew "fd"
+brew "bat"
+brew "eza"
+brew "fastfetch"
+brew "delta"
+brew "jq"
+brew "yq"
+
+# Modern Productivity
+brew "atuin"
+brew "direnv"
+brew "mise"
+brew "lazygit"
+brew "btop"
+brew "ncdu"
+brew "tldr"
+
+# DevOps
+brew "docker"
+brew "kubectl"
+brew "helm"
+brew "terraform"
+
+# Fonts (requires cask)
+tap "homebrew/cask-fonts"
+cask "font-symbols-only-nerd-font"
+cask "font-inter"

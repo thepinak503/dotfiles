@@ -1,0 +1,252 @@
+# =============================================================================
+# STARSHIP PROMPT - Tokyo Night (World's Most Advanced)
+# =============================================================================
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[░▒▓](#a3aed2)\
+[  ](bg:#a3aed2 fg:#090c0c)\
+[](bg:#769ff0 fg:#a3aed2)\
+$directory\
+[](fg:#769ff0 bg:#394260)\
+$git_branch\
+$git_status\
+[](fg:#394260 bg:#212736)\
+$python\
+$rust\
+$golang\
+$nodejs\
+$java\
+$php\
+$ruby\
+$dart\
+$elixir\
+$elm\
+$julia\
+$haskell\
+$nim\
+$nix_shell\
+$perl\
+$scala\
+$swift\
+$c\
+$cpp\
+$conda\
+$docker_context\
+[](fg:#212736 bg:#1d2230)\
+$time\
+$battery\
+[▓▒░](fg:#1d2230)\
+[▶](fg:#1d2230)\
+$character"""
+
+right_format = """$cmd_duration$shell$jobs"""
+
+add_newline = true
+
+[shell]
+style = "fg:#6c7086"
+format = '[$symbol$version]($style) '
+disabled = false
+
+[jobs]
+style = "fg:#6c7086"
+format = '[$number]($style) '
+
+[directory]
+style = "fg:#e3e5e5 bg:#769ff0"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+symbol = ""
+style = "bg:#394260"
+format = '[[ $symbol $branch ](fg:#769ff0 bg:#394260)]($style)'
+
+[git_status]
+style = "bg:#394260"
+format = '[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)'
+
+[python]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol (\($version\)) (\($virtualenv\)) ](fg:#769ff0 bg:#212736)]($style)'
+
+[rust]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[golang]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[nodejs]
+symbol = "󰌷"
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[java]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[php]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[ruby]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+[dart]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[elixir]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[elm]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[julia]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[haskell]
+symbol = "λ"
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[nim]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[nix_shell]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[perl]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[scala]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[swift]
+symbol = "ᕕ"
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[c]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+[cpp]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+
+[conda]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($environment) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = false
+
+
+[docker_context]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($context) ](fg:#769ff0 bg:#212736)]($style)'
+
+[kubernetes]
+symbol = "󰉙"
+style = "bg:#212736"
+format = '[[ $symbol ($context) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = true
+
+[aws]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($profile) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = true
+
+[package]
+symbol = ""
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+
+[bun]
+symbol = "󰟓"
+style = "bg:#212736"
+format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
+disabled = true
+
+[time]
+disabled = false
+time_format = "%a %d %b %H:%M:%S"
+style = "bg:#1d2230"
+format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
+
+[battery]
+format = '[[ $symbol $percentage ]($style)]'
+full_symbol = '🔋 '
+charging_symbol = '⚡ '
+discharging_symbol = '🔋 '
+unknown_symbol = '🔋 '
+empty_symbol = '🔋 '
+disabled = false
+[[battery.display]]
+threshold = 20
+style = 'bold red fg:#a0a9cb bg:#1d2230'
+
+[[battery.display]]
+threshold = 50
+style = 'bold yellow fg:#a0a9cb bg:#1d2230'
+
+[[battery.display]]
+threshold = 100
+style = 'bold green fg:#a0a9cb bg:#1d2230'
+
+[cmd_duration]
+style = "fg:#6c7086"
+format = '[$duration]($style) '
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[✗](bold red)"

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fastfetch - Pinak's Dotfiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<div class="brand">Pinak's Dotfiles</div>
+<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="active">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="">FAQ</a></nav>
+<div class="meta">v12.1.0<br>Arch-style manual</div>
+</aside>
+<main>
+<header class="top"><span>Manual</span><h1>Fastfetch</h1></header>
+
+<section><h2>Config</h2><p>Fastfetch is configured for a clean system summary with battery health when a battery is detected. It runs on shell startup by default. Set <code>DOTFILES_FASTFETCH_ON_STARTUP=0</code> to disable it for faster terminal tabs.</p></section>
+<section><h2>Manual Run</h2><pre><code>fastfetch --config ~/.config/fastfetch/config.jsonc</code></pre></section>
+<section><h2>Battery Health</h2><p>The helper reads Linux power supply data and exits quietly on desktops or systems without a battery.</p></section>
+</main>
+</body>
+</html>

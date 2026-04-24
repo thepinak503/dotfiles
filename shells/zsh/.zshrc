@@ -1,0 +1,248 @@
+#!/usr/bin/env zsh
+_BS_FILE="${(%):-%N}"
+while [ -L "$_BS_FILE" ]; do
+    _BS_DIR="$(cd -P "$(dirname "$_BS_FILE")" >/dev/null 2>&1 && pwd)"
+    _BS_FILE="$(readlink "$_BS_FILE")"
+    [[ $_BS_FILE != /* ]] && _BS_FILE="$_BS_DIR/$_BS_FILE"
+done
+DOTFILES_DIR="$(cd -P "$(dirname "$_BS_FILE")/../.." >/dev/null 2>&1 && pwd)"
+if [[ ! -d "$DOTFILES_DIR/shells" ]]; then
+    if [[ -d "$HOME/git/dotfiles" ]]; then
+        DOTFILES_DIR="$HOME/git/dotfiles"
+    else
+        DOTFILES_DIR="$HOME/.dotfiles"
+    fi
+fi
+export DOTFILES_DIR
+unset _BS_FILE _BS_DIR
+export DOTFILES_STATE_DIR="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}"
+[[ -d "$DOTFILES_STATE_DIR" ]] || mkdir -p "$DOTFILES_STATE_DIR" 2>/dev/null || DOTFILES_STATE_DIR="${TMPDIR:-/tmp}/dotfiles-$USER"
+[[ -d "$DOTFILES_STATE_DIR" ]] || mkdir -p "$DOTFILES_STATE_DIR" 2>/dev/null
+[[ -w "$DOTFILES_STATE_DIR" ]] || export DOTFILES_STATE_DIR="${TMPDIR:-/tmp}/dotfiles-$USER"
+[[ -d "$DOTFILES_STATE_DIR" ]] || mkdir -p "$DOTFILES_STATE_DIR" 2>/dev/null
+
+# Exit early for non-interactive shells to speed startup (keeps login/profile intact)
+case "$-" in
+    *i*) ;; # interactive, continue
+    *) return 0 ;; # non-interactive, stop processing .zshrc
+esac
+if [[ -z "$DOTFILES_MODE" ]]; then
+    if [[ -f "$DOTFILES_STATE_DIR/mode" ]]; then
+        export DOTFILES_MODE="$(<"$DOTFILES_STATE_DIR/mode")"
+    else
+        export DOTFILES_MODE="supreme"
+    fi
+fi
+export DOTFILES_VERSION="12.1.0"
+_src() { [[ -f "$1" && -r "$1" ]] && source "$1" 2>/dev/null; }
+_src "$DOTFILES_DIR/core/system-detect.sh"
+_src "$DOTFILES_DIR/core/tools.sh"
+_src "$DOTFILES_DIR/core/battery.sh"
+_src "$DOTFILES_DIR/core/ssh-agent.sh"
+_src "$DOTFILES_DIR/shells/zsh/exports.zsh"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+if command -v nvim &>/dev/null; then
+    export EDITOR="nvim" VISUAL="nvim" MANPAGER="nvim +Man!"
+elif command -v vim &>/dev/null; then
+    export EDITOR="vim"  VISUAL="vim"
+else
+    export EDITOR="nano" VISUAL="nano"
+fi
+export PAGER="less"
+export LESS="-R -i -g -c -W -F -X -M --shift 5"
+export LANG="${LANG:-en_US.UTF-8}"
+export LC_ALL="${LC_ALL:-en_US.UTF-8}"
+export TERM="${TERM:-xterm-256color}"
+export COLORTERM="truecolor"
+export CLICOLOR=1
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+export NPM_CONFIG_UPDATE_NOTIFIER=false
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_ENV_HINTS=1
+export PYTHONDONTWRITEBYTECODE=1
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
+export RUSTUP_HOME="${RUSTUP_HOME:-$HOME/.rustup}"
+export GOPATH="${GOPATH:-$HOME/go}"
+export NPM_CONFIG_PREFIX="$HOME/.npm-global"
+export BAT_THEME="TwoDark"
+export BAT_STYLE="numbers,changes,header"
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export FZF_DEFAULT_OPTS="
+  --height=60% --layout=reverse --border=rounded
+  --preview-window=right:50%
+  --bind='ctrl-f:page-down,ctrl-b:page-up,ctrl-u:half-page-up,ctrl-d:half-page-down'
+  --color='bg:#1e1e1e,bg+:#3c3c3c,fg:#d4d4d4,fg+:#ffffff'
+  --color='hl:#569cd6,hl+:#4fc1ff,info:#ce9178,prompt:#4ec9b0,pointer:#ff6188'
+"
+if command -v fd &>/dev/null; then
+    export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude .git"
+fi
+export LESS_TERMCAP_mb=$'\e[1;31m'
+export LESS_TERMCAP_md=$'\e[1;36m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;44;33m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;32m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export HISTFILE="$HOME/.zsh_history"
+export HISTSIZE=100000
+export SAVEHIST=100000
+setopt HIST_IGNORE_DUPS HIST_IGNORE_SPACE HIST_EXPIRE_DUPS_FIRST \
+       SHARE_HISTORY EXTENDED_HISTORY APPEND_HISTORY HIST_FIND_NO_DUPS
+setopt AUTO_CD CORRECT NOMATCH AUTO_PUSHD PUSHD_IGNORE_DUPS CD_SILENT 2>/dev/null || true
+unsetopt BEEP 2>/dev/null || true
+autoload -U select-word-style && select-word-style bash
+_path_prepend() { [[ -d "$1" && ":$PATH:" != *":$1:"* ]] && export PATH="$1${PATH:+:$PATH}"; }
+_path_append()  { [[ -d "$1" && ":$PATH:" != *":$1:"* ]] && export PATH="${PATH:+$PATH:}$1"; }
+_path_prepend "$HOME/.local/bin"
+_path_prepend "$CARGO_HOME/bin"
+_path_prepend "$HOME/.pyenv/bin"
+_path_append  "$GOPATH/bin"
+_path_append  "$NPM_CONFIG_PREFIX/bin"
+_path_append  "$HOME/.poetry/bin"
+_path_append  "$HOME/.dotnet/tools"
+[[ -d /snap/bin ]] && _path_append "/snap/bin"
+[[ -d /var/core/flatpak/exports/bin ]] && _path_append "/var/core/flatpak/exports/bin"
+if [[ -d "/home/linuxbrew/.linuxbrew/bin" ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null
+elif [[ -d "/opt/homebrew/bin" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)" 2>/dev/null
+fi
+unset -f _path_prepend _path_append
+autoload -Uz compinit
+if [[ -n "$HOME/.zcompdump"(#qN.mh+24) ]]; then
+    compinit
+else
+    compinit -C
+fi
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:descriptions' format '%F{cyan}-- %d --%f'
+zstyle ':completion:*:warnings' format '%F{red}No matches%f'
+for _plugin in \
+    zsh-syntax-highlighting \
+    zsh-autosuggestions; do
+    for _dir in \
+        "$HOME/shells/zsh/${_plugin}" \
+        "/usr/share/zsh/plugins/${_plugin}" \
+        "/usr/share/${_plugin}" \
+        "$ZSH/custom/plugins/${_plugin}"; do
+        _src "${_dir}/${_plugin}.zsh" && break
+    done
+done
+unset _plugin _dir
+_src "$DOTFILES_DIR/shells/zsh/01-keybindings.zsh"
+if [[ -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" && "${USE_OMZ:-0}" == "1" ]]; then
+    _src "$DOTFILES_DIR/shells/zsh/02-plugins.zsh"
+fi
+if [[ "${DOTFILES_LOAD_FULL:-0}" == "1" ]]; then
+    _src "$DOTFILES_DIR/shells/zsh/aliases.zsh"
+    _src "$DOTFILES_DIR/shells/zsh/functions.zsh"
+else
+    _src "$DOTFILES_DIR/shells/zsh/aliases-core.zsh"
+    _src "$DOTFILES_DIR/shells/zsh/functions-core.zsh"
+fi
+
+# Precompile and cache function files to DOTFILES_STATE_DIR to speed future startups.
+if command -v zcompile >/dev/null 2>&1; then
+    _ZCOMP_DIR="$DOTFILES_STATE_DIR/zcompiled"
+    mkdir -p "$_ZCOMP_DIR" 2>/dev/null || true
+    for f in "$DOTFILES_DIR/shells/zsh/functions-core.zsh" "$DOTFILES_DIR/shells/zsh/functions.zsh"; do
+        if [[ -f "$f" ]]; then
+            tgt="$_ZCOMP_DIR/$(basename "$f")"
+            # copy and compile into state dir (avoids modifying repo files)
+            if [[ ! -f "$tgt.zwc" || "$f" -nt "$tgt.zwc" ]]; then
+                cp "$f" "$tgt" 2>/dev/null || true
+                zcompile "$tgt" 2>/dev/null || true
+            fi
+            # prefer compiled file if present
+            if [[ -f "$tgt.zwc" ]]; then
+                source "$tgt.zwc" 2>/dev/null || true
+            else
+                source "$tgt" 2>/dev/null || true
+            fi
+        fi
+    done
+fi
+_load_mode() {
+    local d="$DOTFILES_DIR/shells/zsh/modes"
+    case "$DOTFILES_MODE" in
+        minimal)
+            _src "$d/minimal.zsh" ;;
+        standard)
+            _src "$d/minimal.zsh"
+            _src "$d/standard.zsh" ;;
+        supreme)
+            _src "$d/minimal.zsh"
+            _src "$d/standard.zsh"
+            _src "$d/supreme.zsh" ;;
+        ultra-nerd)
+            _src "$d/minimal.zsh"
+            _src "$d/standard.zsh"
+            _src "$d/supreme.zsh"
+            _src "$d/ultra-nerd.zsh" ;;
+        *)
+            _src "$d/minimal.zsh"
+            _src "$d/standard.zsh"
+            _src "$d/supreme.zsh" ;;
+    esac
+}
+_load_mode
+unset -f _load_mode
+chmode() {
+    case "${1:-}" in
+        minimal|standard|supreme|ultra-nerd)
+            export DOTFILES_MODE="$1"
+            echo "$1" > "$DOTFILES_STATE_DIR/mode" 2>/dev/null
+            echo "✓ Mode → $1  (restart shell or run: exec zsh)"
+            ;;
+        "")
+            printf 'Current mode: %s\n' "$DOTFILES_MODE"
+            printf 'Modes: minimal | standard | supreme | ultra-nerd\n'
+            printf '  minimal     — minimal, SSH-safe\n'
+            printf '  standard    — balanced\n'
+            printf '  supreme     — full-featured (default)\n'
+            printf '  ultra-nerd  — maximum productivity\n'
+            ;;
+        *) echo "Unknown mode: $1" >&2; return 1 ;;
+    esac
+}
+alias cm='chmode'
+if command -v starship &>/dev/null; then
+    export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
+    [[ "$DOTFILES_OS" == "Darwin" ]] && export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
+    eval "$(starship init zsh 2>>"${DOTFILES_STATE_DIR:-/tmp}/errors.log")"
+fi
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)" 2>/dev/null
+if [[ "${DOTFILES_AUTO_UPDATE:-0}" == "1" && -f "$DOTFILES_DIR/bin/dotupdate_bg.sh" && "$DOTFILES_MODE" != "minimal" ]]; then
+    (bash "$DOTFILES_DIR/bin/dotupdate_bg.sh" &)
+    if [[ -f "$DOTFILES_STATE_DIR/update_ready" ]]; then
+        echo "\n%F{yellow}⚡ Dotfiles updates are available! Run 'dotupdate' to apply.%f"
+    fi
+fi
+for _fzf_bind in \
+    /usr/share/fzf/key-bindings.zsh \
+    /usr/share/doc/fzf/examples/key-bindings.zsh \
+    "$HOME/.fzf.zsh"; do
+    _src "$_fzf_bind" && break
+done
+unset _fzf_bind
+command -v battery_warn &>/dev/null && battery_warn
+[[ "${DOTFILES_FASTFETCH_ON_STARTUP:-1}" == "1" ]] && command -v fastfetch &>/dev/null && (fastfetch 2>/dev/null &)
+_src "$DOTFILES_DIR/core/logging.sh"
+if [[ -f /usr/share/doc/find-the-command/ftc.zsh ]]; then
+    source /usr/share/doc/find-the-command/ftc.zsh noprompt quiet
+fi
+if [[ -f "$HOME/.zshrc.local" ]]; then
+    source "$HOME/.zshrc.local"
+fi
+unset -f _src
+true

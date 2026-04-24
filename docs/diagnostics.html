@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnostics - Pinak's Dotfiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<div class="brand">Pinak's Dotfiles</div>
+<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="active">Diagnostics</a><a href="faq.html" class="">FAQ</a></nav>
+<div class="meta">v12.1.0<br>Arch-style manual</div>
+</aside>
+<main>
+<header class="top"><span>Manual</span><h1>Diagnostics</h1></header>
+
+<section><h2>Test Suite</h2><pre><code>bash bin/test_repo.sh
+bash bin/test_all.sh --fast
+git diff --check</code></pre></section>
+<section><h2>Installer Checks</h2><p>The installer validates shell behavior through <code>bash -c</code>, <code>zsh -c</code>, and <code>fish -c</code> when those shells are installed.</p></section>
+<section><h2>Common Files</h2><table><tbody><tr><th>Errors</th><td><code>$DOTFILES_STATE_DIR/errors.log</code></td></tr><tr><th>Mode</th><td><code>$DOTFILES_STATE_DIR/mode</code></td></tr><tr><th>Install date</th><td><code>$DOTFILES_STATE_DIR/install_date</code></td></tr></tbody></table></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Main Page - Pinak's Dotfiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<div class="brand">Pinak's Dotfiles</div>
+<nav><a href="index.html" class="active">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="">FAQ</a></nav>
+<div class="meta">v12.1.0<br>Arch-style manual</div>
+</aside>
+<main>
+<header class="top"><span>Manual</span><h1>Main Page</h1></header>
+
+<section><h2>Overview</h2><p>Pinak's Dotfiles is a modular shell and terminal environment for Arch Linux, Arch-based systems, other Linux distributions, and macOS. It keeps the repository at <code>~/.dotfiles</code>, links files into their runtime locations, and supports Bash, Zsh, and Fish from one coherent layout.</p></section>
+<div class="grid">
+<div class="box"><strong>2200</strong><span>Bash aliases</span></div>
+<div class="box"><strong>2200</strong><span>Zsh aliases</span></div>
+<div class="box"><strong>2200</strong><span>Fish aliases</span></div>
+<div class="box"><strong>525</strong><span>Starship lines</span></div>
+</div>
+<section><h2>Quick Start</h2><pre><code>curl -fsSL https://raw.githubusercontent.com/thepinak503/dotfiles/main/install.sh | sh
+exec "$SHELL" -l</code></pre></section>
+<section><h2>Default Behavior</h2><ul><li>Fast startup path loads core aliases and functions only.</li><li>Full 2200-item libraries remain available through <code>dotloadfull</code> or <code>DOTFILES_LOAD_FULL=1</code>.</li><li>Fastfetch runs at startup by default and can be disabled with <code>DOTFILES_FASTFETCH_ON_STARTUP=0</code>.</li><li>Starship uses a compact Nord prompt with clear Git, directory, runtime, battery, and time segments.</li></ul></section>
+</main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture - Pinak's Dotfiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<div class="brand">Pinak's Dotfiles</div>
+<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="active">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="">FAQ</a></nav>
+<div class="meta">v12.1.0<br>Arch-style manual</div>
+</aside>
+<main>
+<header class="top"><span>Manual</span><h1>Architecture</h1></header>
+
+<section><h2>Repository Layout</h2><table><tbody><tr><th><code>shells/</code></th><td>Bash, Zsh, Fish entry points, core libraries, full catalogs, and modes</td></tr><tr><th><code>core/</code></th><td>Shared detection, tool, battery, SSH, and logging helpers</td></tr><tr><th><code>apps/</code></th><td>External application configs for Starship, Fastfetch, Git, Tmux, Lazygit, Atuin, and Brew</td></tr><tr><th><code>bin/</code></th><td>Generators, diagnostics, benchmarks, update helpers, and docs tooling</td></tr><tr><th><code>install/</code></th><td>Installer and uninstaller</td></tr></tbody></table></section>
+<section><h2>Generated Assets</h2><p><code>bin/generate_assets.js</code> owns the large synchronized shell catalogs and prompt configs. Edit the generator first, then regenerate.</p><pre><code>node bin/generate_assets.js</code></pre></section>
+<section><h2>Modes</h2><table><tbody><tr><th>minimal</th><td>SSH-safe and low noise</td></tr><tr><th>standard</th><td>Balanced daily interactive shell</td></tr><tr><th>supreme</th><td>Default feature set</td></tr><tr><th>ultra-nerd</th><td>Maximum opt-in surface area</td></tr></tbody></table></section>
+</main>
+</body>
+</html>

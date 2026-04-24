@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ - Pinak's Dotfiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<div class="brand">Pinak's Dotfiles</div>
+<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="active">FAQ</a></nav>
+<div class="meta">v12.1.0<br>Arch-style manual</div>
+</aside>
+<main>
+<header class="top"><span>Manual</span><h1>FAQ</h1></header>
+
+<section><h2>Can This Be Best-In-Class?</h2><p>For a personal dotfiles repository, yes: it is modular, generated where large catalogs would otherwise drift, validated across shells, and optimized for fast default startup. It is not universally best for every user because terminals, fonts, policies, and package managers differ.</p></section>
+<section><h2>Why Does Bash Sometimes Miss Starship?</h2><p>Bash only reads <code>~/.bashrc</code> for interactive non-login shells. Login shells may read <code>~/.bash_profile</code>, <code>~/.bash_login</code>, or <code>~/.profile</code>. Source <code>~/.bashrc</code> from the login file and ensure <code>starship</code> is installed on <code>PATH</code>.</p></section>
+<section><h2>Are All Commands Distro-Agnostic?</h2><p>No large shell catalog is perfectly distro-agnostic. The default startup path is conservative, but package-manager commands, Linux-only paths, Docker/Kubernetes helpers, and GNU/BSD differences can still require local adjustment.</p></section>
+</main>
+</body>
+</html>

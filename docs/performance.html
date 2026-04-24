@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance - Pinak's Dotfiles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside>
+<div class="brand">Pinak's Dotfiles</div>
+<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="active">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="">FAQ</a></nav>
+<div class="meta">v12.1.0<br>Arch-style manual</div>
+</aside>
+<main>
+<header class="top"><span>Manual</span><h1>Performance</h1></header>
+
+<section><h2>Startup Policy</h2><table><tbody><tr><th>Default</th><td>Core aliases/functions only</td></tr><tr><th>Full catalog</th><td><code>dotloadfull</code> or <code>DOTFILES_LOAD_FULL=1</code></td></tr><tr><th>Fastfetch</th><td>enabled by default; disable with <code>DOTFILES_FASTFETCH_ON_STARTUP=0</code></td></tr><tr><th>Updater</th><td><code>DOTFILES_AUTO_UPDATE=1</code></td></tr><tr><th>Starship</th><td>Compact prompt without always-on custom command modules</td></tr></tbody></table></section>
+<section><h2>Benchmark</h2><pre><code>for i in 1 2 3; do zsh -c 'zmodload zsh/datetime; s=$EPOCHREALTIME; zsh -i -c exit >/dev/null 2>&amp;1; e=$EPOCHREALTIME; printf "zsh %.3f\n" $(( e - s ))'; done</code></pre></section>
+<section><h2>Tuning</h2><ul><li>Keep <code>DOTFILES_LOAD_FULL</code> unset for daily shells.</li><li>Run <code>dotloadfull</code> only in sessions where the large generated catalog is useful.</li><li>Set <code>DOTFILES_FASTFETCH_ON_STARTUP=0</code> on machines where terminal tab creation speed matters more than the startup summary.</li><li>Use <code>minimal</code> mode on remote hosts.</li></ul></section>
+</main>
+</body>
+</html>
