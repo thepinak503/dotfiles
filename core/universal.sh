@@ -7,6 +7,14 @@
 export DOTFILES_OS="$(uname -s)"
 export DOTFILES_ARCH="$(uname -m)"
 
+# Detect shell name for app initializers
+case "${SHELL##*/}" in
+    bash) export SHELL_NAME="bash" ;;
+    zsh)  export SHELL_NAME="zsh" ;;
+    fish) export SHELL_NAME="fish" ;;
+    *)    export SHELL_NAME="bash" ;;
+esac
+
 _detect_linux_distro() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release

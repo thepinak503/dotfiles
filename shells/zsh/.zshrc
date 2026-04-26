@@ -48,6 +48,9 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 # Universal distro-agnostic config (OS detection + cross-distro aliases)
 [[ -f "$DOTFILES_DIR/core/universal.sh" ]] && emulate sh -c "source '$DOTFILES_DIR/core/universal.sh'"
 
+# Dynamic app detection (only enables aliases if app is installed)
+[[ -f "$DOTFILES_DIR/core/detect_apps.sh" ]] && emulate sh -c "source '$DOTFILES_DIR/core/detect_apps.sh'"
+
 [[ -f "$DOTFILES_DIR/shells/zsh/aliases-core.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/aliases-core.zsh"
 [[ -f "$DOTFILES_DIR/shells/zsh/functions-core.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/functions-core.zsh"
 

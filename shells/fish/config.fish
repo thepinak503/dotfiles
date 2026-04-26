@@ -230,6 +230,11 @@ end
 abbr -a cleancache rm -rf ~/.cache/*
 abbr -a cleanpkg rm -rf /var/cache/*
 
+# Dynamic app detection
+if test -f "$DOTFILES_DIR/shells/fish/detect_apps.fish"
+    source "$DOTFILES_DIR/shells/fish/detect_apps.fish"
+end
+
 # Starship prompt
 if command -v starship >/dev/null
     if uname -s | string match -q Darwin

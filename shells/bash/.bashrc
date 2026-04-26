@@ -13,6 +13,9 @@ export DOTFILES_VERSION="12.1.0"
 # Universal distro-agnostic config (OS detection + cross-distro aliases)
 [[ -f "$DOTFILES_DIR/core/universal.sh" ]] && source "$DOTFILES_DIR/core/universal.sh"
 
+# Dynamic app detection (only enables aliases if app is installed)
+[[ -f "$DOTFILES_DIR/core/detect_apps.sh" ]] && source "$DOTFILES_DIR/core/detect_apps.sh"
+
 [[ -f "$DOTFILES_DIR/shells/bash/aliases-core.bash" ]] && source "$DOTFILES_DIR/shells/bash/aliases-core.bash"
 [[ -f "$DOTFILES_DIR/shells/bash/functions-core.bash" ]] && source "$DOTFILES_DIR/shells/bash/functions-core.bash"
 
