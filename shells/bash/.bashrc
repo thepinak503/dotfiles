@@ -21,6 +21,12 @@ export DOTFILES_VERSION="12.1.0"
 # All functions (merged into one file)
 [[ -f "$DOTFILES_DIR/shells/bash/functions_all.bash" ]] && source "$DOTFILES_DIR/shells/bash/functions_all.bash"
 
+# Distro-specific aliases (Arch, Debian, macOS, Fedora)
+[[ -f "$DOTFILES_DIR/core/arch_aliases.sh" ]] && source "$DOTFILES_DIR/core/arch_aliases.sh"
+[[ -f "$DOTFILES_DIR/core/debian_aliases.sh" ]] && source "$DOTFILES_DIR/core/debian_aliases.sh"
+[[ -f "$DOTFILES_DIR/core/macos_aliases.sh" ]] && source "$DOTFILES_DIR/core/macos_aliases.sh"
+[[ -f "$DOTFILES_DIR/core/fedora_aliases.sh" ]] && source "$DOTFILES_DIR/core/fedora_aliases.sh"
+
 # Fastfetch at startup (interactive only)
 if [[ -i ]] && command -v fastfetch >/dev/null; then
     fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
