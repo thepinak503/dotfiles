@@ -16,13 +16,13 @@ export DOTFILES_VERSION="12.1.0"
 # Dynamic app detection (only enables aliases if app is installed)
 [[ -f "$DOTFILES_DIR/core/detect_apps.sh" ]] && source "$DOTFILES_DIR/core/detect_apps.sh"
 
-[[ -f "$DOTFILES_DIR/shells/bash/aliases-core.bash" ]] && source "$DOTFILES_DIR/shells/bash/aliases-core.bash"
-[[ -f "$DOTFILES_DIR/shells/bash/functions-core.bash" ]] && source "$DOTFILES_DIR/shells/bash/functions-core.bash"
+# All aliases (merged into one file)
+[[ -f "$DOTFILES_DIR/shells/bash/aliases_all.bash" ]] && source "$DOTFILES_DIR/shells/bash/aliases_all.bash"
 
-d="$DOTFILES_DIR/shells/bash/modes"
-[[ -f "$d/supreme.bash" ]] && source "$d/supreme.bash"
+# All functions (merged into one file)
+[[ -f "$DOTFILES_DIR/shells/bash/functions_all.bash" ]] && source "$DOTFILES_DIR/shells/bash/functions_all.bash"
 
-# Fastfetch at startup - no starship
+# Fastfetch at startup
 command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
 
 true

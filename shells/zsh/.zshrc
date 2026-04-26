@@ -45,19 +45,19 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
-# Universal distro-agnostic config (OS detection + cross-distro aliases)
+# Universal distro-agnostic config (OS detection)
 [[ -f "$DOTFILES_DIR/core/universal.sh" ]] && emulate sh -c "source '$DOTFILES_DIR/core/universal.sh'"
 
-# Dynamic app detection (only enables aliases if app is installed)
+# Dynamic app detection
 [[ -f "$DOTFILES_DIR/core/detect_apps.sh" ]] && emulate sh -c "source '$DOTFILES_DIR/core/detect_apps.sh'"
 
-[[ -f "$DOTFILES_DIR/shells/zsh/aliases-core.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/aliases-core.zsh"
-[[ -f "$DOTFILES_DIR/shells/zsh/functions-core.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/functions-core.zsh"
+# All aliases (merged)
+[[ -f "$DOTFILES_DIR/shells/zsh/aliases_all.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/aliases_all.zsh"
 
-d="$DOTFILES_DIR/shells/zsh/modes"
-[[ -f "$d/supreme.zsh" ]] && source "$d/supreme.zsh"
+# All functions (merged)
+[[ -f "$DOTFILES_DIR/shells/zsh/functions_all.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/functions_all.zsh"
 
-# Fastfetch at startup - no starship
+# Fastfetch at startup
 command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
 
 true
