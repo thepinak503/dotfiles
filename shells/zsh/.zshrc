@@ -45,6 +45,9 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
+# Universal distro-agnostic config (OS detection + cross-distro aliases)
+[[ -f "$DOTFILES_DIR/core/universal.sh" ]] && emulate sh -c "source '$DOTFILES_DIR/core/universal.sh'"
+
 [[ -f "$DOTFILES_DIR/shells/zsh/aliases-core.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/aliases-core.zsh"
 [[ -f "$DOTFILES_DIR/shells/zsh/functions-core.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/functions-core.zsh"
 
