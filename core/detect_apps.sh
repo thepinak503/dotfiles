@@ -232,11 +232,15 @@ if _detect_app fzf; then
 fi
 
 if _detect_app zoxide; then
-    eval "$(zoxide init "$SHELL_NAME" 2>/dev/null)"
+    if [ "$SHELL_NAME" = "bash" ]; then
+        eval "$(zoxide init bash 2>/dev/null)"
+    fi
 fi
 
 if _detect_app atuin; then
-    eval "$(atuin init "$SHELL_NAME" 2>/dev/null)"
+    if [ "$SHELL_NAME" = "bash" ]; then
+        eval "$(atuin init bash 2>/dev/null)"
+    fi
 fi
 
 if _detect_app starship; then
@@ -245,7 +249,10 @@ if _detect_app starship; then
     else
         export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
     fi
-    eval "$(starship init "$SHELL_NAME" 2>/dev/null)"
+    # Check if shell is bash to avoid syntax errors
+    if [ "$SHELL_NAME" = "bash" ]; then
+        eval "$(starship init bash --print-full-init 2>/dev/null)"
+    fi
 fi
 
 if _detect_app fastfetch; then

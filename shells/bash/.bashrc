@@ -2,7 +2,6 @@
 unset DOTFILES_DIR DOTFILES_STATE_DIR DOTFILES_MODE DOTFILES_VERSION DOTFILES_FASTFETCH_ON_STARTUP
 export DOTFILES_DIR="$HOME/.local/share/dotfiles"
 export DOTFILES_STATE_DIR="$HOME/.local/share/dotfiles"
-[[ $- != *i* ]] && return
 
 bind "set bell-style visible"
 bind "set completion-ignore-case on"
@@ -22,7 +21,9 @@ export DOTFILES_VERSION="12.1.0"
 # All functions (merged into one file)
 [[ -f "$DOTFILES_DIR/shells/bash/functions_all.bash" ]] && source "$DOTFILES_DIR/shells/bash/functions_all.bash"
 
-# Fastfetch at startup
-command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
+# Fastfetch at startup (interactive only)
+if [[ -i ]] && command -v fastfetch >/dev/null; then
+    fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
+fi
 
 true
