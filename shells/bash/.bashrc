@@ -13,13 +13,13 @@ export DOTFILES_VERSION="12.1.0"
 [[ -f "$DOTFILES_DIR/core/universal.sh" ]] && source "$DOTFILES_DIR/core/universal.sh"
 
 # Dynamic app detection (only enables aliases if app is installed)
-[[ -f "$DOTFILES_DIR/core/detect_apps.sh" ]] && source "$DOTFILES_DIR/core/detect_apps.sh"
+[[ -f "$DOTFILES_DIR/shells/bash/detect_apps.bash" ]] && source "$DOTFILES_DIR/shells/bash/detect_apps.bash"
 
 # All aliases (merged into one file)
-[[ -f "$DOTFILES_DIR/shells/bash/aliases_all.bash" ]] && source "$DOTFILES_DIR/shells/bash/aliases_all.bash"
+[[ -f "$DOTFILES_DIR/shells/bash/aliases.bash" ]] && source "$DOTFILES_DIR/shells/bash/aliases.bash"
 
 # All functions (merged into one file)
-[[ -f "$DOTFILES_DIR/shells/bash/functions_all.bash" ]] && source "$DOTFILES_DIR/shells/bash/functions_all.bash"
+[[ -f "$DOTFILES_DIR/shells/bash/functions.bash" ]] && source "$DOTFILES_DIR/shells/bash/functions.bash"
 
 # Distro-specific aliases (Arch, Debian, macOS, Fedora)
 [[ -f "$DOTFILES_DIR/core/arch_aliases.sh" ]] && source "$DOTFILES_DIR/core/arch_aliases.sh"
@@ -28,8 +28,8 @@ export DOTFILES_VERSION="12.1.0"
 [[ -f "$DOTFILES_DIR/core/fedora_aliases.sh" ]] && source "$DOTFILES_DIR/core/fedora_aliases.sh"
 
 # Fastfetch at startup (interactive only)
-if [[ -i ]] && command -v fastfetch >/dev/null; then
+case $- in *i*) if command -v fastfetch >/dev/null; then
     fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
-fi
+fi;; esac
 
 true

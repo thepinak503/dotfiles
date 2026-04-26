@@ -49,13 +49,13 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 [[ -f "$DOTFILES_DIR/core/universal.sh" ]] && emulate sh -c "source '$DOTFILES_DIR/core/universal.sh'"
 
 # Dynamic app detection
-[[ -f "$DOTFILES_DIR/core/detect_apps.sh" ]] && emulate sh -c "source '$DOTFILES_DIR/core/detect_apps.sh'"
+[[ -f "$DOTFILES_DIR/shells/zsh/detect_apps.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/detect_apps.zsh"
 
 # All aliases (merged)
-[[ -f "$DOTFILES_DIR/shells/zsh/aliases_all.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/aliases_all.zsh"
+[[ -f "$DOTFILES_DIR/shells/zsh/aliases.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/aliases.zsh"
 
 # All functions (merged)
-[[ -f "$DOTFILES_DIR/shells/zsh/functions_all.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/functions_all.zsh"
+[[ -f "$DOTFILES_DIR/shells/zsh/functions.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/functions.zsh"
 
 # Fastfetch at startup
 command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
