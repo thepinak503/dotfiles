@@ -85,12 +85,20 @@ mkdir -p "$HOME/.config/fastfetch"
 mkdir -p "$HOME/.config/lazygit"
 mkdir -p "$HOME/.config/atuin"
 mkdir -p "$HOME/.config/fish"
-safe_link() {
+BACKUP_DIR="$DOTFILES_STATE_DIR/backups"
+mkdir -p "$BACKUP_DIR"
+backup_existing() {
     src="$1"; dst="$2"
     if [ -e "$dst" ] && [ ! -L "$dst" ]; then
-        mv "$dst" "$dst.bak"
-        warn "Backed up existing $dst to $dst.bak"
+        fname=$(basename "$dst")
+        timestamp=$(date +"%Y%m%d-%H%M%S")
+        mv "$dst" "$BACKUP_DIR/${fname}.bak"
+        info "Backed up existing $dst to $BACKUP_DIR/${fname}.bak"
     fi
+}
+safe_link() {
+    src="$1"; dst="$2"
+    backup_existing "$src" "$dst"
     ln -nsf "$src" "$dst"
     info "Linked $(basename "$dst")"
 }
