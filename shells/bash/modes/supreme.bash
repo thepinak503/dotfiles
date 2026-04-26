@@ -112,3 +112,18 @@ dot_sync() {
   git -C "$repo_root" pull --rebase --autostash || git -C "$repo_root" pull --ff-only
 }
 alias dsync='dot_sync'
+
+# Starship prompt
+if command -v starship >/dev/null 2>&1; then
+    if [[ "$(uname)" == "Darwin" ]]; then
+        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
+    else
+        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
+    fi
+    eval "$(starship init bash --print-full-init)"
+fi
+
+# Zoxide
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init bash)"
+fi

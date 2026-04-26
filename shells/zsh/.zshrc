@@ -51,7 +51,7 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 d="$DOTFILES_DIR/shells/zsh/modes"
 [[ -f "$d/supreme.zsh" ]] && source "$d/supreme.zsh"
 
-# Fastfetch only - no starship
-command -v fastfetch >/dev/null && fastfetch 2>/dev/null &
+# Fastfetch at startup - no starship
+command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
 
 true

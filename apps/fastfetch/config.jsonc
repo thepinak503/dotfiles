@@ -1,16 +1,16 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
+    "type": "builtin",
+    "source": "arch",
     "padding": {
       "top": 1,
       "left": 2,
       "right": 2
-    },
-    "width": 32,
-    "height": 17
+    }
   },
   "display": {
-    "separator": "  ->  ",
+    "separator": "  ➤  ",
     "color": {
       "keys": "38;5;110",
       "title": "38;5;152"
@@ -23,10 +23,6 @@
     }
   },
   "modules": [
-    {
-      "type": "title",
-      "key": ""
-    },
     {
       "type": "os",
       "key": "OS        ",
@@ -70,11 +66,6 @@
     {
       "type": "terminal",
       "key": "Terminal  ",
-      "keyColor": "38;5;114"
-    },
-    {
-      "type": "terminalFont",
-      "key": "Font      ",
       "keyColor": "38;5;114"
     },
     {
