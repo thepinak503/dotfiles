@@ -1,9 +1,38 @@
 set -g fish_greeting ""
+
+function fish_user_key_bindings
+    bind \e\[A history-search-backward
+    bind \e\[B history-search-forward
+    bind \e\[1\;5D backward-word
+    bind \e\[1\;5C forward-word
+    bind \e\[1\;3D backward-word
+    bind \e\[1\;3C forward-word
+    bind \e\[H beginning-of-line
+    bind \e\[F end-of-line
+    bind \e\x7f backward-kill-word
+    bind \e\b backward-kill-word
+    bind \e\[3\;3~ kill-word
+    bind \ch backward-kill-word
+    bind \e\[3\;5~ kill-word
+    bind \cw backward-kill-word
+    bind \ed kill-word
+    bind \ck kill-line
+    bind \cu backward-kill-line
+    bind \cz undo
+    bind \e\cz redo
+    bind \cl 'clear; commandline -f repaint'
+end
+
 set -gx DOTFILES_DIR "$HOME/.local/share/dotfiles"
 set -gx DOTFILES_OS (uname -s)
 set -gx DOTFILES_DISTRO "linux"
 set -gx DOTFILES_PKG_MANAGER "none"
 set -gx DOTFILES_INIT ""
+
+# Homebrew
+if command -v brew >/dev/null
+    eval (brew shellenv)
+end
 
 if test -f /etc/os-release
     set -gx DOTFILES_DISTRO (cat /etc/os-release | grep "^ID=" | cut -d= -f2)
@@ -38,3 +67,5 @@ if command -v fastfetch >/dev/null
 end
 
 true
+# Created by `pipx` on 2026-04-26 08:18:49
+set PATH $PATH /home/pinak/.local/bin

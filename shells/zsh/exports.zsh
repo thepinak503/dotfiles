@@ -171,3 +171,4 @@ _atuin_init() {
     command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
 }
 # direnv and mise disabled for faster startup - load manually when needed
+export PATH="$HOME/.cargo/bin:$PATH"

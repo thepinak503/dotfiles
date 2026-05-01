@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Homebrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 # Login shell detection
 if [ -n "$ZSH_VERSION" ]; then
     # Zsh login

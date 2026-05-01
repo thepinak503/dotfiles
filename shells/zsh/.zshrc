@@ -3,6 +3,11 @@ unset DOTFILES_DIR DOTFILES_STATE_DIR DOTFILES_MODE DOTFILES_VERSION DOTFILES_FA
 export DOTFILES_DIR="$HOME/.local/share/dotfiles"
 export DOTFILES_STATE_DIR="$HOME/.local/share/dotfiles"
 
+# Starship prompt
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init zsh)"
+fi
+
 case "$-" in
     *i*) ;;
     *) return 0 ;;
@@ -44,6 +49,30 @@ fi
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+bindkey -e
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+bindkey '^P' up-line-or-history
+bindkey '^N' down-line-or-history
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;3C' forward-word
+bindkey '^[^?' backward-kill-word
+bindkey '^[^H' backward-kill-word
+bindkey '^[[3;3~' kill-word
+bindkey '^H' backward-kill-word
+bindkey '^[[3;5~' kill-word
+bindkey '^w' backward-kill-word
+bindkey '^u' backward-kill-line
+bindkey '^k' kill-line
+bindkey '^y' yank
+bindkey '^_' undo
 
 # Universal distro-agnostic config (OS detection)
 [[ -f "$DOTFILES_DIR/core/universal.sh" ]] && emulate sh -c "source '$DOTFILES_DIR/core/universal.sh'"

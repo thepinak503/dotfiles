@@ -27,6 +27,7 @@ export DOTFILES_MODE="${DOTFILES_MODE:-supreme}"
 # export COMPOSE_DOCKER_CLI_BUILD='1'
 # export GOPATH='$HOME/go'
 # export CARGO_HOME='$HOME/.cargo'
+export PATH="$HOME/.cargo/bin:$PATH"
 # export RUSTUP_HOME='$HOME/.rustup'
 # export NPM_CONFIG_PREFIX='$HOME/.npm-global'
 # export DOTNET_CLI_TELEMETRY_OPTOUT='1'
