@@ -4,7 +4,7 @@
 # Only loads on Fedora-based distros
 # =============================================================================
 
-[ "$DOTFILES_DISTRO" = "fedora" ] || [ "$DOTFILES_DISTRO" = "centos" ] || [ "$DOTFILES_DISTRO" = "rhel" ] || [ "$DOTFILES_DISTRO" = "rocky" ] || [ "$DOTFILES_DISTRO" = "alma" ] && {
+if [ "$DOTFILES_DISTRO" = "fedora" ] || [ "$DOTFILES_DISTRO" = "centos" ] || [ "$DOTFILES_DISTRO" = "rhel" ] || [ "$DOTFILES_DISTRO" = "rocky" ] || [ "$DOTFILES_DISTRO" = "alma" ]; then
 
 # DNF aliases
 alias dnfup='sudo dnf upgrade'
@@ -36,5 +36,4 @@ command -v cockpit >/dev/null 2>&1 && {
     alias cockpit='cockpit'
 }
 
-echo "[dotfiles] Fedora aliases loaded"
-}
+fi

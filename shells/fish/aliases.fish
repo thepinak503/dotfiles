@@ -17,6 +17,9 @@ alias dt 'cd ~/Desktop'
 alias tmp 'cd /tmp'
 alias root 'cd /'
 alias bk 'cd -'
+alias x 'exit'
+alias c 'clear'
+alias cls 'clear'
 alias ls 'eza --icons=auto --group-directories-first 2>/dev/null || ls'
 alias lsa 'ls -a'
 alias lsd 'ls -d */'
@@ -30,7 +33,7 @@ alias l1 'ls -1'
 alias lh 'ls -lhS'
 alias lr 'ls -lR'
 alias cat 'bat --paging=never 2>/dev/null || cat'
-alias grep 'rg 2>/dev/null || grep'
+alias grep 'rg 2>/dev/null || command grep'
 alias find 'fd 2>/dev/null || find'
 alias duh 'du -sh'
 alias dfh 'df -h'
@@ -40,7 +43,7 @@ alias j 'jobs -l'
 alias c 'clear'
 alias clr 'clear'
 alias please 'sudo'
-alias pathlines 'printf "%s\n" ${PATH//:/\\n}'
+function pathlines; printf "%s\n" $PATH; end
 alias mkdirp 'mkdir -p'
 alias focus 'printf "\033c" && date +"%F %T"'
 alias dotupdate 'bash "$DOTFILES_DIR/bin/dotupdate.sh"'
@@ -446,7 +449,7 @@ if type -q python3
     alias pyt 'python3 -m pytest'
     alias pyun 'python3 -m unittest'
 end
-if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
+if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1
     alias pip 'pip3 2>/dev/null || pip'
     alias pi 'pip install'
     alias piu 'pip install --upgrade'
@@ -627,7 +630,7 @@ alias chown 'chown'
 alias chgrp 'chgrp'
 alias ln 'ln -s'
 alias lnh 'readlink -f'
-alias backup 'cp -r "$1" "${1}.bak-$(date +%Y%m%d-%H%M%S)"'
+function backup; cp -r $argv[1] "$argv[1].bak-"(date +%Y%m%d-%H%M%S); end
 alias timestamp 'date +%s'
 alias today 'date +%F'
 alias week 'date +%V'
@@ -843,9 +846,9 @@ if type -q ffmpeg
     alias ffp 'ffprobe'
     alias ffg 'ffplay'
     alias ffconvert 'ffmpeg -i'
-    alias ffmp3 'ffmpeg -i "$1" -q:a 0 "${1%.*}.mp3"'
+    function ffmp3; ffmpeg -i $argv[1] -q:a 0 (string replace -r '\.[^.]+$' '.mp3' $argv[1]); end
     alias ffcompress 'ffmpeg -i "$1" -vcodec libx265 -crf 28'
-    alias ffgif 'ffmpeg -i "$1" -vf "fps=10,scale=320:-1" "${1%.*}.gif"'
+    function ffgif; ffmpeg -i $argv[1] -vf "fps=10,scale=320:-1" (string replace -r '\.[^.]+$' '.gif' $argv[1]); end
     alias ffscreencap 'ffmpeg -f x11grab -video_size 1920x1080 -i :0.0'
 end
 if type -q convert
@@ -860,7 +863,7 @@ if type -q nvidia-smi
 end
 alias matrix 'printf "\01101000\01100101\01101100\01101100\01101111\n"'
 alias coinflip 'awk "BEGIN{srand();print rand()<0.5?\"heads\":\"tails\"}"'
-alias dice 'echo $((RANDOM % 6 + 1))'
+function dice; echo (random 1 6); end
 alias randpw 'openssl rand -base64 16 2>/dev/null || python3 -c "import secrets; print(secrets.token_urlsafe(16))"'
 alias sha 'shasum -a 256'
 alias md5sum 'md5 2>/dev/null || md5sum'
@@ -884,8 +887,8 @@ alias envg 'env | grep'
 alias fn 'declare -f 2>/dev/null || typeset -f'
 alias dsync 'dot_sync'
 alias chmode 'export DOTFILES_MODE'
-alias modestat 'echo "Mode: ${DOTFILES_MODE:-unknown}"'
-alias dotinfo 'echo "Dotfiles: $DOTFILES_DIR | Mode: ${DOTFILES_MODE:-unknown} | Shell: $SHELL"'
+function modestat; echo "Mode: $DOTFILES_MODE"; end
+function dotinfo; echo "Dotfiles: $DOTFILES_DIR | Mode: $DOTFILES_MODE | Shell: $SHELL"; end
 alias pgit 'git'
 alias pgitst 'git status --short --branch'
 alias pgitadd 'git add'
@@ -1790,7 +1793,7 @@ alias putilurld 'python3 -c "import urllib.parse,sys; print(urllib.parse.unquote
 alias putiljson 'python3 -m json.tool'
 alias putilyaml 'python3 -c "import sys,yaml,json; print(yaml.dump(json.load(sys.stdin)))"'
 alias putilxml 'xmllint --format'
-alias putiltimer 'start=$(date +%s); "$@"; code=$?; end=$(date +%s); echo "elapsed: $((end-start))s"; return $code'
+function putiltimer; set start (date +%s); eval $argv; set code $status; set end (date +%s); echo "elapsed: "(math "$end - $start")"s"; return $code; end
 alias putilbench 'hyperfine'
 alias putilrand 'shuf -i'
 alias putilseq 'seq'
@@ -1956,7 +1959,7 @@ if type -q navi
     alias naviq 'navi --query'
 end
 
-if command -v tldr >/dev/null 2>&1 || command -v tealdeer >/dev/null 2>&1; then
+if command -v tldr >/dev/null 2>&1 || command -v tealdeer >/dev/null 2>&1
     alias tldr 'tldr 2>/dev/null || tealdeer'
 end
 
@@ -2150,7 +2153,6 @@ alias pclr 'clear'
 alias pdup 'docker compose up -d'
 alias pddown 'docker compose down'
 
-echo "aliases loaded (bash/zsh)"
 alias py='python3'
 alias ip='ip -br addr'
 alias ipa='ip addr'

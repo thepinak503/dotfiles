@@ -23,7 +23,7 @@ _detect_linux_distro() {
         echo "arch"
     elif [ -f /etc/debian_version ]; then
         echo "debian"
-    elif [ -f /etc/fedora-version ]; then
+    elif [ -f /etc/fedora-release ]; then
         echo "fedora"
     elif [ -f /etc/SuSE-release ]; then
         echo "suse"

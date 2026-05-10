@@ -30,6 +30,6 @@ timer() {
     start=$(date +%s); "$@"; code=$?; end=$(date +%s); printf 'elapsed: %ss\n' "$((end-start))"; return $code
 }
 dotloadfull() {
-    source "$DOTFILES_DIR/shells/zsh/functions.zsh"
-    source "$DOTFILES_DIR/shells/zsh/aliases.zsh"
+    source "$DOTFILES_DIR/core/functions.sh"
+    source "$DOTFILES_DIR/core/aliases.sh"
 }

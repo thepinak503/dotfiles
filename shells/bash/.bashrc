@@ -50,8 +50,8 @@ fi;; esac
 
 # Auto-update check (background, every 7 days)
 [[ -z "$DOTFILES_NO_UPDATE" && $- == *i* ]] && {
-  local _du_file="$DOTFILES_STATE_DIR/last_update_check"
-  [[ -f "$_du_file" ]] && local _du_age=$(( $(date +%s) - $(<"$_du_file") )) || local _du_age=999999
+  _du_file="$DOTFILES_STATE_DIR/last_update_check"
+  [[ -f "$_du_file" ]] && _du_age=$(( $(date +%s) - $(<"$_du_file") )) || _du_age=999999
   [[ $_du_age -gt 604800 ]] && { bash "$DOTFILES_DIR/bin/dotupdate.sh" --yes >/dev/null 2>&1 & disown; date +%s > "$_du_file"; }
   unset _du_file _du_age
 }

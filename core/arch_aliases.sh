@@ -4,7 +4,7 @@
 # Only loads on Arch-based distros
 # =============================================================================
 
-[ "$DOTFILES_DISTRO" = "arch" ] || [ "$DOTFILES_DISTRO" = "artix" ] || [ "$DOTFILES_DISTRO" = "manjaro" ] || [ "$DOTFILES_DISTRO" = "endeavouros" ] || [ "$DOTFILES_DISTRO" = "garuda" ] && {
+if [ "$DOTFILES_DISTRO" = "arch" ] || [ "$DOTFILES_DISTRO" = "artix" ] || [ "$DOTFILES_DISTRO" = "manjaro" ] || [ "$DOTFILES_DISTRO" = "endeavouros" ] || [ "$DOTFILES_DISTRO" = "garuda" ]; then
 
 # Pacman aliases
 alias fixpacman='sudo rm -f /var/lib/pacman/db.lck'
@@ -16,7 +16,6 @@ alias pacq='pacman -Qq'
 alias pacqi='pacman -Qi'
 alias pacls='pacman -Qql'
 alias pacown='pacman -Qo'
-alias pacown='pacman -Qo'
 alias pacdiff='pacman -Si'
 
 # Pacman functions
@@ -25,7 +24,7 @@ pacfind() { pacman -Ss "$@" | less; }
 pacinstall() { sudo pacman -S "$@"; }
 pacremove() { sudo pacman -Rns "$@"; }
 pacupdate() { sudo pacman -Syu; }
-pacclean() { sudo pacman -Sc && sudo pacman -Scc; }
+function pacclean() { sudo pacman -Sc && sudo pacman -Scc; }
 paclsremote() { pacman -Slq | grep "$@"; }
 pacver() { pacman -V "$@"; }
 
@@ -51,5 +50,4 @@ command -v chaotic-gl >/dev/null 2>&1 && {
     alias cgs='chaotic-gl search'
 }
 
-echo "[dotfiles] Arch Linux aliases loaded"
-}
+fi

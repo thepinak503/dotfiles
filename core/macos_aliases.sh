@@ -4,7 +4,7 @@
 # Only loads on macOS
 # =============================================================================
 
-[ "$DOTFILES_DISTRO" = "macos" ] && {
+if [ "$DOTFILES_DISTRO" = "macos" ]; then
 
 # Homebrew aliases
 alias brewup='brew update && brew upgrade'
@@ -27,10 +27,10 @@ brewinstall() { brew install "$@"; }
 brewremove() { brew uninstall "$@"; }
 brewupdate() { brew update; }
 brewupgrade() { brew upgrade; }
-brewclean() { brew cleanup; }
+function brewclean() { brew cleanup; }
 brewsearch() { brew search "$@"; }
-brewinfo() { brew info "$@"; }
-brewcask() { brew install --cask "$@"; }
+function brewinfo() { brew info "$@"; }
+function brewcask() { brew install --cask "$@"; }
 
 # Mac App Store
 command -v mas >/dev/null 2>&1 && {
@@ -46,5 +46,4 @@ command -v port >/dev/null 2>&1 && {
     alias ports='port search'
 }
 
-echo "[dotfiles] macOS aliases loaded"
-}
+fi

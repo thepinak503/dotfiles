@@ -4,7 +4,7 @@
 # Only loads on Debian-based distros
 # =============================================================================
 
-[ "$DOTFILES_DISTRO" = "debian" ] || [ "$DOTFILES_DISTRO" = "ubuntu" ] || [ "$DOTFILES_DISTRO" = "linuxmint" ] || [ "$DOTFILES_DISTRO" = "pop" ] || [ "$DOTFILES_DISTRO" = "zorin" ] && {
+if [ "$DOTFILES_DISTRO" = "debian" ] || [ "$DOTFILES_DISTRO" = "ubuntu" ] || [ "$DOTFILES_DISTRO" = "linuxmint" ] || [ "$DOTFILES_DISTRO" = "pop" ] || [ "$DOTFILES_DISTRO" = "zorin" ]; then
 
 # APT aliases
 alias aptup='sudo apt update && sudo apt upgrade'
@@ -37,5 +37,4 @@ command -v add-apt-repository >/dev/null 2>&1 && {
     alias aptrepo='add-apt-repository'
 }
 
-echo "[dotfiles] Debian/Ubuntu aliases loaded"
-}
+fi

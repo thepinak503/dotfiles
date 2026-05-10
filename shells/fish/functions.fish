@@ -397,7 +397,7 @@ function vi --description "Vim"
 end
 
 function nvim --description "Neovim"
-    nvim $argv
+    command nvim $argv
 end
 
 function nano --description "Nano"
@@ -1091,14 +1091,7 @@ function llist --description "Launchctl list"
     launchctl list
 end
 
-# ---------- LOGS ----------
-function tailf --description "Tail follow"
-    tail -f -n 100 $argv[1]
-end
 
-function tal --description "Tail lines"
-    tail -100 $argv[1]
-end
 
 function journal --description "Journalctl follow"
     journalctl -f -u $argv[1]
@@ -1258,7 +1251,7 @@ end
 
 # ---------- HELPERS ----------
 function which --description "Which command"
-    which $argv[1]
+    command which $argv[1]
 end
 
 function type_cmd --description "Type command"
@@ -1297,13 +1290,7 @@ function roll --description "Roll dice"
 end
 
 # ---------- QUICK ----------
-function cls --description "Clear screen"
-    clear
-end
 
-function q --description "Exit"
-    exit 0
-end
 
 function reload --description "Reload config"
     source ~/.config/fish/config.fish
@@ -1511,7 +1498,7 @@ function finder --description "Open Finder"
     open .
 end
 
-function ql --description "Quick Look"
+function qlook --description "Quick Look"
     qlmanage -p $argv[1]
 end
 
@@ -1718,7 +1705,7 @@ function az_list_vms; az vm list --output table 2>/dev/null; or true; end
 
 function backup_dir; tar -czf (string trim -r -c / -- $argv[1])".tar.gz" $argv[1]; and echo "backup: "(string trim -r -c / -- $argv[1])".tar.gz"; end
 
-function backup_file; cp -r "$argv[1]" "$1.bak-$(date +%Y%m%d-%H%M%S)"; and echo "backup: $1.bak-$(date +%Y%m%d-%H%M%S)"; end
+function backup_file; cp -r "$argv[1]" "$argv[1].bak-"(date +%Y%m%d-%H%M%S); and echo "backup: $argv[1].bak-"(date +%Y%m%d-%H%M%S); end
 
 function backup_with_date; tar -czf (string trim -r -c / -- $argv[1])"-(date +%Y%m%d).tar.gz" $argv[1]; end
 
@@ -1886,7 +1873,7 @@ function clipclear
 
 end
 
-function compress_7z; 7z a "$1.7z" "$argv[1]"; end
+function compress_7z; 7z a "$argv[1].7z" "$argv[1]"; end
 
 function compress_bz2; bzip2 "$argv[1]"; end
 
@@ -5679,4 +5666,3 @@ function zip_encrypt; zip -er "$argv[1].zip" "$argv[1]"; end
 
 function zip_list; unzip -l "$argv[1]"; end
 
-echo "Loaded universal fish functions (Linux + macOS)"

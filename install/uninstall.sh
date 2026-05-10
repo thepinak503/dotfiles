@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/local/share/.dotfiles}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
 BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d_%H%M%S)"
 RED='\033[0;31m'
 GREEN='\033[0;32m'

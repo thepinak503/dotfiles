@@ -899,20 +899,7 @@ docker_volume_backup() { docker run --rm -v "$1":/data -v "$(pwd)":/backup alpin
 docker_volume_restore() { docker run --rm -v "$1":/data -v "$(pwd)":/backup alpine tar xzf /backup/"$2" -C /data; }
 docker_compose_up_recreate() { docker compose up --force-recreate -d; }
 docker_compose_up_scale() { docker compose up -d --scale "$1=$2"; }
-docker_compose_down_timeout() { docker compose down -t "$1"; }
-docker_compose_exec_no_tty() { docker compose exec -T "$1" "$2"; }
-docker_compose_run_no_tty() { docker compose run --rm -T "$1" "$2"; }
-docker_compose_logs_tail() { docker compose logs --tail="$1" -f; }
-docker_compose_ps_format() { docker compose ps --format "table {{.Name}}\t{{.State}}\t{{.Ports}}"; }
-docker_compose_restart_service() { docker compose restart "$1"; }
-docker_compose_pause_service() { docker compose pause "$1"; }
-docker_compose_unpause_service() { docker compose unpause "$1"; }
-docker_compose_build_service() { docker compose build "$1"; }
-docker_compose_push_service() { docker compose push "$1"; }
-docker_compose_pull_service() { docker compose pull "$1"; }
-docker_compose_start_service() { docker compose start "$1"; }
-docker_compose_stop_service() { docker compose stop "$1"; }
-docker_compose_kill_service() { docker compose kill "$1"; }
+
 docker_build_prune_all() { docker buildx prune -af; }
 docker_build_prune_cache() { docker builder prune -f; }
 docker_system_events_since() { docker system events --since "$1"; }
@@ -961,7 +948,6 @@ kubectl_cordon_all() { kubectl get nodes -o name | xargs -r kubectl cordon; }
 kubectl_uncordon_all() { kubectl get nodes -o name | xargs -r kubectl uncordon; }
 kubectl_node_ready() { kubectl get nodes | grep -c Ready || true; }
 kubectl_node_details() { kubectl describe node "$1"; }
-kubectl_top_pod_ns() { kubectl top pod -n "$1"; }
 kubectl_top_node_sort() { kubectl top node --sort-by="$1"; }
 kubectl_config_view() { kubectl config view; }
 kubectl_config_rename_context() { kubectl config rename-context "$1" "$2"; }
@@ -1283,8 +1269,6 @@ cargo_workspace_list() { cargo metadata --format-version 1 | python3 -c "import 
 cargo_licenses() { cargo license 2>/dev/null || echo "cargo-license not installed"; }
 cargo_lint_clippy() { cargo clippy; }
 cargo_fmt_rust() { cargo fmt; }
-cargo_fmt_check() { cargo fmt --check; }
-
 go_test_short() { go test -short ./...; }
 go_test_bench() { go test -bench=. ./...; }
 go_test_cover_html() { go test -coverprofile=coverage.out ./... && go tool cover -html=coverage.out; }
@@ -2111,5 +2095,3 @@ dev_build_esbuild() { npx esbuild "${1:-src/index.js}" --outfile="${2:-dist/bund
 dev_format_prettier() { npx prettier --write "${1:-.}" 2>/dev/null || echo "prettier needed"; }
 dev_lint_eslint() { npx eslint "${1:-.}" 2>/dev/null || echo "eslint needed"; }
 dev_lint_stylelint() { npx stylelint "${1:-**/*.css}" 2>/dev/null || echo "stylelint needed"; }
-
-echo "functions loaded (bash/zsh)"

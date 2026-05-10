@@ -45,10 +45,11 @@ autoload -Uz select-word-style && select-word-style bash
 [[ -f "$DOTFILES_DIR/shells/zsh/exports.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/exports.zsh"
 
 autoload -Uz compinit
-if [[ -n "$HOME/.zcompdump"(#qN.mh+24) ]]; then
-    compinit
-else
+local zdump="$HOME/.zcompdump"
+if [[ -f "$zdump" ]] && (( $(date +%s) - $(stat -c %Y "$zdump" 2>/dev/null || echo 0) < 86400 )); then
     compinit -C
+else
+    compinit
 fi
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
@@ -95,10 +96,9 @@ command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfetch/config.jsonc
 
 # Auto-update check (background, every 7 days)
 [[ -z "$DOTFILES_NO_UPDATE" ]] && {
-  local _du_file="$DOTFILES_STATE_DIR/last_update_check"
-  [[ -f "$_du_file" ]] && local _du_age=$(( $(date +%s) - $(cat "$_du_file") )) || local _du_age=999999
+  _du_file="$DOTFILES_STATE_DIR/last_update_check"
+  _du_age=999999; [[ -f "$_du_file" ]] && _du_age=$(( $(date +%s) - $(<"$_du_file") ))
   [[ $_du_age -gt 604800 ]] && { bash "$DOTFILES_DIR/bin/dotupdate.sh" --yes >/dev/null 2>&1 & disown; date +%s > "$_du_file"; }
   unset _du_file _du_age
 }
 
-eval "$(~/.local/bin/mise activate zsh)"

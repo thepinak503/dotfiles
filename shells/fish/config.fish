@@ -72,6 +72,4 @@ if command -v fastfetch >/dev/null
 end
 
 true
-# Created by `pipx` on 2026-04-26 08:18:49
 set PATH $PATH /home/pinak/.local/bin
-~/.local/bin/mise activate fish | source
