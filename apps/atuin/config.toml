@@ -1,0 +1,12 @@
+db_path = "~/.local/share/atuin/history.db"
+search_mode = "fuzzy"
+filter_mode = "global"
+search_delay = 0
+style = "compact"
+inline_height = 15
+show_preview = true
+enter_accept = true
+[keys]
+[sync]
+[history]
+enabled = true
