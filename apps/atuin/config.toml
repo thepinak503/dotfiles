@@ -1,12 +1,22 @@
 db_path = "~/.local/share/atuin/history.db"
 search_mode = "fuzzy"
 filter_mode = "global"
-search_delay = 0
 style = "compact"
 inline_height = 15
 show_preview = true
 enter_accept = true
-[keys]
+secrets_filter = true
+workspaces = false
+show_help = true
+show_tabs = true
+auto_sync = false
+update_check = false
+store_failed = true
+strip_trailing_whitespace = true
+
+[stats]
+common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "yarn", "cargo", "systemctl", "brew", "go", "nix"]
+common_prefix = ["sudo"]
+
 [sync]
-[history]
-enabled = true
+records = true

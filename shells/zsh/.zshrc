@@ -46,7 +46,7 @@ autoload -Uz select-word-style && select-word-style bash
 
 autoload -Uz compinit
 local zdump="$HOME/.zcompdump"
-if [[ -f "$zdump" ]] && (( $(date +%s) - $(stat -c %Y "$zdump" 2>/dev/null || echo 0) < 86400 )); then
+if [[ -f "$zdump" ]] && (( $(date +%s) - $(stat -c %Y "$zdump" 2>/dev/null || stat -f %m "$zdump" 2>/dev/null || echo 0) < 86400 )); then
     compinit -C
 else
     compinit
@@ -91,8 +91,27 @@ bindkey '^_' undo
 # All functions (merged)
 [[ -f "$DOTFILES_DIR/core/functions.sh" ]] && source "$DOTFILES_DIR/core/functions.sh"
 
-# Fastfetch at startup
-command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
+# Distro-specific aliases (Arch, Debian, macOS, Fedora) — same as bash
+[[ -f "$DOTFILES_DIR/core/arch_aliases.sh" ]] && source "$DOTFILES_DIR/core/arch_aliases.sh"
+[[ -f "$DOTFILES_DIR/core/debian_aliases.sh" ]] && source "$DOTFILES_DIR/core/debian_aliases.sh"
+[[ -f "$DOTFILES_DIR/core/macos_aliases.sh" ]] && source "$DOTFILES_DIR/core/macos_aliases.sh"
+[[ -f "$DOTFILES_DIR/core/fedora_aliases.sh" ]] && source "$DOTFILES_DIR/core/fedora_aliases.sh"
+
+# Core modules (system detection, logging, ssh-agent, battery, tools)
+[[ -f "$DOTFILES_DIR/core/system-detect.sh" ]] && source "$DOTFILES_DIR/core/system-detect.sh"
+[[ -f "$DOTFILES_DIR/core/os_detect.sh" ]] && source "$DOTFILES_DIR/core/os_detect.sh"
+[[ -f "$DOTFILES_DIR/core/logging.sh" ]] && source "$DOTFILES_DIR/core/logging.sh"
+[[ -f "$DOTFILES_DIR/core/ssh-agent.sh" ]] && source "$DOTFILES_DIR/core/ssh-agent.sh"
+[[ -f "$DOTFILES_DIR/core/battery.sh" ]] && source "$DOTFILES_DIR/core/battery.sh"
+[[ -f "$DOTFILES_DIR/core/tools.sh" ]] && source "$DOTFILES_DIR/core/tools.sh"
+
+# Zsh mode (based on DOTFILES_MODE)
+local _mode_file="$DOTFILES_DIR/shells/zsh/modes/${DOTFILES_MODE:-supreme}.zsh"
+[[ -f "$_mode_file" ]] && source "$_mode_file"
+unset _mode_file
+
+# Fastfetch at startup (interactive only)
+case $- in *i*) command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null;; esac
 
 # Auto-update check (background, every 7 days)
 [[ -z "$DOTFILES_NO_UPDATE" ]] && {

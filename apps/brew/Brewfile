@@ -24,7 +24,6 @@ brew "yq"
 # Modern Productivity
 brew "atuin"
 brew "direnv"
-brew "mise"
 brew "lazygit"
 brew "btop"
 brew "ncdu"

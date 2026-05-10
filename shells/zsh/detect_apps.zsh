@@ -20,3 +20,5 @@ fi
 if _detect_app atuin; then
     eval "$(atuin init zsh)"
 fi
+
+[[ -f /usr/share/doc/find-the-command/ftc.zsh ]] && source /usr/share/doc/find-the-command/ftc.zsh noprompt quiet

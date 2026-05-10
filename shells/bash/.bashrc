@@ -9,10 +9,9 @@ if command -v brew >/dev/null 2>&1; then
     eval "$(brew shellenv)"
 fi
 
-# ble.sh -- Bash Line Editor (syntax highlighting, autocomplete, vim mode, etc.)
-[[ -f /usr/share/blesh/ble.sh && $- == *i* ]] && source /usr/share/blesh/ble.sh --attach=none
-
 export DOTFILES_VERSION="1.0.0"
+
+[[ $- == *i* ]] && stty -ixon
 
 # Environment exports (PATH, LS_COLORS, etc.)
 [[ -f "$DOTFILES_DIR/shells/bash/exports.bash" ]] && source "$DOTFILES_DIR/shells/bash/exports.bash"
@@ -45,8 +44,13 @@ case $- in *i*) if command -v fastfetch >/dev/null; then
     fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
 fi;; esac
 
-# ble-attach (must be at end of .bashrc for ble.sh)
-[[ ! ${BLE_VERSION-} ]] || ble-attach
+# Core modules (system detection, logging, ssh-agent, battery, tools)
+[[ -f "$DOTFILES_DIR/core/system-detect.sh" ]] && source "$DOTFILES_DIR/core/system-detect.sh"
+[[ -f "$DOTFILES_DIR/core/os_detect.sh" ]] && source "$DOTFILES_DIR/core/os_detect.sh"
+[[ -f "$DOTFILES_DIR/core/logging.sh" ]] && source "$DOTFILES_DIR/core/logging.sh"
+[[ -f "$DOTFILES_DIR/core/ssh-agent.sh" ]] && source "$DOTFILES_DIR/core/ssh-agent.sh"
+[[ -f "$DOTFILES_DIR/core/battery.sh" ]] && source "$DOTFILES_DIR/core/battery.sh"
+[[ -f "$DOTFILES_DIR/core/tools.sh" ]] && source "$DOTFILES_DIR/core/tools.sh"
 
 # Auto-update check (background, every 7 days)
 [[ -z "$DOTFILES_NO_UPDATE" && $- == *i* ]] && {

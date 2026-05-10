@@ -18,5 +18,8 @@ if _detect_app zoxide; then
 fi
 
 if _detect_app atuin; then
+    [[ -f /usr/share/bash-preexec/bash-preexec.sh ]] && source /usr/share/bash-preexec/bash-preexec.sh
     eval "$(atuin init bash 2>/dev/null)"
 fi
+
+[[ -f /usr/share/doc/find-the-command/ftc.bash ]] && source /usr/share/doc/find-the-command/ftc.bash noprompt quiet

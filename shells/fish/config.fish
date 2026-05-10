@@ -29,11 +29,6 @@ set -gx DOTFILES_DISTRO "linux"
 set -gx DOTFILES_PKG_MANAGER "none"
 set -gx DOTFILES_INIT ""
 
-# Homebrew
-if command -v brew >/dev/null
-    eval (brew shellenv)
-end
-
 if test -f /etc/os-release
     set -gx DOTFILES_DISTRO (cat /etc/os-release | grep "^ID=" | cut -d= -f2)
 end
@@ -59,17 +54,4 @@ if test -f "$DOTFILES_DIR/shells/fish/functions.fish"
     source "$DOTFILES_DIR/shells/fish/functions.fish"
 end
 
-if command -v starship >/dev/null
-    starship init fish --print-full-init | source
-end
-
-if command -v zoxide >/dev/null
-    zoxide init fish | source
-end
-
-if command -v fastfetch >/dev/null
-    fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
-end
-
 true
-set PATH $PATH /home/pinak/.local/bin

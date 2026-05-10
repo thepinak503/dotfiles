@@ -9,7 +9,6 @@ The strongest public dotfiles distro. 2000+ hand-written aliases, 2000+ hand-wri
 - **2000+ functions** per shell, hand-written
 - **Zero name conflicts** across all 4 cross-checks (bash-internal, fish-internal, cross-shell)
 - **Distro-agnostic** — detects 15+ distros, 15+ package managers, adapts automatically
-- **ble.sh** — syntax highlighting, auto-complete, vim mode, fzf integration
 - **Starship prompt** — minimal, fast, informative
 - **Fastfetch** — clean system info on startup
 - **Auto-update** — background pull checks every 7 days
@@ -38,7 +37,7 @@ sh install.sh
 │   ├── bash/          # .bashrc, exports, detect_apps
 │   ├── zsh/           # .zshrc, .zprofile, mode profiles
 │   └── fish/          # config.fish, aliases, functions, exports
-├── apps/              # App configs (git, tmux, starship, fastfetch, atuin, blesh, lazygit)
+├── apps/              # App configs (git, tmux, starship, fastfetch, atuin, lazygit)
 ├── bin/               # Utilities: test_repo, dotupdate, setup_hooks
 └── install/           # Installer, uninstaller, fonts installer
 ```

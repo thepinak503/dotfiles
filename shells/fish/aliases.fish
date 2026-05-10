@@ -238,17 +238,51 @@ if type -q pacman
     alias pacwhy 'pacman -D --asexplicit'
     alias fixpacman 'sudo rm -f /var/lib/pacman/db.lck'
 end
-if type -q yay
-    alias yay 'yay'
-    alias yays 'yay -Ss'
-    alias yayq 'yay -Q'
-    alias yayup 'yay -Syu'
-    alias yayi 'yay -S'
-    alias yayrm 'yay -Rns'
-    alias yayclean 'yay -Sc'
-    alias yaygendb 'yay -Y --gendb'
-    alias yaydev 'yay -S --devel'
-    alias yayfiles 'yay -Fl'
+# Detect any AUR helper
+set -q _AUR_HELPER; or set -g _AUR_HELPER ""
+for _h in paru yay pikaur aura pakku trizen
+    type -q $_h; and set -g _AUR_HELPER $_h; and break
+end
+
+if test -n "$_AUR_HELPER"
+    alias aurs "$_AUR_HELPER -Ss"
+    alias aurq "$_AUR_HELPER -Q"
+    alias auri "$_AUR_HELPER -S"
+    alias aurup "$_AUR_HELPER -Syu"
+    alias aurrm "$_AUR_HELPER -Rns"
+    alias aurinfo "$_AUR_HELPER -Si"
+    alias aurclean "$_AUR_HELPER -Sc"
+    alias aurfiles "$_AUR_HELPER -Fl"
+
+    function _aur_fzf
+        $_AUR_HELPER -Slq 2>/dev/null | fzf --multi \
+            --preview "$_AUR_HELPER -Sii {1} 2>/dev/null" \
+            --preview-window=down:75% | xargs -ro $_AUR_HELPER -S
+    end
+    alias aurf '_aur_fzf'
+
+    # Helper-specific aliases
+    switch $_AUR_HELPER
+        case paru
+            alias paruf '_aur_fzf'
+            alias paruq 'paru -Q'
+            alias parudb 'paru -Y --gendb'
+            alias parudev 'paru -S --devel'
+            alias parunews 'paru -P --news'
+        case yay
+            alias yayf '_aur_fzf'
+            alias yays 'yay -Ss'
+            alias yayq 'yay -Q'
+            alias yayup 'yay -Syu'
+            alias yayi 'yay -S'
+            alias yayrm 'yay -Rns'
+            alias yayclean 'yay -Sc'
+            alias yaygendb 'yay -Y --gendb'
+            alias yaydev 'yay -S --devel'
+            alias yayfiles 'yay -Fl'
+        case pikaur
+            alias pikaurf '_aur_fzf'
+    end
 end
 if command -v apt >/dev/null 2>&1 || command -v apt-get >/dev/null 2>&1; then
     alias apt 'apt'
@@ -1393,19 +1427,21 @@ alias pdnfli 'sudo dnf localinstall'
 alias pdnfprov 'dnf provides'
 alias pdnfchk 'dnf check-update'
 alias pdnfmod 'dnf module list'
-alias pyay 'yay'
-alias pyays 'yay -Ss'
-alias pyayq 'yay -Q'
-alias pyayqi 'yay -Qi'
-alias pyayup 'yay -Syu'
-alias pyayin 'yay -S'
-alias pyayrm 'yay -Rns'
-alias pyaycl 'yay -Sc'
-alias pyaydb 'yay -Y --gendb'
-alias pyaydev 'yay -S --devel'
-alias pyayfl 'yay -Fl'
-alias pyaynews 'yay -P --news'
-alias pyaycf 'yay -Pg'
+if type -q yay
+    alias pyay 'yay'
+    alias pyays 'yay -Ss'
+    alias pyayq 'yay -Q'
+    alias pyayqi 'yay -Qi'
+    alias pyayup 'yay -Syu'
+    alias pyayin 'yay -S'
+    alias pyayrm 'yay -Rns'
+    alias pyaycl 'yay -Sc'
+    alias pyaydb 'yay -Y --gendb'
+    alias pyaydev 'yay -S --devel'
+    alias pyayfl 'yay -Fl'
+    alias pyaynews 'yay -P --news'
+    alias pyaycf 'yay -Pg'
+end
 alias pnpm 'npm'
 alias pnmini 'npm init -y'
 alias pnminst 'npm install'
@@ -1756,7 +1792,6 @@ alias pdevjust 'just'
 alias pdevlazy 'lazygit'
 alias pdevyazi 'yazi'
 alias pdevzellij 'zellij'
-alias pdevblesh 'ble.sh'
 alias pdevgit 'git'
 alias pdevgh 'gh'
 alias pdevglb 'glab'
@@ -1811,25 +1846,6 @@ alias peza 'eza'
 alias pdu 'dust'
 alias pdf 'duf'
 alias ptop 'btop'
-if type -q mise
-    alias mise 'mise'
-    alias misei 'mise install'
-    alias miselu 'mise ls'
-    alias misel 'mise local'
-    alias miseg 'mise global'
-    alias misex 'mise exec'
-    alias miseren 'mise run'
-    alias miset 'mise ls-remote'
-    alias miseu 'mise upgrade'
-    alias miseud 'mise outdated'
-    alias misepl 'mise plugins ls'
-    alias misepli 'mise plugins install'
-    alias miseen 'mise env'
-    alias misecache 'mise cache clear'
-    alias misesh 'mise shell'
-    alias miseuse 'mise use'
-    alias misew 'mise ls-remote'
-end
 
 if type -q atuin
     alias atu 'atuin'

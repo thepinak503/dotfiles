@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const DOTFILES_DIR = path.dirname(__dirname);
-const BASH_ALIASES = path.join(DOTFILES_DIR, 'shells', 'bash', 'aliases.bash');
-const BASH_FUNCS = path.join(DOTFILES_DIR, 'shells', 'bash', 'functions.bash');
+const BASH_ALIASES = path.join(DOTFILES_DIR, 'core', 'aliases.sh');
+const BASH_FUNCS = path.join(DOTFILES_DIR, 'core', 'functions.sh');
 const OUTPUT_FILE = path.join(DOTFILES_DIR, 'docs', 'data.js');
 
 function get_aliases() {
