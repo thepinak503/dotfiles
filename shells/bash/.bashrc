@@ -4,14 +4,66 @@ export DOTFILES_DIR="$HOME/.local/share/dotfiles"
 export DOTFILES_STATE_DIR="$HOME/.local/share/dotfiles"
 export DOTFILES_NAME="Pinak's Dotfiles"
 
-# Homebrew
+# Homebrew - supports both macOS (Intel/Apple Silicon) and Linux
 if command -v brew >/dev/null 2>&1; then
     eval "$(brew shellenv)"
+elif [ -f "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -f "/usr/local/bin/brew" ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
 fi
 
 export DOTFILES_VERSION="1.0.0"
 
-[[ $- == *i* ]] && stty -ixon
+# Source global definitions - /etc/bashrc exists on RHEL/Fedora/CentOS
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# Interactive-only settings
+case "$-" in
+    *i*)
+        # Disable ctrl-s from stopping flow (freezing terminal)
+        stty -ixon 2>/dev/null || true
+
+        # Check window size after each command, update LINES/COLUMNS
+        shopt -s checkwinsize 2>/dev/null || true
+
+        # Append to history instead of overwriting (critical for multi-terminal sessions)
+        shopt -s histappend 2>/dev/null || true
+
+        # Save multi-line commands as single entry in history
+        shopt -s cmdhist 2>/dev/null || true
+
+        # History control: ignore duplicates + commands starting with space
+        # erasedups removes all previous duplicates of the current command
+        export HISTCONTROL=ignoreboth:erasedups
+
+        # Save history immediately after each command (with PROMPT_COMMAND)
+        # -a: append new history lines from current session to histfile
+        PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a"
+
+        # Enable bash programmable completion (multi-distro path support)
+        # /usr/share/bash-completion: Arch, Fedora, modern Debian/Ubuntu
+        # /etc/bash_completion: Debian/Ubuntu legacy, some older systems
+        # /usr/local/share/bash-completion: Homebrew, custom installs
+        if [ -f /usr/share/bash-completion/bash_completion ]; then
+            . /usr/share/bash-completion/bash_completion
+        elif [ -f /etc/bash_completion ]; then
+            . /etc/bash_completion
+        elif [ -f /usr/local/share/bash-completion/bash_completion ]; then
+            . /usr/local/share/bash-completion/bash_completion
+        elif command -v brew >/dev/null 2>&1; then
+            _brew_prefix="$(brew --prefix 2>/dev/null)"
+            if [ -f "$_brew_prefix/share/bash-completion/bash_completion" ]; then
+                . "$_brew_prefix/share/bash-completion/bash_completion"
+            fi
+            unset _brew_prefix
+        fi
+        ;;
+esac
 
 # Environment exports (PATH, LS_COLORS, etc.)
 [[ -f "$DOTFILES_DIR/shells/bash/exports.bash" ]] && source "$DOTFILES_DIR/shells/bash/exports.bash"

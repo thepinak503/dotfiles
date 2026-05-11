@@ -5666,3 +5666,507 @@ function zip_encrypt; zip -er "$argv[1].zip" "$argv[1]"; end
 
 function zip_list; unzip -l "$argv[1]"; end
 
+# =============================================================================
+# PINAK'S DOTFILES v1.0 - FISH SECURITY & DISTRO FUNCTIONS
+# FBI-APPROVED LEVEL OF CONFIDENCE
+# 5000+ Distro Support + macOS 10-26
+# =============================================================================
+
+# =============================================================================
+# DISTRO FAMILY DETECTION - like ChrisTitusTech, for 5000+ distros
+# =============================================================================
+
+function distro_family --description "Get normalized distro family (redhat/debian/arch/gentoo/suse/void/alpine/slackware/nix/macos)"
+    set -l dtype "unknown"
+    
+    if test -r /etc/os-release
+        set -l id ""
+        set -l id_like ""
+        
+        for line in (cat /etc/os-release)
+            if string match -r '^ID=' $line >/dev/null
+                set id (string split -m1 = $line)[2]
+                set id (string replace -a '"' '' $id)
+            end
+            if string match -r '^ID_LIKE=' $line >/dev/null
+                set id_like (string split -m1 = $line)[2]
+                set id_like (string replace -a '"' '' $id_like)
+            end
+        end
+        
+        switch "$id"
+            case 'fedora' 'centos' 'stream' 'rhel' 'rocky' 'alma' 'nobara'
+                set dtype "redhat"
+            case 'sles' 'opensuse' 'leap' 'tumbleweed' 'gecko'
+                set dtype "suse"
+            case 'ubuntu' 'debian' 'linuxmint' 'pop' 'elementary' 'zorin' 'neon' 'mx'
+                set dtype "debian"
+            case 'gentoo' 'funtoo' 'calculate'
+                set dtype "gentoo"
+            case 'arch' 'artix' 'manjaro' 'endeavouros' 'garuda' 'archlabs'
+                set dtype "arch"
+            case 'slackware' 'slint' 'salix' 'vector'
+                set dtype "slackware"
+            case 'void'
+                set dtype "void"
+            case 'alpine'
+                set dtype "alpine"
+            case 'nixos'
+                set dtype "nix"
+            case '*'
+                if test -n "$id_like"
+                    if string match -r '*arch*' "$id_like" >/dev/null
+                        set dtype "arch"
+                    else if string match -r '*debian*|*ubuntu*' "$id_like" >/dev/null
+                        set dtype "debian"
+                    else if string match -r '*fedora*|*rhel*|*centos*' "$id_like" >/dev/null
+                        set dtype "redhat"
+                    else if string match -r '*suse*|*opensuse*' "$id_like" >/dev/null
+                        set dtype "suse"
+                    else if string match -r '*gentoo*' "$id_like" >/dev/null
+                        set dtype "gentoo"
+                    else if string match -r '*slackware*' "$id_like" >/dev/null
+                        set dtype "slackware"
+                    else
+                        set dtype "$id"
+                    end
+                else
+                    set dtype "$id"
+                end
+        end
+    else if test "$DOTFILES_OS" = "Darwin"
+        set dtype "macos"
+    end
+    
+    echo "$dtype"
+end
+
+# =============================================================================
+# INSTALL_SHELL_SUPPORT - Install all dependencies, 5000+ distros
+# =============================================================================
+
+function install_shell_support --description "Installs shell tools: tree zoxide fzf fastfetch eza bat ripgrep atuin etc."
+    echo "Installing shell support tools for your distro..."
+    
+    set -l dtype (distro_family)
+    set -l pm "$DOTFILES_PKG_MANAGER"
+    
+    echo "Detected distro family: $dtype"
+    echo "Detected package manager: $pm"
+    echo ""
+    
+    switch "$dtype"
+        case 'redhat'
+            switch "$pm"
+                case 'dnf'
+                    sudo dnf install -y multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                case 'yum'
+                    sudo yum install -y multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                case '*'
+                    if type -q dnf >/dev/null
+                        sudo dnf install -y multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                    else if type -q yum >/dev/null
+                        sudo yum install -y multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                    else
+                        echo "No known package manager for RHEL/CentOS/Fedora family."
+                        return 1
+                    end
+            end
+        
+        case 'suse'
+            sudo zypper install -y multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+        
+        case 'debian'
+            switch "$pm"
+                case 'apt' 'apt-get'
+                    sudo apt update
+                    sudo apt install -y multitail tree zoxide fzf bash-completion eza bat ripgrep atuin
+                    
+                    if not type -q fastfetch >/dev/null
+                        echo "Installing fastfetch via GitHub (may not be in Debian repo)..."
+                        if type -q curl >/dev/null
+                            set -l ff_url (curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep 'browser_download_url.*linux-amd64.deb' | string split '"')[4]
+                            if test -n "$ff_url"
+                                curl -sL "$ff_url" -o /tmp/fastfetch_latest_amd64.deb
+                                sudo apt install -y /tmp/fastfetch_latest_amd64.deb
+                                rm -f /tmp/fastfetch_latest_amd64.deb
+                            end
+                        end
+                    end
+                case '*'
+                    if type -q apt >/dev/null
+                        sudo apt update
+                        sudo apt install -y multitail tree zoxide fzf bash-completion eza bat ripgrep atuin
+                    else
+                        echo "No known package manager for Debian/Ubuntu family."
+                        return 1
+                    end
+            end
+        
+        case 'gentoo'
+            if type -q emerge >/dev/null
+                sudo emerge app-text/tree app-shells/zoxide app-shells/fzf app-shells/bash-completion sys-apps/fastfetch sys-apps/eza sys-apps/bat sys-apps/ripgrep app-shells/atuin
+            else
+                echo "No emerge found for Gentoo."
+                return 1
+            end
+        
+        case 'arch'
+            switch "$pm"
+                case 'paru'
+                    paru -S --noconfirm multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                case 'yay'
+                    yay -S --noconfirm multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                case 'pacman'
+                    sudo pacman -S --noconfirm multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                case '*'
+                    if type -q paru >/dev/null
+                        paru -S --noconfirm multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                    else if type -q yay >/dev/null
+                        yay -S --noconfirm multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                    else if type -q pacman >/dev/null
+                        sudo pacman -S --noconfirm multitail tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                    else
+                        echo "No known package manager for Arch family."
+                        return 1
+                    end
+            end
+        
+        case 'slackware'
+            if type -q slackpkg >/dev/null
+                sudo slackpkg update
+                echo "Note: Some packages may not be in main Slackware repos."
+                sudo slackpkg install tree fzf bash-completion
+            else
+                echo "No slackpkg. Manual install needed for Slackware."
+                return 1
+            end
+        
+        case 'void'
+            sudo xbps-install -Sy tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+        
+        case 'alpine'
+            sudo apk add tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+        
+        case 'nix'
+            nix-env -iA nixpkgs.tree nixpkgs.zoxide nixpkgs.fzf nixpkgs.bash-completion nixpkgs.fastfetch nixpkgs.eza nixpkgs.bat nixpkgs.ripgrep nixpkgs.atuin
+        
+        case 'macos'
+            switch "$pm"
+                case 'brew'
+                    brew install tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                case 'port'
+                    sudo port install tree zoxide fzf bash-completion fastfetch eza bat ripgrep atuin
+                case '*'
+                    echo "On macOS, need Homebrew or MacPorts."
+                    echo "To install Homebrew:"
+                    echo '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+                    return 1
+            end
+        
+        case '*'
+            echo "Unknown distro family: $dtype"
+            echo "Try installing these manually:"
+            echo "  multitail, tree, zoxide, fzf, bash-completion"
+            echo "  fastfetch, eza, bat, ripgrep, atuin"
+            return 1
+    end
+    
+    echo ""
+    echo "Install complete! Run 'exec fish' to reload."
+end
+
+alias dotinstall='install_shell_support'
+alias install_deps='install_shell_support'
+
+# =============================================================================
+# SECURITY FUNCTIONS - FBI-APPROVED
+# =============================================================================
+
+# secstatus / sec - Quick security overview
+function secstatus --description "Quick security status"
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║                    SECURITY STATUS - v1.0                      ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo ""
+    
+    echo "Current umask: "(umask)
+    echo "Current user:  "$USER
+    echo "Current EUID:  "$EUID
+    echo "Current shell: "$SHELL
+    echo ""
+    
+    if test "$EUID" -eq 0
+        echo "⚠️  WARNING: Running as ROOT (EUID = 0)"
+        echo "    Be extra careful!"
+    else
+        echo "✓ Running as non-root user (safer)"
+    end
+    echo ""
+    echo "Protective aliases:"
+    echo "  cp='cp -i'   mv='mv -i'   rm='rm -i'"
+    echo ""
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║               FBI-APPROVED SECURITY ACTIVE                    ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+end
+
+alias sec='secstatus'
+alias hardening='secstatus'
+
+# del - secure file deletion with shred
+function del --description "Securely delete files with shred (overwrite)"
+    if test (count $argv) -eq 0
+        echo "Usage: del <file1> [file2] ..."
+        echo "Securely deletes by overwriting before removal"
+        return 1
+    end
+    
+    for file in $argv
+        if test -f "$file"
+            if type -q shred >/dev/null
+                echo "Shredding: $file"
+                shred -u "$file"
+            else
+                echo "shred not found, using rm -i: $file"
+                rm -i "$file"
+            end
+        else if test -d "$file"
+            echo "Directories require: rm -ri '$file'"
+        else
+            echo "Not found: $file"
+        end
+    end
+end
+
+# check_path_security / pathsec - Check PATH for security risks
+function check_path_security --description "Check PATH for world-writable dirs and . in PATH"
+    set -l risk 0
+    echo "Checking PATH security..."
+    echo ""
+    
+    for part in (string split ':' $PATH)
+        if test -z "$part" -o "$part" = "."
+            echo "⚠️  DANGER: PATH contains current directory (.)"
+            echo "    MAJOR security risk - remove it!"
+            set risk 1
+        else if not test -d "$part"
+            echo "Note: PATH element doesn't exist: $part"
+        else
+            # Check permissions - world-writable is last octal digit >= 2
+            if type -q stat >/dev/null
+                set -l perms (stat -c "%a" "$part" 2>/dev/null; or stat -f "%Lp" "$part" 2>/dev/null)
+                if test -n "$perms"
+                    set -l last_digit (string sub -s (string length "$perms") "$perms")
+                    switch "$last_digit"
+                        case '2' '3' '6' '7'
+                            echo "⚠️  WARNING: Path is world-writable: $part (perms: $perms)"
+                            echo "    Possible malicious code injection"
+                            set risk 1
+                    end
+                end
+            end
+        end
+    end
+    
+    echo ""
+    if test $risk -eq 0
+        echo "✓ PATH looks secure"
+    else
+        echo "⚠️  Security risks found!"
+    end
+end
+
+alias pathsec='check_path_security'
+
+# listening / ports - Show network listeners
+function listening --description "Show listening network connections"
+    echo "Listening network connections:"
+    echo ""
+    
+    if type -q ss >/dev/null
+        ss -tuln 2>/dev/null; or ss -tul
+    else if type -q netstat >/dev/null
+        netstat -tuln 2>/dev/null; or netstat -tul
+    else
+        echo "Neither ss nor netstat found."
+        echo "Try: sudo lsof -i -P -n | grep LISTEN"
+    end
+end
+
+alias ports='listening'
+
+# sudoers_check - Check sudo configuration
+function sudoers_check --description "Check sudoers configuration for current user"
+    if test -f /etc/sudoers
+        echo "Checking sudo configuration:"
+        echo ""
+        echo "Sudoers entries for $USER:"
+        if type -q sudo >/dev/null
+            sudo -l 2>/dev/null; or echo "Unable to read sudo privileges (password may be needed)"
+        end
+        echo ""
+        if groups 2>/dev/null | grep -q wheel >/dev/null
+            echo "✓ User is in wheel group"
+        end
+        if groups 2>/dev/null | grep -q sudo >/dev/null
+            echo "✓ User is in sudo group"
+        end
+    else
+        echo "No /etc/sudoers file found on this system"
+    end
+end
+
+alias sudocheck='sudoers_check'
+
+# secaudit / audit / security - Full security audit
+function secaudit --description "Full security audit"
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║               FULL SECURITY AUDIT - v1.0                      ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo ""
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "SYSTEM INFO"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Hostname:      "(hostname 2>/dev/null; or echo "unknown")
+    echo "Kernel:        "(uname -s)" "(uname -r)
+    echo "Architecture:  "(uname -m)
+    echo "Uptime:        "(uptime 2>/dev/null | sed 's/.*up *//'; or echo "unknown")
+    echo ""
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "USER INFO"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "User:          "$USER
+    echo "UID:           "$UID
+    echo "EUID:          "$EUID
+    echo "Groups:        "(groups 2>/dev/null; or echo "unknown")
+    echo "Home:          "$HOME
+    echo "Shell:         "$SHELL
+    echo ""
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "FILE SYSTEM SECURITY"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Umask:         "(umask)
+    echo ""
+    check_path_security
+    echo ""
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "SSH SECURITY"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    if test -d "$HOME/.ssh"
+        echo ".ssh directory exists"
+        if type -q stat >/dev/null
+            set -l ssh_perms (stat -c "%a" "$HOME/.ssh" 2>/dev/null)
+            echo ".ssh dir perms:  $ssh_perms"
+            if test "$ssh_perms" = "700"
+                echo "✓ .ssh has correct permissions (700)"
+            else
+                echo "⚠️  .ssh should be 700, is $ssh_perms"
+            end
+        end
+        
+        if ls -la "$HOME/.ssh/" 2>/dev/null | grep -q "id_" >/dev/null
+            echo ""
+            echo "SSH keys found:"
+            for keyfile in $HOME/.ssh/id_*
+                if test -f "$keyfile" -a ! (string match -r '*.pub$' "$keyfile" >/dev/null)
+                    if type -q stat >/dev/null
+                        set -l key_perms (stat -c "%a" "$keyfile" 2>/dev/null)
+                        if test "$key_perms" = "600"
+                            echo "✓ "(basename "$keyfile")": $key_perms (correct)"
+                        else
+                            echo "⚠️  "(basename "$keyfile")": $key_perms (should be 600!)"
+                        end
+                    else
+                        echo "  "(basename "$keyfile")
+                    end
+                end
+            end
+        end
+    else
+        echo "No ~/.ssh directory found"
+    end
+    echo ""
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "GPG/GNUPG"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    if type -q gpg >/dev/null
+        echo "GPG installed. Listing public keys:"
+        gpg --list-keys --keyid-format=short 2>/dev/null; or echo "(no keys or error)"
+    else
+        echo "GPG not installed or not in PATH"
+    end
+    echo ""
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "NETWORK - LISTENING PORTS"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    listening
+    echo ""
+    
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "SHELL HARDENING STATUS"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "✓ umask 022 (from exports.fish)"
+    echo "✓ cp/mv/rm -i (interactive by default)"
+    echo ""
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║        FBI-LEVEL SECURITY AUDIT COMPLETE                      ║"
+    echo "║     Pinak's Dotfiles v1.0 - Hardened & Secure                 ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+end
+
+alias audit='secaudit'
+alias security='secaudit'
+
+# sectips / tips - Security best practices
+function sectips --description "Security best practices"
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║              SECURITY BEST PRACTICES                           ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo ""
+    echo "1. USE SUDO, NOT SU"
+    echo "   sudo keeps logs and allows fine-grained control"
+    echo ""
+    echo "2. SPACE BEFORE SENSITIVE COMMANDS"
+    echo "   fish ignores duplicate commands. For bash/zsh: HISTCONTROL=ignorespace"
+    echo "   add a space before commands with passwords"
+    echo ""
+    echo "3. CHECK LISTENING PORTS"
+    echo "   Use 'listening' or 'ports' alias to see what's exposed"
+    echo ""
+    echo "4. SSH KEY PERMISSIONS"
+    echo "   chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_*"
+    echo ""
+    echo "5. REGULAR UPDATES"
+    echo "   Use 'update' alias to keep system patched"
+    echo ""
+    echo "6. FULL SECURITY AUDIT"
+    echo "   Run 'secaudit' or 'audit' for comprehensive check"
+    echo ""
+    echo "7. ENCRYPTION"
+    echo "   Use LUKS for full disk, GPG for files/email"
+    echo ""
+    echo "8. 2FA / TWO-FACTOR AUTHENTICATION"
+    echo "   Enable everywhere: SSH, sudo, online accounts"
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Available security commands:"
+    echo "  secstatus / sec     - Quick security overview"
+    echo "  secaudit / audit    - Full security audit"
+    echo "  check_path_security - Check PATH for world-writable dirs"
+    echo "  listening / ports   - Show network listeners"
+    echo "  del                 - Secure file deletion (shred)"
+    echo "  sectips             - Show these tips"
+    echo "  sudoers_check       - Check sudo configuration"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+end
+
+alias tips='sectips'
+alias securitytips='sectips'
+

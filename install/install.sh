@@ -2,7 +2,7 @@
 set -e
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
 DOTFILES_STATE_DIR="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}"
-VERSION="12.0.0"
+VERSION="1.0.0"
 BREWFILE="$DOTFILES_DIR/apps/brew/Brewfile"
 
 AUTO_YES=false

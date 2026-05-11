@@ -35,11 +35,7 @@ check_tool "kubectl"  "Enables 70+ kubernetes aliases."
 check_tool "terraform" "Enables 30+ terraform aliases."
 check_tool "helm"      "Enables 25+ helm aliases."
 echo -e "\n${BOLD}System Status:${NC}"
-if [[ "$DOTFILES_MODE" == "ultra-nerd" ]]; then
-    echo -e "  Mode: ${GREEN}ULTRA-NERD${NC} (Maximum Potential Enabled)"
-else
-    echo -e "  Mode: ${YELLOW}$DOTFILES_MODE${NC} (Try: 'chmode ultra-nerd' for full power)"
-fi
+echo -e "  Mode: ${GREEN}v1.0 ULTIMATE${NC} (All Features Always Enabled)"
 echo -e "\n${CYAN}═══════════════════════════════════════════${NC}"
 echo -e "Recommendation: Install missing tools to reach 100% potential."
 echo -e "Use your package manager (pacman/apt/brew) to upgrade."
