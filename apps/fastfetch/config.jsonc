@@ -39,6 +39,12 @@
       "keyColor": "38;5;110"
     },
     {
+      "type": "command",
+      "key": "OS Age    ",
+      "keyColor": "38;5;152",
+      "text": "bash -c 'birth=$(stat -c %W / 2>/dev/null); if [ -n \"$birth\" ] && [ \"$birth\" != \"0\" ]; then now=$(date +%s); days=$(( (now - birth) / 86400 )); bdate=$(date -d @$birth +%Y-%m-%d 2>/dev/null); if [ $days -eq 1 ]; then echo \"1 day ($bdate)\"; else echo \"$days days ($bdate)\"; fi; else echo \"Unknown\"; fi'"
+    },
+    {
       "type": "uptime",
       "key": "Uptime    ",
       "keyColor": "38;5;152"
