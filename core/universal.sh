@@ -196,7 +196,6 @@ _update_sys() {
     esac
 }
 alias update='_update_sys'
-alias up='_update_sys'
 
 # Install packages - works on 5000+ distros
 _install_pkg() {
@@ -667,7 +666,6 @@ install_shell_support() {
     echo "Install complete! Run 'exec $SHELL' to reload your shell."
 }
 alias install_deps='install_shell_support'
-alias dotinstall='install_shell_support'
 
 # =============================================================================
 # SECURITY FEATURES - FBI-APPROVED LEVEL OF CONFIDENCE
@@ -836,7 +834,6 @@ sudoers_check() {
         echo "No /etc/sudoers file found on this system"
     fi
 }
-alias sudocheck='sudoers_check'
 
 # Comprehensive security audit
 secaudit() {

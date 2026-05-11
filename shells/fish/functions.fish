@@ -6017,8 +6017,6 @@ function sudoers_check --description "Check sudoers configuration for current us
     end
 end
 
-alias sudocheck='sudoers_check'
-
 # secaudit / audit / security - Full security audit
 function secaudit --description "Full security audit"
     echo "╔══════════════════════════════════════════════════════════════╗"
