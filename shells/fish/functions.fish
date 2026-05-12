@@ -6168,3 +6168,348 @@ end
 alias tips='sectips'
 alias securitytips='sectips'
 
+function _x --description "Run command if available"
+    if type -q $argv[1]
+        command $argv
+    else
+        echo "missing: $argv[1]" >&2
+        return 127
+    end
+end
+
+function bak --description "Backup file with timestamp"
+    for f in $argv
+        if not test -f "$f"; echo "usage: bak file"; return 1; end
+        set -l b "$f.bak."(date '+%F_%T' | sed 's/:/-/g')
+        while test -f "$b"; sleep 1; set b "$f.bak."(date '+%F_%T' | sed 's/:/-/g'); end
+        cp -av "$f" "$b"
+    end
+end
+
+function unbak --description "Restore newest backup"
+    for f in $argv
+        set -l d (dirname "$f"); set -l b (basename "$f")
+        set -l bf (find "$d" -name "$b.bak.*" -o -name "$b.*.bak" 2>/dev/null | sort | tail -1)
+        test -n "$bf"; and cp -av "$bf" "$d/$b"; or echo "no backup for $b"
+    end
+end
+
+function orig --description "Create .orig backup"
+    for f in $argv
+        if not test -f "$f"; echo "missing: $f"; return 1; end
+        if test -f "$f.org"; echo "$f.org exists"; return 1; end
+    end
+    for f in $argv; cp -av "$f" "$f.org"; end
+end
+
+function unorig --description "Restore from .orig"
+    for f in $argv
+        if not test -f "$f"; echo "missing: $f"; return 1; end
+        cp -av "$f" (string replace -r '\.org$' '' "$f")
+    end
+end
+
+function topcommands --description "Most used commands"
+    set -l c 10; test (count $argv) -gt 0; and set c $argv[1]
+    history | awk '{print $4}' | awk 'BEGIN{FS="|"}{print $1}' | sort | uniq -c | sort -n | tail -n (math "max(1,$c)") | sort -nr
+end
+
+function findup --description "Find file in parent dirs"
+    set -l a $argv[1]; set -l d (pwd)
+    while test -n "$d"
+        if test -e "$d/$a"; echo "$d/$a"; return 0; end
+        set d (string replace -r '/[^/]+$' '' "$d")
+    end
+    echo "not found: $a" >&2; return 1
+end
+
+function cdup --description "Cd to dir containing file"
+    set -l f (findup $argv[1])
+    test -n "$f"; and cd (dirname "$f"); or echo "not found: $argv[1]"
+end
+
+function pg --description "ps+grep"
+    ps -ef | grep -i --color=yes $argv | grep -v grep
+end
+
+function stamp --description "Timestamp prefix"
+    echo -n (date '+%F %T')"  $argv"
+    test (count $argv) -gt 0; and echo
+end
+
+function stampcmd --description "Run command with timestamp"
+    set -l o ("$argv" 2>&1); stamp "$o"
+end
+
+function clip --description "Copy to clipboard"
+    if test (count $argv) -gt 0
+        _x xclip -selection clipboard <"$argv[1]" 2>/dev/null
+        or _x wl-copy <"$argv[1]" 2>/dev/null
+        or _x pbcopy <"$argv[1]" 2>/dev/null
+    else
+        _x xclip -selection clipboard 2>/dev/null
+        or _x wl-copy 2>/dev/null
+        or _x pbcopy 2>/dev/null
+    end
+end
+
+function path_remove --description "Remove from PATH"
+    set -l p; for d in $PATH; test "$d" != "$argv[1]"; and set p $p $d; end; set -gx PATH $p
+end
+
+function path_append --description "Append to PATH"
+    path_remove $argv[1]; set -gx PATH $PATH $argv[1]
+end
+
+function path_prepend --description "Prepend to PATH"
+    path_remove $argv[1]; set -gx PATH $argv[1] $PATH
+end
+
+function here --description "Bookmark directory"
+    ln -sfn (realpath $argv[1]) "$HOME/.shell.here" 2>/dev/null
+    or ln -sfn $argv[1] "$HOME/.shell.here"
+    echo "here -> "(readlink "$HOME/.shell.here")
+end
+
+function there --description "Jump to bookmark"; cd (readlink "$HOME/.shell.here"); end
+
+function mkcd --description "mkdir + cd"; mkdir -p $argv[1]; and cd $argv[1]; end
+
+function gcd --description "Go to git root"
+    set -l r (git rev-parse --show-toplevel 2>/dev/null)
+    test -n "$r"; and cd "$r"; or echo "not in git repo"
+end
+
+function extract --description "Extract archives"
+    if test (count $argv) -eq 0; echo "usage: extract <file>"; return 1; end
+    for f in $argv
+        if not test -f "$f"; echo "missing: $f"; continue; end
+        switch "$f"
+            case '*.tar.bz2' '*.tbz2'; _x tar xjf "$f"
+            case '*.tar.gz' '*.tgz';   _x tar xzf "$f"
+            case '*.tar.xz';           _x tar xJf "$f"
+            case '*.tar.zst';          _x tar --zstd -xf "$f"
+            case '*.tar';              _x tar xf "$f"
+            case '*.bz2';              _x bunzip2 "$f"
+            case '*.gz';               _x gunzip "$f"
+            case '*.xz';               _x unxz "$f"
+            case '*.zst';              _x zstd -d "$f"
+            case '*.zip';              _x unzip "$f"
+            case '*.rar';              _x unrar x "$f"
+            case '*.7z';               _x 7z x "$f"
+            case '*.Z';                _x uncompress "$f"
+            case '*';                  echo "unknown: $f"
+        end
+    end
+end
+
+function colors --description "Display 256 colors"
+    for i in (seq 0 15); printf "\e[48;5;"$i"m  \e[0m"; end; echo
+    for i in (seq 16 231); printf "\e[48;5;"$i"m \e[0m"; if test (math $i - 16) % 36 -eq 35; echo; end; end; echo
+    for i in (seq 232 255); printf "\e[48;5;"$i"m  \e[0m"; end; echo
+end
+
+function wanip --description "Show public IP"
+    _x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null
+    or _x curl -s ifconfig.me 2>/dev/null
+    or _x curl -s icanhazip.com 2>/dev/null
+end
+
+function flush --description "Flush DNS cache"
+    switch (uname)
+        case Darwin; _x dscacheutil -flushcache; and _x sudo killall -HUP mDNSResponder
+        case Linux; _x sudo resolvectl flush-caches 2>/dev/null; or _x sudo systemd-resolve --flush-caches 2>/dev/null; or true
+    end
+end
+
+function countfiles --description "Count files/dirs/links"
+    for t in files links directories
+        set -l c (find . -type (string sub -l1 $t) 2>/dev/null | wc -l | string trim)
+        echo "$c $t"
+    end
+end
+
+function pwdtail --description "Last 2 path components"
+    pwd | awk -F/ '{nlast=NF-1; print $nlast"/"$NF}'
+end
+
+function distribution --description "Distro family"
+    if test -r /etc/os-release
+        set -l id (grep ^ID= /etc/os-release | cut -d= -f2 | tr -d '"')
+        switch "$id"
+            case fedora rhel centos; echo redhat
+            case 'sles*' 'opensuse*'; echo suse
+            case ubuntu debian; echo debian
+            case gentoo; echo gentoo
+            case arch manjaro; echo arch
+            case slackware; echo slackware
+            case '*'
+                set -l il (grep ^ID_LIKE= /etc/os-release | cut -d= -f2 | tr -d '"')
+                switch "$il"
+                    case '*fedora*' '*rhel*' '*centos*'; echo redhat
+                    case '*sles*' '*opensuse*'; echo suse
+                    case '*ubuntu*' '*debian*'; echo debian
+                    case '*gentoo*'; echo gentoo
+                    case '*arch*'; echo arch
+                    case '*slackware*'; echo slackware
+                    case '*'; echo unknown
+                end
+        end
+    else; echo unknown
+    end
+end
+
+function ip_show --description "Show IP addresses"
+    if test (uname) = Linux; _x ip addr show $argv; else; _x ifconfig $argv; end
+end
+
+function mem_info --description "Memory info"
+    if test (uname) = Linux; _x free -h; else; _x vm_stat 2>/dev/null; or _x free -h; end
+end
+
+function cpu_info --description "CPU info"
+    if test (uname) = Linux; _x lscpu; else; _x sysctl -n machdep.cpu.brand_string; end
+end
+
+function open_file --description "Open file with system handler"
+    _x xdg-open $argv 2>/dev/null; or _x open $argv 2>/dev/null; or echo "no opener"
+end
+
+function copy_cmd --description "Copy to clipboard"
+    _x xclip -selection clipboard $argv 2>/dev/null
+    or _x wl-copy $argv 2>/dev/null
+    or _x pbcopy $argv 2>/dev/null
+    or echo "no clipboard tool"
+end
+
+function epoch --description "Current epoch seconds"; date +%s; end
+
+function hrline --description "Horizontal line"
+    printf '%*s\n' (math "max(1,"(string sub -l1 "$argv[1]")")") '' | tr ' ' (string sub -l1 "$argv[2]") 2>/dev/null
+end
+
+function have --description "Check command exists"
+    type -q $argv[1]
+end
+
+function myip4 --description "IPv4 address"
+    _x dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com 2>/dev/null | tr -d '"'
+    or _x curl -sf4 ifconfig.me 2>/dev/null
+    or _x curl -sf4 icanhazip.com 2>/dev/null
+    or echo "N/A"
+end
+
+function myip6 --description "IPv6 address"
+    _x dig -6 TXT +short o-o.myaddr.l.google.com @ns1.google.com 2>/dev/null | tr -d '"'
+    or _x curl -sf6 ifconfig.me 2>/dev/null
+    or _x curl -sf6 icanhazip.com 2>/dev/null
+    or echo "N/A"
+end
+
+function dns_lookup --description "DNS lookup"
+    _x dig +short $argv[1] 2>/dev/null
+    or _x host $argv[1] 2>/dev/null | awk '/has address/{print $NF}'
+end
+
+function http_status --description "HTTP status code"
+    _x curl -sI -o /dev/null -w "%{http_code}" $argv[1] 2>/dev/null
+end
+
+function http_headers --description "HTTP response headers"
+    _x curl -sI $argv[1] 2>/dev/null
+end
+
+function download --description "Download file"
+    _x curl -fSL $argv[1] -o $argv[2] 2>/dev/null
+    or _x wget -q $argv[1] -O $argv[2] 2>/dev/null
+    or echo "no download tool"
+end
+
+function ps_cpu --description "Top CPU processes"
+    set -l n 10; test (count $argv) -gt 0; and set n $argv[1]
+    _x ps aux --sort=-%cpu 2>/dev/null | head -n $n
+    or _x ps aux 2>/dev/null | sort -k3rn | head -n $n
+end
+
+function ps_mem --description "Top memory processes"
+    set -l n 10; test (count $argv) -gt 0; and set n $argv[1]
+    _x ps aux --sort=-%mem 2>/dev/null | head -n $n
+    or _x ps aux 2>/dev/null | sort -k4rn | head -n $n
+end
+
+function file_largest --description "Largest files"
+    find $argv[1] -type f -exec ls -lhS {} + 2>/dev/null | head -n $argv[2]
+end
+
+function file_newest --description "Newest files"
+    find $argv[1] -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -n $argv[2] | cut -d' ' -f2-
+end
+
+function file_dupes --description "Find duplicate files"
+    find $argv[1] -type f -exec md5sum {} + 2>/dev/null | sort | uniq -w32 -dD
+end
+
+function file_rename_bulk --description "Bulk rename"
+    for f in *$argv[1]*
+        mv "$f" (string replace -a "$argv[1]" "$argv[2]" "$f") 2>/dev/null
+    end
+end
+
+function text_lower --description "Lowercase stdin"; tr '[:upper:]' '[:lower:]'; end
+function text_upper --description "Uppercase stdin"; tr '[:lower:]' '[:upper:]'; end
+function text_reverse --description "Reverse stdin"; rev; end
+function text_count_words --description "Word count"; wc -w; end
+function text_count_lines --description "Line count"; wc -l; end
+function text_count_chars --description "Character count"; wc -c; end
+function text_uniq_lines --description "Unique sorted lines"; sort | uniq; end
+function text_columns --description "Columnate stdin"; column -t -s (string sub -l1 "$argv[1]"); end
+function text_json --description "Format JSON stdin"; python3 -m json.tool 2>/dev/null; or echo "python3 needed"; end
+
+function hash_md5 --description "MD5 hash"
+    _x md5sum $argv[1] 2>/dev/null; or _x md5 -r $argv[1] 2>/dev/null; or echo "no md5 tool"
+end
+
+function hash_sha1 --description "SHA1 hash"
+    _x sha1sum $argv[1] 2>/dev/null; or _x shasum -a1 $argv[1] 2>/dev/null; or echo "no sha1"
+end
+
+function hash_sha256 --description "SHA256 hash"
+    _x sha256sum $argv[1] 2>/dev/null; or _x shasum -a256 $argv[1] 2>/dev/null; or echo "no sha256"
+end
+
+function git_log_short --description "Short git log"
+    _x git log --oneline -n (math "max(1,"$argv[1]")") 2>/dev/null
+end
+
+function git_branch_delete_merged --description "Delete merged branches"
+    git branch --merged | grep -v '\*\|master\|main' | xargs -r git branch -d 2>/dev/null
+end
+
+function encrypt_aes --description "AES encrypt file"
+    _x openssl enc -aes-256-cbc -salt -in $argv[1] -out $argv[1].enc 2>/dev/null; or echo "openssl needed"
+end
+
+function decrypt_aes --description "AES decrypt file"
+    _x openssl enc -aes-256-cbc -d -in $argv[1] -out (string replace -r '\.enc$' '' $argv[1]) 2>/dev/null; or echo "openssl needed"
+end
+
+function disk_usage --description "Disk usage"
+    _x df -h $argv[1] 2>/dev/null
+end
+
+function disk_io --description "Disk IO stats"
+    _x iostat 2>/dev/null; or echo "iostat needed"
+end
+
+function archive_list --description "List archive contents"
+    switch $argv[1]
+        case '*.tar.gz' '*.tgz'; _x tar tzf $argv[1]
+        case '*.tar.bz2' '*.tbz2'; _x tar tjf $argv[1]
+        case '*.tar.xz'; _x tar tJf $argv[1]
+        case '*.tar'; _x tar tf $argv[1]
+        case '*.zip'; _x unzip -l $argv[1]
+        case '*.7z'; _x 7z l $argv[1]
+        case '*.rar'; _x unrar l $argv[1]
+    end 2>/dev/null
+end
+

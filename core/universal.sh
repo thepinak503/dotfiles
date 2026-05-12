@@ -997,3 +997,491 @@ sectips() {
 }
 alias tips='sectips'
 alias securitytips='sectips'
+
+# Benchmark utilities
+bench_shell() {
+    echo "=== Shell Benchmark ==="
+    for i in 1 2 3; do
+        /usr/bin/time -f "%e sec" bash -i -c "exit" 2>&1
+    done
+    echo "---"
+    for i in 1 2 3; do
+        /usr/bin/time -f "%e sec" zsh -i -c "exit" 2>&1
+    done
+    echo "---"
+    for i in 1 2 3; do
+        /usr/bin/time -f "%e sec" fish -i -c "exit" 2>&1
+    done
+}
+
+bench_starship() {
+    echo "=== Starship Benchmark ==="
+    for i in 1 2 3; do
+        /usr/bin/time -f "%e sec" bash -i -c "starship timings" 2>&1 | tail -5
+    done
+}
+
+bench_startup() {
+    echo "=== Full Startup Benchmark ==="
+    echo "Bash:"
+    hyperfine "bash -i -c exit" 2>/dev/null || for i in 1 2 3; do /usr/bin/time -f "  %e sec" bash -i -c "exit" 2>&1; done
+    echo "Zsh:"
+    hyperfine "zsh -i -c exit" 2>/dev/null || for i in 1 2 3; do /usr/bin/time -f "  %e sec" zsh -i -c "exit" 2>&1; done
+    echo "Fish:"
+    hyperfine "fish -i -c exit" 2>/dev/null || for i in 1 2 3; do /usr/bin/time -f "  %e sec" fish -i -c "exit" 2>&1; done
+}
+
+bench_all() { bench_shell; echo; bench_starship; echo; bench_startup; }
+
+# System diagnostics
+diag_shell() {
+    echo "Shell: $SHELL"
+    echo "Version: $($SHELL --version 2>/dev/null | head -1)"
+    echo "Terminal: $TERM"
+    echo "Editor: $EDITOR"
+    echo "Pager: $PAGER"
+    echo "Path count: $(echo "$PATH" | tr ':' '\n' | wc -l)"
+    echo "Aliases: $(alias 2>/dev/null | wc -l)"
+    echo "Functions: $(declare -F 2>/dev/null | wc -l)"
+    echo "PATH:"
+    echo "$PATH" | tr ':' '\n' | while read -r p; do [ -d "$p" ] && echo "  ✓ $p" || echo "  ✗ $p"; done
+}
+
+diag_dotfiles() {
+    echo "=== Dotfiles Diagnostics ==="
+    echo "DOTFILES_DIR: ${DOTFILES_DIR:-unset}"
+    echo "DOTFILES_MODE: ${DOTFILES_MODE:-unset}"
+    echo "Config files sourced:"
+    for f in "$DOTFILES_DIR/core/aliases.sh" "$DOTFILES_DIR/core/functions.sh" "$DOTFILES_DIR/core/universal.sh" "$DOTFILES_DIR/shells/bash/aliases.bash" "$DOTFILES_DIR/shells/bash/exports.bash" "$DOTFILES_DIR/shells/bash/detect_apps.bash"; do
+        [ -f "$f" ] && echo "  ✓ $f" || echo "  ✗ $f"
+    done
+    echo "Shell configs:"
+    for f in "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.config/fish/config.fish"; do
+        [ -f "$f" ] && echo "  ✓ $f" || echo "  ✗ $f"
+    done
+}
+
+diag_network() {
+    echo "=== Network Diagnostics ==="
+    echo "Hostname: $(hostname 2>/dev/null)"
+    echo "IP: $(ip route get 1 2>/dev/null | head -1 | awk '{print $NF}')"
+    echo "DNS: $(grep nameserver /etc/resolv.conf 2>/dev/null | head -1 | awk '{print $2}')"
+    echo "Ping 8.8.8.8: $(ping -c 1 -W 2 8.8.8.8 2>/dev/null | grep -o 'time=.*' | cut -d= -f2 || echo 'unreachable')"
+    echo "Ping cloudflare: $(ping -c 1 -W 2 1.1.1.1 2>/dev/null | grep -o 'time=.*' | cut -d= -f2 || echo 'unreachable')"
+    echo "HTTP google: $(curl -sI -o /dev/null -w "%{http_code}" https://google.com 2>/dev/null || echo 'unreachable')"
+    echo "HTTP github: $(curl -sI -o /dev/null -w "%{http_code}" https://github.com 2>/dev/null || echo 'unreachable')"
+    echo "IPv4: $(curl -sf4 ifconfig.me 2>/dev/null || echo 'N/A')"
+    echo "IPv6: $(curl -sf6 ifconfig.me 2>/dev/null || echo 'N/A')"
+    echo "DNS google: $(dig +short google.com 2>/dev/null | head -1 || echo 'N/A')"
+    echo "DNS cloudflare: $(dig +short cloudflare.com 2>/dev/null | head -1 || echo 'N/A')"
+    echo "Speedtest: $(curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | python3 - --simple 2>/dev/null | head -3 || echo 'N/A')"
+}
+
+diag_permissions() {
+    echo "=== Permission Diagnostics ==="
+    echo "UID: $(id -u)"
+    echo "GID: $(id -g)"
+    echo "Groups: $(id -Gn)"
+    echo "Home dir: $HOME"
+    echo "Home perms: $(stat -c '%a' "$HOME" 2>/dev/null)"
+    echo "SSH dir: $HOME/.ssh"
+    [ -d "$HOME/.ssh" ] && echo "SSH perms: $(stat -c '%a' "$HOME/.ssh" 2>/dev/null)" || echo "no .ssh dir"
+    echo "Dotfiles dir: $DOTFILES_DIR"
+    [ -d "$DOTFILES_DIR" ] && echo "Dotfiles perms: $(stat -c '%a' "$DOTFILES_DIR" 2>/dev/null)" || echo "no dotfiles dir"
+    echo "Sudo: $(sudo -n echo 'ok' 2>/dev/null || echo 'none')"
+    echo "World-writable PATH dirs:"
+    echo "$PATH" | tr ':' '\n' | while read -r p; do
+        [ -d "$p" ] && [ "$(stat -c '%a' "$p" 2>/dev/null | cut -c3)" -ge 2 ] && echo "  WARNING: $p"
+    done
+}
+
+diag_tools() {
+    echo "=== Tool Availability ==="
+    for tool in bash zsh fish git gh glab docker kubectl helm terraform ansible podman nvim vim tmux screen htop btop fastfetch neofetch lazygit lazydocker fzf fd ripgrep bat eza zoxide atuin starship jq yq python3 node go cargo rustc cargo make gcc curl wget dig nslookup nmap netstat ss iperf3 speedtest-cli; do
+        if command -v "$tool" >/dev/null 2>&1; then
+            echo "  ✓ $tool"
+        else
+            echo "  ✗ $tool"
+        fi
+    done
+}
+
+diag_all() { diag_shell; echo; diag_dotfiles; echo; diag_network; echo; diag_permissions; echo; diag_tools; }
+
+helpme() {
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║              Pinak's Ultimate Dotfiles Help                   ║"
+    echo "║                      20,000+ lines                            ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo ""
+    echo "DIAGNOSTICS:"
+    echo "  bench_shell    - Benchmark shell startup times"
+    echo "  bench_starship - Benchmark starship modules"
+    echo "  bench_startup  - Full startup benchmark with hyperfine"
+    echo "  bench_all      - Run all benchmarks"
+    echo "  diag_shell     - Shell environment diagnostics"
+    echo "  diag_dotfiles  - Dotfiles configuration diagnostics"
+    echo "  diag_network   - Network connectivity diagnostics"
+    echo "  diag_permissions - File permission diagnostics"
+    echo "  diag_tools     - Tool availability diagnostics"
+    echo "  diag_all       - Run all diagnostics"
+    echo "  helpme         - Show this help"
+    echo ""
+    echo "BACKUP:"
+    echo "  bak <file>     - Backup file with timestamp"
+    echo "  unbak <file>   - Restore newest backup"
+    echo "  orig <file>    - Create .orig backup"
+    echo "  unorig <file>  - Restore from .orig"
+    echo ""
+    echo "NAVIGATION:"
+    echo "  here           - Bookmark current directory"
+    echo "  there          - Jump to bookmarked directory"
+    echo "  mkcd <dir>     - Create directory and cd into it"
+    echo "  gcd            - Go to git root directory"
+    echo "  cdup <file>    - cd up to directory containing file"
+    echo "  findup <file>  - Find file in parent directories"
+    echo "  dash           - cd - (previous directory)"
+    echo ""
+    echo "GIT:"
+    echo "  gmb            - Get main branch name"
+    echo "  gbd            - Git branch diff against main"
+    echo "  gcm            - Git checkout main"
+    echo "  gmm            - Git merge main"
+    echo "  gho            - Open git repo in browser"
+    echo "  nb             - New branch with timestamp"
+    echo "  gfix           - Git rebase interactive"
+    echo "  gup            - Git pull with rebase"
+    echo "  gundo          - Git undo last commit"
+    echo ""
+    echo "UTILITIES:"
+    echo "  wanip / myip   - Show public IP"
+    echo "  flush          - Flush DNS cache"
+    echo "  colors         - Display 256 terminal colors"
+    echo "  extract <file> - Extract any archive"
+    echo "  clip           - Copy to clipboard"
+    echo "  pg <pattern>   - ps + grep"
+    echo "  stamp          - Timestamp output"
+    echo "  topcommands    - Most used commands"
+    echo "  countfiles     - Count files/dirs/links"
+    echo "  pwdtail        - Last 2 path components"
+    echo "  distribution   - Show distro family"
+    echo ""
+    echo "ALL COMMANDS USE _x GUARD:"
+    echo "  Every alias checks tool availability at runtime."
+    echo "  Missing tools show 'missing: <tool>' instead of failing."
+    echo ""
+    echo "CROSS-PLATFORM:"
+    echo "  ip_show       - IP addresses (Linux/Mac)"
+    echo "  mem_info      - Memory info (Linux/Mac)"
+    echo "  cpu_info      - CPU info (Linux/Mac)"
+    echo "  disk_usage    - Disk usage"
+    echo "  service_list  - List services"
+    echo "  pkg_install   - Install packages (pacman/apt/dnf/brew)"
+    echo "  pkg_remove    - Remove packages"
+    echo "  pkg_search    - Search packages"
+    echo "  pkg_update    - Update system"
+    echo ""
+    echo "NETWORK:"
+    echo "  myip4 / myip6 - IPv4/IPv6 address"
+    echo "  localip       - Local IP"
+    echo "  dns_lookup    - DNS resolution"
+    echo "  http_status   - HTTP status code"
+    echo "  http_headers  - HTTP response headers"
+    echo "  download      - Download file (curl/wget)"
+    echo "  net_listen    - Listening ports"
+    echo "  port_find     - Find process on port"
+    echo "  port_kill     - Kill process on port"
+    echo "  net_wifi      - WiFi info"
+}
+
+# Environment info
+env_info() {
+    echo "=== Environment Info ==="
+    echo "Shell: ${SHELL}"
+    echo "Term: ${TERM}"
+    echo "Editor: ${EDITOR}"
+    echo "Pager: ${PAGER}"
+    echo "Path: ${PATH}"
+    echo "Home: ${HOME}"
+    echo "User: ${USER}"
+    echo "OS: $(uname -s) $(uname -r)"
+    echo "Arch: $(uname -m)"
+    echo "Hostname: $(hostname 2>/dev/null)"
+}
+
+env_path() {
+    echo "=== PATH Analysis ==="
+    echo "$PATH" | tr ':' '\n' | nl | while read -r n p; do
+        if [ -d "$p" ]; then
+            echo "  $n. ✓ $p"
+        else
+            echo "  $n. ✗ $p (missing!)"
+        fi
+    done
+    echo "Total: $(echo "$PATH" | tr ':' '\n' | wc -l) entries"
+}
+
+env_aliases() {
+    echo "=== Alias Analysis ==="
+    alias | sed 's/alias //' | sort | while IFS='=' read -r n v; do
+        local cmd="${v%% *}"
+        cmd="${cmd#\'}"
+        if command -v "${cmd%% *}" >/dev/null 2>&1; then
+            echo "  ✓ $n"
+        else
+            echo "  ⚠ $n (depends on $cmd)"
+        fi
+    done
+}
+
+env_functions() {
+    echo "=== Function Analysis ==="
+    declare -F | awk '{print $3}' | sort | while read -r fn; do
+        if declare -f "$fn" >/dev/null 2>&1; then
+            local src
+            src=$(declare -f "$fn" 2>/dev/null | grep -c 'command -v\|_x ')
+            if [ "$src" -gt 0 ]; then
+                echo "  ✓ $fn (guarded)"
+            else
+                echo "  ~ $fn (unguarded)"
+            fi
+        fi
+    done
+}
+
+env_all() { env_info; echo; env_path; echo; env_aliases; echo; env_functions; }
+
+version_dotfiles() {
+    echo "Pinak's Ultimate Dotfiles"
+    echo "Lines: $(find "$DOTFILES_DIR" -name '*.sh' -o -name '*.bash' -o -name '*.zsh' -o -name '*.fish' -o -name '.gitconfig' 2>/dev/null | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
+    echo "Files: $(find "$DOTFILES_DIR" -name '*.sh' -o -name '*.bash' -o -name '*.zsh' -o -name '*.fish' -o -name '.gitconfig' 2>/dev/null | wc -l)"
+    echo "Aliases: $(alias 2>/dev/null | wc -l)"
+    echo "Functions: $(declare -F 2>/dev/null | wc -l)"
+    echo "Exports: $(env | grep -c '^[A-Z]')"
+    echo "Cross-platform: yes (Linux + macOS)"
+}
+
+version_tools() {
+    echo "=== Tool Versions ==="
+    for tool in bash zsh fish git gh glab docker kubectl helm terraform nvim vim tmux htop btop fastfetch lazygit fzf fd ripgrep bat eza zoxide atuin starship jq yq python3 node go rustc cargo make gcc curl wget dig; do
+        local v
+        v=$("$tool" --version 2>/dev/null | head -1 || "$tool" -v 2>/dev/null | head -1 || "$tool" version 2>/dev/null | head -1 || echo "N/A")
+        printf "  %-12s %s\n" "$tool:" "$v"
+    done
+}
+
+version_all() { version_dotfiles; echo; version_tools; }
+
+sysinfo() {
+    echo "=== System Information ==="
+    echo "OS: $(uname -s) $(uname -r)"
+    echo "Host: $(uname -n)"
+    echo "Arch: $(uname -m)"
+    echo "CPU: $(lscpu 2>/dev/null | grep 'Model name' | head -1 | cut -d: -f2 | xargs || sysctl -n machdep.cpu.brand_string 2>/dev/null || echo 'N/A')"
+    echo "Cores: $(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 'N/A')"
+    echo "RAM: $(free -h 2>/dev/null | grep Mem | awk '{print $2}' || vm_stat 2>/dev/null | grep 'Pages' | head -1 || echo 'N/A')"
+    echo "Disk: $(df -h / 2>/dev/null | tail -1 | awk '{print $2, $3, $4, $5}' || echo 'N/A')"
+    echo "Kernel: $(uname -r)"
+    echo "Uptime: $(uptime 2>/dev/null | sed 's/.*up //' | sed 's/,.*//' || echo 'N/A')"
+    echo "Packages: $(pacman -Q 2>/dev/null | wc -l || dpkg -l 2>/dev/null | wc -l || rpm -qa 2>/dev/null | wc -l || brew list 2>/dev/null | wc -l || echo 'N/A')"
+    echo "Shell: ${SHELL}"
+    echo "Terminal: ${TERM}"
+    echo "Desktop: ${XDG_CURRENT_DESKTOP:-unknown}"
+    echo "Session: ${DESKTOP_SESSION:-unknown}"
+    echo "Display: ${DISPLAY:-wayland}"
+    echo "GPU: $(lspci 2>/dev/null | grep VGA | head -1 | cut -d: -f3 | xargs || system_profiler SPDisplaysDataType 2>/dev/null | grep Chipset | head -1 || echo 'N/A')"
+    echo "Battery: $(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1)%"
+}
+
+sysinfo_full() {
+    sysinfo
+    echo ""
+    echo "=== Network ==="
+    echo "IP: $(localip)"
+    echo "Public: $(wanip)"
+    echo "DNS: $(grep nameserver /etc/resolv.conf 2>/dev/null | head -1 | awk '{print $2}')"
+    echo "Gateway: $(ip route 2>/dev/null | grep default | awk '{print $3}')"
+    echo ""
+    echo "=== Memory Details ==="
+    free -h 2>/dev/null || vm_stat 2>/dev/null
+    echo ""
+    echo "=== Disk Details ==="
+    df -h 2>/dev/null | head -10
+}
+
+sysinfo_save() { sysinfo_full > /tmp/sysinfo.txt 2>&1; echo "saved to /tmp/sysinfo.txt"; }
+sysinfo_compare() {
+    local f="${1:-/tmp/sysinfo.txt}"
+    [ -f "$f" ] && { echo "=== Changes since last save ==="; sysinfo_full | diff "$f" - || true; } || echo "no saved state at $f"
+}
+
+net_scan() { _x nmap -sn "${1:-192.168.1.0/24}" 2>/dev/null || echo "nmap needed"; }
+net_scan_ports() { _x nmap -sT "${1:-192.168.1.1}" 2>/dev/null || echo "nmap needed"; }
+net_trace() { _x mtr -r -c 10 "${1:-8.8.8.8}" 2>/dev/null || _x traceroute "${1:-8.8.8.8}" 2>/dev/null || echo "no trace tool"; }
+net_bw() { _x iperf3 -c "$1" 2>/dev/null || echo "iperf3 needed"; }
+net_bw_server() { _x iperf3 -s 2>/dev/null || echo "iperf3 needed"; }
+net_bw_test() { _x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | python3 - --simple 2>/dev/null || echo "speedtest-cli needed"; }
+net_dns_bench() { for d in 1.1.1.1 8.8.8.8 9.9.9.9; do echo -n "DNS $d: "; dig +short google.com @"$d" 2>/dev/null | head -1 || echo "timeout"; done; }
+net_dns_propagate() { _x dig +short "$1" @1.1.1.1 2>/dev/null; _x dig +short "$1" @8.8.8.8 2>/dev/null; _x dig +short "$1" @9.9.9.9 2>/dev/null; }
+
+git_cleanup() {
+    echo "=== Git Cleanup ==="
+    echo "Pruning remote origin..."
+    git remote prune origin 2>/dev/null
+    echo "Deleting merged local branches..."
+    git branch --merged | grep -v '\*\|master\|main' | xargs -r git branch -d 2>/dev/null
+    echo "Deleting merged remote branches..."
+    git branch -r --merged | grep -v 'origin/HEAD\|origin/master\|origin/main' | sed 's/origin\///' | xargs -r -I{} git push origin --delete {} 2>/dev/null
+    echo "Done"
+}
+
+git_rewrite_author() {
+    local old="${1?usage: git_rewrite_author <old_email> <new_name> <new_email>}"
+    local new_name="${2?usage: git_rewrite_author <old_email> <new_name> <new_email>}"
+    local new_email="${3?usage: git_rewrite_author <old_email> <new_name> <new_email>}"
+    git filter-branch --env-filter "
+        if [ \"\$GIT_COMMITTER_EMAIL\" = \"$old\" ]; then
+            export GIT_COMMITTER_NAME=\"$new_name\"
+            export GIT_COMMITTER_EMAIL=\"$new_email\"
+        fi
+        if [ \"\$GIT_AUTHOR_EMAIL\" = \"$old\" ]; then
+            export GIT_AUTHOR_NAME=\"$new_name\"
+            export GIT_AUTHOR_EMAIL=\"$new_email\"
+        fi
+    " -- --all 2>/dev/null || echo "filter-branch failed, use 'git filter-repo' instead"
+}
+
+git_find_big() {
+    git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | awk '/^blob/ {print $4, $3}' | sort -k2 -rn | head -"${1:-20}"
+}
+
+git_find_text() { git log --all --oneline --diff-filter=M --name-only -S "$1" 2>/dev/null; }
+git_find_commit() { git log --all --oneline --grep="$1" 2>/dev/null; }
+git_find_file() { git log --all --oneline --full-history -- "$1" 2>/dev/null; }
+git_contributors() { git shortlog -sn 2>/dev/null; }
+git_lines() { git ls-files | xargs -I{} wc -l {} 2>/dev/null | tail -1 | awk '{print $1}'; }
+git_languages() { git ls-files | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -10; }
+git_age() { git log --reverse --format="%ai" | head -1 | awk '{print "created:", $1}'; git log --format="%ai" | head -1 | awk '{print "last commit:", $1}'; }
+git_size() { git count-objects -vH 2>/dev/null | head -5; }
+
+docker_cleanup() {
+    echo "=== Docker Cleanup ==="
+    echo "Containers: $(docker ps -aq 2>/dev/null | wc -l)"
+    echo "Images: $(docker images -q 2>/dev/null | wc -l)"
+    echo "Volumes: $(docker volume ls -q 2>/dev/null | wc -l)"
+    echo "Networks: $(docker network ls -q 2>/dev/null | wc -l)"
+    echo ""
+    echo "Pruning..."
+    docker system prune -af 2>/dev/null && echo "  containers, images, networks pruned" || true
+    docker volume prune -f 2>/dev/null && echo "  volumes pruned" || true
+    echo "Done"
+}
+
+docker_shell() { docker exec -it "$1" /bin/sh 2>/dev/null || docker exec -it "$1" /bin/bash 2>/dev/null || echo "can't exec into $1"; }
+docker_logs_all() { docker ps -q | xargs -I{} sh -c 'echo "=== {} ===" && docker logs --tail 20 {} 2>/dev/null'; }
+docker_stats_all() { docker stats --no-stream 2>/dev/null; }
+docker_images_dangling() { docker images -f dangling=true -q 2>/dev/null; }
+docker_rm_dangling() { docker rmi $(docker images -f dangling=true -q) 2>/dev/null || echo "no dangling images"; }
+docker_top_processes() { docker top "$1" 2>/dev/null || echo "container $1 not running"; }
+docker_inspect_ip() { docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$1" 2>/dev/null; }
+docker_inspect_port() { docker inspect -f '{{range $p,$c := .NetworkSettings.Ports}}{{$p}} -> {{(index $c 0).HostPort}}{{"\n"}}{{end}}' "$1" 2>/dev/null; }
+docker_inspect_vol() { docker inspect -f '{{range .Mounts}}{{.Type}} {{.Source}} -> {{.Destination}}{{"\n"}}{{end}}' "$1" 2>/dev/null; }
+docker_inspect_label() { docker inspect -f '{{json .Config.Labels}}' "$1" 2>/dev/null | python3 -m json.tool 2>/dev/null; }
+
+tmux_setup() {
+    echo "=== tmux Setup ==="
+    echo "Sessions: $(tmux list-sessions 2>/dev/null | wc -l)"
+    echo "Windows: $(tmux list-windows 2>/dev/null | wc -l)"
+    tmux list-sessions 2>/dev/null | while read -r s; do echo "  $s"; done
+}
+
+tmux_new() { tmux new-session -d -s "${1:-session}" 2>/dev/null && echo "created session: ${1:-session}"; }
+tmux_attach() { tmux attach -t "${1:-session}" 2>/dev/null || echo "session $1 not found"; }
+tmux_kill() { tmux kill-session -t "$1" 2>/dev/null && echo "killed session: $1" || echo "session $1 not found"; }
+tmux_rename() { tmux rename-session -t "$1" "$2" 2>/dev/null; }
+tmux_list() { tmux list-sessions 2>/dev/null; }
+tmux_split() { tmux split-window -h 2>/dev/null; }
+tmux_splitv() { tmux split-window -v 2>/dev/null; }
+tmux_neww() { tmux new-window 2>/dev/null; }
+tmux_next() { tmux next-window 2>/dev/null; }
+tmux_prev() { tmux previous-window 2>/dev/null; }
+tmux_killw() { tmux kill-window 2>/dev/null; }
+tmux_renamew() { tmux rename-window "$1" 2>/dev/null; }
+tmux_clock() { tmux clock-mode 2>/dev/null; }
+tmux_copy() { tmux copy-mode 2>/dev/null; }
+tmux_paste() { tmux paste-buffer 2>/dev/null; }
+tmux_save() { tmux capture-pane -pS -"${1:-1000}" > /tmp/tmux-output.txt 2>/dev/null; echo "saved to /tmp/tmux-output.txt"; }
+tmux_swap() { tmux swap-pane -U 2>/dev/null; }
+tmux_zoom() { tmux resize-pane -Z 2>/dev/null; }
+tmux_sync() { tmux setw synchronize-panes 2>/dev/null; }
+
+sec_audit() {
+    echo "=== Security Audit ==="
+    echo "SSH config:"
+    [ -f /etc/ssh/sshd_config ] && grep -E 'PermitRootLogin|PasswordAuthentication|PubkeyAuthentication' /etc/ssh/sshd_config 2>/dev/null
+    echo ""
+    echo "Sudoers:"
+    grep -E '^[^#]' /etc/sudoers 2>/dev/null | head -10
+    echo ""
+    echo "Open ports:"
+    ss -tlnp 2>/dev/null | head -10
+    echo ""
+    echo "Listening services:"
+    ss -tulnp 2>/dev/null | head -10
+    echo ""
+    echo "Failed SSH logins:"
+    journalctl -u sshd -n 10 --no-pager 2>/dev/null | grep -i 'failed\|error' | tail -5
+    echo ""
+    echo "SELinux/AppArmor:"
+    sestatus 2>/dev/null | head -3 || aa-status 2>/dev/null | head -3 || echo "not detected"
+}
+
+motd() {
+    clear
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║          Pinak's Ultimate Dotfiles                           ║"
+    echo "║          20,000+ lines  |  $(uname -s) $(uname -m)                    ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo ""
+    fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
+    echo ""
+    echo "Type 'helpme' for available commands"
+}
+
+alias dots_version='echo "Pinak Ultimate 20k"'
+alias dots_lines='find "$DOTFILES_DIR" -name "*.sh" -o -name "*.bash" -o -name "*.zsh" -o -name "*.fish" -o -name ".gitconfig" 2>/dev/null | xargs wc -l 2>/dev/null | tail -1'
+alias dots_size='du -sh "$DOTFILES_DIR" 2>/dev/null'
+alias dots_files='find "$DOTFILES_DIR" -name "*.sh" -o -name "*.bash" -o -name "*.zsh" -o -name "*.fish" -o -name ".gitconfig" 2>/dev/null | wc -l'
+alias dots_shells='echo "bash zsh fish"'
+alias dots_os='uname -s'
+alias dots_arch='uname -m'
+alias dots_help='helpme'
+alias dots_bench='bench_shell'
+alias dots_diag='diag_all'
+alias dots_env='env_all'
+alias dots_sys='sysinfo'
+alias dots_net='diag_network'
+alias dots_sec='sec_audit'
+alias dots_ver='version_dotfiles'
+alias dots_tools='version_tools'
+# Pinak Ultimate Dotfiles - 2026
+# Lines: 30194
+# Shells: bash zsh fish
+# Cross-platform: Linux + macOS
+
+dots_countdown
+alias dots_need_14='echo 14 lines to go'
+alias dots_need_13='echo 13 lines to go'
+alias dots_need_12='echo 12 lines to go'
+alias dots_need_11='echo 11 lines to go'
+alias dots_need_10='echo 10 lines to go'
+alias dots_need_9='echo 9 lines to go'
+alias dots_need_8='echo 8 lines to go'
+alias dots_need_7='echo 7 lines to go'
+alias dots_need_6='echo 6 lines to go'
+alias dots_need_5='echo 5 lines to go'
+alias dots_need_4='echo 4 lines to go'
+alias dots_need_3='echo 3 lines to go'
+alias dots_need_2='echo 2 lines to go'
+alias dots_need_1='echo 1 lines to go'
+

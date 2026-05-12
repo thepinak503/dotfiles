@@ -119,6 +119,12 @@
       "showIpv6": false
     },
     {
+      "type": "command",
+      "key": "Public IP ",
+      "keyColor": "38;5;110",
+      "text": "curl -fsSL --max-time 2 ifconfig.me 2>/dev/null || echo 'N/A'"
+    },
+    {
       "type": "colors",
       "symbol": "circle",
       "paddingLeft": 2

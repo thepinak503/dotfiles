@@ -24,20 +24,103 @@
 	colorMoved = default
 
 [alias]
+	# basics
 	st = status
 	co = checkout
 	cm = commit
-	br = branch
+	br = branch -ra
+	ci = commit -v
+	cp = cherry-pick
+	r = reset
+	rh = reset --hard
+	rl = reflog
+
+	# log/show
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-	unstage = restore --staged
+	ls = log --pretty=format:"%C(green)%h %C(yellow)[%ad]%Cred%d %Creset%s %Cblue[%an]" --decorate --date=relative
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d %Creset%s %Cblue[a:%an,c:%cn]" --numstat
+	lc = log --pretty=oneline -n 20 --graph --abbrev-commit
 	last = log -1 HEAD
+	wtf = log --pretty=tformat:"%C(auto,yellow)%h%C(auto)%d%C(auto,reset) by %C(auto,blue)%cn, %C(auto,cyan)%ar%n %s%n" --stat
+
+	# unstaging / undo
+	unstage = restore --staged
+	unadd = reset HEAD
+	uncommit = reset --soft HEAD^
 	amend = commit --amend --no-edit
+	ca = commit -a --amend -C HEAD
+	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+	empty = "!git commit --allow-empty -m'[empty] init'"
+
+	# diff
+	d = diff --word-diff
+	dc = diff --cached
+	dlc = diff --cached HEAD^
+	df = diff --patch-with-stat
+
+	# tags
+	lasttag = describe --tags --abbrev=0
+	lt = describe --tags --abbrev=0
+	tags = tag -l
+
+	# branches
+	branches = branch --all
+	remotes = remote --verbose
+	fall = fetch --all
+	pl = pull --recurse-submodules
+	dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+	hreset = reset --hard HEAD
+
+	# merging
+	ours = "!f() { git co --ours $@ && git add $@; }; f"
+	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
+
+	# assume-unchanged
+	assume = update-index --assume-unchanged
+	unassume = update-index --no-assume-unchanged
+	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
+	unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
+	assumeall = "!git status -s | awk '{print $2}' | xargs git assume"
+
+	# misc
+	s = status --short
+	whoami = config user.email
+	fix = "!f() { $EDITOR $(git diff --name-only | uniq); }; f"
+	aliases = "!git config -l | grep ^alias | cut -c 7- | sort"
+	la = "!git config -l | grep alias | cut -c 7-"
+	ignore = "!gi() { curl -sL https://www.gitignore.io/api/$@; }; gi"
+	worktree = worktree list
+	sba = "!f() { git subtree add --prefix $2 $1 master --squash; }; f"
+	sbu = "!f() { git subtree pull --prefix $2 $1 master --squash; }; f"
 
 [push]
 	autoSetupRemote = true
+	default = current
+	followTags = true
+
+[pull]
+	rebase = true
+
+[rebase]
+	autoStash = true
+
+[fetch]
+	prune = true
+
+[branch]
+	sort = -committerdate
 
 [init]
 	defaultBranch = main
+
+# URL shorthands
+[url "git@github.com:"]
+	insteadOf = "gh:"
+[url "git@github.com:"]
+	pushInsteadOf = "github:"
+[url "git://github.com/"]
+	insteadOf = "github:"
+
 [credential "https://github.com"]
 	helper =
 	helper = !/usr/bin/gh auth git-credential

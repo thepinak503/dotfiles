@@ -29,3 +29,77 @@ set -gx LESS_TERMCAP_us \e'[04;38;5;146m'
 
 # Secure umask - files 0644, dirs 0755
 umask 022
+
+# Locale
+set -gx LANG en_US.UTF-8
+set -gx LC_ALL en_US.UTF-8
+set -gx LC_COLLATE C
+set -gx LC_TIME en_US.UTF-8
+set -gx LC_NUMERIC en_US.UTF-8
+set -gx LC_MONETARY en_US.UTF-8
+
+# Editors
+set -gx EDITOR nvim
+set -gx VISUAL nvim
+set -gx PAGER less
+set -gx BROWSER xdg-open
+set -gx TERMINAL alacritty
+set -gx MANPAGER less
+set -gx MANWIDTH 80
+
+# XDG
+set -gx XDG_CONFIG_HOME $HOME/.config
+set -gx XDG_DATA_HOME $HOME/.local/share
+set -gx XDG_CACHE_HOME $HOME/.cache
+set -gx XDG_STATE_HOME $HOME/.local/state
+set -gx XDG_RUNTIME_DIR /run/user/(id -u)
+set -gx XDG_DATA_DIRS /usr/local/share:/usr/share
+set -gx XDG_CONFIG_DIRS /etc/xdg
+
+# Development
+set -gx CARGO_HOME $HOME/.cargo
+set -gx GOBIN $HOME/.go/bin
+set -gx GOPATH $HOME/.go
+set -gx RUSTUP_HOME $HOME/.rustup
+set -gx PNPM_HOME $HOME/.local/share/pnpm
+set -gx TF_PLUGIN_CACHE_DIR $HOME/.terraform.d/plugin-cache
+
+# Language
+set -gx PYTHONDONTWRITEBYTECODE 1
+set -gx RUST_BACKTRACE 1
+set -gx RUST_LOG info
+
+# Tools
+set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow --no-ignore-vcs"
+set -gx FZF_DEFAULT_OPTS "--color=16 --height=40% --layout=reverse --border"
+set -gx BAT_THEME Nord
+set -gx BAT_STYLE numbers,changes
+set -gx DELTA_FEATURES +line-numbers
+set -gx EZA_COLORS di=36:ex=32
+set -gx LESS RFX
+set -gx SYSTEMD_PAGER "less -RFX"
+set -gx SYSTEMD_COLORS 1
+
+# Security
+set -gx GPG_TTY (tty 2>/dev/null)
+set -gx GNUPGHOME $HOME/.gnupg
+
+# Git
+set -gx GIT_PAGER delta
+set -gx GIT_SEQUENCE_EDITOR nvim
+
+# Docker
+set -gx DOCKER_BUILDKIT 1
+set -gx COMPOSE_DOCKER_CLI_BUILD 1
+set -gx DOCKER_DEFAULT_PLATFORM linux/amd64
+set -gx BUILDKIT_PROGRESS plain
+
+# Misc
+set -gx TMPDIR /tmp
+set -gx MAILCHECK 0
+set -gx HOMEBREW_NO_ANALYTICS 1
+set -gx HOMEBREW_NO_ENV_HINTS 1
+set -gx DOTNET_CLI_TELEMETRY_OPTOUT 1
+set -gx KUBE_EDITOR nvim
+set -gx GH_EDITOR nvim
+set -gx AWS_PAGER ""

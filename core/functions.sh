@@ -2074,6 +2074,89 @@ eslint_init() { echo -e "{\n  \"env\": {\"node\": true,\"es2021\": true},\n  \"e
 tsconfig_init() { echo -e "{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"ESNext\",\n    \"strict\": true,\n    \"outDir\": \"./dist\"\n  },\n  \"include\": [\"src\"]\n}" > tsconfig.json; }
 package_json_init() { echo -e "{\n  \"name\": \"$1\",\n  \"version\": \"1.0.0\",\n  \"main\": \"index.js\",\n  \"scripts\": {},\n  \"license\": \"MIT\"\n}" > package.json; }
 
+_x() { if command -v "${1%% *}" >/dev/null 2>&1; then "$@"; else echo "missing: $1" >&2; return 127; fi; }
+
+bak() { for f in "$@"; do [ -f "$f" ] || { echo "usage: bak file"; return 1; }; [[ $f =~ \.bak\..* ]] && continue; local b; b="$f.bak.$(date '+%F_%T' | sed 's/:/-/g')"; while [ -f "$b" ]; do sleep 1; b="$f.bak.$(date '+%F_%T' | sed 's/:/-/g')"; done; cp -av "$f" "$b"; done; }
+
+unbak() { for f in "$@"; do local d b; d="$(dirname "$f")"; f="${f##*/}"; b="$(find "$d" -name "$f.bak.*" -o -name "$f.*.bak" 2>/dev/null | sort | tail -1)"; [ -n "$b" ] && cp -av "$b" "$d/$f" || echo "no backup for $f"; done; }
+
+orig() { for f in "$@"; do [ -f "$f" ] || { echo "missing: $f"; return 1; }; [ -f "$f.org" ] && { echo "$f.org exists"; return 1; }; done; for f in "$@"; do cp -av "$f" "$f.org"; done; }
+
+unorig() { for f in "$@"; do [ -f "$f" ] || { echo "missing: $f"; return 1; }; cp -av "$f" "${f%.org}"; done; }
+
+topcommands() { history | awk '{print $4}' | awk 'BEGIN{FS="|"}{print $1}' | sort | uniq -c | sort -n | tail -n "${1:-10}" | sort -nr; }
+
+puniq() { echo "$1" | tr : '\n' | nl | sort -u -k2,2 | sort -n | cut -f2- | tr '\n' : | sed -e 's/:$//' -e 's/^://'; }
+
+findup() { local a="$1" d="${PWD:-$(pwd)}"; while [ -n "$d" ]; do [ -e "$d/$a" ] && { echo "$d/$a"; return 0; }; d="${d%/*}"; done; echo "not found: $a" >&2; return 1; }
+
+cdup() { local f; f="$(findup "$1")" && cd "$(dirname "$f")" || echo "not found: $1"; }
+
+pg() { ps -ef | grep -i --color=yes "$@" | grep -v grep; }
+
+stamp() { printf "%s" "$(date '+%F %T')  $*"; [ $# -gt 0 ] && echo; }
+
+stampcmd() { local o; o="$("$@" 2>&1)"; stamp "$o"; }
+
+clip() { if [ $# -gt 0 ]; then _x xclip -selection clipboard < "$1" 2>/dev/null || _x wl-copy < "$1" 2>/dev/null || _x pbcopy < "$1" 2>/dev/null; else _x xclip -selection clipboard 2>/dev/null || _x wl-copy 2>/dev/null || _x pbcopy 2>/dev/null; fi; }
+
+path_remove() { PATH="$(echo -n "$PATH" | awk -v RS=: -v ORS=: "\$0 != \"$1\"" | sed 's/:$//')"; }
+
+path_append() { path_remove "$1"; PATH="${PATH:+"$PATH:"}$1"; }
+
+path_prepend() { path_remove "$1"; PATH="$1${PATH:+":$PATH"}"; }
+
+here() { ln -sfn "$(readlink -f "${1:-.}" 2>/dev/null || echo "${1:-.}")" "$HOME/.shell.here"; echo "here -> $(readlink "$HOME/.shell.here")"; }
+
+there() { cd "$(readlink "$HOME/.shell.here")" 2>/dev/null || echo "no bookmark"; }
+
+mkcd() { mkdir -p "$1" && cd "$1"; }
+
+gcd() { local r; r="$(git rev-parse --show-toplevel 2>/dev/null)" && cd "$r" || echo "not in git repo"; }
+
+gbs() { git branch 2>/dev/null | sed -n '/\* /s/^* //p'; }
+
+extract() { [ $# -eq 0 ] && { echo "usage: extract <file>"; return 1; }; for f in "$@"; do [ -f "$f" ] || { echo "missing: $f"; continue; }; case "$f" in *.tar.bz2|*.tbz2) _x tar xjf "$f" ;; *.tar.gz|*.tgz) _x tar xzf "$f" ;; *.tar.xz) _x tar xJf "$f" ;; *.tar.zst) _x tar --zstd -xf "$f" ;; *.tar) _x tar xf "$f" ;; *.bz2) _x bunzip2 "$f" ;; *.gz) _x gunzip "$f" ;; *.xz) _x unxz "$f" ;; *.zst) _x zstd -d "$f" ;; *.zip) _x unzip "$f" ;; *.rar) _x unrar x "$f" ;; *.7z) _x 7z x "$f" ;; *.Z) _x uncompress "$f" ;; *) echo "unknown: $f" ;; esac; done; }
+
+colors() { for i in {0..15}; do printf "\e[48;5;${i}m  \e[0m"; done; echo; for i in {16..231}; do printf "\e[48;5;${i}m \e[0m"; (( (i-16)%36==35 )) && echo; done; echo; for i in {232..255}; do printf "\e[48;5;${i}m  \e[0m"; done; echo; }
+
+wanip() { _x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || _x curl -s icanhazip.com 2>/dev/null; }
+
+myip() { wanip; }
+
+flush() { case "$(uname)" in Darwin) _x dscacheutil -flushcache; _x sudo killall -HUP mDNSResponder ;; Linux) _x sudo systemd-resolve --flush-caches 2>/dev/null || true ;; esac; }
+
+countfiles() { for t in files links directories; do echo "$(find . -type "${t:0:1}" 2>/dev/null | wc -l) $t"; done 2>/dev/null; }
+
+pwdtail() { pwd | awk -F/ '{nlast=NF-1; print $nlast"/"$NF}'; }
+
+distribution() { local d="unknown"; [ -r /etc/os-release ] && { . /etc/os-release 2>/dev/null; case "${ID-}" in fedora|rhel|centos) d="redhat" ;; sles|opensuse*) d="suse" ;; ubuntu|debian) d="debian" ;; gentoo) d="gentoo" ;; arch|manjaro) d="arch" ;; slackware) d="slackware" ;; *) case "${ID_LIKE-}" in *fedora*|*rhel*|*centos*) d="redhat" ;; *sles*|*opensuse*) d="suse" ;; *ubuntu*|*debian*) d="debian" ;; *gentoo*) d="gentoo" ;; *arch*) d="arch" ;; esac ;; esac; }; echo "$d"; }
+
+# cross-platform helpers
+_os() { uname -s; }
+_is_mac() { [ "$(_os)" = "Darwin" ]; }
+_is_linux() { [ "$(_os)" = "Linux" ]; }
+_is_bsd() { [ "$(_os)" = "FreeBSD" ] || [ "$(_os)" = "OpenBSD" ] || [ "$(_os)" = "NetBSD" ]; }
+_mac_only() { _is_mac && "$@" || echo "macOS only" >&2; }
+_linux_only() { _is_linux && "$@" || echo "Linux only" >&2; }
+
+ip_show() { if _is_linux; then _x ip addr show "$@"; else _x ifconfig "$@"; fi; }
+disk_usage() { if _is_linux; then _x df -h "$@"; else _x df -h "$@" 2>/dev/null || _x df "$@"; fi; }
+mem_info() { if _is_linux; then _x free -h; else _x vm_stat 2>/dev/null || _x free -h; fi; }
+cpu_info() { if _is_linux; then _x lscpu; else _x sysctl -n machdep.cpu.brand_string; fi; }
+pkg_list() { if _is_linux; then _x pacman -Q 2>/dev/null || _x dpkg -l 2>/dev/null || _x rpm -qa 2>/dev/null; else _x brew list 2>/dev/null; fi; }
+service_list() { if _is_linux; then _x systemctl list-units --type=service 2>/dev/null || _x service --status-all 2>/dev/null; else _x launchctl list 2>/dev/null; fi; }
+ssh_keys() { for k in "$HOME"/.ssh/id_*; do [ -f "$k" ] && echo "${k##*/}"; done; }
+open_file() { _x xdg-open "$@" 2>/dev/null || _x open "$@" 2>/dev/null || echo "no opener"; }
+copy_cmd() { _x xclip -selection clipboard "$@" 2>/dev/null || _x wl-copy "$@" 2>/dev/null || _x pbcopy "$@" 2>/dev/null || echo "no clipboard tool"; }
+paste_cmd() { _x xclip -selection clipboard -o 2>/dev/null || _x wl-paste 2>/dev/null || _x pbpaste 2>/dev/null || echo "no clipboard tool"; }
+
+cdf() { cd "$(dirname "$(find . -name "$1" -maxdepth 5 -type f 2>/dev/null | head -1)")" 2>/dev/null || echo "not found: $1"; }
+swap() { mv "$1" "${1}.bak" && mv "$2" "$1" && mv "${1}.bak" "$2"; }
+epoch() { date +%s; }
+epoch2date() { if _is_mac; then date -r "$1" 2>/dev/null; else date -d "@$1" 2>/dev/null; fi; }
+hrline() { printf '%*s\n' "${1:-80}" '' | tr ' ' "${2:-#}"; }
+
 dev_server_python() { python3 -m http.server "${1:-8000}"; }
 dev_server_php() { php -S "localhost:${1:-8000}"; }
 dev_server_node_http() { npx http-server -p "${1:-8080}"; }
@@ -2095,3 +2178,203 @@ dev_build_esbuild() { npx esbuild "${1:-src/index.js}" --outfile="${2:-dist/bund
 dev_format_prettier() { npx prettier --write "${1:-.}" 2>/dev/null || echo "prettier needed"; }
 dev_lint_eslint() { npx eslint "${1:-.}" 2>/dev/null || echo "eslint needed"; }
 dev_lint_stylelint() { npx stylelint "${1:-**/*.css}" 2>/dev/null || echo "stylelint needed"; }
+
+# cross-platform command wrappers
+have() { command -v "$1" >/dev/null 2>&1; }
+nott() { have "$1" || echo "missing: $1" >&2; }
+macos() { [ "$(uname)" = Darwin ]; }
+linux() { [ "$(uname)" = Linux ]; }
+bsd() { [ "$(uname)" = FreeBSD ] || [ "$(uname)" = OpenBSD ] || [ "$(uname)" = NetBSD ]; }
+wsl() { grep -qi microsoft /proc/version 2>/dev/null; }
+
+# network tools
+myip4() { _x dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com 2>/dev/null | tr -d '"' || _x curl -sf4 ifconfig.me 2>/dev/null || _x curl -sf4 icanhazip.com 2>/dev/null || echo "N/A"; }
+myip6() { _x dig -6 TXT +short o-o.myaddr.l.google.com @ns1.google.com 2>/dev/null | tr -d '"' || _x curl -sf6 ifconfig.me 2>/dev/null || _x curl -sf6 icanhazip.com 2>/dev/null || echo "N/A"; }
+localip() { if linux; then _x ip -4 addr show scope global 2>/dev/null | grep -oP 'inet \K[\d.]+' || _x hostname -I 2>/dev/null | awk '{print $1}'; elif macos; then _x ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}'; fi; }
+dns_lookup() { _x dig +short "$1" 2>/dev/null || _x host "$1" 2>/dev/null | awk '/has address/{print $NF}' || _x nslookup "$1" 2>/dev/null | awk '/^Address: /{print $2}'; }
+dns_reverse() { _x dig +short -x "$1" 2>/dev/null || _x host "$1" 2>/dev/null | awk '/pointer/{print $NF}'; }
+port_scan() { _x nmap -sT -p "${2:-1-1000}" "$1" 2>/dev/null || _x nc -zv "$1" "${2:-80}" 2>/dev/null; }
+http_status() { _x curl -sI -o /dev/null -w "%{http_code}" "$1" 2>/dev/null; }
+http_headers() { _x curl -sI "$1" 2>/dev/null; }
+download() { _x curl -fSL "$1" -o "${2:-$(basename "$1")}" 2>/dev/null || _x wget -q "$1" -O "${2:-$(basename "$1")}" 2>/dev/null || echo "no download tool"; }
+speedtest() { _x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | python3 - 2>/dev/null || echo "speedtest-cli needed"; }
+net_stats() { if linux; then _x ss -s 2>/dev/null || _x netstat -s 2>/dev/null; elif macos; then _x netstat -s 2>/dev/null; fi; }
+route_table() { if linux; then _x ip route 2>/dev/null || _x route -n 2>/dev/null; elif macos; then _x netstat -rn 2>/dev/null; fi; }
+
+# system tools
+sys_uptime() { _x uptime 2>/dev/null || echo "N/A"; }
+sys_load() { _x cat /proc/loadavg 2>/dev/null || _x uptime | awk -F'load averages?:' '{print $2}' || echo "N/A"; }
+sys_os() { _x cat /etc/os-release 2>/dev/null | grep '^PRETTY_NAME=' | cut -d= -f2 | tr -d '"' || _x sw_vers -productName 2>/dev/null; }
+sys_kernel() { _x uname -r 2>/dev/null || echo "N/A"; }
+sys_hostname() { _x hostname 2>/dev/null || _x hostname -s 2>/dev/null || echo "N/A"; }
+sys_users() { _x who 2>/dev/null | awk '{print $1}' | sort -u; }
+sys_logged_in() { _x who 2>/dev/null | wc -l; }
+sys_reboot_required() { test -f /var/run/reboot-required && echo "yes" || echo "no"; }
+sys_temp() { if linux; then _x cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null | head -1 | awk '{print $1/1000"°C"}'; elif macos; then _x sudo powermetrics --samplers smc -i 1 -n 1 2>/dev/null | grep -i "CPU die" | awk '{print $NF}'; fi; }
+
+# disk tools
+disk_usage() { _x df -h "${1:-/}" 2>/dev/null; }
+disk_inode() { _x df -i "${1:-/}" 2>/dev/null; }
+disk_fs() { _x df -T 2>/dev/null || _x df -t 2>/dev/null; }
+disk_mounts() { _x mount 2>/dev/null | grep "^/dev" | awk '{print $1, $3, $5}'; }
+disk_io() { _x iostat 2>/dev/null || echo "iostat needed"; }
+disk_smart() { _x sudo smartctl -H "$1" 2>/dev/null || echo "no smartctl"; }
+disk_usage_depth() { _x du -h --max-depth="${1:-1}" "${2:-.}" 2>/dev/null | sort -h; }
+
+# process tools
+ps_cpu() { _x ps aux --sort=-%cpu 2>/dev/null | head -n "${1:-10}" || _x ps aux 2>/dev/null | sort -k3rn | head -n "${1:-10}"; }
+ps_mem() { _x ps aux --sort=-%mem 2>/dev/null | head -n "${1:-10}" || _x ps aux 2>/dev/null | sort -k4rn | head -n "${1:-10}"; }
+ps_tree() { _x ps auxf 2>/dev/null || _x pstree 2>/dev/null || echo "no process tree tool"; }
+ps_threads() { _x ps -eLf 2>/dev/null | head -n "${1:-20}"; }
+ps_wait() { _x wait "$1" 2>/dev/null; }
+
+# file tools
+file_largest() { find "${1:-.}" -type f -exec ls -lhS {} + 2>/dev/null | head -n "${2:-20}"; }
+file_newest() { find "${1:-.}" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -n "${2:-20}" | cut -d' ' -f2- || find "${1:-.}" -type f -ls 2>/dev/null | sort -k7rn | head -n "${2:-20}"; }
+file_oldest() { find "${1:-.}" -type f -printf '%T@ %p\n' 2>/dev/null | sort -n | head -n "${2:-20}" | cut -d' ' -f2-; }
+file_dupes() { find "${1:-.}" -type f -exec md5sum {} + 2>/dev/null | sort | uniq -w32 -dD; }
+file_split() { _x split -b "$1" "$2" "${3:-x}" 2>/dev/null || echo "usage: file_split SIZE FILE [PREFIX]"; }
+file_join() { _x cat "$@" > "${@: -1}" 2>/dev/null; }
+file_rename_bulk() { for f in *"$1"*; do mv "$f" "${f//$1/$2}" 2>/dev/null; done; }
+file_ext() { ls "$1"*."$1" 2>/dev/null; }
+file_type_dist() { find . -type f -name '*.*' 2>/dev/null | sed 's/.*\.//' | sort | uniq -c | sort -rn; }
+file_zero_size() { find . -type f -empty 2>/dev/null; }
+file_zero_size_rm() { find . -type f -empty -delete 2>/dev/null; }
+
+# text tools
+text_wrap() { _x fold -s -w "${1:-80}" 2>/dev/null; }
+text_truncate() { _x cut -c "1-${1:-80}" 2>/dev/null; }
+text_lower() { tr '[:upper:]' '[:lower:]'; }
+text_upper() { tr '[:lower:]' '[:upper:]'; }
+text_title() { sed 's/.*/\L&/; s/[a-z]*/\u&/g'; }
+text_reverse() { rev; }
+text_sort_words() { tr ' ' '\n' | sort -u | tr '\n' ' '; }
+text_count_words() { wc -w; }
+text_count_lines() { wc -l; }
+text_count_chars() { wc -c; }
+text_uniq_lines() { sort | uniq; }
+text_comm_lines() { sort | uniq -c; }
+text_random_line() { _x shuf -n 1 2>/dev/null || sort -R | head -1; }
+text_columns() { column -t -s "${1:- }"; }
+text_json() { python3 -m json.tool 2>/dev/null || echo "python3 needed"; }
+
+# archive tools
+archive_create_tar() { _x tar czvf "$1.tar.gz" "$@" 2>/dev/null || echo "tar needed"; }
+archive_create_zip() { _x zip -r "$1.zip" "$@" 2>/dev/null || echo "zip needed"; }
+archive_create_7z() { _x 7z a "$1.7z" "$@" 2>/dev/null || echo "7z needed"; }
+archive_list() { case "$1" in *.tar.gz|*.tgz) _x tar tzf "$1" ;; *.tar.bz2|*.tbz2) _x tar tjf "$1" ;; *.tar.xz) _x tar tJf "$1" ;; *.tar) _x tar tf "$1" ;; *.zip) _x unzip -l "$1" ;; *.7z) _x 7z l "$1" ;; *.rar) _x unrar l "$1" ;; esac 2>/dev/null; }
+
+# encrypt tools
+encrypt_aes() { _x openssl enc -aes-256-cbc -salt -in "$1" -out "$1.enc" 2>/dev/null || echo "openssl needed"; }
+decrypt_aes() { _x openssl enc -aes-256-cbc -d -in "$1" -out "${1%.enc}" 2>/dev/null || echo "openssl needed"; }
+encrypt_gpg() { _x gpg -c "$1" 2>/dev/null || echo "gpg needed"; }
+decrypt_gpg() { _x gpg -d "$1" 2>/dev/null || echo "gpg needed"; }
+sign_file() { _x gpg --detach-sign "$1" 2>/dev/null || echo "gpg needed"; }
+verify_file() { _x gpg --verify "$1" "${1%.sig}" 2>/dev/null || echo "gpg needed"; }
+
+# hash tools
+hash_md5() { _x md5sum "$1" 2>/dev/null || _x md5 -r "$1" 2>/dev/null || echo "no md5 tool"; }
+hash_sha1() { _x sha1sum "$1" 2>/dev/null || _x shasum -a1 "$1" 2>/dev/null || echo "no sha1 tool"; }
+hash_sha256() { _x sha256sum "$1" 2>/dev/null || _x shasum -a256 "$1" 2>/dev/null || echo "no sha256 tool"; }
+hash_sha512() { _x sha512sum "$1" 2>/dev/null || _x shasum -a512 "$1" 2>/dev/null || echo "no sha512 tool"; }
+
+# dev tools
+git_branches_old() { for b in $(git branch -r 2>/dev/null); do echo "$b $(git log -1 --format="%ci" "$b" 2>/dev/null)"; done | sort -k2 | head -"${1:-10}"; }
+git_undo_last() { git reset --soft HEAD~1 2>/dev/null; }
+git_ammend_date() { git commit --amend --no-edit --date="$(date -R)" 2>/dev/null; }
+git_log_graph() { git log --graph --oneline --all --decorate 2>/dev/null; }
+git_log_author() { git log --author="$1" --oneline 2>/dev/null; }
+git_log_since() { git log --since="$1" --oneline 2>/dev/null; }
+git_log_short() { git log --oneline -n "${1:-20}" 2>/dev/null; }
+git_changed_files() { git diff --name-only "$1" 2>/dev/null || git diff --name-only HEAD~1 2>/dev/null; }
+git_branch_delete_merged() { git branch --merged | grep -v '\*\|master\|main' | xargs -r git branch -d 2>/dev/null; }
+git_tag_date() { git log -1 --format="%ai" "$1" 2>/dev/null; }
+git_repo_size() { git count-objects -vH 2>/dev/null; }
+
+# systemd if available
+if have systemctl; then
+    service_start() { _x sudo systemctl start "$1"; }
+    service_stop() { _x sudo systemctl stop "$1"; }
+    service_restart() { _x sudo systemctl restart "$1"; }
+    service_status() { _x systemctl status "$1" 2>/dev/null; }
+    service_enable() { _x sudo systemctl enable "$1"; }
+    service_disable() { _x sudo systemctl disable "$1"; }
+    service_logs() { _x journalctl -u "$1" -n "${2:-50}" --no-pager 2>/dev/null; }
+    service_logs_follow() { _x journalctl -u "$1" -f 2>/dev/null; }
+    service_list_all() { _x systemctl list-units --type=service --all 2>/dev/null; }
+    service_failed() { _x systemctl --failed 2>/dev/null; }
+    boot_time() { _x systemd-analyze 2>/dev/null; }
+    boot_time_detail() { _x systemd-analyze blame 2>/dev/null | head -"${1:-20}"; }
+fi
+
+gmb() { local m; m=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null) && echo "${m#origin/}" || echo "main"; }
+gbd() { local m; m=$(gmb) && git diff "$m..HEAD" 2>/dev/null; }
+gcm() { local m; m=$(gmb) && git checkout "$m" 2>/dev/null && git pull 2>/dev/null; }
+gmm() { local m; m=$(gmb) && git merge "$m" 2>/dev/null; }
+gho() { local f="${1:-}" r="${2:-origin}" g b u; g=$(git rev-parse --show-toplevel 2>/dev/null) || return 1; b=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || return 1; u=$(git config --get "remote.$r.url" 2>/dev/null) || return 1; local p="${PWD/#$g/}"; [ -n "$f" ] && p+="/$f"; local a; IFS=:/ read -ra a <<< "$u"; local l=${#a[@]}; local us=${a[l-2]}; local rp=${a[l-1]%.git}; echo "https://github.com/$us/$rp/tree/$b$p"; _x xdg-open "https://github.com/$us/$rp/tree/$b$p" 2>/dev/null || _x open "https://github.com/$us/$rp/tree/$b$p" 2>/dev/null; }
+nb() { git checkout -b "$USER-$(date +%s)" 2>/dev/null; }
+gfix() { git rebase -i HEAD~"${1:-10}" 2>/dev/null; }
+gfixup() { git rebase -i HEAD~"${1:-10}" 2>/dev/null; }
+gfrb() { git fetch origin 2>/dev/null && git rebase origin/HEAD 2>/dev/null; }
+gup() { git pull --rebase 2>/dev/null; }
+gun() { git reset HEAD "$@" 2>/dev/null; }
+gundo() { git reset --soft HEAD~1 2>/dev/null; }
+gclean() { git clean -fd 2>/dev/null; }
+gprune() { git remote prune origin 2>/dev/null; }
+gstash() { git stash push -m "${1:-wip}" 2>/dev/null; }
+gstashp() { git stash pop 2>/dev/null; }
+gstashl() { git stash list 2>/dev/null; }
+glog1() { git log --oneline -n "${1:-20}" 2>/dev/null; }
+glogg() { git log --oneline --graph --all --decorate 2>/dev/null; }
+gdiff() { git diff --word-diff "$@" 2>/dev/null; }
+gdiffc() { git diff --cached "$@" 2>/dev/null; }
+gblam() { git blame "$1" 2>/dev/null; }
+gtag() { git tag -l | sort -V 2>/dev/null; }
+gtags() { git tag -l "${1:-*}" | sort -V 2>/dev/null; }
+gremotes() { git remote -v 2>/dev/null; }
+gcontrib() { git shortlog -sn 2>/dev/null; }
+gstat() { git diff --stat 2>/dev/null; }
+gshow() { git show --stat "$@" 2>/dev/null; }
+gbranchc() { git branch --show-current 2>/dev/null; }
+gbrancha() { git branch -a 2>/dev/null; }
+gbranchd() { git branch -d "$1" 2>/dev/null; }
+gbranchm() { git branch -m "$1" "$2" 2>/dev/null; }
+gcheck() { git log --oneline --left-right "$1...$2" 2>/dev/null; }
+grewrite() { git commit --amend --no-edit 2>/dev/null; }
+grewrited() { git commit --amend --date="$(date -R)" 2>/dev/null; }
+
+untiny() { local l="$1" ll; while [ -n "$l" ]; do [ -n "$ll" ] && echo " -> $ll"; ll="$l"; l=$(curl -sI "$l" 2>/dev/null | grep -i '^Location:' | sed 's/^[Ll]ocation: //' | tr -d '\r\n'); done; echo "$ll"; }
+over() { awk -v c="${1:-80}" 'length($0) > c { printf("%4d %s\n", NR, $0); }'; }
+truecolor_rainbow() { local i r g b; for ((i=0; i<77; i++)); do r=$((255 - (i*255/76))); g=$((i*510/76)); b=$((i*255/76)); ((g>255)) && g=$((510-g)); printf '\033[48;2;%d;%d;%dm ' "$r" "$g" "$b"; done; tput sgr0; echo; }
+dump_palette() { for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do printf "\e[48;5;${i}m  \e[0m"; done; echo; for i in $(seq 16 231); do printf "\e[48;5;${i}m \e[0m"; (( (i-16)%36==35 )) && echo; done; echo; for i in $(seq 232 255); do printf "\e[48;5;${i}m  \e[0m"; done; echo; }
+
+pkg_install() { case "$(uname)" in Linux) if have pacman; then _x sudo pacman -S "$@" 2>/dev/null; elif have apt; then _x sudo apt install "$@" 2>/dev/null; elif have dnf; then _x sudo dnf install "$@" 2>/dev/null; elif have zypper; then _x sudo zypper install "$@" 2>/dev/null; fi;; Darwin) _x brew install "$@" 2>/dev/null;; esac; }
+pkg_remove() { case "$(uname)" in Linux) if have pacman; then _x sudo pacman -R "$@" 2>/dev/null; elif have apt; then _x sudo apt remove "$@" 2>/dev/null; elif have dnf; then _x sudo dnf remove "$@" 2>/dev/null; fi;; Darwin) _x brew uninstall "$@" 2>/dev/null;; esac; }
+pkg_search() { case "$(uname)" in Linux) if have pacman; then _x pacman -Ss "$@" 2>/dev/null; elif have apt; then _x apt search "$@" 2>/dev/null; elif have dnf; then _x dnf search "$@" 2>/dev/null; fi;; Darwin) _x brew search "$@" 2>/dev/null;; esac; }
+pkg_update() { case "$(uname)" in Linux) if have pacman; then _x sudo pacman -Syu 2>/dev/null; elif have apt; then _x sudo apt update && _x sudo apt upgrade 2>/dev/null; elif have dnf; then _x sudo dnf upgrade 2>/dev/null; fi;; Darwin) _x brew update && _x brew upgrade 2>/dev/null;; esac; }
+pkg_info() { case "$(uname)" in Linux) if have pacman; then _x pacman -Qi "$@" 2>/dev/null; elif have apt; then _x apt show "$@" 2>/dev/null; elif have dnf; then _x dnf info "$@" 2>/dev/null; fi;; Darwin) _x brew info "$@" 2>/dev/null;; esac; }
+pkg_files() { case "$(uname)" in Linux) if have pacman; then _x pacman -Ql "$@" 2>/dev/null; elif have dpkg; then _x dpkg -L "$@" 2>/dev/null; fi;; Darwin) echo "N/A";; esac; }
+pkg_orphans() { if have pacman; then _x pacman -Qdt 2>/dev/null; elif have apt; then _x apt list --installed 2>/dev/null | grep -v "^Listing..." | wc -l; fi; }
+
+port_find() { _x lsof -i :"$1" 2>/dev/null || _x ss -tlnp "sport = :$1" 2>/dev/null || _x netstat -tlnp 2>/dev/null | grep ":$1 "; }
+port_kill() { port_find "$1" | awk 'NR>1{print $2}' | xargs -r kill 2>/dev/null; }
+ip_local() { if linux; then _x ip addr show scope global 2>/dev/null | grep -oP 'inet \K[\d.]+' || _x hostname -I 2>/dev/null; elif macos; then _x ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}'; fi; }
+ip_public() { _x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || _x curl -s icanhazip.com 2>/dev/null; }
+ip_dns() { _x dig +short "$1" 2>/dev/null || _x host "$1" 2>/dev/null | awk '/has address/{print $NF}'; }
+ip_reverse() { _x dig +short -x "$1" 2>/dev/null || _x host "$1" 2>/dev/null | awk '/pointer/{print $NF}'; }
+net_listen() { _x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || _x lsof -i -P -n 2>/dev/null | grep LISTEN; }
+net_connections() { _x ss -tunp 2>/dev/null || _x netstat -tunp 2>/dev/null; }
+net_throughput() { _x iperf3 -c "$1" 2>/dev/null || echo "iperf3 needed"; }
+net_wifi() { if linux; then _x iwconfig 2>/dev/null 2>/dev/null || _x nmcli device wifi 2>/dev/null; elif macos; then _x /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I 2>/dev/null; fi; }
+net_dns_cache() { if linux; then _x sudo resolvectl statistics 2>/dev/null || echo "N/A"; elif macos; then _x sudo killall -HUP mDNSResponder 2>/dev/null && echo "DNS cache flushed"; fi; }
+net_mtu() { _x ip link show 2>/dev/null | grep -o 'mtu [0-9]*' || _x ifconfig 2>/dev/null | grep -o 'mtu [0-9]*'; }
+
+curlm() { _x curl -fsSL -o /dev/null -w "HTTP %{http_code} | %{time_total}s | %{size_download}bytes\n" "$1" 2>/dev/null; }
+curlt() { _x curl -fsSL -o /dev/null -w "dns:%{time_namelookup} connect:%{time_connect} tls:%{time_appconnect} ttfb:%{time_starttransfer} total:%{time_total}\n" "$1" 2>/dev/null; }
+curlb() { _x curl -fsSL -D - "$1" -o /dev/null 2>/dev/null; }
+
+watch() { while true; do clear; date; echo "---"; eval "$*"; sleep "${2:-2}"; done; }
+repeat() { local n="$1"; shift; for ((i=0; i<n; i++)); do "$@"; done; }
+countdown() { local s="${1:-10}"; while [ "$s" -gt 0 ]; do printf "\r%3d" "$s"; sleep 1; s=$((s-1)); done; echo; }
+timeit() { TIMEFORMAT="real %3lR  user %3lU  sys %3lS"; time "$@"; }
+bench() { local n="${2:-5}"; echo "benchmarking: $1 ($n runs)"; for ((i=0; i<n; i++)); do TIMEFORMAT="%3lR"; t=$( { time "$@" 2>/dev/null; } 2>&1); echo "  run $((i+1)): ${t}s"; done; }

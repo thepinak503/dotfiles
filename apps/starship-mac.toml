@@ -7,7 +7,7 @@
 # ─── Global Settings ─────────────────────────────────────────────────────────────
 "$schema" = 'https://starship.rs/config-schema.json'
 palette = "tokyo_night"           # ← activate the palette defined below
-command_timeout = 5000
+command_timeout = 500
 scan_timeout = 30
 add_newline = true
 follow_symlinks = true
@@ -101,8 +101,6 @@ $time\
 $battery\
 [▓▒░](fg:#1d2230)\
 [▶](fg:#1d2230)\
-$cmd_duration\
-${custom.public_ip}\
 $character"""
 
 # Right prompt: diagnostics & network info
@@ -995,14 +993,6 @@ format = '[$symbol$output]($style)'
 when = 'test $EUID -eq 0'
 description = "Warns when running as root"
 
-[custom.public_ip]
-command = 'curl -fsSL --max-time 1 ifconfig.me 2>/dev/null || true'
-style = 'fg:#a0a9cb bg:#1d2230'
-symbol = ' '
-format = '[[ $symbol$output ](fg:#a0a9cb bg:#1d2230)]($style)'
-when = 'test -n "$(command -v curl)"'
-shell = 'bash'
-description = "Shows public IP address"
 
 # ── Inactive custom modules (not in format string — won't display as-is) ────
 
