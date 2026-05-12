@@ -2196,4 +2196,14 @@ alias dstats='docker stats --no-stream'
 alias kns='kubectl config set-context --namespace'
 alias kpf='kubectl port-forward'
 
+# ---- Clipboard (macOS pbcopy/pbpaste mapped to Linux equivalents) ----
+if command -v xclip >/dev/null 2>&1; then
+    alias pbcopy='xclip -selection clipboard'
+    alias pbpaste='xclip -selection clipboard -o'
+elif command -v wl-copy >/dev/null 2>&1; then
+    alias pbcopy='wl-copy'
+    alias pbpaste='wl-paste'
+fi
+alias pbc='pbcopy'
+alias pbp='pbpaste'
 
