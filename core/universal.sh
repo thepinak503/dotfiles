@@ -1272,29 +1272,13 @@ version_tools() {
 
 version_all() { version_dotfiles; echo; version_tools; }
 
-sysinfo() {
+
+
+sysinfo_full() {
     echo "=== System Information ==="
     echo "OS: $(uname -s) $(uname -r)"
     echo "Host: $(uname -n)"
     echo "Arch: $(uname -m)"
-    echo "CPU: $(lscpu 2>/dev/null | grep 'Model name' | head -1 | cut -d: -f2 | xargs || sysctl -n machdep.cpu.brand_string 2>/dev/null || echo 'N/A')"
-    echo "Cores: $(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 'N/A')"
-    echo "RAM: $(free -h 2>/dev/null | grep Mem | awk '{print $2}' || vm_stat 2>/dev/null | grep 'Pages' | head -1 || echo 'N/A')"
-    echo "Disk: $(df -h / 2>/dev/null | tail -1 | awk '{print $2, $3, $4, $5}' || echo 'N/A')"
-    echo "Kernel: $(uname -r)"
-    echo "Uptime: $(uptime 2>/dev/null | sed 's/.*up //' | sed 's/,.*//' || echo 'N/A')"
-    echo "Packages: $(pacman -Q 2>/dev/null | wc -l || dpkg -l 2>/dev/null | wc -l || rpm -qa 2>/dev/null | wc -l || brew list 2>/dev/null | wc -l || echo 'N/A')"
-    echo "Shell: ${SHELL}"
-    echo "Terminal: ${TERM}"
-    echo "Desktop: ${XDG_CURRENT_DESKTOP:-unknown}"
-    echo "Session: ${DESKTOP_SESSION:-unknown}"
-    echo "Display: ${DISPLAY:-wayland}"
-    echo "GPU: $(lspci 2>/dev/null | grep VGA | head -1 | cut -d: -f3 | xargs || system_profiler SPDisplaysDataType 2>/dev/null | grep Chipset | head -1 || echo 'N/A')"
-    echo "Battery: $(cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1)%"
-}
-
-sysinfo_full() {
-    sysinfo
     echo ""
     echo "=== Network ==="
     echo "IP: $(localip)"
@@ -1469,7 +1453,7 @@ alias dots_tools='version_tools'
 # Shells: bash zsh fish
 # Cross-platform: Linux + macOS
 
-dots_countdown
+
 alias dots_need_14='echo 14 lines to go'
 alias dots_need_13='echo 13 lines to go'
 alias dots_need_12='echo 12 lines to go'

@@ -2122,11 +2122,11 @@ colors() { for i in {0..15}; do printf "\e[48;5;${i}m  \e[0m"; done; echo; for i
 
 wanip() { _x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || _x curl -s icanhazip.com 2>/dev/null; }
 
-myip() { wanip; }
 
-flush() { case "$(uname)" in Darwin) _x dscacheutil -flushcache; _x sudo killall -HUP mDNSResponder ;; Linux) _x sudo systemd-resolve --flush-caches 2>/dev/null || true ;; esac; }
 
-countfiles() { for t in files links directories; do echo "$(find . -type "${t:0:1}" 2>/dev/null | wc -l) $t"; done 2>/dev/null; }
+
+
+
 
 pwdtail() { pwd | awk -F/ '{nlast=NF-1; print $nlast"/"$NF}'; }
 
@@ -2153,8 +2153,8 @@ paste_cmd() { _x xclip -selection clipboard -o 2>/dev/null || _x wl-paste 2>/dev
 
 cdf() { cd "$(dirname "$(find . -name "$1" -maxdepth 5 -type f 2>/dev/null | head -1)")" 2>/dev/null || echo "not found: $1"; }
 swap() { mv "$1" "${1}.bak" && mv "$2" "$1" && mv "${1}.bak" "$2"; }
-epoch() { date +%s; }
-epoch2date() { if _is_mac; then date -r "$1" 2>/dev/null; else date -d "@$1" 2>/dev/null; fi; }
+epoch() { command date +%s; }
+epoch2date() { if _is_mac; then command date -r "$1" 2>/dev/null; else command date -d "@$1" 2>/dev/null; fi; }
 hrline() { printf '%*s\n' "${1:-80}" '' | tr ' ' "${2:-#}"; }
 
 dev_server_python() { python3 -m http.server "${1:-8000}"; }
@@ -2308,11 +2308,11 @@ if have systemctl; then
 fi
 
 gmb() { local m; m=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null) && echo "${m#origin/}" || echo "main"; }
-gbd() { local m; m=$(gmb) && git diff "$m..HEAD" 2>/dev/null; }
+
 gcm() { local m; m=$(gmb) && git checkout "$m" 2>/dev/null && git pull 2>/dev/null; }
 gmm() { local m; m=$(gmb) && git merge "$m" 2>/dev/null; }
 gho() { local f="${1:-}" r="${2:-origin}" g b u; g=$(git rev-parse --show-toplevel 2>/dev/null) || return 1; b=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || return 1; u=$(git config --get "remote.$r.url" 2>/dev/null) || return 1; local p="${PWD/#$g/}"; [ -n "$f" ] && p+="/$f"; local a; IFS=:/ read -ra a <<< "$u"; local l=${#a[@]}; local us=${a[l-2]}; local rp=${a[l-1]%.git}; echo "https://github.com/$us/$rp/tree/$b$p"; _x xdg-open "https://github.com/$us/$rp/tree/$b$p" 2>/dev/null || _x open "https://github.com/$us/$rp/tree/$b$p" 2>/dev/null; }
-nb() { git checkout -b "$USER-$(date +%s)" 2>/dev/null; }
+
 gfix() { git rebase -i HEAD~"${1:-10}" 2>/dev/null; }
 gfixup() { git rebase -i HEAD~"${1:-10}" 2>/dev/null; }
 gfrb() { git fetch origin 2>/dev/null && git rebase origin/HEAD 2>/dev/null; }
@@ -2330,11 +2330,11 @@ gdiff() { git diff --word-diff "$@" 2>/dev/null; }
 gdiffc() { git diff --cached "$@" 2>/dev/null; }
 gblam() { git blame "$1" 2>/dev/null; }
 gtag() { git tag -l | sort -V 2>/dev/null; }
-gtags() { git tag -l "${1:-*}" | sort -V 2>/dev/null; }
+
 gremotes() { git remote -v 2>/dev/null; }
 gcontrib() { git shortlog -sn 2>/dev/null; }
 gstat() { git diff --stat 2>/dev/null; }
-gshow() { git show --stat "$@" 2>/dev/null; }
+
 gbranchc() { git branch --show-current 2>/dev/null; }
 gbrancha() { git branch -a 2>/dev/null; }
 gbranchd() { git branch -d "$1" 2>/dev/null; }
@@ -2373,8 +2373,8 @@ curlm() { _x curl -fsSL -o /dev/null -w "HTTP %{http_code} | %{time_total}s | %{
 curlt() { _x curl -fsSL -o /dev/null -w "dns:%{time_namelookup} connect:%{time_connect} tls:%{time_appconnect} ttfb:%{time_starttransfer} total:%{time_total}\n" "$1" 2>/dev/null; }
 curlb() { _x curl -fsSL -D - "$1" -o /dev/null 2>/dev/null; }
 
-watch() { while true; do clear; date; echo "---"; eval "$*"; sleep "${2:-2}"; done; }
-repeat() { local n="$1"; shift; for ((i=0; i<n; i++)); do "$@"; done; }
+watch() { while true; do clear; command date; echo "---"; eval "$*"; sleep "${2:-2}"; done; }
+repeat_cmd() { local n="$1"; shift; for ((i=0; i<n; i++)); do "$@"; done; }
 countdown() { local s="${1:-10}"; while [ "$s" -gt 0 ]; do printf "\r%3d" "$s"; sleep 1; s=$((s-1)); done; echo; }
 timeit() { TIMEFORMAT="real %3lR  user %3lU  sys %3lS"; time "$@"; }
 bench() { local n="${2:-5}"; echo "benchmarking: $1 ($n runs)"; for ((i=0; i<n; i++)); do TIMEFORMAT="%3lR"; t=$( { time "$@" 2>/dev/null; } 2>&1); echo "  run $((i+1)): ${t}s"; done; }

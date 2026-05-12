@@ -2199,8 +2199,8 @@ elif command -v wl-copy >/dev/null 2>&1; then
 fi
 alias pbc='pbcopy'
 alias pbp='pbpaste'
-alias cpy='pbcopy'
-alias pst='pbpaste'
+alias cpy='(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard) || (command -v wl-copy >/dev/null 2>&1 && wl-copy) || (command -v pbcopy >/dev/null 2>&1 && pbcopy) || echo "missing: clipboard tool" >&2'
+alias pst='(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard -o) || (command -v wl-paste >/dev/null 2>&1 && wl-paste) || (command -v pbpaste >/dev/null 2>&1 && pbpaste) || echo "missing: clipboard tool" >&2'
 
 alias path="echo \$PATH | tr ':' '\\n' | sort -u"
 alias envg="env | grep -i"
