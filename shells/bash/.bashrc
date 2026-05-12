@@ -82,6 +82,9 @@ fi
 # All aliases (merged into one file)
 [[ -f "$DOTFILES_DIR/core/aliases.sh" ]] && source "$DOTFILES_DIR/core/aliases.sh"
 
+# Bash-specific aliases (2000+)
+[[ -f "$DOTFILES_DIR/shells/bash/aliases.bash" ]] && source "$DOTFILES_DIR/shells/bash/aliases.bash"
+
 # All functions (merged into one file)
 [[ -f "$DOTFILES_DIR/core/functions.sh" ]] && source "$DOTFILES_DIR/core/functions.sh"
 

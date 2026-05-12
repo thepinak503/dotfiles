@@ -88,6 +88,9 @@ bindkey '^_' undo
 # All aliases (merged)
 [[ -f "$DOTFILES_DIR/core/aliases.sh" ]] && source "$DOTFILES_DIR/core/aliases.sh"
 
+# Zsh-specific aliases (2000+)
+[[ -f "$DOTFILES_DIR/shells/zsh/aliases.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/aliases.zsh"
+
 # All functions (merged)
 [[ -f "$DOTFILES_DIR/core/functions.sh" ]] && source "$DOTFILES_DIR/core/functions.sh"
 

@@ -169,7 +169,7 @@ check_bash_zsh_conflicts "BASH" "bash" \
 
 # Check ZSH files
 check_bash_zsh_conflicts "ZSH" "zsh" \
-    "$ROOT/core/aliases.sh $ROOT/core/universal.sh" \
+    "$ROOT/core/aliases.sh $ROOT/core/universal.sh $ROOT/core/arch_aliases.sh $ROOT/core/debian_aliases.sh $ROOT/core/fedora_aliases.sh $ROOT/core/macos_aliases.sh $ROOT/shells/zsh/aliases.zsh" \
     "$ROOT/core/functions.sh $ROOT/core/tools.sh"
 
 # Check FISH (different syntax)
@@ -223,7 +223,6 @@ section "PHASE 3: LIVE SHELL LOAD TEST"
 
 test_shell_load() {
     local shell_name="$1"
-    local shell_rc="$2"
     
     echo ""
     echo "Testing $shell_name RC load..."
@@ -259,6 +258,8 @@ test_shell_load() {
         -e '^stty: .*standard input' \
         -e 'tput: No value for $TERM' \
         -e 'find-the-command:' \
+        -e 'no job control in this shell' \
+        -e '^exit$' \
         "$test_err")
     
     if [[ $rc -ne 0 ]]; then

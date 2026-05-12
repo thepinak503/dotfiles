@@ -17,8 +17,8 @@ gui:
       - '#bf616a' # Nord Aurora Red
     defaultSideSize: 0.4
 git:
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never
 os:
   editCommand: 'nvim'

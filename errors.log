@@ -1,1 +1,10 @@
 [2026-04-24 10:24:16] EXIT=2 CMD=env -i zsh -i -c "echo DOTFILES_DIR=$DOTFILES_DIR"
+[2026-05-11 23:08:33] STARTUP_ERROR (Bash):
+bash: cannot set terminal process group (31727): Inappropriate ioctl for device
+stty: 'standard input': Inappropriate ioctl for device
+exit
+[2026-05-11 23:08:33] STARTUP_ERROR (Zsh):
+/home/pinak/.local/share/dotfiles/core/functions.sh:4: defining function based on alias `up'
+/home/pinak/.local/share/dotfiles/core/functions.sh:4: parse error near `()'
+/home/pinak/.local/share/dotfiles/core/tools.sh:112: defining function based on alias `dotinstall'
+/home/pinak/.local/share/dotfiles/core/tools.sh:112: parse error near `()'
