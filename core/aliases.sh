@@ -1,3 +1,27 @@
+# -----------------------------------------------------------------------------
+# Navigation
+# -----------------------------------------------------------------------------
+#
+# This section provides directory navigation shortcuts. These aliases reduce
+# keystrokes for common directory traversal patterns, directory bookmarks for
+# frequently accessed locations, and shell session management commands.
+#
+# Notable aliases:
+#   .. / ... / ....  — go up 1–5 directory levels (also a / aa / aaa / aaaa / aaaaa)
+#   home             — cd to $HOME
+#   docs / dt / tmp  — cd to ~/Documents, ~/Desktop, /tmp
+#   root             — cd to filesystem root
+#   bk               — return to previous directory (cd -)
+#   tmpdir           — cd to a temporary directory created with mktemp
+#   x / :q / q       — exit the shell
+#   c / cls / clr    — clear the terminal
+#   dash / -         — cd back (function + alias)
+#
+# See also: pushd, popd, zoxide (z, zi)
+#
+# Tip: use bk to toggle between two directories rapidly.
+#
+
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -8,10 +32,6 @@ alias aaa='cd ../../..'
 alias aaaa='cd ../../../..'
 alias aaaaa='cd ../../../..'
 alias home='cd ~'
-alias dots='cd "$DOTFILES_DIR"'
-alias dotfiles='cd "$DOTFILES_DIR"'
-alias dotst='git -C "$DOTFILES_DIR" status --short --branch'
-alias edots='$EDITOR "$DOTFILES_DIR"'
 alias docs='cd ~/Documents'
 alias dt='cd ~/Desktop'
 alias tmp='cd /tmp'
@@ -20,6 +40,40 @@ alias bk='cd -'
 alias x='exit'
 alias c='clear'
 alias cls='clear'
+alias clr='clear'
+alias tmpdir='cd $(mktemp -d)'
+dash() { cd -; }
+alias -- -='dash'
+alias :q='exit'
+alias q='exit'
+
+# -----------------------------------------------------------------------------
+# File Listing
+# -----------------------------------------------------------------------------
+#
+# This section provides file and directory listing aliases. These commands
+# enhance the default ls experience with tree views, detailed listings, and
+# modern alternatives (eza/exa) when available, falling back to standard ls.
+#
+# Notable aliases:
+#   lsa / l1 / lh / lr  — various ls flag combinations (-a, -1, -lhS, -lR)
+#   lsd / lsdot         — list only directories / dotfiles
+#   lsf                 — list only regular files (via grep -v /)
+#   lsbig               — largest files by size (ls -lS | head -20)
+#   lshidden            — show hidden entries only
+#   ltree               — eza --tree or fallback to find -maxdepth 3
+#   le                  — list unique file extensions in pwd
+#   lw                  — ls -ldh of current directory
+#   ls / ll / la / tree — smart wrappers preferring eza, then exa, then ls
+#   ldir / dirs         — list directories only
+#   lf                  — list files with sizes sorted ascending
+#
+# See also: eza(1), exa(1), ls(1), tree(1)
+#
+# Warning: the fallback chain may produce different output formats across
+#          systems where eza/exa are not installed.
+#
+
 alias lsa='ls -a'
 alias lsd='ls -d */'
 alias lsdot='ls -d .*'
@@ -30,16 +84,44 @@ alias ltree='eza --tree --level=3 --icons=auto 2>/dev/null || find . -maxdepth 3
 alias l1='ls -1'
 alias lh='ls -lhS'
 alias lr='ls -lR'
-alias duh='du -sh'
-alias dfh='df -h'
-alias freeh='free -h'
-alias h='history'
-alias j='jobs -l'
-alias clr='clear'
-alias please='sudo'
-alias pathlines='printf "%s\n" ${PATH//:/\\n}'
-alias mkdirp='mkdir -p'
-alias focus='printf "\033c" && date +"%F %T"'
+alias le="ls | grep -o '.[^.]*$' | sort | uniq"
+alias lw='ls -ldh $(pwd)'
+alias ls='_x eza --group-directories-first --icons 2>/dev/null || _x exa --group-directories-first 2>/dev/null || ls --color=auto 2>/dev/null || ls -G'
+alias ll='_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || ls -l'
+alias la='_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || ls -la'
+alias tree='_x eza -T --icons 2>/dev/null || _x tree 2>/dev/null || echo "tree/eza needed"'
+alias dirs='ls -d */'
+alias ldir='ls -d */'
+alias lf='find . -maxdepth 1 -type f -exec ls -lh {} + 2>/dev/null | sort -k5 -h'
+
+# -----------------------------------------------------------------------------
+# System Information — Dotfiles Management
+# -----------------------------------------------------------------------------
+#
+# This section covers aliases for managing and inspecting the dotfiles
+# repository itself. These commands provide shortcuts for common git
+# operations scoped to $DOTFILES_DIR, health checks, version info, and
+# reloading the shell configuration.
+#
+# Notable aliases:
+#   dots / dotfiles   — cd to the dotfiles directory
+#   dotst             — short git status of the dotfiles repo
+#   dotupdate         — run the full dotfiles update script
+#   dothealth         — run the health check script
+#   dotbranch / dotdiff / dotlog / dotpush — git operations on dotfiles
+#   dotreload         — exec $SHELL -l to reload the login shell
+#   dsync             — run dot_sync (sync function)
+#   chmode            — set $DOTFILES_MODE
+#
+# See also: git(1), chezmoi(1)
+#
+# Tip: run dothealth after any config change to catch regressions early.
+#
+
+alias dots='cd "$DOTFILES_DIR"'
+alias dotfiles='cd "$DOTFILES_DIR"'
+alias dotst='git -C "$DOTFILES_DIR" status --short --branch'
+alias edots='$EDITOR "$DOTFILES_DIR"'
 alias dotupdate='bash "$DOTFILES_DIR/bin/dotupdate.sh"'
 alias dothealth='bash "$DOTFILES_DIR/bin/health_check.sh"'
 alias dotbench='bash "$DOTFILES_DIR/bin/benchmark_shell.sh"'
@@ -55,6 +137,54 @@ alias dotmode='echo "$DOTFILES_MODE"'
 alias dotpush='git -C "$DOTFILES_DIR" push'
 alias dotreload='exec "$SHELL" -l'
 alias dotver='echo "$DOTFILES_VERSION"'
+alias dsync='dot_sync'
+alias chmode='export DOTFILES_MODE'
+alias modestat='echo "Mode: ${DOTFILES_MODE:-unknown}"'
+alias dotinfo='echo "Dotfiles: $DOTFILES_DIR | Mode: ${DOTFILES_MODE:-unknown} | Shell: $SHELL"'
+
+# -----------------------------------------------------------------------------
+# Git Operations
+# -----------------------------------------------------------------------------
+#
+# This section provides comprehensive git aliases for common version control
+# workflows. These cover commit, push, pull, branch management, diff, stash,
+# rebase, merge, cherry-pick, tag operations, and diagnostic commands, all
+# using short two- and three-character mnemonics.
+#
+# Notable aliases:
+#   g      — git (base command)
+#   ga     — git add
+#   gc     — git commit -v
+#   gca    — git commit -a -v
+#   gpl    — git pull (with or without --rebase --autostash)
+#   gp     — git push
+#   gco    — git checkout
+#   gcb    — git checkout -b
+#   gsw    — git switch
+#   gswc   — git switch --create
+#   gd     — git diff
+#   gdc    — git diff --cached
+#   gl     — git log --oneline -n 20
+#   gla    — git log --oneline --graph --all --decorate
+#   gs     — git status
+#   gss    — git status --short
+#   gst    — git stash
+#   gsta   — git stash apply
+#   grb    — git rebase
+#   grbc   — git rebase --continue
+#   gm     — git merge
+#   gcp    — git cherry-pick
+#   gbl    — git blame
+#   gsh    — git show
+#   gwip   — git add -A && git commit -m "wip" (--no-verify)
+#   gwipe  — git reset --hard && git clean --force -df
+#   nah    — hard reset + clean (same as gwipe)
+#
+# See also: git(1), git-workflow(7), lazygit (lg)
+#
+# Warning: gwipe / nah are destructive — they discard uncommitted changes.
+#
+
 alias gap='git add -p'
 alias gcm='git commit -m'
 alias gcan='git commit --amend --no-edit'
@@ -87,6 +217,143 @@ alias gwp='git worktree prune'
 alias grepo='git init'
 alias gtags='git tag -l'
 alias gshow='git show'
+alias gwip='git add -A && git rm $(git ls-files --deleted) 2>/dev/null; git commit --no-verify -m "wip"'
+alias gwipe='git reset --hard && git clean --force -df'
+alias nah='git reset --hard && git clean -df'
+alias gbage='for k in $(git branch -a | sed "s/^..//;s/ ->.*//" 2>/dev/null); do echo -e "$(git show --pretty=format:"%ci %cr" $k -- 2>/dev/null | head -1)\t$k"; done | sort -r'
+alias gmn='git merge --no-ff --no-commit'
+alias g='git'
+alias ga='git add'
+alias gaa='git add --all'
+alias gau='git add -u'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gbd='git branch -d'
+alias gbm='git branch -m'
+alias gbc='git branch --show-current'
+alias gc='git commit -v'
+alias gca='git commit -a -v'
+alias gcam='git commit --amend --no-edit'
+alias gcne='git commit --no-edit'
+alias gcnv='git commit --no-verify'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gd='git diff'
+alias gds='git diff --stat'
+alias gf='git fetch'
+alias gfa='git fetch --all'
+alias gfr='git fetch --prune'
+alias gi='git init'
+alias gl='git log --oneline -n 20'
+alias gp='git push'
+alias gpo='git push origin'
+alias gpoh='git push origin HEAD'
+alias gpu='git push --set-upstream origin'
+alias gplr='git pull --rebase'
+alias gr='git remote -v'
+alias gra='git remote add'
+alias grm='git remote remove'
+alias gs='git status'
+alias gss='git status --short'
+alias gst='git stash'
+alias gstl='git stash list'
+alias gstp='git stash pop'
+alias gt='git tag'
+alias gtl='git tag -l'
+alias gtd='git tag -d'
+alias gtop='gcd'
+alias grh='git reset --hard'
+alias grs='git reset --soft'
+alias gm='git merge'
+alias gmnf='git merge --no-ff'
+alias gmt='git mergetool'
+alias gmv='git mv'
+alias grb='git rebase'
+alias grbi='git rebase -i'
+alias gcl1='git clone --depth=1'
+alias gcf='git config'
+alias gcfl='git config -l'
+alias gk='gitk'
+alias gkw='gitk --all'
+alias gsh='git show'
+alias gshs='git show --stat'
+alias gshn='git show --name-only'
+alias gdf='git difftool'
+
+# -----------------------------------------------------------------------------
+# GitHub CLI (gh)
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for the GitHub CLI tool. These cover pull
+# request management, issue tracking, release operations, repository
+# inspection, and workflow actions.
+#
+# Notable aliases:
+#   gh     — gh (base command)
+#   ghs    — gh status
+#   ghp    — gh pr
+#   ghpl   — gh pr list
+#   ghpc   — gh pr create
+#   ghco   — gh pr checkout
+#   ghi    — gh issue
+#   ghr    — gh release
+#   ghrep  — gh repo
+#   ghw    — gh workflow
+#
+# See also: gh(1), https://cli.github.com/manual/
+#
+
+if command -v gh >/dev/null 2>&1; then
+    alias ghs='gh status'
+    alias ghp='gh pr'
+    alias ghpl='gh pr list'
+    alias ghpc='gh pr create'
+    alias ghpm='gh pr merge'
+    alias ghco='gh pr checkout'
+    alias ghi='gh issue'
+    alias ghil='gh issue list'
+    alias ghic='gh issue create'
+    alias ghr='gh release'
+    alias ghrl='gh release list'
+    alias ghrc='gh release create'
+    alias ghrd='gh release download'
+    alias ghrv='gh release view'
+    alias ghrep='gh repo'
+    alias ghrepv='gh repo view'
+    alias ghcl='gh repo clone'
+    alias ghcr='gh repo create'
+    alias ghw='gh workflow'
+fi
+
+# -----------------------------------------------------------------------------
+# Docker Management
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Docker and Docker Compose. These cover
+# container lifecycle (run, exec, stop, rm), image management (build, rmi),
+# system pruning, compose stacks, volume/network inspection, and resource
+# usage statistics.
+#
+# Notable aliases:
+#   dk       — docker (base command via _x)
+#   dkps     — docker ps
+#   dkex     — docker exec -it
+#   dklogs   — docker logs -f
+#   dkstop   — stop all running containers
+#   dkrm     — remove all stopped containers
+#   dkprune  — docker system prune -af
+#   dkclean  — docker system prune -af --volumes
+#   dkup     — docker compose up -d
+#   dkdown   — docker compose down
+#   dstats   — docker stats --no-stream
+#   lzd      — lazydocker TUI
+#   docker-ip — inspect container IP address
+#
+# See also: docker(1), docker-compose(1), lazydocker
+#
+# Warning: dkstop, dkrm, dkprune, dkclean operate on ALL containers/images.
+#
+
 if command -v docker >/dev/null 2>&1; then
     alias dk='_x docker'
     alias dkps='_x docker ps'
@@ -120,7 +387,80 @@ if command -v docker >/dev/null 2>&1; then
     alias dknet='_x docker network ls'
     alias dkvol='_x docker volume ls'
     alias dksys='_x docker system df'
+    alias docker-ip="_x docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null"
+    alias dstats='_x docker stats --no-stream'
 fi
+
+if command -v lazydocker >/dev/null 2>&1; then
+    alias lzd='lazydocker'
+fi
+
+# -----------------------------------------------------------------------------
+# Container Image Tools
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for container image inspection, analysis,
+# and security scanning tools. These cover image inspection (skopeo, dive),
+# Dockerfile linting (hadolint), vulnerability scanning (trivy), and
+# signature verification (cosign).
+#
+# Notable aliases:
+#   sk / skc / skl / ski / sks — skopeo (copy, list-tags, inspect, sync)
+#   dive                        — image layer inspection TUI
+#   hado                        — hadolint Dockerfile linter
+#   trivy / trivyi / trivyf     — vulnerability scanner (image, fs, repo)
+#   cosign / cosignv / cosigns  — container image signing and verification
+#
+# See also: skopeo(1), dive(1), hadolint(1), trivy(1), cosign(1)
+#
+
+if command -v skopeo >/dev/null 2>&1; then
+    alias sk='skopeo'
+    alias skc='skopeo copy'
+    alias skl='skopeo list-tags'
+    alias ski='skopeo inspect'
+    alias sks='skopeo sync'
+fi
+
+
+if command -v hadolint >/dev/null 2>&1; then
+    alias hado='hadolint'
+fi
+
+if command -v trivy >/dev/null 2>&1; then
+    alias trivyi='trivy image'
+    alias trivyf='trivy fs'
+    alias trivyr='trivy repo'
+fi
+
+if command -v cosign >/dev/null 2>&1; then
+    alias cosignv='cosign verify'
+    alias cosigns='cosign sign'
+fi
+
+# -----------------------------------------------------------------------------
+# Podman Management
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Podman, the daemonless container engine.
+# These cover container lifecycle (run, exec, stop, rm), image management,
+# system pruning, and compose operations, mirroring the Docker alias scheme.
+#
+# Notable aliases:
+#   pod        — podman (base command via _x)
+#   podps      — podman ps
+#   podex      — podman exec -it
+#   podlogs    — podman logs -f
+#   podstop    — stop all running containers
+#   podprune   — podman system prune -af
+#   podcom     — podman compose
+#   podrun     — podman run -it --rm
+#
+# See also: podman(1), containers-podman(1)
+#
+# Warning: podstop operates on ALL running containers.
+#
+
 if command -v podman >/dev/null 2>&1; then
     alias pod='_x podman'
     alias podps='_x podman ps'
@@ -137,6 +477,34 @@ if command -v podman >/dev/null 2>&1; then
     alias podup='_x podman compose up -d'
     alias poddown='_x podman compose down'
 fi
+
+# -----------------------------------------------------------------------------
+# Kubernetes Operations
+# -----------------------------------------------------------------------------
+#
+# This section covers kubectl aliases for managing Kubernetes clusters.
+# These address pod and deployment operations, service inspection, log
+# streaming, port-forwarding, context switching, resource creation, and
+# cluster administration (cordon, drain, taint).
+#
+# Notable aliases:
+#   kgpw    — kubectl get pods -w
+#   kd / kdp / kds / kdd — kubectl describe (pod, svc, deployment)
+#   kl / klf — kubectl logs / -f
+#   kpf     — kubectl port-forward
+#   kexec   — kubectl exec -it
+#   ka      — kubectl apply -f
+#   ktop    — kubectl top pods
+#   kns     — set namespace context
+#   kind    — kind (Kubernetes in Docker) management
+#   mk      — minikube management
+#   k0      — k0s management
+#
+# See also: kubectl(1), kubeconfig(5), minikube(1), kind(1), k0s(1)
+#
+# Tip: use kns <namespace> to switch default namespace without editing kubeconfig.
+#
+
 if command -v kubectl >/dev/null 2>&1; then
     alias kgpw='_x kubectl get pods -w'
     alias kgns='_x kubectl get namespaces'
@@ -164,1872 +532,14 @@ if command -v kubectl >/dev/null 2>&1; then
     alias kdrain='_x kubectl drain'
     alias kapi='_x kubectl api-resources'
     alias kexplain='_x kubectl explain'
-fi
-if command -v systemctl >/dev/null 2>&1; then
-    alias scsr='_x systemctl restart'
-    alias scse='_x systemctl enable'
-    alias scsd='_x systemctl disable'
-    alias scn='_x systemctl daemon-reload'
-    alias scens='_x systemctl enable --now'
-    alias scdis='_x systemctl disable --now'
-    alias scu='_x systemctl --user'
-    alias scus='_x systemctl --user status'
-    alias scust='_x systemctl --user start'
-    alias scusp='_x systemctl --user stop'
-    alias scusr='_x systemctl --user restart'
-    alias scuse='_x systemctl --user enable'
-    alias scusd='_x systemctl --user disable'
-    alias scl='_x systemctl list-units'
-    alias scla='_x systemctl list-units --all'
-    alias scfail='_x systemctl list-units --failed'
-    alias scmask='_x systemctl mask'
-    alias scunmask='_x systemctl unmask'
-    alias sccat='_x systemctl cat'
-    alias sclist='_x systemctl list-unit-files'
-    alias scon='_x systemctl is-active'
-fi
-if command -v journalctl >/dev/null 2>&1; then
-    alias jc='_x journalctl'
-    alias jce='_x journalctl -e'
-    alias jcf='_x journalctl -f'
-    alias jcu='_x journalctl -u'
-    alias jcub='_x journalctl -u -b'
-    alias jcs='_x journalctl --since'
-    alias jct='_x journalctl --until'
-    alias jcp='_x journalctl -p err'
-    alias jcdf='_x journalctl --disk-usage'
-    alias jcro='_x journalctl --rotate'
-    alias jcv='_x journalctl --verify'
-    alias jcemerg='_x journalctl -p emerg'
-    alias jcalert='_x journalctl -p alert'
-    alias jccrit='_x journalctl -p crit'
-    alias jcwarn='_x journalctl -p warning'
-    alias jcnotice='_x journalctl -p notice'
-    alias jcinfo='_x journalctl -p info'
-    alias jcdebug='_x journalctl -p debug'
-    alias jcboot='_x journalctl -b'
-fi
-if command -v pacman >/dev/null 2>&1; then
-    alias pac='sudo pacman'
-    alias pacs='_x pacman -Ss'
-    alias pacsi='_x pacman -Si'
-    alias pacq='_x pacman -Q'
-    alias pacqi='_x pacman -Qi'
-    alias pacql='_x pacman -Ql'
-    alias pacqo='_x pacman -Qo'
-    alias pacqs='_x pacman -Qs'
-    alias pacup='sudo pacman -Syu'
-    alias pacin='sudo pacman -S'
-    alias pacrm='sudo pacman -Rns'
-    alias pacrmu='sudo pacman -Rdd'
-    alias pacor='sudo pacman -Sc'
-    alias pacowned='_x pacman -Qii'
-    alias pacorph='_x pacman -Qtdq'
-    alias pacclean='sudo pacman -Rns $(pacman -Qtdq)'
-    alias paclsorph='_x pacman -Qtd'
-    alias pacfiles='_x pacman -Fl'
-    alias pacdep='_x pacman -Si'
-    alias pacwhy='_x pacman -D --asexplicit'
-    alias fixpacman='sudo rm -f /var/lib/pacman/db.lck'
-fi
-if command -v yay >/dev/null 2>&1; then
-    alias yay='yay'
-    alias yays='yay -Ss'
-    alias yayq='yay -Q'
-    alias yayup='yay -Syu'
-    alias yayi='yay -S'
-    alias yayrm='yay -Rns'
-    alias yayclean='yay -Sc'
-    alias yaygendb='yay -Y --gendb'
-    alias yaydev='yay -S --devel'
-    alias yayfiles='yay -Fl'
-fi
-if command -v apt >/dev/null 2>&1 || command -v apt-get >/dev/null 2>&1; then
-    alias apt='_x apt'
-    alias aptup='sudo apt update && sudo apt upgrade -y'
-    alias aptin='sudo apt install'
-    alias aptr='sudo apt remove'
-    alias aptp='sudo apt purge'
-    alias apts='_x apt search'
-    alias aptsh='_x apt show'
-    alias aptq='dpkg -l'
-    alias aptqi='dpkg -l | grep'
-    alias aptau='sudo apt autoremove'
-    alias aptd='sudo apt download'
-    alias aptsrc='sudo apt source'
-    alias aptbuild='sudo apt build-dep'
-    alias aptpolicy='_x apt policy'
-    alias aptchangelog='_x apt changelog'
-    alias aptlistup='_x apt list --upgradable'
-    alias aptlistins='_x apt list --installed'
-    alias apthold='sudo apt-mark hold'
-    alias aptunhold='sudo apt-mark unhold'
-    alias aptshowhold='apt-mark showhold'
-    alias aptfix='sudo apt --fix-broken install'
-    alias aptupdate='sudo apt update'
-    alias aptdistup='sudo apt full-upgrade'
-fi
-if command -v dnf >/dev/null 2>&1; then
-    alias dnf='_x dnf'
-    alias dnfs='_x dnf search'
-    alias dnfsi='_x dnf info'
-    alias dnfup='sudo dnf upgrade'
-    alias dnfi='sudo dnf install'
-    alias dnfrm='sudo dnf remove'
-    alias dnfau='sudo dnf autoremove'
-    alias dnfq='_x dnf list installed'
-    alias dnfqi='_x dnf list installed | grep'
-    alias dnfrep='_x dnf repolist'
-    alias dnfre='_x dnf group list'
-    alias dnfcache='sudo dnf clean all'
-    alias dnfhist='_x dnf history'
-    alias dnfhistinfo='_x dnf history info'
-    alias dnfroll='_x dnf history rollback'
-    alias dnfdowng='_x dnf downgrade'
-    alias dnflocal='sudo dnf localinstall'
-    alias dnfprov='_x dnf provides'
-    alias dnfchk='_x dnf check-update'
-    alias dnfmod='_x dnf module'
-fi
-if command -v brew >/dev/null 2>&1; then
-    alias brew='_x brew'
-    alias brews='_x brew search'
-    alias brewin='_x brew install'
-    alias brewrm='_x brew uninstall'
-    alias brewq='_x brew list'
-    alias brewsrv='_x brew services'
-    alias brewsrvl='_x brew services list'
-    alias brewsrvr='_x brew services restart'
-    alias brewup='_x brew update && brew upgrade'
-    alias brewupc='_x brew update && brew upgrade && brew cleanup'
-    alias brewclean='_x brew cleanup'
-    alias brewdoc='_x brew doctor'
-    alias brewout='_x brew outdated'
-    alias brewpin='_x brew pin'
-    alias brewsr='_x brew tap'
-    alias brewinfo='_x brew info'
-    alias brewcask='_x brew install --cask'
-    alias brewdep='_x brew deps'
-    alias brewuses='_x brew uses'
-    alias brewleaves='_x brew leaves'
-fi
-if command -v flatpak >/dev/null 2>&1; then
-    alias flat='flatpak'
-    alias flats='flatpak search'
-    alias flati='flatpak install'
-    alias flatrm='flatpak uninstall'
-    alias flatup='flatpak update'
-    alias flatq='flatpak list'
-    alias flatrun='flatpak run'
-    alias flatinfo='flatpak info'
-    alias flatover='flatpak override'
-fi
-if command -v snap >/dev/null 2>&1; then
-    alias snap='snap'
-    alias snaps='snap search'
-    alias snapi='sudo snap install'
-    alias snaprm='sudo snap remove'
-    alias snapup='sudo snap refresh'
-    alias snapq='snap list'
-    alias snapinfo='snap info'
-    alias snapch='sudo snap changes'
-fi
-if command -v nix >/dev/null 2>&1; then
-    alias nix='nix'
-    alias nixs='nix search'
-    alias nixsh='nix shell'
-    alias nixi='nix profile install'
-    alias nixrm='nix profile remove'
-    alias nixup='nix profile upgrade'
-    alias nixq='nix profile list'
-    alias nixdev='nix develop'
-    alias nixbuild='nix build'
-    alias nixrun='nix run'
-    alias nixgc='nix store gc'
-    alias nixopt='nix store optimise'
-fi
-if command -v zypper >/dev/null 2>&1; then
-    alias zyp='sudo zypper'
-    alias zyps='zypper search'
-    alias zypi='sudo zypper install'
-    alias zypr='sudo zypper remove'
-    alias zypup='sudo zypper update'
-    alias zypdup='sudo zypper dist-upgrade'
-    alias zypl='zypper list-installed'
-    alias zypclean='sudo zypper clean'
-    alias zyplr='zypper lr'
-    alias zypprov='zypper what-provides'
-fi
-if command -v apk >/dev/null 2>&1; then
-    alias apk='apk'
-    alias apks='apk search'
-    alias apki='apk add'
-    alias apkrm='apk del'
-    alias apkup='apk update && apk upgrade'
-    alias apkq='apk list'
-    alias apkqi='apk list -I'
-    alias apkinfo='apk info'
-    alias apkclean='apk cache clean'
-fi
-if command -v node >/dev/null 2>&1; then
-    alias node='node'
-    alias nt='_x npm test'
-    alias nb='_x npm run build'
-    alias nrn='_x npm run --'
-    alias np='_x npm publish'
-    alias nup='_x npm update'
-    alias nout='_x npm outdated'
-    alias nls='_x npm list'
-    alias ndoc='_x npm docs'
-    alias ninit='_x npm init -y'
-    alias nstar='_x npm star'
-    alias nuni='_x npm uninstall'
-    alias nlex='_x npm exec'
-    alias nwhy='_x npm why'
-    alias naud='_x npm audit'
-    alias naux='_x npm audit fix'
-fi
-if command -v npx >/dev/null 2>&1; then
-    alias npx='npx'
-fi
-if command -v pnpm >/dev/null 2>&1; then
-    alias pn='_x pnpm'
-    alias pni='_x pnpm install'
-    alias pnr='_x pnpm run'
-    alias pnd='_x pnpm run dev'
-    alias pnb='_x pnpm run build'
-    alias pnt='_x pnpm test'
-    alias pna='_x pnpm add'
-    alias pnad='_x pnpm add -D'
-    alias pnrm='_x pnpm remove'
-    alias pnup='_x pnpm update'
-    alias pnout='_x pnpm outdated'
-    alias pnls='_x pnpm list'
-    alias pninit='_x pnpm init'
-    alias pnpub='_x pnpm publish'
-    alias pnlint='_x pnpm lint'
-    alias pnex='_x pnpm exec'
-    alias pnlc='_x pnpm lint:check'
-    alias pnstore='_x pnpm store'
-fi
-if command -v yarn >/dev/null 2>&1; then
-    alias y='yarn'
-    alias ya='yarn add'
-    alias yad='yarn add -D'
-    alias yr='yarn run'
-    alias yb='yarn build'
-    alias yd='yarn dev'
-    alias yt='yarn test'
-    alias yrm='yarn remove'
-    alias yls='yarn list'
-    alias yinit='yarn init'
-    alias ypub='yarn publish'
-    alias ylint='yarn lint'
-    alias ygl='yarn global list'
-    alias yga='yarn global add'
-fi
-if command -v python3 >/dev/null 2>&1; then
-    alias py='_x python3'
-    alias py2='python2 2>/dev/null || python3'
-    alias py3='_x python3'
-    alias pipup='_x python3 -m pip install --upgrade pip'
-    alias venv='_x python3 -m venv .venv'
-    alias akt='source .venv/bin/activate'
-    alias dakt='deactivate'
-    alias pyreq='_x pip freeze > requirements.txt'
-    alias pyr='_x python3 -m pip install -r requirements.txt'
-    alias pyi='_x python3 -i'
-    alias pym='_x python3 -m'
-    alias pyt='_x python3 -m pytest'
-    alias pyun='_x python3 -m unittest'
-fi
-if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
-    alias pip='pip3 2>/dev/null || pip'
-    alias pi='_x pip install'
-    alias piu='_x pip install --upgrade'
-    alias pir='_x pip install -r requirements.txt'
-    alias pls='_x pip list'
-    alias pout='_x pip list --outdated'
-    alias psh='_x pip show'
-    alias pch='_x pip check'
-    alias pdown='_x pip download'
-    alias phash='_x pip hash'
-fi
-if command -v cargo >/dev/null 2>&1; then
-    alias cr='_x cargo'
-    alias crb='_x cargo build'
-    alias crbr='_x cargo build --release'
-    alias crr='_x cargo run'
-    alias crrr='_x cargo run --release'
-    alias crt='_x cargo test'
-    alias crcl='_x cargo clippy'
-    alias crf='_x cargo fmt'
-    alias crc='_x cargo check'
-    alias crd='_x cargo doc'
-    alias crp='_x cargo publish'
-    alias cru='_x cargo update'
-    alias crout='_x cargo outdated'
-    alias crclean='_x cargo clean'
-    alias crbench='_x cargo bench'
-    alias crfix='_x cargo fix'
-    alias crl='_x cargo +nightly'
-    alias crw='_x cargo watch'
-    alias cradd='_x cargo add'
-    alias crrm='_x cargo remove'
-fi
-if command -v go >/dev/null 2>&1; then
-    alias go='_x go'
-    alias gor='_x go run'
-    alias gob='_x go build'
-    alias got='_x go test'
-    alias gotv='_x go test -v ./...'
-    alias goi='_x go install'
-    alias gom='_x go mod'
-    alias gomt='_x go mod tidy'
-    alias gomv='_x go mod vendor'
-    alias gog='_x go get'
-    alias gof='_x go fmt ./...'
-    alias gol='_x go vet ./...'
-    alias godoc='_x go doc'
-    alias gogen='_x go generate ./...'
-    alias goc='_x go clean'
-    alias gocache='_x go clean -cache'
-    alias goenv='_x go env'
-    alias gop='_x go tool pprof'
-fi
-if command -v terraform >/dev/null 2>&1; then
-    alias tfv='_x terraform validate'
-    alias tff='_x terraform fmt'
-    alias tfw='_x terraform workspace'
-    alias tfwl='_x terraform workspace list'
-    alias tfws='_x terraform workspace select'
-    alias tfs='_x terraform show'
-    alias tfo='_x terraform output'
-    alias tfst='_x terraform state'
-    alias tfstl='_x terraform state list'
-    alias tfimp='_x terraform import'
-    alias tfprov='_x terraform providers'
-    alias tfgraph='_x terraform graph'
-    alias tfconsole='_x terraform console'
-fi
-if command -v ansible >/dev/null 2>&1; then
-    alias an='_x ansible'
-    alias anp='_x ansible-playbook'
-    alias ang='_x ansible-galaxy'
-    alias anv='_x ansible-vault'
-    alias and='_x ansible-doc'
-    alias ancon='_x ansible-config'
-    alias aninv='_x ansible-inventory'
-fi
-if command -v helm >/dev/null 2>&1; then
-    alias hl='_x helm'
-    alias hls='_x helm list'
-    alias hli='_x helm install'
-    alias hlu='_x helm upgrade'
-    alias hlui='_x helm upgrade --install'
-    alias hld='_x helm delete'
-    alias hlr='_x helm rollback'
-    alias hlg='_x helm get'
-    alias hlga='_x helm get all'
-    alias hlgs='_x helm get values'
-    alias hlh='_x helm history'
-    alias hlsh='_x helm show'
-    alias hlshc='_x helm show chart'
-    alias hlshv='_x helm show values'
-    alias hlrepo='_x helm repo'
-    alias hlrl='_x helm repo list'
-    alias hlra='_x helm repo add'
-    alias hlru='_x helm repo update'
-    alias hlsea='_x helm search'
-    alias hlver='_x helm version'
-    alias hlcomp='_x helm completion'
-    alias hlplug='_x helm plugin'
-    alias hlpl='_x helm plugin list'
-fi
-if command -v tmux >/dev/null 2>&1; then
-    alias tad='_x tmux attach -d'
-    alias tl='_x tmux list-sessions'
-    alias tn='_x tmux new-session -s'
-    alias tk='_x tmux kill-session -t'
-    alias tks='_x tmux kill-server'
-    alias tsw='_x tmux switch-client'
-    alias trn='_x tmux rename-session'
-    alias tlp='_x tmux list-panes'
-    alias tsplit='_x tmux split-window -h'
-    alias tsplitv='_x tmux split-window'
-    alias tprev='_x tmux previous-window'
-    alias tnext='_x tmux next-window'
-    alias tswap='_x tmux swap-window'
-fi
-if command -v ssh >/dev/null 2>&1; then
-    alias ssh='_x ssh'
-    alias ssha='_x ssh -A'
-    alias sshi='_x ssh -o StrictHostKeyChecking=no'
-    alias ssk='ssh-keygen'
-    alias sskr='ssh-keygen -R'
-    alias ssc='ssh-copy-id'
-fi
-alias myipl='ip addr show | grep "inet " | awk "{print \$2}" | cut -d/ -f1 | head -1'
-alias weather='curl -fsSL wttr.in'
-alias portlisten='ss -tlnp 2>/dev/null || netstat -tlnp'
-alias pingf='ping -c 100 -s 1472 -f'
-alias pb='ping -c 4 8.8.8.8'
-alias net='ip -br addr'
-alias ipl='ip -br link'
-alias ipa='ip -br addr'
-alias ipr='ip route'
-alias nst='netstat -tulanp 2>/dev/null || ss -tulanp'
-alias trace='traceroute'
-if command -v dig >/dev/null 2>&1; then
-    alias dns='dig +short'
-    alias dnsx='dig ANY +short'
-    alias dnsmx='dig MX +short'
-    alias dnsns='dig NS +short'
-    alias dnstxt='dig TXT +short'
-    alias dnsany='dig ANY'
-fi
-if command -v nmap >/dev/null 2>&1; then
-    alias nm='nmap'
-    alias nms='nmap -sn'
-    alias nmp='nmap -sV -sC'
-    alias nmo='nmap -O'
-fi
-if command -v curl >/dev/null 2>&1; then
-    alias cur='curl -fsSL'
-    alias curh='curl -I'
-    alias curv='curl -v'
-    alias curj='curl -s | jq .'
-    alias curd='curl -X DELETE'
-    alias curp='curl -X POST'
-    alias curu='curl -X PUT'
-fi
-if command -v wget >/dev/null 2>&1; then
-    alias wg='wget -c'
-    alias wgr='wget -r -np -nH'
-fi
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i'
-alias rmr='rm -r'
-alias rmf='rm -f'
-alias cpf='cp -f'
-alias mvfs='mv -f'
-alias cpv='_x rsync -ah --progress'
-alias mkd='mkdir -p'
-alias rsync='_x rsync -avz --progress'
-alias rsyncdn='_x rsync -avz --dry-run --progress'
-alias chx='chmod +x'
-alias chm='chmod'
-alias chown='chown'
-alias chgrp='chgrp'
-alias ln='ln -s'
-alias lnh='readlink -f'
-alias backup='cp -r "$1" "${1}.bak-$(date +%Y%m%d-%H%M%S)"'
-alias timestamp='date +%s'
-alias today='date +%F'
-alias week='date +%V'
-alias mount='mount | column -t'
-alias tart='tar -tzf'
-alias tarjx='tar -xjf'
-alias tarjc='tar -cjf'
-alias tarzx='tar -xJf'
-alias tarzc='tar -cJf'
-alias tarl='tar -tvf'
-alias gunz='gunzip'
-alias bz2='bzip2'
-alias bunz='bunzip2'
-alias xz='xz'
-alias unxz='unxz'
-alias 7z='7z'
-alias 7zx='7z x'
-alias 7za='7z a'
-alias rarx='unrar x'
-alias ps='ps auxf'
-alias pse='ps aux | grep'
-alias pst='_x pstree'
-alias psea='ps -e'
-alias kill9='kill -9'
-alias kill15='kill -15'
-alias pkillf='_x pkill -f'
-alias pid='_x pgrep -f'
-alias nohup='nohup'
-alias disown='disown'
-alias bg='bg'
-alias fg='fg'
-alias nice='nice -n'
-alias renice='renice -n'
-alias topcpu='ps aux --sort=-%cpu | head 2>/dev/null || ps aux -r | head'
-alias topmem='ps aux --sort=-%mem | head 2>/dev/null || ps aux -m | head'
-alias iotop='iotop -o 2>/dev/null || echo "iotop not found"'
-alias gr='grep'
-alias gri='grep -i'
-alias grr='grep -r'
-alias grri='grep -ri'
-alias grl='grep -rl'
-alias grc='grep -c'
-alias sed='sed'
-alias awk='awk'
-alias sort='sort'
-alias uniq='uniq'
-alias uniqc='sort | uniq -c | sort -rn'
-alias wc='wc'
-alias wcw='wc -w'
-alias cut='cut'
-alias tr='tr'
-alias fold='fold'
-alias column='column -t'
-alias join='join'
-alias diff='diff'
-alias diffy='diff -y'
-alias cmp='cmp'
-alias head='head'
-alias tail='tail'
-alias tair='tail -f'
-alias taill='tail -100'
-alias headl='head -100'
-alias nl='nl -ba'
-alias tac='tac 2>/dev/null || tail -r'
-alias rev='rev'
-alias shuf='shuf'
-alias yes='yes'
-if command -v rg >/dev/null 2>&1; then
-    alias rg='rg --hidden --glob "!.git"'
-    alias rgi='rg -i --hidden --glob "!.git"'
-    alias rgf='rg --files'
-    alias rgl='rg --files-with-matches'
-    alias rgc='rg --count'
-fi
-if command -v fd >/dev/null 2>&1; then
-    alias fd='fd --hidden'
-    alias fdi='fd -i'
-fi
-if command -v gpg >/dev/null 2>&1; then
-    alias gpg='_x gpg'
-    alias gpge='_x gpg -e'
-    alias gpgd='_x gpg -d'
-    alias gpgs='_x gpg -s'
-    alias gpgv='_x gpg --verify'
-    alias gpgl='_x gpg --list-keys'
-    alias gpgls='_x gpg --list-secret-keys'
-    alias gpgk='_x gpg --list-keys'
-    alias gpgex='_x gpg --export'
-    alias gpgimport='_x gpg --import'
-    alias gpgrecv='_x gpg --recv-keys'
-    alias gpgens='_x gpg --gen-key'
-fi
-if command -v openssl >/dev/null 2>&1; then
-    alias ossl='openssl'
-    alias osslcsr='openssl req -new -newkey rsa:2048 -nodes'
-    alias osslchk='openssl s_client -connect'
-    alias osslx='openssl x509 -in'
-    alias osslr='openssl rand -hex'
-    alias osslgen='openssl genrsa'
-fi
-if command -v shred >/dev/null 2>&1; then
-    alias shred='shred -uz'
-    alias shredf='shred -uz -n 7'
-fi
-if command -v lsof >/dev/null 2>&1; then
-    alias lsof='lsof'
-    alias lsofi='lsof -i'
-    alias lsofp='lsof -P'
-    alias lsofn='lsof -nP'
-fi
-alias du='du -h'
-alias dud='du -h --max-depth=1'
-alias dfT='df -hT'
-alias blk='lsblk -f'
-alias findsuid='find / -perm -4000 -type f'
-alias disks='lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT'
-alias fdisk='fdisk -l'
-alias smart='sudo smartctl -a'
-alias cpuinfo='lscpu 2>/dev/null || sysctl -n machdep.cpu.brand_string'
-alias meminfo='free -h'
-alias diskspace='df -h'
-alias uptime='uptime'
-alias dmesg='dmesg -T'
-alias uname='uname -a'
-alias dateutc='date -u'
-alias caldate='cal'
-alias nproc='nproc 2>/dev/null || sysctl -n hw.ncpu'
-alias release='cat /etc/os-release 2>/dev/null || cat /usr/lib/os-release'
-alias arch='uname -m'
-alias vim='nvim 2>/dev/null || command vim'
-alias sv='nvim 2>/dev/null || command vim'
-alias nv='nvim'
-alias codel='code .'
-alias micro='micro'
-if command -v lazygit >/dev/null 2>&1; then
-    alias lg='lazygit'
-fi
-if command -v yazi >/dev/null 2>&1; then
-    alias yz='yazi'
-fi
-if command -v zellij >/dev/null 2>&1; then
-    alias zj='zellij'
-    alias zja='zellij attach'
-    alias zjl='zellij list-sessions'
-fi
-if command -v just >/dev/null 2>&1; then
-    alias just='just'
-    alias justl='just --list'
-fi
-if command -v make >/dev/null 2>&1; then
-    alias mk='make'
-    alias mkc='make clean'
-    alias mki='make install'
-    alias mkt='make test'
-fi
-if command -v mysql >/dev/null 2>&1; then
-    alias myq='mysql'
-    alias myqr='mysql -u root -p'
-    alias mydump='mysqldump'
-    alias mydumpr='mysqldump -u root -p'
-fi
-if command -v psql >/dev/null 2>&1; then
-    alias psql='psql'
-    alias psqlr='psql -U postgres'
-    alias pgdump='pg_dump'
-    alias pgres='pg_restore'
-fi
-if command -v sqlite3 >/dev/null 2>&1; then
-    alias sq3='sqlite3'
-    alias sq3d='sqlite3 .dump'
-fi
-if command -v redis-cli >/dev/null 2>&1; then
-    alias rcli='redis-cli'
-    alias rcliping='redis-cli ping'
-    alias rcliinfo='redis-cli info'
-    alias rclimon='redis-cli monitor'
-fi
-alias s3='_x s3cmd'
-alias mc='mc'
-if command -v aws >/dev/null 2>&1; then
-    alias aws='aws'
-    alias awsw='aws sts get-caller-identity'
-    alias awsinfo='aws ec2 describe-instances'
-    alias awss3='aws s3'
-    alias awss3ls='aws s3 ls'
-    alias awslb='aws elb describe-load-balancers'
-    alias awsecs='aws ecs list-clusters'
-    alias awsecr='aws ecr describe-repositories'
-    alias awslam='aws lambda list-functions'
-    alias awslog='aws logs describe-log-groups'
-    alias awscw='aws cloudwatch'
-    alias awsiam='aws iam list-users'
-    alias awsr53='aws route53 list-hosted-zones'
-fi
-if command -v gcloud >/dev/null 2>&1; then
-    alias gcl='gcloud'
-    alias gcls='gcloud compute ssh'
-    alias gcll='gcloud compute instances list'
-    alias gclc='gcloud container clusters list'
-    alias gclgke='gcloud container clusters get-credentials'
-    alias gcllogs='gcloud logging list'
-fi
-if command -v az >/dev/null 2>&1; then
-    alias az='az'
-    alias azl='az vm list'
-    alias azs='az vm start'
-    alias azst='az vm stop'
-    alias azr='az vm restart'
-    alias azg='az group list'
-    alias azaks='az aks list'
-fi
-if command -v ffmpeg >/dev/null 2>&1; then
-    alias ffp='ffprobe'
-    alias ffg='ffplay'
-    alias ffconvert='ffmpeg -i'
-    alias ffmp3='ffmpeg -i "$1" -q:a 0 "${1%.*}.mp3"'
-    alias ffcompress='ffmpeg -i "$1" -vcodec libx265 -crf 28'
-    alias ffgif='ffmpeg -i "$1" -vf "fps=10,scale=320:-1" "${1%.*}.gif"'
-    alias ffscreencap='ffmpeg -f x11grab -video_size 1920x1080 -i :0.0'
-fi
-if command -v convert >/dev/null 2>&1; then
-    alias img='convert'
-    alias imgres='convert -resize'
-    alias imgfmt='convert -format'
-    alias imgcompress='convert -quality 85'
-fi
-if command -v nvidia-smi >/dev/null 2>&1; then
-    alias gpul='nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv'
-    alias gputop='nvidia-smi dmon -s pucvmet'
-fi
-alias matrix='printf "\01101000\01100101\01101100\01101100\01101111\n"'
-alias coinflip='awk "BEGIN{srand();print rand()<0.5?\"heads\":\"tails\"}"'
-alias dice='echo $((RANDOM % 6 + 1))'
-alias randpw='openssl rand -base64 16 2>/dev/null || python3 -c "import secrets; print(secrets.token_urlsafe(16))"'
-alias sha='shasum -a 256'
-alias md5sum='md5 2>/dev/null || command md5sum'
-alias hex='xxd'
-alias base64e='base64'
-alias base64d='base64 -d'
-alias urlenc='_x python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))"'
-alias urldec='_x python3 -c "import urllib.parse,sys; print(urllib.parse.unquote(sys.argv[1]))"'
-
-alias count='wc -l'
-alias lines='cat -n'
-alias cht='curl -fsSL "https://cht.sh/$1"'
-alias learn='curl -fsSL "https://learnxinyminutes.com/docs/$1"'
-alias cheat='curl -fsSL "https://cheat.sh/$1"'
-alias man='man'
-alias help='help'
-alias info='info'
-alias what='type'
-alias ali='alias'
-alias envg='env | grep'
-alias fn='declare -f 2>/dev/null || typeset -f'
-alias dsync='dot_sync'
-alias chmode='export DOTFILES_MODE'
-alias modestat='echo "Mode: ${DOTFILES_MODE:-unknown}"'
-alias dotinfo='echo "Dotfiles: $DOTFILES_DIR | Mode: ${DOTFILES_MODE:-unknown} | Shell: $SHELL"'
-alias pgit='git'
-alias pgitst='git status --short --branch'
-alias pgitadd='git add'
-alias pgitaddall='git add -A'
-alias pgitaddpatch='git add -p'
-alias pgitbr='git branch'
-alias pgitbrd='git branch -d'
-alias pgitbrD='git branch -D'
-alias pgitbrall='git branch -a'
-alias pgitbrnm='git branch -m'
-alias pgitco='git checkout'
-alias pgitsw='git switch'
-alias pgitswc='git switch -c'
-alias pgitcl='git clone'
-alias pgitcm='git commit'
-alias pgitcmm='git commit -m'
-alias pgitcma='git commit --amend'
-alias pgitcmne='git commit --amend --no-edit'
-alias pgitdf='git diff'
-alias pgitdfs='git diff --staged'
-alias pgitdfw='git diff --word-diff'
-alias pgitdfn='git diff --name-only'
-alias pgitft='git fetch'
-alias pgitftp='git fetch --all --prune'
-alias pgitlg='git log --oneline --graph -20'
-alias pgitlga='git log --oneline --graph --all -20'
-alias pgitlgs='git log --oneline --graph --all --simplify-by-decoration'
-alias pgitmg='git merge'
-alias pgitmgff='git merge --ff-only'
-alias pgitmgnc='git merge --no-commit'
-alias pgitph='git push'
-alias pgitphf='git push --force-with-lease'
-alias pgitphu='git push -u origin HEAD'
-alias pgitpl='git pull'
-alias pgitplr='git pull --rebase --autostash'
-alias pgitpr='git remote prune origin'
-alias pgitsh='git stash'
-alias pgitshp='git stash pop'
-alias pgitshl='git stash list'
-alias pgitsha='git stash apply'
-alias pgitshd='git stash drop'
-alias pgitshw='git stash show -p'
-alias pgitrb='git rebase'
-alias pgitrbc='git rebase --continue'
-alias pgitrba='git rebase --abort'
-alias pgitrbs='git rebase --skip'
-alias pgitrbi='git rebase -i'
-alias pgitrs='git reset'
-alias pgitrsf='git reset --hard'
-alias pgitrss='git reset --soft'
-alias pgitrm='git remote -v'
-alias pgitrma='git remote add'
-alias pgitrmrm='git remote remove'
-alias pgitcp='git cherry-pick'
-alias pgitcpnc='git cherry-pick --no-commit'
-alias pgitbl='git blame'
-alias pgitgr='git grep'
-alias pgittg='git tag'
-alias pgitcfg='git config'
-alias pgitcfgg='git config --global'
-alias pgitwrk='git worktree'
-alias pgitwrka='git worktree add'
-alias pgitwrkl='git worktree list'
-alias pgitwrkpr='git worktree prune'
-alias pgitign='git update-index --assume-unchanged'
-alias pgitignn='git update-index --no-assume-unchanged'
-alias pgitignl='git ls-files -v | grep "^[a-z]"'
-alias pgitarc='git archive'
-alias pgitbnd='git bundle'
-alias pgitdesc='git describe'
-alias pgitref='git reflog'
-alias pgitcln='git clean -fd'
-alias pgitshow='git show'
-alias pgitsm='git submodule'
-alias pgitinit='git init'
-alias pgitbis='git bisect'
-alias pgitci='git citool'
-alias pdk='_x docker'
-alias pdkps='_x docker ps'
-alias pdkpsa='_x docker ps -a'
-alias pdkpsq='_x docker ps -q'
-alias pdkpsl='_x docker ps -l'
-alias pdkim='_x docker images'
-alias pdkima='_x docker images -a'
-alias pdkimq='_x docker images -q'
-alias pdkimrm='_x docker rmi'
-alias pdkex='_x docker exec -it'
-alias pdkexsh='_x docker exec -it /bin/sh'
-alias pdkexba='_x docker exec -it /bin/bash'
-alias pdkcp='_x docker cp'
-alias pdklogs='_x docker logs'
-alias pdklogsf='_x docker logs -f'
-alias pdklogst='_x docker logs --tail 100 -f'
-alias pdkrun='_x docker run -it --rm'
-alias pdkrund='_x docker run -d'
-alias pdkrunp='_x docker run -it --rm -p'
-alias pdkrunv='_x docker run -it --rm -v'
-alias pdkrn='_x docker run --name'
-alias pdkst='_x docker start'
-alias pdkstp='_x docker stop'
-alias pdkstpa='_x docker stop $(docker ps -q)'
-alias pdkrs='_x docker restart'
-alias pdkrm='_x docker rm'
-alias pdkrma='_x docker rm $(docker ps -aq)'
-alias pdkrmv='_x docker rm -v'
-alias pdkbl='_x docker build'
-alias pdkblt='_x docker build -t'
-alias pdkblnc='_x docker build --no-cache -t'
-alias pdkblpus='_x docker buildx build --push'
-alias pdkpush='_x docker push'
-alias pdkpull='_x docker pull'
-alias pdkpsh='_x docker push'
-alias pdkcm='_x docker commit'
-alias pdknet='_x docker network'
-alias pdknetls='_x docker network ls'
-alias pdknetcr='_x docker network create'
-alias pdknetrm='_x docker network rm'
-alias pdkvol='_x docker volume'
-alias pdkvolls='_x docker volume ls'
-alias pdkvolrm='_x docker volume rm'
-alias pdkvolpr='_x docker volume prune'
-alias pdkstts='_x docker stats'
-alias pdkstop='_x docker top'
-alias pdkpr='_x docker system prune'
-alias pdkpra='_x docker system prune -af'
-alias pdkprv='_x docker system prune -af --volumes'
-alias pdkdf='_x docker system df'
-alias pdkdh='_x docker system df'
-alias pdkpsf='_x docker ps --format'
-alias pdkcom='_x docker compose'
-alias pdkcomp='_x docker compose ps'
-alias pdkcomup='_x docker compose up -d'
-alias pdkcomdown='_x docker compose down'
-alias pdkcomlogs='_x docker compose logs -f'
-alias pdkcombuild='_x docker compose build'
-alias pdkcompull='_x docker compose pull'
-alias pdkcomrestart='_x docker compose restart'
-alias pdkcomstop='_x docker compose stop'
-alias pdkcomstart='_x docker compose start'
-alias pdkcomrm='_x docker compose rm'
-alias pdkcomex='_x docker compose exec'
-alias pdkcomrun='_x docker compose run --rm'
-alias pdkcomcr='_x docker compose create'
-alias pdkcomsc='_x docker compose scale'
-alias pdkcomtop='_x docker compose top'
-alias pdkcomps='_x docker compose images'
-alias pk='_x kubectl'
-alias pkgs='_x kubectl get all'
-alias pkgp='_x kubectl get pods'
-alias pkgpw='_x kubectl get pods -w'
-alias pkgsv='_x kubectl get svc'
-alias pkgdep='_x kubectl get deployments'
-alias pkgng='_x kubectl get nodes'
-alias pkgns='_x kubectl get namespaces'
-alias pkgst='_x kubectl get statefulsets'
-alias pkgds='_x kubectl get daemonsets'
-alias pkgcj='_x kubectl get cronjobs'
-alias pkgj='_x kubectl get jobs'
-alias pkgi='_x kubectl get ingress'
-alias pkgcm='_x kubectl get configmaps'
-alias pkgsec='_x kubectl get secrets'
-alias pkgpv='_x kubectl get pv'
-alias pkgpvc='_x kubectl get pvc'
-alias pkgsc='_x kubectl get storageclass'
-alias pkgn='_x kubectl get networkpolicies'
-alias pkgall='_x kubectl get all --all-namespaces'
-alias pkdesc='_x kubectl describe'
-alias pkdp='_x kubectl describe pod'
-alias pkds='_x kubectl describe svc'
-alias pkdd='_x kubectl describe deployment'
-alias pkdn='_x kubectl describe node'
-alias kdl='_x kubectl describe pod -l app'
-alias pklog='_x kubectl logs'
-alias pklogf='_x kubectl logs -f'
-alias pklogp='_x kubectl logs --previous'
-alias pkapp='_x kubectl apply -f'
-alias pkappl='_x kubectl apply -f --recursive'
-alias pkdel='_x kubectl delete'
-alias pkdelp='_x kubectl delete pod'
-alias pkdels='_x kubectl delete svc'
-alias pkex='_x kubectl exec -it'
-alias pkexsh='_x kubectl exec -it -- /bin/sh'
-alias pkexba='_x kubectl exec -it -- /bin/bash'
-alias pkpf='_x kubectl port-forward'
-alias pktop='_x kubectl top pods'
-alias pktopn='_x kubectl top nodes'
-alias pkedit='_x kubectl edit'
-alias pkcr='_x kubectl create -f'
-alias pkroll='_x kubectl rollout status'
-alias pkrollh='_x kubectl rollout history'
-alias pkrollu='_x kubectl rollout undo'
-alias pkres='_x kubectl rollout restart'
-alias pkscale='_x kubectl scale'
-alias pklab='_x kubectl label'
-alias pktaint='_x kubectl taint'
-alias pkcord='_x kubectl cordon'
-alias pkuncord='_x kubectl uncordon'
-alias pkdrain='_x kubectl drain'
-alias pkapi='_x kubectl api-resources'
-alias pkapiv='_x kubectl api-versions'
-alias pkexpl='_x kubectl explain'
-alias pkctx='_x kubectl config current-context'
-alias pkuse='_x kubectl config use-context'
-alias pkgetctx='_x kubectl config get-contexts'
-alias pksetctx='_x kubectl config set-context'
-alias pkview='_x kubectl config view'
-alias pkcns='_x kubectl config set-context --namespace'
-alias pkcp='_x kubectl cp'
-alias pkauth='_x kubectl auth can-i'
-alias pkcomp='_x kubectl completion'
-alias pkwatch='_x kubectl get pods --watch'
-alias psc='_x systemctl'
-alias pscst='_x systemctl status'
-alias pscup='_x systemctl start'
-alias pscdown='_x systemctl stop'
-alias pscrs='_x systemctl restart'
-alias pscen='_x systemctl enable'
-alias pscdis='_x systemctl disable'
-alias pscenow='_x systemctl enable --now'
-alias pscdisn='_x systemctl disable --now'
-alias pscmask='_x systemctl mask'
-alias pscunmask='_x systemctl unmask'
-alias pscrel='_x systemctl daemon-reload'
-alias psclist='_x systemctl list-units'
-alias psclista='_x systemctl list-units --all'
-alias psclistf='_x systemctl list-unit-files'
-alias pscfail='_x systemctl list-units --failed'
-alias pscisact='_x systemctl is-active'
-alias pscisen='_x systemctl is-enabled'
-alias psccat='_x systemctl cat'
-alias pscedit='_x systemctl edit'
-alias pscadd='_x systemctl add-wants'
-alias pschlp='_x systemctl help'
-alias psctim='_x systemd-analyze'
-alias pscblame='_x systemd-analyze blame'
-alias psccrit='_x systemd-analyze critical-chain'
-alias pscca='_x systemd-analyze calendar'
-alias psccond='_x systemd-analyze condition'
-alias pjc='_x journalctl'
-alias pjce='_x journalctl -e'
-alias pjcf='_x journalctl -f'
-alias pjcu='_x journalctl -u'
-alias pjcub='_x journalctl -u -b'
-alias pjcs='_x journalctl --since'
-alias pjct='_x journalctl -n'
-alias pjcp='_x journalctl -p'
-alias pjcerr='_x journalctl -p err'
-alias pjcwarn='_x journalctl -p warning'
-alias pjcinfo='_x journalctl -p info'
-alias pjcdebug='_x journalctl -p debug'
-alias pjcb='_x journalctl -b'
-alias pjcb1='_x journalctl -b -1'
-alias pjcb2='_x journalctl -b -2'
-alias pjcboot='_x journalctl --list-boots'
-alias pjcdsk='_x journalctl --disk-usage'
-alias pjcro='_x journalctl --rotate'
-alias pjcvac='_x journalctl --vacuum-size'
-alias pjcvact='_x journalctl --vacuum-time'
-alias ppod='_x podman'
-alias ppodps='_x podman ps'
-alias ppodpsa='_x podman ps -a'
-alias ppodim='_x podman images'
-alias ppodimrm='_x podman rmi'
-alias ppodex='_x podman exec -it'
-alias ppodlogs='_x podman logs'
-alias ppodlogsf='_x podman logs -f'
-alias ppodrun='_x podman run -it --rm'
-alias ppodrund='_x podman run -d'
-alias ppodst='_x podman start'
-alias ppodstp='_x podman stop'
-alias ppodrs='_x podman restart'
-alias ppodrm='_x podman rm'
-alias ppodbl='_x podman build -t'
-alias ppodpull='_x podman pull'
-alias ppodpush='_x podman push'
-alias ppodpr='_x podman system prune -af'
-alias ppodnet='_x podman network ls'
-alias ppodvol='_x podman volume ls'
-alias ppodcom='_x podman compose'
-alias ppodcomp='_x podman compose ps'
-alias ppodcompup='_x podman compose up -d'
-alias ppodcompdown='_x podman compose down'
-alias ppodcomplogs='_x podman compose logs -f'
-alias ptf='_x terraform'
-alias ptfinit='_x terraform init'
-alias ptfinitup='_x terraform init -upgrade'
-alias ptfpl='_x terraform plan'
-alias ptfplo='_x terraform plan -out=tfplan'
-alias ptfap='_x terraform apply'
-alias ptfapo='_x terraform apply tfplan'
-alias ptfdes='_x terraform destroy'
-alias ptfval='_x terraform validate'
-alias ptffmt='_x terraform fmt'
-alias ptffmtr='_x terraform fmt -recursive'
-alias ptfws='_x terraform workspace'
-alias ptfwsl='_x terraform workspace list'
-alias ptfwss='_x terraform workspace select'
-alias ptfwsn='_x terraform workspace new'
-alias ptfwsd='_x terraform workspace delete'
-alias ptfsh='_x terraform show'
-alias ptfout='_x terraform output'
-alias ptfst='_x terraform state list'
-alias ptfstsh='_x terraform state show'
-alias ptfstmv='_x terraform state mv'
-alias ptfstrm='_x terraform state rm'
-alias ptfstpull='_x terraform state pull'
-alias ptfstpush='_x terraform state push'
-alias ptfim='_x terraform import'
-alias ptfprv='_x terraform providers'
-alias ptfprvlock='_x terraform providers lock'
-alias ptfprvmir='_x terraform providers mirror'
-alias ptfgr='_x terraform graph'
-alias ptfcon='_x terraform console'
-alias ptfun='_x terraform untaint'
-alias ptftaint='_x terraform taint'
-alias ptfvers='_x terraform version'
-alias ptfref='_x terraform refesh'
-alias pan='_x ansible'
-alias panall='_x ansible all -m'
-alias panping='_x ansible all -m ping'
-alias pangath='_x ansible all -m gather_facts'
-alias pansh='_x ansible all -m shell -a'
-alias panpl='_x ansible-playbook'
-alias panplchk='_x ansible-playbook --check'
-alias panplsy='_x ansible-playbook --syntax-check'
-alias pangal='_x ansible-galaxy'
-alias pangals='_x ansible-galaxy search'
-alias pangalin='_x ansible-galaxy install'
-alias pangup='_x ansible-galaxy collection install --upgrade'
-alias panvault='_x ansible-vault'
-alias panvenc='_x ansible-vault encrypt'
-alias panvdec='_x ansible-vault decrypt'
-alias panved='_x ansible-vault edit'
-alias panvcr='_x ansible-vault create'
-alias panvvi='_x ansible-vault view'
-alias pandoc='_x ansible-doc'
-alias pandocl='_x ansible-doc -l'
-alias pnaconf='_x ansible-config list'
-alias paninv='_x ansible-inventory --graph'
-alias ph='_x helm'
-alias phls='_x helm list'
-alias phlsa='_x helm list --all'
-alias phlsn='_x helm list -n'
-alias phi='_x helm install'
-alias phin='_x helm install --namespace'
-alias phiu='_x helm upgrade --install'
-alias phup='_x helm upgrade'
-alias phupn='_x helm upgrade --namespace'
-alias phdel='_x helm delete'
-alias phdeln='_x helm delete --purge'
-alias phroll='_x helm rollback'
-alias phrold='_x helm rollback --dry-run'
-alias phget='_x helm get all'
-alias phgv='_x helm get values'
-alias phgvc='_x helm get values --all'
-alias phgn='_x helm get notes'
-alias phgh='_x helm get hooks'
-alias phgm='_x helm get manifest'
-alias phhis='_x helm history'
-alias phhisn='_x helm history --namespace'
-alias phsh='_x helm show chart'
-alias phshv='_x helm show values'
-alias phshr='_x helm show readme'
-alias phshc='_x helm show crds'
-alias phrp='_x helm repo'
-alias phrpl='_x helm repo list'
-alias phrpa='_x helm repo add'
-alias phrprm='_x helm repo remove'
-alias phrpu='_x helm repo update'
-alias phrpidx='_x helm repo index'
-alias phsea='_x helm search hub'
-alias phsr='_x helm search repo'
-alias phver='_x helm version'
-alias phenv='_x helm env'
-alias phcomp='_x helm completion'
-alias phplg='_x helm plugin'
-alias phplgl='_x helm plugin list'
-alias phplgi='_x helm plugin install'
-alias phplgrm='_x helm plugin remove'
-alias ptmx='_x tmux'
-alias ptmxls='_x tmux list-sessions'
-alias ptmxnew='_x tmux new-session -s'
-alias ptmxatt='_x tmux attach'
-alias ptmxattd='_x tmux attach -d'
-alias ptmxkill='_x tmux kill-session -t'
-alias ptmxkillall='_x tmux kill-server'
-alias ptmxsw='_x tmux switch-client -t'
-alias ptmxren='_x tmux rename-session -t'
-alias ptmxlist='_x tmux list-windows -a'
-alias ptmxpanes='_x tmux list-panes -a'
-alias ptmxsp='_x tmux split-window -h'
-alias ptmxspv='_x tmux split-window'
-alias ptmxwin='_x tmux new-window'
-alias ptmxclose='_x tmux kill-pane'
-alias ptmxprev='_x tmux previous-window'
-alias tmxn='_x tmux next-window'
-alias ptmxmv='_x tmux move-window'
-alias ptmxswp='_x tmux swap-window -t'
-alias ptmxsync='_x tmux setw synchronize-panes'
-alias ptmxcap='_x tmux capture-pane -pS -'
-alias ptmxbuf='_x tmux save-buffer'
-alias ptmxchoos='_x tmux choose-session'
-alias pbr='_x brew'
-alias pbrls='_x brew list'
-alias pbrsr='_x brew search'
-alias pbri='_x brew install'
-alias pbrci='_x brew install --cask'
-alias pbrrm='_x brew uninstall'
-alias pbrupg='_x brew upgrade'
-alias pbrup='_x brew update && brew upgrade'
-alias pbrcl='_x brew cleanup'
-alias pbrcln='_x brew cleanup --prune=all'
-alias pbrdoc='_x brew doctor'
-alias pbrout='_x brew outdated'
-alias pbrinfo='_x brew info'
-alias pbrdep='_x brew deps'
-alias pbrtree='_x brew deps --tree'
-alias pbruses='_x brew uses'
-alias pbrleaves='_x brew leaves'
-alias pbrpin='_x brew pin'
-alias pbrunpin='_x brew unpin'
-alias pbrsvc='_x brew services'
-alias pbrsvcls='_x brew services list'
-alias pbrsvcst='_x brew services start'
-alias pbrsvcsp='_x brew services stop'
-alias pbrsvcrs='_x brew services restart'
-alias pbrserv='_x brew services'
-alias pbrbun='_x brew bundle'
-alias pbrbund='_x brew bundle dump'
-alias pbrbunc='_x brew bundle cleanup'
-alias pbrcask='_x brew casks'
-alias pbrform='_x brew formulae'
-alias ppac='_x pacman'
-alias ppaq='_x pacman -Q'
-alias ppaqi='_x pacman -Qi'
-alias ppaql='_x pacman -Ql'
-alias ppaqo='_x pacman -Qo'
-alias ppaqs='_x pacman -Qs'
-alias ppaqdt='_x pacman -Qdt'
-alias ppaqd='_x pacman -Qd'
-alias ppaqe='_x pacman -Qe'
-alias ppaqm='_x pacman -Qm'
-alias ppas='_x pacman -Ss'
-alias ppasi='_x pacman -Si'
-alias ppaup='sudo pacman -Syu'
-alias ppain='sudo pacman -S'
-alias pparm='sudo pacman -Rns'
-alias ppard='sudo pacman -Rdd'
-alias ppasc='sudo pacman -Sc'
-alias ppaf='_x pacman -Fl'
-alias ppaowns='_x pacman -Qo'
-alias ppafiles='_x pacman -Fl'
-alias ppaorph='_x pacman -Qtdq'
-alias ppaclean='sudo pacman -Rns $(pacman -Qtdq)'
-alias ppaar='sudo pacman -Syu --noconfirm'
-alias ppau='sudo pacman -Syu'
-alias ppasy='sudo pacman -Sy'
-alias ppauma='sudo pacman -Syu --noconfirm'
-alias ppah='_x pacman -Qii'
-alias papt='_x apt'
-alias papts='_x apt search'
-alias paptsh='_x apt show'
-alias paptup='sudo apt update'
-alias paptug='sudo apt upgrade -y'
-alias paptfu='sudo apt full-upgrade -y'
-alias paptin='sudo apt install'
-alias paptrm='sudo apt remove'
-alias paptpur='sudo apt purge'
-alias paptau='sudo apt autoremove -y'
-alias paptcl='sudo apt clean'
-alias paptac='sudo apt autoclean'
-alias paptfix='sudo apt --fix-broken install'
-alias paptdw='sudo apt download'
-alias paptsrc='sudo apt source'
-alias paptbd='sudo apt build-dep'
-alias paptpl='_x apt policy'
-alias paptlu='_x apt list --upgradable'
-alias paptli='_x apt list --installed'
-alias paptsrv='_x apt list --installed | grep -i'
-alias paph='apt-mark hold'
-alias papunh='apt-mark unhold'
-alias papsh='apt-mark showhold'
-alias papch='apt-get changelog'
-alias pdnf='_x dnf'
-alias pdnfs='_x dnf search'
-alias pdnfsi='_x dnf info'
-alias pdnfup='sudo dnf upgrade -y'
-alias pdnfi='sudo dnf install'
-alias pdnfrm='sudo dnf remove'
-alias pdnfau='sudo dnf autoremove -y'
-alias pdnfq='_x dnf list installed'
-alias pdnfqi='_x dnf list installed | grep'
-alias pdnfre='_x dnf repolist'
-alias pdnfgl='_x dnf group list'
-alias pdnfcc='sudo dnf clean all'
-alias pdnfhi='_x dnf history'
-alias pdnfhiu='_x dnf history userinstalled'
-alias pdnfroll='_x dnf history rollback'
-alias pdnfdw='_x dnf downgrade'
-alias pdnfli='sudo dnf localinstall'
-alias pdnfprov='_x dnf provides'
-alias pdnfchk='_x dnf check-update'
-alias pdnfmod='_x dnf module list'
-if command -v yay >/dev/null 2>&1; then
-alias pyay='yay'
-alias pyays='yay -Ss'
-alias pyayq='yay -Q'
-alias pyayqi='yay -Qi'
-alias pyayup='yay -Syu'
-alias pyayin='yay -S'
-alias pyayrm='yay -Rns'
-alias pyaycl='yay -Sc'
-alias pyaydb='yay -Y --gendb'
-alias pyaydev='yay -S --devel'
-alias pyayfl='yay -Fl'
-alias pyaynews='yay -P --news'
-alias pyaycf='yay -Pg'
-fi
-alias pnpm='_x npm'
-alias pnmini='_x npm init -y'
-alias pnminst='_x npm install'
-alias pnmins='_x npm install --save'
-alias pnmisd='_x npm install --save-dev'
-alias pnmig='_x npm install -g'
-alias pnmrm='_x npm uninstall'
-alias pnmrms='_x npm uninstall --save'
-alias pnmrmd='_x npm uninstall --save-dev'
-alias pnmrmg='_x npm uninstall -g'
-alias pnmup='_x npm update'
-alias pnmout='_x npm outdated'
-alias pnmls='_x npm list'
-alias pnmlsg='_x npm list -g --depth=0'
-alias pnmrun='_x npm run'
-alias pnmt='_x npm test'
-alias pnmb='_x npm run build'
-alias pnmd='_x npm run dev'
-alias pnms='_x npm run start'
-alias pnmlnt='_x npm run lint'
-alias pnmfmt='_x npm run format'
-alias pnmpub='_x npm publish'
-alias pnmvers='_x npm version'
-alias pnmhr='_x npm run'
-alias pnmcx='_x npm cache clean --force'
-alias pnmaud='_x npm audit'
-alias pnmaudf='_x npm audit fix'
-alias pnmwho='_x npm whoami'
-alias pnmlog='_x npm login'
-alias pnmdc='_x npm docs'
-alias pnmbug='_x npm bugs'
-alias pnmrepo='_x npm repo'
-alias pnmex='_x npm exec'
-alias pnmwhy='_x npm why'
-alias pnmdedup='_x npm dedupe'
-alias pnmci='_x npm ci'
-alias pnmprune='_x npm prune'
-alias pnpn='_x pnpm'
-alias pnpni='_x pnpm install'
-alias pnpnr='_x pnpm run'
-alias pnpnd='_x pnpm run dev'
-alias pnpnb='_x pnpm run build'
-alias pnpnt='_x pnpm test'
-alias pnpnl='_x pnpm run lint'
-alias pnpna='_x pnpm add'
-alias pnpnad='_x pnpm add -D'
-alias pnpnag='_x pnpm add -g'
-alias pnpnrm='_x pnpm remove'
-alias pnpnup='_x pnpm update'
-alias pnpnout='_x pnpm outdated'
-alias pnpnls='_x pnpm list'
-alias pnpnlsg='_x pnpm list -g'
-alias pnpninit='_x pnpm init'
-alias pnpnpub='_x pnpm publish'
-alias pnpnex='_x pnpm exec'
-alias pnpnst='_x pnpm store'
-alias pnpnstp='_x pnpm store prune'
-alias pnpnstst='_x pnpm store status'
-alias pcr='_x cargo'
-alias pcrbl='_x cargo build'
-alias pcrblr='_x cargo build --release'
-alias pcrbn='_x cargo bench'
-alias pcrun='_x cargo run'
-alias pcrrunr='_x cargo run --release'
-alias pcrt='_x cargo test'
-alias pcrtf='_x cargo test -- --nocapture'
-alias pcrck='_x cargo check'
-alias pcrcl='_x cargo clippy'
-alias pcrfmt='_x cargo fmt'
-alias pcrfix='_x cargo fix'
-alias pcrdoc='_x cargo doc'
-alias pcrpub='_x cargo publish'
-alias pcrup='_x cargo update'
-alias pcrau='_x cargo outdated'
-alias pcradd='_x cargo add'
-    alias pcrrm='_x cargo remove'
-alias pcrcln='_x cargo clean'
-alias pcrinit='_x cargo init'
-alias pcrnew='_x cargo new'
-alias pcrw='_x cargo watch'
-alias pcrl='_x cargo +nightly'
-alias pcret='_x cargo expand'
-alias pgo='_x go'
-alias pgorun='_x go run'
-alias pgob='_x go build'
-alias pgobld='_x go build -o'
-alias pgoget='_x go get'
-alias pgoin='_x go install'
-alias pgot='_x go test'
-alias pgotv='_x go test -v ./...'
-alias pgotc='_x go test -cover ./...'
-alias pgom='_x go mod'
-alias pgomi='_x go mod init'
-alias pgomt='_x go mod tidy'
-alias pgomv='_x go mod vendor'
-alias pgomd='_x go mod download'
-alias pgomgl='_x go mod graph'
-alias pgomwh='_x go mod why'
-alias pgof='_x go fmt ./...'
-alias pgov='_x go vet ./...'
-alias pgoenv='_x go env'
-alias pgocln='_x go clean -cache'
-alias pgodoc='_x go doc'
-alias pgover='_x go version'
-alias pgogen='_x go generate'
-alias pgolint='golint ./...'
-alias pgost='_x go tool pprof'
-alias ppy='_x python3'
-alias ppys='_x python3 -S'
-alias ppyi='_x python3 -i'
-alias ppym='_x python3 -m'
-alias ppyhttp='_x python3 -m http.server'
-alias ppyjson='_x python3 -m json.tool'
-alias ppyv='_x python3 -m venv'
-alias ppyactivate='source .venv/bin/activate'
-alias ppypip='_x python3 -m pip'
-alias ppypia='_x pip install'
-alias ppypir='_x pip install -r requirements.txt'
-alias ppyfreeze='_x pip freeze > requirements.txt'
-alias ppyinst='_x pip list'
-alias ppyout='_x pip list --outdated'
-alias ppyt='_x python3 -m pytest'
-alias ppytv='_x python3 -m pytest -v'
-alias ppyun='_x python3 -m unittest'
-alias ppyvrb='_x python3 -m unittest -v'
-alias ppycov='_x python3 -m pytest --cov'
-alias ppyblack='_x python3 -m black'
-alias ppyflk='_x python3 -m flake8'
-alias ppymb='_x python3 -m mypy'
-alias ppylint='_x python3 -m pylint'
-alias ppyband='_x python3 -m bandit'
-alias ppysa='_x python3 -m safety check'
-alias ppyuv='_x pip install uv && uv'
-alias ppytut='_x python3 -m pendulum'
-alias ppychk='_x python3 -m py_compile'
-alias ppycfg='_x python3 -m site'
-alias ppyupip='_x python3 -m pip install --upgrade pip'
-alias psh='_x ssh'
-alias psha='_x ssh -A'
-alias pshc='ssh-copy-id'
-alias pshk='ssh-keygen'
-alias pshkr='ssh-keygen -R'
-alias pshkf='ssh-keygen -F'
-alias pshK='_x ssh -o StrictHostKeyChecking=no'
-alias pshp='_x ssh -p'
-alias pshj='_x ssh -J'
-alias pshl='_x ssh -L'
-alias pshr='_x ssh -R'
-alias pshD='_x ssh -D'
-alias pshv='_x ssh -v'
-alias pshf='_x ssh -f'
-alias pshN='_x ssh -N'
-alias pshcp='_x scp -r'
-alias pshrsync='_x rsync -avz -e ssh'
-alias pgg='_x gpg'
-alias pggc='_x gpg -c'
-alias pgge='_x gpg -e'
-alias pggd='_x gpg -d'
-alias pggs='_x gpg -s'
-alias pggv='_x gpg --verify'
-alias pggls='_x gpg --list-keys'
-alias pgglssec='_x gpg --list-secret-keys'
-alias pgglo='_x gpg --list-keys --keyid-format LONG'
-alias pggks='_x gpg --list-keys | grep "^pub\|^sub"'
-alias pggk='_x gpg --keyserver keyserver.ubuntu.com --search-keys'
-alias pggrecv='_x gpg --recv-keys'
-alias pggen='_x gpg --full-generate-key'
-alias pggexp='_x gpg --export -a'
-alias pggimp='_x gpg --import'
-alias pggxprt='_x gpg --export-secret-keys -a'
-alias pggdel='_x gpg --delete-key'
-alias pggdels='_x gpg --delete-secret-key'
-alias pggsign='_x gpg --sign-key'
-alias pggenc='_x gpg --encrypt'
-alias pggchm='_x gpg --change-passphrase'
-alias pggkys='_x gpg --show-key'
-alias pggarm='_x gpg --armor'
-alias pggcle='_x gpgconf --kill gpg-agent'
-alias pggrel='_x gpgconf --reload gpg-agent'
-alias psys='cat /etc/os-release'
-alias psysk='uname -a'
-alias psysh='hostnamectl'
-alias psyblk='lsblk'
-alias psyld='uptime'
-alias psym='free -h'
-alias psyd='df -h'
-alias psyc='lscpu'
-alias psyp='ps aux | head -20'
-alias psyu='who'
-alias psyw='who -b'
-alias psyl='last'
-alias psyda='date'
-alias psyche='cal'
-    alias psymod='lsmod'
-alias psypci='lspci'
-alias psyusb='lsusb'
-alias psydm='dmesg -T'
-alias psykrn='uname -r'
-alias pnet='ip addr'
-alias pnetl='ip link'
-alias pnetr='ip route'
-alias pnetn='ip neigh'
-alias pnets='ip -stats'
-alias pnetns='ip netns'
-alias pnslk='nslookup'
-alias pnetst='ss -tulanp'
-alias pnetstt='ss -tunap'
-alias pnets4='ss -t4'
-alias pnetstl='ss -tlnp'
-alias pnetfw='iptables -L -n -v'
-alias pnetfw6='ip6tables -L -n -v'
-alias pnetm='nmap -sn'
-alias pnetmp='nmap -sV -sC'
-alias pnett='traceroute'
-alias pnetp='ping -c 4'
-alias pnetpf='ping -c 100 -f'
-alias pnetd='dig'
-alias pnetdns='dig +short'
-alias pneth='host'
-alias pnetw='wget -c'
-alias pnetcur='curl -fsSL'
-alias pnetmyip='curl -fsSL ifconfig.me'
-alias pnetdh='dhclient'
-alias pnettcp='tcptraceroute'
-alias pnetbw='iperf3'
-alias pnetwbw='speedtest-cli'
-alias pproc='ps auxf'
-alias pproca='ps aux'
-alias pprocf='ps aux | grep'
-alias pproct='_x pstree'
-alias pprocpid='_x pgrep -f'
-alias pprock='kill -9'
-alias pprocterm='kill -15'
-alias pprocpk='_x pkill -f'
-alias pprocn='nice -n'
-alias pprocrn='renice -n'
-alias pprocnohup='nohup'
-alias pprocnice='nice -n 19'
-alias pproci='iotop -o'
-alias pprocs='ps --sort=-%cpu | head'
-alias ptexg='grep'
-alias ptexgr='grep -r'
-alias ptexgi='grep -i'
-alias ptexv='grep -v'
-alias ptexl='grep -l'
-alias ptexc='grep -c'
-alias ptexs='sed'
-alias ptexsr='sort'
-alias ptexx='sed -n'
-alias ptexa='awk'
-alias ptexaw='awk "{print}"'
-alias ptexu='uniq'
-alias ptexuc='sort | uniq -c | sort -rn'
-alias ptexwc='wc -l'
-alias ptexww='wc -w'
-alias ptexcut='cut -d'
-alias ptextr='tr'
-alias ptexpd='paste -d'
-alias ptexcol='column -t'
-alias ptexdf='diff'
-alias ptexdiy='diff -y'
-alias ptexhd='head -n'
-alias ptextl='tail -n'
-alias ptextf='tail -f'
-alias ptexxm='xmllint --format'
-alias ptexj='_x python3 -m json.tool'
-alias ptexy='yq eval'
-alias ptexb='bat --language'
-alias ptexxd='xxd'
-alias psec='openssl version'
-alias pseca='openssl enc -aes-256-cbc -salt -in'
-alias psecd='openssl enc -d -aes-256-cbc -in'
-alias psecr='openssl rand -hex'
-alias psecrs='openssl rand -base64'
-alias pseck='openssl genrsa -out'
-alias psecreq='openssl req -new -key'
-alias psecx='openssl x509 -in'
-alias psecs='openssl s_client -connect'
-alias psecv='openssl verify'
-alias psech='sha256sum'
-alias psecsh='shasum -a 256'
-alias psecmd5='md5sum'
-alias psecshred='shred -uz'
-alias psecharden='chmod 600'
-alias pfilecp='cp -i'
-alias pfilemv='mv -i'
-alias pfilerm='rm -i'
-alias pfilecpf='cp -f'
-alias pfilemvf='mv -f'
-alias pfilermf='rm -f'
-alias pfilermr='rm -r'
-alias pfilersync='_x rsync -avz'
-alias pfilemk='mkdir -p'
-alias pfilechx='chmod +x'
-alias pfilechm='chmod'
-alias pfileown='chown'
-alias pfilegrp='chgrp'
-alias pfileln='ln -sf'
-alias pfilebak='cp -r "$1" "$1.bak"'
-alias pfiletouch='touch'
-alias pfileread='cat -n'
-alias pfileless='less -N'
-alias pfilehead='head -n'
-alias pfiletail='tail -n'
-alias pfilefoll='tail -f'
-alias pfilewatch='watch -n 2'
-alias pfilefind='find . -name'
-alias pfilerca='fd'
-alias pfiletree='_x tree'
-alias pfilestat='stat'
-alias parcx='tar -xf'
-alias parct='tar -czf'
-alias parctxz='tar -xJf'
-alias parctzx='tar -cJf'
-alias parcjx='tar -xjf'
-alias parcjc='tar -cjf'
-alias parctl='tar -tvf'
-alias parczip='zip -r'
-alias parczipd='zip -r -d .'
-alias parcunz='unzip'
-alias parcunzl='unzip -l'
-alias parcunzt='unzip -t'
-alias parc7z='7z x'
-alias parc7za='7z a'
-alias parc7zl='7z l'
-alias parc7zt='7z t'
-alias parcr='unrar x'
-alias parcgl='gunzip'
-alias parcgz='gzip'
-alias parcbl='bunzip2'
-alias parcbz='bzip2'
-alias parcxl='unxz'
-alias parcxz='xz'
-alias pdbm='mysql -u root -p'
-alias pdbmd='mysqldump -u root -p'
-alias pdbms='mysql -u root -p -e'
-alias pdbps='psql -U postgres'
-alias pdbpsd='pg_dump -U postgres'
-alias pdbsq='sqlite3'
-alias pdbredis='redis-cli'
-alias pdbredping='redis-cli ping'
-alias pdbmong='mongosh'
-alias pdevv='nvim'
-alias pdevcode='code'
-alias pdevmake='make'
-alias pdevjust='just'
-alias pdevlazy='lazygit'
-alias pdevyazi='yazi'
-alias pdevzellij='zellij'
-alias pdevgit='git'
-alias pdevgh='gh'
-alias pdevglb='glab'
-alias pcaws='aws'
-alias pcawss3='aws s3 ls'
-alias pcawsec2='aws ec2 describe-instances'
-alias pcawsiam='aws iam list-users'
-alias pcawsinfo='aws sts get-caller-identity'
-alias pcgcl='gcloud'
-alias pcgclls='gcloud compute instances list'
-alias pcgclgke='gcloud container clusters list'
-alias pcaz='az'
-alias pcazls='az vm list'
-alias pcazaks='az aks list'
-alias pmediaff='ffmpeg -i'
-alias pmediafp='ffprobe'
-alias pmediafg='ffplay'
-alias pmediaimg='convert'
-alias pmediaimgr='convert -resize'
-alias pmediaimgg='convert -gravity center'
-alias pmediaimgq='convert -quality 85'
-alias pmediaexif='exiftool'
-alias putiltime='date +%s'
-alias putilnow='date +"%F %T"'
-alias putiltoday='date +%F'
-alias putilsum='sha256sum'
-alias putilmd5='md5sum'
-alias putilb64='base64'
-alias putilb64d='base64 -d'
-alias putiluuid='uuidgen'
-alias putilpw='openssl rand -base64 16'
-alias putilurle='_x python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))"'
-alias putilurld='_x python3 -c "import urllib.parse,sys; print(urllib.parse.unquote(sys.argv[1]))"'
-alias putiljson='_x python3 -m json.tool'
-alias putilyaml='_x python3 -c "import sys,yaml,json; print(yaml.dump(json.load(sys.stdin)))"'
-alias putilxml='xmllint --format'
-alias putiltimer='start=$(date +%s); "$@"; code=$?; end=$(date +%s); echo "elapsed: $((end-start))s"; return $code'
-alias putilbench='hyperfine'
-alias putilrand='shuf -i'
-alias putilseq='seq'
-alias putilcls='clear'
-alias puticlean='rm -rf ~/.cache/*'
-alias putilps='ps auxf'
-alias putilkill='kill -9'
-alias putilhs='history | grep'
-alias putilhist='history'
-alias putilsr='source "$HOME/.zshrc"'
-alias pfd='fd'
-alias pbat='bat'
-alias prg='rg'
-alias peza='eza'
-alias pdu='dust'
-alias pdf='duf'
-alias ptop='btop'
-
-if command -v atuin >/dev/null 2>&1; then
-    alias atu='atuin'
-    alias atus='atuin search'
-    alias atul='atuin login'
-    alias atur='atuin register'
-    alias atusync='atuin sync'
-    alias atust='atuin status'
-    alias atuh='atuin history'
-    alias atuhl='atuin history list'
-    alias atustats='atuin stats'
-fi
-
-if command -v direnv >/dev/null 2>&1; then
-    alias dir='direnv'
-    alias dira='direnv allow'
-    alias dird='direnv deny'
-    alias dirr='direnv reload'
-    alias dire='direnv edit'
-    alias dirv='direnv view'
-    alias dirh='direnv hook'
-fi
-
-if command -v zoxide >/dev/null 2>&1; then
-    alias z='zoxide'
-    alias zi='zoxide query -i'
-fi
-
-if command -v fzf >/dev/null 2>&1; then
-    alias fz='fzf'
-    alias fzp='fzf --preview'
-fi
-
-if command -v gh >/dev/null 2>&1; then
-    alias gh='gh'
-    alias ghs='gh status'
-    alias ghp='gh pr'
-    alias ghpl='gh pr list'
-    alias ghpc='gh pr create'
-    alias ghpm='gh pr merge'
-    alias ghco='gh pr checkout'
-    alias ghi='gh issue'
-    alias ghil='gh issue list'
-    alias ghic='gh issue create'
-    alias ghr='gh release'
-    alias ghrl='gh release list'
-    alias ghrc='gh release create'
-    alias ghrd='gh release download'
-    alias ghrv='gh release view'
-    alias ghrep='gh repo'
-    alias ghrepv='gh repo view'
-    alias ghcl='gh repo clone'
-    alias ghcr='gh repo create'
-    alias ghw='gh workflow'
-fi
-
-if command -v fastfetch >/dev/null 2>&1; then
-    alias ffet='_x fastfetch'
-    alias ffetl='_x fastfetch -l'
-fi
-
-if command -v hyperfine >/dev/null 2>&1; then
-    alias hf='hyperfine'
-    alias hfw='hyperfine --warmup'
-fi
-
-if command -v delta >/dev/null 2>&1; then
-    alias delta='delta'
-fi
-
-if command -v jq >/dev/null 2>&1; then
-    alias jq='jq'
-    alias jqc='jq -c'
-    alias jqr='jq -r'
-    alias jqs='jq -S'
-fi
-
-if command -v yq >/dev/null 2>&1; then
-    alias yq='yq'
-    alias yqe='yq eval'
-    alias yqp='yq eval -P'
-fi
-
-if command -v glow >/dev/null 2>&1; then
-    alias glow='glow'
-    alias glows='glow -s'
-fi
-
-if command -v dog >/dev/null 2>&1; then
-    alias dog='dog'
-    alias doga='dog A'
-    alias dogmx='dog MX'
-    alias dogns='dog NS'
-    alias dogtxt='dog TXT'
-fi
-
-if command -v http >/dev/null 2>&1; then
-    alias https='https'
-fi
-
-if command -v procs >/dev/null 2>&1 || command -v bottom >/dev/null 2>&1; then
-    alias procs='procs'
-fi
-
-if command -v bandwhich >/dev/null 2>&1; then
-    alias band='bandwhich'
-    alias bandl='bandwhich -r'
-fi
-
-if command -v gping >/dev/null 2>&1; then
-    alias gping='gping'
-fi
-
-if command -v ouch >/dev/null 2>&1; then
-    alias ouch='ouch'
-    alias ouchd='ouch decompress'
-    alias ouchc='ouch compress'
-    alias ouchl='ouch list'
-fi
-
-if command -v sd >/dev/null 2>&1; then
-    alias sd='sd'
-fi
-
-if command -v navi >/dev/null 2>&1; then
-    alias navi='navi'
-    alias naviq='navi --query'
-fi
-
-if command -v tldr >/dev/null 2>&1 || command -v tealdeer >/dev/null 2>&1; then
-    alias tldr='tldr 2>/dev/null || tealdeer'
-fi
-
-if command -v lazydocker >/dev/null 2>&1; then
-    alias lzd='lazydocker'
-fi
-
-if command -v vivid >/dev/null 2>&1; then
-    alias vivid='vivid'
-    alias vividg='vivid generate'
-    alias vividt='vivid themes'
-fi
-
-if command -v chezmoi >/dev/null 2>&1; then
-    alias chez='chezmoi'
-    alias cheza='chezmoi apply'
-    alias chezd='chezmoi diff'
-    alias cheze='chezmoi edit'
-    alias chezad='chezmoi add'
-    alias chezup='chezmoi update'
-    alias chezcd='chezmoi cd'
-    alias chezi='chezmoi init'
-    alias chezs='chezmoi status'
-    alias chezr='chezmoi re-add'
-fi
-
-if command -v act >/dev/null 2>&1; then
-    alias act='act'
-    alias actl='act -l'
-    alias actp='act -p'
-    alias actpush='act push'
-    alias actpr='act pull_request'
-    alias actw='act -W'
-fi
-
-if command -v vault >/dev/null 2>&1; then
-    alias vault='vault'
-    alias vaults='vault status'
-    alias vaultl='vault login'
-    alias vaultkv='vault kv'
-    alias vaultkvg='vault kv get'
-    alias vaultkvp='vault kv put'
-    alias vaultkvd='vault kv delete'
-    alias vaultr='vault read'
-    alias vaultw='vault write'
+    alias kns='_x kubectl config set-context --namespace'
 fi
 
 if command -v kind >/dev/null 2>&1; then
-    alias kind='kind'
     alias kindc='kind create cluster'
     alias kindd='kind delete cluster'
     alias kindg='kind get clusters'
     alias kindk='kind get kubeconfig'
-fi
-
-if command -v vagrant >/dev/null 2>&1; then
-    alias vg='vagrant'
-    alias vgu='vagrant up'
-    alias vgh='vagrant halt'
-    alias vgd='vagrant destroy'
-    alias vgs='vagrant status'
-    alias vgssh='vagrant ssh'
-    alias vgp='vagrant provision'
-    alias vgreload='vagrant reload'
-    alias vgbox='vagrant box list'
-fi
-
-if command -v packer >/dev/null 2>&1; then
-    alias pk='packer'
-    alias pkb='packer build'
-    alias pkv='packer validate'
-    alias pkf='packer fmt'
-    alias pkinit='packer init'
-fi
-
-if command -v age >/dev/null 2>&1; then
-    alias age='age'
-    alias agee='age -e'
-    alias aged='age -d'
-    alias agegen='age-keygen'
-fi
-
-if command -v sops >/dev/null 2>&1; then
-    alias sops='sops'
-    alias sopse='sops -e'
-    alias sopsd='sops -d'
-    alias sopsi='sops -i'
-fi
-
-if command -v argocd >/dev/null 2>&1; then
-    alias argo='argocd'
-    alias argol='argocd login'
-    alias argos='argocd app sync'
-    alias argog='argocd app get'
-    alias argolist='argocd app list'
-    alias argodiff='argocd app diff'
 fi
 
 if command -v minikube >/dev/null 2>&1; then
@@ -2057,37 +567,1640 @@ if command -v talosctl >/dev/null 2>&1; then
     alias talc='talosctl config'
 fi
 
-if command -v skopeo >/dev/null 2>&1; then
-    alias sk='skopeo'
-    alias skc='skopeo copy'
-    alias skl='skopeo list-tags'
-    alias ski='skopeo inspect'
-    alias sks='skopeo sync'
+if command -v argocd >/dev/null 2>&1; then
+    alias argo='argocd'
+    alias argol='argocd login'
+    alias argos='argocd app sync'
+    alias argog='argocd app get'
+    alias argolist='argocd app list'
+    alias argodiff='argocd app diff'
 fi
 
-if command -v dive >/dev/null 2>&1; then
-    alias dive='dive'
+# -----------------------------------------------------------------------------
+# Helm Operations
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for the Helm package manager for Kubernetes.
+# These cover release management (install, upgrade, delete, rollback),
+# chart inspection (show chart/values), repository operations (add, list,
+# update), and search across Helm repositories.
+#
+# Notable aliases:
+#   hl      — helm (base command via _x)
+#   hls     — helm list
+#   hli     — helm install
+#   hlu     — helm upgrade
+#   hlui    — helm upgrade --install
+#   hld     — helm delete
+#   hlr     — helm rollback
+#   hlshc   — helm show chart
+#   hlshv   — helm show values
+#   hlrl    — helm repo list
+#   hlra    — helm repo add
+#   hlsea   — helm search
+#
+# See also: helm(1), helm-using(1)
+#
+
+if command -v helm >/dev/null 2>&1; then
+    alias hl='_x helm'
+    alias hls='_x helm list'
+    alias hli='_x helm install'
+    alias hlu='_x helm upgrade'
+    alias hlui='_x helm upgrade --install'
+    alias hld='_x helm delete'
+    alias hlr='_x helm rollback'
+    alias hlg='_x helm get'
+    alias hlga='_x helm get all'
+    alias hlgs='_x helm get values'
+    alias hlh='_x helm history'
+    alias hlsh='_x helm show'
+    alias hlshc='_x helm show chart'
+    alias hlshv='_x helm show values'
+    alias hlrepo='_x helm repo'
+    alias hlrl='_x helm repo list'
+    alias hlra='_x helm repo add'
+    alias hlru='_x helm repo update'
+    alias hlsea='_x helm search'
+    alias hlver='_x helm version'
+    alias hlcomp='_x helm completion'
+    alias hlplug='_x helm plugin'
+    alias hlpl='_x helm plugin list'
 fi
 
-if command -v hadolint >/dev/null 2>&1; then
-    alias hado='hadolint'
+# -----------------------------------------------------------------------------
+# Systemd Service Management
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for systemd service and unit management.
+# These cover service lifecycle (start, stop, restart, enable, disable),
+# user service units, unit listing by state (all, failed, masked), and
+# daemon-reload operations.
+#
+# Notable aliases:
+#   scsr / scse / scsd — systemctl restart / enable / disable
+#   scens / scdis      — systemctl enable/disable --now
+#   scu / scus / scust — systemctl --user (status, start, stop)
+#   scl / scla / scfail — systemctl list-units (default, all, failed)
+#   scmask / scunmask  — systemctl mask / unmask
+#   serv               — _x systemctl (shortcut)
+#
+# See also: systemctl(1), systemd(1)
+#
+
+if command -v systemctl >/dev/null 2>&1; then
+    alias scsr='_x systemctl restart'
+    alias scse='_x systemctl enable'
+    alias scsd='_x systemctl disable'
+    alias scn='_x systemctl daemon-reload'
+    alias scens='_x systemctl enable --now'
+    alias scdis='_x systemctl disable --now'
+    alias scu='_x systemctl --user'
+    alias scus='_x systemctl --user status'
+    alias scust='_x systemctl --user start'
+    alias scusp='_x systemctl --user stop'
+    alias scusr='_x systemctl --user restart'
+    alias scuse='_x systemctl --user enable'
+    alias scusd='_x systemctl --user disable'
+    alias scl='_x systemctl list-units'
+    alias scla='_x systemctl list-units --all'
+    alias scfail='_x systemctl list-units --failed'
+    alias scmask='_x systemctl mask'
+    alias scunmask='_x systemctl unmask'
+    alias sccat='_x systemctl cat'
+    alias sclist='_x systemctl list-unit-files'
+    alias scon='_x systemctl is-active'
+    alias serv='_x systemctl'
 fi
 
-if command -v trivy >/dev/null 2>&1; then
-    alias trivy='trivy'
-    alias trivyi='trivy image'
-    alias trivyf='trivy fs'
-    alias trivyr='trivy repo'
+# -----------------------------------------------------------------------------
+# Journalctl — System Log Inspection
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for journalctl to inspect systemd journal
+# logs. These cover filtering by unit, priority level, time windows, boot
+# sessions, and disk usage management for the journal.
+#
+# Notable aliases:
+#   jc       — journalctl (base command)
+#   jcf      — journalctl -f (follow)
+#   jcu      — journalctl -u (by unit)
+#   jcub     — journalctl -u -b (by unit, current boot)
+#   jcs      — journalctl --since
+#   jcp      — journalctl -p err (error priority and above)
+#   jcdf     — journalctl --disk-usage
+#   jcemerg / jcalert / jccrit / jcwarn / jcnotice / jcinfo / jcdebug
+#            — journalctl filtered by specific priority levels
+#   jrnl     — _x journalctl (shortcut)
+#
+# See also: journalctl(1), systemd-journald(8)
+#
+
+if command -v journalctl >/dev/null 2>&1; then
+    alias jc='_x journalctl'
+    alias jce='_x journalctl -e'
+    alias jcf='_x journalctl -f'
+    alias jcu='_x journalctl -u'
+    alias jcub='_x journalctl -u -b'
+    alias jcs='_x journalctl --since'
+    alias jct='_x journalctl --until'
+    alias jcp='_x journalctl -p err'
+    alias jcdf='_x journalctl --disk-usage'
+    alias jcro='_x journalctl --rotate'
+    alias jcv='_x journalctl --verify'
+    alias jcemerg='_x journalctl -p emerg'
+    alias jcalert='_x journalctl -p alert'
+    alias jccrit='_x journalctl -p crit'
+    alias jcwarn='_x journalctl -p warning'
+    alias jcnotice='_x journalctl -p notice'
+    alias jcinfo='_x journalctl -p info'
+    alias jcdebug='_x journalctl -p debug'
+    alias jcboot='_x journalctl -b'
+    alias jrnl='_x journalctl'
 fi
 
-if command -v cosign >/dev/null 2>&1; then
-    alias cosign='cosign'
-    alias cosignv='cosign verify'
-    alias cosigns='cosign sign'
+# -----------------------------------------------------------------------------
+# Package Managers — pacman / yay
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Arch Linux package management with
+# pacman and the AUR helper yay. These cover package search, install,
+# removal, orphan cleanup, files query, and database operations.
+#
+# Notable aliases:
+#   pac / pacs / pacsi   — pacman (sudo) / search / info
+#   pacup / pacin / pacrm — pacman -Syu / -S / -Rns
+#   pacorph / pacclean   — list / remove orphan packages
+#   yay / yays / yayi    — AUR-aware search / install
+#   yayup / yayrm       — AUR upgrade / remove
+#   yayf                 — fzf-interactive AUR package browser + install
+#
+# See also: pacman(8), yay(1), makepkg(8)
+#
+# Warning: pacclean removes all orphan packages in one operation.
+#
+
+if command -v pacman >/dev/null 2>&1; then
+    alias pac='sudo pacman'
+    alias pacs='_x pacman -Ss'
+    alias pacsi='_x pacman -Si'
+    alias pacq='_x pacman -Q'
+    alias pacqi='_x pacman -Qi'
+    alias pacql='_x pacman -Ql'
+    alias pacqo='_x pacman -Qo'
+    alias pacqs='_x pacman -Qs'
+    alias pacup='sudo pacman -Syu'
+    alias pacin='sudo pacman -S'
+    alias pacrm='sudo pacman -Rns'
+    alias pacrmu='sudo pacman -Rdd'
+    alias pacor='sudo pacman -Sc'
+    alias pacowned='_x pacman -Qii'
+    alias pacorph='_x pacman -Qtdq'
+    alias pacclean='sudo pacman -Rns $(pacman -Qtdq)'
+    alias paclsorph='_x pacman -Qtd'
+    alias pacfiles='_x pacman -Fl'
+    alias pacdep='_x pacman -Si'
+    alias pacwhy='_x pacman -D --asexplicit'
+    alias fixpacman='sudo rm -f /var/lib/pacman/db.lck'
 fi
 
+if command -v yay >/dev/null 2>&1; then
+    alias yays='yay -Ss'
+    alias yayq='yay -Q'
+    alias yayup='yay -Syu'
+    alias yayi='yay -S'
+    alias yayrm='yay -Rns'
+    alias yayclean='yay -Sc'
+    alias yaygendb='yay -Y --gendb'
+    alias yaydev='yay -S --devel'
+    alias yayfiles='yay -Fl'
+fi
+
+if command -v yay >/dev/null 2>&1 && command -v fzf >/dev/null 2>&1; then
+    alias yayf="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
+fi
+
+# -----------------------------------------------------------------------------
+# Package Managers — APT (Debian/Ubuntu)
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for APT on Debian-based systems. These cover
+# package search, install, removal, purging, automatic removal of orphans,
+# package holding, and source/build dependency management.
+#
+# Notable aliases:
+#   apt / apts / aptsh   — apt search / show
+#   aptup / aptin / aptr — apt update + upgrade / install / remove
+#   aptp                 — apt purge
+#   aptau                — apt autoremove
+#   aptbuild             — apt build-dep
+#   apthold / aptunhold  — apt-mark hold / unhold
+#   aptfix               — apt --fix-broken install
+#
+# See also: apt(8), apt-get(8), dpkg(1)
+#
+
+if command -v apt >/dev/null 2>&1 || command -v apt-get >/dev/null 2>&1; then
+    alias apt='_x apt'
+    alias aptup='sudo apt update && sudo apt upgrade -y'
+    alias aptin='sudo apt install'
+    alias aptr='sudo apt remove'
+    alias aptp='sudo apt purge'
+    alias apts='_x apt search'
+    alias aptsh='_x apt show'
+    alias aptq='dpkg -l'
+    alias aptqi='dpkg -l | grep'
+    alias aptau='sudo apt autoremove'
+    alias aptd='sudo apt download'
+    alias aptsrc='sudo apt source'
+    alias aptbuild='sudo apt build-dep'
+    alias aptpolicy='_x apt policy'
+    alias aptchangelog='_x apt changelog'
+    alias aptlistup='_x apt list --upgradable'
+    alias aptlistins='_x apt list --installed'
+    alias apthold='sudo apt-mark hold'
+    alias aptunhold='sudo apt-mark unhold'
+    alias aptshowhold='apt-mark showhold'
+    alias aptfix='sudo apt --fix-broken install'
+    alias aptupdate='sudo apt update'
+    alias aptdistup='sudo apt full-upgrade'
+fi
+
+# -----------------------------------------------------------------------------
+# Package Managers — DNF (Fedora/RHEL)
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for DNF on Fedora/RHEL-based systems.
+# These cover package search, install, removal, automatic removal, history
+# inspection and rollback, repository management, module operations,
+# and downgrade workflows.
+#
+# Notable aliases:
+#   dnf / dnfs / dnfsi   — dnf search / info
+#   dnfup / dnfi / dnfrm — upgrade / install / remove
+#   dnfau                — dnf autoremove
+#   dnfhist / dnfroll    — history inspection / rollback
+#   dnfdowng             — dnf downgrade
+#   dnfcache             — dnf clean all
+#   dnfprov              — dnf provides (what package owns file)
+#
+# See also: dnf(8), rpm(8)
+#
+
+if command -v dnf >/dev/null 2>&1; then
+    alias dnf='_x dnf'
+    alias dnfs='_x dnf search'
+    alias dnfsi='_x dnf info'
+    alias dnfup='sudo dnf upgrade'
+    alias dnfi='sudo dnf install'
+    alias dnfrm='sudo dnf remove'
+    alias dnfau='sudo dnf autoremove'
+    alias dnfq='_x dnf list installed'
+    alias dnfqi='_x dnf list installed | grep'
+    alias dnfrep='_x dnf repolist'
+    alias dnfre='_x dnf group list'
+    alias dnfcache='sudo dnf clean all'
+    alias dnfhist='_x dnf history'
+    alias dnfhistinfo='_x dnf history info'
+    alias dnfroll='_x dnf history rollback'
+    alias dnfdowng='_x dnf downgrade'
+    alias dnflocal='sudo dnf localinstall'
+    alias dnfprov='_x dnf provides'
+    alias dnfchk='_x dnf check-update'
+    alias dnfmod='_x dnf module'
+fi
+
+# -----------------------------------------------------------------------------
+# Package Managers — Homebrew (macOS/Linux)
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Homebrew on macOS and Linux. These cover
+# package search, install, uninstall, service management, update/upgrade
+# with cleanup, dependency inspection, and cask (GUI app) installation.
+#
+# Notable aliases:
+#   brew / brews / brewin   — brew search / install
+#   brewrm                  — brew uninstall
+#   brewup / brewupc        — brew update && upgrade (with/without cleanup)
+#   brewsrv / brewsrvl      — brew services list
+#   brewcask                — brew install --cask
+#   brewdep / brewuses      — dependency inspection / reverse deps
+#   brewleaves              — packages not required by others
+#
+# See also: brew(1), https://brew.sh
+#
+
+if command -v brew >/dev/null 2>&1; then
+    alias brew='_x brew'
+    alias brews='_x brew search'
+    alias brewin='_x brew install'
+    alias brewrm='_x brew uninstall'
+    alias brewq='_x brew list'
+    alias brewsrv='_x brew services'
+    alias brewsrvl='_x brew services list'
+    alias brewsrvr='_x brew services restart'
+    alias brewup='_x brew update && brew upgrade'
+    alias brewupc='_x brew update && brew upgrade && brew cleanup'
+    alias brewclean='_x brew cleanup'
+    alias brewdoc='_x brew doctor'
+    alias brewout='_x brew outdated'
+    alias brewpin='_x brew pin'
+    alias brewsr='_x brew tap'
+    alias brewinfo='_x brew info'
+    alias brewcask='_x brew install --cask'
+    alias brewdep='_x brew deps'
+    alias brewuses='_x brew uses'
+    alias brewleaves='_x brew leaves'
+fi
+
+# -----------------------------------------------------------------------------
+# Package Managers — Flatpak / Snap / Nix / Zypper / APK
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Flatpak (cross-distro sandboxed apps),
+# Snap (Canonical's package format), Nix (purely functional package manager),
+# Zypper (openSUSE), and APK (Alpine Linux). Each group covers search,
+# install, remove, update, and inspection workflows.
+#
+# Notable aliases:
+#   flat / flats / flati    — flatpak search / install
+#   snap / snaps / snapi    — snap search / install
+#   nix / nixs / nixi       — nix search / profile install
+#   zyp / zyps / zypi       — zypper search / install
+#   apk / apks / apki       — apk search / add
+#
+# See also: flatpak(1), snap(1), nix(1), zypper(8), apk(8)
+#
+
+if command -v flatpak >/dev/null 2>&1; then
+    alias flat='flatpak'
+    alias flats='flatpak search'
+    alias flati='flatpak install'
+    alias flatrm='flatpak uninstall'
+    alias flatup='flatpak update'
+    alias flatq='flatpak list'
+    alias flatrun='flatpak run'
+    alias flatinfo='flatpak info'
+    alias flatover='flatpak override'
+fi
+
+if command -v snap >/dev/null 2>&1; then
+    alias snaps='snap search'
+    alias snapi='sudo snap install'
+    alias snaprm='sudo snap remove'
+    alias snapup='sudo snap refresh'
+    alias snapq='snap list'
+    alias snapinfo='snap info'
+    alias snapch='sudo snap changes'
+fi
+
+if command -v nix >/dev/null 2>&1; then
+    alias nixs='nix search'
+    alias nixsh='nix shell'
+    alias nixi='nix profile install'
+    alias nixrm='nix profile remove'
+    alias nixup='nix profile upgrade'
+    alias nixq='nix profile list'
+    alias nixdev='nix develop'
+    alias nixbuild='nix build'
+    alias nixrun='nix run'
+    alias nixgc='nix store gc'
+    alias nixopt='nix store optimise'
+fi
+
+if command -v zypper >/dev/null 2>&1; then
+    alias zyp='sudo zypper'
+    alias zyps='zypper search'
+    alias zypi='sudo zypper install'
+    alias zypr='sudo zypper remove'
+    alias zypup='sudo zypper update'
+    alias zypdup='sudo zypper dist-upgrade'
+    alias zypl='zypper list-installed'
+    alias zypclean='sudo zypper clean'
+    alias zyplr='zypper lr'
+    alias zypprov='zypper what-provides'
+fi
+
+if command -v apk >/dev/null 2>&1; then
+    alias apks='apk search'
+    alias apki='apk add'
+    alias apkrm='apk del'
+    alias apkup='apk update && apk upgrade'
+    alias apkq='apk list'
+    alias apkqi='apk list -I'
+    alias apkinfo='apk info'
+    alias apkclean='apk cache clean'
+fi
+
+# -----------------------------------------------------------------------------
+# Node.js / JavaScript — npm / pnpm / yarn
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Node.js package management and
+# development workflows. These cover npm (test, build, run, publish,
+# audit, outdated), pnpm (fast, disk-efficient alternative), and
+# yarn (classic) with per-tool conventions.
+#
+# Notable aliases:
+#   nt / nb / nrn / np   — npm test / build / run / publish
+#   naud / naux          — npm audit / audit fix
+#   ninit / nls / nout   — npm init / list / outdated
+#   pn / pni / pnr       — pnpm install / run
+#   pna / pnad / pnrm    — pnpm add / add -D / remove
+#   y / ya / yr / yb     — yarn add / run / build
+#
+# See also: npm(1), pnpm(1), yarn(1), package.json(5)
+#
+# Tip: pnpm store is shared across projects — run pnstore to inspect.
+#
+
+if command -v node >/dev/null 2>&1; then
+    alias nt='_x npm test'
+    alias nb='_x npm run build'
+    alias nrn='_x npm run --'
+    alias np='_x npm publish'
+    alias nup='_x npm update'
+    alias nout='_x npm outdated'
+    alias nls='_x npm list'
+    alias ndoc='_x npm docs'
+    alias ninit='_x npm init -y'
+    alias nstar='_x npm star'
+    alias nuni='_x npm uninstall'
+    alias nlex='_x npm exec'
+    alias nwhy='_x npm why'
+    alias naud='_x npm audit'
+    alias naux='_x npm audit fix'
+fi
+
+
+if command -v pnpm >/dev/null 2>&1; then
+    alias pn='_x pnpm'
+    alias pni='_x pnpm install'
+    alias pnr='_x pnpm run'
+    alias pnd='_x pnpm run dev'
+    alias pnb='_x pnpm run build'
+    alias pnt='_x pnpm test'
+    alias pna='_x pnpm add'
+    alias pnad='_x pnpm add -D'
+    alias pnrm='_x pnpm remove'
+    alias pnup='_x pnpm update'
+    alias pnout='_x pnpm outdated'
+    alias pnls='_x pnpm list'
+    alias pninit='_x pnpm init'
+    alias pnpub='_x pnpm publish'
+    alias pnlint='_x pnpm lint'
+    alias pnex='_x pnpm exec'
+    alias pnlc='_x pnpm lint:check'
+    alias pnstore='_x pnpm store'
+fi
+
+if command -v yarn >/dev/null 2>&1; then
+    alias y='yarn'
+    alias ya='yarn add'
+    alias yad='yarn add -D'
+    alias yr='yarn run'
+    alias yb='yarn build'
+    alias yd='yarn dev'
+    alias yt='yarn test'
+    alias yrm='yarn remove'
+    alias yls='yarn list'
+    alias yinit='yarn init'
+    alias ypub='yarn publish'
+    alias ylint='yarn lint'
+    alias ygl='yarn global list'
+    alias yga='yarn global add'
+fi
+
+# -----------------------------------------------------------------------------
+# Rust / Cargo Development
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Rust development with Cargo. These cover
+# the full build-test-run cycle, code quality (clippy, fmt, check),
+# documentation generation, publishing, benchmark, and nightly toolchain
+# shortcuts.
+#
+# Notable aliases:
+#   cr / crb / crbr    — cargo build / build --release
+#   crr / crrr         — cargo run / run --release
+#   crt / crcl / crf   — cargo test / clippy / fmt
+#   crc / crd          — cargo check / doc
+#   crp / cru / crout  — cargo publish / update / outdated
+#   crbench / crfix    — cargo bench / fix
+#   crl                — cargo +nightly (nightly toolchain)
+#   crw                — cargo watch
+#   cradd / crrm       — cargo add / remove
+#
+# See also: cargo(1), rustc(1), https://doc.rust-lang.org/cargo/
+#
+
+if command -v cargo >/dev/null 2>&1; then
+    alias cr='_x cargo'
+    alias crb='_x cargo build'
+    alias crbr='_x cargo build --release'
+    alias crr='_x cargo run'
+    alias crrr='_x cargo run --release'
+    alias crt='_x cargo test'
+    alias crcl='_x cargo clippy'
+    alias crf='_x cargo fmt'
+    alias crc='_x cargo check'
+    alias crd='_x cargo doc'
+    alias crp='_x cargo publish'
+    alias cru='_x cargo update'
+    alias crout='_x cargo outdated'
+    alias crclean='_x cargo clean'
+    alias crbench='_x cargo bench'
+    alias crfix='_x cargo fix'
+    alias crl='_x cargo +nightly'
+    alias crw='_x cargo watch'
+    alias cradd='_x cargo add'
+    alias crrm='_x cargo remove'
+fi
+
+# -----------------------------------------------------------------------------
+# Go Development
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Go development. These cover compilation
+# (build, run), testing (verbose with ./...), module management (mod tidy,
+# mod vendor), code quality (fmt, vet), documentation, code generation,
+# and profiling (pprof).
+#
+# Notable aliases:
+#   go / gor / gob     — go run / build
+#   got / gotv         — go test / test -v ./...
+#   goi                — go install
+#   gom / gomt / gomv  — go mod / mod tidy / mod vendor
+#   gof / gol          — go fmt ./... / go vet ./...
+#   godoc              — go doc
+#   gogen              — go generate ./...
+#   goc                — go clean
+#   gop                — go tool pprof
+#
+# See also: go(1), https://go.dev/doc/
+#
+
+if command -v go >/dev/null 2>&1; then
+    alias go='_x go'
+    alias gor='_x go run'
+    alias gob='_x go build'
+    alias got='_x go test'
+    alias gotv='_x go test -v ./...'
+    alias goi='_x go install'
+    alias gom='_x go mod'
+    alias gomt='_x go mod tidy'
+    alias gomv='_x go mod vendor'
+    alias gog='_x go get'
+    alias gof='_x go fmt ./...'
+    alias gol='_x go vet ./...'
+    alias godoc='_x go doc'
+    alias gogen='_x go generate ./...'
+    alias goc='_x go clean'
+    alias gocache='_x go clean -cache'
+    alias goenv='_x go env'
+    alias gop='_x go tool pprof'
+fi
+
+# -----------------------------------------------------------------------------
+# Python Development
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for Python development. These cover
+# interpreter selection (python2/3), virtual environment creation and
+# activation, pip package management (install, freeze, list, check),
+# testing with pytest and unittest, and JSON/YAML/CSV formatting.
+#
+# Notable aliases:
+#   py / py2 / py3    — python3 / python2 / python3
+#   pipup / pi / piu  — pip upgrade / install / install --upgrade
+#   venv / akt / dakt — create venv / activate / deactivate
+#   pyreq / pyr       — pip freeze > requirements.txt / install -r
+#   pyt / pyun        — pytest / unittest
+#   json / yaml / csv — stdin formatting pipelines
+#   math              — python3 -c (inline calculator)
+#
+# See also: python(1), pip(1), pytest(1), venv(1)
+#
+# Tip: akt sources .venv/bin/activate; run dakt to leave the venv.
+#
+
+if command -v python3 >/dev/null 2>&1; then
+    alias py='_x python3'
+    alias py2='python2 2>/dev/null || python3'
+    alias py3='_x python3'
+    alias pipup='_x python3 -m pip install --upgrade pip'
+    alias venv='_x python3 -m venv .venv'
+    alias akt='source .venv/bin/activate'
+    alias dakt='deactivate'
+    alias pyreq='_x pip freeze > requirements.txt'
+    alias pyr='_x python3 -m pip install -r requirements.txt'
+    alias pyi='_x python3 -i'
+    alias pym='_x python3 -m'
+    alias pyt='_x python3 -m pytest'
+    alias pyun='_x python3 -m unittest'
+fi
+
+if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
+    alias pip='pip3 2>/dev/null || pip'
+    alias pi='_x pip install'
+    alias piu='_x pip install --upgrade'
+    alias pir='_x pip install -r requirements.txt'
+    alias pls='_x pip list'
+    alias pout='_x pip list --outdated'
+    alias psh='_x pip show'
+    alias pch='_x pip check'
+    alias pdown='_x pip download'
+    alias phash='_x pip hash'
+fi
+
+alias json='python3 -m json.tool 2>/dev/null || echo "python3 needed"'
+alias xml='_x xmllint --format - 2>/dev/null || echo "xmllint needed"'
+alias yaml='_x python3 -c "import sys,yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, default_flow_style=False)" 2>/dev/null || echo "python3+yaml needed"'
+alias csv='_x python3 -c "import sys,csv; r=csv.reader(sys.stdin); [print(l) for l in r]" 2>/dev/null || column -t -s, 2>/dev/null'
+alias ts='_x python3 -c "import sys,json; [print(json.dumps(eval(l))) for l in sys.stdin]" 2>/dev/null'
+alias math='_x python3 -c'
+alias rstring='_x python3 -c "import secrets; print(secrets.token_hex())"'
+
+# -----------------------------------------------------------------------------
+# SSH Operations
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for SSH client operations, key management,
+# and host-key verification. These cover agent forwarding, strict host key
+# checking bypass (for trusted/transient hosts), key generation, key removal
+# from known_hosts, and public-key copy to remote hosts.
+#
+# Notable aliases:
+#   ssh     — ssh (via _x)
+#   ssha    — ssh -A (agent forwarding enabled)
+#   sshi    — ssh -o StrictHostKeyChecking=no (insecure, transient hosts only)
+#   ssk     — ssh-keygen
+#   sskr    — ssh-keygen -R (remove host key)
+#   ssc     — ssh-copy-id
+#   scp     — scp (secure copy)
+#
+# See also: ssh(1), sshd(8), ssh-keygen(1), ssh-copy-id(1)
+#
+# Warning: sshi disables host key checking — use only in trusted environments.
+#
+
+if command -v ssh >/dev/null 2>&1; then
+    alias ssh='_x ssh'
+    alias ssha='_x ssh -A'
+    alias sshi='_x ssh -o StrictHostKeyChecking=no'
+    alias ssk='ssh-keygen'
+    alias sskr='ssh-keygen -R'
+    alias ssc='ssh-copy-id'
+fi
+
+# -----------------------------------------------------------------------------
+# GPG Operations
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for GNU Privacy Guard operations. These
+# cover encryption, decryption, signing, verification, key listing, key
+# export/import, and key retrieval from keyservers.
+#
+# Notable aliases:
+#   gpg      — gpg (base command via _x)
+#   gpge     — gpg -e (encrypt)
+#   gpgd     — gpg -d (decrypt)
+#   gpgs     — gpg -s (sign)
+#   gpgv     — gpg --verify
+#   gpgl     — gpg --list-keys
+#   gpgls    — gpg --list-secret-keys
+#   gpgex    — gpg --export
+#   gpgimport — gpg --import
+#   gpgrecv  — gpg --recv-keys
+#
+# See also: gpg(1), gpg-agent(1)
+#
+
+if command -v gpg >/dev/null 2>&1; then
+    alias gpg='_x gpg'
+    alias gpge='_x gpg -e'
+    alias gpgd='_x gpg -d'
+    alias gpgs='_x gpg -s'
+    alias gpgv='_x gpg --verify'
+    alias gpgl='_x gpg --list-keys'
+    alias gpgls='_x gpg --list-secret-keys'
+    alias gpgk='_x gpg --list-keys'
+    alias gpgex='_x gpg --export'
+    alias gpgimport='_x gpg --import'
+    alias gpgrecv='_x gpg --recv-keys'
+    alias gpgens='_x gpg --gen-key'
+fi
+
+# -----------------------------------------------------------------------------
+# Network Tools
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for network diagnostics, DNS queries,
+# port scanning, HTTP requests, and connectivity testing. These combine
+# traditional tools (dig, nmap, curl, wget, ss, traceroute) with modern
+# Rust alternatives (dog, bandwhich, gping) when available.
+#
+# Notable aliases:
+#   dns / dnsx / dnsmx  — dig +short, ANY, MX
+#   nm / nms / nmp      — nmap ping sweep / version scan / OS detect
+#   cur / curh / curv   — curl -fsSL / -I / -v
+#   wg / wgr            — wget -c (continue) / recursive mirror
+#   net / ipa / ipr     — ip -br addr / route
+#   nst / portlisten    — netstat / ss for listening ports
+#   trace               — traceroute
+#   myip / myipl        — public / local IP address
+#   speed               — speedtest-cli via curl
+#   flush               — flush DNS cache (systemd-resolve / mDNSResponder)
+#   ping / pb           — prettyping / ping 8.8.8.8
+#   band / bandl        — bandwhich (network utilization TUI)
+#   gping               — graphical ping
+#
+# See also: ip(8), ss(8), dig(1), nmap(1), curl(1), wget(1), traceroute(1)
+#
+
+alias myipl='ip addr show | grep "inet " | awk "{print \$2}" | cut -d/ -f1 | head -1'
+alias weather='curl -fsSL wttr.in'
+alias portlisten='ss -tlnp 2>/dev/null || netstat -tlnp'
+alias pingf='ping -c 100 -s 1472 -f'
+alias pb='ping -c 4 8.8.8.8'
+alias net='ip -br addr'
+alias ipl='ip -br link'
+alias ipa='ip -br addr'
+alias ipr='ip route'
+alias nst='netstat -tulanp 2>/dev/null || ss -tulanp'
+alias trace='traceroute'
+alias net='_x ip -br addr 2>/dev/null || _x ifconfig 2>/dev/null'
+alias ipa='_x ip -br addr 2>/dev/null || _x ifconfig 2>/dev/null'
+alias trace='_x traceroute 2>/dev/null || _x traceroute6 2>/dev/null || echo "no traceroute"'
+alias ip='ip -br addr'
+alias myip='_x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || echo "N/A"'
+alias myipl='_x ip addr show scope global 2>/dev/null | grep -oP "inet \K[\d.]+" || _x ifconfig 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | awk "{print \$2}"'
+alias dns='_x dig +short'
+alias flush='_x sudo resolvectl flush-caches 2>/dev/null || _x sudo systemd-resolve --flush-caches 2>/dev/null || _x sudo killall -HUP mDNSResponder 2>/dev/null || echo "no flush"'
+alias speed='_x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | _x python3 - 2>/dev/null || echo "speedtest-cli needed"'
+alias weather='_x curl -fsSL wttr.in 2>/dev/null || echo "curl needed"'
+alias weather3='_x curl -fsSL "wttr.in?F" 2>/dev/null || echo "curl needed"'
+alias moon='_x curl -fsSL "wttr.in/Moon" 2>/dev/null || echo "curl needed"'
+alias dnst='dig +short'
+alias iftop='sudo iftop'
+alias ping='_x prettyping 2>/dev/null || ping'
+alias dig='_x dog 2>/dev/null || dig'
+
+if command -v dig >/dev/null 2>&1; then
+    alias dns='dig +short'
+    alias dnsx='dig ANY +short'
+    alias dnsmx='dig MX +short'
+    alias dnsns='dig NS +short'
+    alias dnstxt='dig TXT +short'
+    alias dnsany='dig ANY'
+fi
+
+if command -v nmap >/dev/null 2>&1; then
+    alias nm='nmap'
+    alias nms='nmap -sn'
+    alias nmp='nmap -sV -sC'
+    alias nmo='nmap -O'
+fi
+
+if command -v curl >/dev/null 2>&1; then
+    alias cur='curl -fsSL'
+    alias curh='curl -I'
+    alias curv='curl -v'
+    alias curj='curl -s | jq .'
+    alias curd='curl -X DELETE'
+    alias curp='curl -X POST'
+    alias curu='curl -X PUT'
+fi
+
+if command -v wget >/dev/null 2>&1; then
+    alias wg='wget -c'
+    alias wgr='wget -r -np -nH'
+fi
+
+# -----------------------------------------------------------------------------
+# Process Management
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for process inspection, signal handling,
+# and scheduling. These cover process listing with various sort orders,
+# tree views, kill signals, searching by name/pattern, priority adjustment
+# with nice/renice, and resource monitoring (CPU, memory, I/O).
+#
+# Notable aliases:
+#   ps / psf / psxl     — ps auxf / forest view
+#   pse / psi / pid     — search processes by name/pattern
+#   pst                 — pstree (process tree)
+#   kill9 / kill15      — kill -9 / kill -15
+#   pkillf              — pkill -f (kill by pattern)
+#   topcpu / topmem     — top processes by CPU/memory
+#   iotop               — I/O monitoring TUI
+#   procs               — modern process viewer (Rust)
+#   nohup / disown / bg / fg — job control
+#   nice / renice       — priority adjustment
+#
+# See also: ps(1), kill(1), pkill(1), nice(1), renice(1), top(1)
+#
+
+alias ps='ps auxf'
+alias pse='ps aux | grep'
+alias pst='_x pstree'
+alias psea='ps -e'
+alias kill9='kill -9'
+alias kill15='kill -15'
+alias pkillf='_x pkill -f'
+alias pid='_x pgrep -f'
+alias nice='nice -n'
+alias renice='renice -n'
+alias topcpu='ps aux --sort=-%cpu | head 2>/dev/null || ps aux -r | head'
+alias topmem='ps aux --sort=-%mem | head 2>/dev/null || ps aux -m | head'
+alias iotop='iotop -o 2>/dev/null || echo "iotop not found"'
+alias pscpu='ps aux --sort=-%cpu'
+alias psmem='ps aux --sort=-%mem'
+alias psuser='ps -u'
+alias psi='ps aux | grep -i'
+alias psaux='ps aux'
+alias psf='ps auxf'
+alias psxl='ps aux --forest'
+alias psymod='lsmod'
+alias top='_x btop 2>/dev/null || _x htop 2>/dev/null || top'
+
+# -----------------------------------------------------------------------------
+# Text Processing
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for text search, filtering, transformation,
+# and comparison. These cover grep (with ripgrep fallback), sed, awk, sort,
+# uniq, diff, column formatting, and common pipeline helpers. Modern
+# alternatives (rg, sd, delta) are used when available.
+#
+# Notable aliases:
+#   gr / gri / grr      — grep / grep -i / grep -r
+#   rg / rgi            — ripgrep (with hidden files, excluding .git)
+#   sed / awk / sort / uniq — standard text tools
+#   uniqc               — sort | uniq -c | sort -rn (frequency count)
+#   diff / diffy        — diff / diff -y (side-by-side), delta fallback
+#   head / tail         — head/tail with common defaults
+#   tair / taill        — tail -f / tail -100
+#   nl / tac / rev      — line numbering / reverse / reverse chars
+#   cut / tr / fold / column / join — field/column operations
+#   grepw / grepr / grex — grep word / recursive / exclude dirs
+#   delta               — modern diff viewer (Rust)
+#   sd                  — find-and-replace (sed alternative, Rust)
+#
+# See also: grep(1), rg(1), sed(1), awk(1), diff(1), delta(1)
+#
+
+alias gr='grep'
+alias gri='grep -i'
+alias grr='grep -r'
+alias grri='grep -ri'
+alias grl='grep -rl'
+alias grc='grep -c'
+alias uniqc='sort | uniq -c | sort -rn'
+alias wcw='wc -w'
+alias column='column -t'
+alias diffy='diff -y'
+alias tair='tail -f'
+alias taill='tail -100'
+alias headl='head -100'
+alias nl='nl -ba'
+alias tac='tac 2>/dev/null || tail -r'
+alias grepw='grep -w'
+alias grepr='grep -r'
+alias grex='grep -r --exclude-dir=.git --exclude-dir=node_modules'
+alias grep='_x rg --color=auto 2>/dev/null || grep --color=auto'
+alias diff='_x delta 2>/dev/null || diff --color=auto 2>/dev/null || diff'
+
+if command -v rg >/dev/null 2>&1; then
+    alias rg='rg --hidden --glob "!.git"'
+    alias rgi='rg -i --hidden --glob "!.git"'
+    alias rgf='rg --files'
+    alias rgl='rg --files-with-matches'
+    alias rgc='rg --count'
+fi
+
+
+
+# -----------------------------------------------------------------------------
+# File Operations
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for file manipulation, copying, moving,
+# deletion, permissions, symlinks, and disk usage. These use interactive
+# flags (-i) by default for safety, and include modern alternatives
+# (bat, fd, rsync) when available.
+#
+# Notable aliases:
+#   cp / mv / rm        — interactive copy/move/remove
+#   rmr / rmf / cpf     — recursive / force variants
+#   cpv                 — rsync-based copy with progress
+#   rsync / rsyncdn     — rsync with archive/compress/dry-run
+#   chx / chm           — chmod +x / chmod
+#   ln / lnh            — symlink / readlink
+#   backup              — timestamped backup copy
+#   fd / fdi            — fd (find alternative) with hidden
+#   find                — fd with hidden fallback to find
+#   cat                 — bat with fallback to cat
+#   shred / shredf      — secure file deletion
+#   lsof / lsofi        — list open files / by port
+#   du / dud / du2      — disk usage with depth control
+#
+# See also: cp(1), mv(1), rm(1), rsync(1), fd(1), bat(1), shred(1)
+#
+# Warning: rmf / shred are destructive and irreversible.
+#
+
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias rmr='rm -r'
+alias rmf='rm -f'
+alias cpf='cp -f'
+alias mvfs='mv -f'
+alias cpv='_x rsync -ah --progress'
+alias mkd='mkdir -p'
+alias rsync='_x rsync -avz --progress'
+alias rsyncdn='_x rsync -avz --dry-run --progress'
+alias chx='chmod +x'
+alias chm='chmod'
+alias ln='ln -s'
+alias lnh='readlink -f'
+alias backup='cp -r "$1" "${1}.bak-$(date +%Y%m%d-%H%M%S)"'
+alias mount='mount | column -t'
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias mkdir='mkdir -p'
+alias bc='bc -l'
+alias find='_x fd 2>/dev/null || find'
+alias cat='_x bat --style=plain --paging=never 2>/dev/null || _x batcat --style=plain --paging=never 2>/dev/null || cat'
+alias fd='_x fd 2>/dev/null || find'
+alias ff='find . -type f -name'
+alias mkdir='mkdir -p'
+alias wget='_x wget 2>/dev/null || _x curl -fSL -o 2>/dev/null || echo "no download tool"'
+
+if command -v fd >/dev/null 2>&1; then
+    alias fd='fd --hidden'
+    alias fdi='fd -i'
+fi
+
+if command -v shred >/dev/null 2>&1; then
+    alias shred='shred -uz'
+    alias shredf='shred -uz -n 7'
+fi
+
+if command -v lsof >/dev/null 2>&1; then
+    alias lsofi='lsof -i'
+    alias lsofp='lsof -P'
+    alias lsofn='lsof -nP'
+fi
+
+alias lsof='_x lsof -i -P -n 2>/dev/null || echo "lsof needed"'
+
+# -----------------------------------------------------------------------------
+# Archive Operations
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for archive creation, extraction, and
+# inspection across multiple formats. These cover tar (gz, bz2, xz),
+# gzip, bzip2, xz, 7z, rar, zip, and the modern ouch tool with
+# format-agnostic compression.
+#
+# Notable aliases:
+#   tart / tarjx / tarjc  — tar list / extract bz2 / create bz2
+#   tarzx / tarzc        — tar extract xz / create xz
+#   tarl                  — tar list verbose
+#   gunz / bz2 / bunz    — gzip / bzip2 / bunzip2
+#   xz / unxz            — xz / unxz
+#   7z / 7zx / 7za       — 7z base / extract / add
+#   rarx                  — unrar extract
+#   ouch / ouchd / ouchc — modern format-agnostic compress/decompress
+#
+# See also: tar(1), gzip(1), bzip2(1), xz(1), 7z(1), unrar(1), ouch(1)
+#
+
+alias tart='tar -tzf'
+alias tarjx='tar -xjf'
+alias tarjc='tar -cjf'
+alias tarzx='tar -xJf'
+alias tarzc='tar -cJf'
+alias tarl='tar -tvf'
+alias gunz='gunzip'
+alias bz2='bzip2'
+alias bunz='bunzip2'
+alias 7z='7z'
+alias 7zx='7z x'
+alias 7za='7z a'
+alias rarx='unrar x'
+
+if command -v ouch >/dev/null 2>&1; then
+    alias ouchd='ouch decompress'
+    alias ouchc='ouch compress'
+    alias ouchl='ouch list'
+fi
+
+# -----------------------------------------------------------------------------
+# Database Operations
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for relational and NoSQL database clients.
+# These cover MySQL (client, dump, root access), PostgreSQL (client, dump,
+# restore), SQLite (interactive, dump), and Redis (ping, info, monitor).
+#
+# Notable aliases:
+#   myq / myqr          — mysql / mysql -u root -p
+#   mydump / mydumpr    — mysqldump / mysqldump -u root -p
+#   psql / psqlr        — psql / psql -U postgres
+#   pgdump / pgres      — pg_dump / pg_restore
+#   sq3 / sq3d          — sqlite3 / sqlite3 .dump
+#   rcli / rcliping     — redis-cli / ping
+#   rcliinfo / rclimon  — redis info / monitor
+#
+# See also: mysql(1), psql(1), sqlite3(1), redis-cli(1)
+#
+
+if command -v mysql >/dev/null 2>&1; then
+    alias myq='mysql'
+    alias myqr='mysql -u root -p'
+    alias mydump='mysqldump'
+    alias mydumpr='mysqldump -u root -p'
+fi
+
+if command -v psql >/dev/null 2>&1; then
+    alias psqlr='psql -U postgres'
+    alias pgdump='pg_dump'
+    alias pgres='pg_restore'
+fi
+
+if command -v sqlite3 >/dev/null 2>&1; then
+    alias sq3='sqlite3'
+    alias sq3d='sqlite3 .dump'
+fi
+
+if command -v redis-cli >/dev/null 2>&1; then
+    alias rcli='redis-cli'
+    alias rcliping='redis-cli ping'
+    alias rcliinfo='redis-cli info'
+    alias rclimon='redis-cli monitor'
+fi
+
+# -----------------------------------------------------------------------------
+# Cloud CLI — AWS / GCP / Azure
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for major cloud provider CLIs. These cover
+# AWS (STS, EC2, S3, ECS, ECR, Lambda, CloudWatch, IAM, Route53), GCP
+# (Compute SSH, instances, GKE clusters, logs), and Azure (VM management,
+# resource groups, AKS).
+#
+# Notable aliases:
+#   aws / awsw / awsinfo  — aws sts get-caller-identity / ec2 describe
+#   awss3 / awss3ls       — aws s3 / aws s3 ls
+#   awsecs / awsecr       — ECS clusters / ECR repos
+#   gcl / gcls / gcll     — gcloud / compute ssh / instances list
+#   gclgke                — gcloud container clusters get-credentials
+#   az / azl / azs        — az / vm list / vm start
+#
+# See also: aws(1), gcloud(1), az(1)
+#
+
+alias s3='_x s3cmd'
+
+if command -v aws >/dev/null 2>&1; then
+    alias awsw='aws sts get-caller-identity'
+    alias awsinfo='aws ec2 describe-instances'
+    alias awss3='aws s3'
+    alias awss3ls='aws s3 ls'
+    alias awslb='aws elb describe-load-balancers'
+    alias awsecs='aws ecs list-clusters'
+    alias awsecr='aws ecr describe-repositories'
+    alias awslam='aws lambda list-functions'
+    alias awslog='aws logs describe-log-groups'
+    alias awscw='aws cloudwatch'
+    alias awsiam='aws iam list-users'
+    alias awsr53='aws route53 list-hosted-zones'
+fi
+
+if command -v gcloud >/dev/null 2>&1; then
+    alias gcl='gcloud'
+    alias gcls='gcloud compute ssh'
+    alias gcll='gcloud compute instances list'
+    alias gclc='gcloud container clusters list'
+    alias gclgke='gcloud container clusters get-credentials'
+    alias gcllogs='gcloud logging list'
+fi
+
+if command -v az >/dev/null 2>&1; then
+    alias azl='az vm list'
+    alias azs='az vm start'
+    alias azst='az vm stop'
+    alias azr='az vm restart'
+    alias azg='az group list'
+    alias azaks='az aks list'
+fi
+
+# -----------------------------------------------------------------------------
+# Media Tools — FFmpeg / ImageMagick / NVIDIA
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for multimedia processing. These cover
+# FFmpeg (probe, play, format conversion, compression, GIF creation,
+# screen capture), ImageMagick (resize, format conversion, compression),
+# and NVIDIA GPU monitoring (utilization, memory, temperature).
+#
+# Notable aliases:
+#   ffp / ffg          — ffprobe / ffplay
+#   ffconvert          — ffmpeg -i (generic conversion)
+#   ffmp3              — extract audio as MP3
+#   ffcompress         — H.265/HEVC compression
+#   ffgif              — video to GIF
+#   ffscreencap        — X11 screen capture
+#   img / imgres       — ImageMagick convert / resize
+#   gpul / gputop      — nvidia-smi query / dmon
+#
+# See also: ffmpeg(1), ffprobe(1), convert(1), nvidia-smi(1)
+#
+
+if command -v ffmpeg >/dev/null 2>&1; then
+    alias ffp='ffprobe'
+    alias ffg='ffplay'
+    alias ffconvert='ffmpeg -i'
+    alias ffmp3='ffmpeg -i "$1" -q:a 0 "${1%.*}.mp3"'
+    alias ffcompress='ffmpeg -i "$1" -vcodec libx265 -crf 28'
+    alias ffgif='ffmpeg -i "$1" -vf "fps=10,scale=320:-1" "${1%.*}.gif"'
+    alias ffscreencap='ffmpeg -f x11grab -video_size 1920x1080 -i :0.0'
+fi
+
+if command -v convert >/dev/null 2>&1; then
+    alias img='convert'
+    alias imgres='convert -resize'
+    alias imgfmt='convert -format'
+    alias imgcompress='convert -quality 85'
+fi
+
+if command -v nvidia-smi >/dev/null 2>&1; then
+    alias gpul='nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv'
+    alias gputop='nvidia-smi dmon -s pucvmet'
+fi
+
+# -----------------------------------------------------------------------------
+# Utility Operations — Clipboard / Hashing / Encoding / Help
+# -----------------------------------------------------------------------------
+#
+# This section provides general-purpose utility aliases. These cover
+# clipboard access (pbcopy/pbpaste for X11/Wayland), hashing and checksums
+# (SHA256, MD5), encoding (base64, hex, URL), random password generation,
+# cheat sheet access (cht.sh, cheat.sh, learnxinyminutes), shell info
+# (history, path, env), and system data (disk, memory, CPU).
+#
+# Notable aliases:
+#   pbcopy / pbpaste   — clipboard copy/paste (xclip or wl-clipboard)
+#   sha / md5sum / hex — hashing / hex dump
+#   base64e / base64d  — base64 encode / decode
+#   urlenc / urldec    — URL encode / decode
+#   randpw             — random 16-byte base64 password
+#   cht / cheat / learn — online cheat sheets (cht.sh, cheat.sh)
+#   please             — sudo (politely)
+#   focus              — clear screen + timestamp
+#   path / pathlines   — display PATH entries
+#   port / ports       — listening ports via ss/netstat/lsof
+#   connections        — active connections via ss/netstat
+#   sep                — horizontal rule across terminal width
+#   countfiles         — count files/links/dirs in pwd
+#
+# See also: xclip(1), openssl(1), xxd(1), cht.sh
+#
+
+# Clipboard
+if command -v xclip >/dev/null 2>&1; then
+    alias pbcopy='xclip -selection clipboard'
+    alias pbpaste='xclip -selection clipboard -o'
+elif command -v wl-copy >/dev/null 2>&1; then
+    alias pbcopy='wl-copy'
+    alias pbpaste='wl-paste'
+fi
+alias pbc='pbcopy'
+alias pbp='pbpaste'
+alias cpy='(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard) || (command -v wl-copy >/dev/null 2>&1 && wl-copy) || (command -v pbcopy >/dev/null 2>&1 && pbcopy) || echo "missing: clipboard tool" >&2'
+alias pst='(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard -o) || (command -v wl-paste >/dev/null 2>&1 && wl-paste) || (command -v pbpaste >/dev/null 2>&1 && pbpaste) || echo "missing: clipboard tool" >&2'
+
+if command -v xdotool >/dev/null 2>&1 && command -v xclip >/dev/null 2>&1; then
+    alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
+fi
+
+# Hashing / Encoding
+alias randpw='openssl rand -base64 16 2>/dev/null || python3 -c "import secrets; print(secrets.token_urlsafe(16))"'
+alias sha='shasum -a 256'
+alias md5sum='md5 2>/dev/null || command md5sum'
+alias hex='xxd'
+alias base64e='base64'
+alias base64d='base64 -d'
+alias urlenc='_x python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))"'
+alias urldec='_x python3 -c "import urllib.parse,sys; print(urllib.parse.unquote(sys.argv[1]))"'
+alias sha='_x shasum -a 256 2>/dev/null || _x sha256sum 2>/dev/null'
+alias hex='_x xxd 2>/dev/null || _x od -A x -t x1z 2>/dev/null'
+
+# Shell / System Utilities
+alias please='sudo'
+alias pathlines='printf "%s\n" ${PATH//:/\\n}'
+alias mkdirp='mkdir -p'
+alias focus='printf "\033c" && date +"%F %T"'
+alias h='history'
+alias j='jobs -l'
+alias duh='du -sh'
+alias dfh='df -h'
+alias freeh='free -h'
+alias free='free -h'
+alias du='du -h'
+alias dud='du -h --max-depth=1'
+alias du2='du -sh --max-depth=2'
+alias dux='du -sh * | sort -h'
+alias duk='du -sh * | sort -h'
+alias duf='du -sh * | sort -h'
+alias duls='du -sm * | sort -n'
+alias dus='du -sh .[!.]* * 2>/dev/null | sort -h'
+alias usage='du -sh * 2>/dev/null | sort -h'
+alias dfT='df -hT'
+alias df='df -h'
+alias diskspace='df -h'
+alias blk='lsblk -f'
+alias disks='lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT'
+alias disks='_x lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT 2>/dev/null || _x diskutil list 2>/dev/null'
+alias fdisk='fdisk -l'
+alias smart='sudo smartctl -a'
+alias smart='_x sudo smartctl -a 2>/dev/null || echo "no smartctl"'
+alias cpuinfo='lscpu 2>/dev/null || sysctl -n machdep.cpu.brand_string'
+alias meminfo='free -h'
+alias dmesg='dmesg -T'
+alias uname='uname -a'
+alias dateutc='date -u'
+alias caldate='cal'
+alias nproc='nproc 2>/dev/null || sysctl -n hw.ncpu'
+alias release='cat /etc/os-release 2>/dev/null || cat /usr/lib/os-release'
+alias arch='uname -m'
+alias findsuid='find / -perm -4000 -type f'
+alias timestamp='date +%s'
+alias today='date +%F'
+alias week='date +%V'
+alias count='wc -l'
+alias lines='cat -n'
+alias cht='curl -fsSL "https://cht.sh/$1"'
+alias cht='_x curl -fsSL "https://cht.sh/$1" 2>/dev/null || echo "curl needed"'
+alias learn='curl -fsSL "https://learnxinyminutes.com/docs/$1"'
+alias learn='_x curl -fsSL "https://learnxinyminutes.com/docs/$1" 2>/dev/null'
+alias cheat='curl -fsSL "https://cheat.sh/$1"'
 alias try='curl -fsSL https://cht.sh'
 alias tldrl='curl -fsSL https://cheat.sh'
+alias what='type'
+alias ali='alias'
+alias envg='env | grep'
+alias envg="env | grep -i"
+alias fn='declare -f 2>/dev/null || typeset -f'
+alias path="echo \$PATH | tr ':' '\\n' | sort -u"
+alias nohist='unset HISTFILE'
+alias clhist='HISTSIZE=0; HISTSIZE=5000'
+alias histgrep='history | grep -i'
+alias cleanshell='env - bash --norc --noprofile'
+alias topcmds='topcommands'
+alias port='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || echo "no port tool"'
+alias ports='_x ss -tulpn 2>/dev/null || _x netstat -tulpn 2>/dev/null || _x lsof -i -n -P 2>/dev/null'
+alias ports='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || _x lsof -i -P -n 2>/dev/null | grep LISTEN'
+alias listen='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null'
+alias connections='_x ss -tunp 2>/dev/null || _x netstat -tunp 2>/dev/null'
+alias dsstore='find . -name ".DS_Store" -type f -delete -print 2>/dev/null'
+alias mirrorsite='_x wget -m -k -K -E -e robots=off 2>/dev/null || echo "wget needed"'
+alias sep='printf "=%.0s" $(seq 1 $(tput cols))'
+alias countfiles='for t in files links directories; do echo $(find . -type ${t:0:1} 2>/dev/null | wc -l) $t; done 2>/dev/null'
+alias tstamp='stamp'
+alias idg='id -g'
+alias idu='id -u'
+alias shuffle='shuf'
+alias rsample='shuf -n'
+alias man='_x tldr 2>/dev/null || man'
+
+# -----------------------------------------------------------------------------
+# Development Tools — Tmux / Editors / Lazygit / Just
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for development tooling beyond language
+# runtimes. These cover tmux (session management, window splitting),
+# editors (Neovim with sudo variant), lazygit TUI, yazi file manager,
+# zellij multiplexer, just command runner, make, chezmoi dotfile manager,
+# Vagrant VM management, Packer image builder, and act GitHub Actions runner.
+#
+# Notable aliases:
+#   tad / tl / tn       — tmux attach / list / new session
+#   lg                  — lazygit TUI
+#   yz                  — yazi file manager
+#   zj / zja / zjl      — zellij / attach / list
+#   just / justl         — just command runner / list
+#   mk / mkc / mkt      — make / clean / test
+#   vim / nv / sv       — Neovim / sudo Neovim
+#   chez / cheza        — chezmoi / apply
+#   vg / vgu / vgh      — vagrant / up / halt
+#   pk / pkb / pkv      — packer / build / validate
+#   act / actl          — GitHub Actions locally / list
+#
+# See also: tmux(1), nvim(1), lazygit(1), yazi(1), zellij(1), just(1)
+#
+
+# Tmux
+if command -v tmux >/dev/null 2>&1; then
+    alias tad='_x tmux attach -d'
+    alias tl='_x tmux list-sessions'
+    alias tn='_x tmux new-session -s'
+    alias tk='_x tmux kill-session -t'
+    alias tks='_x tmux kill-server'
+    alias tsw='_x tmux switch-client'
+    alias trn='_x tmux rename-session'
+    alias tlp='_x tmux list-panes'
+    alias tsplit='_x tmux split-window -h'
+    alias tsplitv='_x tmux split-window'
+    alias tprev='_x tmux previous-window'
+    alias tnext='_x tmux next-window'
+    alias tswap='_x tmux swap-window'
+fi
+
+# Editors
+alias vim='nvim 2>/dev/null || command vim'
+alias sv='nvim 2>/dev/null || command vim'
+alias nv='nvim'
+alias codel='code .'
+
+if command -v nvim >/dev/null 2>&1; then
+    alias svi='sudo nvim'
+    alias vis='nvim "+set si"'
+elif command -v vim >/dev/null 2>&1; then
+    alias svi='sudo vim'
+    alias vis='vim "+set si"'
+fi
+
+# Lazygit / Yazi / Zellij / Just / Make
+if command -v lazygit >/dev/null 2>&1; then
+    alias lg='lazygit'
+fi
+
+if command -v yazi >/dev/null 2>&1; then
+    alias yz='yazi'
+fi
+
+if command -v zellij >/dev/null 2>&1; then
+    alias zj='zellij'
+    alias zja='zellij attach'
+    alias zjl='zellij list-sessions'
+fi
+
+if command -v just >/dev/null 2>&1; then
+    alias justl='just --list'
+fi
+
+if command -v make >/dev/null 2>&1; then
+    alias mk='make'
+    alias mkc='make clean'
+    alias mki='make install'
+    alias mkt='make test'
+fi
+
+# Atuin (shell history)
+if command -v atuin >/dev/null 2>&1; then
+    alias atu='atuin'
+    alias atus='atuin search'
+    alias atul='atuin login'
+    alias atur='atuin register'
+    alias atusync='atuin sync'
+    alias atust='atuin status'
+    alias atuh='atuin history'
+    alias atuhl='atuin history list'
+    alias atustats='atuin stats'
+fi
+
+# Direnv (env loader)
+if command -v direnv >/dev/null 2>&1; then
+    alias dir='direnv'
+    alias dira='direnv allow'
+    alias dird='direnv deny'
+    alias dirr='direnv reload'
+    alias dire='direnv edit'
+    alias dirv='direnv view'
+    alias dirh='direnv hook'
+fi
+
+# Zoxide (smarter cd)
+if command -v zoxide >/dev/null 2>&1; then
+    alias z='zoxide'
+    alias zi='zoxide query -i'
+fi
+
+# Fzf (fuzzy finder)
+if command -v fzf >/dev/null 2>&1; then
+    alias fz='fzf'
+    alias fzp='fzf --preview'
+fi
+
+# JSON / YAML processors
+if command -v jq >/dev/null 2>&1; then
+    alias jqc='jq -c'
+    alias jqr='jq -r'
+    alias jqs='jq -S'
+fi
+
+if command -v yq >/dev/null 2>&1; then
+    alias yqe='yq eval'
+    alias yqp='yq eval -P'
+fi
+
+# Glow (markdown renderer)
+if command -v glow >/dev/null 2>&1; then
+    alias glows='glow -s'
+fi
+
+if command -v dog >/dev/null 2>&1; then
+    alias doga='dog A'
+    alias dogmx='dog MX'
+    alias dogns='dog NS'
+    alias dogtxt='dog TXT'
+fi
+
+
+if command -v bandwhich >/dev/null 2>&1; then
+    alias band='bandwhich'
+    alias bandl='bandwhich -r'
+fi
+
+
+if command -v navi >/dev/null 2>&1; then
+    alias naviq='navi --query'
+fi
+
+if command -v tldr >/dev/null 2>&1 || command -v tealdeer >/dev/null 2>&1; then
+    alias tldr='tldr 2>/dev/null || tealdeer'
+fi
+
+if command -v vivid >/dev/null 2>&1; then
+    alias vividg='vivid generate'
+    alias vividt='vivid themes'
+fi
+
+# Chezmoi (dotfile manager)
+if command -v chezmoi >/dev/null 2>&1; then
+    alias chez='chezmoi'
+    alias cheza='chezmoi apply'
+    alias chezd='chezmoi diff'
+    alias cheze='chezmoi edit'
+    alias chezad='chezmoi add'
+    alias chezup='chezmoi update'
+    alias chezcd='chezmoi cd'
+    alias chezi='chezmoi init'
+    alias chezs='chezmoi status'
+    alias chezr='chezmoi re-add'
+fi
+
+# Act (GitHub Actions locally)
+if command -v act >/dev/null 2>&1; then
+    alias actl='act -l'
+    alias actp='act -p'
+    alias actpush='act push'
+    alias actpr='act pull_request'
+    alias actw='act -W'
+fi
+
+# Vagrant
+if command -v vagrant >/dev/null 2>&1; then
+    alias vg='vagrant'
+    alias vgu='vagrant up'
+    alias vgh='vagrant halt'
+    alias vgd='vagrant destroy'
+    alias vgs='vagrant status'
+    alias vgssh='vagrant ssh'
+    alias vgp='vagrant provision'
+    alias vgreload='vagrant reload'
+    alias vgbox='vagrant box list'
+fi
+
+# Packer
+if command -v packer >/dev/null 2>&1; then
+    alias pk='packer'
+    alias pkb='packer build'
+    alias pkv='packer validate'
+    alias pkf='packer fmt'
+    alias pkinit='packer init'
+fi
+
+# -----------------------------------------------------------------------------
+# Infrastructure as Code — Terraform / Ansible
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for infrastructure provisioning and
+# configuration management tools. These cover Terraform (validate, fmt,
+# workspace, state, import, graph, console) and Ansible (playbook, galaxy,
+# vault, doc, config, inventory).
+#
+# Notable aliases:
+#   tfv / tff / tfw     — terraform validate / fmt / workspace
+#   tfs / tfo           — terraform show / output
+#   tfst / tfstl        — terraform state / state list
+#   tfimp / tfgraph     — terraform import / graph
+#   an / anp / ang      — ansible / ansible-playbook / galaxy
+#   anv / and           — ansible-vault / ansible-doc
+#
+# See also: terraform(1), ansible(1), ansible-playbook(1)
+#
+
+if command -v terraform >/dev/null 2>&1; then
+    alias tfv='_x terraform validate'
+    alias tff='_x terraform fmt'
+    alias tfw='_x terraform workspace'
+    alias tfwl='_x terraform workspace list'
+    alias tfws='_x terraform workspace select'
+    alias tfs='_x terraform show'
+    alias tfo='_x terraform output'
+    alias tfst='_x terraform state'
+    alias tfstl='_x terraform state list'
+    alias tfimp='_x terraform import'
+    alias tfprov='_x terraform providers'
+    alias tfgraph='_x terraform graph'
+    alias tfconsole='_x terraform console'
+fi
+
+if command -v ansible >/dev/null 2>&1; then
+    alias an='_x ansible'
+    alias anp='_x ansible-playbook'
+    alias ang='_x ansible-galaxy'
+    alias anv='_x ansible-vault'
+    alias and='_x ansible-doc'
+    alias ancon='_x ansible-config'
+    alias aninv='_x ansible-inventory'
+fi
+
+# -----------------------------------------------------------------------------
+# Secret Management — Age / SOPS / Vault / OpenSSL
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for encryption, secret storage, and
+# certificate management. These cover age (modern file encryption),
+# SOPS (encrypted YAML/JSON for configs), HashiCorp Vault (KV store,
+# login, status), and OpenSSL (CSR generation, cert inspection, random).
+#
+# Notable aliases:
+#   age / agee / aged   — age encrypt / decrypt
+#   sops / sopse / sopsd — SOPS encrypt / decrypt / in-place
+#   vault / vaults      — vault status
+#   vaultkv / vaultkvg  — vault kv get
+#   ossl / osslcsr      — openssl / CSR generation
+#   osslchk / osslx     — TLS connection check / x509 inspect
+#
+# See also: age(1), sops(1), vault(1), openssl(1)
+#
+
+if command -v age >/dev/null 2>&1; then
+    alias agee='age -e'
+    alias aged='age -d'
+    alias agegen='age-keygen'
+fi
+
+if command -v sops >/dev/null 2>&1; then
+    alias sopse='sops -e'
+    alias sopsd='sops -d'
+    alias sopsi='sops -i'
+fi
+
+if command -v vault >/dev/null 2>&1; then
+    alias vaults='vault status'
+    alias vaultl='vault login'
+    alias vaultkv='vault kv'
+    alias vaultkvg='vault kv get'
+    alias vaultkvp='vault kv put'
+    alias vaultkvd='vault kv delete'
+    alias vaultr='vault read'
+    alias vaultw='vault write'
+fi
+
+if command -v openssl >/dev/null 2>&1; then
+    alias ossl='openssl'
+    alias osslcsr='openssl req -new -newkey rsa:2048 -nodes'
+    alias osslchk='openssl s_client -connect'
+    alias osslx='openssl x509 -in'
+    alias osslr='openssl rand -hex'
+    alias osslgen='openssl genrsa'
+fi
+
+# -----------------------------------------------------------------------------
+# Backup Tools — Rclone / Restic / Borg / Kopia
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for file backup, synchronization, and
+# archival tools. These cover rclone (cloud storage sync), restic
+# (encrypted backups), Borg (deduplicating backup), and Kopia
+# (fast encrypted snapshots).
+#
+# Notable aliases:
+#   rcl / rclls / rclsync — rclone ls / sync / copy / move
+#   rest / restb / restr  — restic backup / restore / snapshots
+#   borg / borgc / borge  — borg create / extract / list / prune
+#   kop / kops / kopl     — kopia snapshot create / list / mount
+#
+# See also: rclone(1), restic(1), borg(1), kopia(1)
+#
 
 if command -v rclone >/dev/null 2>&1; then
     alias rcl='rclone'
@@ -2106,7 +2219,6 @@ if command -v restic >/dev/null 2>&1; then
 fi
 
 if command -v borg >/dev/null 2>&1; then
-    alias borg='borg'
     alias borgc='borg create'
     alias borge='borg extract'
     alias borgl='borg list'
@@ -2123,258 +2235,78 @@ if command -v kopia >/dev/null 2>&1; then
     alias kopc='kopia cache clear'
 fi
 
-alias pclr='clear'
-alias pdup='_x docker compose up -d'
-alias pddown='_x docker compose down'
+# -----------------------------------------------------------------------------
+# Performance / Benchmarking
+# -----------------------------------------------------------------------------
+#
+# This section provides aliases for performance benchmarking and system
+# information tools. These cover hyperfine (command benchmarking) and
+# fastfetch (system information display).
+#
+# Notable aliases:
+#   hf / hfw     — hyperfine / hyperfine --warmup
+#   ffet / ffetl — fastfetch / fastfetch -l
+#
+# See also: hyperfine(1), fastfetch(1)
+#
 
-alias py='_x python3'
-alias ip='ip -br addr'
-alias free='free -h'
-alias pscpu='ps aux --sort=-%cpu'
-alias psmem='ps aux --sort=-%mem'
-alias psuser='ps -u'
-alias nslookup='nslookup'
-alias curl='curl'
-alias tar='tar'
-alias unzip='unzip'
-alias ssh='_x ssh'
-alias scp='scp'
-alias mkdir='mkdir -p'
-alias rmdir='rmdir'
-alias chmod='chmod'
-alias xargs='xargs'
-alias touch='touch'
-alias watch='watch'
-alias date='date'
-alias bc='bc -l'
-alias expr='expr'
-alias printf='printf'
-alias duk='du -sh * | sort -h'
-alias psi='ps aux | grep -i'
-alias psaux='ps aux'
-alias psf='ps auxf'
+if command -v hyperfine >/dev/null 2>&1; then
+    alias hf='hyperfine'
+    alias hfw='hyperfine --warmup'
+fi
 
-alias psxl='ps aux --forest'
-alias iftop='sudo iftop'
-alias dnst='dig +short'
+if command -v fastfetch >/dev/null 2>&1; then
+    alias ffet='_x fastfetch'
+    alias ffetl='_x fastfetch -l'
+fi
+
+# -----------------------------------------------------------------------------
+# Miscellaneous — Additional Aliases
+# -----------------------------------------------------------------------------
+#
+# This section collects additional aliases that provide standalone
+# convenience wrappers, duplicate definitions preserved for compatibility,
+# and fallback commands outside conditional blocks.
+#
+# Notable aliases:
+#   tstamp / topcmds   — stamp / topcommands wrappers
+#   idg / idu / groups — user identity queries
+#   last / w           — login history / who is online
+#   seq / expand / od  — standard text utilities
+#   grex               — grep excluding .git and node_modules
+#   rstring            — random hex token via Python secrets
+#   clickpaste         — xdotool type clipboard content after 3s delay
+#   dsstore            — delete .DS_Store files recursively
+#   mirrorsite         — wget full site mirror
+#   countfiles         — count files, links, directories in pwd
+#   sep                — print horizontal rule across terminal
+#
+
+alias tstamp='stamp'
+alias topcmds='topcommands'
 alias idg='id -g'
 alias idu='id -u'
-alias groups='groups'
-alias last='last'
-alias w='w'
-alias tmpdir='cd $(mktemp -d)'
-alias math='_x python3 -c'
-alias seq='seq'
 alias shuffle='shuf'
-alias expand='expand'
-alias unexpand='unexpand'
-alias od='od'
-alias strings='strings'
-alias comm='comm'
-alias grepw='grep -w'
-alias grepr='grep -r'
-alias grex='grep -r --exclude-dir=.git --exclude-dir=node_modules'
-alias du2='du -sh --max-depth=2'
-alias dux='du -sh * | sort -h'
-alias pr='pr'
 alias rsample='shuf -n'
-alias rstring='_x python3 -c "import secrets; print(secrets.token_hex())"'
-alias serv='_x systemctl'
-alias jrnl='_x journalctl'
+alias pur='_x curl -fsSL "https://cht.sh/$1" 2>/dev/null'
+
+# Standalone duplicates preserved for compatibility
 alias pod='_x podman'
 alias podps='_x podman ps'
 alias podrun='_x podman run -it --rm'
 alias podimg='_x podman images'
 alias dstats='_x docker stats --no-stream'
 alias kns='_x kubectl config set-context --namespace'
-alias kpf='_x kubectl port-forward'
+alias py='_x python3'
+alias ip='ip -br addr'
+alias free='free -h'
+alias bc='bc -l'
+alias wget='_x wget 2>/dev/null || _x curl -fSL -o 2>/dev/null || echo "no download tool"'
 
-# ---- Clipboard (macOS pbcopy/pbpaste mapped to Linux equivalents) ----
-if command -v xclip >/dev/null 2>&1; then
-    alias pbcopy='xclip -selection clipboard'
-    alias pbpaste='xclip -selection clipboard -o'
-elif command -v wl-copy >/dev/null 2>&1; then
-    alias pbcopy='wl-copy'
-    alias pbpaste='wl-paste'
-fi
-alias pbc='pbcopy'
-alias pbp='pbpaste'
-alias cpy='(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard) || (command -v wl-copy >/dev/null 2>&1 && wl-copy) || (command -v pbcopy >/dev/null 2>&1 && pbcopy) || echo "missing: clipboard tool" >&2'
-alias pst='(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard -o) || (command -v wl-paste >/dev/null 2>&1 && wl-paste) || (command -v pbpaste >/dev/null 2>&1 && pbpaste) || echo "missing: clipboard tool" >&2'
-
-alias path="echo \$PATH | tr ':' '\\n' | sort -u"
-alias envg="env | grep -i"
-alias nohist='unset HISTFILE'
-alias clhist='HISTSIZE=0; HISTSIZE=5000'
-alias histgrep='history | grep -i'
-alias cleanshell='env - bash --norc --noprofile'
-alias tmp='cd /tmp'
-alias tstamp='stamp'
-alias topcmds='topcommands'
-alias port='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || echo "no port tool"'
-alias ports='_x ss -tulpn 2>/dev/null || _x netstat -tulpn 2>/dev/null || _x lsof -i -n -P 2>/dev/null'
-alias lw='ls -ldh $(pwd)'
-alias le="ls | grep -o '.[^.]*$' | sort | uniq"
+# Miscellaneous shell utilities
+alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 alias dsstore='find . -name ".DS_Store" -type f -delete -print 2>/dev/null'
 alias mirrorsite='_x wget -m -k -K -E -e robots=off 2>/dev/null || echo "wget needed"'
-alias ff='find . -type f -name'
-alias gwip='git add -A && git rm $(git ls-files --deleted) 2>/dev/null; git commit --no-verify -m "wip"'
-alias gwipe='git reset --hard && git clean --force -df'
-alias nah='git reset --hard && git clean -df'
-alias gbage='for k in $(git branch -a | sed "s/^..//;s/ ->.*//" 2>/dev/null); do echo -e "$(git show --pretty=format:"%ci %cr" $k -- 2>/dev/null | head -1)\t$k"; done | sort -r'
-alias gmn='git merge --no-ff --no-commit'
-dash() { cd -; }
-alias -- -='dash'
-alias :q='exit'
-alias q='exit'
 alias sep='printf "=%.0s" $(seq 1 $(tput cols))'
 alias countfiles='for t in files links directories; do echo $(find . -type ${t:0:1} 2>/dev/null | wc -l) $t; done 2>/dev/null'
-if command -v yay >/dev/null 2>&1 && command -v fzf >/dev/null 2>&1; then
-    alias yayf="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
-fi
-if command -v xdotool >/dev/null 2>&1 && command -v xclip >/dev/null 2>&1; then
-    alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
-fi
-alias ipa='_x ip -br addr 2>/dev/null || _x ifconfig 2>/dev/null'
-alias net='_x ip -br addr 2>/dev/null || _x ifconfig 2>/dev/null'
-alias trace='_x traceroute 2>/dev/null || _x traceroute6 2>/dev/null || echo "no traceroute"'
-alias pid='_x pgrep -f'
-alias disks='_x lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT 2>/dev/null || _x diskutil list 2>/dev/null'
-alias smart='_x sudo smartctl -a 2>/dev/null || echo "no smartctl"'
-alias sha='_x shasum -a 256 2>/dev/null || _x sha256sum 2>/dev/null'
-alias hex='_x xxd 2>/dev/null || _x od -A x -t x1z 2>/dev/null'
-alias cht='_x curl -fsSL "https://cht.sh/$1" 2>/dev/null || echo "curl needed"'
-alias learn='_x curl -fsSL "https://learnxinyminutes.com/docs/$1" 2>/dev/null'
-if command -v docker >/dev/null 2>&1; then
-    alias docker-ip="_x docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null"
-fi
-if command -v nvim >/dev/null 2>&1; then
-    alias svi='sudo nvim'
-    alias vis='nvim "+set si"'
-elif command -v vim >/dev/null 2>&1; then
-    alias svi='sudo vim'
-    alias vis='vim "+set si"'
-fi
-
-alias g='git'
-alias ga='git add'
-alias gaa='git add --all'
-alias gap='git add --patch'
-alias gau='git add -u'
-alias gb='git branch'
-alias gba='git branch -a'
-alias gbd='git branch -d'
-alias gbm='git branch -m'
-alias gbc='git branch --show-current'
-alias gc='git commit -v'
-alias gca='git commit -a -v'
-alias gcam='git commit --amend --no-edit'
-alias gcan='git commit --amend --no-verify'
-alias gcne='git commit --no-edit'
-alias gcnv='git commit --no-verify'
-alias gco='git checkout'
-alias gcb='git checkout -b'
-alias gcp='git cherry-pick'
-alias gd='git diff'
-alias gdc='git diff --cached'
-alias gdw='git diff --word-diff'
-alias gds='git diff --stat'
-alias gf='git fetch'
-alias gfa='git fetch --all'
-alias gfr='git fetch --prune'
-alias gi='git init'
-alias gl='git log --oneline -n 20'
-alias gla='git log --oneline --graph --all --decorate'
-alias glg='git log --oneline --graph'
-alias gp='git push'
-alias gpo='git push origin'
-alias gpoh='git push origin HEAD'
-alias gpu='git push --set-upstream origin'
-alias gpl='git pull'
-alias gplr='git pull --rebase'
-alias gr='git remote -v'
-alias gra='git remote add'
-alias grm='git remote remove'
-alias grv='git remote -v'
-alias gs='git status'
-alias gss='git status --short'
-alias gst='git stash'
-alias gsta='git stash apply'
-alias gstl='git stash list'
-alias gstp='git stash pop'
-alias gstd='git stash drop'
-alias gsw='git switch'
-alias gswc='git switch --create'
-alias gt='git tag'
-alias gtl='git tag -l'
-alias gtd='git tag -d'
-alias gtop='gcd'
-alias grh='git reset --hard'
-alias grs='git reset --soft'
-alias gm='git merge'
-alias gmnf='git merge --no-ff'
-alias gmt='git mergetool'
-alias gmv='git mv'
-alias grb='git rebase'
-alias grba='git rebase --abort'
-alias grbc='git rebase --continue'
-alias grbi='git rebase -i'
-alias grbs='git rebase --skip'
-alias gcl='git clone'
-alias gcl1='git clone --depth=1'
-alias gbl='git blame'
-alias gcf='git config'
-alias gcfl='git config -l'
-alias gk='gitk'
-alias gkw='gitk --all'
-alias gsh='git show'
-alias gshs='git show --stat'
-alias gshn='git show --name-only'
-alias gdf='git difftool'
-alias gcm='gcm'
-alias gmm='gmm'
-
-alias find='_x fd 2>/dev/null || find'
-alias cat='_x bat --style=plain --paging=never 2>/dev/null || _x batcat --style=plain --paging=never 2>/dev/null || cat'
-alias ls='_x eza --group-directories-first --icons 2>/dev/null || _x exa --group-directories-first 2>/dev/null || ls --color=auto 2>/dev/null || ls -G'
-alias ll='_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || ls -l'
-alias la='_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || ls -la'
-alias tree='_x eza -T --icons 2>/dev/null || _x tree 2>/dev/null || echo "tree/eza needed"'
-alias grep='_x rg --color=auto 2>/dev/null || grep --color=auto'
-alias du='du -h'
-alias df='df -h'
-alias mkdir='mkdir -p'
-alias wget='_x wget 2>/dev/null || _x curl -fSL -o 2>/dev/null || echo "no download tool"'
-alias diff='_x delta 2>/dev/null || diff --color=auto 2>/dev/null || diff'
-alias top='_x btop 2>/dev/null || _x htop 2>/dev/null || top'
-alias ps='ps auxf'
-alias ping='_x prettyping 2>/dev/null || ping'
-alias dig='_x dog 2>/dev/null || dig'
-alias man='_x tldr 2>/dev/null || man'
-alias fd='_x fd 2>/dev/null || find'
-alias duf='du -sh * | sort -h'
-alias dud='du -sh ./* | sort -h'
-alias dus='du -sh .[!.]* * 2>/dev/null | sort -h'
-alias usage='du -sh * 2>/dev/null | sort -h'
-alias duls='du -sm * | sort -n'
-alias dirs='ls -d */'
-alias ldir='ls -d */'
-alias lf='find . -maxdepth 1 -type f -exec ls -lh {} + 2>/dev/null | sort -k5 -h'
-alias lsof='_x lsof -i -P -n 2>/dev/null || echo "lsof needed"'
-alias ports='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || _x lsof -i -P -n 2>/dev/null | grep LISTEN'
-alias listen='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null'
-alias connections='_x ss -tunp 2>/dev/null || _x netstat -tunp 2>/dev/null'
-alias myip='_x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || echo "N/A"'
-alias myipl='_x ip addr show scope global 2>/dev/null | grep -oP "inet \K[\d.]+" || _x ifconfig 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | awk "{print \$2}"'
-alias dns='_x dig +short'
-alias flush='_x sudo resolvectl flush-caches 2>/dev/null || _x sudo systemd-resolve --flush-caches 2>/dev/null || _x sudo killall -HUP mDNSResponder 2>/dev/null || echo "no flush"'
-alias speed='_x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | _x python3 - 2>/dev/null || echo "speedtest-cli needed"'
-alias weather='_x curl -fsSL wttr.in 2>/dev/null || echo "curl needed"'
-alias weather3='_x curl -fsSL "wttr.in?F" 2>/dev/null || echo "curl needed"'
-alias moon='_x curl -fsSL "wttr.in/Moon" 2>/dev/null || echo "curl needed"'
-alias json='python3 -m json.tool 2>/dev/null || echo "python3 needed"'
-alias xml='_x xmllint --format - 2>/dev/null || echo "xmllint needed"'
-alias yaml='_x python3 -c "import sys,yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, default_flow_style=False)" 2>/dev/null || echo "python3+yaml needed"'
-alias csv='_x python3 -c "import sys,csv; r=csv.reader(sys.stdin); [print(l) for l in r]" 2>/dev/null || column -t -s, 2>/dev/null'
-alias ts='_x python3 -c "import sys,json; [print(json.dumps(eval(l))) for l in sys.stdin]" 2>/dev/null'
-
+alias psymod='lsmod'

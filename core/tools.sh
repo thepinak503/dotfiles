@@ -1,7 +1,84 @@
 #!/usr/bin/env sh
+# =============================================================================
+# Tool Status and Installation System
+# =============================================================================
 #
+# Comprehensive tool management system that tracks the availability of
+# 50+ command-line tools across 8 feature phases. Provides status
+# reports, installation hints, and feature phase summaries.
 #
+# Architecture:
+#   Tools are organized into categories (phases) representing different
+#   use cases: core, shell enhancement, file operations, development,
+#   DevOps, cloud CLI, security, and extras.
+#
+#   Each tool has an associated HINT variable (DOTTOOLS_HINT_<tool>)
+#   containing its description and package names for various managers.
+#   The hint format: "Description|ArchPkg|DebPkg|BrewPkg"
+#
+# Phases:
+#   Phase 1 - CORE (required):      git, curl, wget, tar, gzip, unzip, openssl
+#   Phase 2 - SHELL ENHANCEMENT:    starship, zoxide, fzf
+#   Phase 3 - FILE OPERATIONS:      eza, bat, fd, rg, delta, ncdu, duf
+#   Phase 4 - DEVELOPER DAILY:      nvim, tmux, lazygit, yazi, zellij, fastfetch
+#   Phase 5 - DEVOPS/CONTAINERS:    docker, kubectl, helm, terraform, ansible
+#   Phase 6 - CLOUD CLI:            aws, gcloud, az
+#   Phase 7 - SECURITY:             gpg, shred, nmap, netstat, ss, lsof
+#   Phase 8 - EXTRAS:               jq, yq, hyperfine, tokei, glow, tldr, gping, duf, dust, procs
+#
+# Functions:
+#   dottools    - Display formatted tool status report
+#   dotinstall  - Show install commands for missing tools
+#   dotphase    - Show active feature phases
+#
+# Display:
+#   - Color-coded output: green (✓) for installed, yellow (✗) for missing
+#   - Red (✗) for missing core tools (critical)
+#   - Summary line with installed/total count
+#   - Core tool count with warning if any are missing
+#
+# Compatibility:
+#   Works on: All Unix-like systems
+#   Shell: sh, bash, zsh
+#
+# See also:
+#   - core/universal.sh - distro_family() and install_shell_support()
+#   - core/arch_aliases.sh - Arch-specific tool aliases
+#   - core/debian_aliases.sh - Debian-specific tool aliases
+#
+# =============================================================================
+# Tool Checking Utility
+# =============================================================================
+#
+# Internal helper that checks if a command is available on the system.
+# Wraps command -v with stdout/stderr suppression.
+#
+# Returns:
+#   0 - Tool is available in PATH
+#   1 - Tool is not found
+
 _has() { command -v "$1" >/dev/null 2>&1; }
+
+# =============================================================================
+# Tool Category Definitions
+# =============================================================================
+#
+# Tool lists organized by phase/category. Each list is a space-separated
+# string of tool names that will be checked by the status functions.
+#
+# Core tools are REQUIRED for basic dotfiles functionality. Missing
+# core tools generate a red warning in the status report.
+#
+# Phase organization:
+#   1. CORE       - Essential tools for dotfiles operation
+#   2. SHELL      - Shell prompt and navigation enhancements
+#   3. FILES      - Modern replacements for coreutils
+#   4. DEV        - Daily development tools
+#   5. DEVOPS     - Container and infrastructure tools
+#   6. CLOUD      - Cloud provider CLIs
+#   7. SECURITY   - Security and network tools
+#   8. EXTRAS     - Nice-to-have utilities
+
 DOTTOOLS_CORE="git curl wget tar gzip unzip openssl"
 DOTTOOLS_SHELL="starship zoxide fzf"
 DOTTOOLS_FILES="eza bat fd rg delta ncdu duf"
@@ -10,6 +87,35 @@ DOTTOOLS_DEVOPS="docker kubectl helm terraform ansible"
 DOTTOOLS_CLOUD="aws gcloud az"
 DOTTOOLS_SECURITY="gpg shred nmap netstat ss lsof"
 DOTTOOLS_EXTRAS="jq yq hyperfine tokei glow tldr gping duf dust procs"
+
+# =============================================================================
+# Tool Package Hints Database
+# =============================================================================
+#
+# Each DOTTOOLS_HINT_<tool> variable contains pipe-separated metadata:
+#   Field 1: Human-readable description
+#   Field 2: Arch Linux package name
+#   Field 3: Debian/Ubuntu package name
+#   Field 4: Homebrew package name
+#
+# Format: "Description|ArchPkg|DebPkg|BrewPkg"
+#
+# These hints are used by dotinstall() to generate the correct
+# installation command for the detected package manager.
+#
+# Examples:
+#   DOTTOOLS_HINT_fzf="Fuzzy finder|fzf|fzf|fzf"
+#   DOTTOOLS_HINT_delta="Git diff pager|git-delta|git-delta|git-delta"
+#   DOTTOOLS_HINT_lazygit="Git TUI|lazygit|<gh release>|lazygit"
+#
+# When a tool is not available in a distro's repository, the hint
+# may contain "<gh release>" or "<curl installer>" to indicate
+# alternative installation methods.
+#
+# See also:
+#   - dotinstall() - Uses these hints for install commands
+#   - dottools() - Status report references these descriptions
+
 DOTTOOLS_HINT_starship="Smart prompt|starship|<curl installer>|starship"
 DOTTOOLS_HINT_zoxide="Smart cd|zoxide|zoxide|zoxide"
 DOTTOOLS_HINT_fzf="Fuzzy finder|fzf|fzf|fzf"
@@ -44,6 +150,32 @@ DOTTOOLS_HINT_aws="AWS CLI|aws-cli|awscli|awscli"
 DOTTOOLS_HINT_gcloud="GCP CLI|google-cloud-sdk|google-cloud-sdk|google-cloud-sdk"
 DOTTOOLS_HINT_az="Azure CLI|azure-cli|azure-cli|azure-cli"
 DOTTOOLS_HINT_zellij="Terminal mux|zellij|<gh release>|zellij"
+
+# =============================================================================
+# Terminal Color Definitions
+# =============================================================================
+#
+# ANSI escape codes for colorized output in tool status reports.
+# These are used internally by _section(), _ok(), _miss(), _crit()
+# to produce the color-coded status display.
+#
+# Color codes:
+#   _c_reset   - Reset all attributes
+#   _c_bold    - Bold text
+#   _c_green   - Installed/OK indicator
+#   _c_yellow  - Missing/warning indicator
+#   _c_red     - Critical error indicator
+#   _c_cyan    - Section header color
+#   _c_blue    - Information text
+#   _c_magenta - Banner/title color
+#
+# Usage:
+#   printf "${_c_green}✓${_c_reset} tool_name\n"
+#
+# See also:
+#   - console_codes(4) - Linux console escape codes
+#   - terminfo(5) - Terminal capability database
+
 _c_reset='\033[0m'
 _c_bold='\033[1m'
 _c_green='\033[0;32m'
@@ -52,10 +184,65 @@ _c_red='\033[0;31m'
 _c_cyan='\033[0;36m'
 _c_blue='\033[0;34m'
 _c_magenta='\033[0;35m'
+
+# =============================================================================
+# Internal Display Helpers
+# =============================================================================
+#
+# Formatting functions for the tool status report. Each function
+# produces a single line with the appropriate color coding.
+#
+#   _section(text)  - Phase/section header with cyan bold text
+#   _ok(tool, info) - Green checkmark for installed tools
+#   _miss(tool)     - Yellow X for missing (non-core) tools
+#   _crit(tool)     - Red X for missing core (required) tools
+#
+# Output format:
+#   Section:  "▶ Phase Name"
+#   OK:       "  ✓ tool-name           description"
+#   Missing:  "  ✗ tool-name           not installed"
+#   Critical: "  ✗ tool-name           MISSING (required)"
+#
+# See also:
+#   - dottools() - Uses all four helpers for the status report
 _section() { printf "\n${_c_bold}${_c_cyan}▶ %s${_c_reset}\n" "$1"; }
 _ok()       { printf "  ${_c_green}✓${_c_reset} %-20s %s\n" "$1" "${2:-}"; }
 _miss()     { printf "  ${_c_yellow}✗${_c_reset} %-20s ${_c_yellow}%s${_c_reset}\n" "$1" "${2:-not installed}"; }
 _crit()     { printf "  ${_c_red}✗${_c_reset} %-20s ${_c_red}%s${_c_reset}\n" "$1" "MISSING (required)"; }
+# =============================================================================
+# dottools - Tool Status Report
+# =============================================================================
+#
+# Displays a comprehensive formatted report showing the availability of
+# all tracked tools organized by phase/category. The report uses color
+# coding and icons for quick visual scanning.
+#
+# Report sections:
+#   Header: Mode, OS, Distro
+#   Phase 1: Core (required) — must-have tools for dotfiles
+#   Phase 2: Shell enhancement (recommended) — starship, zoxide, fzf
+#   Phase 3: File operations (recommended) — eza, bat, fd, rg, delta
+#   Phase 4: Developer daily (recommended) — nvim, tmux, lazygit, yazi
+#   Phase 5: DevOps/containers (optional) — docker, kubectl, helm
+#   Phase 6: Cloud CLI (optional) — aws, gcloud, az
+#   Phase 7: Security (recommended) — gpg, nmap, netstat, ss, lsof
+#   Phase 8: Extras (optional) — jq, yq, hyperfine, tokei, glow
+#
+# Status indicators:
+#   ✓ - Tool is installed
+#   ✗ - Tool is missing (yellow for recommended, red for core)
+#
+# Summary line:
+#   Shows installed/total count with warning if core tools are missing.
+#
+# Usage:
+#   dottools         # Show full tool status report
+#
+# See also:
+#   - dotinstall() - Install commands for missing tools
+#   - dotphase() - Feature phase activation status
+#   - _has() - Tool availability check
+#
 dottools() {
     printf "${_c_bold}${_c_magenta}"
     printf "╔══════════════════════════════════════════════════╗\n"
@@ -109,6 +296,42 @@ dottools() {
     printf "\n"
     printf "  Run ${_c_cyan}dotinstall${_c_reset} to see install commands for missing tools.\n\n"
 }
+# =============================================================================
+# dotinstall - Installation Command Generator
+# =============================================================================
+#
+# Generates package manager-specific install commands for all missing
+# tools. Uses DOTTOOLS_HINT_* variables to map each tool to its correct
+# package name for the detected package manager.
+#
+# Features:
+#   - Only shows commands for tools that are actually missing
+#   - Uses DOTFILES_PKG to determine the correct package manager
+#   - Falls back to showing all three managers (pacman, apt, brew)
+#     when the package manager cannot be detected
+#   - Package names are maintained in DOTTOOLS_HINT_* variables
+#   - Handles special cases: <gh release>, <curl installer>
+#
+# Supported managers:
+#   pacman - Arch Linux (includes AUR via paru/yay)
+#   apt    - Debian, Ubuntu, Linux Mint, Pop!_OS
+#   dnf    - Fedora, RHEL, CentOS, Rocky, Alma
+#   brew   - macOS (Homebrew) and Linux (Linuxbrew)
+#
+# Output format:
+#   tool_name     Description
+#     sudo pacman -S <package>
+#     sudo apt install <package>
+#     brew install <package>
+#
+# Usage:
+#   dotinstall     # Show install commands for missing tools
+#
+# See also:
+#   - dottools() - Tool status report
+#   - DOTTOOLS_HINT_* - Package name database
+#   - DOTFILES_PKG - Current package manager
+#
 dotinstall() {
     local pkg="${DOTFILES_PKG:-unknown}"
     printf "${_c_bold}${_c_cyan}Missing tools — install commands for: %s${_c_reset}\n\n" "$pkg"
@@ -139,6 +362,46 @@ dotinstall() {
     done
     [ "$any_missing" -eq 0 ] && printf "  ${_c_green}All recommended tools are installed! 🎉${_c_reset}\n\n"
 }
+# =============================================================================
+# dotphase - Feature Phase Status
+# =============================================================================
+#
+# Shows which feature phases are active (enabled) based on tool
+# availability. Each phase represents a capability group that is
+# enabled when its key tool is installed.
+#
+# Feature phases tracked:
+#   starship:Prompt   - Smart shell prompt
+#   zoxide:SmartCD    - Smarter directory navigation
+#   fzf:FuzzyFinder   - Fuzzy file/command search
+#   eza:ModernLS      - Modern ls replacement
+#   bat:SyntaxCat     - Syntax-highlighted cat
+#   fd:FastFind       - Fast file finder
+#   rg:FastGrep       - Fast code search
+#   delta:GitDiff     - Enhanced git diffs
+#   nvim:Editor       - Neovim editor
+#   tmux:Multiplexer  - Terminal multiplexer
+#   lazygit:GitTUI    - Git TUI interface
+#   yazi:FileMgr      - Terminal file manager
+#   fastfetch:SysInfo - System information
+#   docker:Containers - Container runtime
+#   kubectl:Kubernetes- Container orchestration
+#   terraform:IaC     - Infrastructure as code
+#   gpg:GPGCrypto     - Encryption/crypto
+#   jq:JSON           - JSON processor
+#
+# Display:
+#   ● ACTIVE   - Green indicator (tool is installed)
+#   ○ DISABLED - Yellow indicator (tool is missing)
+#
+# Usage:
+#   dotphase     # Show active feature phases
+#
+# See also:
+#   - dottools() - Detailed tool status report
+#   - dotinstall() - Install commands for missing tools
+#   - _has() - Tool availability check
+#
 dotphase() {
     printf "${_c_bold}${_c_cyan}Active feature phases:${_c_reset}\n"
     local phases="starship:Prompt zoxide:SmartCD fzf:FuzzyFinder eza:ModernLS \

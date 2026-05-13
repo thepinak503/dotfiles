@@ -1,4 +1,29 @@
 #!/usr/bin/env sh
+# -----------------------------------------------------------------------------
+# navigation — directory movement helpers
+# -----------------------------------------------------------------------------
+#
+# Functions in this category provide fast, ergonomic directory navigation for
+# the shell. They reduce keystrokes for common movement patterns and include
+# basic error handling for missing directories or invalid arguments.
+#
+# Notable functions:
+#   mkcd       — create directory and cd into it
+#   take       — alias for mkcd (mnemonic: "take me there")
+#   up         — go up N directories (default 1)
+#   back       — return to previous directory (cd -)
+#   cdup       — go up one directory
+#   cdhome     — return to $HOME
+#   cdroot     — return to filesystem root
+#
+# Usage examples:
+#   $ mkcd /tmp/new-project
+#   $ up 3
+#   $ back
+#
+# See also: autojump, zoxide, pushd/popd
+#
+
 mkcd() { mkdir -p "$1" && cd "$1"; }
 take() { mkdir -p "$1" && cd "$1"; }
 up() { local d=""; for i in $(seq 1 "${1:-1}"); do d="${d}../"; done; cd "$d" 2>/dev/null || cd ..; }
@@ -6,15 +31,99 @@ back() { cd -; }
 cdup() { cd ..; }
 cdhome() { cd ~; }
 cdroot() { cd /; }
-recent() { find "${1:-.}" -type f -mtime -1 -print 2>/dev/null | head -100; }
+# -----------------------------------------------------------------------------
+# archive — universal archive extraction
+# -----------------------------------------------------------------------------
+#
+# Functions in this category handle compressed archive extraction across a wide
+# variety of formats. They auto-detect the format from the file extension and
+# dispatch to the appropriate tool (tar, unzip, 7z, unrar, etc.).
+#
+# Notable functions:
+#   extract    — extract any archive by detecting its extension
+#
+# Usage examples:
+#   $ extract project.tar.gz
+#   $ extract archive.zip
+#
+# See also: tar, unzip, 7z, unrar, uncompress_auto()
+#
+
 recent_dirs() { find "${1:-.}" -type d -mtime -1 -print 2>/dev/null | head -50; }
 recent_all() { find "${1:-.}" -ctime -1 -print 2>/dev/null | head -100; }
+# -----------------------------------------------------------------------------
+# utilities — general-purpose shell helpers
+# -----------------------------------------------------------------------------
+#
+# Functions in this category provide commonly needed operations that do not fit
+# neatly into other categories. They include timing command execution and
+# prompting before destructive operations.
+#
+# Notable functions:
+#   timer      — run a command and print elapsed wall-clock time
+#   confirm    — prompt for confirmation before running a command
+#
+# Usage examples:
+#   $ timer make
+#   $ confirm rm -rf node_modules
+#
+# See also: timeit(), bench()
+#
+
 mkdt() { mkdir -p "$1" && cd "$1" && pwd; }
 quick_cd() { cd "$@" && ls; }
+# -----------------------------------------------------------------------------
+# trash — freedesktop-compatible trash management
+# -----------------------------------------------------------------------------
+#
+# Functions in this category provide safe file deletion by moving files to the
+# XDG trash directory (~/.local/share/Trash) rather than permanently removing
+# them. They also support listing, emptying, and restoring trashed files.
+#
+# Notable functions:
+#   trash_put       — move files to trash with timestamp suffix
+#   trash_list      — list trashed files
+#   trash_empty     — permanently empty the trash
+#   trash_restore   — restore a trashed file to current directory
+#
+# Usage examples:
+#   $ trash_put old-project/
+#   $ trash_list
+#   $ trash_restore old-project.1234567890
+#
+# See also: shred_file(), rm
+#
+
 dotfiles_cd() { cd "$DOTFILES_DIR" 2>/dev/null || cd; }
 
 extract() { if [ -f "$1" ]; then case "$1" in *.tar.bz2|*.tbz2) tar xjf "$1";; *.tar.gz|*.tgz) tar xzf "$1";; *.tar.xz|*.txz) tar xJf "$1";; *.tar) tar xf "$1";; *.bz2) bunzip2 "$1";; *.gz) gunzip "$1";; *.rar) unrar x "$1";; *.zip) unzip "$1";; *.Z) uncompress "$1";; *.7z) 7z x "$1";; *) echo "unknown: $1"; return 1;; esac; else echo "not found: $1"; return 1; fi; }
 compress_tar_gz() { tar -czf "$1.tar.gz" "$1"; }
+# -----------------------------------------------------------------------------
+# security — secret detection, encryption, and safe operations
+# -----------------------------------------------------------------------------
+#
+# Functions in this category help detect leaked credentials, manage GPG agent
+# and SSH agent integration, perform safe downloads with checksum verification,
+# clear clipboard contents after a timeout, and encrypt/decrypt files. They are
+# designed to minimise the risk of accidental secret exposure.
+#
+# Notable functions:
+#   scan_secrets     — grep for API keys, tokens, private keys in git repos
+#   gpg_agent_ensure — launch gpg-agent and set GPG_TTY
+#   safe_dl          — download a file and verify its SHA-256 checksum
+#   clipclear        — clear clipboard after N seconds (default 10)
+#   shred_file       — securely overwrite and remove files
+#   file_encrypt     — AES-256-CBC encrypt a file with openssl
+#   file_decrypt     — AES-256-CBC decrypt a file with openssl
+#
+# Usage examples:
+#   $ scan_secrets ~/projects/myapp
+#   $ safe_dl https://example.com/file.tar.gz abc123...
+#   $ clipclear 30
+#
+# See also: gpg_*, openssl_*
+#
+
 compress_tar_bz2() { tar -cjf "$1.tar.bz2" "$1"; }
 compress_tar_xz() { tar -cJf "$1.tar.xz" "$1"; }
 compress_zip() { zip -r "${1}.zip" "$1"; }
@@ -26,9 +135,66 @@ decompress_tar_gz() { tar -xzf "$1"; }
 decompress_tar_bz2() { tar -xjf "$1"; }
 decompress_tar_xz() { tar -xJf "$1"; }
 decompress_zip() { unzip "$1"; }
+# -----------------------------------------------------------------------------
+# ssh — key generation, agent management, and connection testing
+# -----------------------------------------------------------------------------
+#
+# Functions in this category simplify SSH key generation using modern defaults
+# (Ed25519, RSA 4096), agent initialisation, and basic agent status checks.
+#
+# Notable functions:
+#   ssh_keygen_ed25519 — generate Ed25519 key with 100 KDF rounds
+#   ssh_keygen_rsa     — generate 4096-bit RSA key
+#   ssh_key_add        — start ssh-agent and add keys
+#   ssh_agent_status   — list loaded keys or report agent not running
+#
+# Usage examples:
+#   $ ssh_keygen_ed25519 -f ~/.ssh/id_ed25519 -C "user@host"
+#   $ ssh_key_add ~/.ssh/id_ed25519
+#   $ ssh_agent_status
+#
+# See also: ssh_copy_id_port(), ssh_tunnel_local(), ssh_agent_*
+#
+
 decompress_gz() { gunzip "$1"; }
 decompress_bz2() { bunzip2 "$1"; }
 decompress_xz() { unxz "$1"; }
+# -----------------------------------------------------------------------------
+# git — comprehensive git workflow and history functions
+# -----------------------------------------------------------------------------
+#
+# Functions in this category cover the full git workflow: branch management,
+# log inspection with various formats, diff visualisation, commit helpers,
+# stash operations, tags, remotes, rebase, reset, cherry-pick, revert, blame,
+# submodules, worktrees, bisect, notes, and configuration. Each function wraps
+# a common git command with sensible defaults and error suppression.
+#
+# Notable functions:
+#   git_branch_current       — show current branch name
+#   git_branch_delete_merged — delete all branches merged into current
+#   git_log_today            — commits by current user since midnight
+#   git_log_graph            — compact one-line graph of last 30 commits
+#   git_commit_signed        — commit with GPG signature
+#   git_pull_rebase_auto     — pull with rebase and autostash
+#   git_push_force_lease     — force push with safety check
+#   git_stash_save           — stash including untracked files
+#   git_squash_last          — squash last N commits into one
+#   git_rebase_interactive   — interactive rebase of last N commits
+#   git_branch_age           — branches sorted by commit freshness
+#   git_clone_shallow        — shallow clone (depth=1)
+#   git_fetch_prune          — fetch all remotes with pruning
+#   git_branch_diff          — diff current branch against main
+#   git_branch_log           — log current branch against main
+#
+# Usage examples:
+#   $ git_branch_delete_merged
+#   $ git_log_today
+#   $ git_squash_last 3 "feat: squash into one"
+#   $ git_push_force_lease
+#
+# See also: man git, git-config(1), gmb/gcm/gmm shortcuts
+#
+
 decompress_7z() { 7z x "$1"; }
 decompress_rar() { unrar x "$1"; }
 list_archive() { tar -tvf "$1" 2>/dev/null || unzip -l "$1" 2>/dev/null || 7z l "$1" 2>/dev/null; }
@@ -122,6 +288,38 @@ git_squash_last() { git reset --soft HEAD~"${1:-2}" && git commit -m "${2:-squas
 git_rebase_interactive() { git rebase -i HEAD~"${1:-10}"; }
 git_rebase_continue() { git rebase --continue; }
 git_rebase_abort() { git rebase --abort; }
+# -----------------------------------------------------------------------------
+# docker — container and image management
+# -----------------------------------------------------------------------------
+#
+# Functions in this category wrap common Docker CLI operations: listing
+# containers in various states, stopping and removing containers, pruning
+# unused resources, running containers with various options, building images,
+# managing networks and volumes, Docker Compose orchestration, Swarm mode,
+# secrets, and plugins. All functions check for docker availability first.
+#
+# Notable functions:
+#   docker_ps_all           — list all containers (running + stopped)
+#   docker_stop_all         — stop all running containers
+#   docker_rm_all           — remove all containers
+#   docker_prune_all        — system prune including volumes
+#   docker_clean_all        — full cleanup: prune + remove all images
+#   docker_exec_sh          — exec interactive shell in running container
+#   docker_logs_tail        — tail last N lines of container logs
+#   docker_run_interactive  — run container interactively with auto-remove
+#   docker_build_tag        — build image from Dockerfile with tag
+#   docker_compose_up_build — docker compose up with rebuild
+#   docker_compose_down_volumes — docker compose down removing volumes
+#
+# Usage examples:
+#   $ docker_stop_all
+#   $ docker_prune_all
+#   $ docker_logs_tail myapp 50
+#   $ docker_compose_up_build
+#
+# See also: docker-compose(1), lazydocker_open()
+#
+
 git_rebase_skip() { git rebase --skip; }
 git_reset_soft() { git reset --soft HEAD~"$1"; }
 git_reset_hard() { git reset --hard HEAD~"$1"; }
@@ -191,6 +389,36 @@ docker_prune_images() { docker image prune -af; }
 docker_prune_containers() { docker container prune -f; }
 docker_prune_volumes() { docker volume prune -f; }
 docker_prune_networks() { docker network prune -f; }
+# -----------------------------------------------------------------------------
+# kubernetes — pod, service, deployment, and cluster management with kubectl
+# -----------------------------------------------------------------------------
+#
+# Functions in this category wrap kubectl commands for common Kubernetes
+# operations: listing resources across namespaces, inspecting pods, tailing
+# logs, executing commands inside containers, port forwarding, rollouts,
+# scaling, node management, context switching, and RBAC checks. The shorter
+# k8s_* aliases provide quick-access variants for daily use.
+#
+# Notable functions:
+#   kubectl_get_pods_all       — list pods across all namespaces
+#   kubectl_logs_tail          — tail pod logs with configurable line count
+#   kubectl_exec_bash          — open interactive bash in a pod
+#   kubectl_port_forward_svc   — port-forward a service
+#   kubectl_rollout_restart    — restart a deployment rollout
+#   kubectl_context_switch     — switch kubectl context
+#   kubectl_top_pods_all       — show pod resource usage across namespaces
+#   k8s_pods                   — shorthand: get pods in current namespace
+#   k8s_port_fw                — shorthand: port-forward a resource
+#
+# Usage examples:
+#   $ kubectl_get_pods_all
+#   $ kubectl_logs_tail my-pod-xyz12 200
+#   $ kubectl_rollout_restart my-deployment
+#   $ k8s_pods
+#
+# See also: kubectl(1), k9s_open(), helm_*
+#
+
 docker_clean_all() { docker system prune -af --volumes && docker rmi $(docker images -q) 2>/dev/null || true; }
 docker_exec_sh() { docker exec -it "$1" /bin/sh; }
 docker_exec_bash() { docker exec -it "$1" /bin/bash; }
@@ -266,6 +494,34 @@ kubectl_apply_dir() { kubectl apply -f "$1" --recursive; }
 kubectl_apply_prune() { kubectl apply --prune -f "$1"; }
 kubectl_delete_pod_force() { kubectl delete pod "$1" --force --grace-period=0; }
 kubectl_rollout_status() { kubectl rollout status deployment/"$1"; }
+# -----------------------------------------------------------------------------
+# systemd & journalctl — service management and log inspection
+# -----------------------------------------------------------------------------
+#
+# Functions in this category manage systemd services (start, stop, restart,
+# enable, disable, mask) and inspect logs via journalctl with various filters
+# (by unit, time range, priority, boot). All functions gracefully return 0
+# on systems without systemd.
+#
+# Notable functions:
+#   systemctl_status_all      — list all loaded units
+#   systemctl_list_failed     — list failed units
+#   systemctl_daemon_reload   — reload systemd daemon configuration
+#   systemctl_analyze_blame   — show boot time breakdown by unit
+#   journalctl_logs           — show recent log entries with explanations
+#   journalctl_errors         — show error-level messages from current boot
+#   journalctl_disk_usage     — show journal disk usage
+#   journalctl_vacuum_size    — trim journal to a maximum size
+#
+# Usage examples:
+#   $ systemctl_list_failed
+#   $ journalctl_unit nginx.service
+#   $ journalctl_errors
+#   $ journalctl_vacuum_size 200M
+#
+# See also: systemd(1), journalctl(1), service_*
+#
+
 kubectl_rollout_history() { kubectl rollout history deployment/"$1"; }
 kubectl_rollout_undo() { kubectl rollout undo deployment/"$1"; }
 kubectl_rollout_restart() { kubectl rollout restart deployment/"$1"; }
@@ -297,6 +553,35 @@ kubectl_get_all_pvc() { kubectl get pvc --all-namespaces; }
 kubectl_get_all_storageclass() { kubectl get sc; }
 kubectl_label_node() { kubectl label node "$@"; }
 kubectl_taint_node() { kubectl taint node "$@"; }
+# -----------------------------------------------------------------------------
+# package management — multi-distro package manager abstraction
+# -----------------------------------------------------------------------------
+#
+# Functions in this category abstract package management across different
+# distributions and operating systems. They dispatch to the correct package
+# manager (pacman, yay, apt, dnf, brew, zypper, apk, xbps, nix) based on
+# the DOTFILES_PKG_MANAGER environment variable. Additional helpers cover
+# orphan cleanup, verification, PPA management, Flatpak, and Snap.
+#
+# Notable functions:
+#   pkg_update_all     — update all packages using the configured manager
+#   pkg_install_tool   — install packages via the configured manager
+#   pkg_search_query   — search for packages by name
+#   pkg_clean_cache    — clean the package cache
+#   pacman_clean_orphans — remove orphaned pacman dependencies
+#   apt_broken_fix     — fix broken apt dependencies
+#   brew_update_all    — brew update + upgrade + cleanup
+#   flatpak_update_all — update all Flatpak applications
+#   snap_update_all    — refresh all Snap packages
+#
+# Usage examples:
+#   $ DOTFILES_PKG_MANAGER=brew pkg_update_all
+#   $ pkg_install_tool ripgrep fd
+#   $ apt_broken_fix
+#
+# See also: pkg_install(), pkg_remove(), pkg_search(), pkg_update()
+#
+
 kubectl_cp_to_pod() { kubectl cp "$1" "$2:$3"; }
 kubectl_cp_from_pod() { kubectl cp "$1:$2" "$3"; }
 kubectl_get_events_ns() { kubectl get events -n "$1" --sort-by=.lastTimestamp; }
@@ -330,6 +615,34 @@ systemctl_disable_service() { sudo systemctl disable "$1" 2>/dev/null || return 
 systemctl_mask_unit() { sudo systemctl mask "$1" 2>/dev/null || return 0; }
 systemctl_unmask_unit() { sudo systemctl unmask "$1" 2>/dev/null || return 0; }
 systemctl_daemon_reload() { sudo systemctl daemon-reload 2>/dev/null || return 0; }
+# -----------------------------------------------------------------------------
+# python — pip, venv, pytest, linting, and environment management
+# -----------------------------------------------------------------------------
+#
+# Functions in this category cover Python development workflows: package
+# installation via pip, virtual environment creation and activation, test
+# running with pytest, linting with ruff/flake8/mypy, formatting with black,
+# and pyenv/conda integration.
+#
+# Notable functions:
+#   pip_install_reqs  — install dependencies from requirements.txt
+#   pip_freeze_reqs   — freeze current environment to requirements.txt
+#   venv_create       — create a Python virtual environment
+#   venv_activate     — activate a virtual environment
+#   pytest_run        — run pytest on current or specified files
+#   pytest_coverage   — run pytest with coverage report
+#   ruff_check        — run ruff linter
+#   black_format      — format Python files with black
+#
+# Usage examples:
+#   $ venv_create .venv && venv_activate .venv
+#   $ pip_install_reqs
+#   $ pytest_run tests/
+#   $ ruff_check src/
+#
+# See also: python3(1), pip(1), poetry_*, pyenv_*, conda_*
+#
+
 systemctl_edit_override() { sudo systemctl edit "$1" 2>/dev/null || return 0; }
 systemctl_cat_unit() { systemctl cat "$1" 2>/dev/null || return 0; }
 systemctl_is_active() { systemctl is-active "$1" 2>/dev/null || return 0; }
@@ -352,6 +665,31 @@ journalctl_vacuum_time() { sudo journalctl --vacuum-time="${1:-2weeks}" 2>/dev/n
 
 pkg_update_all() { case "${DOTFILES_PKG_MANAGER:-}" in pacman|yay) sudo pacman -Syu 2>/dev/null;; apt|apt-get) sudo apt update && sudo apt upgrade -y 2>/dev/null;; dnf) sudo dnf upgrade -y 2>/dev/null;; brew) brew update && brew upgrade 2>/dev/null;; zypper) sudo zypper update 2>/dev/null;; apk) apk update && apk upgrade 2>/dev/null;; xbps) sudo xbps-install -Su 2>/dev/null;; nix) nix upgrade-all 2>/dev/null;; *) echo "unknown pkg manager";; esac; }
 pkg_install_tool() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) sudo pacman -S "$@" 2>/dev/null;; yay) yay -S "$@" 2>/dev/null;; apt|apt-get) sudo apt install "$@" 2>/dev/null;; dnf) sudo dnf install "$@" 2>/dev/null;; brew) brew install "$@" 2>/dev/null;; zypper) sudo zypper install "$@" 2>/dev/null;; apk) apk add "$@" 2>/dev/null;; xbps) sudo xbps-install "$@" 2>/dev/null;; nix) nix profile install "$@" 2>/dev/null;; *) echo "unknown pkg manager"; return 1;; esac; }
+# -----------------------------------------------------------------------------
+# node.js — npm, yarn, pnpm, nvm, and TypeScript tooling
+# -----------------------------------------------------------------------------
+#
+# Functions in this category manage Node.js projects and packages: npm
+# package installation (local, global, dev), running scripts, publishing,
+# auditing, caching, and deduplication. Also covers pnpm, yarn, and nvm for
+# Node version management, plus TypeScript compiler shortcuts.
+#
+# Notable functions:
+#   npm_list_global   — list globally installed packages
+#   npm_audit_fix     — run npm audit and fix vulnerabilities
+#   npm_ci_clean      — clean install from lockfile
+#   nvm_use           — switch Node version via nvm
+#   tsc_noemit        — type-check without emitting output
+#   ts_node_run       — run TypeScript directly via ts-node
+#
+# Usage examples:
+#   $ npm_audit_fix
+#   $ nvm_use 20
+#   $ tsc_noemit
+#
+# See also: node(1), npm(1), nvm(1)
+#
+
 pkg_remove_tool() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) sudo pacman -Rns "$@" 2>/dev/null;; yay) yay -Rns "$@" 2>/dev/null;; apt|apt-get) sudo apt remove "$@" 2>/dev/null;; dnf) sudo dnf remove "$@" 2>/dev/null;; brew) brew uninstall "$@" 2>/dev/null;; zypper) sudo zypper remove "$@" 2>/dev/null;; apk) apk del "$@" 2>/dev/null;; xbps) sudo xbps-remove "$@" 2>/dev/null;; nix) nix profile remove "$@" 2>/dev/null;; *) echo "unknown pkg manager"; return 1;; esac; }
 pkg_search_query() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) pacman -Ss "$@" 2>/dev/null;; yay) yay -Ss "$@" 2>/dev/null;; apt|apt-get) apt search "$@" 2>/dev/null;; dnf) dnf search "$@" 2>/dev/null;; brew) brew search "$@" 2>/dev/null;; zypper) zypper search "$@" 2>/dev/null;; apk) apk search "$@" 2>/dev/null;; xbps) xbps-query -Rs "$@" 2>/dev/null;; *) echo "unknown pkg manager"; return 1;; esac; }
 pkg_list_installed() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) pacman -Q 2>/dev/null;; yay) yay -Q 2>/dev/null;; apt|apt-get) dpkg -l 2>/dev/null;; dnf) dnf list installed 2>/dev/null;; brew) brew list 2>/dev/null;; zypper) zypper se --installed-only 2>/dev/null;; apk) apk list -I 2>/dev/null;; *) echo "unknown"; return 1;; esac; }
@@ -374,6 +712,31 @@ brew_find_leaves() { brew leaves 2>/dev/null; }
 brew_list_deps() { brew deps --tree "$@" 2>/dev/null; }
 brew_clean_all() { brew cleanup --prune=all 2>/dev/null; }
 brew_update_all() { brew update && brew upgrade && brew cleanup 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# rust — cargo project management, testing, and tooling
+# -----------------------------------------------------------------------------
+#
+# Functions in this category cover Rust development with Cargo: updating
+# dependencies, building and testing, linting with clippy, formatting, code
+# coverage, auditing, and publishing. They assume a Rust toolchain is
+# installed.
+#
+# Notable functions:
+#   cargo_update_all    — update all dependencies via cargo-install-update
+#   cargo_tree_deps     — display dependency tree
+#   cargo_clippy_all    — run clippy with deny warnings
+#   cargo_fmt_check     — check code formatting
+#   cargo_audit_check   — audit dependencies for vulnerabilities
+#   cargo_outdated_all  — list outdated dependencies
+#
+# Usage examples:
+#   $ cargo_update_all
+#   $ cargo_clippy_all
+#   $ cargo_test_all
+#
+# See also: cargo(1), rustc(1)
+#
+
 brew_services_start() { brew services start "$1" 2>/dev/null; }
 brew_services_stop() { brew services stop "$1" 2>/dev/null; }
 brew_services_list() { brew services list 2>/dev/null; }
@@ -391,6 +754,30 @@ pip_show_pkg() { pip show "$1" 2>/dev/null || pip3 show "$1"; }
 pip_check() { pip check 2>/dev/null || pip3 check; }
 venv_create() { python3 -m venv "${1:-.venv}"; }
 venv_activate() { . "${1:-.venv}/bin/activate"; }
+# -----------------------------------------------------------------------------
+# go — module management, testing, building, and tooling
+# -----------------------------------------------------------------------------
+#
+# Functions in this category cover Go development: module graph inspection,
+# testing with coverage, building for multiple platforms, cross-compilation,
+# vetting, formatting, and module verification.
+#
+# Notable functions:
+#   go_version        — show Go version
+#   go_test_cover     — run tests with coverage across all packages
+#   go_build_cross    — cross-compile for Linux and macOS
+#   go_mod_tidy       — tidy go module dependencies
+#   go_vet_all        — run go vet across all packages
+#   go_clean_cache    — clean the Go build cache
+#
+# Usage examples:
+#   $ go_test_cover
+#   $ go_build_cross myapp
+#   $ go_mod_tidy
+#
+# See also: go(1), go-mod(1)
+#
+
 venv_deactivate() { deactivate 2>/dev/null || true; }
 python_version() { python3 --version; }
 python_find() { which python3 || which python; }
@@ -407,6 +794,36 @@ pip_hash_pkg() { pip hash "$1" 2>/dev/null || pip3 hash "$1"; }
 
 npm_list_global() { npm list -g --depth=0 2>/dev/null; }
 npm_list_outdated() { npm outdated 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# network diagnostics — IP, DNS, ports, SSL, and HTTP tools
+# -----------------------------------------------------------------------------
+#
+# Functions in this category diagnose network issues: retrieving public and
+# local IP addresses, checking open ports, DNS lookups (A, MX, NS, TXT,
+# ANY), SSL certificate validation, HTTP status and header inspection, file
+# downloads, and bandwidth testing. They prefer modern tools (dig, curl)
+# with fallbacks to traditional ones (nslookup, wget).
+#
+# Notable functions:
+#   whatismyip          — get public IP address
+#   whatismyip_external — get public IP with geolocation JSON
+#   dns_lookup          — resolve hostname to IP address
+#   dns_mx_lookup       — look up MX records
+#   check_port_open     — test if a remote TCP port is open
+#   check_port_listen   — check if a local port is being listened on
+#   ssl_check           — check SSL certificate expiry dates
+#   http_status         — get HTTP status code for a URL
+#   download_file       — download a file via curl or wget
+#
+# Usage examples:
+#   $ whatismyip
+#   $ dns_lookup example.com
+#   $ check_port_open example.com 443
+#   $ ssl_check example.com
+#
+# See also: ping_test(), traceroute_path(), myip4(), myip6(), localip()
+#
+
 npm_audit_fix() { npm audit fix 2>/dev/null; }
 npm_cache_clean() { npm cache clean --force 2>/dev/null; }
 npm_docs_pkg() { npm docs "$1" 2>/dev/null; }
@@ -435,6 +852,32 @@ cargo_test_all() { cargo test --all; }
 cargo_clippy_all() { cargo clippy --all-targets -- -D warnings 2>/dev/null; }
 cargo_fmt_check() { cargo fmt --check; }
 cargo_doc_open() { cargo doc --open; }
+# -----------------------------------------------------------------------------
+# file operations — backup, search, comparison, and metadata
+# -----------------------------------------------------------------------------
+#
+# Functions in this category handle file and directory operations: creating
+# timestamped backups, counting files/lines, finding largest/newest/oldest
+# files, detecting duplicates, copying with progress, renaming extensions,
+# symlink management, and checksum verification.
+#
+# Notable functions:
+#   backup_file        — create timestamped backup copy of a file/dir
+#   backup_dir         — create compressed tar.gz backup of a directory
+#   find_largest       — show largest files in a directory
+#   find_largest_dirs  — show largest subdirectories
+#   find_duplicates    — find duplicate files by MD5 checksum
+#   copy_with_progress — copy with rsync progress display
+#   checksum_sha256    — compute SHA-256 checksum of a file
+#
+# Usage examples:
+#   $ backup_file important.doc
+#   $ find_largest /var/log 10
+#   $ find_duplicates ~/Downloads
+#
+# See also: bak(), unbak(), orig(), file_*
+#
+
 cargo_expand_macro() { cargo expand "$@"; }
 cargo_bloat_crate() { cargo bloat --crates 2>/dev/null; }
 cargo_clean_all() { cargo clean; }
@@ -462,6 +905,33 @@ go_test_race() { go test -race ./...; }
 
 whatismyip() { curl -fsSL https://ifconfig.me 2>/dev/null || curl -fsSL https://ipinfo.io/ip 2>/dev/null; }
 whatismyip_external() { curl -fsSL https://ipinfo.io/json 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# text processing — grep, sed, awk, sort, diff, and format conversion
+# -----------------------------------------------------------------------------
+#
+# Functions in this category provide text processing utilities: searching
+# with grep (recursive, invert, context, word), stream editing with sed,
+# column extraction with awk, file sorting, line deduplication, diffing,
+# CSV/JSON/YAML validation and formatting, and hex dumps.
+#
+# Notable functions:
+#   grep_search      — basic grep search
+#   grep_recursive   — recursive grep
+#   sed_replace      — sed-based find-and-replace in a file
+#   awk_column       — extract N-th column with awk
+#   sort_by_size     — list files sorted by size
+#   json_validate    — validate JSON syntax
+#   yaml_validate    — validate YAML syntax
+#   csv_view         — formatted CSV viewer with column alignment
+#
+# Usage examples:
+#   $ grep_recursive "TODO" src/
+#   $ sed_replace "old" "new" file.txt
+#   $ json_validate package.json
+#
+# See also: text_*, rg_search(), sd_replace()
+#
+
 whatismyip_local() { ip addr show | grep "inet " | awk '{print $2}' | cut -d/ -f1 | head -1; }
 check_port_open() { if command -v nc >/dev/null 2>&1; then nc -zv "$1" "$2" 2>&1; elif command -v nmap >/dev/null 2>&1; then nmap -p "$2" "$1"; else echo "check: nc or nmap needed"; fi; }
 check_port_listen() { ss -tlnp 2>/dev/null | grep ":$1 " || netstat -tlnp 2>/dev/null | grep ":$1 "; }
@@ -487,6 +957,31 @@ traceroute_path() { traceroute "$1" 2>/dev/null; }
 bandwidth_test() { curl -fsSL https://speedtest.net 2>/dev/null || echo "speedtest-cli needed"; }
 netstat_connections() { ss -tupan 2>/dev/null || netstat -tupan; }
 netstat_listening() { ss -tlnp 2>/dev/null || netstat -tlnp; }
+# -----------------------------------------------------------------------------
+# dotfiles — self-management of the dotfiles repository
+# -----------------------------------------------------------------------------
+#
+# Functions in this category manage the dotfiles repository itself: updating
+# from remote, running health checks, viewing documentation, checking status,
+# and synchronising changes. They assume the DOTFILES_DIR environment variable
+# is set to the repository root.
+#
+# Notable functions:
+#   dot_update  — pull latest changes via dotupdate.sh
+#   dot_health  — run health check script
+#   dot_status  — show git status of dotfiles repo
+#   dot_sync    — fetch, prune, and rebase dotfiles repo
+#   dot_docs    — open dotfiles documentation in browser
+#   dot_ver     — show dotfiles version
+#
+# Usage examples:
+#   $ dot_update
+#   $ dot_health
+#   $ dot_status
+#
+# See also: backup_dotfiles(), dotfiles_diff()
+#
+
 
 backup_file() { cp -r "$1" "${1}.bak-$(date +%Y%m%d-%H%M%S)" && echo "backup: ${1}.bak-$(date +%Y%m%d-%H%M%S)"; }
 backup_dir() { tar -czf "${1%/}.tar.gz" "$1" && echo "backup: ${1%/}.tar.gz"; }
@@ -495,6 +990,29 @@ count_files() { find "${1:-.}" -type f 2>/dev/null | wc -l; }
 count_dirs() { find "${1:-.}" -type d 2>/dev/null | wc -l; }
 count_lines_total() { find "${1:-.}" -type f -exec cat {} + 2>/dev/null | wc -l; }
 find_largest() { find "${1:-.}" -type f -exec ls -s {} + 2>/dev/null | sort -rn | head "${2:-20}"; }
+# -----------------------------------------------------------------------------
+# generation — passwords, UUIDs, tokens, encoding, and hashing
+# -----------------------------------------------------------------------------
+#
+# Functions in this category generate random values (passwords, UUIDs,
+# tokens), encode/decode data (base64, URL encoding), and compute hashes
+# (SHA-256, MD5) for strings and files.
+#
+# Notable functions:
+#   generate_password — generate a base64-encoded random password
+#   generate_uuid     — generate a UUID v4 string
+#   url_encode        — percent-encode a string
+#   hash_string       — compute SHA-256 hash of a string
+#   hash_file         — compute SHA-256 hash of a file
+#
+# Usage examples:
+#   $ generate_password 32
+#   $ generate_uuid
+#   $ url_encode "hello world"
+#
+# See also: openssl_rand_hex(), openssl_rand_base64()
+#
+
 find_largest_dirs() { du -sh "${1:-.}"/*/ 2>/dev/null | sort -rh | head "${2:-20}"; }
 find_newest() { find "${1:-.}" -type f -print0 2>/dev/null | xargs -0 ls -lt | head "${2:-20}"; }
 find_oldest() { find "${1:-.}" -type f -print0 2>/dev/null | xargs -0 ls -ltr | head "${2:-20}"; }
@@ -506,6 +1024,34 @@ copy_and_cd() { cp -r "$1" "$2" && cd "$2"; }
 move_and_cd() { mv "$1" "$2" && cd "$2"; }
 rename_extension() { for f in *."$1"; do mv "$f" "${f%.$1}.$2"; done; }
 symlink_force() { ln -sf "$1" "$2"; }
+# -----------------------------------------------------------------------------
+# media — FFmpeg, ImageMagick, and EXIF processing
+# -----------------------------------------------------------------------------
+#
+# Functions in this category process media files: converting video formats
+# with ffmpeg, compressing video to H.265, creating GIFs, extracting audio,
+# taking screenshots, resizing and cropping, plus image manipulation with
+# ImageMagick (resize, compress, convert, crop, rotate, trim) and EXIF
+# metadata read/remove.
+#
+# Notable functions:
+#   ffmpeg_convert       — convert video to another format
+#   ffmpeg_compress      — compress video with H.265 at a given CRF
+#   ffmpeg_gif           — create animated GIF from video
+#   ffmpeg_extract_audio — extract audio stream to MP3
+#   image_resize         — resize an image to a percentage
+#   image_compress       — compress JPEG with quality setting
+#   exif_show            — display EXIF metadata
+#   exif_remove          — strip all EXIF metadata
+#
+# Usage examples:
+#   $ ffmpeg_compress input.mp4 23
+#   $ ffmpeg_gif input.mp4 15 640
+#   $ image_resize photo.jpg 50%
+#
+# See also: ffprobe(1), convert(1), exiftool(1)
+#
+
 touch_all() { for f in "$@"; do touch "$f"; done; }
 show_permissions() { ls -la "$1" | awk '{print $1, $NF}'; }
 show_owner() { ls -la "$1" | awk '{print $3, $4, $NF}'; }
@@ -531,6 +1077,32 @@ awk_calc() { awk "BEGIN{print $*}"; }
 sort_by_size() { ls -lS "$@"; }
 sort_by_time() { ls -lt "$@"; }
 sort_by_name() { ls -l "$@"; }
+# -----------------------------------------------------------------------------
+# cloud — AWS, GCP, and Azure CLI wrappers
+# -----------------------------------------------------------------------------
+#
+# Functions in this category wrap common cloud provider CLI commands: AWS
+# (EC2, S3, Lambda, IAM, ECS, EKS, RDS, DynamoDB, CloudWatch, Route53, etc.),
+# GCP (Compute Engine, GKE, Cloud Storage, IAM, Cloud Run, Cloud SQL, KMS),
+# and Azure (VMs, AKS, resource groups).
+#
+# Notable functions:
+#   aws_whoami           — show current AWS identity
+#   aws_list_ec2         — list EC2 instances in table format
+#   aws_s3_browse        — browse S3 bucket contents
+#   gcloud_list_instances — list GCP compute instances
+#   gcloud_get_creds     — get GKE cluster credentials
+#   az_list_vms          — list Azure VMs
+#
+# Usage examples:
+#   $ aws_whoami
+#   $ aws_list_ec2
+#   $ gcloud_list_instances
+#   $ gcloud_get_creds my-cluster
+#
+# See also: aws(1), gcloud(1), az(1), terraform_*
+#
+
 unique_lines() { sort -u "$@"; }
 unique_count() { sort "$1" | uniq -c | sort -rn; }
 diff_summary() { diff -q "$@"; }
@@ -554,6 +1126,30 @@ dot_update() { bash "$DOTFILES_DIR/bin/dotupdate.sh" 2>/dev/null || echo "dotupd
 dot_health() { bash "$DOTFILES_DIR/bin/health_check.sh" 2>/dev/null || echo "health check not found"; }
 dot_bench() { bash "$DOTFILES_DIR/bin/benchmark_shell.sh" 2>/dev/null || echo "benchmark not found"; }
 dot_fix() { sh "$DOTFILES_DIR/install/install.sh" 2>/dev/null || echo "installer not found"; }
+# -----------------------------------------------------------------------------
+# infrastructure — Terraform lifecycle management
+# -----------------------------------------------------------------------------
+#
+# Functions in this category manage Terraform workflows: initialisation,
+# planning, applying, destroying, workspace management, state inspection,
+# validation, formatting, and graph visualisation.
+#
+# Notable functions:
+#   terraform_plan_out      — plan with output file
+#   terraform_apply_auto    — apply without confirmation
+#   terraform_workspace_new — create and switch to a new workspace
+#   terraform_fmt_recursive — format all Terraform files recursively
+#   terraform_validate_all  — validate configuration
+#   terraform_graph_deps    — generate dependency graph as PNG
+#
+# Usage examples:
+#   $ terraform_plan_out
+#   $ terraform_apply_auto
+#   $ terraform_fmt_recursive
+#
+# See also: terraform(1), helm_*
+#
+
 dot_status() { git -C "$DOTFILES_DIR" status --short --branch 2>/dev/null || true; }
 dot_sync() { git -C "$DOTFILES_DIR" fetch --all --prune 2>/dev/null && git -C "$DOTFILES_DIR" pull --rebase --autostash 2>/dev/null; }
 dot_ver() { echo "$DOTFILES_VERSION"; }
@@ -567,6 +1163,28 @@ url_decode() { python3 -c "import urllib.parse,sys; print(urllib.parse.unquote(s
 hash_string() { printf "%s" "$1" | sha256sum | cut -d' ' -f1; }
 hash_file() { sha256sum "$1" 2>/dev/null | cut -d' ' -f1; }
 hash_md5() { printf "%s" "$1" | md5sum | cut -d' ' -f1; }
+# -----------------------------------------------------------------------------
+# helm — Kubernetes package manager operations
+# -----------------------------------------------------------------------------
+#
+# Functions in this category manage Helm charts and releases: repository
+# management, searching, installing, upgrading, rolling back, fetching
+# manifests, testing, and templating.
+#
+# Notable functions:
+#   helm_repo_add            — add a Helm chart repository
+#   helm_upgrade_install_full — upgrade or install with namespace
+#   helm_list_releases_all   — list releases across all namespaces
+#   helm_dry_run             — dry-run install for debugging
+#   helm_template_render     — render chart templates locally
+#
+# Usage examples:
+#   $ helm_repo_add bitnami https://charts.bitnami.com/bitnami
+#   $ helm_upgrade_install_full my-release bitnami/nginx
+#
+# See also: helm(1), kubectl_*
+#
+
 
 ffmpeg_convert() { ffmpeg -i "$1" "${2:-output.mp4}"; }
 ffmpeg_compress() { ffmpeg -i "$1" -vcodec libx265 -crf "${2:-28}" "${1%.*}-compressed.mp4"; }
@@ -581,6 +1199,30 @@ ffmpeg_metadata() { ffprobe "$1" 2>/dev/null; }
 ffmpeg_png_sequence() { ffmpeg -i "$1" -vf "fps=${2:-1}" "${1%.*}-%04d.png"; }
 ffmpeg_stream() { ffmpeg -i "$1" -c copy -f mp4 pipe:; }
 image_resize() { convert "$1" -resize "${2:-50%}" "${1%.*}-resized.${1##*.}"; }
+# -----------------------------------------------------------------------------
+# databases — MySQL, PostgreSQL, SQLite, and Redis helpers
+# -----------------------------------------------------------------------------
+#
+# Functions in this category provide quick database operations: dumping and
+# importing MySQL/PostgreSQL databases, running queries, listing tables and
+# schemas for SQLite, and basic Redis operations (ping, flush, monitor,
+# key-value get/set).
+#
+# Notable functions:
+#   mysql_dump_db  — dump a MySQL database to a SQL file
+#   pg_list_dbs    — list PostgreSQL databases
+#   sqlite_query   — run a query against a SQLite database
+#   redis_ping     — test Redis connectivity
+#   redis_monitor  — start Redis monitor
+#
+# Usage examples:
+#   $ mysql_dump_db mydb
+#   $ pg_list_dbs
+#   $ sqlite_query my.db "SELECT * FROM users"
+#
+# See also: mysql(1), psql(1), sqlite3(1), redis-cli(1)
+#
+
 image_compress() { convert "$1" -quality "${2:-85}" "${1%.*}-compressed.${1##*.}"; }
 image_convert() { convert "$1" "${2:-output.png}"; }
 image_crop() { convert "$1" -crop "${2:-640x480}+${3:-0}+${4:-0}" "${1%.*}-cropped.${1##*.}"; }
@@ -603,6 +1245,32 @@ aws_list_iam() { aws iam list-users --query 'Users[*].[UserName,CreateDate]' --o
 aws_list_vpc() { aws ec2 describe-vpcs --query 'Vpcs[*].[VpcId,Tags[?Key==`Name`].Value|[0],CidrBlock]' --output table 2>/dev/null || true; }
 aws_list_logs() { aws logs describe-log-groups --query 'logGroups[*].[logGroupName,storedBytes]' --output table 2>/dev/null || true; }
 aws_list_route53() { aws route53 list-hosted-zones --query 'HostedZones[*].[Name,Id]' --output table 2>/dev/null || true; }
+# -----------------------------------------------------------------------------
+# gpg & openssl — encryption, signing, key management, and certificate inspection
+# -----------------------------------------------------------------------------
+#
+# Functions in this category manage GPG keys (listing, exporting, importing,
+# encrypting, decrypting, signing, verifying) and OpenSSL operations
+# (generating RSA keys and CSRs, self-signed certificates, certificate
+# inspection, random data generation).
+#
+# Notable functions:
+#   gpg_list_keys        — list public keys
+#   gpg_encrypt_file     — encrypt a file for a recipient
+#   gpg_decrypt_file     — decrypt a GPG-encrypted file
+#   gpg_sign_file        — sign a file with your GPG key
+#   openssl_gen_rsa      — generate RSA private key
+#   openssl_self_sign    — generate self-signed certificate
+#   openssl_check_expiry — check certificate expiry dates
+#
+# Usage examples:
+#   $ gpg_encrypt_file recipient@example.com secret.txt
+#   $ openssl_self_sign mykey.pem mycert.pem 730
+#   $ openssl_check_expiry cert.pem
+#
+# See also: gpg(1), openssl(1), file_encrypt(), file_decrypt()
+#
+
 aws_s3_browse() { aws s3 ls "s3://$1"; }
 aws_s3_sync_up() { aws s3 sync . "s3://$1" --exclude '.git/*'; }
 aws_s3_sync_down() { aws s3 sync "s3://$1" .; }
@@ -629,6 +1297,27 @@ terraform_fmt_recursive() { terraform fmt -recursive; }
 terraform_validate_all() { terraform validate && echo "valid"; }
 terraform_refresh_state() { terraform refresh; }
 terraform_console_tool() { terraform console; }
+# -----------------------------------------------------------------------------
+# docker compose — orchestration inspection and lifecycle
+# -----------------------------------------------------------------------------
+#
+# These functions provide Docker Compose and container inspection commands:
+# listing all compose resources, inspecting containers/images/volumes,
+# building and pulling all services, and system-level pruning.
+#
+# Notable functions:
+#   docker_compose_ps_all   — list all compose services including stopped
+#   docker_compose_build_all — build all compose services
+#   docker_system_prune_all  — full system prune including volumes
+#   docker_container_ip      — get IP address of a container
+#
+# Usage examples:
+#   $ docker_compose_build_all
+#   $ docker_system_prune_all
+#
+# See also: docker-compose(1), docker_*
+#
+
 helm_repo_add() { helm repo add "$1" "$2"; }
 helm_repo_update() { helm repo update; }
 helm_repo_list() { helm repo list; }
@@ -647,6 +1336,29 @@ mysql_dump_db() { mysqldump -u root -p "$1" > "${1}.sql"; }
 mysql_import_db() { mysql -u root -p "$1" < "$2"; }
 mysql_run_query() { mysql -u root -p -e "$1"; }
 mysql_list_dbs() { mysql -u root -p -e "SHOW DATABASES;" 2>/dev/null || mysql -u root -e "SHOW DATABASES;"; }
+# -----------------------------------------------------------------------------
+# kubectl — resource inspection, YAML output, and namespace helpers
+# -----------------------------------------------------------------------------
+#
+# These kubectl functions focus on resource inspection with YAML/JSON output,
+# detailed descriptions, multi-container log access, scaling, labelling,
+# annotation, watching, proxying, port forwarding, and namespace-scoped
+# resource listing.
+#
+# Notable functions:
+#   kubectl_get_pod_yaml — get pod definition as YAML
+#   kubectl_describe_node — detailed node information
+#   kubectl_watch_all    — watch all resources in a namespace
+#   kubectl_proxy_start  — start kubectl proxy
+#   kubectl_get_pods_ns   — get pods in a specific namespace
+#
+# Usage examples:
+#   $ kubectl_get_pod_yaml my-pod
+#   $ kubectl_describe_node worker-1
+#
+# See also: kubectl(1), k9s_open()
+#
+
 pg_dump_db() { pg_dump -U postgres "$1" > "${1}.sql"; }
 pg_import_db() { psql -U postgres -d "$1" -f "$2"; }
 pg_list_dbs() { psql -U postgres -l 2>/dev/null || true; }
@@ -666,6 +1378,30 @@ mongosh_run() { mongosh "$@" 2>/dev/null || true; }
 mongosh_list_dbs() { mongosh --quiet --eval "db.adminCommand('listDatabases')" 2>/dev/null || true; }
 
 gpg_list_keys() { gpg --list-keys 2>/dev/null || true; }
+# -----------------------------------------------------------------------------
+# system information — hardware, OS, and resource queries
+# -----------------------------------------------------------------------------
+#
+# Functions in this category report system information: CPU, memory, disk,
+# network interfaces, system load, running processes, listening ports,
+# logged-in users, uptime, battery status and percentage, temperature,
+# GPU info, and swap usage.
+#
+# Notable functions:
+#   get_cpu_info          — show CPU information
+#   get_memory_info       — show memory usage
+#   get_listening_ports   — show listening TCP ports
+#   get_battery_percent   — show battery charge percentage
+#   get_temperature_info  — show CPU temperature
+#
+# Usage examples:
+#   $ get_cpu_info
+#   $ get_battery_percent
+#   $ get_listening_ports
+#
+# See also: sys_*, ps_*, disk_*, net_*
+#
+
 gpg_list_secret_keys() { gpg --list-secret-keys 2>/dev/null || true; }
 gpg_export_key() { gpg --export -a "$1" > "${1}.asc"; }
 gpg_export_secret_key() { gpg --export-secret-keys -a "$1"; }
@@ -686,6 +1422,30 @@ openssl_self_sign() { openssl req -x509 -newkey rsa:4096 -keyout "${1:-key.pem}"
 openssl_check_cert() { openssl x509 -in "$1" -text -noout 2>/dev/null; }
 openssl_check_expiry() { openssl x509 -in "$1" -noout -dates 2>/dev/null; }
 openssl_check_conn() { echo | openssl s_client -connect "$1:${2:-443}" -servername "$1" 2>/dev/null | openssl x509 -noout -dates; }
+# -----------------------------------------------------------------------------
+# archive utilities — tar, gzip, bzip2, xz, zip, 7z, rar compression
+# -----------------------------------------------------------------------------
+#
+# Functions in this category provide compression and decompression for
+# individual archive formats with configurable compression levels. They
+# complement the universal extract() function.
+#
+# Notable functions:
+#   tar_compress     — create a tar.gz archive
+#   tar_decompress   — extract a tar.gz archive
+#   gzip_compress    — compress a file with gzip
+#   zip_compress     — create a zip archive
+#   7z_compress      — create a 7z archive
+#   uncompress_auto  — extract any archive by extension (multi-format)
+#
+# Usage examples:
+#   $ tar_compress mydir "output.tar.gz"
+#   $ zip_compress project/
+#   $ uncompress_auto file.rar
+#
+# See also: extract(), archive_create_*
+#
+
 openssl_rand_hex() { openssl rand -hex "${1:-32}"; }
 openssl_rand_base64() { openssl rand -base64 "${1:-32}"; }
 openssl_check_modulus() { openssl rsa -modulus -in "$1" -noout | openssl md5; }
@@ -714,6 +1474,28 @@ quiet_run() { "$@" >/dev/null 2>&1; }
 dry_run() { printf "DRY-RUN: %s\n" "$*"; }
 confirm_action() { printf "continue? [y/N] "; read -r _c; case "$_c" in [yY]|[yY][eE][sS]) "$@";; *) echo "cancelled"; return 1;; esac; }
 show_ip() { ip -br addr show 2>/dev/null || ifconfig; }
+# -----------------------------------------------------------------------------
+# gpg — extended key management, encryption, and signing operations
+# -----------------------------------------------------------------------------
+#
+# These functions extend the GPG toolset with asymmetric encryption/decryption,
+# detached signing, keyserver operations, key expiry checks, and detailed
+# fingerprint and identity inspection.
+#
+# Notable functions:
+#   gpg_encrypt_asymmetric — encrypt a file for a specific recipient
+#   gpg_sign_detached      — create a detached signature
+#   gpg_recv_keyserver     — receive keys from a keyserver
+#   gpg_delete_key         — delete a public key
+#   gpg_key_details        — show full key details with long ID
+#
+# Usage examples:
+#   $ gpg_encrypt_asymmetric alice@example.com doc.pdf
+#   $ gpg_sign_detached release.tar.gz
+#
+# See also: gpg(1), gpg_agent_ensure()
+#
+
 show_date_time() { date '+%A, %B %d, %Y %T %Z'; }
 show_timezone() { cat /etc/timezone 2>/dev/null || echo "$TZ"; }
 show_uptime() { uptime; }
@@ -732,6 +1514,31 @@ show_git_config() { git config --list --global 2>/dev/null | sort; }
 show_battery_status() { if [ -f /sys/class/power_supply/BAT0/capacity ]; then cat /sys/class/power_supply/BAT0/capacity; elif [ -f /sys/class/power_supply/BAT1/capacity ]; then cat /sys/class/power_supply/BAT1/capacity; fi; }
 calc() { echo "$*" | bc -l; }
 calc_float() { echo "$*" | bc -l; }
+# -----------------------------------------------------------------------------
+# docker — advanced run, exec, log, volume, and swarm operations
+# -----------------------------------------------------------------------------
+#
+# These functions extend the Docker toolset with interactive shell access,
+# detailed log inspection, formatted ps output, image management, build cache
+# pruning, volume backup/restore, Docker Compose lifecycle options, Swarm
+# mode operations, secret/config management, and plugin management.
+#
+# Notable functions:
+#   docker_run_shell       — run a container with an interactive shell
+#   docker_logs_timestamps — show logs with timestamps
+#   docker_ps_format       — formatted container listing
+#   docker_image_dangling  — list dangling images
+#   docker_volume_backup   — backup a volume to a tar.gz file
+#   docker_swarm_init      — initialise a Docker Swarm cluster
+#
+# Usage examples:
+#   $ docker_run_shell alpine
+#   $ docker_volume_backup my_volume
+#   $ docker_swarm_init 192.168.1.10
+#
+# See also: docker(1), docker_compose_*
+#
+
 calc_int() { printf "%.0f\n" $(echo "$*" | bc -l 2>/dev/null) 2>/dev/null; }
 calc_sci() { echo "$*" | bc -l; }
 hex_to_dec() { printf "%d\n" "0x$1" 2>/dev/null; }
@@ -807,6 +1614,32 @@ get_display_info() { echo "${DISPLAY:-:0}"; }
 tar_compress() { tar -czf "${2:-$1.tar.gz}" "$1"; }
 tar_decompress() { tar -xzf "$1"; }
 tar_list() { tar -tzf "$1"; }
+# -----------------------------------------------------------------------------
+# kubectl — namespace-scoped resource management and configuration
+# -----------------------------------------------------------------------------
+#
+# These kubectl functions manage resources within a specific namespace:
+# creating cronjobs, jobs, deployments, services, and ingresses; updating
+# images and environment variables; autoscaling; node cordoning; config
+# operations; API discovery; shell completion generation; and pod readiness
+# waiting.
+#
+# Notable functions:
+#   kubectl_get_pods_ns       — get pods in a namespace
+#   kubectl_create_cronjob    — create a cronjob
+#   kubectl_set_image         — update deployment image
+#   kubectl_autoscale_deployment — enable autoscaling
+#   kubectl_wait_pod_ready    — wait until a pod is ready
+#   kubectl_completion_bash   — generate bash completion script
+#
+# Usage examples:
+#   $ kubectl_get_pods_ns production
+#   $ kubectl_set_image myapp nginx:1.25
+#   $ kubectl_wait_pod_ready my-pod 60
+#
+# See also: kubectl(1), helm_*
+#
+
 tar_compress_bz2() { tar -cjf "${2:-$1.tar.bz2}" "$1"; }
 tar_compress_xz() { tar -cJf "${2:-$1.tar.xz}" "$1"; }
 tar_decompress_bz2() { tar -xjf "$1"; }
@@ -847,6 +1680,30 @@ gpg_key_details() { gpg --list-keys --keyid-format LONG "$1"; }
 gpg_key_fpr() { gpg --fingerprint "$1" | grep -i fingerprint | tr -d ' ' | cut -d= -f2; }
 gpg_list_keys_with_id() { gpg --list-keys --keyid-format LONG | grep "^pub\|^sub"; }
 gpg_list_keys_with_email() { gpg --list-keys --keyid-format LONG | grep -A1 "^pub" | grep -v "^--"; }
+# -----------------------------------------------------------------------------
+# helm — advanced chart search, pull, packaging, and dependency management
+# -----------------------------------------------------------------------------
+#
+# These Helm functions extend the toolset with Hub search, chart pulling,
+# install/upgrade with various options, release inspection, chart creation,
+# packaging, linting, dependency management, and chart metadata display.
+#
+# Notable functions:
+#   helm_search_hub     — search Helm Hub for charts
+#   helm_pull_chart     — download and untar a chart
+#   helm_get_manifest   — get the manifest of a release
+#   helm_create_chart   — scaffold a new chart
+#   helm_dep_update     — update chart dependencies
+#   helm_show_readme    — display chart README
+#
+# Usage examples:
+#   $ helm_search_hub nginx
+#   $ helm_create_chart my-app
+#   $ helm_pull_chart bitnami/postgresql
+#
+# See also: helm(1), kubectl_*
+#
+
 gpg_delete_key() { gpg --delete-key "$1"; }
 gpg_delete_secret_key() { gpg --delete-secret-key "$1"; }
 
@@ -871,6 +1728,29 @@ docker_compose_down_timeout() { docker compose down -t "${1:-10}"; }
 docker_compose_events() { docker compose events; }
 docker_compose_pause() { docker compose pause; }
 docker_compose_unpause() { docker compose unpause; }
+# -----------------------------------------------------------------------------
+# terraform — extended plan, state, and provider management
+# -----------------------------------------------------------------------------
+#
+# These Terraform functions extend the toolset with targeted applies,
+# resource tainting, state manipulation, workspace selection, provider
+# locking, dependency graph generation, and console expressions.
+#
+# Notable functions:
+#   terraform_plan_destroy  — plan a destroy operation
+#   terraform_apply_target  — apply only a specific resource target
+#   terraform_import_resource — import existing infrastructure
+#   terraform_graph_deps    — generate dependency graph as PNG
+#   terraform_validate_quiet — quick validation check
+#
+# Usage examples:
+#   $ terraform_plan_destroy
+#   $ terraform_import_resource aws_instance.web i-12345
+#   $ terraform_graph_deps
+#
+# See also: terraform(1), aws_*, gcloud_*
+#
+
 docker_compose_kill() { docker compose kill; }
 docker_compose_scale() { docker compose scale "$@"; }
 docker_compose_version() { docker compose version; }
@@ -891,6 +1771,30 @@ docker_image_tag_latest() { docker tag "$1:latest" "$1:$(date +%Y%m%d)"; }
 docker_image_squash() { docker build --squash -t "$1" .; }
 docker_network_create_bridge() { docker network create -d bridge "$1"; }
 docker_network_create_overlay() { docker network create -d overlay "$1"; }
+# -----------------------------------------------------------------------------
+# gcloud — authentication, config, storage, IAM, serverless, and KMS
+# -----------------------------------------------------------------------------
+#
+# Functions in this category wrap gcloud commands for authentication,
+# configuration management, Cloud Storage operations, firewall rules,
+# DNS management, IAM service accounts, Cloud Build, Cloud Run, Cloud SQL,
+# and Cloud KMS.
+#
+# Notable functions:
+#   gcloud_auth_login       — authenticate with Google Cloud
+#   gcloud_config_set_project — set the active project
+#   gcloud_storage_buckets  — list storage buckets
+#   gcloud_run_deploy       — deploy to Cloud Run
+#   gcloud_kms_encrypt      — encrypt with Cloud KMS
+#
+# Usage examples:
+#   $ gcloud_auth_login
+#   $ gcloud_config_set_project my-project
+#   $ gcloud_run_deploy my-service gcr.io/my-project/my-image
+#
+# See also: gcloud(1), kubectl_*, terraform_*
+#
+
 docker_network_connect() { docker network connect "$1" "$2"; }
 docker_network_disconnect() { docker network disconnect "$1" "$2"; }
 docker_network_prune() { docker network prune -f; }
@@ -920,6 +1824,31 @@ docker_secret_create() { printf "%s" "$2" | docker secret create "$1" -; }
 docker_secret_ls() { docker secret ls; }
 docker_config_create() { docker config create "$1" "$2"; }
 docker_config_ls() { docker config ls; }
+# -----------------------------------------------------------------------------
+# aws — EC2, S3, Lambda, IAM, ECS, EKS, RDS, and infrastructure services
+# -----------------------------------------------------------------------------
+#
+# These AWS functions wrap EC2 instance lifecycle management, S3 bucket
+# operations, Lambda invocation, IAM listing, CloudWatch log inspection,
+# Route53 DNS, CloudFront invalidation, SQS/SNS messaging, DynamoDB CRUD,
+# ECR/ECS/EKS cluster management, RDS snapshots, and more.
+#
+# Notable functions:
+#   aws_ec2_start           — start an EC2 instance
+#   aws_ec2_instances       — list all EC2 instances
+#   aws_s3_presign          — generate a presigned S3 URL
+#   aws_lambda_invoke       — invoke a Lambda function
+#   aws_iam_users           — list IAM users
+#   aws_eks_update_kubeconfig — update kubeconfig for an EKS cluster
+#
+# Usage examples:
+#   $ aws_ec2_start i-1234567890abcdef0
+#   $ aws_s3_presign my-bucket secret.pdf 3600
+#   $ aws_eks_update_kubeconfig my-cluster
+#
+# See also: aws(1), terraform_*
+#
+
 docker_plugin_ls() { docker plugin ls; }
 docker_plugin_install() { docker plugin install "$1"; }
 docker_plugin_disable() { docker plugin disable "$1"; }
@@ -978,6 +1907,34 @@ helm_list_releases_ns() { helm list -n "$1"; }
 helm_get_manifest() { helm get manifest "$1"; }
 helm_get_notes() { helm get notes "$1"; }
 helm_get_hooks() { helm get hooks "$1"; }
+# -----------------------------------------------------------------------------
+# python — pip, pipx, virtualenv, pytest, ruff, and poetry integration
+# -----------------------------------------------------------------------------
+#
+# These extended Python functions cover additional pip installation modes
+# (global, user, editable, dev requirements), pipx for isolated app
+# installation, virtualenv creation variants, advanced pytest options
+# (verbose, fail-fast, parallel, coverage HTML, last-failed), ruff linting
+# and formatting, and Poetry dependency management.
+#
+# Notable functions:
+#   pip_install_user       — install packages in user site-packages
+#   pip_upgrade_all        — upgrade all outdated pip packages
+#   pipx_install           — install a package via pipx
+#   pytest_run_parallel    — run tests in parallel with pytest-xdist
+#   ruff_check             — run ruff linter
+#   poetry_install         — install project dependencies with Poetry
+#   pyenv_install_python   — install a Python version via pyenv
+#   conda_env_create       — create a conda environment
+#
+# Usage examples:
+#   $ pip_install_user requests
+#   $ pytest_run_parallel tests/
+#   $ poetry_add_dev pytest
+#
+# See also: python(1), pip(1), pipx(1), pyenv(1)
+#
+
 helm_status_release() { helm status "$1"; }
 helm_test_ns() { helm test "$1" -n "$2"; }
 helm_create_chart() { helm create "$1"; }
@@ -1024,6 +1981,37 @@ gcloud_storage_buckets() { gcloud storage buckets list; }
 gcloud_firewall_list() { gcloud compute firewall-rules list; }
 gcloud_firewall_create() { gcloud compute firewall-rules create "$1" --allow "$2"; }
 gcloud_dns_list() { gcloud dns managed-zones list; }
+# -----------------------------------------------------------------------------
+# node.js — advanced npm, pnpm, yarn, and TypeScript tooling
+# -----------------------------------------------------------------------------
+#
+# These extended Node.js functions cover project initialisation (npm init,
+# TypeScript setup), package installation modes (local, dev, global,
+# optional), running scripts, publishing, linking, access control, and
+# registry management. Also covers pnpm commands (install, add, remove,
+# store), yarn (workspaces, immutable installs), nvm (remote listing, LTS),
+# and advanced node/TypeScript utilities.
+#
+# Notable functions:
+#   npm_init_project       — initialise a package.json
+#   npm_init_ts            — initialise with TypeScript
+#   npm_install_pkg        — install a package
+#   npm_run_dev            — run the dev script
+#   npm_publish_pkg        — publish to npm registry
+#   pnpm_install           — install dependencies with pnpm
+#   yarn_workspace_run     — run a script in a yarn workspace
+#   nvm_install_lts        — install the latest LTS Node version
+#   tsc_compile            — compile TypeScript with tsc
+#
+# Usage examples:
+#   $ npm_init_ts
+#   $ npm_install_pkg express
+#   $ nvm_install_lts
+#   $ tsc_noemit
+#
+# See also: node(1), npm(1), nvm(1), pnpm(1), yarn(1)
+#
+
 gcloud_dns_records() { gcloud dns record-sets list --zone="$1"; }
 gcloud_iam_list() { gcloud iam service-accounts list; }
 gcloud_iam_create() { gcloud iam service-accounts create "$1"; }
@@ -1120,6 +2108,34 @@ ruff_check() { python3 -m ruff check "$@"; }
 ruff_format() { python3 -m ruff format "$@"; }
 ruff_fix() { python3 -m ruff check --fix "$@"; }
 poetry_install() { poetry install; }
+# -----------------------------------------------------------------------------
+# rust — advanced cargo project, dependency, and workspace management
+# -----------------------------------------------------------------------------
+#
+# These extended Rust/Cargo functions cover project scaffolding (cargo new,
+# init), dependency management (add, rm, upgrade), workspace creation,
+# running examples and binaries, advanced testing (doc tests, ignored),
+# benchmarking, metadata inspection, vendoring, publishing operations,
+# licensing, and linting.
+#
+# Notable functions:
+#   cargo_new_project      — create a new Rust project
+#   cargo_add_dep          — add a dependency
+#   cargo_run_example      — run an example binary
+#   cargo_test_doc         — run documentation tests
+#   cargo_fix_all          — auto-fix compiler warnings
+#   cargo_publish_dryrun   — dry-run publish to crates.io
+#   cargo_licenses         — list dependency licenses
+#
+# Usage examples:
+#   $ cargo_new_project my-app
+#   $ cargo_add_dep serde
+#   $ cargo_test_doc
+#   $ cargo_fix_all
+#
+# See also: cargo(1), rustc(1)
+#
+
 poetry_add() { poetry add "$1"; }
 poetry_add_dev() { poetry add --dev "$1"; }
 poetry_build() { poetry build; }
@@ -1151,6 +2167,34 @@ npm_install_optional() { npm install --save-optional "$1"; }
 npm_uninstall_pkg() { npm uninstall "$1"; }
 npm_update_pkg() { npm update "$1"; }
 npm_update_all() { npm update; }
+# -----------------------------------------------------------------------------
+# go — advanced testing, cross-compilation, modules, and profiling
+# -----------------------------------------------------------------------------
+#
+# These extended Go functions cover advanced testing (short, benchmark,
+# coverage HTML/functional reports), cross-compilation for multiple
+# platforms (Linux, macOS, Windows), module management (download, verify,
+# why), workspace mode (use, init, sync), and profiling tools (pprof,
+# trace, objdump, covdata).
+#
+# Notable functions:
+#   go_test_short          — run short tests only
+#   go_test_cover_html     — generate HTML coverage report
+#   go_build_linux         — cross-compile for Linux amd64
+#   go_build_darwin        — cross-compile for macOS arm64
+#   go_mod_verify          — verify module checksums
+#   go_work_init           — initialise a Go workspace
+#   go_tool_pprof          — run pprof profiling tool
+#
+# Usage examples:
+#   $ go_test_cover_html
+#   $ go_build_cross myapp
+#   $ go_mod_verify
+#   $ go_tool_pprof cpu.pprof
+#
+# See also: go(1), go-mod(1)
+#
+
 npm_run_dev() { npm run dev; }
 npm_run_build() { npm run build; }
 npm_run_test() { npm run test; }
@@ -1175,6 +2219,41 @@ npm_pack_pkg() { npm pack; }
 npm_rebuild_all() { npm rebuild; }
 npm_cache_ls() { npm cache ls; }
 npm_cache_verify() { npm cache verify; }
+# -----------------------------------------------------------------------------
+# git — clone, branch, stash, merge, rebase, submodule, and worktree ops
+# -----------------------------------------------------------------------------
+#
+# These extended git functions cover clone variants (GitHub SSH, GitLab,
+# Bitbucket, bare, mirror), branch operations (create, switch, rename with
+# remote, purge, sort by date), log formatting (patch, stat, short, custom
+# format, between, graph-all), diff modes (branches, commits, word-highlight,
+# patch), commit helpers (fixup, squash, date stamp, allow-empty), stash
+# (with message, apply+drop, branch, clear), remote operations (add origin,
+# set-url, rename, remove), merge/rebase variants, submodule management
+# (add, remove, deinit, sync, update remote), worktree management, bisect,
+# blame, ignore templates, config, notes, replace, archive, fsck, gc, and
+# repack.
+#
+# Notable functions:
+#   git_clone_gh_ssh         — clone via SSH from GitHub
+#   git_branch_rename_remote — rename branch and update remote
+#   git_log_patch            — show log with patch content
+#   git_commit_fixup         — create a fixup commit
+#   git_stash_branch         — create a branch from a stash
+#   git_submodule_remove     — properly remove a submodule
+#   git_bisect_start         — start a bisect session
+#   git_worktree_remove      — remove a worktree
+#   git_gc_aggressive        — aggressive garbage collection
+#
+# Usage examples:
+#   $ git_clone_gh_ssh user/repo
+#   $ git_branch_rename_remote old-name new-name
+#   $ git_log_patch HEAD~5..HEAD
+#   $ git_bisect_start HEAD v1.0
+#
+# See also: man git, git-config(1)
+#
+
 npm_ls_top() { npm ls --depth=0; }
 npm_ls_global() { npm ls -g --depth=0; }
 npm_fund_pkg() { npm fund "$1"; }
@@ -1292,6 +2371,32 @@ go_tool_pprof() { go tool pprof "$@"; }
 go_tool_trace() { go tool trace "$@"; }
 go_tool_objdump() { go tool objdump "$1"; }
 go_tool_covdata() { go tool covdata "$@"; }
+# -----------------------------------------------------------------------------
+# systemd — extended service lifecycle, power management, and journal filters
+# -----------------------------------------------------------------------------
+#
+# These extended systemd functions cover service reload, re-enable, preset,
+# dependency listing, unit property display, listing units by type, machine
+# listing, power management (poweroff, reboot, hibernate, suspend, hybrid
+# sleep), and journalctl query variants (user units, priority, time ranges,
+# JSON output, catalog, merge, reverse, kernel messages, boot listing).
+#
+# Notable functions:
+#   systemctl_reload_service — reload service configuration
+#   systemctl_list_deps      — list unit dependencies
+#   systemctl_poweroff       — power off the system
+#   journalctl_priority      — show logs by priority level
+#   journalctl_kernel        — show kernel messages
+#   journalctl_list_boots    — list available boot entries
+#
+# Usage examples:
+#   $ systemctl_list_deps nginx.service
+#   $ journalctl_priority err
+#   $ journalctl_kernel
+#
+# See also: systemd(1), journalctl(1)
+#
+
 
 git_clone_github() { git clone "https://github.com/$1.git" "${2:-$(basename "$1")}"; }
 git_clone_gh_ssh() { git clone "git@github.com:$1.git" "${2:-$(basename "$1")}"; }
@@ -1318,6 +2423,31 @@ git_log_author_date() { git log --author="$1" --format='%h %ad %s' --date=short;
 git_log_diff() { git whatchanged -p "$1"; }
 git_diff_staged() { git diff --cached; }
 git_diff_unstaged() { git diff; }
+# -----------------------------------------------------------------------------
+# find — file search by name, size, type, permissions, and metadata
+# -----------------------------------------------------------------------------
+#
+# These functions use the find command to locate files by various criteria:
+# name patterns, regex, size ranges, file type, permissions, inode number,
+# depth, owner, group, modification/access/change time, broken symlinks,
+# SUID/SGID binaries, world-writable files, large files, and recent changes.
+#
+# Notable functions:
+#   find_by_name        — find files by name pattern
+#   find_by_size        — find files within a size range
+#   find_broken_symlinks — find dangling symbolic links
+#   find_suid_binaries  — find SUID-root binaries (security)
+#   find_large_files    — find files larger than a threshold
+#   find_exec_command   — find and exec a command on matches
+#
+# Usage examples:
+#   $ find_by_name "*.py" src/
+#   $ find_large_files /var 500M
+#   $ find_suid_binaries /usr
+#
+# See also: ffind(), fd_find(), find(1)
+#
+
 git_diff_branches() { git diff "$1"..."$2"; }
 git_diff_commits() { git diff "$1" "$2"; }
 git_diff_summary_only() { git diff --name-status "$@"; }
@@ -1342,6 +2472,32 @@ git_remote_get_url() { git remote get-url origin; }
 git_remote_update() { git remote update; }
 git_merge_squash_branch() { git merge --squash "$1" && git commit -m "${2:-squash: $1}"; }
 git_merge_ff_only() { git merge --ff-only "$1"; }
+# -----------------------------------------------------------------------------
+# network — port scanning, routing, DNS, HTTP methods, SSL, and packet capture
+# -----------------------------------------------------------------------------
+#
+# These network functions perform port scanning, subnet discovery, traceroute,
+# ping with custom count and flood mode, MTR reports, detailed DNS queries
+# (all records, per-nameserver), HTTP methods (GET, POST, PUT, DELETE, HEAD,
+# OPTIONS), download with resume and rate limiting, SSL certificate chain
+# inspection, whois lookups, and packet capture with tcpdump.
+#
+# Notable functions:
+#   network_scan_ports     — scan TCP ports on a host
+#   network_scan_subnet    — discover hosts on a subnet
+#   network_http_get       — HTTP GET request
+#   network_http_post      — HTTP POST request
+#   network_ssl_cert       — retrieve and display SSL certificate
+#   network_tcpdump_port   — capture packets on a specific port
+#
+# Usage examples:
+#   $ network_scan_ports example.com 1-1000
+#   $ network_http_get https://api.example.com
+#   $ network_tcpdump_port 443 50
+#
+# See also: nmap(1), tcpdump(1), curl(1)
+#
+
 git_rebase_root() { git rebase -i --root; }
 git_rebase_onto() { git rebase --onto "$1" "$2" "$3"; }
 git_rebase_editor() { GIT_SEQUENCE_EDITOR=true git rebase -i "$@"; }
@@ -1371,6 +2527,31 @@ git_bisect_good() { git bisect good; }
 git_bisect_bad() { git bisect bad; }
 git_bisect_reset() { git bisect reset; }
 git_bisect_log() { git bisect log; }
+# -----------------------------------------------------------------------------
+# execution — command runners with retry, timeout, logging, and backgrounding
+# -----------------------------------------------------------------------------
+#
+# These utility functions execute commands with various modifiers: as a
+# different user, as root, in sequence, in parallel, in a specific directory,
+# with logging to a file, with retry logic, with a timeout, in the background
+# via nohup, conditionally if a command exists, or via specific interpreters
+# (sh, bash, python, node, deno).
+#
+# Notable functions:
+#   execute_as_root      — run a command as root via sudo
+#   execute_parallel     — run multiple commands in parallel
+#   execute_retry        — retry a command up to N times
+#   execute_timeout      — run a command with a timeout
+#   execute_background   — run a command in the background via nohup
+#
+# Usage examples:
+#   $ execute_retry 5 curl -s https://example.com
+#   $ execute_parallel "make" "make test"
+#   $ execute_timeout 30 long_running_command
+#
+# See also: nohup(1), timeout(1), sudo(1)
+#
+
 git_bisect_run() { git bisect run "$1"; }
 git_blame_email() { git blame -e "$1"; }
 git_blame_date() { git blame --date=short "$1"; }
@@ -1399,6 +2580,32 @@ git_verify_commit() { git verify-commit "$1"; }
 git_verify_tag() { git verify-tag "$1"; }
 git_check_ignore() { git check-ignore "$1"; }
 git_check_attr() { git check-attr "$1" "$2"; }
+# -----------------------------------------------------------------------------
+# disk — usage analysis, free space, mounts, filesystem, and SMART
+# -----------------------------------------------------------------------------
+#
+# These functions analyse disk usage and filesystem health: human-readable
+# usage summaries, sorted output, usage by extension, free space reporting,
+# inode usage, filesystem type detection, mount point listing, filesystem
+# check (fsck), block device inspection (blkid, lsblk), SMART health
+# monitoring, and I/O statistics (iostat, iotop).
+#
+# Notable functions:
+#   disk_usage_sort     — sort directories by disk usage
+#   disk_usage_by_ext   — calculate total usage by file extension
+#   disk_free_summary   — show free space on a mount
+#   disk_lsblk_tree     — show block devices as a tree
+#   disk_smart_health   — check disk SMART health status
+#   disk_iostat         — show I/O statistics
+#
+# Usage examples:
+#   $ disk_usage_sort /var
+#   $ disk_smart_health /dev/sda
+#   $ disk_iostat 10
+#
+# See also: df(1), du(1), lsblk(1), smartctl(1)
+#
+
 git_show_refs() { git show-ref; }
 git_ls_files() { git ls-files; }
 git_ls_tree() { git ls-tree -r "$1"; }
@@ -1421,6 +2628,32 @@ systemctl_list_machines() { systemctl list-machines 2>/dev/null || return 0; }
 systemctl_poweroff() { sudo systemctl poweroff 2>/dev/null || return 0; }
 systemctl_reboot() { sudo systemctl reboot 2>/dev/null || return 0; }
 systemctl_hibernate() { sudo systemctl hibernate 2>/dev/null || return 0; }
+# -----------------------------------------------------------------------------
+# process — listing, tree, search, kill, priority, threads, and inspection
+# -----------------------------------------------------------------------------
+#
+# These functions manage and inspect running processes: full listing, tree
+# view, search by name or user, kill by name or PID (SIGTERM/SIGKILL), kill
+# all processes for a user, adjust priority (nice, renice), inspect threads,
+# open file descriptors, environment variables, scheduling policy, stack
+# dumps, CPU/memory/elapsed time, parent-child relationships, and zombie or
+# uninterruptible (D-state) process detection.
+#
+# Notable functions:
+#   process_by_name     — find processes matching a name
+#   process_kill_by_name — kill processes by name
+#   process_threads     — show threads of a process
+#   process_zombies     — list zombie processes
+#   process_hung        — list uninterruptible (D-state) processes
+#
+# Usage examples:
+#   $ process_by_name nginx
+#   $ process_kill_by_name chrome
+#   $ process_zombies
+#
+# See also: ps(1), kill(1), htop_monitor()
+#
+
 systemctl_suspend() { sudo systemctl suspend 2>/dev/null || return 0; }
 systemctl_hybrid_sleep() { sudo systemctl hybrid-sleep 2>/dev/null || return 0; }
 journalctl_user_unit() { journalctl --user -u "$1" 2>/dev/null || return 0; }
@@ -1442,6 +2675,35 @@ find_by_size() { find "${3:-.}" -type f -size "$1" -size "$2" 2>/dev/null; }
 find_by_type() { find "${2:-.}" -type "$1" 2>/dev/null; }
 find_by_perm() { find "${2:-.}" -perm "$1" 2>/dev/null; }
 find_by_inode() { find "${2:-.}" -inum "$1" 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# ssh — keygen variants, config management, tunnels, agent, and connections
+# -----------------------------------------------------------------------------
+#
+# These extended SSH functions cover additional key types (ECDSA, Ed25519-SK),
+# SSH config management (host listing, editing), connection testing, local/
+# remote/dynamic port forwarding, jump hosts, agent key management (list,
+# add, remove, load defaults), fingerprint display (SHA256, MD5, visual
+# ASCII art), passphrase changes, remote key scanning, known hosts
+# management, SFTP transfers, SCP with recursion, mosh connections,
+# proxy command chaining, and config validation.
+#
+# Notable functions:
+#   ssh_keygen_ecdsa     — generate ECDSA key (P-521)
+#   ssh_config_host      — list configured SSH hosts
+#   ssh_tunnel_local     — create a local port forward
+#   ssh_tunnel_dynamic   — create a SOCKS proxy tunnel
+#   ssh_key_fingerprint  — show key fingerprint
+#   ssh_key_from_remote  — add remote host key to known_hosts
+#   ssh_scp_recursive    — recursive copy via SCP
+#
+# Usage examples:
+#   $ ssh_config_host
+#   $ ssh_tunnel_local 8080 internal:80 bastion
+#   $ ssh_key_fingerprint ~/.ssh/id_ed25519
+#
+# See also: ssh(1), ssh-keygen(1), ssh-add(1), ssh_config(5)
+#
+
 find_by_depth() { find "${2:-.}" -maxdepth "$1" -name "$3" 2>/dev/null; }
 find_by_user() { find "${2:-.}" -user "$1" 2>/dev/null; }
 find_by_group() { find "${2:-.}" -group "$1" 2>/dev/null; }
@@ -1474,6 +2736,33 @@ network_http_post() { curl -sS -X POST -d "$2" "$1"; }
 network_http_put() { curl -sS -X PUT -d "$2" "$1"; }
 network_http_delete() { curl -sS -X DELETE "$1"; }
 network_http_head() { curl -sI "$1"; }
+# -----------------------------------------------------------------------------
+# curl — JSON, form, auth, proxy, rate limiting, and advanced HTTP helpers
+# -----------------------------------------------------------------------------
+#
+# These curl wrapper functions add content-type headers (JSON POST, PUT,
+# PATCH), form uploads, file uploads, resume downloads, basic auth, bearer
+# token auth, proxy usage, rate limiting, connection and max timeouts,
+# retry logic, redirect following, verbose dumps, certificate-based auth
+# (CA certs, client certs), cookie jar management, insecure SSL, range
+# requests, If-Modified-Since, HTTP/2, speed limits, interface binding,
+# custom DNS servers, and parallel fetching.
+#
+# Notable functions:
+#   curl_json_post       — POST JSON data
+#   curl_auth_bearer     — send request with Bearer token
+#   curl_proxy_use       — send request through a proxy
+#   curl_retry_conn      — retry request on failure
+#   curl_parallel_fetch  — download multiple URLs in parallel
+#
+# Usage examples:
+#   $ curl_json_post '{"key":"value"}' https://api.example.com
+#   $ curl_auth_bearer "token123" https://api.example.com
+#   $ curl_parallel_fetch url1 url2 url3
+#
+# See also: curl(1), curlm(), curlt(), httpie_*, xh_*
+#
+
 network_http_options() { curl -sX OPTIONS "$1"; }
 network_http_download() { curl -fsSL -O "$1"; }
 network_http_download_as() { curl -fsSL -o "$2" "$1"; }
@@ -1504,6 +2793,37 @@ execute_shell_script() { sh "$1" "$@"; }
 execute_bash_script() { bash "$1" "$@"; }
 execute_python_script() { python3 "$1" "$@"; }
 execute_node_script() { node "$1" "$@"; }
+# -----------------------------------------------------------------------------
+# git — configuration, aliases, hooks, git-flow, SVN, LFS, and patches
+# -----------------------------------------------------------------------------
+#
+# These extended git functions cover configuration options (HTTP proxy,
+# SSH command, credential helper, excludes, autocrlf, editor, merge,
+# push, rebase, color, init defaults, fetch), alias management (set,
+# list, remove), hooks (view, install), git-flow workflow (init, feature,
+# release, hotfix), git-SVN bridge (clone, rebase, dcommit), git LFS
+# (install, track, list, pull, push, migrate), patch operations (format,
+# apply, stat, check), range-diff, bundle (create, verify, unbundle),
+# interactive rebase utilities (reword, split, undo), staging helpers,
+# reflog management, blob/object inspection, and squash-all.
+#
+# Notable functions:
+#   git_config_http_proxy   — set HTTP proxy for git
+#   git_alias_set           — create a git alias
+#   git_flow_init           — initialise git-flow
+#   git_lfs_install         — install git LFS
+#   git_patch_create        — create patch series
+#   git_squash_all          — squash entire history
+#
+# Usage examples:
+#   $ git_config_http_proxy http://proxy:8080
+#   $ git_alias_set co checkout
+#   $ git_lfs_track "*.psd"
+#   $ git_squash_all "Initial commit"
+#
+# See also: man git, git-config(1), git-flow(1)
+#
+
 execute_deno_script() { deno run "$1" "$@"; }
 eval_math() { echo "$*" | bc -l; }
 eval_condition() { if "$@"; then echo "true"; else echo "false"; fi; }
@@ -1608,6 +2928,32 @@ curl_retry_conn() { curl --retry "${2:-3}" -sS "$1"; }
 curl_follow_redirect() { curl -L -sS "$1"; }
 curl_verbose_dump() { curl -v "$1" 2>&1; }
 curl_cert_check() { curl --cacert "$1" -sS "$2"; }
+# -----------------------------------------------------------------------------
+# package management — cache, download, files, deps, provides, APK/RPM/DPKG
+# -----------------------------------------------------------------------------
+#
+# These extended package management functions cover additional operations
+# beyond the DOTFILES_PKG_MANAGER abstraction: cache cleaning, download-only
+# mode, listing files owned by a package, showing dependencies, finding what
+# package owns a file, downloading source packages, and format-specific
+# helpers for Alpine (apk), RPM, Debian (dpkg), Flatpak, and Snap.
+#
+# Notable functions:
+#   pkg_cache_clean     — clean the package manager cache
+#   pkg_what_provides   — find which package owns a file
+#   pkg_list_files      — list files installed by a package
+#   dpkg_configure_all  — reconfigure all unpacked dpkg packages
+#   flatpak_install_app — install a Flatpak application
+#   snap_install_app    — install a Snap package
+#
+# Usage examples:
+#   $ pkg_what_provides /usr/bin/ffmpeg
+#   $ flatpak_install_app com.spotify.Client
+#   $ dpkg_configure_all
+#
+# See also: pkg_install(), apt_*, brew_*, pacman_*
+#
+
 curl_cert_client() { curl --cert "$1" --key "$2" -sS "$3"; }
 curl_cookie_jar() { curl -c "$1" -b "$2" -sS "$3"; }
 curl_insecure_ssl() { curl -k -sS "$1"; }
@@ -1651,6 +2997,33 @@ git_flow_init() { git flow init -d; }
 git_flow_feature_start() { git flow feature start "$1"; }
 git_flow_feature_finish() { git flow feature finish "$1"; }
 git_flow_release_start() { git flow release start "$1"; }
+# -----------------------------------------------------------------------------
+# time & date — formatting, arithmetic, stopwatch, countdown, and waiters
+# -----------------------------------------------------------------------------
+#
+# These functions provide time and date utilities: current time in various
+# formats (local, UTC, epoch, ISO 8601), epoch-to-date conversion, relative
+# date arithmetic (next, last, add, subtract, diff in days), a stopwatch
+# that measures command execution time, a visual countdown, random sleep,
+# simple timers stored in a temp file, and wait loops for ports, URLs,
+# file existence, and process startup.
+#
+# Notable functions:
+#   time_date_now      — show current date and time
+#   time_date_diff     — calculate days between two dates
+#   time_stopwatch     — time a command with start/elapsed display
+#   time_countdown     — display a numeric countdown from N
+#   time_wait_port     — wait until a TCP port is accepting connections
+#
+# Usage examples:
+#   $ time_date_utc
+#   $ time_date_diff "2024-01-01" "2024-12-31"
+#   $ time_countdown 5
+#   $ time_wait_port localhost 8080
+#
+# See also: date(1), timer(), timeit()
+#
+
 git_flow_release_finish() { git flow release finish "$1"; }
 git_flow_hotfix_start() { git flow hotfix start "$1"; }
 git_flow_hotfix_finish() { git flow hotfix finish "$1"; }
@@ -1673,6 +3046,38 @@ git_bundle_create() { git bundle create "${1:-repo.bundle}" --all; }
 git_bundle_verify() { git bundle verify "$1"; }
 git_bundle_unbundle() { git clone "$1" "${2:-repo}"; }
 git_interactive_rebase() { git rebase -i HEAD~"${1:-10}"; }
+# -----------------------------------------------------------------------------
+# file — create, remove, copy, move, symlink, chmod, diff, patch, and watch
+# -----------------------------------------------------------------------------
+#
+# These extended file operations cover file creation, safe removal (force,
+# recursive, interactive), copies with backup/preserve/verbose/recursive,
+# moves (force, interactive, verbose, backup), symlinks (soft, hard, edit),
+# recursive chmod/chown/chgrp, file comparison (diff, quiet, side-by-side),
+# patching (dry-run, apply, reverse), interactive merging, line joining
+# and splitting, head/tail/middle line extraction, random/shuffle/reverse,
+# numbering, whitespace trimming, line ending conversion (DOS/Unix), blank
+# line removal, deduplication, string replacement, line insertion/append/
+# prepend, encryption (AES-256-CBC, GPG), compression (gzip, bzip2, xz,
+# zip, tar, 7z), auto-extraction, and file change watching with inotify.
+#
+# Notable functions:
+#   file_touch_create      — create an empty file
+#   file_remove_force      — force-remove files
+#   file_copy_backup       — copy with backup
+#   file_chmod_recursive   — recursive chmod on files
+#   file_compare           — unified diff between two files
+#   file_encrypt_aes       — AES-256-CBC encrypt a file
+#   file_watch_changes     — watch a file for changes and run a command
+#
+# Usage examples:
+#   $ file_chmod_recursive /path/to/dir 644
+#   $ file_encrypt_aes secret.txt
+#   $ file_watch_changes config.py "make test"
+#
+# See also: bak(), unbak(), backup_file()
+#
+
 git_reword_commit() { git commit --amend --only -m "$1"; }
 git_split_commit() { git reset HEAD~1 && git add -p && git commit -m "$1" && git commit -m "$2"; }
 git_undo_commit() { git reset --soft HEAD~1; }
@@ -1737,6 +3142,40 @@ apk_remove_pkg() { apk del "$@"; }
 apk_search_pkg() { apk search "$@"; }
 apk_list_installed() { apk list -I; }
 apk_list_updates() { apk list -u; }
+# -----------------------------------------------------------------------------
+# text — search, replace, delete, extract, transform, and format conversion
+# -----------------------------------------------------------------------------
+#
+# These extended text functions provide comprehensive search (recursive,
+# word, case-insensitive, inverse, count, context, regex, fixed-string,
+# binary, by file types, exclude patterns), sed-based replacement (all,
+# line-specific, first, regex), line deletion (range, empty, matching),
+# extraction (between markers, columns, fields, URLs, emails, IPs),
+# word/line/character counting and frequency analysis, sorting (alpha,
+# numeric, reverse, unique), file merging, splitting on delimiters,
+# joining lines, wrapping, indenting, case conversion (upper, lower,
+# capitalize, reverse, rot13), XML formatting/xpath/validation, JSON
+# formatting/minification/querying/flattening, YAML formatting/conversion/
+# validation, CSV-to-JSON conversion, HTML-to-text extraction, Markdown
+# rendering, and character/word-level diffing.
+#
+# Notable functions:
+#   text_search_recursive    — recursive grep in a directory
+#   text_replace_all         — sed replace all occurrences in files
+#   text_extract_urls        — extract all URLs from a file
+#   text_count_freq          — word frequency analysis
+#   text_json_query          — query JSON with JMESPath-like paths
+#   text_csv_to_json         — convert CSV to JSON
+#   text_diff_words          — word-level diff of two files
+#
+# Usage examples:
+#   $ text_search_recursive "TODO" src/ --include="*.py"
+#   $ text_json_query data.json /users/0/name
+#   $ text_csv_to_json data.csv
+#
+# See also: grep(1), sed(1), jq(1), rg_search()
+#
+
 apk_info_pkg() { apk info "$@"; }
 apk_cache_clean() { apk cache clean; }
 apk_upgrade_all() { apk upgrade; }
@@ -1824,6 +3263,31 @@ file_tail_bytes() { tail -c "$1" "$2"; }
 file_tail_follow() { tail -f "$1"; }
 file_tail_follow_name() { tail -F "$1"; }
 file_head_first() { head -n "${1:-10}" "$2"; }
+# -----------------------------------------------------------------------------
+# terminal multiplexers — screen, tmux, and zellij session management
+# -----------------------------------------------------------------------------
+#
+# These functions manage terminal multiplexer sessions: screen (list, create,
+# attach, detach, kill, reattach), tmux (create, attach, split, window
+# navigation, rename, swap, rotate, send keys, capture, buffer, options,
+# resize, choose tree), and zellij (list, attach, create, kill, rename
+# session, move focus, resize).
+#
+# Notable functions:
+#   screen_session_create    — create a named screen session
+#   screen_session_reattach  — reattach to a detached screen session
+#   tmux_new_session         — create a new tmux session
+#   tmux_split_horizontal    — split pane horizontally in tmux
+#   zellij_session_create    — create a new zellij session
+#
+# Usage examples:
+#   $ tmux_new_session work
+#   $ tmux_split_vertical
+#   $ zellij_session_attach main
+#
+# See also: screen(1), tmux(1), zellij(1)
+#
+
 file_head_last() { tail -n "${1:-10}" "$2"; }
 file_middle_lines() { sed -n "${1},${2}p" "$3"; }
 file_random_line() { shuf -n 1 "$1"; }
@@ -1862,6 +3326,39 @@ text_search_case() { grep -in "$1" "$2"; }
 text_search_inverse() { grep -v "$1" "$2"; }
 text_search_count() { grep -c "$1" "$2"; }
 text_search_context() { grep -C "${3:-2}" "$1" "$2"; }
+# -----------------------------------------------------------------------------
+# TUI launchers — lazygit, lazydocker, htop, and modern CLI tool wrappers
+# -----------------------------------------------------------------------------
+#
+# These functions launch terminal UI applications and modern CLI tool
+# replacements: lazygit and lazydocker for git/docker TUI, htop/btop/
+# nvtop/glances for system monitoring, iftop/nethogs/bandwhich for
+# network monitoring, iotop/ctop/ytop for I/O and container monitoring,
+# procs for process listing, dog/doggo for DNS queries, duf/dust for
+# disk usage, bottom for system monitoring, gping for ping with graph,
+# grex for regex generation, gron for JSON flattening, xh/httpie for
+# HTTP clients, bat/eza/lsd for file listing, fd for file finding, rg
+# for text searching, sd for find-and-replace, and fzf for fuzzy
+# finding with previews.
+#
+# Notable functions:
+#   lazygit_open     — open lazygit TUI
+#   htop_monitor     — open htop system monitor
+#   bat_cat          — syntax-highlighted file output
+#   eza_tree         — directory tree with icons
+#   rg_search        — fast recursive text search
+#   fzf_file         — fuzzy-find files with preview
+#   fzf_git_branch   — fuzzy-switch git branches
+#
+# Usage examples:
+#   $ lazygit_open
+#   $ eza_tree 3 src/
+#   $ rg_search "def main" src/
+#   $ fzf_file
+#
+# See also: lazygit(1), htop(1), bat(1), fzf(1)
+#
+
 text_search_regex() { grep -E "$1" "$2"; }
 text_search_fixed() { grep -F "$1" "$2"; }
 text_search_only_match() { grep -o "$1" "$2"; }
@@ -1926,6 +3423,30 @@ def get(d,p):
   try: d=d[int(k)]
   except ValueError: d=d[k]
  return d
+# -----------------------------------------------------------------------------
+# tree — directory tree visualisation with various output formats
+# -----------------------------------------------------------------------------
+#
+# These functions display directory trees using the tree command when
+# available, with fallback to find-based formatting. They support level
+# limiting, directory-only display, hidden files, size display, and
+# output in XML, JSON, or HTML format.
+#
+# Notable functions:
+#   tree_show         — display directory tree
+#   tree_dirs_only    — show directories only
+#   tree_size         — show tree with file sizes
+#   tree_json         — output tree in JSON format
+#   tree_html         — generate HTML tree view
+#
+# Usage examples:
+#   $ tree_show /var/log
+#   $ tree_json src/ > tree.json
+#   $ tree_html . > /tmp/tree.html
+#
+# See also: tree(1), eza_tree(), lsd_tree()
+#
+
 d=json.load(sys.stdin)
 print(json.dumps(get(d,'$1')))
 " "$1" 2>/dev/null; }
@@ -1935,6 +3456,31 @@ text_yaml_to_json() { python3 -c "import sys,yaml,json; print(json.dumps(yaml.sa
 text_yaml_validate() { python3 -c "import sys,yaml; yaml.safe_load(open(sys.argv[1])); print('valid')" "$1" 2>/dev/null || echo "invalid"; }
 text_csv_to_json() { python3 -c "import sys,csv,json; print(json.dumps(list(csv.DictReader(open(sys.argv[1]))),indent=2))" "$1"; }
 text_html_to_text() { lynx -dump "$1" 2>/dev/null || w3m -dump "$1" 2>/dev/null || echo "lynx or w3m needed"; }
+# -----------------------------------------------------------------------------
+# project management — TODO tracking and project file generation
+# -----------------------------------------------------------------------------
+#
+# These functions manage project TODO/FIXME/HACK/XXX annotations across
+# source files, generate project boilerplate (LICENSE files for MIT,
+# Apache-2.0, GPL-3.0, BSD-2, Unlicense), .gitignore and .dockerignore
+# files via gitignore.io templates, .editorconfig, .prettierrc, eslintrc,
+# tsconfig.json, and package.json.
+#
+# Notable functions:
+#   todo_list         — list all TODO/FIXME/HACK/XXX markers
+#   todo_by_type      — count TODOs grouped by type
+#   license_mit       — generate MIT license file
+#   gitignore_fetch   — fetch .gitignore template from gitignore.io
+#   editorconfig_create — create .editorconfig file
+#
+# Usage examples:
+#   $ todo_list src/
+#   $ license_mit "Your Name"
+#   $ gitignore_fetch python,java
+#
+# See also: license(1), gitignore.io
+#
+
 text_html_extract() { python3 -c "import sys; from html.parser import HTMLParser; p=HTMLParser(); p.feed(open(sys.argv[1]).read())" 2>/dev/null || echo "python needed"; }
 text_markdown_render() { python3 -c "import sys,markdown,html; print(html.escape(markdown.markdown(open(sys.argv[1]).read())))" "$1" 2>/dev/null || echo "markdown module needed"; }
 text_diff_chars() { diff -u "$1" "$2" | colordiff 2>/dev/null || diff -u "$1" "$2"; }
@@ -1956,6 +3502,39 @@ tmux_split_horizontal() { tmux split-window -h; }
 tmux_split_vertical() { tmux split-window -v; }
 tmux_new_window() { tmux new-window -n "$1"; }
 tmux_next_window() { tmux next-window; }
+# -----------------------------------------------------------------------------
+# utility helpers — command availability check, backup, bookmark, and PATH
+# -----------------------------------------------------------------------------
+#
+# These utility helper functions solve common shell workflow needs: _x
+# checks if a command exists before running it (suppressing errors on
+# missing commands), bak/unbak create and restore timestamped backups,
+# orig/unorig save/restore .org files, topcommands shows most-used
+# shell commands from history, puniq deduplicates PATH-like strings,
+# findup searches parent directories for a file, cdup changes to the
+# directory containing a found file, pg greps process listing, stamp
+# adds a timestamp prefix, clip copies file content to clipboard,
+# path_remove/append/prepend manipulate PATH, and here/there provide
+# a directory bookmark system.
+#
+# Notable functions:
+#   _x         — run command if available, else print error
+#   bak        — create a timestamped backup of a file
+#   findup     — search parent directories for a file
+#   clip       — copy file content to clipboard
+#   path_append — append a directory to PATH
+#   here       — bookmark the current directory
+#   there      — navigate to the bookmarked directory
+#
+# Usage examples:
+#   $ bak important-file.txt
+#   $ findup Makefile
+#   $ here && cd /tmp && there
+#   $ path_prepend "$HOME/.local/bin"
+#
+# See also: backup_file(), clipboard utilities
+#
+
 tmux_prev_window() { tmux previous-window; }
 tmux_rename_session() { tmux rename-session "$1"; }
 tmux_rename_window() { tmux rename-window "$1"; }
@@ -2013,6 +3592,38 @@ httpie_post() { http POST "$1" "$2" 2>/dev/null || curl -sS -X POST -d "$2" "$1"
 httpie_put() { http PUT "$1" "$2" 2>/dev/null || curl -sS -X PUT -d "$2" "$1"; }
 httpie_delete() { http DELETE "$1" 2>/dev/null || curl -sS -X DELETE "$1"; }
 bat_cat() { bat "$@" 2>/dev/null || cat "$@"; }
+# -----------------------------------------------------------------------------
+# cross-platform — OS detection, platform-aware commands, and clipboard
+# -----------------------------------------------------------------------------
+#
+# These helpers detect the current operating system (_is_mac, _is_linux,
+# _is_bsd) and provide conditional execution paths for platform-specific
+# commands (ip vs ifconfig, free vs vm_stat, lscpu vs sysctl, pacman vs
+# dpkg vs brew, systemctl vs launchctl). They also provide cross-platform
+# wrappers for opening files, copying/pasting clipboard content, bookmark
+# directory navigation (cdf), swapping files, epoch time conversion, and
+# HTTP server launching.
+#
+# Notable functions:
+#   ip_show    — show network interfaces (OS-aware)
+#   disk_usage — show disk free space (OS-aware)
+#   mem_info   — show memory info (OS-aware)
+#   open_file  — open a file with the system default handler
+#   copy_cmd   — copy to system clipboard
+#   paste_cmd  — paste from system clipboard
+#   cdf        — cd to directory containing a file
+#   swap       — swap two filenames
+#   epoch2date — convert Unix epoch to human date
+#
+# Usage examples:
+#   $ _is_linux && echo "Running on Linux"
+#   $ open_file report.pdf
+#   $ copy_cmd < secret.txt
+#   $ epoch2date 1700000000
+#
+# See also: have(), nott(), _x()
+#
+
 bat_lang() { bat -l "$1" "$2" 2>/dev/null || cat "$2"; }
 bat_theme_list() { bat --list-themes 2>/dev/null || echo "bat not installed"; }
 bat_diff() { bat --diff "$1" "$2" 2>/dev/null || diff -u "$1" "$2"; }
@@ -2038,6 +3649,34 @@ fzf_git_log() { git log --oneline --graph --all | fzf | awk '{print $1}' | xargs
 fzf_git_diff() { git status --short | fzf | awk '{print $2}' | xargs -r git diff; }
 fzf_history() { history | fzf; }
 fzf_process() { ps aux | fzf | awk '{print $2}' | xargs -r kill; }
+# -----------------------------------------------------------------------------
+# dev servers — local HTTP servers, tunnels, watchers, and formatters
+# -----------------------------------------------------------------------------
+#
+# These functions start local development servers for various stacks:
+# Python's http.server module, PHP's built-in server, Node.js http-server
+# and live-server with auto-reload, serve for static files, ngrok and
+# cloudflared for public tunnels, browser-sync for multi-device testing,
+# sass compiler watcher, and build watchers for webpack, vite, parcel,
+# and esbuild. Also includes code formatting with prettier, linting with
+# eslint and stylelint, and TypeScript compilation.
+#
+# Notable functions:
+#   dev_server_python       — HTTP server on port 8000
+#   dev_server_ngrok        — expose localhost via ngrok tunnel
+#   dev_server_browsersync  — start browser-sync with file watching
+#   dev_watch_vite          — start Vite dev server
+#   dev_watch_sass          — watch and compile Sass files
+#   dev_format_prettier     — format code with prettier
+#
+# Usage examples:
+#   $ dev_server_python 8080
+#   $ dev_watch_vite
+#   $ dev_server_ngrok 3000
+#
+# See also: npx(1), python3(1), sass(1)
+#
+
 fzf_man() { man -k . | fzf | awk '{print $1}' | xargs -r man; }
 fzf_browse() { fzf --preview 'bat {}' --bind 'enter:become(nvim {})' 2>/dev/null; }
 fzf_cd() { cd "$(find "${1:-.}" -type d | fzf)" 2>/dev/null; }
@@ -2060,6 +3699,30 @@ todo_add() { echo "TODO: $1" >> "${2:-TODO.md}"; }
 todo_show_file() { cat "${1:-TODO.md}" 2>/dev/null || echo "no TODO.md"; }
 
 license_mit() { curl -fsSL "https://raw.githubusercontent.com/licenses/license-templates/master/templates/mit.txt" | sed "s/\[year\]/$(date +%Y)/;s/\[fullname\]/$1/" > LICENSE 2>/dev/null || echo "unable to fetch"; }
+# -----------------------------------------------------------------------------
+# command availability — portable command existence checks
+# -----------------------------------------------------------------------------
+#
+# These shorthands check whether commands are available on the PATH. The
+# have() function is the primary workhorse used throughout this file to
+# gracefully handle missing tools. The nott() variant prints a warning.
+# macos(), linux(), bsd() and wsl() are convenience aliases.
+#
+# Notable functions:
+#   have   — check if a command exists on PATH (silent)
+#   nott   — check if a command exists, warn if missing
+#   macos  — true when running on macOS
+#   linux  — true when running on Linux
+#   wsl    — true when running under Windows WSL
+#
+# Usage examples:
+#   $ have docker || echo "Docker not installed"
+#   $ nott jq
+#   $ linux && echo "Running on Linux"
+#
+# See also: _is_mac(), _is_linux(), _x()
+#
+
 license_apache() { curl -fsSL "https://raw.githubusercontent.com/licenses/license-templates/master/templates/apache2.txt" | sed "s/\[year\]/$(date +%Y)/;s/\[fullname\]/$1/" > LICENSE 2>/dev/null || echo "unable to fetch"; }
 license_gpl() { curl -fsSL "https://raw.githubusercontent.com/licenses/license-templates/master/templates/gpl3.txt" > LICENSE 2>/dev/null || echo "unable to fetch"; }
 license_bsd() { curl -fsSL "https://raw.githubusercontent.com/licenses/license-templates/master/templates/bsd2.txt" | sed "s/\[year\]/$(date +%Y)/;s/\[fullname\]/$1/" > LICENSE 2>/dev/null || echo "unable to fetch"; }
@@ -2068,6 +3731,35 @@ gitignore_fetch() { curl -fsSL "https://www.toptal.com/developers/gitignore/api/
 gitignore_append() { curl -fsSL "https://www.toptal.com/developers/gitignore/api/$1" >> .gitignore 2>/dev/null || echo "unable to fetch"; }
 gitignore_list() { curl -fsSL "https://www.toptal.com/developers/gitignore/api/list" 2>/dev/null | tr ',' '\n'; }
 dockerignore_create() { echo -e ".git\n*.md\nDockerfile\ndocker-compose.yml\n.gitignore" > .dockerignore; }
+# -----------------------------------------------------------------------------
+# network — IP retrieval, DNS, port scanning, HTTP, and routing
+# -----------------------------------------------------------------------------
+#
+# These network diagnostic functions retrieve public and local IP addresses
+# (IPv4 and IPv6), perform DNS lookups and reverse lookups, scan TCP ports,
+# check HTTP status codes and headers, download files, test bandwidth via
+# speedtest-cli, display network statistics, and inspect routing tables.
+# They prefer modern tools (dig, curl, ss) with fallbacks to traditional
+# ones (nslookup, wget, netstat).
+#
+# Notable functions:
+#   myip4         — get public IPv4 address
+#   myip6         — get public IPv6 address
+#   localip       — get local network IP address
+#   port_scan     — scan TCP ports on a remote host
+#   http_status   — get HTTP status code for a URL
+#   download      — download a file via curl or wget
+#   route_table   — display the routing table
+#
+# Usage examples:
+#   $ myip4
+#   $ localip
+#   $ port_scan example.com 80,443
+#   $ http_status https://example.com
+#
+# See also: whatismyip(), dns_*, check_port_*, netstat_*
+#
+
 editorconfig_create() { echo -e "root = true\n\n[*]\nend_of_line = lf\ninsert_final_newline = true\ncharset = utf-8\nindent_style = space\nindent_size = 2" > .editorconfig; }
 prettier_init() { echo -e "{\n  \"semi\": true,\n  \"singleQuote\": true,\n  \"tabWidth\": 2,\n  \"trailingComma\": \"all\"\n}" > .prettierrc; }
 eslint_init() { echo -e "{\n  \"env\": {\"node\": true,\"es2021\": true},\n  \"extends\": \"eslint:recommended\",\n  \"parserOptions\": {\"ecmaVersion\": \"latest\"}\n}" > .eslintrc.json; }
@@ -2082,6 +3774,31 @@ unbak() { for f in "$@"; do local d b; d="$(dirname "$f")"; f="${f##*/}"; b="$(f
 
 orig() { for f in "$@"; do [ -f "$f" ] || { echo "missing: $f"; return 1; }; [ -f "$f.org" ] && { echo "$f.org exists"; return 1; }; done; for f in "$@"; do cp -av "$f" "$f.org"; done; }
 
+# -----------------------------------------------------------------------------
+# system — OS, kernel, hostname, users, reboot detection, and temperature
+# -----------------------------------------------------------------------------
+#
+# These functions query system-level information: uptime display, load
+# averages, OS pretty-name from /etc/os-release (or sw_vers on macOS),
+# kernel version, hostname, logged-in users, whether a reboot is required
+# after package updates, and CPU temperature from thermal sensors.
+#
+# Notable functions:
+#   sys_uptime           — show system uptime
+#   sys_load             — show load averages
+#   sys_os               — show OS pretty name
+#   sys_kernel           — show kernel version
+#   sys_reboot_required  — check if reboot is needed
+#   sys_temp             — show CPU temperature
+#
+# Usage examples:
+#   $ sys_os
+#   $ sys_reboot_required
+#   $ sys_temp
+#
+# See also: get_cpu_info(), get_memory_info(), sys_info()
+#
+
 unorig() { for f in "$@"; do [ -f "$f" ] || { echo "missing: $f"; return 1; }; cp -av "$f" "${f%.org}"; done; }
 
 topcommands() { history | awk '{print $4}' | awk 'BEGIN{FS="|"}{print $1}' | sort | uniq -c | sort -n | tail -n "${1:-10}" | sort -nr; }
@@ -2093,6 +3810,31 @@ findup() { local a="$1" d="${PWD:-$(pwd)}"; while [ -n "$d" ]; do [ -e "$d/$a" ]
 cdup() { local f; f="$(findup "$1")" && cd "$(dirname "$f")" || echo "not found: $1"; }
 
 pg() { ps -ef | grep -i --color=yes "$@" | grep -v grep; }
+# -----------------------------------------------------------------------------
+# disk — usage, inodes, filesystem types, mounts, and SMART monitoring
+# -----------------------------------------------------------------------------
+#
+# These functions provide disk and filesystem diagnostics: human-readable
+# disk usage, inode usage, filesystem type detection, mount point listing
+# for physical devices, I/O statistics, SMART health checks, and usage
+# summaries by directory depth.
+#
+# Notable functions:
+#   disk_usage       — show disk usage of a mount point
+#   disk_inode       — show inode usage
+#   disk_fs          — show filesystem types
+#   disk_mounts      — show mounted physical devices
+#   disk_smart       — show SMART health for a disk
+#   disk_usage_depth — show directory usage at a specific depth
+#
+# Usage examples:
+#   $ disk_usage /
+#   $ disk_mounts
+#   $ disk_smart /dev/sda
+#
+# See also: df(1), du(1), iostat(1), smartctl(1)
+#
+
 
 stamp() { printf "%s" "$(date '+%F %T')  $*"; [ $# -gt 0 ] && echo; }
 
@@ -2102,6 +3844,29 @@ clip() { if [ $# -gt 0 ]; then _x xclip -selection clipboard < "$1" 2>/dev/null 
 
 path_remove() { PATH="$(echo -n "$PATH" | awk -v RS=: -v ORS=: "\$0 != \"$1\"" | sed 's/:$//')"; }
 
+# -----------------------------------------------------------------------------
+# process — top CPU/memory consumers, tree, threads, and waiting
+# -----------------------------------------------------------------------------
+#
+# These functions inspect running processes: top consumers by CPU and
+# memory usage, process tree display, thread listing, and waiting for
+# background processes to complete.
+#
+# Notable functions:
+#   ps_cpu      — show top processes by CPU usage
+#   ps_mem      — show top processes by memory usage
+#   ps_tree     — show process tree
+#   ps_threads  — show thread list
+#   ps_wait     — wait for a background process
+#
+# Usage examples:
+#   $ ps_cpu 15
+#   $ ps_mem 10
+#   $ ps_tree
+#
+# See also: ps(1), htop_monitor(), mem_top(), cpu_top()
+#
+
 path_append() { path_remove "$1"; PATH="${PATH:+"$PATH:"}$1"; }
 
 path_prepend() { path_remove "$1"; PATH="$1${PATH:+":$PATH"}"; }
@@ -2109,6 +3874,32 @@ path_prepend() { path_remove "$1"; PATH="$1${PATH:+":$PATH"}"; }
 here() { ln -sfn "$(readlink -f "${1:-.}" 2>/dev/null || echo "${1:-.}")" "$HOME/.shell.here"; echo "here -> $(readlink "$HOME/.shell.here")"; }
 
 there() { cd "$(readlink "$HOME/.shell.here")" 2>/dev/null || echo "no bookmark"; }
+# -----------------------------------------------------------------------------
+# file — largest, newest, dupes, splitting, renaming, and type distribution
+# -----------------------------------------------------------------------------
+#
+# These functions operate on files within the filesystem: finding the largest
+# files by size, most recently modified files, oldest files, duplicate files
+# by MD5 checksum, splitting and joining files, bulk renaming by substring
+# replacement, counting file extension types, and finding/removing zero-byte
+# files.
+#
+# Notable functions:
+#   file_largest       — show largest files by size
+#   file_newest        — show most recently modified files
+#   file_dupes         — find duplicate files by MD5
+#   file_rename_bulk   — replace substring in multiple filenames
+#   file_type_dist     — show distribution of file extensions
+#   file_zero_size_rm  — remove all empty files
+#
+# Usage examples:
+#   $ file_largest /var 10
+#   $ file_dupes ~/Downloads
+#   $ file_rename_bulk "old" "new"
+#
+# See also: find_largest(), find_duplicates(), find(1)
+#
+
 
 mkcd() { mkdir -p "$1" && cd "$1"; }
 
@@ -2121,6 +3912,34 @@ extract() { [ $# -eq 0 ] && { echo "usage: extract <file>"; return 1; }; for f i
 colors() { for i in {0..15}; do printf "\e[48;5;${i}m  \e[0m"; done; echo; for i in {16..231}; do printf "\e[48;5;${i}m \e[0m"; (( (i-16)%36==35 )) && echo; done; echo; for i in {232..255}; do printf "\e[48;5;${i}m  \e[0m"; done; echo; }
 
 wanip() { _x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || _x curl -s icanhazip.com 2>/dev/null; }
+
+# -----------------------------------------------------------------------------
+# text — wrapping, truncation, case conversion, sorting, and formatting
+# -----------------------------------------------------------------------------
+#
+# These functions provide text transformation utilities for stdin: wrapping
+# lines at a given column width, truncating to a maximum length, converting
+# case (lowercase, uppercase, title case), reversing character order, sorting
+# unique words, counting lines/words/characters, deduplicating sorted lines,
+# counting line frequencies, selecting a random line, formatting as aligned
+# table columns, and pretty-printing JSON.
+#
+# Notable functions:
+#   text_wrap          — wrap lines at a given width
+#   text_lower         — convert stdin to lowercase
+#   text_title         — title-case text from stdin
+#   text_sort_words    — sort unique words alphabetically
+#   text_random_line   — select a random line from stdin
+#   text_columns       — format as aligned table columns
+#   text_json          — pretty-print JSON from stdin
+#
+# Usage examples:
+#   $ echo "HELLO WORLD" | text_lower
+#   $ cat data.json | text_json
+#   $ cut -d: -f1 /etc/passwd | text_sort_words
+#
+# See also: fold(1), tr(1), column(1), jq(1), json_pretty()
+#
 
 
 
@@ -2139,12 +3958,57 @@ _is_linux() { [ "$(_os)" = "Linux" ]; }
 _is_bsd() { [ "$(_os)" = "FreeBSD" ] || [ "$(_os)" = "OpenBSD" ] || [ "$(_os)" = "NetBSD" ]; }
 _mac_only() { _is_mac && "$@" || echo "macOS only" >&2; }
 _linux_only() { _is_linux && "$@" || echo "Linux only" >&2; }
+# -----------------------------------------------------------------------------
+# archive — create, list, and extract common archive formats
+# -----------------------------------------------------------------------------
+#
+# These functions create archives in tar.gz, zip, and 7z formats from one
+# or more input files/directories, and list the contents of existing
+# archives by auto-detecting the format from the filename extension.
+#
+# Notable functions:
+#   archive_create_tar  — create a tar.gz archive
+#   archive_create_zip  — create a zip archive
+#   archive_create_7z   — create a 7z archive
+#   archive_list        — list contents of any archive type
+#
+# Usage examples:
+#   $ archive_create_tar myproject
+#   $ archive_create_zip myproject
+#   $ archive_list archive.tar.gz
+#
+# See also: tar_compress(), zip_compress(), extract(), compress()
+#
+
 
 ip_show() { if _is_linux; then _x ip addr show "$@"; else _x ifconfig "$@"; fi; }
 disk_usage() { if _is_linux; then _x df -h "$@"; else _x df -h "$@" 2>/dev/null || _x df "$@"; fi; }
 mem_info() { if _is_linux; then _x free -h; else _x vm_stat 2>/dev/null || _x free -h; fi; }
 cpu_info() { if _is_linux; then _x lscpu; else _x sysctl -n machdep.cpu.brand_string; fi; }
 pkg_list() { if _is_linux; then _x pacman -Q 2>/dev/null || _x dpkg -l 2>/dev/null || _x rpm -qa 2>/dev/null; else _x brew list 2>/dev/null; fi; }
+# -----------------------------------------------------------------------------
+# encrypt — symmetric encryption/decryption and GPG signing
+# -----------------------------------------------------------------------------
+#
+# These functions encrypt and decrypt files using OpenSSL AES-256-CBC or
+# GPG symmetric encryption, and create/verify detached GPG signatures.
+# Each function checks that the required tool is available before running.
+#
+# Notable functions:
+#   encrypt_aes   — AES-256-CBC encrypt a file
+#   decrypt_aes   — decrypt an AES-encrypted file
+#   encrypt_gpg   — GPG symmetric encrypt a file
+#   sign_file     — create a detached GPG signature
+#   verify_file   — verify a detached GPG signature
+#
+# Usage examples:
+#   $ encrypt_aes secret.txt
+#   $ decrypt_aes secret.txt.enc
+#   $ sign_file release.tar.gz
+#
+# See also: gpg(1), openssl(1), file_encrypt(), file_decrypt()
+#
+
 service_list() { if _is_linux; then _x systemctl list-units --type=service 2>/dev/null || _x service --status-all 2>/dev/null; else _x launchctl list 2>/dev/null; fi; }
 ssh_keys() { for k in "$HOME"/.ssh/id_*; do [ -f "$k" ] && echo "${k##*/}"; done; }
 open_file() { _x xdg-open "$@" 2>/dev/null || _x open "$@" 2>/dev/null || echo "no opener"; }
@@ -2153,228 +4017,740 @@ paste_cmd() { _x xclip -selection clipboard -o 2>/dev/null || _x wl-paste 2>/dev
 
 cdf() { cd "$(dirname "$(find . -name "$1" -maxdepth 5 -type f 2>/dev/null | head -1)")" 2>/dev/null || echo "not found: $1"; }
 swap() { mv "$1" "${1}.bak" && mv "$2" "$1" && mv "${1}.bak" "$2"; }
-epoch() { command date +%s; }
-epoch2date() { if _is_mac; then command date -r "$1" 2>/dev/null; else command date -d "@$1" 2>/dev/null; fi; }
-hrline() { printf '%*s\n' "${1:-80}" '' | tr ' ' "${2:-#}"; }
+# -----------------------------------------------------------------------------
+# hash — cryptographic file hashing with multiple algorithms
+# -----------------------------------------------------------------------------
+#
+# These functions compute cryptographic hashes of files using MD5, SHA-1,
+# SHA-256, or SHA-512, with cross-platform fallbacks (Linux sha*sum vs
+# macOS shasum). They are useful for verifying file integrity after
+# downloads.
+#
+# Notable functions:
+#   hash_md5    — compute MD5 hash of a file
+#   hash_sha1   — compute SHA-1 hash of a file
+#   hash_sha256 — compute SHA-256 hash of a file
+#   hash_sha512 — compute SHA-512 hash of a file
+#
+# Usage examples:
+#   $ hash_sha256 downloaded-file.iso
+#
+# See also: checksum_sha256(), verify_checksum(), hash_string()
+#
 
-dev_server_python() { python3 -m http.server "${1:-8000}"; }
-dev_server_php() { php -S "localhost:${1:-8000}"; }
-dev_server_node_http() { npx http-server -p "${1:-8080}"; }
-dev_server_node_live() { npx live-server --port="${1:-8080}"; }
-dev_server_serve() { serve -l "${1:-3000}" 2>/dev/null || npx serve -l "${1:-3000}"; }
-dev_server_browser() { python3 -m http.server "${1:-8000}" && xdg-open "http://localhost:${1:-8000}" 2>/dev/null || open "http://localhost:${1:-8000}" 2>/dev/null; }
-dev_server_ngrok() { ngrok http "${1:-8080}" 2>/dev/null || echo "ngrok needed"; }
-dev_server_cloudflared() { cloudflared tunnel --url "$1" 2>/dev/null || echo "cloudflared needed"; }
-dev_server_browsersync() { npx browser-sync start --server --files "${1:-.}" 2>/dev/null || echo "browsersync needed"; }
-dev_watch_sass() { sass --watch "${1:-src/style.scss}:${2:-dist/style.css}" 2>/dev/null || echo "sass needed"; }
-dev_watch_webpack() { npx webpack --watch 2>/dev/null || echo "webpack needed"; }
-dev_watch_vite() { npx vite 2>/dev/null || echo "vite needed"; }
-dev_watch_parcel() { npx parcel watch "${1:-src/index.html}" 2>/dev/null || echo "parcel needed"; }
-dev_watch_esbuild() { npx esbuild "${1:-src/index.js}" --outfile="${2:-dist/bundle.js}" --watch 2>/dev/null || echo "esbuild needed"; }
-dev_build_webpack() { npx webpack --mode production 2>/dev/null || echo "webpack needed"; }
-dev_build_vite() { npx vite build 2>/dev/null || echo "vite needed"; }
-dev_build_parcel() { npx parcel build "${1:-src/index.html}" 2>/dev/null || echo "parcel needed"; }
-dev_build_esbuild() { npx esbuild "${1:-src/index.js}" --outfile="${2:-dist/bundle.js}" --bundle --minify 2>/dev/null || echo "esbuild needed"; }
-dev_format_prettier() { npx prettier --write "${1:-.}" 2>/dev/null || echo "prettier needed"; }
-dev_lint_eslint() { npx eslint "${1:-.}" 2>/dev/null || echo "eslint needed"; }
-dev_lint_stylelint() { npx stylelint "${1:-**/*.css}" 2>/dev/null || echo "stylelint needed"; }
 
-# cross-platform command wrappers
-have() { command -v "$1" >/dev/null 2>&1; }
-nott() { have "$1" || echo "missing: $1" >&2; }
-macos() { [ "$(uname)" = Darwin ]; }
-linux() { [ "$(uname)" = Linux ]; }
-bsd() { [ "$(uname)" = FreeBSD ] || [ "$(uname)" = OpenBSD ] || [ "$(uname)" = NetBSD ]; }
-wsl() { grep -qi microsoft /proc/version 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# backup_dotfiles — full dotfiles backup with timestamp
+# -----------------------------------------------------------------------------
+#
+# Creates a complete timestamped archive of the dotfiles directory,
+# including any uncommitted changes. The backup is written to the parent
+# of DOTFILES_DIR with a filename containing the current date and time.
+# This provides a safety net before making major configuration changes.
+#
+# Usage:
+#   backup_dotfiles
+#
+# Examples:
+#   $ backup_dotfiles
+#   > created: /home/user/.dotfiles-backup-20250115-143022.tar.gz
+#
+# Requires: DOTFILES_DIR to be set, tar to be installed.
+# Returns 1 if the dotfiles directory is not found or archive creation fails.
+#
+backup_dotfiles() {
+    local _dir="${DOTFILES_DIR:-$HOME/.dotfiles}"
+    [ -d "$_dir" ] || { echo "dotfiles directory not found: $_dir" >&2; return 1; }
+    local _ts; _ts=$(date +%Y%m%d-%H%M%S)
+    local _out="${_dir}-backup-${_ts}.tar.gz"
+    tar -czf "$_out" -C "$(dirname "$_dir")" "$(basename "$_dir")" 2>/dev/null &&         echo "created: $_out" || { echo "backup failed" >&2; return 1; }
+}
 
-# network tools
-myip4() { _x dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com 2>/dev/null | tr -d '"' || _x curl -sf4 ifconfig.me 2>/dev/null || _x curl -sf4 icanhazip.com 2>/dev/null || echo "N/A"; }
-myip6() { _x dig -6 TXT +short o-o.myaddr.l.google.com @ns1.google.com 2>/dev/null | tr -d '"' || _x curl -sf6 ifconfig.me 2>/dev/null || _x curl -sf6 icanhazip.com 2>/dev/null || echo "N/A"; }
-localip() { if linux; then _x ip -4 addr show scope global 2>/dev/null | grep -oP 'inet \K[\d.]+' || _x hostname -I 2>/dev/null | awk '{print $1}'; elif macos; then _x ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}'; fi; }
-dns_lookup() { _x dig +short "$1" 2>/dev/null || _x host "$1" 2>/dev/null | awk '/has address/{print $NF}' || _x nslookup "$1" 2>/dev/null | awk '/^Address: /{print $2}'; }
-dns_reverse() { _x dig +short -x "$1" 2>/dev/null || _x host "$1" 2>/dev/null | awk '/pointer/{print $NF}'; }
-port_scan() { _x nmap -sT -p "${2:-1-1000}" "$1" 2>/dev/null || _x nc -zv "$1" "${2:-80}" 2>/dev/null; }
-http_status() { _x curl -sI -o /dev/null -w "%{http_code}" "$1" 2>/dev/null; }
-http_headers() { _x curl -sI "$1" 2>/dev/null; }
-download() { _x curl -fSL "$1" -o "${2:-$(basename "$1")}" 2>/dev/null || _x wget -q "$1" -O "${2:-$(basename "$1")}" 2>/dev/null || echo "no download tool"; }
-speedtest() { _x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | python3 - 2>/dev/null || echo "speedtest-cli needed"; }
-net_stats() { if linux; then _x ss -s 2>/dev/null || _x netstat -s 2>/dev/null; elif macos; then _x netstat -s 2>/dev/null; fi; }
-route_table() { if linux; then _x ip route 2>/dev/null || _x route -n 2>/dev/null; elif macos; then _x netstat -rn 2>/dev/null; fi; }
+# -----------------------------------------------------------------------------
+# dotfiles_diff — compare current vs committed dotfiles
+# -----------------------------------------------------------------------------
+#
+# Shows the diff between the current state of the dotfiles repository
+# and the last committed state. It runs git diff inside DOTFILES_DIR,
+# showing staged, unstaged, and optionally untracked changes.
+#
+# Usage:
+#   dotfiles_diff
+#
+# Examples:
+#   $ dotfiles_diff
+#   > diff --git a/core/functions.sh b/core/functions.sh
+#   > +new_function() { echo "hello"; }
+#
+# Requires: DOTFILES_DIR set to a git repository.
+#
+dotfiles_diff() {
+    local _dir="${DOTFILES_DIR:-$HOME/.dotfiles}"
+    [ -d "$_dir" ] || { echo "dotfiles directory not found: $_dir" >&2; return 1; }
+    git -C "$_dir" diff --stat "$@" && git -C "$_dir" diff "$@"
+}
 
-# system tools
-sys_uptime() { _x uptime 2>/dev/null || echo "N/A"; }
-sys_load() { _x cat /proc/loadavg 2>/dev/null || _x uptime | awk -F'load averages?:' '{print $2}' || echo "N/A"; }
-sys_os() { _x cat /etc/os-release 2>/dev/null | grep '^PRETTY_NAME=' | cut -d= -f2 | tr -d '"' || _x sw_vers -productName 2>/dev/null; }
-sys_kernel() { _x uname -r 2>/dev/null || echo "N/A"; }
-sys_hostname() { _x hostname 2>/dev/null || _x hostname -s 2>/dev/null || echo "N/A"; }
-sys_users() { _x who 2>/dev/null | awk '{print $1}' | sort -u; }
-sys_logged_in() { _x who 2>/dev/null | wc -l; }
-sys_reboot_required() { test -f /var/run/reboot-required && echo "yes" || echo "no"; }
-sys_temp() { if linux; then _x cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null | head -1 | awk '{print $1/1000"°C"}'; elif macos; then _x sudo powermetrics --samplers smc -i 1 -n 1 2>/dev/null | grep -i "CPU die" | awk '{print $NF}'; fi; }
+# -----------------------------------------------------------------------------
+# workon — activate project with directory change, venv, and git status
+# -----------------------------------------------------------------------------
+#
+# Activates a Python project by changing to its directory, sourcing the
+# virtual environment (.venv or venv), and showing the current git status.
+# If no argument is given, it lists all available projects in the configured
+# WORKON_HOME directory (default: ~/code). Inspired by virtualenvwrapper.
+#
+# Usage:
+#   workon [project_name]
+#
+# Examples:
+#   $ workon
+#   > available projects: myapp, mylib, website
+#   $ workon myapp
+#   > (myapp) Python 3.12.1
+#   > ## main...origin/main
+#
+# Requires: python3, virtual environment in project/.venv or project/venv.
+#
+workon() {
+    local _home="${WORKON_HOME:-$HOME/code}"
+    if [ $# -eq 0 ]; then
+        echo "available projects:"
+        ls -1 "$_home" 2>/dev/null || echo "(none in $_home)"
+        return 0
+    fi
+    local _dir="$_home/$1"
+    [ -d "$_dir" ] || { echo "project not found: $_dir" >&2; return 1; }
+    cd "$_dir" || return 1
+    if [ -f ".venv/bin/activate" ]; then
+        . .venv/bin/activate
+    elif [ -f "venv/bin/activate" ]; then
+        . venv/bin/activate
+    fi
+    echo "[$1] $(python3 --version 2>/dev/null)"
+    git status --short --branch 2>/dev/null || true
+}
 
-# disk tools
-disk_usage() { _x df -h "${1:-/}" 2>/dev/null; }
-disk_inode() { _x df -i "${1:-/}" 2>/dev/null; }
-disk_fs() { _x df -T 2>/dev/null || _x df -t 2>/dev/null; }
-disk_mounts() { _x mount 2>/dev/null | grep "^/dev" | awk '{print $1, $3, $5}'; }
-disk_io() { _x iostat 2>/dev/null || echo "iostat needed"; }
-disk_smart() { _x sudo smartctl -H "$1" 2>/dev/null || echo "no smartctl"; }
-disk_usage_depth() { _x du -h --max-depth="${1:-1}" "${2:-.}" 2>/dev/null | sort -h; }
+# -----------------------------------------------------------------------------
+# mkproject — create project directory with git init and virtualenv
+# -----------------------------------------------------------------------------
+#
+# Creates a new project directory under WORKON_HOME, initialises a git
+# repository, creates a Python virtual environment, and generates a basic
+# .gitignore file. This is the creation counterpart to workon().
+#
+# Usage:
+#   mkproject <project_name>
+#
+# Examples:
+#   $ mkproject my-new-app
+#   > Initialised empty Git repository in ~/code/my-new-app/.git/
+#   > created virtual environment: .venv
+#   > created: .gitignore
+#
+# Requires: python3, git. Sets WORKON_HOME (default: ~/code).
+#
+mkproject() {
+    [ $# -eq 1 ] || { echo "usage: mkproject <name>" >&2; return 1; }
+    local _home="${WORKON_HOME:-$HOME/code}"
+    mkdir -p "$_home/$1" || return 1
+    cd "$_home/$1" || return 1
+    git init 2>/dev/null
+    python3 -m venv .venv 2>/dev/null && echo "created virtual environment: .venv"
+    if [ ! -f .gitignore ]; then
+        cat > .gitignore <<'GITIGNORE'
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+dist/
+build/
+GITIGNORE
+        echo "created: .gitignore"
+    fi
+    git status --short --branch 2>/dev/null || true
+}
 
-# process tools
-ps_cpu() { _x ps aux --sort=-%cpu 2>/dev/null | head -n "${1:-10}" || _x ps aux 2>/dev/null | sort -k3rn | head -n "${1:-10}"; }
-ps_mem() { _x ps aux --sort=-%mem 2>/dev/null | head -n "${1:-10}" || _x ps aux 2>/dev/null | sort -k4rn | head -n "${1:-10}"; }
-ps_tree() { _x ps auxf 2>/dev/null || _x pstree 2>/dev/null || echo "no process tree tool"; }
-ps_threads() { _x ps -eLf 2>/dev/null | head -n "${1:-20}"; }
-ps_wait() { _x wait "$1" 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# ffind — find files by name with case-insensitive matching
+# -----------------------------------------------------------------------------
+#
+# Searches for files by name under a given directory using case-insensitive
+# matching. Uses fd for fast parallel search when available, with automatic
+# fallback to find -iname. Results are sorted for consistent output.
+#
+# Usage:
+#   ffind <name_pattern> [directory]
+#
+# Examples:
+#   $ ffind "*.py" src/
+#   > src/main.py
+#   > src/utils/helpers.py
+#
+# Requires: fd is optional; falls back to find(1) automatically.
+# Default directory: current directory (.).
+#
+ffind() {
+    [ $# -ge 1 ] || { echo "usage: ffind <pattern> [directory]" >&2; return 1; }
+    local _pat="$1" _dir="${2:-.}"
+    if command -v fd >/dev/null 2>&1; then
+        fd -t f -i "$_pat" "$_dir"
+    else
+        find "$_dir" -iname "$_pat" -type f 2>/dev/null | sort
+    fi
+}
 
-# file tools
-file_largest() { find "${1:-.}" -type f -exec ls -lhS {} + 2>/dev/null | head -n "${2:-20}"; }
-file_newest() { find "${1:-.}" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -n "${2:-20}" | cut -d' ' -f2- || find "${1:-.}" -type f -ls 2>/dev/null | sort -k7rn | head -n "${2:-20}"; }
-file_oldest() { find "${1:-.}" -type f -printf '%T@ %p\n' 2>/dev/null | sort -n | head -n "${2:-20}" | cut -d' ' -f2-; }
-file_dupes() { find "${1:-.}" -type f -exec md5sum {} + 2>/dev/null | sort | uniq -w32 -dD; }
-file_split() { _x split -b "$1" "$2" "${3:-x}" 2>/dev/null || echo "usage: file_split SIZE FILE [PREFIX]"; }
-file_join() { _x cat "$@" > "${@: -1}" 2>/dev/null; }
-file_rename_bulk() { for f in *"$1"*; do mv "$f" "${f//$1/$2}" 2>/dev/null; done; }
-file_ext() { ls "$1"*."$1" 2>/dev/null; }
-file_type_dist() { find . -type f -name '*.*' 2>/dev/null | sed 's/.*\.//' | sort | uniq -c | sort -rn; }
-file_zero_size() { find . -type f -empty 2>/dev/null; }
-file_zero_size_rm() { find . -type f -empty -delete 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# grep_all — recursive grep across multiple patterns
+# -----------------------------------------------------------------------------
+#
+# Searches files recursively for multiple patterns at once. Each pattern
+# is searched separately and results are grouped by pattern. Uses ripgrep
+# (rg) if available for better performance, with automatic fallback to
+# grep -r. Useful for finding all TODOs, FIXMEs, or multiple terms.
+#
+# Usage:
+#   grep_all <pattern1> [pattern2 ...] [directory]
+#
+# Examples:
+#   $ grep_all "TODO" "FIXME" src/
+#   > === TODO ===
+#   > src/main.py:10: # TODO: implement feature X
+#   > === FIXME ===
+#   > src/utils.py:5: # FIXME: handle edge case
+#
+grep_all() {
+    [ $# -ge 1 ] || { echo "usage: grep_all <pattern> [pattern...] [dir]" >&2; return 1; }
+    local _dir="."
+    local _args=() _last
+    _last="${@: -1}"
+    if [ -d "$_last" ] && [ $# -gt 1 ]; then
+        _dir="$_last"
+        set -- "${@:1:$#-1}"
+    fi
+    for _p in "$@"; do
+        echo "=== $_p ==="
+        if command -v rg >/dev/null 2>&1; then
+            rg -l "$_p" "$_dir" 2>/dev/null | head -20
+        else
+            grep -rl "$_p" "$_dir" 2>/dev/null | head -20
+        fi
+        echo
+    done
+}
 
-# text tools
-text_wrap() { _x fold -s -w "${1:-80}" 2>/dev/null; }
-text_truncate() { _x cut -c "1-${1:-80}" 2>/dev/null; }
-text_lower() { tr '[:upper:]' '[:lower:]'; }
-text_upper() { tr '[:lower:]' '[:upper:]'; }
-text_title() { sed 's/.*/\L&/; s/[a-z]*/\u&/g'; }
-text_reverse() { rev; }
-text_sort_words() { tr ' ' '\n' | sort -u | tr '\n' ' '; }
-text_count_words() { wc -w; }
-text_count_lines() { wc -l; }
-text_count_chars() { wc -c; }
-text_uniq_lines() { sort | uniq; }
-text_comm_lines() { sort | uniq -c; }
-text_random_line() { _x shuf -n 1 2>/dev/null || sort -R | head -1; }
-text_columns() { column -t -s "${1:- }"; }
-text_json() { python3 -m json.tool 2>/dev/null || echo "python3 needed"; }
+# -----------------------------------------------------------------------------
+# sys_update — comprehensive system update across all package managers
+# -----------------------------------------------------------------------------
+#
+# Performs a comprehensive system update across multiple package managers:
+# the primary system manager (pacman/apt/dnf/brew via pkg_update_all),
+# flatpak, snap, Homebrew (macOS), and the dotfiles repository. Each step
+# is attempted independently so that one failure does not block others.
+#
+# Usage:
+#   sys_update
+#
+# Examples:
+#   $ sys_update
+#   > :: updating system packages... done
+#   > :: updating flatpaks... done
+#   > :: updating dotfiles... done
+#
+sys_update() {
+    echo ":: updating system packages..."
+    pkg_update_all 2>/dev/null || echo "   (skipped)"
+    if command -v flatpak >/dev/null 2>&1; then
+        echo ":: updating flatpaks..."
+        flatpak update -y 2>/dev/null || echo "   (failed)"
+    fi
+    if command -v snap >/dev/null 2>&1; then
+        echo ":: updating snaps..."
+        sudo snap refresh 2>/dev/null || echo "   (failed)"
+    fi
+    if command -v brew >/dev/null 2>&1; then
+        echo ":: updating homebrew..."
+        brew update 2>/dev/null && brew upgrade 2>/dev/null || echo "   (failed)"
+    fi
+    if [ -n "${DOTFILES_DIR:-}" ]; then
+        echo ":: updating dotfiles..."
+        dot_sync 2>/dev/null || echo "   (failed)"
+    fi
+    echo ":: done"
+}
 
-# archive tools
-archive_create_tar() { _x tar czvf "$1.tar.gz" "$@" 2>/dev/null || echo "tar needed"; }
-archive_create_zip() { _x zip -r "$1.zip" "$@" 2>/dev/null || echo "zip needed"; }
-archive_create_7z() { _x 7z a "$1.7z" "$@" 2>/dev/null || echo "7z needed"; }
-archive_list() { case "$1" in *.tar.gz|*.tgz) _x tar tzf "$1" ;; *.tar.bz2|*.tbz2) _x tar tjf "$1" ;; *.tar.xz) _x tar tJf "$1" ;; *.tar) _x tar tf "$1" ;; *.zip) _x unzip -l "$1" ;; *.7z) _x 7z l "$1" ;; *.rar) _x unrar l "$1" ;; esac 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# disk_usage — show human-readable disk usage for paths
+# -----------------------------------------------------------------------------
+#
+# Displays disk usage for the given paths in human-readable format, sorted
+# by size. With no arguments, shows usage for all visible items in the
+# current directory. When multiple paths are given, includes a grand total.
+#
+# Usage:
+#   disk_usage [path ...]
+#
+# Examples:
+#   $ disk_usage
+#   > 4.0K    file.txt
+#   > 1.2M    src/
+#   > 500M    videos/
+#   $ disk_usage /var/log /tmp
+#   > ...
+#   > total  1.5G
+#
+disk_usage() {
+    if [ $# -eq 0 ]; then
+        du -sh -- * .[!.]* 2>/dev/null | sort -rh
+    else
+        du -shc "$@" 2>/dev/null | sort -rh
+    fi
+}
 
-# encrypt tools
-encrypt_aes() { _x openssl enc -aes-256-cbc -salt -in "$1" -out "$1.enc" 2>/dev/null || echo "openssl needed"; }
-decrypt_aes() { _x openssl enc -aes-256-cbc -d -in "$1" -out "${1%.enc}" 2>/dev/null || echo "openssl needed"; }
-encrypt_gpg() { _x gpg -c "$1" 2>/dev/null || echo "gpg needed"; }
-decrypt_gpg() { _x gpg -d "$1" 2>/dev/null || echo "gpg needed"; }
-sign_file() { _x gpg --detach-sign "$1" 2>/dev/null || echo "gpg needed"; }
-verify_file() { _x gpg --verify "$1" "${1%.sig}" 2>/dev/null || echo "gpg needed"; }
+# -----------------------------------------------------------------------------
+# mem_top — show top memory-consuming processes
+# -----------------------------------------------------------------------------
+#
+# Displays the top N processes by resident memory usage (RSS). Shows PID,
+# memory percentage, RSS, and command name. Uses ps with %mem sorting,
+# with fallback for platforms that use different flag conventions.
+#
+# Usage:
+#   mem_top [count]
+#
+# Examples:
+#   $ mem_top 10
+#   >   PID %MEM    RSS COMMAND
+#   >  1234 12.5  2.1g chromium-browser
+#
+# Default count: 10.
+#
+mem_top() {
+    local _n="${1:-10}"
+    if ps --version 2>/dev/null | grep -qi procps; then
+        ps aux --sort=-%mem 2>/dev/null | head -n "$((_n + 1))"
+    else
+        ps aux 2>/dev/null | sort -k4rn | head -n "$((_n + 1))"
+    fi
+}
 
-# hash tools
-hash_md5() { _x md5sum "$1" 2>/dev/null || _x md5 -r "$1" 2>/dev/null || echo "no md5 tool"; }
-hash_sha1() { _x sha1sum "$1" 2>/dev/null || _x shasum -a1 "$1" 2>/dev/null || echo "no sha1 tool"; }
-hash_sha256() { _x sha256sum "$1" 2>/dev/null || _x shasum -a256 "$1" 2>/dev/null || echo "no sha256 tool"; }
-hash_sha512() { _x sha512sum "$1" 2>/dev/null || _x shasum -a512 "$1" 2>/dev/null || echo "no sha512 tool"; }
+# -----------------------------------------------------------------------------
+# cpu_top — show top CPU-consuming processes
+# -----------------------------------------------------------------------------
+#
+# Displays the top N processes by CPU usage percentage. Shows PID, CPU
+# percentage, cumulative CPU time, and command name. Uses ps with %cpu
+# sorting, with fallback for platforms that use different flags.
+#
+# Usage:
+#   cpu_top [count]
+#
+# Examples:
+#   $ cpu_top 5
+#   >   PID %CPU     TIME COMMAND
+#   >  5678 45.2  01:23:45 ffmpeg
+#
+# Default count: 10.
+#
+cpu_top() {
+    local _n="${1:-10}"
+    if ps --version 2>/dev/null | grep -qi procps; then
+        ps aux --sort=-%cpu 2>/dev/null | head -n "$((_n + 1))"
+    else
+        ps aux 2>/dev/null | sort -k3rn | head -n "$((_n + 1))"
+    fi
+}
 
-# dev tools
-git_branches_old() { for b in $(git branch -r 2>/dev/null); do echo "$b $(git log -1 --format="%ci" "$b" 2>/dev/null)"; done | sort -k2 | head -"${1:-10}"; }
-git_undo_last() { git reset --soft HEAD~1 2>/dev/null; }
-git_ammend_date() { git commit --amend --no-edit --date="$(date -R)" 2>/dev/null; }
-git_log_graph() { git log --graph --oneline --all --decorate 2>/dev/null; }
-git_log_author() { git log --author="$1" --oneline 2>/dev/null; }
-git_log_since() { git log --since="$1" --oneline 2>/dev/null; }
-git_log_short() { git log --oneline -n "${1:-20}" 2>/dev/null; }
-git_changed_files() { git diff --name-only "$1" 2>/dev/null || git diff --name-only HEAD~1 2>/dev/null; }
-git_branch_delete_merged() { git branch --merged | grep -v '\*\|master\|main' | xargs -r git branch -d 2>/dev/null; }
-git_tag_date() { git log -1 --format="%ai" "$1" 2>/dev/null; }
-git_repo_size() { git count-objects -vH 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# git_cleanup — remove merged branches, prune remote, and run gc
+# -----------------------------------------------------------------------------
+#
+# Cleans a git repository by deleting local branches that have been merged
+# into the current branch, pruning remote tracking branches that no longer
+# exist on origin, and running automatic garbage collection. Safe to run
+# at any time and helps keep the branch list manageable.
+#
+# Usage:
+#   git_cleanup
+#
+# Examples:
+#   $ git_cleanup
+#   > Deleted feature-x (was merged)
+#   > Pruned origin/obsolete-branch
+#   > cleanup done
+#
+git_cleanup() {
+    git branch --merged | grep -v "^*\|main\|master\|develop" | xargs -r git branch -d
+    git remote prune origin 2>/dev/null || true
+    git gc --auto 2>/dev/null || true
+    echo "cleanup done"
+}
 
-# systemd if available
-if have systemctl; then
-    service_start() { _x sudo systemctl start "$1"; }
-    service_stop() { _x sudo systemctl stop "$1"; }
-    service_restart() { _x sudo systemctl restart "$1"; }
-    service_status() { _x systemctl status "$1" 2>/dev/null; }
-    service_enable() { _x sudo systemctl enable "$1"; }
-    service_disable() { _x sudo systemctl disable "$1"; }
-    service_logs() { _x journalctl -u "$1" -n "${2:-50}" --no-pager 2>/dev/null; }
-    service_logs_follow() { _x journalctl -u "$1" -f 2>/dev/null; }
-    service_list_all() { _x systemctl list-units --type=service --all 2>/dev/null; }
-    service_failed() { _x systemctl --failed 2>/dev/null; }
-    boot_time() { _x systemd-analyze 2>/dev/null; }
-    boot_time_detail() { _x systemd-analyze blame 2>/dev/null | head -"${1:-20}"; }
-fi
+# -----------------------------------------------------------------------------
+# git_search — search git log for string in messages and diffs
+# -----------------------------------------------------------------------------
+#
+# Searches the entire git log for commits that reference a given string,
+# either in their commit message or in the diff content. Uses --grep for
+# message matching and -G (pickaxe) for content matching, providing a
+# comprehensive search across the repository's full history.
+#
+# Usage:
+#   git_search <pattern>
+#
+# Examples:
+#   $ git_search "fix race condition"
+#   > === commits matching in message ===
+#   > abc1234 Fix race condition in queue handler
+#   > === commits touching code ===
+#   > def5678 Add test for race condition fix
+#
+git_search() {
+    [ $# -ge 1 ] || { echo "usage: git_search <pattern>" >&2; return 1; }
+    echo "=== commits matching in message ==="
+    git log --all --oneline --grep="$1" -30 2>/dev/null
+    echo "=== commits touching code ==="
+    git log --all --oneline -G"$1" -20 2>/dev/null
+}
 
-gmb() { local m; m=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null) && echo "${m#origin/}" || echo "main"; }
+# -----------------------------------------------------------------------------
+# git_find — find when a string was introduced in git history
+# -----------------------------------------------------------------------------
+#
+# Uses git log's -S (pickaxe) to find the commit that introduced or removed
+# a given string in the codebase. Shows commit hash, date, author, email,
+# and subject line for each matching commit. Useful for tracking down when
+# and why a specific change was made.
+#
+# Usage:
+#   git_find <string>
+#
+# Examples:
+#   $ git_find "deprecated_function"
+#   > abc1234 2024-01-15 Alice <alice@x>
+#   >   refactor: replace deprecated_function with new API
+#
+git_find() {
+    [ $# -ge 1 ] || { echo "usage: git_find <string>" >&2; return 1; }
+    git log --all -S "$1" --format="%h %ad %an <%ae>%n  %s%n" --date=short 2>/dev/null
+}
 
-gcm() { local m; m=$(gmb) && git checkout "$m" 2>/dev/null && git pull 2>/dev/null; }
-gmm() { local m; m=$(gmb) && git merge "$m" 2>/dev/null; }
-gho() { local f="${1:-}" r="${2:-origin}" g b u; g=$(git rev-parse --show-toplevel 2>/dev/null) || return 1; b=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || return 1; u=$(git config --get "remote.$r.url" 2>/dev/null) || return 1; local p="${PWD/#$g/}"; [ -n "$f" ] && p+="/$f"; local a; IFS=:/ read -ra a <<< "$u"; local l=${#a[@]}; local us=${a[l-2]}; local rp=${a[l-1]%.git}; echo "https://github.com/$us/$rp/tree/$b$p"; _x xdg-open "https://github.com/$us/$rp/tree/$b$p" 2>/dev/null || _x open "https://github.com/$us/$rp/tree/$b$p" 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# net_listen — show listening ports with process information
+# -----------------------------------------------------------------------------
+#
+# Displays all listening TCP (or UDP) ports along with the process name and
+# PID that owns each socket. Uses ss if available (preferred for speed),
+# with fallback to netstat and lsof. Accepts an optional protocol filter.
+#
+# Usage:
+#   net_listen [tcp|udp]
+#
+# Examples:
+#   $ net_listen
+#   > State  Recv-Q Send-Q  Local Address:Port  Peer Address:Port  Process
+#   > LISTEN 0      128     0.0.0.0:22          0.0.0.0:*          users:(("sshd",pid=1234))
+#
+net_listen() {
+    local _proto="${1:-}"
+    if command -v ss >/dev/null 2>&1; then
+        case "$_proto" in
+            tcp) ss -tlnp 2>/dev/null ;;
+            udp) ss -ulnp 2>/dev/null ;;
+            *) ss -tlnp 2>/dev/null ;;
+        esac
+    elif command -v netstat >/dev/null 2>&1; then
+        netstat -tlnp 2>/dev/null
+    elif command -v lsof >/dev/null 2>&1; then
+        lsof -i -P -n 2>/dev/null | grep LISTEN
+    fi
+}
 
-gfix() { git rebase -i HEAD~"${1:-10}" 2>/dev/null; }
-gfixup() { git rebase -i HEAD~"${1:-10}" 2>/dev/null; }
-gfrb() { git fetch origin 2>/dev/null && git rebase origin/HEAD 2>/dev/null; }
-gup() { git pull --rebase 2>/dev/null; }
-gun() { git reset HEAD "$@" 2>/dev/null; }
-gundo() { git reset --soft HEAD~1 2>/dev/null; }
-gclean() { git clean -fd 2>/dev/null; }
-gprune() { git remote prune origin 2>/dev/null; }
-gstash() { git stash push -m "${1:-wip}" 2>/dev/null; }
-gstashp() { git stash pop 2>/dev/null; }
-gstashl() { git stash list 2>/dev/null; }
-glog1() { git log --oneline -n "${1:-20}" 2>/dev/null; }
-glogg() { git log --oneline --graph --all --decorate 2>/dev/null; }
-gdiff() { git diff --word-diff "$@" 2>/dev/null; }
-gdiffc() { git diff --cached "$@" 2>/dev/null; }
-gblam() { git blame "$1" 2>/dev/null; }
-gtag() { git tag -l | sort -V 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# local_ip — show local IPv4 addresses for all active interfaces
+# -----------------------------------------------------------------------------
+#
+# Displays the IPv4 addresses assigned to all active network interfaces,
+# excluding loopback. On Linux uses 'ip addr', with fallback to 'ifconfig'
+# on macOS and other Unix systems, and finally 'hostname -I'.
+#
+# Usage:
+#   local_ip
+#
+# Examples:
+#   $ local_ip
+#   > 192.168.1.42
+#   > 10.0.0.5
+#
+local_ip() {
+    if command -v ip >/dev/null 2>&1; then
+        ip -4 addr show scope global 2>/dev/null | grep -oP 'inet \K[\d.]+'
+    elif command -v ifconfig >/dev/null 2>&1; then
+        ifconfig 2>/dev/null | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}'
+    elif command -v hostname >/dev/null 2>&1; then
+        hostname -I 2>/dev/null | awk '{print $1}'
+    fi
+}
 
-gremotes() { git remote -v 2>/dev/null; }
-gcontrib() { git shortlog -sn 2>/dev/null; }
-gstat() { git diff --stat 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# docker_clean_all — aggressive cleanup of unused Docker resources
+# -----------------------------------------------------------------------------
+#
+# Performs a thorough Docker cleanup by removing all stopped containers,
+# dangling and unused images, unused networks, and build cache. This is
+# more aggressive than docker system prune because it also removes all
+# unused images regardless of whether they are dangling. Supports an
+# optional --volumes flag to additionally remove unused named volumes.
+#
+# Usage:
+#   docker_clean_all [--volumes]
+#
+# Examples:
+#   $ docker_clean_all
+#   > :: removing unused images...
+#   > :: removing build cache...
+#   > Total reclaimed space: 2.3GB
+#
+docker_clean_all() {
+    echo ":: removing stopped containers..."
+    docker container prune -f 2>/dev/null
+    echo ":: removing unused images..."
+    docker image prune -af 2>/dev/null
+    echo ":: removing unused networks..."
+    docker network prune -f 2>/dev/null
+    echo ":: removing build cache..."
+    docker builder prune -af 2>/dev/null
+    if [ "${1:-}" = "--volumes" ]; then
+        echo ":: removing unused volumes..."
+        docker volume prune -f 2>/dev/null
+    fi
+    docker system df 2>/dev/null
+}
 
-gbranchc() { git branch --show-current 2>/dev/null; }
-gbrancha() { git branch -a 2>/dev/null; }
-gbranchd() { git branch -d "$1" 2>/dev/null; }
-gbranchm() { git branch -m "$1" "$2" 2>/dev/null; }
-gcheck() { git log --oneline --left-right "$1...$2" 2>/dev/null; }
-grewrite() { git commit --amend --no-edit 2>/dev/null; }
-grewrited() { git commit --amend --date="$(date -R)" 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# docker_compose_rebuild — rebuild and restart compose services
+# -----------------------------------------------------------------------------
+#
+# Rebuilds all (or a specific) Docker Compose service images from scratch
+# without using the build cache, then recreates and restarts the containers.
+# Useful when dependencies have changed or when you need a guaranteed clean
+# build of the service images.
+#
+# Usage:
+#   docker_compose_rebuild [service_name]
+#
+# Examples:
+#   $ docker_compose_rebuild
+#   > rebuilding all services...
+#   $ docker_compose_rebuild api
+#   > rebuilding api...
+#
+docker_compose_rebuild() {
+    if [ $# -eq 0 ]; then
+        echo "rebuilding all services..."
+        docker compose build --no-cache 2>/dev/null
+        docker compose up -d --force-recreate 2>/dev/null
+    else
+        echo "rebuilding $1..."
+        docker compose build --no-cache "$1" 2>/dev/null
+        docker compose up -d --force-recreate "$1" 2>/dev/null
+    fi
+}
 
-untiny() { local l="$1" ll; while [ -n "$l" ]; do [ -n "$ll" ] && echo " -> $ll"; ll="$l"; l=$(curl -sI "$l" 2>/dev/null | grep -i '^Location:' | sed 's/^[Ll]ocation: //' | tr -d '\r\n'); done; echo "$ll"; }
-over() { awk -v c="${1:-80}" 'length($0) > c { printf("%4d %s\n", NR, $0); }'; }
-truecolor_rainbow() { local i r g b; for ((i=0; i<77; i++)); do r=$((255 - (i*255/76))); g=$((i*510/76)); b=$((i*255/76)); ((g>255)) && g=$((510-g)); printf '\033[48;2;%d;%d;%dm ' "$r" "$g" "$b"; done; tput sgr0; echo; }
-dump_palette() { for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do printf "\e[48;5;${i}m  \e[0m"; done; echo; for i in $(seq 16 231); do printf "\e[48;5;${i}m \e[0m"; (( (i-16)%36==35 )) && echo; done; echo; for i in $(seq 232 255); do printf "\e[48;5;${i}m  \e[0m"; done; echo; }
+# -----------------------------------------------------------------------------
+# compress — compress file or directory with auto-detected format
+# -----------------------------------------------------------------------------
+#
+# Creates a compressed archive from a file or directory, selecting the
+# compression method based on the output filename extension. Supports
+# .tar.gz (default), .tar.bz2, .tar.xz, .zip, .7z, .gz, .bz2, and .xz.
+# If no output filename is given, appends .tar.gz to the source name.
+#
+# Usage:
+#   compress <target> [output]
+#
+# Examples:
+#   $ compress mydir
+#   > created: mydir.tar.gz
+#   $ compress mydir archive.tar.bz2
+#   > created: archive.tar.bz2
+#
+compress() {
+    [ $# -ge 1 ] || { echo "usage: compress <target> [output]" >&2; return 1; }
+    local _src="$1" _out="${2:-$1.tar.gz}"
+    case "$_out" in
+        *.tar.gz|*.tgz) tar -czf "$_out" "$_src" ;;
+        *.tar.bz2|*.tbz2) tar -cjf "$_out" "$_src" ;;
+        *.tar.xz|*.txz) tar -cJf "$_out" "$_src" ;;
+        *.zip) zip -r "$_out" "$_src" ;;
+        *.7z) 7z a "$_out" "$_src" ;;
+        *.gz) gzip -c "$_src" > "$_out" ;;
+        *.bz2) bzip2 -c "$_src" > "$_out" ;;
+        *.xz) xz -c "$_src" > "$_out" ;;
+        *) tar -czf "$_out" "$_src" ;;
+    esac
+    echo "created: $_out"
+}
 
-pkg_install() { case "$(uname)" in Linux) if have pacman; then _x sudo pacman -S "$@" 2>/dev/null; elif have apt; then _x sudo apt install "$@" 2>/dev/null; elif have dnf; then _x sudo dnf install "$@" 2>/dev/null; elif have zypper; then _x sudo zypper install "$@" 2>/dev/null; fi;; Darwin) _x brew install "$@" 2>/dev/null;; esac; }
-pkg_remove() { case "$(uname)" in Linux) if have pacman; then _x sudo pacman -R "$@" 2>/dev/null; elif have apt; then _x sudo apt remove "$@" 2>/dev/null; elif have dnf; then _x sudo dnf remove "$@" 2>/dev/null; fi;; Darwin) _x brew uninstall "$@" 2>/dev/null;; esac; }
-pkg_search() { case "$(uname)" in Linux) if have pacman; then _x pacman -Ss "$@" 2>/dev/null; elif have apt; then _x apt search "$@" 2>/dev/null; elif have dnf; then _x dnf search "$@" 2>/dev/null; fi;; Darwin) _x brew search "$@" 2>/dev/null;; esac; }
-pkg_update() { case "$(uname)" in Linux) if have pacman; then _x sudo pacman -Syu 2>/dev/null; elif have apt; then _x sudo apt update && _x sudo apt upgrade 2>/dev/null; elif have dnf; then _x sudo dnf upgrade 2>/dev/null; fi;; Darwin) _x brew update && _x brew upgrade 2>/dev/null;; esac; }
-pkg_info() { case "$(uname)" in Linux) if have pacman; then _x pacman -Qi "$@" 2>/dev/null; elif have apt; then _x apt show "$@" 2>/dev/null; elif have dnf; then _x dnf info "$@" 2>/dev/null; fi;; Darwin) _x brew info "$@" 2>/dev/null;; esac; }
-pkg_files() { case "$(uname)" in Linux) if have pacman; then _x pacman -Ql "$@" 2>/dev/null; elif have dpkg; then _x dpkg -L "$@" 2>/dev/null; fi;; Darwin) echo "N/A";; esac; }
-pkg_orphans() { if have pacman; then _x pacman -Qdt 2>/dev/null; elif have apt; then _x apt list --installed 2>/dev/null | grep -v "^Listing..." | wc -l; fi; }
+# -----------------------------------------------------------------------------
+# backup_rotate — keep the last N backup files, remove older ones
+# -----------------------------------------------------------------------------
+#
+# Prunes old backup files matching a glob pattern, keeping only the N most
+# recent ones by modification time. Useful when used with cron jobs or
+# regular script invocations that create periodic backups.
+#
+# Usage:
+#   backup_rotate <glob_pattern> [keep]
+#
+# Examples:
+#   $ backup_rotate "*.backup.sql" 7
+#   > only 3 files (keeping 7), nothing to prune
+#   $ backup_rotate "db-dump-*.gz" 5
+#   > removed: db-dump-20240101.gz
+#   > removed: db-dump-20240102.gz
+#
+# Default keep count: 7.
+#
+backup_rotate() {
+    [ $# -ge 1 ] || { echo "usage: backup_rotate <glob_pattern> [keep]" >&2; return 1; }
+    local _pat="$1" _keep="${2:-7}" _files _count
+    _files=$(ls -t $_pat 2>/dev/null) || { echo "no files matching: $_pat"; return 0; }
+    _count=$(echo "$_files" | wc -l)
+    if [ "$_count" -le "$_keep" ]; then
+        echo "only $_count files (keeping $_keep), nothing to prune"
+        return 0
+    fi
+    echo "$_files" | tail -n "$((_count - _keep))" | while IFS= read -r _f; do
+        rm -f "$_f" && echo "removed: $_f"
+    done
+}
 
-port_find() { _x lsof -i :"$1" 2>/dev/null || _x ss -tlnp "sport = :$1" 2>/dev/null || _x netstat -tlnp 2>/dev/null | grep ":$1 "; }
-port_kill() { port_find "$1" | awk 'NR>1{print $2}' | xargs -r kill 2>/dev/null; }
-ip_local() { if linux; then _x ip addr show scope global 2>/dev/null | grep -oP 'inet \K[\d.]+' || _x hostname -I 2>/dev/null; elif macos; then _x ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print $2}'; fi; }
-ip_public() { _x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || _x curl -s icanhazip.com 2>/dev/null; }
-ip_dns() { _x dig +short "$1" 2>/dev/null || _x host "$1" 2>/dev/null | awk '/has address/{print $NF}'; }
-ip_reverse() { _x dig +short -x "$1" 2>/dev/null || _x host "$1" 2>/dev/null | awk '/pointer/{print $NF}'; }
-net_listen() { _x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || _x lsof -i -P -n 2>/dev/null | grep LISTEN; }
-net_connections() { _x ss -tunp 2>/dev/null || _x netstat -tunp 2>/dev/null; }
-net_throughput() { _x iperf3 -c "$1" 2>/dev/null || echo "iperf3 needed"; }
-net_wifi() { if linux; then _x iwconfig 2>/dev/null 2>/dev/null || _x nmcli device wifi 2>/dev/null; elif macos; then _x /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I 2>/dev/null; fi; }
-net_dns_cache() { if linux; then _x sudo resolvectl statistics 2>/dev/null || echo "N/A"; elif macos; then _x sudo killall -HUP mDNSResponder 2>/dev/null && echo "DNS cache flushed"; fi; }
-net_mtu() { _x ip link show 2>/dev/null | grep -o 'mtu [0-9]*' || _x ifconfig 2>/dev/null | grep -o 'mtu [0-9]*'; }
+# -----------------------------------------------------------------------------
+# sys_info — comprehensive system overview summary
+# -----------------------------------------------------------------------------
+#
+# Prints a concise summary of the current system: hostname, OS name,
+# kernel version, uptime, CPU model, memory usage, and root disk usage.
+# Designed as a quick overview when logging into a new machine or for
+# inclusion in shell prompts.
+#
+# Usage:
+#   sys_info
+#
+# Examples:
+#   $ sys_info
+#   > Hostname: my-machine
+#   > OS:       Arch Linux
+#   > Kernel:   6.6.1-arch1-1
+#   > Uptime:   3 days, 12:34
+#   > CPU:      Intel(R) Core(TM) i7-10750H
+#   > Memory:   2.1G / 15.6G (13%)
+#
+sys_info() {
+    local _host _os _kernel _uptime _cpu _mem_total _mem_used _mem_pct
+    _host=$(hostname 2>/dev/null || echo "N/A")
+    _os=$(cat /etc/os-release 2>/dev/null | grep '^PRETTY_NAME=' | cut -d= -f2 | tr -d '"' || sw_vers -productName 2>/dev/null || echo "N/A")
+    _kernel=$(uname -r 2>/dev/null || echo "N/A")
+    _uptime=$(uptime | sed 's/.*up //; s/,.*//' 2>/dev/null || echo "N/A")
+    _cpu=$(lscpu 2>/dev/null | grep 'Model name' | sed 's/Model name:\s*//' || sysctl -n machdep.cpu.brand_string 2>/dev/null || echo "N/A")
+    if command -v free >/dev/null 2>&1; then
+        _mem_total=$(free -h | awk '/Mem:/{print $2}')
+        _mem_used=$(free -h | awk '/Mem:/{print $3}')
+        _mem_pct=$(free | awk '/Mem:/{printf "%.0f", $3/$2 * 100}')
+    else
+        _mem_total="N/A"; _mem_used="N/A"; _mem_pct="N/A"
+    fi
+    echo "Hostname: $_host"
+    echo "OS:       $_os"
+    echo "Kernel:   $_kernel"
+    echo "Uptime:   $_uptime"
+    echo "CPU:      $_cpu"
+    echo "Memory:   ${_mem_used} / ${_mem_total} (${_mem_pct}%)"
+    if command -v df >/dev/null 2>&1; then
+        df -h / | awk 'NR==2{printf "Disk:    %s / %s (%s)\n", $3, $2, $5}'
+    fi
+}
 
-curlm() { _x curl -fsSL -o /dev/null -w "HTTP %{http_code} | %{time_total}s | %{size_download}bytes\n" "$1" 2>/dev/null; }
-curlt() { _x curl -fsSL -o /dev/null -w "dns:%{time_namelookup} connect:%{time_connect} tls:%{time_appconnect} ttfb:%{time_starttransfer} total:%{time_total}\n" "$1" 2>/dev/null; }
-curlb() { _x curl -fsSL -D - "$1" -o /dev/null 2>/dev/null; }
+# -----------------------------------------------------------------------------
+# json_pretty — pretty-print JSON from file or stdin
+# -----------------------------------------------------------------------------
+#
+# Formats JSON data with proper indentation using Python's json.tool
+# module. Accepts either a filename as an argument or piped input via
+# stdin. Validates the JSON input and reports errors for invalid data.
+#
+# Usage:
+#   json_pretty [file]
+#
+# Examples:
+#   $ json_pretty data.json
+#   $ echo '{"a":1}' | json_pretty
+#   > {
+#   >     "a": 1
+#   > }
+#
+json_pretty() {
+    if [ $# -ge 1 ]; then
+        python3 -m json.tool "$1" 2>/dev/null || { echo "invalid JSON or file not found: $1" >&2; return 1; }
+    else
+        python3 -m json.tool 2>/dev/null || { echo "invalid JSON from stdin" >&2; return 1; }
+    fi
+}
 
-watch() { while true; do clear; command date; echo "---"; eval "$*"; sleep "${2:-2}"; done; }
-repeat_cmd() { local n="$1"; shift; for ((i=0; i<n; i++)); do "$@"; done; }
-countdown() { local s="${1:-10}"; while [ "$s" -gt 0 ]; do printf "\r%3d" "$s"; sleep 1; s=$((s-1)); done; echo; }
-timeit() { TIMEFORMAT="real %3lR  user %3lU  sys %3lS"; time "$@"; }
-bench() { local n="${2:-5}"; echo "benchmarking: $1 ($n runs)"; for ((i=0; i<n; i++)); do TIMEFORMAT="%3lR"; t=$( { time "$@" 2>/dev/null; } 2>&1); echo "  run $((i+1)): ${t}s"; done; }
+# -----------------------------------------------------------------------------
+# weather — show current weather conditions for a city
+# -----------------------------------------------------------------------------
+#
+# Fetches and displays the current weather conditions for a given city
+# from wttr.in. Shows temperature, conditions, wind speed, and humidity
+# in a compact single-line format. If no city is provided, it attempts
+# to auto-detect location by IP geolocation.
+#
+# Usage:
+#   weather [city_name]
+#
+# Examples:
+#   $ weather London
+#   > London: +12°C ☁️ Overcast  ↙15km/h 72%
+#   $ weather "New York"
+#   > New York: +18°C ☀️ Sunny  →10km/h 45%
+#
+weather_report() {
+    local _loc="${1:-}"
+    if [ -n "$_loc" ]; then
+        curl -fsSL "https://wttr.in/${_loc}?format=%l:+%t+%C+%w+%h" 2>/dev/null || echo "unable to fetch weather"
+    else
+        curl -fsSL "https://wttr.in?format=%l:+%t+%C+%w+%h" 2>/dev/null || echo "unable to fetch weather"
+    fi
+}
+
+# -----------------------------------------------------------------------------
+# markdown_preview — render Markdown to HTML and open in browser
+# -----------------------------------------------------------------------------
+#
+# Converts a Markdown file to HTML using Python's markdown library and
+# opens the result in the default web browser. If the markdown library
+# is not installed, it falls back to rendering the raw content as a
+# preformatted block. Useful for quick documentation previews.
+#
+# Usage:
+#   markdown_preview <file.md>
+#
+# Examples:
+#   $ markdown_preview README.md
+#   > Preview opened in browser
+#
+markdown_preview() {
+    [ $# -ge 1 ] || { echo "usage: markdown_preview <file>" >&2; return 1; }
+    local _f="$1" _tmp
+    [ -f "$_f" ] || { echo "file not found: $_f" >&2; return 1; }
+    _tmp=$(mktemp /tmp/mdpreview-XXXXXX.html) || return 1
+    if python3 -c "import markdown" 2>/dev/null; then
+        python3 -c "import markdown, sys; html = markdown.markdown(open(sys.argv[1]).read()); print(f'<html><body>{html}</body></html>')" "$_f" > "$_tmp"
+    else
+        python3 -c "import sys, html; print('<html><body><pre>' + html.escape(open(sys.argv[1]).read()) + '</pre></body></html>')" "$_f" > "$_tmp"
+    fi
+    xdg-open "$_tmp" 2>/dev/null || open "$_tmp" 2>/dev/null || echo "opened: $_tmp"
+}

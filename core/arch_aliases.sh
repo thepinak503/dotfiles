@@ -4,6 +4,29 @@
 # Only loads on Arch-based distros, only enables aliases for installed tools
 # =============================================================================
 
+# =============================================================================
+# Arch Linux Detection Guard
+# =============================================================================
+#
+# Checks if the current system is an Arch Linux-based distribution.
+# This function is called immediately on source; if it returns
+# non-zero (not Arch), the entire module is skipped via "return".
+#
+# Detection sources:
+#   Primary: DOTFILES_DISTRO environment variable
+#   Fallback: /etc/os-release ID field
+#
+# Arch-based distros detected (14+):
+#   arch, artix, manjaro, endeavouros, garuda, archarm, archlabs,
+#   arcolinux, chakra, hyperbola, kaos, parabola, rebornos, siduction
+#
+# Usage:
+#   _detect_arch || return  # Guard at module top
+#
+# See also:
+#   - core/os_detect.sh - Primary OS detection
+#   - core/universal.sh - DOTFILES_DISTRO setup
+#
 _detect_arch() {
     case "${DOTFILES_DISTRO:-$(. /etc/os-release 2>/dev/null && echo "$ID")}" in
         arch|artix|manjaro|endeavouros|garuda|archarm|archlabs|arcolinux|chakra|hyperbola|kaos|parabola|rebornos|siduction) return 0 ;;
@@ -12,6 +35,38 @@ _detect_arch() {
 }
 _detect_arch || return
 
+# =============================================================================
+# AUR Helper Detection
+# =============================================================================
+#
+# Scans for installed AUR helpers in order of preference. The first
+# one found is used for all AUR-related aliases and functions.
+#
+# Detection order (by preference):
+#   1. paru    - Rust-based, fast, full-featured (recommended)
+#   2. yay     - Go-based, most popular, "Yet Another Yogurt"
+#   3. pikaur  - Python-based, single-file, minimal dependencies
+#   4. aura    - Haskell-based, includes package management tools
+#   5. pakku   - Rust-based, pacman-compatible wrapper
+#   6. trizen  - Perl-based, lightweight AUR helper
+#
+# The detected helper is stored in _AUR_HELPER and used for all
+# aur- prefixed aliases and the _aur_fzf browser function.
+#
+# Features:
+#   - Support for 6 different AUR helpers
+#   - Preference-ordered detection (best first)
+#   - Generates dynamic aliases for the detected helper
+#   - Falls back gracefully when no helper is found
+#
+# Compatibility:
+#   Requires: Arch-based distro (guarded by _detect_arch)
+#
+# See also:
+#   - aur-* aliases - Generic AUR commands
+#   - paru-* / yay-* etc. - Helper-specific aliases
+#   - _aur_fzf() - Fzf package browser
+#
 # ---- AUR helper detection ----
 # Ordered by preference: paru -> yay -> pikaur -> aura -> pakku -> trizen -> aurutils -> pamac
 _AUR_HELPER=""
