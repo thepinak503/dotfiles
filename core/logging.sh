@@ -109,7 +109,7 @@ if [ -n "$BASH_VERSION" ]; then
                printf '%s %s CMD="%s"\n' "$ts" "EXIT=$code" "$_DOTFILES_LAST_CMD" >> "$DOTFILES_LOG_FILE" 2>/dev/null
                _DOTFILES_LAST_CMD=""
            }
-           PROMPT_COMMAND=(_bash_precmd_log)
+           PROMPT_COMMAND="_bash_precmd_log${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
            ;;
     esac
 fi
