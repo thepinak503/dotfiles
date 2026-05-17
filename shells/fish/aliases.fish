@@ -292,7 +292,7 @@ if test -n "$_AUR_HELPER"
             alias pikaurf '_aur_fzf'
     end
 end
-if command -v apt >/dev/null 2>&1 || command -v apt-get >/dev/null 2>&1; then
+if command -v apt >/dev/null 2>&1; or command -v apt-get >/dev/null 2>&1
     alias apt '_x apt'
     alias aptup 'sudo apt update && sudo apt upgrade -y'
     alias aptin 'sudo apt install'
@@ -1946,7 +1946,7 @@ if type -q http
     alias https 'https'
 end
 
-if command -v procs >/dev/null 2>&1 || command -v bottom >/dev/null 2>&1; then
+if command -v procs >/dev/null 2>&1; or command -v bottom >/dev/null 2>&1
     alias procs 'procs'
 end
 
