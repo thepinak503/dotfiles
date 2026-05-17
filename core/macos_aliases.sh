@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # =============================================================================
-# macOS - Homebrew, MacPorts, MAS & macOS-specific aliases
+
 # Only loads on macOS
 # =============================================================================
 
 if [ "$DOTFILES_DISTRO" = "macos" ]; then
 
-# ---- Homebrew aliases ----
+
 alias brewup='brew update && brew upgrade'
 alias brewin='brew install'
 alias brewrm='brew uninstall'
@@ -57,7 +57,7 @@ alias brewbundch='brew bundle check'
 alias brewconfig='brew config'
 alias brewenve='eval "$(brew shellenv)"'
 
-# ---- Homebrew functions ----
+
 brewinstall() { brew install "$@"; }
 brewremove() { brew uninstall "$@"; }
 brewupdate() { brew update; }
@@ -67,7 +67,7 @@ brewsearch() { brew search "$@"; }
 function brewinfo() { brew info "$@"; }
 function brewcask() { brew install --cask "$@"; }
 
-# ---- Mac App Store (mas) ----
+
 command -v mas >/dev/null 2>&1 && {
     alias mas='mas'
     alias masin='mas install'
@@ -81,7 +81,7 @@ command -v mas >/dev/null 2>&1 && {
     alias masreset='mas reset'
 }
 
-# ---- MacPorts ----
+
 command -v port >/dev/null 2>&1 && {
     alias port='port'
     alias portin='sudo port install'
@@ -100,7 +100,7 @@ command -v port >/dev/null 2>&1 && {
     alias portlocks='sudo port reclaim'
 }
 
-# ---- macOS-specific CLI tools ----
+
 alias pbcopy='pbcopy'
 alias pbpaste='pbpaste'
 alias pbc='pbcopy'
@@ -135,7 +135,7 @@ alias diskutapfs='diskutil apfs resize'
 alias diskutapfv='diskutil apfs lock'
 alias diskutapfu='diskutil apfs unlock'
 
-# ---- Network (macOS-specific) ----
+
 alias netstat='netstat'
 alias nstop='sudo lsof -iTCP -sTCP:LISTEN -P'
 alias nstoppid='sudo lsof -iTCP -sTCP:LISTEN -P -p'
@@ -161,7 +161,7 @@ alias wifion='networksetup -setairportpower en0 on'
 alias wifioff='networksetup -setairportpower en0 off'
 alias wifiname='networksetup -getairportnetwork en0'
 
-# ---- macOS System management ----
+
 alias sysprefs='open -a System\ Preferences'
 alias sysinfo='system_profiler SPHardwareDataType'
 alias sysmem='system_profiler SPMemoryDataType'
@@ -180,7 +180,7 @@ alias sysaudio='system_profiler SPAudioDataType'
 alias syscamera='system_profiler SPCameraDataType'
 alias sysbatt='system_profiler SPPowerDataType | grep -E "Condition|Cycle|Charge|Health"'
 
-# ---- Launchctl (macOS init) ----
+
 alias lctl='launchctl'
 alias lctll='launchctl list'
 alias lctlload='launchctl load'
@@ -199,7 +199,7 @@ alias lctlrm='launchctl remove'
 alias lctlprint='launchctl print'
 alias lctlerr='launchctl error'
 
-# ---- PlistBuddy ----
+
 command -v /usr/libexec/PlistBuddy >/dev/null 2>&1 && {
     alias plist='/usr/libexec/PlistBuddy'
     alias plistp='/usr/libexec/PlistBuddy -c Print'
@@ -212,7 +212,7 @@ command -v /usr/libexec/PlistBuddy >/dev/null 2>&1 && {
     alias plistchk='plutil -lint'
 }
 
-# ---- Defaults (macOS settings) ----
+
 alias def='defaults'
 alias defr='defaults read'
 alias defw='defaults write'
@@ -222,12 +222,12 @@ alias deft='defaults read -g'
 alias defhost='defaults -currentHost'
 alias defv='defaults -domain'
 
-# ---- macOS FDer ----
+
 alias fdsoft='ulimit -S -n'
 alias fdhard='ulimit -H -n'
 alias fdmax='ulimit -n 1024'
 
-# ---- SW_VER ----
+
 alias swv='sw_vers'
 alias swvpd='sw_vers -productName'
 alias swvpv='sw_vers -productVersion'

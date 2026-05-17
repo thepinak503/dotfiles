@@ -269,7 +269,7 @@ if test -n "$_AUR_HELPER"
     end
     alias aurf '_aur_fzf'
 
-    # Helper-specific aliases
+
     switch $_AUR_HELPER
         case paru
             alias paruf '_aur_fzf'

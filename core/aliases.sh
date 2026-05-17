@@ -1,26 +1,28 @@
 # -----------------------------------------------------------------------------
 # Navigation
-# -----------------------------------------------------------------------------
-#
-# This section provides directory navigation shortcuts. These aliases reduce
-# keystrokes for common directory traversal patterns, directory bookmarks for
-# frequently accessed locations, and shell session management commands.
-#
-# Notable aliases:
-#   .. / ... / ....  — go up 1–5 directory levels (also a / aa / aaa / aaaa / aaaaa)
-#   home             — cd to $HOME
-#   docs / dt / tmp  — cd to ~/Documents, ~/Desktop, /tmp
-#   root             — cd to filesystem root
-#   bk               — return to previous directory (cd -)
-#   tmpdir           — cd to a temporary directory created with mktemp
-#   x / :q / q       — exit the shell
-#   c / cls / clr    — clear the terminal
-#   dash / -         — cd back (function + alias)
-#
-# See also: pushd, popd, zoxide (z, zi)
-#
-# Tip: use bk to toggle between two directories rapidly.
-#
+
+_x() { if command -v "${1%% *}" >/dev/null 2>&1; then "$@"; else echo "missing: $1" >&2; return 127; fi; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -50,29 +52,29 @@ alias q='exit'
 # -----------------------------------------------------------------------------
 # File Listing
 # -----------------------------------------------------------------------------
-#
-# This section provides file and directory listing aliases. These commands
-# enhance the default ls experience with tree views, detailed listings, and
-# modern alternatives (eza/exa) when available, falling back to standard ls.
-#
-# Notable aliases:
-#   lsa / l1 / lh / lr  — various ls flag combinations (-a, -1, -lhS, -lR)
-#   lsd / lsdot         — list only directories / dotfiles
-#   lsf                 — list only regular files (via grep -v /)
-#   lsbig               — largest files by size (ls -lS | head -20)
-#   lshidden            — show hidden entries only
-#   ltree               — eza --tree or fallback to find -maxdepth 3
-#   le                  — list unique file extensions in pwd
-#   lw                  — ls -ldh of current directory
-#   ls / ll / la / tree — smart wrappers preferring eza, then exa, then ls
-#   ldir / dirs         — list directories only
-#   lf                  — list files with sizes sorted ascending
-#
-# See also: eza(1), exa(1), ls(1), tree(1)
-#
-# Warning: the fallback chain may produce different output formats across
-#          systems where eza/exa are not installed.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias lsa='ls -a'
 alias lsd='ls -d */'
@@ -97,26 +99,26 @@ alias lf='find . -maxdepth 1 -type f -exec ls -lh {} + 2>/dev/null | sort -k5 -h
 # -----------------------------------------------------------------------------
 # System Information — Dotfiles Management
 # -----------------------------------------------------------------------------
-#
-# This section covers aliases for managing and inspecting the dotfiles
-# repository itself. These commands provide shortcuts for common git
-# operations scoped to $DOTFILES_DIR, health checks, version info, and
-# reloading the shell configuration.
-#
-# Notable aliases:
-#   dots / dotfiles   — cd to the dotfiles directory
-#   dotst             — short git status of the dotfiles repo
-#   dotupdate         — run the full dotfiles update script
-#   dothealth         — run the health check script
-#   dotbranch / dotdiff / dotlog / dotpush — git operations on dotfiles
-#   dotreload         — exec $SHELL -l to reload the login shell
-#   dsync             — run dot_sync (sync function)
-#   chmode            — set $DOTFILES_MODE
-#
-# See also: git(1), chezmoi(1)
-#
-# Tip: run dothealth after any config change to catch regressions early.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias dots='cd "$DOTFILES_DIR"'
 alias dotfiles='cd "$DOTFILES_DIR"'
@@ -145,45 +147,45 @@ alias dotinfo='echo "Dotfiles: $DOTFILES_DIR | Mode: ${DOTFILES_MODE:-unknown} |
 # -----------------------------------------------------------------------------
 # Git Operations
 # -----------------------------------------------------------------------------
-#
-# This section provides comprehensive git aliases for common version control
-# workflows. These cover commit, push, pull, branch management, diff, stash,
-# rebase, merge, cherry-pick, tag operations, and diagnostic commands, all
-# using short two- and three-character mnemonics.
-#
-# Notable aliases:
-#   g      — git (base command)
-#   ga     — git add
-#   gc     — git commit -v
-#   gca    — git commit -a -v
-#   gpl    — git pull (with or without --rebase --autostash)
-#   gp     — git push
-#   gco    — git checkout
-#   gcb    — git checkout -b
-#   gsw    — git switch
-#   gswc   — git switch --create
-#   gd     — git diff
-#   gdc    — git diff --cached
-#   gl     — git log --oneline -n 20
-#   gla    — git log --oneline --graph --all --decorate
-#   gs     — git status
-#   gss    — git status --short
-#   gst    — git stash
-#   gsta   — git stash apply
-#   grb    — git rebase
-#   grbc   — git rebase --continue
-#   gm     — git merge
-#   gcp    — git cherry-pick
-#   gbl    — git blame
-#   gsh    — git show
-#   gwip   — git add -A && git commit -m "wip" (--no-verify)
-#   gwipe  — git reset --hard && git clean --force -df
-#   nah    — hard reset + clean (same as gwipe)
-#
-# See also: git(1), git-workflow(7), lazygit (lg)
-#
-# Warning: gwipe / nah are destructive — they discard uncommitted changes.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias gap='git add -p'
 alias gcm='git commit -m'
@@ -281,27 +283,27 @@ alias gshn='git show --name-only'
 alias gdf='git difftool'
 
 # -----------------------------------------------------------------------------
-# GitHub CLI (gh)
+
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for the GitHub CLI tool. These cover pull
-# request management, issue tracking, release operations, repository
-# inspection, and workflow actions.
-#
-# Notable aliases:
-#   gh     — gh (base command)
-#   ghs    — gh status
-#   ghp    — gh pr
-#   ghpl   — gh pr list
-#   ghpc   — gh pr create
-#   ghco   — gh pr checkout
-#   ghi    — gh issue
-#   ghr    — gh release
-#   ghrep  — gh repo
-#   ghw    — gh workflow
-#
-# See also: gh(1), https://cli.github.com/manual/
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v gh >/dev/null 2>&1; then
     alias ghs='gh status'
@@ -328,31 +330,31 @@ fi
 # -----------------------------------------------------------------------------
 # Docker Management
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Docker and Docker Compose. These cover
-# container lifecycle (run, exec, stop, rm), image management (build, rmi),
-# system pruning, compose stacks, volume/network inspection, and resource
-# usage statistics.
-#
-# Notable aliases:
-#   dk       — docker (base command via _x)
-#   dkps     — docker ps
-#   dkex     — docker exec -it
-#   dklogs   — docker logs -f
-#   dkstop   — stop all running containers
-#   dkrm     — remove all stopped containers
-#   dkprune  — docker system prune -af
-#   dkclean  — docker system prune -af --volumes
-#   dkup     — docker compose up -d
-#   dkdown   — docker compose down
-#   dstats   — docker stats --no-stream
-#   lzd      — lazydocker TUI
-#   docker-ip — inspect container IP address
-#
-# See also: docker(1), docker-compose(1), lazydocker
-#
-# Warning: dkstop, dkrm, dkprune, dkclean operate on ALL containers/images.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v docker >/dev/null 2>&1; then
     alias dk='_x docker'
@@ -398,21 +400,21 @@ fi
 # -----------------------------------------------------------------------------
 # Container Image Tools
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for container image inspection, analysis,
-# and security scanning tools. These cover image inspection (skopeo, dive),
-# Dockerfile linting (hadolint), vulnerability scanning (trivy), and
-# signature verification (cosign).
-#
-# Notable aliases:
-#   sk / skc / skl / ski / sks — skopeo (copy, list-tags, inspect, sync)
-#   dive                        — image layer inspection TUI
-#   hado                        — hadolint Dockerfile linter
-#   trivy / trivyi / trivyf     — vulnerability scanner (image, fs, repo)
-#   cosign / cosignv / cosigns  — container image signing and verification
-#
-# See also: skopeo(1), dive(1), hadolint(1), trivy(1), cosign(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v skopeo >/dev/null 2>&1; then
     alias sk='skopeo'
@@ -441,25 +443,25 @@ fi
 # -----------------------------------------------------------------------------
 # Podman Management
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Podman, the daemonless container engine.
-# These cover container lifecycle (run, exec, stop, rm), image management,
-# system pruning, and compose operations, mirroring the Docker alias scheme.
-#
-# Notable aliases:
-#   pod        — podman (base command via _x)
-#   podps      — podman ps
-#   podex      — podman exec -it
-#   podlogs    — podman logs -f
-#   podstop    — stop all running containers
-#   podprune   — podman system prune -af
-#   podcom     — podman compose
-#   podrun     — podman run -it --rm
-#
-# See also: podman(1), containers-podman(1)
-#
-# Warning: podstop operates on ALL running containers.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v podman >/dev/null 2>&1; then
     alias pod='_x podman'
@@ -481,29 +483,29 @@ fi
 # -----------------------------------------------------------------------------
 # Kubernetes Operations
 # -----------------------------------------------------------------------------
-#
-# This section covers kubectl aliases for managing Kubernetes clusters.
-# These address pod and deployment operations, service inspection, log
-# streaming, port-forwarding, context switching, resource creation, and
-# cluster administration (cordon, drain, taint).
-#
-# Notable aliases:
-#   kgpw    — kubectl get pods -w
-#   kd / kdp / kds / kdd — kubectl describe (pod, svc, deployment)
-#   kl / klf — kubectl logs / -f
-#   kpf     — kubectl port-forward
-#   kexec   — kubectl exec -it
-#   ka      — kubectl apply -f
-#   ktop    — kubectl top pods
-#   kns     — set namespace context
-#   kind    — kind (Kubernetes in Docker) management
-#   mk      — minikube management
-#   k0      — k0s management
-#
-# See also: kubectl(1), kubeconfig(5), minikube(1), kind(1), k0s(1)
-#
-# Tip: use kns <namespace> to switch default namespace without editing kubeconfig.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v kubectl >/dev/null 2>&1; then
     alias kgpw='_x kubectl get pods -w'
@@ -579,28 +581,28 @@ fi
 # -----------------------------------------------------------------------------
 # Helm Operations
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for the Helm package manager for Kubernetes.
-# These cover release management (install, upgrade, delete, rollback),
-# chart inspection (show chart/values), repository operations (add, list,
-# update), and search across Helm repositories.
-#
-# Notable aliases:
-#   hl      — helm (base command via _x)
-#   hls     — helm list
-#   hli     — helm install
-#   hlu     — helm upgrade
-#   hlui    — helm upgrade --install
-#   hld     — helm delete
-#   hlr     — helm rollback
-#   hlshc   — helm show chart
-#   hlshv   — helm show values
-#   hlrl    — helm repo list
-#   hlra    — helm repo add
-#   hlsea   — helm search
-#
-# See also: helm(1), helm-using(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v helm >/dev/null 2>&1; then
     alias hl='_x helm'
@@ -631,22 +633,22 @@ fi
 # -----------------------------------------------------------------------------
 # Systemd Service Management
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for systemd service and unit management.
-# These cover service lifecycle (start, stop, restart, enable, disable),
-# user service units, unit listing by state (all, failed, masked), and
-# daemon-reload operations.
-#
-# Notable aliases:
-#   scsr / scse / scsd — systemctl restart / enable / disable
-#   scens / scdis      — systemctl enable/disable --now
-#   scu / scus / scust — systemctl --user (status, start, stop)
-#   scl / scla / scfail — systemctl list-units (default, all, failed)
-#   scmask / scunmask  — systemctl mask / unmask
-#   serv               — _x systemctl (shortcut)
-#
-# See also: systemctl(1), systemd(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v systemctl >/dev/null 2>&1; then
     alias scsr='_x systemctl restart'
@@ -676,25 +678,25 @@ fi
 # -----------------------------------------------------------------------------
 # Journalctl — System Log Inspection
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for journalctl to inspect systemd journal
-# logs. These cover filtering by unit, priority level, time windows, boot
-# sessions, and disk usage management for the journal.
-#
-# Notable aliases:
-#   jc       — journalctl (base command)
-#   jcf      — journalctl -f (follow)
-#   jcu      — journalctl -u (by unit)
-#   jcub     — journalctl -u -b (by unit, current boot)
-#   jcs      — journalctl --since
-#   jcp      — journalctl -p err (error priority and above)
-#   jcdf     — journalctl --disk-usage
-#   jcemerg / jcalert / jccrit / jcwarn / jcnotice / jcinfo / jcdebug
-#            — journalctl filtered by specific priority levels
-#   jrnl     — _x journalctl (shortcut)
-#
-# See also: journalctl(1), systemd-journald(8)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v journalctl >/dev/null 2>&1; then
     alias jc='_x journalctl'
@@ -722,23 +724,23 @@ fi
 # -----------------------------------------------------------------------------
 # Package Managers — pacman / yay
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Arch Linux package management with
-# pacman and the AUR helper yay. These cover package search, install,
-# removal, orphan cleanup, files query, and database operations.
-#
-# Notable aliases:
-#   pac / pacs / pacsi   — pacman (sudo) / search / info
-#   pacup / pacin / pacrm — pacman -Syu / -S / -Rns
-#   pacorph / pacclean   — list / remove orphan packages
-#   yay / yays / yayi    — AUR-aware search / install
-#   yayup / yayrm       — AUR upgrade / remove
-#   yayf                 — fzf-interactive AUR package browser + install
-#
-# See also: pacman(8), yay(1), makepkg(8)
-#
-# Warning: pacclean removes all orphan packages in one operation.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v pacman >/dev/null 2>&1; then
     alias pac='sudo pacman'
@@ -781,24 +783,24 @@ if command -v yay >/dev/null 2>&1 && command -v fzf >/dev/null 2>&1; then
 fi
 
 # -----------------------------------------------------------------------------
-# Package Managers — APT (Debian/Ubuntu)
+
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for APT on Debian-based systems. These cover
-# package search, install, removal, purging, automatic removal of orphans,
-# package holding, and source/build dependency management.
-#
-# Notable aliases:
-#   apt / apts / aptsh   — apt search / show
-#   aptup / aptin / aptr — apt update + upgrade / install / remove
-#   aptp                 — apt purge
-#   aptau                — apt autoremove
-#   aptbuild             — apt build-dep
-#   apthold / aptunhold  — apt-mark hold / unhold
-#   aptfix               — apt --fix-broken install
-#
-# See also: apt(8), apt-get(8), dpkg(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v apt >/dev/null 2>&1 || command -v apt-get >/dev/null 2>&1; then
     alias apt='_x apt'
@@ -827,25 +829,25 @@ if command -v apt >/dev/null 2>&1 || command -v apt-get >/dev/null 2>&1; then
 fi
 
 # -----------------------------------------------------------------------------
-# Package Managers — DNF (Fedora/RHEL)
+
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for DNF on Fedora/RHEL-based systems.
-# These cover package search, install, removal, automatic removal, history
-# inspection and rollback, repository management, module operations,
-# and downgrade workflows.
-#
-# Notable aliases:
-#   dnf / dnfs / dnfsi   — dnf search / info
-#   dnfup / dnfi / dnfrm — upgrade / install / remove
-#   dnfau                — dnf autoremove
-#   dnfhist / dnfroll    — history inspection / rollback
-#   dnfdowng             — dnf downgrade
-#   dnfcache             — dnf clean all
-#   dnfprov              — dnf provides (what package owns file)
-#
-# See also: dnf(8), rpm(8)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v dnf >/dev/null 2>&1; then
     alias dnf='_x dnf'
@@ -871,24 +873,24 @@ if command -v dnf >/dev/null 2>&1; then
 fi
 
 # -----------------------------------------------------------------------------
-# Package Managers — Homebrew (macOS/Linux)
+
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Homebrew on macOS and Linux. These cover
-# package search, install, uninstall, service management, update/upgrade
-# with cleanup, dependency inspection, and cask (GUI app) installation.
-#
-# Notable aliases:
-#   brew / brews / brewin   — brew search / install
-#   brewrm                  — brew uninstall
-#   brewup / brewupc        — brew update && upgrade (with/without cleanup)
-#   brewsrv / brewsrvl      — brew services list
-#   brewcask                — brew install --cask
-#   brewdep / brewuses      — dependency inspection / reverse deps
-#   brewleaves              — packages not required by others
-#
-# See also: brew(1), https://brew.sh
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v brew >/dev/null 2>&1; then
     alias brew='_x brew'
@@ -916,21 +918,21 @@ fi
 # -----------------------------------------------------------------------------
 # Package Managers — Flatpak / Snap / Nix / Zypper / APK
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Flatpak (cross-distro sandboxed apps),
-# Snap (Canonical's package format), Nix (purely functional package manager),
-# Zypper (openSUSE), and APK (Alpine Linux). Each group covers search,
-# install, remove, update, and inspection workflows.
-#
-# Notable aliases:
-#   flat / flats / flati    — flatpak search / install
-#   snap / snaps / snapi    — snap search / install
-#   nix / nixs / nixi       — nix search / profile install
-#   zyp / zyps / zypi       — zypper search / install
-#   apk / apks / apki       — apk search / add
-#
-# See also: flatpak(1), snap(1), nix(1), zypper(8), apk(8)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v flatpak >/dev/null 2>&1; then
     alias flat='flatpak'
@@ -993,26 +995,26 @@ if command -v apk >/dev/null 2>&1; then
 fi
 
 # -----------------------------------------------------------------------------
-# Node.js / JavaScript — npm / pnpm / yarn
+
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Node.js package management and
-# development workflows. These cover npm (test, build, run, publish,
-# audit, outdated), pnpm (fast, disk-efficient alternative), and
-# yarn (classic) with per-tool conventions.
-#
-# Notable aliases:
-#   nt / nb / nrn / np   — npm test / build / run / publish
-#   naud / naux          — npm audit / audit fix
-#   ninit / nls / nout   — npm init / list / outdated
-#   pn / pni / pnr       — pnpm install / run
-#   pna / pnad / pnrm    — pnpm add / add -D / remove
-#   y / ya / yr / yb     — yarn add / run / build
-#
-# See also: npm(1), pnpm(1), yarn(1), package.json(5)
-#
-# Tip: pnpm store is shared across projects — run pnstore to inspect.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v node >/dev/null 2>&1; then
     alias nt='_x npm test'
@@ -1074,25 +1076,25 @@ fi
 # -----------------------------------------------------------------------------
 # Rust / Cargo Development
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Rust development with Cargo. These cover
-# the full build-test-run cycle, code quality (clippy, fmt, check),
-# documentation generation, publishing, benchmark, and nightly toolchain
-# shortcuts.
-#
-# Notable aliases:
-#   cr / crb / crbr    — cargo build / build --release
-#   crr / crrr         — cargo run / run --release
-#   crt / crcl / crf   — cargo test / clippy / fmt
-#   crc / crd          — cargo check / doc
-#   crp / cru / crout  — cargo publish / update / outdated
-#   crbench / crfix    — cargo bench / fix
-#   crl                — cargo +nightly (nightly toolchain)
-#   crw                — cargo watch
-#   cradd / crrm       — cargo add / remove
-#
-# See also: cargo(1), rustc(1), https://doc.rust-lang.org/cargo/
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v cargo >/dev/null 2>&1; then
     alias cr='_x cargo'
@@ -1120,25 +1122,25 @@ fi
 # -----------------------------------------------------------------------------
 # Go Development
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Go development. These cover compilation
-# (build, run), testing (verbose with ./...), module management (mod tidy,
-# mod vendor), code quality (fmt, vet), documentation, code generation,
-# and profiling (pprof).
-#
-# Notable aliases:
-#   go / gor / gob     — go run / build
-#   got / gotv         — go test / test -v ./...
-#   goi                — go install
-#   gom / gomt / gomv  — go mod / mod tidy / mod vendor
-#   gof / gol          — go fmt ./... / go vet ./...
-#   godoc              — go doc
-#   gogen              — go generate ./...
-#   goc                — go clean
-#   gop                — go tool pprof
-#
-# See also: go(1), https://go.dev/doc/
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v go >/dev/null 2>&1; then
     alias go='_x go'
@@ -1164,25 +1166,25 @@ fi
 # -----------------------------------------------------------------------------
 # Python Development
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for Python development. These cover
-# interpreter selection (python2/3), virtual environment creation and
-# activation, pip package management (install, freeze, list, check),
-# testing with pytest and unittest, and JSON/YAML/CSV formatting.
-#
-# Notable aliases:
-#   py / py2 / py3    — python3 / python2 / python3
-#   pipup / pi / piu  — pip upgrade / install / install --upgrade
-#   venv / akt / dakt — create venv / activate / deactivate
-#   pyreq / pyr       — pip freeze > requirements.txt / install -r
-#   pyt / pyun        — pytest / unittest
-#   json / yaml / csv — stdin formatting pipelines
-#   math              — python3 -c (inline calculator)
-#
-# See also: python(1), pip(1), pytest(1), venv(1)
-#
-# Tip: akt sources .venv/bin/activate; run dakt to leave the venv.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v python3 >/dev/null 2>&1; then
     alias py='_x python3'
@@ -1224,25 +1226,25 @@ alias rstring='_x python3 -c "import secrets; print(secrets.token_hex())"'
 # -----------------------------------------------------------------------------
 # SSH Operations
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for SSH client operations, key management,
-# and host-key verification. These cover agent forwarding, strict host key
-# checking bypass (for trusted/transient hosts), key generation, key removal
-# from known_hosts, and public-key copy to remote hosts.
-#
-# Notable aliases:
-#   ssh     — ssh (via _x)
-#   ssha    — ssh -A (agent forwarding enabled)
-#   sshi    — ssh -o StrictHostKeyChecking=no (insecure, transient hosts only)
-#   ssk     — ssh-keygen
-#   sskr    — ssh-keygen -R (remove host key)
-#   ssc     — ssh-copy-id
-#   scp     — scp (secure copy)
-#
-# See also: ssh(1), sshd(8), ssh-keygen(1), ssh-copy-id(1)
-#
-# Warning: sshi disables host key checking — use only in trusted environments.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v ssh >/dev/null 2>&1; then
     alias ssh='_x ssh'
@@ -1256,25 +1258,25 @@ fi
 # -----------------------------------------------------------------------------
 # GPG Operations
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for GNU Privacy Guard operations. These
-# cover encryption, decryption, signing, verification, key listing, key
-# export/import, and key retrieval from keyservers.
-#
-# Notable aliases:
-#   gpg      — gpg (base command via _x)
-#   gpge     — gpg -e (encrypt)
-#   gpgd     — gpg -d (decrypt)
-#   gpgs     — gpg -s (sign)
-#   gpgv     — gpg --verify
-#   gpgl     — gpg --list-keys
-#   gpgls    — gpg --list-secret-keys
-#   gpgex    — gpg --export
-#   gpgimport — gpg --import
-#   gpgrecv  — gpg --recv-keys
-#
-# See also: gpg(1), gpg-agent(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v gpg >/dev/null 2>&1; then
     alias gpg='_x gpg'
@@ -1294,29 +1296,29 @@ fi
 # -----------------------------------------------------------------------------
 # Network Tools
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for network diagnostics, DNS queries,
-# port scanning, HTTP requests, and connectivity testing. These combine
-# traditional tools (dig, nmap, curl, wget, ss, traceroute) with modern
-# Rust alternatives (dog, bandwhich, gping) when available.
-#
-# Notable aliases:
-#   dns / dnsx / dnsmx  — dig +short, ANY, MX
-#   nm / nms / nmp      — nmap ping sweep / version scan / OS detect
-#   cur / curh / curv   — curl -fsSL / -I / -v
-#   wg / wgr            — wget -c (continue) / recursive mirror
-#   net / ipa / ipr     — ip -br addr / route
-#   nst / portlisten    — netstat / ss for listening ports
-#   trace               — traceroute
-#   myip / myipl        — public / local IP address
-#   speed               — speedtest-cli via curl
-#   flush               — flush DNS cache (systemd-resolve / mDNSResponder)
-#   ping / pb           — prettyping / ping 8.8.8.8
-#   band / bandl        — bandwhich (network utilization TUI)
-#   gping               — graphical ping
-#
-# See also: ip(8), ss(8), dig(1), nmap(1), curl(1), wget(1), traceroute(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias myipl='ip addr show | grep "inet " | awk "{print \$2}" | cut -d/ -f1 | head -1'
 alias weather='curl -fsSL wttr.in'
@@ -1380,26 +1382,26 @@ fi
 # -----------------------------------------------------------------------------
 # Process Management
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for process inspection, signal handling,
-# and scheduling. These cover process listing with various sort orders,
-# tree views, kill signals, searching by name/pattern, priority adjustment
-# with nice/renice, and resource monitoring (CPU, memory, I/O).
-#
-# Notable aliases:
-#   ps / psf / psxl     — ps auxf / forest view
-#   pse / psi / pid     — search processes by name/pattern
-#   pst                 — pstree (process tree)
-#   kill9 / kill15      — kill -9 / kill -15
-#   pkillf              — pkill -f (kill by pattern)
-#   topcpu / topmem     — top processes by CPU/memory
-#   iotop               — I/O monitoring TUI
-#   procs               — modern process viewer (Rust)
-#   nohup / disown / bg / fg — job control
-#   nice / renice       — priority adjustment
-#
-# See also: ps(1), kill(1), pkill(1), nice(1), renice(1), top(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias ps='ps auxf'
 alias pse='ps aux | grep'
@@ -1427,28 +1429,28 @@ alias top='_x btop 2>/dev/null || _x htop 2>/dev/null || command top'
 # -----------------------------------------------------------------------------
 # Text Processing
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for text search, filtering, transformation,
-# and comparison. These cover grep (with ripgrep fallback), sed, awk, sort,
-# uniq, diff, column formatting, and common pipeline helpers. Modern
-# alternatives (rg, sd, delta) are used when available.
-#
-# Notable aliases:
-#   gr / gri / grr      — grep / grep -i / grep -r
-#   rg / rgi            — ripgrep (with hidden files, excluding .git)
-#   sed / awk / sort / uniq — standard text tools
-#   uniqc               — sort | uniq -c | sort -rn (frequency count)
-#   diff / diffy        — diff / diff -y (side-by-side), delta fallback
-#   head / tail         — head/tail with common defaults
-#   tair / taill        — tail -f / tail -100
-#   nl / tac / rev      — line numbering / reverse / reverse chars
-#   cut / tr / fold / column / join — field/column operations
-#   grepw / grepr / grex — grep word / recursive / exclude dirs
-#   delta               — modern diff viewer (Rust)
-#   sd                  — find-and-replace (sed alternative, Rust)
-#
-# See also: grep(1), rg(1), sed(1), awk(1), diff(1), delta(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias gr='grep'
 alias gri='grep -i'
@@ -1484,31 +1486,31 @@ fi
 # -----------------------------------------------------------------------------
 # File Operations
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for file manipulation, copying, moving,
-# deletion, permissions, symlinks, and disk usage. These use interactive
-# flags (-i) by default for safety, and include modern alternatives
-# (bat, fd, rsync) when available.
-#
-# Notable aliases:
-#   cp / mv / rm        — interactive copy/move/remove
-#   rmr / rmf / cpf     — recursive / force variants
-#   cpv                 — rsync-based copy with progress
-#   rsync / rsyncdn     — rsync with archive/compress/dry-run
-#   chx / chm           — chmod +x / chmod
-#   ln / lnh            — symlink / readlink
-#   backup              — timestamped backup copy
-#   fd / fdi            — fd (find alternative) with hidden
-#   find                — fd with hidden fallback to find
-#   cat                 — bat with fallback to cat
-#   shred / shredf      — secure file deletion
-#   lsof / lsofi        — list open files / by port
-#   du / dud / du2      — disk usage with depth control
-#
-# See also: cp(1), mv(1), rm(1), rsync(1), fd(1), bat(1), shred(1)
-#
-# Warning: rmf / shred are destructive and irreversible.
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias cp='cp -i'
 alias mv='mv -i'
@@ -1560,24 +1562,24 @@ alias lsof='_x lsof -i -P -n 2>/dev/null || echo "lsof needed"'
 # -----------------------------------------------------------------------------
 # Archive Operations
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for archive creation, extraction, and
-# inspection across multiple formats. These cover tar (gz, bz2, xz),
-# gzip, bzip2, xz, 7z, rar, zip, and the modern ouch tool with
-# format-agnostic compression.
-#
-# Notable aliases:
-#   tart / tarjx / tarjc  — tar list / extract bz2 / create bz2
-#   tarzx / tarzc        — tar extract xz / create xz
-#   tarl                  — tar list verbose
-#   gunz / bz2 / bunz    — gzip / bzip2 / bunzip2
-#   xz / unxz            — xz / unxz
-#   7z / 7zx / 7za       — 7z base / extract / add
-#   rarx                  — unrar extract
-#   ouch / ouchd / ouchc — modern format-agnostic compress/decompress
-#
-# See also: tar(1), gzip(1), bzip2(1), xz(1), 7z(1), unrar(1), ouch(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias tart='tar -tzf'
 alias tarjx='tar -xjf'
@@ -1602,22 +1604,22 @@ fi
 # -----------------------------------------------------------------------------
 # Database Operations
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for relational and NoSQL database clients.
-# These cover MySQL (client, dump, root access), PostgreSQL (client, dump,
-# restore), SQLite (interactive, dump), and Redis (ping, info, monitor).
-#
-# Notable aliases:
-#   myq / myqr          — mysql / mysql -u root -p
-#   mydump / mydumpr    — mysqldump / mysqldump -u root -p
-#   psql / psqlr        — psql / psql -U postgres
-#   pgdump / pgres      — pg_dump / pg_restore
-#   sq3 / sq3d          — sqlite3 / sqlite3 .dump
-#   rcli / rcliping     — redis-cli / ping
-#   rcliinfo / rclimon  — redis info / monitor
-#
-# See also: mysql(1), psql(1), sqlite3(1), redis-cli(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v mysql >/dev/null 2>&1; then
     alias myq='mysql'
@@ -1647,22 +1649,22 @@ fi
 # -----------------------------------------------------------------------------
 # Cloud CLI — AWS / GCP / Azure
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for major cloud provider CLIs. These cover
-# AWS (STS, EC2, S3, ECS, ECR, Lambda, CloudWatch, IAM, Route53), GCP
-# (Compute SSH, instances, GKE clusters, logs), and Azure (VM management,
-# resource groups, AKS).
-#
-# Notable aliases:
-#   aws / awsw / awsinfo  — aws sts get-caller-identity / ec2 describe
-#   awss3 / awss3ls       — aws s3 / aws s3 ls
-#   awsecs / awsecr       — ECS clusters / ECR repos
-#   gcl / gcls / gcll     — gcloud / compute ssh / instances list
-#   gclgke                — gcloud container clusters get-credentials
-#   az / azl / azs        — az / vm list / vm start
-#
-# See also: aws(1), gcloud(1), az(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias s3='_x s3cmd'
 
@@ -1702,24 +1704,24 @@ fi
 # -----------------------------------------------------------------------------
 # Media Tools — FFmpeg / ImageMagick / NVIDIA
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for multimedia processing. These cover
-# FFmpeg (probe, play, format conversion, compression, GIF creation,
-# screen capture), ImageMagick (resize, format conversion, compression),
-# and NVIDIA GPU monitoring (utilization, memory, temperature).
-#
-# Notable aliases:
-#   ffp / ffg          — ffprobe / ffplay
-#   ffconvert          — ffmpeg -i (generic conversion)
-#   ffmp3              — extract audio as MP3
-#   ffcompress         — H.265/HEVC compression
-#   ffgif              — video to GIF
-#   ffscreencap        — X11 screen capture
-#   img / imgres       — ImageMagick convert / resize
-#   gpul / gputop      — nvidia-smi query / dmon
-#
-# See also: ffmpeg(1), ffprobe(1), convert(1), nvidia-smi(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v ffmpeg >/dev/null 2>&1; then
     alias ffp='ffprobe'
@@ -1746,30 +1748,30 @@ fi
 # -----------------------------------------------------------------------------
 # Utility Operations — Clipboard / Hashing / Encoding / Help
 # -----------------------------------------------------------------------------
-#
-# This section provides general-purpose utility aliases. These cover
-# clipboard access (pbcopy/pbpaste for X11/Wayland), hashing and checksums
-# (SHA256, MD5), encoding (base64, hex, URL), random password generation,
-# cheat sheet access (cht.sh, cheat.sh, learnxinyminutes), shell info
-# (history, path, env), and system data (disk, memory, CPU).
-#
-# Notable aliases:
-#   pbcopy / pbpaste   — clipboard copy/paste (xclip or wl-clipboard)
-#   sha / md5sum / hex — hashing / hex dump
-#   base64e / base64d  — base64 encode / decode
-#   urlenc / urldec    — URL encode / decode
-#   randpw             — random 16-byte base64 password
-#   cht / cheat / learn — online cheat sheets (cht.sh, cheat.sh)
-#   please             — sudo (politely)
-#   focus              — clear screen + timestamp
-#   path / pathlines   — display PATH entries
-#   port / ports       — listening ports via ss/netstat/lsof
-#   connections        — active connections via ss/netstat
-#   sep                — horizontal rule across terminal width
-#   countfiles         — count files/links/dirs in pwd
-#
-# See also: xclip(1), openssl(1), xxd(1), cht.sh
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Clipboard
 if command -v xclip >/dev/null 2>&1; then
@@ -1881,28 +1883,28 @@ alias man='_x tldr 2>/dev/null || command man'
 # -----------------------------------------------------------------------------
 # Development Tools — Tmux / Editors / Lazygit / Just
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for development tooling beyond language
-# runtimes. These cover tmux (session management, window splitting),
-# editors (Neovim with sudo variant), lazygit TUI, yazi file manager,
-# zellij multiplexer, just command runner, make, chezmoi dotfile manager,
-# Vagrant VM management, Packer image builder, and act GitHub Actions runner.
-#
-# Notable aliases:
-#   tad / tl / tn       — tmux attach / list / new session
-#   lg                  — lazygit TUI
-#   yz                  — yazi file manager
-#   zj / zja / zjl      — zellij / attach / list
-#   just / justl         — just command runner / list
-#   mk / mkc / mkt      — make / clean / test
-#   vim / nv / sv       — Neovim / sudo Neovim
-#   chez / cheza        — chezmoi / apply
-#   vg / vgu / vgh      — vagrant / up / halt
-#   pk / pkb / pkv      — packer / build / validate
-#   act / actl          — GitHub Actions locally / list
-#
-# See also: tmux(1), nvim(1), lazygit(1), yazi(1), zellij(1), just(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Tmux
 if command -v tmux >/dev/null 2>&1; then
@@ -1961,7 +1963,7 @@ if command -v make >/dev/null 2>&1; then
     alias mkt='make test'
 fi
 
-# Atuin (shell history)
+
 if command -v atuin >/dev/null 2>&1; then
     alias atu='atuin'
     alias atus='atuin search'
@@ -1974,7 +1976,7 @@ if command -v atuin >/dev/null 2>&1; then
     alias atustats='atuin stats'
 fi
 
-# Direnv (env loader)
+
 if command -v direnv >/dev/null 2>&1; then
     alias dir='direnv'
     alias dira='direnv allow'
@@ -1985,13 +1987,13 @@ if command -v direnv >/dev/null 2>&1; then
     alias dirh='direnv hook'
 fi
 
-# Zoxide (smarter cd)
+
 if command -v zoxide >/dev/null 2>&1; then
     alias z='zoxide'
     alias zi='zoxide query -i'
 fi
 
-# Fzf (fuzzy finder)
+
 if command -v fzf >/dev/null 2>&1; then
     alias fz='fzf'
     alias fzp='fzf --preview'
@@ -2009,7 +2011,7 @@ if command -v yq >/dev/null 2>&1; then
     alias yqp='yq eval -P'
 fi
 
-# Glow (markdown renderer)
+
 if command -v glow >/dev/null 2>&1; then
     alias glows='glow -s'
 fi
@@ -2041,7 +2043,7 @@ if command -v vivid >/dev/null 2>&1; then
     alias vividt='vivid themes'
 fi
 
-# Chezmoi (dotfile manager)
+
 if command -v chezmoi >/dev/null 2>&1; then
     alias chez='chezmoi'
     alias cheza='chezmoi apply'
@@ -2055,7 +2057,7 @@ if command -v chezmoi >/dev/null 2>&1; then
     alias chezr='chezmoi re-add'
 fi
 
-# Act (GitHub Actions locally)
+
 if command -v act >/dev/null 2>&1; then
     alias actl='act -l'
     alias actp='act -p'
@@ -2089,22 +2091,22 @@ fi
 # -----------------------------------------------------------------------------
 # Infrastructure as Code — Terraform / Ansible
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for infrastructure provisioning and
-# configuration management tools. These cover Terraform (validate, fmt,
-# workspace, state, import, graph, console) and Ansible (playbook, galaxy,
-# vault, doc, config, inventory).
-#
-# Notable aliases:
-#   tfv / tff / tfw     — terraform validate / fmt / workspace
-#   tfs / tfo           — terraform show / output
-#   tfst / tfstl        — terraform state / state list
-#   tfimp / tfgraph     — terraform import / graph
-#   an / anp / ang      — ansible / ansible-playbook / galaxy
-#   anv / and           — ansible-vault / ansible-doc
-#
-# See also: terraform(1), ansible(1), ansible-playbook(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v terraform >/dev/null 2>&1; then
     alias tfv='_x terraform validate'
@@ -2135,22 +2137,22 @@ fi
 # -----------------------------------------------------------------------------
 # Secret Management — Age / SOPS / Vault / OpenSSL
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for encryption, secret storage, and
-# certificate management. These cover age (modern file encryption),
-# SOPS (encrypted YAML/JSON for configs), HashiCorp Vault (KV store,
-# login, status), and OpenSSL (CSR generation, cert inspection, random).
-#
-# Notable aliases:
-#   age / agee / aged   — age encrypt / decrypt
-#   sops / sopse / sopsd — SOPS encrypt / decrypt / in-place
-#   vault / vaults      — vault status
-#   vaultkv / vaultkvg  — vault kv get
-#   ossl / osslcsr      — openssl / CSR generation
-#   osslchk / osslx     — TLS connection check / x509 inspect
-#
-# See also: age(1), sops(1), vault(1), openssl(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v age >/dev/null 2>&1; then
     alias agee='age -e'
@@ -2187,20 +2189,20 @@ fi
 # -----------------------------------------------------------------------------
 # Backup Tools — Rclone / Restic / Borg / Kopia
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for file backup, synchronization, and
-# archival tools. These cover rclone (cloud storage sync), restic
-# (encrypted backups), Borg (deduplicating backup), and Kopia
-# (fast encrypted snapshots).
-#
-# Notable aliases:
-#   rcl / rclls / rclsync — rclone ls / sync / copy / move
-#   rest / restb / restr  — restic backup / restore / snapshots
-#   borg / borgc / borge  — borg create / extract / list / prune
-#   kop / kops / kopl     — kopia snapshot create / list / mount
-#
-# See also: rclone(1), restic(1), borg(1), kopia(1)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v rclone >/dev/null 2>&1; then
     alias rcl='rclone'
@@ -2238,17 +2240,17 @@ fi
 # -----------------------------------------------------------------------------
 # Performance / Benchmarking
 # -----------------------------------------------------------------------------
-#
-# This section provides aliases for performance benchmarking and system
-# information tools. These cover hyperfine (command benchmarking) and
-# fastfetch (system information display).
-#
-# Notable aliases:
-#   hf / hfw     — hyperfine / hyperfine --warmup
-#   ffet / ffetl — fastfetch / fastfetch -l
-#
-# See also: hyperfine(1), fastfetch(1)
-#
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v hyperfine >/dev/null 2>&1; then
     alias hf='hyperfine'
@@ -2263,24 +2265,24 @@ fi
 # -----------------------------------------------------------------------------
 # Miscellaneous — Additional Aliases
 # -----------------------------------------------------------------------------
-#
-# This section collects additional aliases that provide standalone
-# convenience wrappers, duplicate definitions preserved for compatibility,
-# and fallback commands outside conditional blocks.
-#
-# Notable aliases:
-#   tstamp / topcmds   — stamp / topcommands wrappers
-#   idg / idu / groups — user identity queries
-#   last / w           — login history / who is online
-#   seq / expand / od  — standard text utilities
-#   grex               — grep excluding .git and node_modules
-#   rstring            — random hex token via Python secrets
-#   clickpaste         — xdotool type clipboard content after 3s delay
-#   dsstore            — delete .DS_Store files recursively
-#   mirrorsite         — wget full site mirror
-#   countfiles         — count files, links, directories in pwd
-#   sep                — print horizontal rule across terminal
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 alias tstamp='stamp'
 alias topcmds='topcommands'

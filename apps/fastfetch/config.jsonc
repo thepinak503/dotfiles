@@ -122,7 +122,7 @@
       "type": "command",
       "key": "Public IP ",
       "keyColor": "38;5;110",
-      "text": "curl -fsSL --max-time 2 ifconfig.me 2>/dev/null || echo 'N/A'"
+      "text": "curl -fsSL ifconfig.me 2>/dev/null || echo 'N/A'"
     },
     {
       "type": "colors",

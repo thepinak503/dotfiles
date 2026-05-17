@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Debian/Ubuntu/Mint/Pop - APT, dpkg, snap & debian-tools aliases
+
 # Loads on any Debian-derived distro
 # =============================================================================
 
 if [ "$DOTFILES_DISTRO" = "debian" ] || [ "$DOTFILES_DISTRO" = "ubuntu" ] || [ "$DOTFILES_DISTRO" = "linuxmint" ] || [ "$DOTFILES_DISTRO" = "pop" ] || [ "$DOTFILES_DISTRO" = "zorin" ] || [ "$DOTFILES_DISTRO" = "neon" ] || [ "$DOTFILES_DISTRO" = "mx" ] || [ "$DOTFILES_DISTRO" = "elementary" ]; then
 
-# ---- APT-GET families ----
+
 alias aptg='sudo apt-get'
 alias aptgi='sudo apt-get install'
 alias aptgr='sudo apt-get remove'
@@ -32,7 +32,7 @@ alias aptgou='sudo apt-get install --only-upgrade'
 alias aptgdu='sudo apt-get dist-upgrade --dry-run'
 alias aptgsh='sudo apt-get -s install'
 
-# ---- APT families ----
+
 alias aptup='sudo apt update && sudo apt upgrade'
 alias aptin='sudo apt install'
 alias aptr='sudo apt remove'
@@ -57,7 +57,7 @@ alias aptcc='sudo apt clean'
 alias aptdr='sudo apt --dry-run'
 alias aptch='apt changelog'
 
-# ---- APT-CACHE families ----
+
 alias acs='apt-cache search'
 alias acsh='apt-cache show'
 alias acsp='apt-cache showpkg'
@@ -71,7 +71,7 @@ alias acdump='apt-cache dump'
 alias acdumav='apt-cache dumpavail'
 alias acun='apt-cache unmet'
 
-# ---- APT-MARK families ----
+
 alias amh='sudo apt-mark hold'
 alias amuh='sudo apt-mark unhold'
 alias amsh='apt-mark showhold'
@@ -80,11 +80,11 @@ alias amm='sudo apt-mark manual'
 alias amsa='apt-mark showauto'
 alias assm='apt-mark showmanual'
 
-# ---- APT configuration ----
+
 alias aedit='sudo apt edit-sources'
 alias asat='apt satisfies'
 
-# ---- DPKG families ----
+
 alias dpi='sudo dpkg -i'
 alias dpr='sudo dpkg -r'
 alias dpp='sudo dpkg -P'
@@ -109,7 +109,7 @@ alias dpclr='sudo dpkg --clear-avail'
 alias dpfor='sudo dpkg --force-depends -i'
 alias dppurge='sudo dpkg --purge'
 
-# ---- DPKG-DEB families ----
+
 alias dpdeb='dpkg-deb'
 alias dpdebc='dpkg-deb -c'
 alias dpdebi='dpkg-deb -I'
@@ -119,7 +119,7 @@ alias dpdebx='dpkg-deb -x'
 alias dpdebX='dpkg-deb -X'
 alias dpdebv='dpkg-deb --vextract'
 
-# ---- DPKG-QUERY families ----
+
 alias dpqry='dpkg-query'
 alias dpqryW='dpkg-query -W'
 alias dpqryf='dpkg-query -f'
@@ -127,13 +127,13 @@ alias dpqryl='dpkg-query -L'
 alias dpqrys='dpkg-query -S'
 alias dpqryp='dpkg-query -p'
 
-# ---- DPKG-RECONFIGURE ----
+
 alias dprec='sudo dpkg-reconfigure'
 alias dpreca='sudo dpkg-reconfigure -a'
 alias dprecp='sudo dpkg-reconfigure --priority'
 alias dprecf='sudo dpkg-reconfigure --frontend'
 
-# ---- GPG / APT-KEY ----
+
 alias aptkey='sudo apt-key'
 alias aptkeya='sudo apt-key adv'
 alias aptkeyl='sudo apt-key list'
@@ -141,7 +141,7 @@ alias aptkeyf='sudo apt-key finger'
 alias aptkeyd='sudo apt-key del'
 alias aptkeyadd='sudo apt-key add'
 
-# ---- ADD-APT-REPOSITORY (PPA) ----
+
 command -v add-apt-repository >/dev/null 2>&1 && {
     alias aptrepo='sudo add-apt-repository'
     alias aptrepoy='sudo add-apt-repository -y'
@@ -150,7 +150,7 @@ command -v add-apt-repository >/dev/null 2>&1 && {
     alias aptrepols='sudo add-apt-repository --list'
 }
 
-# ---- REPO / SOURCES helpers ----
+
 alias srclist='ls /etc/apt/sources.list.d/'
 alias srcshow='cat /etc/apt/sources.list'
 alias srcbackup='sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak'
@@ -158,7 +158,7 @@ alias srcrestore='sudo cp /etc/apt/sources.list.bak /etc/apt/sources.list'
 alias supd='sudo apt-get update 2>&1 | grep -E "(Hit|Ign|Err|Get)"'
 alias supdlist='sudo apt-get update 2>&1 | grep -v "^Hit:"'
 
-# ---- SNAP families ----
+
 command -v snap >/dev/null 2>&1 && {
     alias sn='snap'
     alias sni='sudo snap install'
@@ -207,7 +207,7 @@ command -v snap >/dev/null 2>&1 && {
     alias snpurge='snap purge'
 }
 
-# ---- DEBOOTSTRAP ----
+
 command -v debootstrap >/dev/null 2>&1 && {
     alias dbootstrap='sudo debootstrap'
     alias dbs='sudo debootstrap'
@@ -216,7 +216,7 @@ command -v debootstrap >/dev/null 2>&1 && {
     alias dbsunstable='sudo debootstrap unstable'
 }
 
-# ---- APT-FILE ----
+
 command -v apt-file >/dev/null 2>&1 && {
     alias af='apt-file'
     alias afs='apt-file search'
@@ -227,7 +227,7 @@ command -v apt-file >/dev/null 2>&1 && {
     alias afpkg='apt-file --package-only'
 }
 
-# ---- DEBCONF ----
+
 command -v debconf-show >/dev/null 2>&1 && {
     alias dcs='sudo debconf-show'
     alias dcget='sudo debconf-get-selections'
@@ -235,7 +235,7 @@ command -v debconf-show >/dev/null 2>&1 && {
     alias dcc='sudo debconf-communicate'
 }
 
-# ---- MISCELLANEOUS DEBIAN TOOLS ----
+
 command -v needrestart >/dev/null 2>&1 && {
     alias nr='sudo needrestart'
     alias nrc='sudo needrestart -c'
@@ -269,7 +269,7 @@ command -v debsums >/dev/null 2>&1 && {
     alias dumpsl='sudo debsums -l'
 }
 
-# ---- UPDATE-ALTERNATIVES ----
+
 command -v update-alternatives >/dev/null 2>&1 && {
     alias alt='sudo update-alternatives'
     alias altc='sudo update-alternatives --config'
@@ -283,7 +283,7 @@ command -v update-alternatives >/dev/null 2>&1 && {
     alias alta='sudo update-alternatives --auto'
 }
 
-# ---- LS-RELEASE ----
+
 command -v lsb_release >/dev/null 2>&1 && {
     alias lsbr='lsb_release -a'
     alias lsd='lsb_release -d'
@@ -293,30 +293,30 @@ command -v lsb_release >/dev/null 2>&1 && {
     alias lss='lsb_release -s'
 }
 
-# ---- UNAME / OS-RELEASE ----
+
 alias osr='cat /etc/os-release'
 alias osid='grep ^ID= /etc/os-release'
 alias osver='grep ^VERSION_ID= /etc/os-release'
 alias oslike='grep ^ID_LIKE= /etc/os-release'
 
-# ---- DOCKER-COMPOSE apt repo (debian-specific) ----
+
 command -v docker >/dev/null 2>&1 && {
     alias dcek='"$(command -v docker)"'
 }
 
-# ---- TIME-SAVING APT combos ----
+
 alias aptfull='sudo apt update && sudo apt dist-upgrade -y'
 alias aptfixall='sudo apt update && sudo apt install -f && sudo dpkg --configure -a && sudo apt autoremove'
 alias aptnuke='sudo apt purge ~c'
 alias aptrmlock='sudo rm -f /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/cache/apt/archives/lock'
 alias aptshowheld='apt-mark showhold'
 
-# ---- APT LOG ----
+
 alias aptlog='cat /var/log/apt/history.log'
 alias aptlogterm='cat /var/log/apt/term.log'
 alias aptloglast='tail -50 /var/log/apt/history.log'
 
-# ---- REPO cache ----
+
 alias aptindex='sudo apt-cache gencaches'
 alias aptmkidx='sudo apt-file update 2>/dev/null; sudo apt-get update'
 

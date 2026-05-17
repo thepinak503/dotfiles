@@ -1,32 +1,32 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Arch Linux module — fully dynamic, multi-AUR-helper support
-# Only loads on Arch-based distros, only enables aliases for installed tools
+
 # =============================================================================
 
 # =============================================================================
 # Arch Linux Detection Guard
 # =============================================================================
-#
-# Checks if the current system is an Arch Linux-based distribution.
-# This function is called immediately on source; if it returns
-# non-zero (not Arch), the entire module is skipped via "return".
-#
-# Detection sources:
-#   Primary: DOTFILES_DISTRO environment variable
-#   Fallback: /etc/os-release ID field
-#
-# Arch-based distros detected (14+):
-#   arch, artix, manjaro, endeavouros, garuda, archarm, archlabs,
-#   arcolinux, chakra, hyperbola, kaos, parabola, rebornos, siduction
-#
-# Usage:
-#   _detect_arch || return  # Guard at module top
-#
-# See also:
-#   - core/os_detect.sh - Primary OS detection
-#   - core/universal.sh - DOTFILES_DISTRO setup
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _detect_arch() {
     case "${DOTFILES_DISTRO:-$(. /etc/os-release 2>/dev/null && echo "$ID")}" in
         arch|artix|manjaro|endeavouros|garuda|archarm|archlabs|arcolinux|chakra|hyperbola|kaos|parabola|rebornos|siduction) return 0 ;;
@@ -38,44 +38,44 @@ _detect_arch || return
 # =============================================================================
 # AUR Helper Detection
 # =============================================================================
-#
-# Scans for installed AUR helpers in order of preference. The first
-# one found is used for all AUR-related aliases and functions.
-#
-# Detection order (by preference):
-#   1. paru    - Rust-based, fast, full-featured (recommended)
-#   2. yay     - Go-based, most popular, "Yet Another Yogurt"
-#   3. pikaur  - Python-based, single-file, minimal dependencies
-#   4. aura    - Haskell-based, includes package management tools
-#   5. pakku   - Rust-based, pacman-compatible wrapper
-#   6. trizen  - Perl-based, lightweight AUR helper
-#
-# The detected helper is stored in _AUR_HELPER and used for all
-# aur- prefixed aliases and the _aur_fzf browser function.
-#
-# Features:
-#   - Support for 6 different AUR helpers
-#   - Preference-ordered detection (best first)
-#   - Generates dynamic aliases for the detected helper
-#   - Falls back gracefully when no helper is found
-#
-# Compatibility:
-#   Requires: Arch-based distro (guarded by _detect_arch)
-#
-# See also:
-#   - aur-* aliases - Generic AUR commands
-#   - paru-* / yay-* etc. - Helper-specific aliases
-#   - _aur_fzf() - Fzf package browser
-#
-# ---- AUR helper detection ----
-# Ordered by preference: paru -> yay -> pikaur -> aura -> pakku -> trizen -> aurutils -> pamac
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _AUR_HELPER=""
 for _h in paru yay pikaur aura pakku trizen; do
     command -v "$_h" >/dev/null 2>&1 && { _AUR_HELPER=$_h; break; }
 done
 unset _h
 
-# ---- Pacman aliases (always available on Arch) ----
+
 alias pac='sudo pacman'
 alias pacup='sudo pacman -Syu'
 alias pacin='sudo pacman -S'
@@ -139,7 +139,7 @@ alias pacdbg='pacman -Qqg base-devel'
 alias pacbase='sudo pacman -S base base-devel'
 alias pacorph='pacman -Qtdq'
 
-# ---- Pacman functions ----
+
 pacinfo() { pacman -Si "$@"; }
 pacfind() { pacman -Ss "$@" | less; }
 pacinstall() { sudo pacman -S "$@"; }
@@ -152,11 +152,11 @@ pacowns() { pacman -Qo "$@"; }
 pacprovides() { pacman -F "$@"; }
 paccheck() { pacman -Qkk "$@"; }
 
-# ---- Dynamic AUR helper aliases (works with any installed helper) ----
+
 if [ -n "$_AUR_HELPER" ]; then
     _h="$_AUR_HELPER"
 
-    # Generic AUR commands
+
     alias aurs="$_h -Ss"
     alias aurq="$_h -Q"
     alias aurqi="$_h -Qi"
@@ -176,7 +176,7 @@ if [ -n "$_AUR_HELPER" ]; then
     alias aurcf="$_h -Pg"
     alias aurpc="$_h -Pc"
 
-    # Helper-specific aliases (only define for the installed one)
+
     case "$_h" in
         paru)
             alias paruf='_aur_fzf'
@@ -271,7 +271,7 @@ if [ -n "$_AUR_HELPER" ]; then
             ;;
     esac
 
-    # Unified fzf AUR package browser (works with any helper)
+
     _aur_fzf() {
         $_AUR_HELPER -Slq 2>/dev/null | fzf --multi \
             --preview "$_AUR_HELPER -Sii {1} 2>/dev/null" \
@@ -283,7 +283,7 @@ if [ -n "$_AUR_HELPER" ]; then
 fi
 unset _AUR_HELPER
 
-# ---- PACMAN-KEY ----
+
 command -v pacman-key >/dev/null 2>&1 && {
     alias pkey='sudo pacman-key'
     alias pkeyi='sudo pacman-key --init'
@@ -300,7 +300,7 @@ command -v pacman-key >/dev/null 2>&1 && {
     alias pkeyimport='sudo pacman-key --import'
 }
 
-# ---- MAKEPKG ----
+
 command -v makepkg >/dev/null 2>&1 && {
     alias mkp='makepkg'
     alias mkpsi='makepkg -si'
@@ -317,7 +317,7 @@ command -v makepkg >/dev/null 2>&1 && {
     alias mkpp='makepkg --printsrcinfo'
 }
 
-# ---- pacman-contrib (conditional) ----
+
 if command -v pactree >/dev/null 2>&1; then
     alias pactree='pactree'
     alias pacdepgraph='pactree -c'
@@ -328,7 +328,7 @@ if command -v pactree >/dev/null 2>&1; then
     alias pactreel='pactree -l'
 fi
 
-# ---- EXPAC ----
+
 command -v expac >/dev/null 2>&1 && {
     alias exp='expac'
     alias expls='expac -l'
@@ -339,7 +339,7 @@ command -v expac >/dev/null 2>&1 && {
     alias expqt='expac -Qt'
 }
 
-# ---- PKGFILE ----
+
 if command -v pkgfile >/dev/null 2>&1; then
     alias pkgf='pkgfile'
     alias pkgfiles='pkgfile -l'
@@ -349,7 +349,7 @@ if command -v pkgfile >/dev/null 2>&1; then
     alias pkgfi='pkgfile -i'
 fi
 
-# ---- REFLECTOR ----
+
 if command -v reflector >/dev/null 2>&1; then
     alias reflect='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
     alias reflectfast='sudo reflector --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
@@ -361,7 +361,7 @@ if command -v reflector >/dev/null 2>&1; then
     alias reflectver='reflector --version'
 fi
 
-# ---- MKINITCPIO ----
+
 if command -v mkinitcpio >/dev/null 2>&1; then
     alias mkinit='sudo mkinitcpio -P'
     alias mkinitc='sudo mkinitcpio -p linux'
@@ -369,7 +369,7 @@ if command -v mkinitcpio >/dev/null 2>&1; then
     alias mkinitv='sudo mkinitcpio --version'
 fi
 
-# ---- CHAOTIC AUR ----
+
 if command -v chaotic-gl >/dev/null 2>&1; then
     alias cgi='chaotic-gl install'
     alias cgr='chaotic-gl remove'
@@ -378,12 +378,12 @@ if command -v chaotic-gl >/dev/null 2>&1; then
     alias cgl='chaotic-gl list'
 fi
 
-# ---- ARCH-CHROOT ----
+
 command -v arch-chroot >/dev/null 2>&1 && {
     alias achroot='sudo arch-chroot'
 }
 
-# ---- Arch Linux specific system tools ----
+
 command -v pacdiff >/dev/null 2>&1 && {
     alias pacdiffview='sudo pacdiff'
 }
@@ -397,7 +397,7 @@ command -v rankmirrors >/dev/null 2>&1 && {
     alias rankmir='sudo rankmirrors -v'
 }
 
-# ---- NETCTL ----
+
 command -v netctl >/dev/null 2>&1 && {
     alias nctl='sudo netctl'
     alias nctll='netctl list'
@@ -412,14 +412,14 @@ command -v netctl >/dev/null 2>&1 && {
     alias nctlisen='netctl is-enabled'
 }
 
-# ---- Pacman log and stats ----
+
 pacrecent() { tail -50 /var/log/pacman.log; }
 pacupdatelog() { grep -E "\[PACMAN\]" /var/log/pacman.log | grep "starting" | tail -"${1:-5}"; }
 pachistory() { cat /var/log/pacman.log; }
 pacinstalllog() { grep -i "installed" /var/log/pacman.log; }
 pacremovelog() { grep -i "removed" /var/log/pacman.log; }
 
-# ---- Clean orphaned and cache ----
+
 pacreclaim() {
     sudo pacman -Scc --noconfirm 2>/dev/null
     local _orphans
@@ -428,7 +428,7 @@ pacreclaim() {
     true
 }
 
-# ---- SYSTEMD journal for arch ----
+
 alias jlog='journalctl -xe'
 alias jboot='journalctl -b'
 alias jfail='journalctl -p 3 -xb'

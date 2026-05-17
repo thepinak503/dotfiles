@@ -97,37 +97,50 @@ alias builtinl='enable'
 
 # List/File tools
 alias ls='eza --icons=auto --group-directories-first 2>/dev/null || command ls'
-alias ll='ls -l'
+alias ll='ls -Al'
 alias la='ls -A'
 alias lsa='ls -a'
 alias lsd='ls -d */'
 alias lsdot='ls -d .*'
-alias lsf='ls -p | grep -v /'
+alias lsf='ls -F'
 alias lsbig='ls -lS | head -20'
 alias lshidden='ls -d .* 2>/dev/null'
-alias tree='eza --tree --icons=auto 2>/dev/null || find . -print | sed -e "s;[^/]*/;|____;g;s;____|; |;g"'
+alias tree='_x eza -T --icons 2>/dev/null || _x tree -CAhF --dirsfirst 2>/dev/null || echo "tree needed"'
 alias ltree='eza --tree --level=3 --icons=auto 2>/dev/null || find . -maxdepth 3 -print'
 alias l1='ls -1'
+alias l='ls -CF'
+alias lk='ls -lSr'
+alias lx='ls -lX'
+alias lm='ls -al | less'
+alias lf='find . -maxdepth 1 -type f -exec ls -lh {} + 2>/dev/null | sort -k5 -h'
+alias ldot='ls -ld .*'
+alias lsdir='ls -d */'
+alias lsr='ls -lR'
+alias lsh='ls -lhS'
+alias lss='ls -lS'
+alias lst='ls -ltr'
+alias lsv='ls -la | less'
 alias lh='ls -lhS'
-alias lr='ls -lR'
-alias lt='ls -lt'
+alias lr='ls -lrt'
+alias lt='ls -ltrh'
 alias ltr='ls -ltr'
-alias lc='ls -lc'
-alias lu='ls -lu'
+alias lc='ls -ltcr'
+alias lu='ls -ltur'
 alias lat='ls -lat'
 alias latr='ls -latr'
-alias lsize='ls -lS'
+alias lsize='ls -lSr'
 alias lext='ls --group-directories-first'
 alias ldir='ls -d */'
 alias lfile='ls -p | grep -v /'
-alias lold='ls -ltr'
-alias lnew='ls -lt'
+alias lold='ls -lt | tail'
+alias lnew='ls -lt | head'
 alias lrec='ls -R'
 alias linode='ls -i'
 alias lcolor='ls --color=auto'
 alias lno='ls -N'
 alias lauth='ls -lZ' 2>/dev/null || true
 alias lctx='ls -lZ' 2>/dev/null || true
+alias treed='_x eza -T --only-dirs 2>/dev/null || _x tree -CAFd 2>/dev/null || echo "tree needed"'
 
 # Cat/View/Pager
 alias cat='bat --paging=never 2>/dev/null || command cat'
@@ -892,7 +905,7 @@ alias pact='pactree' 2>/dev/null || true
 alias pactd='pactree -d' 2>/dev/null || true
 alias pactr='pactree -r' 2>/dev/null || true
 alias pacdis='_x pacman -D'
-# paccheck is a function defined in core/arch_aliases.sh
+
 alias pactest='_x pacman -Dk'
 alias pacdbg='_x pacman -Qqg base-devel'
 alias pacbase='_x pacman -S base base-devel'
@@ -1031,10 +1044,10 @@ alias snapfind='snap find'
 alias snapinfo='snap info'
 
 # Fedora/RHEL/DNF
-# dnf is managed by core/fedora_aliases.sh functions
+
 alias dnfs='_x dnf search'
 alias dnfsi='_x dnf info'
-# dnfinfo is a function defined in core/fedora_aliases.sh
+
 alias dnfup='sudo dnf upgrade'
 alias dnfu='sudo dnf upgrade'
 alias dnfi='sudo dnf install'
@@ -1056,7 +1069,7 @@ alias dnfgrp='_x dnf group list'
 alias dnfgrpi='sudo dnf group install'
 alias dnfgrpr='sudo dnf group remove'
 alias dnfgrpu='sudo dnf group upgrade'
-# dnfinstall is a function defined in core/fedora_aliases.sh
+
 alias dnfreinstall='sudo dnf reinstall'
 alias dnfinstallr='sudo dnf install --nogpgcheck'
 alias dnfinstallf='sudo dnf install --skip-broken'
@@ -1085,7 +1098,7 @@ alias dnfmarkremove='_x dnf mark remove'
 alias dnfmarkuser='_x dnf mark user'
 alias dnfmarkgroup='_x dnf mark group'
 alias dnfcc='sudo dnf clean all'
-# dnfclean is a function defined in core/fedora_aliases.sh
+
 alias dnfcleandb='sudo dnf clean dbcache'
 alias dnfcleanexpire='sudo dnf clean expire-cache'
 alias dnfcleanpackages='sudo dnf clean packages'
@@ -1127,7 +1140,7 @@ alias yumsearch='_x dnf search'
 alias yumclean='sudo dnf clean all'
 
 # Homebrew
-# brew is managed by core/macos_aliases.sh functions
+
 alias brews='_x brew search'
 alias brewse='_x brew search'
 alias brewlist='_x brew list'
@@ -1138,14 +1151,14 @@ alias brewin='_x brew install'
 alias brewii='_x brew install'
 alias brewinfo='_x brew info'
 alias brewrm='_x brew uninstall'
-# brewremove is a function defined in core/macos_aliases.sh
+
 alias brewunin='_x brew uninstall'
 alias brewup='_x brew update && brew upgrade'
-# brewupdate is a function defined in core/macos_aliases.sh
-# brewupgrade is a function defined in core/macos_aliases.sh
+
+
 alias brewupg='_x brew upgrade'
 alias brewupc='_x brew update && brew upgrade && brew cleanup'
-# brewclean is a function defined in core/macos_aliases.sh
+
 alias brewcl='_x brew cleanup'
 alias brewcln='_x brew cleanup --prune=all'
 alias brewdoc='_x brew doctor'
@@ -1321,35 +1334,6 @@ alias hmc='_x home-manager generations'
 setopt AUTO_CD 2>/dev/null
 cd() { builtin cd "$@" && ls; }
 
-alias l='ls -CF'
-alias l1='ls -1'
-alias lr='ls -lrt'
-alias lh='ls -lhS'
-alias lk='ls -lSr'
-alias lx='ls -lX'
-alias lc='ls -ltcr'
-alias lu='ls -ltur'
-alias lm='ls -al | less'
-alias ldir='ls -d */'
-alias ll='ls -Al'
-alias la='ls -A'
-alias lauth='ls -lZ 2>/dev/null || echo "no selinux"'
-alias lf='find . -maxdepth 1 -type f -exec ls -lh {} + 2>/dev/null | sort -k5 -h'
-alias lt='ls -ltrh'
-alias ldot='ls -ld .*'
-alias lsize='ls -lSr'
-alias lnew='ls -lt | head'
-alias lold='ls -lt | tail'
-alias lsd='ls -d */'
-alias lsdir='ls -d */'
-alias lsf='ls -F'
-alias lsr='ls -lR'
-alias lsh='ls -lhS'
-alias lss='ls -lS'
-alias lst='ls -ltr'
-alias lsv='ls -la | less'
-alias tree='_x eza -T --icons 2>/dev/null || _x tree -CAhF --dirsfirst 2>/dev/null || echo "tree needed"'
-alias treed='_x eza -T --only-dirs 2>/dev/null || _x tree -CAFd 2>/dev/null || echo "tree needed"'
 alias grep='command grep --color=auto'
 alias egrep='command grep -E'
 alias fgrep='command grep -F'

@@ -24,8 +24,8 @@ function fish_user_key_bindings
 end
 
 # =============================================================================
-# PINAK'S DOTFILES v1.0 - FISH CONFIG
-# Cross-platform: macOS 10-26 + 5000+ Linux distros
+
+
 # =============================================================================
 
 set -gx DOTFILES_DIR "$HOME/.local/share/dotfiles"
@@ -34,7 +34,7 @@ set -gx DOTFILES_VERSION "1.0.0"
 set -gx DOTFILES_ARCH (uname -m)
 
 # =============================================================================
-# MULTI-PLATFORM HOMEBREW - Intel macOS / Apple Silicon / Linuxbrew
+
 # =============================================================================
 
 set -l brew_prefix ""
@@ -53,7 +53,7 @@ else if test -f "/home/linuxbrew/.linuxbrew/bin/brew"
 end
 
 # =============================================================================
-# OS + DISTRO DETECTION - Normalized family + ID_LIKE fallback
+
 # =============================================================================
 
 set -gx DOTFILES_OS (uname -s)
@@ -61,15 +61,15 @@ set -gx DOTFILES_DISTRO "linux"
 set -gx DOTFILES_PKG_MANAGER "none"
 set -gx DOTFILES_INIT ""
 
-# --- macOS Check ---
+
 if test "$DOTFILES_OS" = "Darwin"
     set -gx DOTFILES_DISTRO "macos"
 else
-    # --- Linux Distro Detection ---
+
     if test -f /etc/os-release
         set -l id ""
         set -l id_like ""
-        # Read ID and ID_LIKE from /etc/os-release
+
         for line in (cat /etc/os-release)
             if string match -r '^ID=' $line >/dev/null
                 set id (string split -m1 = $line)[2]
@@ -81,7 +81,7 @@ else
             end
         end
         
-        # Normalize distro families first
+
         switch "$id"
             case 'arch' 'artix' 'manjaro' 'endeavouros' 'garuda' 'archlabs'
                 set -gx DOTFILES_DISTRO "arch"
@@ -102,7 +102,7 @@ else
             case 'slackware' 'slint' 'salix' 'vector'
                 set -gx DOTFILES_DISTRO "slackware"
             case '*'
-                # ID_LIKE fallback for 5000+ distros
+
                 if test -n "$id_like"
                     switch "$id_like"
                         case '*arch*'
@@ -195,31 +195,31 @@ end
 # SOURCE DOTFILES MODULES
 # =============================================================================
 
-# Environment exports (PATH, LS_COLORS, umask 022 security, flatpak, LESS_TERMCAP)
+
 if test -f "$DOTFILES_DIR/shells/fish/exports.fish"
     source "$DOTFILES_DIR/shells/fish/exports.fish"
 end
 
-# Aliases (2000+ aliases, already has safe rm/mv/cp -i)
+
 if test -f "$DOTFILES_DIR/shells/fish/aliases.fish"
     source "$DOTFILES_DIR/shells/fish/aliases.fish"
 end
 
-# App detection (fzf, starship, zoxide, atuin)
+
 if test -f "$DOTFILES_DIR/shells/fish/detect_apps.fish"
     source "$DOTFILES_DIR/shells/fish/detect_apps.fish"
 end
 
-# Functions (5000+ line - has extract, scan_secrets, kubectl/terraform/helm etc.)
+
 if test -f "$DOTFILES_DIR/shells/fish/functions.fish"
     source "$DOTFILES_DIR/shells/fish/functions.fish"
 end
 
 # =============================================================================
 # SECURITY UPGRADE - FBI-APPROVED HARDENING
-# umask already set in exports.fish, let's also set history control
+
 # =============================================================================
 
 # Fish history control - similar to bash HISTCONTROL
-# Fish: fish_history_shared, fish_history, and the fish_* variables
+
 set fish_history_unique true

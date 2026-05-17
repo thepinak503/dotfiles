@@ -1,8 +1,8 @@
 # =============================================================================
-# Universal Fish Functions - Linux & macOS Compatible
+
 # =============================================================================
 
-# ---------- DETECT OS ----------
+
 function detect_os --description "Detect operating system"
     if test (uname -s) = "Darwin"
         echo "macos"
@@ -38,7 +38,7 @@ function detect_pm --description "Detect package manager"
     end
 end
 
-# ---------- NAVIGATION ----------
+
 function cd --description "Change directory with ls"
    builtin cd $argv; and ls -A
 end
@@ -107,7 +107,7 @@ function cdt --description "Go to dotfiles"
     cd ~/.local/share/dotfiles
 end
 
-# ---------- SYSTEM ----------
+
 function p --description "List processes"
     ps aux | head -20
 end
@@ -192,7 +192,7 @@ function port --description "Check port"
     end
 end
 
-# ---------- FILES ----------
+
 function la --description "List all files"
     ls -AGa $argv
 end
@@ -253,7 +253,7 @@ function df --description "Disk free"
     df -h
 end
 
-# ---------- ARCHIVE ----------
+
 function extract --description "Extract archive"
     for f in $argv
         if test -f $f
@@ -309,7 +309,7 @@ function ungz --description "Gunzip file"
     gunzip -k $argv[1]
 end
 
-# ---------- TEXT ----------
+
 function catn --description "Cat with line numbers"
     cat -n $argv[1]
 end
@@ -350,7 +350,7 @@ function grepv --description "Grep invert"
     grep -v $argv[1] $argv[2]
 end
 
-# ---------- ENCODING ----------
+
 function b64e --description "Base64 encode"
     echo -n $argv[1] | base64
 end
@@ -387,7 +387,7 @@ function sha256 --description "SHA256 hash"
     end
 end
 
-# ---------- EDITORS ----------
+
 function v --description "Vim"
     nvim $argv
 end
@@ -412,7 +412,7 @@ function edit --description "Edit"
     $EDITOR $argv
 end
 
-# ---------- GIT ----------
+
 function g --description "Git"
     git $argv
 end
@@ -537,7 +537,7 @@ function gtagd --description "Git tag delete"
     git tag -d $argv[1]
 end
 
-# ---------- DOCKER ----------
+
 function d --description "Docker"
     docker $argv
 end
@@ -598,7 +598,7 @@ function drun --description "Docker run"
     docker run -it --rm $argv[1] $argv[2]
 end
 
-# ---------- KUBERNETES ----------
+
 function k --description "Kubectl"
     kubectl $argv
 end
@@ -667,7 +667,7 @@ function kcur --description "Current context"
     kubectl config current-context
 end
 
-# ---------- PACKAGE MANAGERS ----------
+
 function upd --description "Update packages"
     switch (detect_pm)
         case brew
@@ -758,7 +758,7 @@ function bclean --description "Brew cleanup"
     brew cleanup
 end
 
-# ---------- TMUX ----------
+
 function t --description "Tmux"
     tmux $argv
 end
@@ -783,7 +783,7 @@ function tkill --description "Tmux kill"
     tmux kill-session -t $argv[1]
 end
 
-# ---------- NETWORK ----------
+
 function ping --description "Ping host"
     ping -c 4 $argv[1]
 end
@@ -832,7 +832,7 @@ function nmap --description "Nmap scan"
     nmap $argv[1]
 end
 
-# ---------- NODE ----------
+
 function ni --description "NPM install"
     npm install $argv
 end
@@ -894,7 +894,7 @@ function yrun --description "Yarn run"
     yarn $argv
 end
 
-# ---------- PYTHON ----------
+
 function pip_in --description "Pip install"
     pip install $argv
 end
@@ -931,7 +931,7 @@ function pyjson --description "JSON format"
     python3 -m json.tool $argv[1]
 end
 
-# ---------- GO ----------
+
 function go_run --description "Go run"
     go run .
 end
@@ -948,7 +948,7 @@ function go_get --description "Go get"
     go get $argv
 end
 
-# ---------- RUST ----------
+
 function cbuild --description "Cargo build"
     cargo build
 end
@@ -973,7 +973,7 @@ function cfmt --description "Cargo fmt"
     cargo fmt
 end
 
-# ---------- DATABASE ----------
+
 function my --description "MySQL"
     mysql -u root -p$argv[1]
 end
@@ -1002,7 +1002,7 @@ function redis --description "Redis CLI"
     redis-cli
 end
 
-# ---------- CLOUD ----------
+
 function tf --description "Terraform"
     terraform $argv
 end
@@ -1040,7 +1040,7 @@ function helm_up --description "Helm upgrade"
     helm upgrade $argv[1] $argv[2]
 end
 
-# ---------- MONITORING ----------
+
 function htop --description "Htop"
     htop
 end
@@ -1057,7 +1057,7 @@ function glances --description "Glances"
     glances
 end
 
-# ---------- SERVICES ----------
+
 function sc --description "Systemctl"
     systemctl $argv
 end
@@ -1078,7 +1078,7 @@ function scres --description "Systemctl restart"
     systemctl restart $argv[1]
 end
 
-# macOS
+
 function launc --description "Launchctl load"
     launchctl load $argv[1]
 end
@@ -1101,7 +1101,7 @@ function journal1 --description "Journalctl"
     journalctl -n 100 -u $argv[1]
 end
 
-# ---------- TIME ----------
+
 function now --description "Current time"
     date "+%Y-%m-%d %H:%M:%S"
 end
@@ -1118,7 +1118,7 @@ function cal --description "Calendar"
     cal
 end
 
-# ---------- CALCULATOR ----------
+
 function calc --description "Calculate"
     echo $argv[1] | bc -l
 end
@@ -1127,7 +1127,7 @@ function factor --description "Factor"
     factor $argv[1]
 end
 
-# ---------- RANDOM ----------
+
 function rand --description "Random number"
     shuf -i 1-$argv[1] -n 1
 end
@@ -1140,7 +1140,7 @@ function uuid --description "UUID"
     end
 end
 
-# ---------- SYSTEM INFO ----------
+
 function neofetch --description "Neofetch"
     neofetch
 end
@@ -1181,7 +1181,7 @@ function whoami --description "Who am I"
     whoami
 end
 
-# ---------- PERMISSIONS ----------
+
 function chmodx --description "Chmod +x"
     chmod +x $argv[1]
 end
@@ -1190,7 +1190,7 @@ function chown_u --description "Chown user:group"
     sudo chown $argv[1]:$argv[2] $argv[3]
 end
 
-# ---------- PROCESSES ----------
+
 function killp --description "Kill process by name"
     pkill -f $argv[1]
 end
@@ -1207,7 +1207,7 @@ function pcont --description "Continue process"
     kill -CONT $argv[1]
 end
 
-# ---------- HARDWARE ----------
+
 function lscpu --description "CPU info"
     lscpu
 end
@@ -1232,7 +1232,7 @@ function sensors --description "Sensors"
     sensors
 end
 
-# ---------- ENV ----------
+
 function env --description "List env"
     printenv | sort
 end
@@ -1249,7 +1249,7 @@ function pathadd --description "Add to PATH"
     set -gx PATH $argv[1] $PATH
 end
 
-# ---------- HELPERS ----------
+
 function which --description "Which command"
     command which $argv[1]
 end
@@ -1258,7 +1258,7 @@ function type_cmd --description "Type command"
     type $argv[1]
 end
 
-# ---------- BACKUP ----------
+
 function bak --description "Backup file"
     cp -r $argv[1] $argv[1].bak-(date +%Y%m%d)
 end
@@ -1267,7 +1267,7 @@ function rsync_cp --description "Rsync copy"
     rsync -avz --progress $argv[1]/ $argv[2]/
 end
 
-# ---------- HTTP ----------
+
 function http --description "HTTP server"
     python3 -m http.server $argv[1]
 end
@@ -1276,7 +1276,7 @@ function serve --description "HTTP server"
     python3 -m http.server $argv[1]
 end
 
-# ---------- FUN ----------
+
 function coin --description "Flip coin"
     if test (random 0 1) = "0"
         echo "🪙 Heads"
@@ -1289,14 +1289,14 @@ function roll --description "Roll dice"
     shuf -i 1-6 -n 1
 end
 
-# ---------- QUICK ----------
+
 
 
 function reload --description "Reload config"
     source ~/.config/fish/config.fish
 end
 
-# ---------- FIND ----------
+
 function f_type --description "Find by type"
     find . -type $argv[1]
 end
@@ -1305,7 +1305,7 @@ function f_name --description "Find by name"
     find . -name "*$argv[1]*"
 end
 
-# ---------- GIT QUICK ----------
+
 function gstat --description "Git status short"
     git status -s
 end
@@ -1314,17 +1314,17 @@ function gch --description "Git changed files"
     git diff --name-only
 end
 
-# ---------- DOCKER QUICK ----------
+
 function dlogs --description "Docker logs"
     docker logs --tail 100 $argv[1]
 end
 
-# ---------- NPM ----------
+
 function nsp --description "NPM show"
     npm show $argv
 end
 
-# ---------- MAVEN ----------
+
 function mvn_ci --description "Maven clean install"
     mvn clean install
 end
@@ -1341,7 +1341,7 @@ function mvnt --description "Maven test"
     mvn test
 end
 
-# ---------- COMPOSE ----------
+
 function dcu --description "Docker compose up"
     docker-compose up -d
 end
@@ -1362,7 +1362,7 @@ function dcb --description "Docker compose build"
     docker-compose build
 end
 
-# ---------- COPY ----------
+
 function copy --description "Copy to clipboard"
     if type -q pbcopy
         pbcopy < $argv[1]
@@ -1379,7 +1379,7 @@ function paste --description "Paste from clipboard"
     end
 end
 
-# ---------- KEYCHAIN ----------
+
 function ssh_add --description "SSH add key"
     ssh-add $argv
 end
@@ -1392,7 +1392,7 @@ function ssh_copy --description "SSH copy id"
     ssh-copy-id $argv[1]
 end
 
-# ---------- SCREEN ----------
+
 function slist --description "Screen list"
     screen -ls
 end
@@ -1405,7 +1405,7 @@ function snew --description "Screen new"
     screen -S $argv[1]
 end
 
-# ---------- NOTES ----------
+
 function note --description "Add note"
     echo $argv[1] >> NOTES.md
 end
@@ -1426,7 +1426,7 @@ function todos --description "Show todos"
     end
 end
 
-# ---------- PROJECT ----------
+
 function pinit --description "Init project"
     mkdir -p $argv[1]; and cd $argv[1]; and git init
 end
@@ -1439,7 +1439,7 @@ function p_sh --description "Create shell script"
     echo "#!/usr/bin/env bash" > $argv[1].sh; and chmod +x $argv[1].sh
 end
 
-# ---------- DOTFILES ----------
+
 function dot --description "Go to dotfiles"
     cd ~/.local/share/dotfiles
 end
@@ -1452,7 +1452,7 @@ function dotedit --description "Edit dotfiles"
     cd ~/.local/share/dotfiles; and $EDITOR .
 end
 
-# ---------- SSH KEYS ----------
+
 function ssh_key --description "Generate SSH key"
     ssh-keygen -t ed25519 -C $argv[1]
 end
@@ -1461,7 +1461,7 @@ function ssh_keyr --description "Generate RSA SSH key"
     ssh-keygen -t rsa -b 4096 -C $argv[1]
 end
 
-# ---------- MACOS SPECIFIC ----------
+
 function mac_afk --description "Display sleep"
     pmset displaysleepnow
 end
@@ -1506,7 +1506,7 @@ function spotlight --description "Spotlight search"
     mdfind $argv[1]
 end
 
-# ---------- LINUX SPECIFIC ----------
+
 function linux_iotop --description "Iotop"
     sudo iotop -b -o
 end
@@ -1515,7 +1515,7 @@ function linux_lsof --description "Lsof"
     sudo lsof -i -n -P
 end
 
-# ---------- CONVERTED BASH FUNCTIONS ----------
+
 
 function 7z_compress; 7z a "$argv[1].7z" "$argv[1]"; end
 
@@ -5667,13 +5667,13 @@ function zip_encrypt; zip -er "$argv[1].zip" "$argv[1]"; end
 function zip_list; unzip -l "$argv[1]"; end
 
 # =============================================================================
-# PINAK'S DOTFILES v1.0 - FISH SECURITY & DISTRO FUNCTIONS
+
 # FBI-APPROVED LEVEL OF CONFIDENCE
-# 5000+ Distro Support + macOS 10-26
+
 # =============================================================================
 
 # =============================================================================
-# DISTRO FAMILY DETECTION - like ChrisTitusTech, for 5000+ distros
+
 # =============================================================================
 
 function distro_family --description "Get normalized distro family (redhat/debian/arch/gentoo/suse/void/alpine/slackware/nix/macos)"
@@ -5742,7 +5742,7 @@ function distro_family --description "Get normalized distro family (redhat/debia
 end
 
 # =============================================================================
-# INSTALL_SHELL_SUPPORT - Install all dependencies, 5000+ distros
+
 # =============================================================================
 
 function install_shell_support --description "Installs shell tools: tree zoxide fzf fastfetch eza bat ripgrep atuin etc."
@@ -5883,7 +5883,7 @@ alias install_deps='install_shell_support'
 # SECURITY FUNCTIONS - FBI-APPROVED
 # =============================================================================
 
-# secstatus / sec - Quick security overview
+
 function secstatus --description "Quick security status"
     echo "╔══════════════════════════════════════════════════════════════╗"
     echo "║                    SECURITY STATUS - v1.0                      ║"
@@ -5914,7 +5914,7 @@ end
 alias sec='secstatus'
 alias hardening='secstatus'
 
-# del - secure file deletion with shred
+
 function del --description "Securely delete files with shred (overwrite)"
     if test (count $argv) -eq 0
         echo "Usage: del <file1> [file2] ..."
@@ -5939,7 +5939,7 @@ function del --description "Securely delete files with shred (overwrite)"
     end
 end
 
-# check_path_security / pathsec - Check PATH for security risks
+
 function check_path_security --description "Check PATH for world-writable dirs and . in PATH"
     set -l risk 0
     echo "Checking PATH security..."
@@ -5953,7 +5953,7 @@ function check_path_security --description "Check PATH for world-writable dirs a
         else if not test -d "$part"
             echo "Note: PATH element doesn't exist: $part"
         else
-            # Check permissions - world-writable is last octal digit >= 2
+
             if type -q stat >/dev/null
                 set -l perms (stat -c "%a" "$part" 2>/dev/null; or stat -f "%Lp" "$part" 2>/dev/null)
                 if test -n "$perms"
@@ -5979,7 +5979,7 @@ end
 
 alias pathsec='check_path_security'
 
-# listening / ports - Show network listeners
+
 function listening --description "Show listening network connections"
     echo "Listening network connections:"
     echo ""
@@ -5996,7 +5996,7 @@ end
 
 alias ports='listening'
 
-# sudoers_check - Check sudo configuration
+
 function sudoers_check --description "Check sudoers configuration for current user"
     if test -f /etc/sudoers
         echo "Checking sudo configuration:"
@@ -6017,7 +6017,7 @@ function sudoers_check --description "Check sudoers configuration for current us
     end
 end
 
-# secaudit / audit / security - Full security audit
+
 function secaudit --description "Full security audit"
     echo "╔══════════════════════════════════════════════════════════════╗"
     echo "║               FULL SECURITY AUDIT - v1.0                      ║"
@@ -6122,7 +6122,7 @@ end
 alias audit='secaudit'
 alias security='secaudit'
 
-# sectips / tips - Security best practices
+
 function sectips --description "Security best practices"
     echo "╔══════════════════════════════════════════════════════════════╗"
     echo "║              SECURITY BEST PRACTICES                           ║"

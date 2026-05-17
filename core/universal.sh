@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Universal Shell Config - Distro-agnostic with OS detection
-# Works with: bash, zsh, fish
+
 # =============================================================================
 
 export DOTFILES_OS="$(uname -s)"
@@ -10,28 +10,28 @@ export DOTFILES_ARCH="$(uname -m)"
 # =============================================================================
 # Shell Detection
 # =============================================================================
-#
-# Detects the currently running shell (bash, zsh, fish) for conditional
-# initialization of shell-specific features and app-specific initializers.
-#
-# The SHELL_NAME variable is used throughout the dotfiles to select the
-# correct syntax, hook mechanism, and completion system for each shell.
-#
-# Features:
-#   - Parses $SHELL to extract the base shell name
-#   - Supports bash, zsh, and fish
-#   - Falls back to bash for unknown shells
-#   - Exported as SHELL_NAME for use in other scripts
-#
-# Compatibility:
-#   Works on: All Unix-like systems with bash/zsh/fish
-#   Tested: Linux (all distros), macOS
-#
-# See also:
-#   - shells/bash/*.bash - Bash-specific configurations
-#   - shells/zsh/*.zsh   - Zsh-specific configurations
-#   - shells/fish/*.fish - Fish-specific configurations
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Detect shell name for app initializers
 case "${SHELL##*/}" in
     bash) export SHELL_NAME="bash" ;;
@@ -43,44 +43,44 @@ esac
 # =============================================================================
 # Linux Distribution Detection
 # =============================================================================
-#
-# Identifies the Linux distribution by reading /etc/os-release and falling
-# back to legacy release files for older or minimalist distributions.
-#
-# This function is the primary distro detection mechanism. It supports:
-#   - /etc/os-release (modern, ID and ID_LIKE fields)
-#   - ID_LIKE fallback for derivatives and unknown distros
-#   - Legacy release file detection (/etc/arch-release, etc.)
-#   - Manual Linux From Scratch (LFS) detection
-#
-# Features:
-#   - Primary: /etc/os-release ID field matching
-#   - Secondary: ID_LIKE field fallback for derivatives
-#   - Tertiary: Legacy /etc/*-release file detection
-#   - Stable release: LFS detection via /etc/lfs-release
-#   - Maps 40+ distro IDs to 8 canonical families
-#
-# Distro families mapped:
-#   arch:    arch, artix, manjaro, endeavouros, garuda, archlabs
-#   debian:  debian, ubuntu, linuxmint, pop, elementary, zorin, neon, mx
-#   fedora:  fedora, centos, stream, rhel, rocky, alma, nobara
-#   suse:    opensuse, sles, leap, tumbleweed, gecko
-#   void:    void
-#   nix:     nixos
-#   gentoo:  gentoo, funtoo, calculate
-#   alpine:  alpine
-#   slackware: slackware, slint, salix, vector
-#   lfs:     linux-from-scratch
-#
-# Compatibility:
-#   Works on: All Linux distributions with POSIX sh
-#   Priority: /etc/os-release > ID_LIKE > legacy files
-#
-# See also:
-#   - os-release(5) - man page for /etc/os-release format
-#   - /etc/os-release - freedesktop.org standard
-#   - lsb_release(1) - LSB release information
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _detect_linux_distro() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
@@ -141,33 +141,33 @@ _detect_linux_distro() {
 # =============================================================================
 # Platform Detection - OS and Architecture
 # =============================================================================
-#
-# Determines the operating system and architecture at shell startup.
-# Sets DOTFILES_OS (uname -s) and DOTFILES_DISTRO (canonical distro name)
-# which are then used by all distro-specific modules.
-#
-# The detection is a two-stage process:
-#   1. Kernel detection via uname (Linux, Darwin, Windows subsystems)
-#   2. Distro detection via /etc/os-release or legacy files (Linux only)
-#
-# Features:
-#   - DOTFILES_OS: linux, macos, windows, unknown
-#   - DOTFILES_DISTRO: arch, debian, fedora, suse, void, nix, gentoo,
-#     alpine, slackware, lfs, macos, unknown
-#   - DOTFILES_ARCH: hardware architecture from uname -m
-#   - DOTFILES_INIT: init system detection (systemd, sysv, runit, openrc)
-#
-# Variables exported:
-#   DOTFILES_OS, DOTFILES_DISTRO, DOTFILES_ARCH, DOTFILES_INIT,
-#   DOTFILES_PKG_MANAGER
-#
-# Compatibility:
-#   Works on: Linux, macOS, Windows (Cygwin/MSYS2)
-#
-# See also:
-#   - uname(1) - system information
-#   - /etc/os-release - OS identification
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 case "$(uname -s)" in
     Linux*)  export DOTFILES_DISTRO="$(_detect_linux_distro)" ;;
     Darwin*) export DOTFILES_DISTRO="macos" ;;
@@ -175,36 +175,36 @@ case "$(uname -s)" in
 esac
 
 # =============================================================================
-# Package Manager Detection (Command-based)
+
 # =============================================================================
-#
-# Fallback package manager detection by scanning the PATH for known
-# package manager binaries. This is used when distro-based detection
-# cannot determine the correct manager.
-#
-# Detection order is weighted by likelihood and preference:
-#   brew (macOS) -> apt (Debian) -> pacman (Arch) -> dnf (Fedora)
-#   -> zypper (SUSE) -> yum (RHEL legacy) -> apk (Alpine)
-#   -> xbps-install (Void) -> nix (NixOS) -> emerge (Gentoo)
-#   -> slackpkg (Slackware) -> apt-get (Debian legacy)
-#
-# Features:
-#   - Detects 12 different package managers by PATH lookup
-#   - Returns the first match (priority-ordered)
-#   - Returns "none" if no manager is found
-#   - Used as fallback in _get_pkg_manager
-#
-# Returns:
-#   Echoes the package manager name or "none"
-#
-# Compatibility:
-#   Works on: All Unix-like systems
-#   Shell: sh, bash, zsh
-#
-# See also:
-#   - _get_pkg_manager() - Distro-aware package manager detection
-#   - DOTFILES_PKG_MANAGER - Exported detection result
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _detect_pkg_manager_by_command() {
     command -v brew >/dev/null 2>&1 && echo "brew" && return
     command -v apt >/dev/null 2>&1 && echo "apt" && return
@@ -222,46 +222,46 @@ _detect_pkg_manager_by_command() {
 }
 
 # =============================================================================
-# Package Manager Detection (Distro-aware)
+
 # =============================================================================
-#
-# Primary package manager detection that uses the detected distro to
-# prefer the correct package manager. AUR helpers are preferred on
-# Arch-based distros before falling back to pacman.
-#
-# Detection prioritization by distro family:
-#   Arch:     paru -> yay -> pacman -> command fallback
-#   Debian:   apt -> apt-get -> command fallback
-#   Fedora:   dnf -> yum -> command fallback
-#   SUSE:     zypper -> command fallback
-#   Void:     xbps-install -> command fallback
-#   Gentoo:   emerge -> pkgcore -> paludis -> command fallback
-#   Slackware: slackpkg -> command fallback
-#   Alpine:   apk -> command fallback
-#   NixOS:    nix -> command fallback
-#   macOS:    brew -> port -> command fallback
-#
-# Features:
-#   - Distro-aware: prefers the correct manager for each distro
-#   - AUR support: paru and yay detection on Arch
-#   - MacPorts support: 'port' detection on macOS
-#   - Multiple Gentoo managers: pkgcore, paludis
-#   - Falls back to _detect_pkg_manager_by_command for unknown distros
-#
-# Returns:
-#   Echoes the package manager name
-#
-# Exported as:
-#   DOTFILES_PKG_MANAGER
-#
-# Compatibility:
-#   Works on: All supported distros and macOS
-#   Shell: sh, bash, zsh
-#
-# See also:
-#   - _detect_pkg_manager_by_command() - Binary PATH fallback
-#   - DOTFILES_DISTRO - Distro detection used for routing
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _get_pkg_manager() {
     case "$DOTFILES_DISTRO" in
         arch|artix|manjaro|endeavouros|garuda)
@@ -313,33 +313,33 @@ export DOTFILES_PKG_MANAGER="$(_get_pkg_manager)"
 # =============================================================================
 # Init System Detection
 # =============================================================================
-#
-# Identifies the init system used by the current Linux system. This is
-# used to determine which service management commands are available
-# (systemctl, service, rc-service, etc.).
-#
-# Detection methods by priority:
-#   1. /run/systemd/system directory exists -> systemd
-#   2. /proc/1/comm contains init name
-#   3. Fallback: "unknown"
-#
-# Init systems detected:
-#   systemd - Modern Linux init (Fedora, Arch, Debian 8+, Ubuntu 15+)
-#   sysv    - SysV-style init (older Debian/Ubuntu, Slackware)
-#   runit   - Void Linux
-#   openrc  - Gentoo, Artix, Alpine
-#
-# Exported as:
-#   DOTFILES_INIT
-#
-# Compatibility:
-#   Works on: Linux systems with /proc
-#   Returns: "unknown" on macOS and other non-Linux systems
-#
-# See also:
-#   - systemd(1) - systemd init system
-#   - /proc/1/comm - Process 1 command name
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _get_init_system() {
     if [ -d /run/systemd/system ]; then
         echo "systemd"
@@ -358,38 +358,38 @@ export DOTFILES_INIT="$(_get_init_system)"
 # =============================================================================
 # Distro Family Boolean Helpers
 # =============================================================================
-#
-# Predicate functions that return true (exit code 0) when the current
-# distro matches the target family. These enable conditional execution
-# throughout the dotfiles without repeating distro string comparisons.
-#
-# Each helper checks DOTFILES_DISTRO against one or more distro identifiers.
-# Multiple IDs are supported for distro families (e.g., _is_arch matches
-# Arch, Artix, Manjaro, EndeavourOS, and Garuda).
-#
-# Defined helpers:
-#   _is_arch   - Arch Linux and Arch-based distros
-#   _is_debian - Debian, Ubuntu, Linux Mint, Pop!_OS
-#   _is_fedora - Fedora, CentOS, RHEL, Rocky, AlmaLinux
-#   _is_macos  - macOS (Darwin kernel)
-#   _is_void   - Void Linux
-#   _is_alpine - Alpine Linux
-#   _is_gentoo - Gentoo, Funtoo, Calculate
-#   _is_lfs    - Linux From Scratch
-#
-# Usage:
-#   if _is_arch; then
-#       echo "Running on Arch Linux"
-#   fi
-#
-# Compatibility:
-#   Works on: All supported operating systems
-#   Shell: sh, bash, zsh
-#
-# See also:
-#   - DOTFILES_DISTRO - Variable checked by these functions
-#   - _detect_linux_distro() - How DOTFILES_DISTRO is set
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _is_arch()    { [ "$DOTFILES_DISTRO" = "arch" ] || [ "$DOTFILES_DISTRO" = "artix" ] || [ "$DOTFILES_DISTRO" = "manjaro" ] || [ "$DOTFILES_DISTRO" = "endeavouros" ] || [ "$DOTFILES_DISTRO" = "garuda" ]; }
 _is_debian()  { [ "$DOTFILES_DISTRO" = "debian" ] || [ "$DOTFILES_DISTRO" = "ubuntu" ] || [ "$DOTFILES_DISTRO" = "linuxmint" ] || [ "$DOTFILES_DISTRO" = "pop" ]; }
 _is_fedora()  { [ "$DOTFILES_DISTRO" = "fedora" ] || [ "$DOTFILES_DISTRO" = "centos" ] || [ "$DOTFILES_DISTRO" = "rhel" ] || [ "$DOTFILES_DISTRO" = "rocky" ] || [ "$DOTFILES_DISTRO" = "alma" ]; }
@@ -402,42 +402,42 @@ _is_lfs()     { [ "$DOTFILES_DISTRO" = "lfs" ]; }
 # =============================================================================
 # System Update Function
 # =============================================================================
-#
-# Cross-distro system update command that dispatches to the correct
-# package manager based on DOTFILES_PKG_MANAGER. Supports 12+ managers
-# and covers all major Linux distros plus macOS.
-#
-# This is the primary "update everything" command. It handles:
-#   - Package database refresh (apt update, pacman -Sy, etc.)
-#   - Package upgrades (upgrade, -Syu, update, etc.)
-#   - AUR helper updates (paru/yay handle both repos and AUR)
-#
-# Supported managers:
-#   paru, yay, pacman, apt, apt-get, dnf, yum, brew, apk, zypper,
-#   xbps, emerge, nix, port, slackpkg
-#
-# Fallback behavior:
-#   If DOTFILES_PKG_MANAGER does not match any known manager,
-#   _detect_pkg_manager_by_command is called to find an alternative.
-#   If an alternative is found, it recursively calls _update_sys with
-#   the newly detected manager.
-#
-# Usage:
-#   update               # Update all packages
-#
-# Aliases:
-#   update -> _update_sys
-#
-# Compatibility:
-#   Works on: 5000+ Linux distros and macOS
-#
-# See also:
-#   - DOTFILES_PKG_MANAGER - Determines which command to run
-#   - _install_pkg() - Package installation
-#   - _remove_pkg()  - Package removal
-#   - _search_pkg()  - Package search
-#
-# System update - works on 5000+ distros via command detection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _update_sys() {
     case "$DOTFILES_PKG_MANAGER" in
         paru)           sudo paru -Syu ;;
@@ -471,39 +471,39 @@ alias update='_update_sys'
 # =============================================================================
 # Package Installation Function
 # =============================================================================
-#
-# Cross-distro package installer that dispatches to the correct manager.
-# Supports batch installation (multiple packages in one call).
-#
-# The function uses DOTFILES_PKG_MANAGER to determine which command to
-# invoke. It passes all arguments through to the underlying manager,
-# enabling advanced flags like --noconfirm where appropriate.
-#
-# Features:
-#   - Batch install: ins pkg1 pkg2 pkg3
-#   - Manager-specific flags: -y for apt, --noconfirm for pacman
-#   - Error handling: returns 1 if no packages specified
-#   - Same interface across all distros
-#
-# Usage:
-#   ins <package...>     # Install packages
-#   install <package...> # Alternative syntax
-#   i <package...>       # Short alias
-#
-# Aliases:
-#   ins -> _install_pkg
-#   install -> _install_pkg
-#   i -> _install_pkg
-#
-# Compatibility:
-#   Works on: All supported distros and macOS
-#
-# See also:
-#   - _remove_pkg() - Package removal
-#   - _search_pkg() - Package search
-#   - _update_sys() - System update
-#
-# Install packages - works on 5000+ distros
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 _install_pkg() {
     if [ $# -eq 0 ]; then
         echo "Usage: ins <package_name>"
@@ -536,32 +536,32 @@ alias i='_install_pkg'
 # =============================================================================
 # Package Removal Function
 # =============================================================================
-#
-# Cross-distro package remover that dispatches to the correct manager.
-# Handles recursive dependency removal where the manager supports it.
-#
-# On Arch-based systems, pacman -Rns is used to remove dependencies
-# and configuration files. On Debian, only the packages themselves are
-# removed (use apt purge for config cleanup).
-#
-# Usage:
-#   rem <package...>    # Remove packages
-#   uninstall <package...>
-#   rmv <package...>
-#
-# Aliases:
-#   rem -> _remove_pkg
-#   uninstall -> _remove_pkg
-#   rmv -> _remove_pkg
-#
-# Compatibility:
-#   Works on: All supported distros and macOS
-#
-# See also:
-#   - _install_pkg() - Package installation
-#   - _search_pkg()  - Package search
-#   - _list_pkgs()   - List installed packages
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Remove packages
 _remove_pkg() {
     if [ $# -eq 0 ]; then
@@ -592,33 +592,33 @@ alias rmv='_remove_pkg'
 # =============================================================================
 # Package Search Function
 # =============================================================================
-#
-# Cross-distro package search that queries the remote repository index.
-# Results are displayed in the native format of each package manager.
-#
-# Features:
-#   - Searches remote repositories (not local cache)
-#   - Supports regex and fuzzy search patterns (manager-dependent)
-#   - AUR helpers include both official repos and the AUR
-#   - Paginated output for long results
-#
-# Usage:
-#   se <pattern>       # Search for packages
-#   search <pattern>
-#   findpkg <pattern>
-#
-# Aliases:
-#   se -> _search_pkg
-#   search -> _search_pkg
-#   findpkg -> _search_pkg
-#
-# Compatibility:
-#   Works on: All supported distros and macOS
-#
-# See also:
-#   - _install_pkg() - Install from search results
-#   - _list_pkgs()   - List what's already installed
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Search packages
 _search_pkg() {
     if [ $# -eq 0 ]; then
@@ -650,43 +650,43 @@ alias findpkg='_search_pkg'
 # =============================================================================
 # Installed Package List
 # =============================================================================
-#
-# Lists all installed packages using the native query mechanism of the
-# detected package manager. The output format varies by manager.
-#
-# This is useful for:
-#   - System inventory and documentation
-#   - Creating package lists for reproduction
-#   - Finding what's installed on a new system
-#   - Cleaning up unused packages
-#
-# Query methods by manager:
-#   pacman:    pacman -Qq (explicitly installed, clean output)
-#   apt/dpkg:  dpkg -l (all packages, tabular format)
-#   dnf/rpm:   dnf list installed or rpm -qa
-#   brew:      brew list (formulae only)
-#   apk:       apk list --installed
-#   xbps:      xbps-query -l
-#   emerge:    qlist or equery list
-#   nix:       nix-env -q
-#
-# Usage:
-#   lsp               # List installed packages
-#   listpkgs
-#   installed
-#
-# Aliases:
-#   lsp -> _list_pkgs
-#   listpkgs -> _list_pkgs
-#   installed -> _list_pkgs
-#
-# Compatibility:
-#   Works on: All supported distros and macOS
-#
-# See also:
-#   - _search_pkg() - Search remote repositories
-#   - _remove_pkg() - Remove unused packages
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # List installed packages
 _list_pkgs() {
     case "$DOTFILES_PKG_MANAGER" in
@@ -709,39 +709,39 @@ alias listpkgs='_list_pkgs'
 alias installed='_list_pkgs'
 
 # =============================================================================
-# Systemd Service Management (systemctl)
+
 # =============================================================================
-#
-# Shortcut aliases for systemctl, the systemd service manager.
-# Only defined when DOTFILES_INIT equals "systemd".
-#
-# These cover the most common service operations:
-#   status, start, stop, restart, enable, disable
-#
-# Features:
-#   - User service management via scu (systemctl --user)
-#   - Conditionally defined only on systemd systems
-#   - Consistent naming: sc + verb initials
-#
-# Usage:
-#   sc              # systemctl (generic)
-#   scs <service>   # systemctl status <service>
-#   scst <service>  # systemctl start <service>
-#   scsp <service>  # systemctl stop <service>
-#   scsr <service>  # systemctl restart <service>
-#   scse <service>  # systemctl enable <service>
-#   scsd <service>  # systemctl disable <service>
-#   scu             # systemctl --user <subcommand>
-#
-# Compatibility:
-#   Defined on: Systems with systemd (Linux)
-#   Skipped on: macOS, Void (runit), Gentoo (OpenRC), older distros
-#
-# See also:
-#   - systemctl(1) - Systemd service manager
-#   - DOTFILES_INIT - Detection variable
-#
-# Systemctl wrapper (Linux only)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if [ "$DOTFILES_INIT" = "systemd" ]; then
     alias sc='systemctl'
     alias scs='systemctl status'
@@ -754,59 +754,59 @@ if [ "$DOTFILES_INIT" = "systemd" ]; then
 fi
 
 # =============================================================================
-# SysVinit Service Management (service)
+
 # =============================================================================
-#
-# Shortcut alias for the traditional SysV init service command.
-# Only defined when DOTFILES_INIT equals "sysv".
-#
-# The service command provides a uniform interface for starting,
-# stopping, and restarting services across SysV init systems.
-#
-# Usage:
-#   sv <service> <action>   # e.g., sv nginx start
-#
-# Compatibility:
-#   Defined on: Systems with SysV init (older Debian, Slackware, etc.)
-#
-# See also:
-#   - service(8) - SysV service management
-#   - DOTFILES_INIT - Init system detection
-#
-# Service manager (sysvinit)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if [ "$DOTFILES_INIT" = "sysv" ]; then
     alias sv='service'
 fi
 
 # =============================================================================
-# Journalctl Wrapper (systemd Journal)
+
 # =============================================================================
-#
-# Shortcut aliases for journalctl, the systemd journal viewer.
-# Only defined on systemd-based systems.
-#
-# These cover the most common journal operations:
-#   browse, jump to end, follow live, filter by unit
-#
-# Usage:
-#   jc              # journalctl (browse full journal)
-#   jce             # journalctl -e (jump to end)
-#   jcf             # journalctl -f (follow live output)
-#   jcu <unit>      # journalctl -u <unit> (filter by unit)
-#
-# Features:
-#   - Works with colored output by default
-#   - Filters by priority, unit, time range
-#   - Supports reverse chronological browsing
-#
-# Compatibility:
-#   Defined on: Systems with systemd (Linux only)
-#
-# See also:
-#   - journalctl(1) - Journal query tool
-#   - systemd-journald(8) - Systemd journal service
-#
-# Journalctl wrapper (systemd)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if [ "$DOTFILES_INIT" = "systemd" ]; then
     alias jc='journalctl'
     alias jce='journalctl -e'
@@ -817,22 +817,22 @@ fi
 # =============================================================================
 # System Information Displays
 # =============================================================================
-#
-# Aliases for showing system information using neofetch or fastfetch.
-# Fastfetch is preferred when available (faster, more customizable).
-# Provides quick sysinfo alias for a minimal one-line summary.
-#
-# Features:
-#   - neo        - Classic neofetch display
-#   - fetch      - Fastfetch with custom config
-#   - sysinfo    - Minimal one-line summary
-#
-# The sysinfo alias reads DOTFILES_DISTRO and DOTFILES_INIT directly
-# from the environment without calling external tools.
-#
-# Compatibility:
-#   Works on: All platforms (depends on neofetch/fastfetch availability)
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Neofetch - cross-distro
 alias neo='neofetch'
 alias fetch='fastfetch -c ~/.config/fastfetch/config.jsonc'
@@ -843,23 +843,23 @@ alias sysinfo='echo "OS: $DOTFILES_DISTRO" && echo "Kernel: $(uname -r)" && echo
 # =============================================================================
 # Cache Cleanup
 # =============================================================================
-#
-# Quick cleanup commands for user cache and package cache.
-#
-# WARNING: cleancache removes all user cache files. Some applications
-# may need to rebuild their cache on next launch.
-#
-# Features:
-#   - cleancache  - Remove all user cache (~/.cache/*)
-#   - cleanpkg    - Remove all package cache (/var/cache/*)
-#
-# Compatibility:
-#   Works on: All Linux systems
-#
-# See also:
-#   - paccleanfn() - Arch-specific pacman cache cleaning
-#   - aptclean alias - Debian-specific apt cache cleaning
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 alias cleancache='rm -rf ~/.cache/*'
 alias cleanpkg='rm -rf /var/cache/*'
 
@@ -870,36 +870,36 @@ alias cleanpkg='rm -rf /var/cache/*'
 # =============================================================================
 # Universal Helper Functions
 # =============================================================================
-#
-# General-purpose utility functions that work on all platforms.
-# These provide cross-platform equivalents for common tasks like
-# creating directories while navigating into them, extracting archives
-# of any format, file backup, weather info, IP lookup, and more.
-#
-# Design principles:
-#   - No external dependencies beyond POSIX coreutils
-#   - Graceful fallbacks when preferred tools are unavailable
-#   - Consistent interface regardless of platform
-#   - Minimal output, focused on getting the job done
-#
-# Features:
-#   mkcd/take   - Create directory and cd into it
-#   extract     - Extract any archive format (tar, gz, bz2, zip, rar, 7z)
-#   backup      - Create timestamped backup copy of a file
-#   weather     - Show weather forecast (uses wttr.in)
-#   myip        - Show public IP address
-#   pkillf      - Kill process by name (fuzzy match)
-#   portcheck   - Find processes listening on a port
-#
-# Compatibility:
-#   Works on: All Unix-like systems (Linux, macOS, BSD)
-#   Dependencies: basic POSIX tools, optional: unrar, 7z, curl
-#
-# See also:
-#   - mkdir(1), tar(1), unzip(1) - Underlying tools
-#   - https://wttr.in - Weather service
-#   - https://ifconfig.me - IP lookup service
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 mkcd() { mkdir -p "$1" && cd "$1"; }
 take() { mkdir -p "$1" && cd "$1"; }
 
@@ -923,147 +923,147 @@ extract() {
 # =============================================================================
 # File Backup Functions
 # =============================================================================
-#
-# Creates timestamped backups before modifying files. The backup() function
-# copies a file or directory with a .bak-YYYYMMDD-HHMMSS suffix, providing
-# a simple undo mechanism without version control.
-#
-# Usage:
-#   backup <file_or_dir>   # Creates <file>.bak-20250101-120000
-#
-# Features:
-#   - Handles both files and directories (cp -r)
-#   - Timestamp resolution: one second
-#   - Can be used as a prefix to edits: edit() { backup "$1" && vim "$1"; }
-#
-# See also:
-#   - cp(1) - File copy
-#   - date(1) - Timestamp formatting
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 backup() { cp -r "$1" "${1}.bak-$(date +%Y%m%d-%H%M%S)"; }
 
 # =============================================================================
 # Weather Forecast
 # =============================================================================
-#
-# Displays a weather forecast using the wttr.in service. Accepts an
-# optional location argument; defaults to automatic IP-based location.
-#
-# Features:
-#   - Uses curl for HTTP requests (no API key needed)
-#   - Supports city names, airport codes, IP addresses
-#   - Returns 3-day forecast by default
-#
-# Usage:
-#   weather              # Auto-detect location
-#   weather London       # Specific city
-#   weather JFK          # Airport code
-#   weather ~            # Moon phase
-#
-# See also:
-#   - https://github.com/chubin/wttr.in - wttr.in documentation
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 weather() { curl -fsSL "wttr.in/${1:-}" ; }
 
 # =============================================================================
 # Public IP Lookup
 # =============================================================================
-#
-# Retrieves the public (external) IP address using multiple fallback
-# services. This is useful for checking VPN status, NAT configuration,
-# or simply knowing your public-facing address.
-#
-# Fallback chain: ifconfig.me -> ipinfo.io/ip
-#
-# Features:
-#   - Multiple service fallback for reliability
-#   - Supports both IPv4 and IPv6
-#   - No external dependencies (uses curl)
-#
-# Usage:
-#   myip               # Show public IP
-#   wanip              # Same as myip
-#
-# See also:
-#   - diag_network() - Full network diagnostics
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 myip() { curl -fsSL https://ifconfig.me 2>/dev/null || curl -fsSL https://ipinfo.io/ip 2>/dev/null ; }
 
 # =============================================================================
 # Process Management Utilities
 # =============================================================================
-#
-# Cross-platform process finder and killer. Uses pkill for pattern
-# matching with fallback to killall for exact name matching.
-#
-# Features:
-#   - Regex/fuzzy process name matching
-#   - Kills all matching processes
-#   - Fallback to killall if pkgill is unavailable
-#
-# Usage:
-#   pkillf <pattern>    # Kill processes matching pattern
-#
-# See also:
-#   - pg <pattern> - ps + grep alias
-#   - pkill(1), killall(1) - Process termination
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 pkillf() { pkill -f "$1" || killall "$1" 2>/dev/null ; }
 
 # =============================================================================
 # Port Checking Utility
 # =============================================================================
-#
-# Shows processes listening on network ports. Uses ss (modern) with
-# fallback to netstat (legacy). Filters output by port number.
-#
-# Features:
-#   - Shows both TCP and UDP listeners
-#   - Displays PID and process name
-#   - Supports port number filtering
-#
-# Usage:
-#   portcheck <port>    # Find what's listening on a port
-#   ports               # Show all listening ports
-#
-# See also:
-#   - listening() - Security-oriented port listing
-#   - ss(8), netstat(8) - Socket statistics
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 portcheck() { netstat -tulanp 2>/dev/null | grep "$1" || ss -tulanp | grep "$1" ; }
 
 # =============================================================================
 # Docker Shortcuts
 # =============================================================================
-#
-# Convenience aliases for common Docker operations. Only defined when
-# the docker command is available on the system.
-#
-# Covers: container listing, image management, exec, logs, cleanup
-#
-# Features:
-#   dps       - List running containers
-#   dpsa      - List all containers (including stopped)
-#   di        - List images
-#   dex       - Exec into container interactively
-#   dlogs     - Follow container logs
-#   dstop     - Stop all running containers
-#   drm       - Remove all stopped containers
-#   dprune    - Prune unused Docker objects
-#   dclean    - Aggressive prune including volumes
-#
-# Warning:
-#   dprune and dclean are destructive operations that remove
-#   unused containers, networks, images, and optionally volumes.
-#   Use with caution on production systems.
-#
-# Compatibility:
-#   Requires: docker CLI
-#
-# See also:
-#   - docker_cleanup() - More detailed cleanup function
-#   - docker(1) - Docker CLI reference
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Docker shortcuts
 if command -v docker >/dev/null 2>&1; then
     alias dps='docker ps'
@@ -1078,34 +1078,34 @@ if command -v docker >/dev/null 2>&1; then
 fi
 
 # =============================================================================
-# Kubernetes (kubectl) Shortcuts
+
 # =============================================================================
-#
-# Convenience aliases for kubectl, the Kubernetes CLI. Only defined when
-# kubectl is available. Uses the standard kubectl convention of short
-# resource names (pods, svc, deployments).
-#
-# Features:
-#   k         - kubectl (generic)
-#   kgp       - Get pods (all namespaces)
-#   kgs       - Get services
-#   kgd       - Get deployments
-#   kga       - Get all resources
-#   kctx      - Show current context
-#   kuse      - Switch context
-#
-# Usage:
-#   k get nodes          # kubectl get nodes
-#   kgp -n kube-system   # List system pods
-#   kuse production      # Switch to production context
-#
-# Compatibility:
-#   Requires: kubectl CLI
-#
-# See also:
-#   - kubectl(1) - Kubernetes CLI reference
-#   - ~/.kube/config - Kubernetes configuration
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # K8s shortcuts
 if command -v kubectl >/dev/null 2>&1; then
     alias k='kubectl'
@@ -1118,32 +1118,32 @@ if command -v kubectl >/dev/null 2>&1; then
 fi
 
 # =============================================================================
-# Tmux (Terminal Multiplexer) Shortcuts
+
 # =============================================================================
-#
-# Convenience aliases for tmux session management. Only defined when
-# tmux is available.
-#
-# Features:
-#   t         - tmux (generic)
-#   ta        - Attach to existing session
-#   tl        - List sessions
-#   tn        - Create new session with name
-#
-# Usage:
-#   tn mysession         # Create and attach to new session
-#   ta                   # Attach to last session
-#   tl                   # List all sessions
-#
-# For advanced tmux operations, see the tmux_* function group below.
-#
-# Compatibility:
-#   Requires: tmux
-#
-# See also:
-#   - tmux(1) - Terminal multiplexer
-#   - tmux_* functions - Advanced tmux management
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Tmux shortcuts
 if command -v tmux >/dev/null 2>&1; then
     alias t='tmux'
@@ -1155,39 +1155,39 @@ fi
 # =============================================================================
 # Git Shortcuts
 # =============================================================================
-#
-# Essential Git aliases for daily workflow. These cover the most common
-# Git operations: status, add, commit, push, log, diff, checkout, stash.
-#
-# Features:
-#   g         - git (generic)
-#   gs        - git status
-#   ga        - git add
-#   gc        - git commit
-#   gp        - git push
-#   gl        - git log (last 20 commits, one-line format)
-#   gd        - git diff
-#   gco       - git checkout
-#   gsw       - git switch (modern alternative to checkout)
-#   gst       - git stash
-#   gsp       - git stash pop
-#
-# Usage:
-#   gs                   # Quick status check
-#   ga file.txt          # Stage file
-#   gc -m "message"      # Commit with message
-#
-# For advanced Git operations (cleanup, rewrite, bisect, etc.),
-# see the git_* function group below.
-#
-# Compatibility:
-#   Requires: git
-#
-# See also:
-#   - git(1) - Git reference
-#   - git_* functions - Advanced Git operations
-#   - contrib/git/* - Git helper scripts
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Git shortcuts
 alias g='git'
 alias gs='git status'
@@ -1204,31 +1204,31 @@ alias gsp='git stash pop'
 # =============================================================================
 # Flatpak PATH Integration
 # =============================================================================
-#
-# Adds Flatpak application directories to PATH so that Flatpak-installed
-# GUI applications can be launched from the command line.
-#
-# Flatpak installs app launchers (symlinks) in two locations:
-#   - System-wide: /var/lib/flatpak/exports/bin
-#   - User-local:  ~/.local/share/flatpak/exports/bin
-#
-# Both are added to PATH if they exist. The order ensures user-installed
-# apps take precedence over system-wide ones.
-#
-# Features:
-#   - Only enabled on Linux (Flatpak is Linux-only)
-#   - Checks both system and user directories
-#   - Gracefully handles missing directories
-#   - Uses PATH expansion syntax to avoid trailing colons
-#
-# Compatibility:
-#   Works on: All Linux distros with Flatpak installed
-#   Skipped on: macOS, Windows
-#
-# See also:
-#   - flatpak(1) - Flatpak CLI reference
-#   - https://flatpak.org - Flatpak project
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =============================================================================
 # Flatpak PATH support - works on all Linux distros
 # =============================================================================
@@ -1238,54 +1238,54 @@ if [ "$DOTFILES_OS" = "Linux" ]; then
 fi
 
 # =============================================================================
-# LESS_TERMCAP - Colored Man Pages
+
 # =============================================================================
-#
-# Configures terminal escape sequences for the less pager to produce
-# syntax-highlighted man pages. This makes reading man pages more
-# pleasant with color-coded sections.
-#
-# The LESS_TERMCAP variables control how less renders text formatting:
-#
-#   mb  - Start blinking mode (red text)
-#   md  - Start bold mode (blue highlighted text)
-#   me  - End all attribute modes
-#   se  - End standout (reverse video) mode
-#   so  - Start standout mode (dim background)
-#   ue  - End underline mode
-#   us  - Start underline mode (light blue text)
-#
-# Color scheme:
-#   - Bold headers in bright blue
-#   - Code/commands in underlined light blue
-#   - Standout sections in dimmed gray
-#   - Blinking indicators in red
-#
-# Features:
-#   - Works with all shells (bash, zsh, fish)
-#   - Uses 256-color ANSI sequences
-#   - Compatible with most terminal emulators
-#   - Does not affect non-manpage less usage
-#
-# Compatibility:
-#   Works on: All terminals with 256-color support
-#   Tested: xterm-256color, tmux, GNOME Terminal, iTerm2, Alacritty
-#
-# See also:
-#   - less(1) - Less pager documentation
-#   - man(1) - Man page viewer
-#   - terminfo(5) - Terminal capability database
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =============================================================================
-# LESS_TERMCAP - Colored man pages for all shells
+
 # =============================================================================
-# mb: Start blinking
-# md: Start bold mode
-# me: End all modes
-# se: End standout mode
-# so: Start standout mode (usually reverse video)
-# ue: End underline mode
-# us: Start underline mode
+
+
+
+
+
+
+
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;38;5;74m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -1295,7 +1295,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[04;38;5;146m'
 
 # =============================================================================
-# Distro family detection - like ChrisTitusTech for broader compatibility
+
 # =============================================================================
 distro_family() {
     local dtype="unknown"
@@ -1354,8 +1354,8 @@ distro_family() {
 }
 
 # =============================================================================
-# install_shell_support - Install all dependencies for the full shell experience
-# Works on 5000+ distros via distro family detection
+
+
 # =============================================================================
 install_shell_support() {
     echo "Installing shell support tools for your distro..."
@@ -1515,95 +1515,95 @@ alias install_deps='install_shell_support'
 # =============================================================================
 # Security Hardening - Shell Environment
 # =============================================================================
-#
-# Baseline security hardening applied at shell startup. These settings
-# help protect against accidental data exposure, history leakage, and
-# privilege escalation through world-writable files.
-#
-# Hardening measures:
-#   1. Secure umask (022) - Files created with 0644, dirs with 0755
-#      This prevents newly created files from being world-writable.
-#      WARNING: Do not set umask 077 unless you understand the implications
-#      for shared file access and application behavior.
-#
-#   2. HISTIGNORE filtering - Prevents sensitive commands from being saved
-#      in shell history. Commands containing passwords, tokens, secrets,
-#      private keys, or sensitive tool invocations (passwd, ssh-keygen,
-#      gpg, openssl) are excluded from history files.
-#
-#   3. HISTCONTROL=ignoreboth:erasedups - Space-prefixed commands are
-#      not saved (ignorespace), duplicate commands are removed (erasedups).
-#      To use: add a space before any sensitive command.
-#
-# Security notes:
-#   - umask 022 is the standard for multi-user Unix systems
-#   - umask 002 is appropriate for shared development groups
-#   - HISTIGNORE patterns are case-sensitive by default
-#   - These settings complement, not replace, full-disk encryption
-#     and proper file permissions on sensitive data files.
-#
-# Compatibility:
-#   Works on: All Unix-like systems with bash or zsh
-#   Notes: Fish shell uses its own history mechanism
-#
-# See also:
-#   - secstatus() - Interactive security status display
-#   - secaudit()  - Full security audit function
-#   - bash(1) - HISTCONTROL, HISTIGNORE documentation
-#   - umask(2) - File creation mask documentation
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =============================================================================
 # SECURITY FEATURES - FBI-APPROVED LEVEL OF CONFIDENCE
 # =============================================================================
 
-# Set secure umask: files 0644, directories 0755
+
 # This prevents newly created files from being world-writable
-# 022 is the standard secure umask
+
 umask 022 2>/dev/null || true
 
-# Don't save these sensitive commands to history
+
 # Passwords, tokens, and secret keys should never be saved
 export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear:passwd:ssh-add*:ssh-keygen*:gpg*:openssl*:*PASSWORD*:*SECRET*:*TOKEN*:*PRIVATE*"
 
-# Also ignore common commands that don't need auditing
+
 # But keep HISTCONTROL as the primary control
 export HISTIGNORE="${HISTIGNORE}:pwd:whoami:uname:date:echo *"
 
 # =============================================================================
 # Protective Shell Aliases
 # =============================================================================
-#
-# Interactive-mode aliases for destructive file operations to prevent
-# accidental data loss. These are the first line of defense against
-# common mistakes like overwriting files or removing the wrong directory.
-#
-# File operations (interactive):
-#   cp -i  - Prompt before overwriting existing files
-#   mv -i  - Prompt before overwriting existing files
-#   rm -i  - Prompt before removing each file
-#   ln -i  - Prompt before creating hard links to existing files
-#
-# Root-preserving operations:
-#   chmod --preserve-root - Refuse to operate on / recursively
-#   chown --preserve-root - Refuse to operate on / recursively
-#   chgrp --preserve-root - Refuse to operate on / recursively
-#
-# Design notes:
-#   - Interactive mode is the default to protect new users
-#   - Experienced users can bypass with: \rm, /usr/bin/rm, 'rm'
-#   - --preserve-root prevents catastrophic chmod -R / 777
-#   - These aliases are set regardless of distro
-#
-# Compatibility:
-#   Works on: All Unix-like systems (Linux, macOS, BSD)
-#   Notes: --preserve-root is a GNU coreutils extension;
-#          macOS uses BSD variants which lack this flag
-#
-# See also:
-#   - rm(1), cp(1), mv(1) - File operation references
-#   - chmod(1), chown(1) - Permission management
-#   - secstatus() - Check current alias status
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =============================================================================
 # SECURITY ALIASES - Safe operations with confirmation
 # =============================================================================
@@ -1615,7 +1615,7 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias ln='ln -i'
 
-# Safe chmod/chown - prevent accidentally making things too open
+
 alias chmod='chmod --preserve-root'
 alias chown='chown --preserve-root'
 alias chgrp='chgrp --preserve-root'
@@ -1623,39 +1623,39 @@ alias chgrp='chgrp --preserve-root'
 # =============================================================================
 # Security Status and Audit Functions
 # =============================================================================
-#
-# Comprehensive security functions for system hardening assessment.
-# These provide interactive reports on the current security posture,
-# PATH safety, exposed network services, and sudo configuration.
-#
-# Function overview:
-#   secstatus     - Quick security overview (umask, aliases, root status)
-#   secaudit      - Full security audit (users, SSH, GPG, network, etc.)
-#   sectips       - Security best practices reference
-#   del           - Secure file deletion with shred
-#   listening     - Show listening network services
-#   portcheck     - Find process on specific port
-#   check_path_security - Find world-writable PATH entries
-#   sudoers_check - Check sudo configuration for current user
-#   pathsec       - Alias for check_path_security
-#   ports         - Alias for listening
-#
-# Design principles:
-#   - All functions are informative only (no automatic fixes)
-#   - Use multiple fallbacks for cross-platform compatibility
-#   - Output is formatted for readability with box-drawing chars
-#   - Color-coded indicators: green=secure, yellow=warning, red=critical
-#
-# Compatibility:
-#   Works on: Linux (all distros), partial on macOS
-#   Dependencies: ss/netstat, stat, gpg (varies by function)
-#
-# See also:
-#   - umask(2) - File creation mask
-#   - sshd_config(5) - SSH server security
-#   - sudoers(5) - Sudo configuration
-#   - shred(1) - Secure file deletion
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =============================================================================
 # SECURITY FUNCTIONS
 # =============================================================================
@@ -1692,7 +1692,7 @@ secstatus() {
 alias sec='secstatus'
 alias hardening='secstatus'
 
-# Safe file deletion with shred (when available)
+
 # Overwrites file before deletion to prevent recovery
 del() {
     if [ $# -eq 0 ]; then
@@ -1718,7 +1718,7 @@ del() {
     done
 }
 
-# Check PATH for current directory (security risk if . is in PATH)
+
 check_path_security() {
     local risk=0
     echo "Checking PATH security..."
@@ -1754,7 +1754,7 @@ check_path_security() {
 }
 alias pathsec='check_path_security'
 
-# Show listening ports (potential security exposure)
+
 listening() {
     echo "Listening network connections:"
     echo ""
@@ -1798,7 +1798,7 @@ secaudit() {
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo ""
     
-    # Basic info
+
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "SYSTEM INFO"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -1808,7 +1808,7 @@ secaudit() {
     echo "Uptime:        $(uptime 2>/dev/null | sed 's/.*up *//' || echo "unknown")"
     echo ""
     
-    # User info
+
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "USER INFO"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -1820,18 +1820,18 @@ secaudit() {
     echo "Shell:         $SHELL"
     echo ""
     
-    # File system security
+
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "FILE SYSTEM SECURITY"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "Umask:         $(umask)"
     
-    # Check PATH
+
     echo ""
     check_path_security
     echo ""
     
-    # SSH checks
+
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "SSH SECURITY"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -1847,7 +1847,7 @@ secaudit() {
             fi
         fi
         
-        # Check for private keys
+
         if ls -la "$HOME/.ssh/"* 2>/dev/null | grep -q "id_"; then
             echo ""
             echo "SSH keys found:"
@@ -1872,7 +1872,7 @@ secaudit() {
     fi
     echo ""
     
-    # GPG checks
+
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "GPG/GNUPG"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -1884,14 +1884,14 @@ secaudit() {
     fi
     echo ""
     
-    # Network
+
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "NETWORK - LISTENING PORTS"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     listening
     echo ""
     
-    # Summary
+
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "SHELL HARDENING STATUS"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -1957,44 +1957,44 @@ alias securitytips='sectips'
 # =============================================================================
 # Shell Performance Benchmarks
 # =============================================================================
-#
-# Benchmarking utilities to measure shell startup time, prompt rendering
-# speed, and full environment load time. These help identify performance
-# bottlenecks in shell configuration.
-#
-# Three benchmark levels:
-#   bench_shell    - Raw shell startup time (bash, zsh, fish)
-#   bench_starship - Starship prompt module timing
-#   bench_startup  - Full shell startup with hyperfine (or /usr/bin/time)
-#   bench_all      - Run all three benchmarks
-#
-# Methodology:
-#   Each shell is started in interactive mode (-i) and immediately exits.
-#   The `time` command measures real (wall clock) elapsed seconds.
-#   Three iterations are run per shell to account for variance.
-#   hyperfine is used when available for statistical accuracy.
-#
-# Usage:
-#   bench_shell    # Time shell startup (3 runs each)
-#   bench_starship # Time starship prompt rendering
-#   bench_startup  # Comprehensive benchmark with hyperfine
-#   bench_all      # Run everything
-#
-# Interpretation:
-#   bash:   <100ms is good, 100-200ms is acceptable
-#   zsh:    <200ms is good (with plugins), 200-400ms is acceptable
-#   fish:   <100ms is good (compiled C)
-#   starship: <50ms per prompt is good
-#
-# Compatibility:
-#   Works on: All Unix-like systems
-#   Requires: /usr/bin/time (POSIX), optional: hyperfine
-#
-# See also:
-#   - diag_shell() - Shell environment diagnostics
-#   - hyperfine(1) - Benchmarking tool
-#   - starship(1) - Prompt timing
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Benchmark utilities
 bench_shell() {
     echo "=== Shell Benchmark ==="
@@ -2033,39 +2033,39 @@ bench_all() { bench_shell; echo; bench_starship; echo; bench_startup; }
 # =============================================================================
 # System Diagnostics Suite
 # =============================================================================
-#
-# Comprehensive diagnostic functions for troubleshooting shell environment,
-# dotfiles configuration, network connectivity, file permissions, and
-# tool availability. Each function focuses on a specific subsystem.
-#
-# Diagnostic functions:
-#   diag_shell      - Shell environment (version, terminal, PATH, aliases)
-#   diag_dotfiles   - Dotfiles configuration file presence check
-#   diag_network    - Network connectivity (IP, DNS, HTTP, speed)
-#   diag_permissions - File permissions (home, SSH, PATH safety)
-#   diag_tools      - Tool availability checklist (100+ tools)
-#   diag_all        - Run all diagnostics in sequence
-#
-# Output format:
-#   ✓ - Check passed or tool is available
-#   ✗ - Check failed or tool is missing
-#   WARNING - Security risk detected
-#
-# Usage:
-#   diag_shell     # Check shell configuration
-#   diag_network   # Test network connectivity
-#   diag_tools     # List available/ missing tools
-#   diag_all       # Complete system diagnosis
-#
-# Compatibility:
-#   Works on: All Unix-like systems (some checks are Linux-specific)
-#   Dependencies: varies by check function
-#
-# See also:
-#   - bench_shell() - Shell performance benchmarks
-#   - dottools() - Tool status report
-#   - env_all() - Environment analysis
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # System diagnostics
 diag_shell() {
     echo "Shell: $SHELL"
@@ -2144,41 +2144,41 @@ diag_all() { diag_shell; echo; diag_dotfiles; echo; diag_network; echo; diag_per
 # =============================================================================
 # Help System
 # =============================================================================
-#
-# Interactive help reference showing all available commands organized
-# by category. The help system is self-documenting and generated from
-# the actual function/alias definitions.
-#
-# Help categories:
-#   DIAGNOSTICS  - Shell benchmarks, diagnostics, and system info
-#   BACKUP       - File backup and restore commands
-#   NAVIGATION   - Directory bookmarking and navigation
-#   GIT          - Git workflow shortcuts (40+ commands)
-#   UTILITIES    - General-purpose utilities
-#   CROSS-PLATFORM - Distro-agnostic package/system commands
-#   NETWORK      - Network diagnostics and tools
-#
-# Additional help entry points:
-#   helpme        - Full help reference (this command)
-#   sectips       - Security best practices
-#   dotfiles      - Dotfiles usage guide
-#
-# Features:
-#   - Organized by command category
-#   - Shows command name and one-line description
-#   - Documents cross-distro compatibility
-#   - Lists all _x guarded commands
-#
-# Usage:
-#   helpme           # Show this help
-#   sectips          # Security tips
-#   dotfiles help    # Dotfiles management
-#
-# See also:
-#   - sectips() - Security best practices
-#   - env_all() - Environment analysis
-#   - version_all() - Dotfiles version info
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 helpme() {
     echo "╔══════════════════════════════════════════════════════════════╗"
     echo "║              Pinak's Ultimate Dotfiles Help                   ║"
@@ -2268,39 +2268,39 @@ helpme() {
 # =============================================================================
 # Environment Analysis Functions
 # =============================================================================
-#
-# Tools for inspecting the shell environment: PATH entries, alias
-# validity, function definitions, and environment variables. These
-# help diagnose configuration issues and understand the runtime state.
-#
-# Function overview:
-#   env_info      - Basic environment overview (shell, term, editor, PATH)
-#   env_path      - Detailed PATH analysis with validity checks
-#   env_aliases   - Alias analysis showing which are actually usable
-#   env_functions - Function analysis showing guard status
-#   env_all       - Run all environment analyses
-#
-# Features:
-#   - Validates each PATH entry exists
-#   - Checks if alias targets are actually installed
-#   - Identifies unguarded functions (missing command -v checks)
-#   - PATH entry numbering for easy reference
-#
-# Usage:
-#   env_info       # Quick environment overview
-#   env_path       # Detailed PATH analysis
-#   env_aliases    # Check alias availability
-#   env_all        # Full environment scan
-#
-# Compatibility:
-#   Works on: All Unix-like systems
-#   Shell: bash (uses declare -F, declare -f)
-#
-# See also:
-#   - diag_shell() - Shell diagnostics
-#   - pathsec() - PATH security check
-#   - printenv(1) - Environment variable display
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Environment info
 env_info() {
     echo "=== Environment Info ==="
@@ -2361,36 +2361,36 @@ env_all() { env_info; echo; env_path; echo; env_aliases; echo; env_functions; }
 # =============================================================================
 # Dotfiles Version and Statistics
 # =============================================================================
-#
-# Reporting functions that show the dotfiles version, code statistics,
-# and installed tool versions. Useful for debugging, sharing config
-# info, and tracking dotfiles growth.
-#
-# Function overview:
-#   version_dotfiles - Dotfiles statistics (lines, files, aliases, functions)
-#   version_tools    - Version info for 25+ installed tools
-#   version_all      - Run both version reports
-#
-# Features:
-#   - Counts total lines across all config files
-#   - Counts total number of config files
-#   - Reports number of defined aliases and functions
-#   - Shows version strings for git, compilers, and dev tools
-#   - Reports cross-platform compatibility status
-#
-# Usage:
-#   version_dotfiles  # Show dotfiles stats
-#   version_tools     # Show tool versions
-#   version_all       # Show everything
-#
-# Compatibility:
-#   Works on: All Unix-like systems
-#   Dependencies: find, wc, alias, declare (bash builtins)
-#
-# See also:
-#   - dots_* aliases - Quick stat commands
-#   - diag_tools() - Tool availability check
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 version_dotfiles() {
     echo "Pinak's Ultimate Dotfiles"
     echo "Lines: $(find "$DOTFILES_DIR" -name '*.sh' -o -name '*.bash' -o -name '*.zsh' -o -name '*.fish' -o -name '.gitconfig' 2>/dev/null | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
@@ -2417,35 +2417,35 @@ version_all() { version_dotfiles; echo; version_tools; }
 # =============================================================================
 # System Information and Reporting
 # =============================================================================
-#
-# Functions for collecting, displaying, and comparing comprehensive
-# system information. These combine OS, network, memory, and disk
-# details into a single report for troubleshooting or documentation.
-#
-# Function overview:
-#   sysinfo_full    - Complete system report (OS, network, memory, disk)
-#   sysinfo_save    - Save current report to /tmp for comparison
-#   sysinfo_compare - Compare current state against saved report
-#
-# Report sections:
-#   System: OS, kernel, hostname, architecture
-#   Network: IP address, public IP, DNS, gateway
-#   Memory: free/vm_stat output
-#   Disk: df output (first 10 filesystems)
-#
-# Usage:
-#   sysinfo_full      # Show complete system report
-#   sysinfo_save      # Save baseline report
-#   sysinfo_compare   # Check what changed since last save
-#
-# Compatibility:
-#   Works on: Linux (full), macOS (partial)
-#   Dependencies: free (Linux), vm_stat (macOS), df, ip, grep
-#
-# See also:
-#   - diag_all() - Comprehensive diagnostics
-#   - bench_all() - Performance benchmarks
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sysinfo_full() {
     echo "=== System Information ==="
     echo "OS: $(uname -s) $(uname -r)"
@@ -2474,38 +2474,38 @@ sysinfo_compare() {
 # =============================================================================
 # Network Tools
 # =============================================================================
-#
-# Network scanning, tracing, bandwidth testing, and DNS diagnostic
-# functions. These provide quick access to common network debugging
-# operations without remembering complex command syntax.
-#
-# Function overview:
-#   net_scan          - nmap ping sweep (default: 192.168.1.0/24)
-#   net_scan_ports    - nmap TCP port scan (default: 192.168.1.1)
-#   net_trace         - MTR/traceroute to target (default: 8.8.8.8)
-#   net_bw            - iperf3 client bandwidth test
-#   net_bw_server     - iperf3 server mode
-#   net_bw_test       - Speedtest-cli bandwidth test
-#   net_dns_bench     - Benchmark DNS resolvers (Cloudflare, Google, Quad9)
-#   net_dns_propagate - Check DNS propagation across multiple resolvers
-#
-# All functions use _x guard for graceful degradation when tools
-# are not installed. They return a helpful message instead of failing.
-#
-# Usage:
-#   net_scan              # Scan local network
-#   net_scan_ports 10.0.0.1  # Scan specific host
-#   net_trace example.com # Trace route
-#   net_dns_bench         # Compare DNS speeds
-#
-# Compatibility:
-#   Works on: All Unix-like systems
-#   Dependencies: nmap, mtr/traceroute, iperf3, dig (varies by function)
-#
-# See also:
-#   - diag_network() - Network diagnostics
-#   - nmap(1), traceroute(1), iperf3(1) - Network tools
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 net_scan() { _x nmap -sn "${1:-192.168.1.0/24}" 2>/dev/null || echo "nmap needed"; }
 net_scan_ports() { _x nmap -sT "${1:-192.168.1.1}" 2>/dev/null || echo "nmap needed"; }
 net_trace() { _x mtr -r -c 10 "${1:-8.8.8.8}" 2>/dev/null || _x traceroute "${1:-8.8.8.8}" 2>/dev/null || echo "no trace tool"; }
@@ -2518,39 +2518,39 @@ net_dns_propagate() { _x dig +short "$1" @1.1.1.1 2>/dev/null; _x dig +short "$1
 # =============================================================================
 # Git Repository Management Functions
 # =============================================================================
-#
-# Advanced Git operations for repository maintenance, history rewriting,
-# search, and statistics. These functions wrap complex git commands
-# with sensible defaults and safety checks.
-#
-# Function overview:
-#   git_cleanup        - Prune merged branches (local and remote)
-#   git_rewrite_author - Rewrite commit author information (filter-branch)
-#   git_find_big       - Find largest files in repository history
-#   git_find_text      - Find commits that modified files containing text
-#   git_find_commit    - Search commit messages with grep
-#   git_find_file      - Track file across entire history
-#   git_contributors   - List contributors by commit count
-#   git_lines          - Total lines of code in repository
-#   git_languages      - Language breakdown by file extension
-#   git_age            - Repository creation and last commit dates
-#   git_size           - Repository object store size
-#
-# WARNING:
-#   git_rewrite_author uses git filter-branch which rewrites history.
-#   This is destructive and should only be used on repositories that
-#   have not been shared with others (or with --force push).
-#   Consider using git-filter-repo for large repositories.
-#
-# Compatibility:
-#   Works on: All systems with git installed
-#   Dependencies: git, xargs, awk, sort
-#
-# See also:
-#   - git(1) - Git reference
-#   - git-filter-repo(1) - Modern history rewriting
-#   - gb_* aliases - Git branch shortcuts
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 git_cleanup() {
     echo "=== Git Cleanup ==="
     echo "Pruning remote origin..."
@@ -2594,38 +2594,38 @@ git_size() { git count-objects -vH 2>/dev/null | head -5; }
 # =============================================================================
 # Docker Management Functions
 # =============================================================================
-#
-# Docker container and image management functions. These provide quick
-# access to common Docker operations including inspection, cleanup,
-# and debugging without remembering verbose CLI flags.
-#
-# Function overview:
-#   docker_cleanup       - Prune all unused Docker objects (containers,
-#                          images, networks, volumes)
-#   docker_shell         - Exec into container with shell fallback
-#   docker_logs_all      - Show last 20 lines from all containers
-#   docker_stats_all     - Show resource stats for all containers
-#   docker_images_dangling - List dangling (untagged) images
-#   docker_rm_dangling   - Remove all dangling images
-#   docker_top_processes - Show processes in a container
-#   docker_inspect_ip    - Get container IP address
-#   docker_inspect_port  - Get container port mappings
-#   docker_inspect_vol   - Get container volume mounts
-#   docker_inspect_label - Get container labels (formatted JSON)
-#
-# WARNING:
-#   docker_cleanup removes ALL unused containers, networks, images,
-#   and dangling volumes. This is irreversible. Use selectively on
-#   production systems.
-#
-# Compatibility:
-#   Requires: docker CLI
-#   Dependencies: docker, optional: python3 (for JSON formatting)
-#
-# See also:
-#   - docker(1) - Docker CLI reference
-#   - d* aliases - Docker shortcut aliases
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 docker_cleanup() {
     echo "=== Docker Cleanup ==="
     echo "Containers: $(docker ps -aq 2>/dev/null | wc -l)"
@@ -2653,46 +2653,46 @@ docker_inspect_label() { docker inspect -f '{{json .Config.Labels}}' "$1" 2>/dev
 # =============================================================================
 # Tmux Management Functions
 # =============================================================================
-#
-# Complete tmux session, window, and pane management functions.
-# These provide a keyboard-friendly interface for tmux operations
-# without learning all the default keybindings.
-#
-# Session management:
-#   tmux_setup   - Show current session/window status
-#   tmux_new     - Create new named session (detached)
-#   tmux_attach  - Attach to existing session
-#   tmux_kill    - Kill a session by name
-#   tmux_rename  - Rename a session
-#   tmux_list    - List all sessions
-#
-# Window management:
-#   tmux_neww    - Create new window
-#   tmux_next    - Switch to next window
-#   tmux_prev    - Switch to previous window
-#   tmux_killw   - Kill current window
-#   tmux_renamew - Rename current window
-#
-# Pane operations:
-#   tmux_split   - Split pane horizontally
-#   tmux_splitv  - Split pane vertically
-#   tmux_swap    - Swap pane with previous
-#   tmux_zoom    - Zoom pane to full window
-#   tmux_sync    - Toggle synchronized pane input
-#
-# Utility:
-#   tmux_clock   - Show clock in pane
-#   tmux_copy    - Enter copy mode
-#   tmux_paste   - Paste from tmux buffer
-#   tmux_save    - Save pane output to file
-#
-# Compatibility:
-#   Requires: tmux
-#
-# See also:
-#   - tmux(1) - Terminal multiplexer
-#   - t* aliases - Tmux shortcut aliases
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 tmux_setup() {
     echo "=== tmux Setup ==="
     echo "Sessions: $(tmux list-sessions 2>/dev/null | wc -l)"
@@ -2723,34 +2723,34 @@ tmux_sync() { tmux setw synchronize-panes 2>/dev/null; }
 # =============================================================================
 # Security Audit Function
 # =============================================================================
-#
-# Targeted security audit focusing on SSH configuration, open ports,
-# listening services, authentication logs, and MAC (SELinux/AppArmor)
-# status. This is a companion to the more comprehensive secaudit()
-# function.
-#
-# Audit checks:
-#   SSH config     - Checks PermitRootLogin, PasswordAuthentication,
-#                    PubkeyAuthentication settings
-#   Sudoers        - Shows active sudo rules (first 10 lines)
-#   Open ports     - TCP listening ports via ss
-#   Services       - All listening TCP/UDP services
-#   Failed logins  - Last 5 failed SSH login attempts
-#   MAC status     - SELinux or AppArmor enforcement status
-#
-# Usage:
-#   sec_audit      # Run security audit
-#   security       # Alias (same as secaudit)
-#
-# Compatibility:
-#   Works on: Linux (all distros)
-#   Requires: ss, journalctl (systemd), optional: sestatus/aa-status
-#
-# See also:
-#   - secstatus() - Quick security overview
-#   - secaudit()  - Full security audit
-#   - check_path_security() - PATH safety check
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sec_audit() {
     echo "=== Security Audit ==="
     echo "SSH config:"
@@ -2773,30 +2773,30 @@ sec_audit() {
 }
 
 # =============================================================================
-# Message of the Day (MOTD)
+
 # =============================================================================
-#
-# Welcome screen displayed at shell startup. Shows the dotfiles banner,
-# fastfetch system information, and a reminder to use helpme for
-# available commands.
-#
-# Features:
-#   - ASCII art banner with dotfiles branding
-#   - Fastfetch system info display (hardware, OS, kernel)
-#   - Clear screen before display
-#   - "helpme" prompt for new users
-#
-# The MOTD is intentionally minimal to avoid startup delay. For more
-# detailed system info, use sysinfo_full, diag_all, or fastfetch directly.
-#
-# Usage:
-#   motd             # Display message of the day
-#
-# See also:
-#   - fastfetch(1) - System information tool
-#   - sysinfo_full() - Detailed system report
-#   - helpme - Full command reference
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 motd() {
     clear
     echo "╔══════════════════════════════════════════════════════════════╗"
@@ -2810,46 +2810,46 @@ motd() {
 }
 
 # =============================================================================
-# Dotfiles Management Aliases (dots_*)
+
 # =============================================================================
-#
-# Consolidated management interface for the dotfiles project. Every
-# dots_* alias provides quick access to a specific aspect of the
-# configuration: version info, statistics, diagnostics, or utilities.
-#
-# Information aliases:
-#   dots_version - Show dotfiles version string
-#   dots_lines   - Count total lines in all config files
-#   dots_size    - Show disk usage of dotfiles directory
-#   dots_files   - Count number of config files
-#   dots_shells  - List supported shells
-#   dots_os      - Show operating system
-#   dots_arch    - Show hardware architecture
-#
-# Utility aliases:
-#   dots_help    - Show help reference (same as helpme)
-#   dots_bench   - Run shell benchmarks
-#   dots_diag    - Run all diagnostics
-#   dots_env     - Run environment analysis
-#   dots_sys     - Show system information summary
-#   dots_net     - Run network diagnostics
-#   dots_sec     - Run security audit
-#   dots_ver     - Show dotfiles version details
-#   dots_tools   - Show installed tool versions
-#
-# Usage:
-#   dots_version     # Quick version check
-#   dots_lines       # Count config lines
-#   dots_diag        # Full diagnostics
-#
-# Compatibility:
-#   Works on: All Unix-like systems
-#
-# See also:
-#   - version_dotfiles() - Detailed version report
-#   - diag_all() - Full diagnostics
-#   - helpme() - Complete help reference
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 alias dots_version='echo "Pinak Ultimate 20k"'
 alias dots_lines='find "$DOTFILES_DIR" -name "*.sh" -o -name "*.bash" -o -name "*.zsh" -o -name "*.fish" -o -name ".gitconfig" 2>/dev/null | xargs wc -l 2>/dev/null | tail -1'
 alias dots_size='du -sh "$DOTFILES_DIR" 2>/dev/null'
@@ -2867,9 +2867,9 @@ alias dots_sec='sec_audit'
 alias dots_ver='version_dotfiles'
 alias dots_tools='version_tools'
 # Pinak Ultimate Dotfiles - 2026
-# Lines: 30194
-# Shells: bash zsh fish
-# Cross-platform: Linux + macOS
+
+
+
 
 
 alias dots_need_14='echo 14 lines to go'

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Fedora/RHEL/CentOS/Rocky/Alma - DNF, RPM & fedora-tools aliases
+
 # Loads on any Fedora-derived distro
 # =============================================================================
 
 if [ "$DOTFILES_DISTRO" = "fedora" ] || [ "$DOTFILES_DISTRO" = "centos" ] || [ "$DOTFILES_DISTRO" = "rhel" ] || [ "$DOTFILES_DISTRO" = "rocky" ] || [ "$DOTFILES_DISTRO" = "alma" ] || [ "$DOTFILES_DISTRO" = "nobara" ]; then
 
-# ---- DNF base ----
+
 alias dnfup='sudo dnf upgrade'
 alias dnfu='sudo dnf upgrade'
 alias dnfi='sudo dnf install'
@@ -30,7 +30,7 @@ alias dnfupd='dnf check-update'
 alias dnfchk='dnf check-update'
 alias dnfse='dnf search'
 
-# ---- DNF groups ----
+
 alias dnfg='dnf group list'
 alias dnfgv='dnf group list -v'
 alias dnfgi='sudo dnf group install'
@@ -39,7 +39,7 @@ alias dnfgu='sudo dnf group upgrade'
 alias dnfgup='sudo dnf group upgrade'
 alias dnfgf='dnf group info'
 
-# ---- DNF modules ----
+
 alias dnfm='dnf module list'
 alias dnfml='dnf module list'
 alias dnfmi='sudo dnf module install'
@@ -51,7 +51,7 @@ alias dnfmup='sudo dnf module upgrade'
 alias dnfmc='sudo dnf module reset'
 alias dnfminfo='dnf module info'
 
-# ---- DNF repo management ----
+
 alias dnfrepo='dnf repolist'
 alias dnfrepos='dnf repolist'
 alias dnfrepoa='dnf repolist --all'
@@ -68,7 +68,7 @@ alias dnfrepoadd='sudo dnf config-manager --add-repo'
 alias dfnenable='sudo dnf config-manager --set-enabled'
 alias dnfdisable='sudo dnf config-manager --set-disabled'
 
-# ---- DNF history ----
+
 alias dnfhi='dnf history list'
 alias dnfhiu='dnf history undo'
 alias dnfhir='dnf history rollback'
@@ -76,7 +76,7 @@ alias dnfhis='dnf history info'
 alias dnfhistore='dnf history store'
 alias dnfhistl='dnf history list'
 
-# ---- DNF system upgrade (Fedora version jumps) ----
+
 command -v dnf-plugin-system-upgrade >/dev/null 2>&1 && {
     alias dnfupgdl='sudo dnf system-upgrade download'
     alias dnfupgreb='sudo dnf system-upgrade reboot'
@@ -84,22 +84,22 @@ command -v dnf-plugin-system-upgrade >/dev/null 2>&1 && {
     alias dnfupgver='sudo dnf system-upgrade download --releasever'
 }
 
-# ---- DNF security ----
+
 alias dnfseconly='sudo dnf upgrade --security'
 alias dnfsecinfo='dnf updateinfo --list --security'
 alias dnfsecadvisory='dnf updateinfo --advisory'
 
-# ---- DNF autoremove / leaves ----
+
 alias dnfau='sudo dnf autoremove'
 alias dnfauto='sudo dnf autoremove'
 alias dnflsorph='dnf list extras'
 alias dnfleaves='dnf list extras'
 
-# ---- DNF swap / distro-sync ----
+
 alias dnfsync='sudo dnf distro-sync'
 alias dnfswap='sudo dnf swap'
 
-# ---- DNF functions ----
+
 dnfinstall() { sudo dnf install "$@"; }
 dnfremove() { sudo dnf remove "$@"; }
 dnfupdate() { sudo dnf upgrade; }
@@ -109,7 +109,7 @@ dnfupgrade() { sudo dnf upgrade; }
 dnfclean() { sudo dnf clean all; }
 dnfgroup() { sudo dnf group "$@"; }
 
-# ---- RPM families ----
+
 alias rpm='rpm'
 alias rpmi='sudo rpm -ivh'
 alias rpmu='sudo rpm -Uvh'
@@ -145,7 +145,7 @@ alias rpmverify='rpm -V'
 alias rpmvers='rpm --version'
 alias rpmchecks='rpm -K --nosignature'
 
-# ---- DNF-Plugin versionlock ----
+
 command -v dnf-plugin-versionlock >/dev/null 2>&1 && {
     alias dnflock='dnf versionlock'
     alias dnflockl='dnf versionlock list'
@@ -154,7 +154,7 @@ command -v dnf-plugin-versionlock >/dev/null 2>&1 && {
     alias dnflockc='sudo dnf versionlock clear'
 }
 
-# ---- COCKPIT ----
+
 command -v cockpit >/dev/null 2>&1 && {
     alias cockpit='cockpit'
     alias cockpitup='sudo systemctl start cockpit'
@@ -163,7 +163,7 @@ command -v cockpit >/dev/null 2>&1 && {
     alias cockpitenable='sudo systemctl enable cockpit'
 }
 
-# ---- FIREWALLD ----
+
 command -v firewall-cmd >/dev/null 2>&1 && {
     alias fw='sudo firewall-cmd'
     alias fwl='sudo firewall-cmd --list-all'
@@ -188,7 +188,7 @@ command -v firewall-cmd >/dev/null 2>&1 && {
     alias fwdirect='sudo firewall-cmd --direct --get-all-rules'
 }
 
-# ---- SELINUX ----
+
 command -v getenforce >/dev/null 2>&1 && {
     alias selinux='getenforce'
     alias selinuxst='sestatus'
@@ -202,7 +202,7 @@ command -v getenforce >/dev/null 2>&1 && {
     alias selinuxlog='sealert -a /var/log/audit/audit.log'
 }
 
-# ---- ABRT ----
+
 command -v abrt-cli >/dev/null 2>&1 && {
     alias abrt='abrt-cli'
     alias abrtls='abrt-cli list'

@@ -7,7 +7,7 @@ export DOTFILES_MODE="${DOTFILES_MODE:-supreme}"
 # Secure umask - files 0644, dirs 0755
 umask 022
 
-# Nord LS_COLORS for ls consistency
+
 export LS_COLORS="di=34;42:ln=35;42:so=33;42:pi=33;42:ex=31;42:bd=34;43:cd=33;43:su=30;41:sg=30;43:tw=30;42:ow=30;42:or=30;41:mi=00;35:st=00;32:do=00;32"
 
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -16,7 +16,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 [ -d "/var/lib/flatpak/exports/bin" ] && export PATH="/var/lib/flatpak/exports/bin${PATH:+:$PATH}"
 [ -d "$HOME/.local/share/flatpak/exports/bin" ] && export PATH="$HOME/.local/share/flatpak/exports/bin${PATH:+:$PATH}"
 
-# LESS_TERMCAP - Colored man pages
+
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;38;5;74m'
 export LESS_TERMCAP_me=$'\E[0m'
@@ -51,7 +51,7 @@ export MANWIDTH="${MANWIDTH:-80}"
 
 # History
 export HISTFILE="${HISTFILE:-$HOME/.zsh_history}"
-export HISTSIZE="${HISTSIZE:-50000}"
+# HISTSIZE set in .zshrc
 export SAVEHIST="${SAVEHIST:-100000}"
 export HISTFILESIZE="${HISTFILESIZE:-100000}"
 export HISTCONTROL="${HISTCONTROL:-ignoreboth:erasedups}"
@@ -927,64 +927,64 @@ fi
 # -----------------------------------------------------------------------------
 # MEDIA
 # -----------------------------------------------------------------------------
-#
-# This section configures environment variables for multimedia applications,
-# including video/audio processing, editing, and playback tools. Each
-# application is detected via command -v and configured with sensible
-# defaults following XDG Base Directory specifications.
-#
-# Design principles:
-#   - All paths use XDG directories ($XDG_CONFIG_HOME, $XDG_DATA_HOME, etc.)
-#   - Graceful fallback: ${VAR:-default} pattern ensures no errors on missing apps
-#   - Shell-agnostic: works with any POSIX shell (sh, bash, zsh, dash)
-#   - Performance: Only sets variables when app is actually installed
-#
-# See also:
-#   - XDG Base Directory Specification: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
-#   - ffmpeg(1), ffplay(1), ffprobe(1) - FFmpeg documentation
-#   - mpv(1) - MPV media player configuration
-#   - ImageMagick(1) - ImageMagick command-line tools
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # =============================================================================
 # FFmpeg - Complete multimedia framework
 # =============================================================================
-#
-# FFmpeg is a complete, cross-platform solution to record, convert, and
-# stream audio and video. It includes libavcodec, libavformat, libavutil,
-# libswscale, libswresample, and libavfilter.
-#
-# Architecture:
-#   - libavcodec: encoding/decoding library (100+ codecs)
-#   - libavformat: container format muxing/demuxing
-#   - libavutil: common utility functions
-#   - libswscale: image scaling and colorspace/pixel format conversion
-#   - libswresample: audio resampling, sample format conversion
-#   - libavfilter: audio/video filtering framework
-#
-# Supported formats:
-#   - Video: H.264/AVC, H.265/HEVC, VP8/VP9/AV1, MPEG-2/4, ProRes, DNxHD
-#   - Audio: AAC, MP3, FLAC, Opus, Vorbis, AC3, DTS, PCM
-#   - Containers: MP4, MKV, AVI, MOV, WebM, FLV, TS, OGG
-#
-# Usage examples:
-#   ffmpeg -i input.mp4 -c:v libx265 -crf 23 output.mp4
-#   ffmpeg -i video.mp4 -ss 00:01:00 -to 00:02:00 -c copy clip.mp4
-#   ffmpeg -i audio.mp3 -af "volume=2.0" louder.mp3
-#   ffmpeg -f x11grab -i :0.0+10,20 -c:v libx264 -preset ultrafast screen.mp4
-#
-# Environment variables:
-#   FFMPEG_DATADIR     - Data files directory (fonts, presets)
-#   FFREPORT           - Report logging (1=enable, file=filename)
-#   FFREPORT_FILE      - Report file path
-#   AV_LOG_FORCE_COLOR - Force colored output (0=disable, 1=enable)
-#
-# See also:
-#   - ffmpeg(1) - FFmpeg command-line documentation
-#   - ffprobe(1) - Media file probe tool
-#   - https://ffmpeg.org - FFmpeg project website
-#   - https://trac.ffmpeg.org - FFmpeg bug tracker and wiki
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v ffmpeg >/dev/null 2>&1; then
     export FFMPEG_DATADIR="${FFMPEG_DATADIR:-$XDG_DATA_HOME/ffmpeg}"
@@ -994,48 +994,48 @@ if command -v ffmpeg >/dev/null 2>&1; then
 fi
 
 # =============================================================================
-# yt-dlp - Feature-rich video downloader
+
 # =============================================================================
-#
-# yt-dlp is a YouTube-dl fork with additional features and fixes. It
-# supports downloading from 1000+ websites including YouTube, Vimeo,
-# TikTok, Instagram, and many more.
-#
-# Features:
-#   - Supports 1000+ video platforms
-#   - Download videos, playlists, channels, and playlists
-#   - Extract audio in various formats (MP3, AAC, FLAC, OPUS)
-#   - Download subtitles and closed captions
-#   - Download video chapters and thumbnails
-#   - Support for cookies, playlists, and age-restricted content
-#   - Customizable output templates and format selection
-#
-# Format selection examples:
-#   bestvideo[height<=?1080]+bestaudio/best - 1080p or better
-#   bestvideo[vcodec=vp9.2]+bestaudio/best - AV1 video
-#   bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best - MP4 preferred
-#   bestaudio[ext=mp3]/bestaudio/best - MP3 audio only
-#
-# Usage examples:
-#   yt-dlp https://youtube.com/watch?v=VIDEO_ID
-#   yt-dlp -f "bestvideo[height<=?1080]+bestaudio" https://youtube.com/watch?v=VIDEO_ID
-#   yt-dlp -x --audio-format mp3 https://youtube.com/watch?v=VIDEO_ID
-#   yt-dlp --sub-lang en --write-sub https://youtube.com/watch?v=VIDEO_ID
-#   yt-dlp --cookies cookies.txt https://youtube.com/watch?v=VIDEO_ID
-#
-# Environment variables:
-#   YT_DLP_CONFIG       - Configuration file path
-#   YT_DLP_CACHE_DIR    - Cache directory for downloads and metadata
-#   YT_DLP_HOME         - Home directory for configuration
-#   YT_DLP_OUTPUT_TEMPLATE - Output filename template
-#   YT_DLP_DEFAULT_FORMAT - Default format selection
-#   YT_DLP_RETRIES      - Number of download retries
-#
-# See also:
-#   - yt-dlp(1) - yt-dlp documentation
-#   - https://github.com/yt-dlp/yt-dlp - GitHub repository
-#   - https://github.com/ytdl-org/youtube-dl - Original YouTube-dl
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v yt-dlp >/dev/null 2>&1; then
     export YT_DLP_CONFIG="${YT_DLP_CONFIG:-$XDG_CONFIG_HOME/yt-dlp/config}"
@@ -1049,45 +1049,45 @@ fi
 # =============================================================================
 # MPV - Cross-platform media player
 # =============================================================================
-#
-# MPV is a free, open-source, and cross-platform media player that supports
-# various video and audio formats. It's known for its performance, minimal
-# interface, and extensive configuration options.
-#
-# Features:
-#   - Hardware-accelerated video decoding (VAAPI, NVDEC, VideoToolbox)
-#   - GPU-accelerated video output (OpenGL, Vulkan, Direct3D)
-#   - Lua scripting for custom functionality
-#   - WebUI for remote control
-#   - Screenshot capture with customizable formats
-#   - Audio/video filters and equalizers
-#   - Playlist management and chapter support
-#
-# Configuration files:
-#   - input.conf - Key bindings and commands
-#   - mpv.conf - Player options and defaults
-#   - scripts/ - Lua scripts directory
-#   - scripts/options/ - Per-script options
-#
-# Usage examples:
-#   mpv --no-terminal --hwdec=auto video.mp4
-#   mpv --ao=pulse --volume=80 audio.mp3
-#   mpv --screenshot-format=png --screenshot-directory=~/Pictures video.mp4
-#   mpv --start=60 --end=120 video.mp4  # Play 1-2 minutes
-#
-# Environment variables:
-#   MPV_HOME           - Config and data directory
-#   MPV_CACHE_DIR      - Cache directory for thumbnails and metadata
-#   MPV_SCRIPT_DIR     - Lua scripts directory
-#   MPV_INPUT_CONF     - Input configuration file
-#   MPV_LOG_FILE       - Log file path
-#   MPV_GPU_API        - GPU API (auto, OpenGL, Vulkan, Direct3D)
-#
-# See also:
-#   - mpv(1) - MPV documentation
-#   - https://mpv.io - MPV project website
-#   - https://github.com/mpv-player/mpv - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v mpv >/dev/null 2>&1; then
     export MPV_HOME="${MPV_HOME:-$XDG_CONFIG_HOME/mpv}"
@@ -1101,46 +1101,46 @@ fi
 # =============================================================================
 # ImageMagick - Image manipulation suite
 # =============================================================================
-#
-# ImageMagick is a software suite to create, edit, compose, or convert
-# bitmap images. It supports over 200 image formats and provides command-line
-# tools for batch processing and automation.
-#
-# Architecture:
-#   - magick - Command-line tool for image manipulation
-#   - convert - Image format conversion (legacy, deprecated)
-#   - identify - Image information extraction
-#   - montage - Image montage creation
-#   - composite - Image compositing
-#   - mogrify - Batch image processing
-#
-# Supported formats:
-#   - Raster: JPEG, PNG, GIF, TIFF, BMP, WebP, HEIC, AVIF
-#   - Vector: SVG, PDF, EPS, PostScript
-#   - Raw: CR2, NEF, ARW, DNG, ORF, RAF
-#   - Animated: GIF, APNG, WebP, AVIF
-#
-# Usage examples:
-#   magick input.jpg -resize 800x600 output.jpg
-#   magick input.jpg -rotate 90 rotated.jpg
-#   magick input.jpg -fill white -opaque black output.jpg
-#   magick *.jpg -delay 100 -loop 0 animation.gif
-#   magick input.jpg -quality 85 compressed.jpg
-#
-# Environment variables:
-#   MAGICK_HOME               - Install directory
-#   MAGICK_CONFIGURE_PATH     - Configuration search path
-#   MAGICK_TMPDIR             - Temporary directory
-#   MAGICK_MEMORY_LIMIT       - Memory limit (e.g., 256MiB)
-#   MAGICK_MAP_LIMIT          - Memory map limit
-#   MAGICK_DISK_LIMIT         - Disk space limit
-#   MAGICK_THREAD_LIMIT       - Thread count for parallel processing
-#
-# See also:
-#   - magick(1) - ImageMagick documentation
-#   - https://imagemagick.org - Project website
-#   - https://github.com/ImageMagick/ImageMagick - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v magick >/dev/null 2>&1; then
     export MAGICK_HOME="${MAGICK_HOME:-/usr}"
@@ -1155,46 +1155,46 @@ fi
 # =============================================================================
 # ExifTool - Metadata reading/writing tool
 # =============================================================================
-#
-# ExifTool is a platform-independent Perl library plus application for
-# reading, writing, and editing meta information in a wide variety of
-# files, including image, audio, video, and document formats.
-#
-# Features:
-#   - Reads metadata from 100+ file formats
-#   - Writes metadata to most supported formats
-#   - Supports EXIF, IPTC, XMP, GPS, and more
-#   - Batch processing with recursive directory scanning
-#   - Customizable output formats (text, JSON, XML, CSV)
-#   - Tag name aliases and custom tag definitions
-#
-# Supported metadata standards:
-#   - EXIF (Exchangeable Image File Format)
-#   - IPTC (International Press Telecommunications Council)
-#   - XMP (Extensible Metadata Platform)
-#   - GPS (Global Positioning System)
-#   - ICC (International Color Consortium)
-#   - PDF, TIFF, PNG, JPEG, GIF, and more
-#
-# Usage examples:
-#   exiftool -title "My Photo" image.jpg
-#   exiftool -gps:all image.jpg
-#   exiftool -r -overwrite_original -tagsfromfile @ -all:all directory/
-#   exiftool -json -time:all -r directory/ > metadata.json
-#   exiftool -d "%Y-%m-%d %H:%M:%S" -datetimeoriginal image.jpg
-#
-# Environment variables:
-#   EXIFTOOL_HOME         - Install directory
-#   EXIFTOOL_CONFIG       - Configuration file path
-#   EXIFTOOL_VERBOSE      - Verbose output (0=quiet, 1=normal, 2=verbose)
-#   EXIFTOOL_CHARSET      - Character encoding (UTF8, latin1, etc.)
-#   EXIFTOOL_DATE_FORMAT  - Date format string
-#
-# See also:
-#   - exiftool(1) - ExifTool documentation
-#   - https://exiftool.org - Project website
-#   - https://github.com/exiftool/exiftool - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v exiftool >/dev/null 2>&1; then
     export EXIFTOOL_HOME="${EXIFTOOL_HOME:-/usr/share/exiftool}"
@@ -1207,39 +1207,39 @@ fi
 # =============================================================================
 # Audacity - Audio editing software
 # =============================================================================
-#
-# Audacity is a free, open-source, cross-platform audio software for
-# recording and editing sounds. It provides a graphical interface for
-# audio manipulation with support for plugins and effects.
-#
-# Features:
-#   - Multi-track audio recording and playback
-#   - Noise reduction and noise gate effects
-#   - Pitch and tempo modification
-#   - VST, LV2, and AU plugin support
-#   - Spectrogram view for frequency analysis
-#   - Batch processing with "Chain" feature
-#
-# Supported formats:
-#   - Import: WAV, AIFF, FLAC, MP3, OGG, AAC, AC3
-#   - Export: WAV, AIFF, FLAC, MP3, OGG, AAC, AC3, EXE
-#
-# Configuration directories:
-#   - Config: ~/.config/audacity/
-#   - Data: ~/.local/share/audacity/
-#   - Cache: ~/.cache/audacity/
-#   - Temp: /tmp/ (or TMPDIR)
-#
-# Environment variables:
-#   AUDACITY_CONFIG_DIR - Configuration directory
-#   AUDACITY_DATA_DIR   - Data directory for presets and samples
-#   AUDACITY_CACHE_DIR  - Cache directory for temporary files
-#   AUDACITY_TEMP_DIR   - Temporary directory for processing
-#
-# See also:
-#   - https://audacityteam.org - Project website
-#   - https://github.com/audacity/audacity - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v audacity >/dev/null 2>&1; then
     export AUDACITY_CONFIG_DIR="${AUDACITY_CONFIG_DIR:-$XDG_CONFIG_HOME/audacity}"
@@ -1251,59 +1251,59 @@ fi
 # -----------------------------------------------------------------------------
 # TERMINAL
 # -----------------------------------------------------------------------------
-#
-# This section configures terminal applications including terminal emulators,
-# terminal multiplexers, and related tools. Each application is detected
-# via command -v and configured with sensible defaults following XDG
-# Base Directory specifications.
-#
-# See also:
-#   - tmux(1) - Terminal multiplexer documentation
-#   - zellij(1) - Zellij workspace documentation
-#   - alacritty(1) - Alacritty terminal emulator
-#   - kitty(1) - GPU-accelerated terminal emulator
-#
+
+
+
+
+
+
+
+
+
+
+
+
 
 # =============================================================================
 # Tmux - Terminal multiplexer
 # =============================================================================
-#
-# Tmux is a terminal multiplexer that enables multiple terminal sessions
-# to be accessed and controlled from a single terminal. It's essential
-# for managing long-running processes and multi-window workflows.
-#
-# Features:
-#   - Split windows into multiple panes
-#   - Multiple windows per session
-#   - Session persistence across disconnects
-#   - Copy/paste with full terminal history
-#   - Scriptable via command-line interface
-#   - Mouse support and vi/emacs keybindings
-#
-# Configuration files:
-#   - tmux.conf - Main configuration file
-#   - plugins/ - Plugin directory (tpm, tmux-plugins)
-#
-# Usage examples:
-#   tmux new -s session_name
-#   tmux attach -t session_name
-#   tmux ls
-#   tmux kill-session -t session_name
-#
-# Environment variables:
-#   TMUX_CONFIG         - Configuration file path
-#   TMUX_TMPDIR         - Socket directory (default: $XDG_RUNTIME_DIR/tmux)
-#   TMUX_CONF           - Alternative config file (alias to TMUX_CONFIG)
-#   TMUX_PLUGIN_MANAGER_PATH - Plugin directory for tpm
-#   TMUX_DEFAULT_SESSION - Default session name
-#   TMUX_DEFAULT_COMMAND - Default command (usually $SHELL)
-#   TMUX_DEFAULT_TERM   - Terminal type (tmux-256color)
-#
-# See also:
-#   - tmux(1) - Tmux documentation
-#   - https://github.com/tmux/tmux - GitHub repository
-#   - https://github.com/tmux-plugins/tpm - Tmux plugin manager
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v tmux >/dev/null 2>&1; then
     export TMUX_CONFIG="${TMUX_CONFIG:-$XDG_CONFIG_HOME/tmux/tmux.conf}"
@@ -1318,42 +1318,42 @@ fi
 # =============================================================================
 # Zellij - Terminal workspace with layouts
 # =============================================================================
-#
-# Zellij is a terminal workspace with a focus on usability, performance,
-# and extensibility. It provides a modern alternative to tmux with
-# built-in layouts and plugin support.
-#
-# Features:
-#   - Tabbed interface with multiple workspaces
-#   - Built-in layouts (vertical, horizontal, grid)
-#   - Plugin system with Rust SDK
-#   - Mouse support and touch gestures
-#   - Persistent sessions and sessions sharing
-#   - Built-in search and find functionality
-#
-# Configuration files:
-#   - config.kdl - Main configuration file
-#   - layouts/ - Layout definition files
-#   - plugins/ - Plugin directory
-#
-# Usage examples:
-#   zellij -c my_workspace
-#   zellij layout -n vertical
-#   zellij layout -n grid
-#   zellij --list-layouts
-#
-# Environment variables:
-#   ZELLIJ_CONFIG_DIR   - Configuration directory
-#   ZELLIJ_CACHE_DIR    - Cache directory for temporary files
-#   ZELLIJ_DATA_DIR     - Data directory for plugins and layouts
-#   ZELLIJ_MODE         - Default mode (normal, resize, pane, tab)
-#   ZELLIJ_LAYOUT       - Default layout file
-#   ZELLIJ_LOG_FILE     - Log file path
-#
-# See also:
-#   - https://zellij.dev - Project website
-#   - https://github.com/zellij-org/zellij - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v zellij >/dev/null 2>&1; then
     export ZELLIJ_CONFIG_DIR="${ZELLIJ_CONFIG_DIR:-$XDG_CONFIG_HOME/zellij}"
@@ -1367,38 +1367,38 @@ fi
 # =============================================================================
 # GNU Screen - Terminal multiplexer
 # =============================================================================
-#
-# GNU Screen is a terminal multiplexer that allows multiple terminal
-# sessions to be accessed simultaneously. It's one of the oldest
-# multiplexers and is still widely used today.
-#
-# Features:
-#   - Multiple windows per session
-#   - Session persistence across disconnects
-#   - Copy/paste with scrollback buffer
-#   - detach/attach sessions
-#   - Scriptable via command-line interface
-#
-# Configuration files:
-#   - screenrc - Configuration file
-#   - /etc/screenrc - System-wide configuration
-#
-# Usage examples:
-#   screen -S session_name
-#   screen -r session_name
-#   screen -ls
-#   screen -X quit
-#
-# Environment variables:
-#   SCREENRC          - User configuration file
-#   SYSSCREENRC       - System-wide configuration file
-#   SCREEN_TMP_DIR    - Socket directory
-#   SCREEN_TERM       - Terminal type (screen-256color)
-#
-# See also:
-#   - screen(1) - GNU Screen documentation
-#   - https://www.gnu.org/software/screen/ - Project website
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v screen >/dev/null 2>&1; then
     export SCREENRC="${SCREENRC:-$XDG_CONFIG_HOME/screen/screenrc}"
@@ -1410,40 +1410,40 @@ fi
 # =============================================================================
 # Kitty - GPU-accelerated terminal emulator
 # =============================================================================
-#
-# Kitty is a GPU-accelerated terminal emulator based on OpenGL. It's
-# designed for performance and features like transparent backgrounds,
-# rich color support, and fast text rendering.
-#
-# Features:
-#   - GPU-accelerated rendering with OpenGL/Vulkan
-#   - Transparent backgrounds and blur effects
-#   - Rich color support (24-bit, truecolor)
-#   - Fast text rendering with fontconfig
-#   - Custom keybindings and configuration
-#   - Shell integration for seamless workflow
-#
-# Configuration files:
-#   - config - Configuration file
-#   - themes/ - Theme files
-#
-# Usage examples:
-#   kitty --title "My Terminal"
-#   kitty --config ~/.config/kitty/config
-#   kitty +kitten themes
-#
-# Environment variables:
-#   KITTY_CONFIG_DIRECTORY  - Configuration directory
-#   KITTY_CACHE_DIRECTORY   - Cache directory for fonts and themes
-#   KITTY_THEME             - Default theme
-#   KITTY_FONT_SIZE         - Font size in points
-#   KITTY_SHELL_INTEGRATION - Shell integration (enabled, disabled)
-#
-# See also:
-#   - kitty(1) - Kitty documentation
-#   - https://sw.kovidgoyal.net/kitty/ - Project website
-#   - https://github.com/kovidgoyal/kitty - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v kitty >/dev/null 2>&1; then
     export KITTY_CONFIG_DIRECTORY="${KITTY_CONFIG_DIRECTORY:-$XDG_CONFIG_HOME/kitty}"
@@ -1456,38 +1456,38 @@ fi
 # =============================================================================
 # Alacritty - GPU-accelerated terminal emulator
 # =============================================================================
-#
-# Alacritty is a cross-platform, GPU-accelerated terminal emulator that
-# focuses on simplicity and performance. It uses Vulkan or OpenGL for
-# rendering and is designed to be minimal and fast.
-#
-# Features:
-#   - GPU-accelerated rendering with Vulkan/OpenGL
-#   - Minimal configuration with YAML
-#   - Transparent backgrounds
-#   - Custom keybindings and colorschemes
-#   - Fast text rendering and scrolling
-#
-# Configuration files:
-#   - alacritty.toml - Main configuration file
-#   - alacritty.yml - Legacy YAML configuration
-#
-# Usage examples:
-#   alacritty --title "My Terminal"
-#   alacritty --config-file ~/.config/alacritty/alacritty.toml
-#   alacritty --print-events
-#
-# Environment variables:
-#   ALACRITTY_CONFIG      - Configuration file path
-#   ALACRITTY_LOG_FILE    - Log file path
-#   ALACRITTY_THEME       - Default theme
-#   ALACRITTY_FONT_SIZE   - Font size in points
-#
-# See also:
-#   - alacritty(1) - Alacritty documentation
-#   - https://alacritty.org - Project website
-#   - https://github.com/alacritty/alacritty - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v alacritty >/dev/null 2>&1; then
     export ALACRITTY_CONFIG="${ALACRITTY_CONFIG:-$XDG_CONFIG_HOME/alacritty/alacritty.toml}"
@@ -1499,41 +1499,41 @@ fi
 # =============================================================================
 # WezTerm - GPU-accelerated terminal emulator
 # =============================================================================
-#
-# WezTerm is a cross-platform terminal emulator and multiplexer that
-# focuses on performance and modern features. It's built with Rust and
-# uses GPU acceleration for rendering.
-#
-# Features:
-#   - GPU-accelerated rendering with WebGL
-#   - Tabbed interface with multiple windows
-#   - Built-in multiplexer functionality
-#   - Rich color support (24-bit, truecolor)
-#   - Custom keybindings and configuration
-#   - Lua scripting for customization
-#
-# Configuration files:
-#   - wezterm.lua - Configuration file (Lua)
-#   - themes/ - Theme files
-#
-# Usage examples:
-#   wezterm --help
-#   wezterm start --title "My Terminal"
-#   wezterm cli spawn --title "New Tab"
-#
-# Environment variables:
-#   WEZTERM_CONFIG_DIR      - Configuration directory
-#   WEZTERM_CONFIG_FILE     - Configuration file path
-#   WEZTERM_CACHE_DIR       - Cache directory for fonts and themes
-#   WEZTERM_DATA_DIR        - Data directory for plugins
-#   WEZTERM_LOG_FILE        - Log file path
-#   WEZTERM_COLOR_SCHEME    - Default color scheme
-#   WEZTERM_FRONTEND        - Frontend (GUI, CLI)
-#
-# See also:
-#   - https://wezfurlong.org/wezterm/ - Project website
-#   - https://github.com/wez/wezterm - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v wezterm >/dev/null 2>&1; then
     export WEZTERM_CONFIG_DIR="${WEZTERM_CONFIG_DIR:-$XDG_CONFIG_HOME/wezterm}"
@@ -1548,41 +1548,41 @@ fi
 # =============================================================================
 # Ghostty - Fast, feature-rich terminal emulator
 # =============================================================================
-#
-# Ghostty is a fast, feature-rich terminal emulator built with modern
-# graphics APIs. It focuses on performance, customization, and user
-# experience with a clean, minimal interface.
-#
-# Features:
-#   - GPU-accelerated rendering with Vulkan
-#   - Fast text rendering with fontconfig
-#   - Rich color support (24-bit, truecolor)
-#   - Custom keybindings and configuration
-#   - Tabbed interface with multiple windows
-#   - Shell integration for seamless workflow
-#
-# Configuration files:
-#   - config - Configuration file
-#   - themes/ - Theme files
-#
-# Usage examples:
-#   ghostty --help
-#   ghostty --title "My Terminal"
-#   ghostty --config ~/.config/ghostty/config
-#
-# Environment variables:
-#   GHOSTTY_CONFIG_DIR      - Configuration directory
-#   GHOSTTY_CONFIG_FILE     - Configuration file path
-#   GHOSTTY_CACHE_DIR       - Cache directory for fonts and themes
-#   GHOSTTY_DATA_DIR        - Data directory for plugins
-#   GHOSTTY_LOG_FILE        - Log file path
-#   GHOSTTY_LOG_LEVEL       - Log level (info, debug, trace)
-#   GHOSTTY_THEME           - Default theme
-#
-# See also:
-#   - https://ghostty.io - Project website
-#   - https://github.com/ghostty-org/ghostty - GitHub repository
-#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if command -v ghostty >/dev/null 2>&1; then
     export GHOSTTY_CONFIG_DIR="${GHOSTTY_CONFIG_DIR:-$XDG_CONFIG_HOME/ghostty}"
