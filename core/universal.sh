@@ -963,7 +963,7 @@ backup() { cp -r "$1" "${1}.bak-$(date +%Y%m%d-%H%M%S)"; }
 
 
 
-weather() { curl -fsSL "wttr.in/${1:-}" ; }
+# defined as alias in core/aliases.sh
 
 # =============================================================================
 # Public IP Lookup
@@ -987,7 +987,7 @@ weather() { curl -fsSL "wttr.in/${1:-}" ; }
 
 
 
-myip() { curl -fsSL https://ifconfig.me 2>/dev/null || curl -fsSL https://ipinfo.io/ip 2>/dev/null ; }
+# defined as alias in core/aliases.sh
 
 # =============================================================================
 # Process Management Utilities
@@ -1008,7 +1008,7 @@ myip() { curl -fsSL https://ifconfig.me 2>/dev/null || curl -fsSL https://ipinfo
 
 
 
-pkillf() { pkill -f "$1" || killall "$1" 2>/dev/null ; }
+# defined as alias in core/aliases.sh
 
 # =============================================================================
 # Port Checking Utility

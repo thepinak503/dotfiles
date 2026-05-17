@@ -990,7 +990,8 @@ command = 'echo " ⚠️  YOU ARE RUNNING AS ROOT! BE CAREFUL WITH YOUR COMMANDS
 style = 'fg:#ff6b6b bg:#1a0a0a'
 symbol = ""
 format = '[$symbol$output]($style)'
-when = 'test $EUID -eq 0'
+when = 'test $(id -u) -eq 0'
+ignore_timeout = true
 description = "Warns when running as root"
 
 

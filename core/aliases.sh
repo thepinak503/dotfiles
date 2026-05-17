@@ -280,7 +280,7 @@ alias gkw='gitk --all'
 alias gsh='git show'
 alias gshs='git show --stat'
 alias gshn='git show --name-only'
-alias gdf='git difftool'
+
 
 # -----------------------------------------------------------------------------
 
@@ -1331,16 +1331,16 @@ alias ipa='ip -br addr'
 alias ipr='ip route'
 alias nst='netstat -tulanp 2>/dev/null || ss -tulanp'
 alias trace='traceroute'
-alias net='_x ip -br addr 2>/dev/null || _x ifconfig 2>/dev/null'
-alias ipa='_x ip -br addr 2>/dev/null || _x ifconfig 2>/dev/null'
-alias trace='_x traceroute 2>/dev/null || _x traceroute6 2>/dev/null || echo "no traceroute"'
+
+
+
 alias ip='ip -br addr'
 alias myip='_x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || echo "N/A"'
-alias myipl='_x ip addr show scope global 2>/dev/null | grep -oP "inet \K[\d.]+" || _x ifconfig 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | awk "{print \$2}"'
+
 alias dns='_x dig +short'
 alias flush='_x sudo resolvectl flush-caches 2>/dev/null || _x sudo systemd-resolve --flush-caches 2>/dev/null || _x sudo killall -HUP mDNSResponder 2>/dev/null || echo "no flush"'
 alias speed='_x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | _x python3 - 2>/dev/null || echo "speedtest-cli needed"'
-alias weather='_x curl -fsSL wttr.in 2>/dev/null || echo "curl needed"'
+
 alias weather3='_x curl -fsSL "wttr.in?F" 2>/dev/null || echo "curl needed"'
 alias moon='_x curl -fsSL "wttr.in/Moon" 2>/dev/null || echo "curl needed"'
 alias dnst='dig +short'
@@ -1452,7 +1452,7 @@ alias top='_x btop 2>/dev/null || _x htop 2>/dev/null || command top'
 
 
 
-alias gr='grep'
+
 alias gri='grep -i'
 alias grr='grep -r'
 alias grri='grep -ri'
@@ -1527,18 +1527,18 @@ alias chx='chmod +x'
 alias chm='chmod'
 alias ln='ln -s'
 alias lnh='readlink -f'
-alias backup='cp -r "$1" "${1}.bak-$(date +%Y%m%d-%H%M%S)"'
+# defined as function in core/functions.sh (backup_file)
 alias mount='mount | column -t'
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i'
+
+
+
 alias mkdir='mkdir -p'
 alias bc='bc -l'
 alias find='_x fd 2>/dev/null || command find'
 alias cat='_x bat --style=plain --paging=never 2>/dev/null || _x batcat --style=plain --paging=never 2>/dev/null || command cat'
 alias fd='_x fd 2>/dev/null || find'
 alias ff='find . -type f -name'
-alias mkdir='mkdir -p'
+
 alias wget='_x wget 2>/dev/null || _x curl -fSL -o 2>/dev/null || echo "no download tool"'
 
 if command -v fd >/dev/null 2>&1; then
@@ -1784,7 +1784,7 @@ fi
 alias pbc='pbcopy'
 alias pbp='pbpaste'
 alias cpy='(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard) || (command -v wl-copy >/dev/null 2>&1 && wl-copy) || (command -v pbcopy >/dev/null 2>&1 && pbcopy) || echo "missing: clipboard tool" >&2'
-alias pst='(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard -o) || (command -v wl-paste >/dev/null 2>&1 && wl-paste) || (command -v pbpaste >/dev/null 2>&1 && pbpaste) || echo "missing: clipboard tool" >&2'
+
 
 if command -v xdotool >/dev/null 2>&1 && command -v xclip >/dev/null 2>&1; then
     alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
@@ -1799,8 +1799,8 @@ alias base64e='base64'
 alias base64d='base64 -d'
 alias urlenc='_x python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))"'
 alias urldec='_x python3 -c "import urllib.parse,sys; print(urllib.parse.unquote(sys.argv[1]))"'
-alias sha='_x shasum -a 256 2>/dev/null || _x sha256sum 2>/dev/null'
-alias hex='_x xxd 2>/dev/null || _x od -A x -t x1z 2>/dev/null'
+
+
 
 # Shell / System Utilities
 alias please='sudo'
@@ -1827,10 +1827,10 @@ alias df='df -h'
 alias diskspace='df -h'
 alias blk='lsblk -f'
 alias disks='lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT'
-alias disks='_x lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT 2>/dev/null || _x diskutil list 2>/dev/null'
+
 alias fdisk='fdisk -l'
 alias smart='sudo smartctl -a'
-alias smart='_x sudo smartctl -a 2>/dev/null || echo "no smartctl"'
+
 alias cpuinfo='lscpu 2>/dev/null || sysctl -n machdep.cpu.brand_string'
 alias meminfo='free -h'
 alias dmesg='dmesg -T'
@@ -1847,16 +1847,16 @@ alias week='date +%V'
 alias count='wc -l'
 alias lines='cat -n'
 alias cht='curl -fsSL "https://cht.sh/$1"'
-alias cht='_x curl -fsSL "https://cht.sh/$1" 2>/dev/null || echo "curl needed"'
+
 alias learn='curl -fsSL "https://learnxinyminutes.com/docs/$1"'
-alias learn='_x curl -fsSL "https://learnxinyminutes.com/docs/$1" 2>/dev/null'
+
 alias cheat='curl -fsSL "https://cheat.sh/$1"'
 alias try='curl -fsSL https://cht.sh'
 alias tldrl='curl -fsSL https://cheat.sh'
 alias what='type'
 alias ali='alias'
 alias envg='env | grep'
-alias envg="env | grep -i"
+
 alias fn='declare -f 2>/dev/null || typeset -f'
 alias path="echo \$PATH | tr ':' '\\n' | sort -u"
 alias nohist='unset HISTFILE'
@@ -1866,7 +1866,7 @@ alias cleanshell='env - bash --norc --noprofile'
 alias topcmds='topcommands'
 alias port='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || echo "no port tool"'
 alias ports='_x ss -tulpn 2>/dev/null || _x netstat -tulpn 2>/dev/null || _x lsof -i -n -P 2>/dev/null'
-alias ports='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || _x lsof -i -P -n 2>/dev/null | grep LISTEN'
+
 alias listen='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null'
 alias connections='_x ss -tunp 2>/dev/null || _x netstat -tunp 2>/dev/null'
 alias dsstore='find . -name ".DS_Store" -type f -delete -print 2>/dev/null'
@@ -1988,10 +1988,7 @@ if command -v direnv >/dev/null 2>&1; then
 fi
 
 
-if command -v zoxide >/dev/null 2>&1; then
-    alias z='zoxide'
-    alias zi='zoxide query -i'
-fi
+# z and zi are functions provided by zoxide init
 
 
 if command -v fzf >/dev/null 2>&1; then
@@ -2284,12 +2281,12 @@ fi
 
 
 
-alias tstamp='stamp'
-alias topcmds='topcommands'
-alias idg='id -g'
-alias idu='id -u'
-alias shuffle='shuf'
-alias rsample='shuf -n'
+
+
+
+
+
+
 alias pur='_x curl -fsSL "https://cht.sh/$1" 2>/dev/null'
 
 # Standalone duplicates preserved for compatibility
@@ -2300,15 +2297,15 @@ alias podimg='_x podman images'
 alias dstats='_x docker stats --no-stream'
 alias kns='_x kubectl config set-context --namespace'
 alias py='_x python3'
-alias ip='ip -br addr'
-alias free='free -h'
-alias bc='bc -l'
-alias wget='_x wget 2>/dev/null || _x curl -fSL -o 2>/dev/null || echo "no download tool"'
+
+
+
+
 
 # Miscellaneous shell utilities
 alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
-alias dsstore='find . -name ".DS_Store" -type f -delete -print 2>/dev/null'
-alias mirrorsite='_x wget -m -k -K -E -e robots=off 2>/dev/null || echo "wget needed"'
-alias sep='printf "=%.0s" $(seq 1 $(tput cols))'
-alias countfiles='for t in files links directories; do echo $(find . -type ${t:0:1} 2>/dev/null | wc -l) $t; done 2>/dev/null'
-alias psymod='lsmod'
+
+
+
+
+
