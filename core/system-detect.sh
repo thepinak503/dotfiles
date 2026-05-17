@@ -121,6 +121,7 @@ export DOTFILES_DISTRO
 
 
 
+_detect_pkg() {
     if [ "$DOTFILES_OS" = "Darwin" ]; then
         command -v brew >/dev/null 2>&1 && { echo brew; return; }
     fi

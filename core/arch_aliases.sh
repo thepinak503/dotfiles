@@ -105,6 +105,7 @@ alias pacsw='pacman -Sw'
 alias pacscc='sudo pacman -Scc'
 alias pacsc='sudo pacman -Sc'
 alias pacown='pacman -Qo'
+alias pacinfo='pacman -Si'
 alias pacdiff='pacman -Si'
 alias pacfiles='pacman -Fl'
 alias pacclean='sudo pacman -Rns $(pacman -Qtdq 2>/dev/null)'
@@ -116,7 +117,7 @@ alias pacasdep='pacman -D --asdeps'
 alias fixpacman='sudo rm -f /var/lib/pacman/db.lck'
 alias pacls='pacman -Qql'
 alias pacupg='sudo pacman -Syu --noconfirm'
-alias pacupd='sudo pacman -Sy'
+alias pacupd='sudo pacman -Syy'
 alias pacug='sudo pacman -Su'
 alias pacref='sudo pacman -Syy'
 alias pacre='sudo pacman -R'
@@ -384,14 +385,13 @@ command -v arch-chroot >/dev/null 2>&1 && {
 }
 
 
-command -v pacdiff >/dev/null 2>&1 && {
+if command -v pacdiff >/dev/null 2>&1; then
     alias pacdiffview='sudo pacdiff'
-}
+    alias pacdiff='sudo pacdiff'
+fi
 
-command -v pacutils >/dev/null 2>&1 && {
-    alias paclist='paclist'
-    alias paclog='paclog'
-}
+command -v paclist >/dev/null 2>&1 && alias paclist='paclist'
+command -v paclog >/dev/null 2>&1 && alias paclog='paclog'
 
 command -v rankmirrors >/dev/null 2>&1 && {
     alias rankmir='sudo rankmirrors -v'

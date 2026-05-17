@@ -758,7 +758,7 @@ if command -v pacman >/dev/null 2>&1; then
     alias pacor='sudo pacman -Sc'
     alias pacowned='_x pacman -Qii'
     alias pacorph='_x pacman -Qtdq'
-    alias pacclean='sudo pacman -Rns $(pacman -Qtdq)'
+    alias pacclean='sudo pacman -Rns $(pacman -Qtdq 2>/dev/null)'
     alias paclsorph='_x pacman -Qtd'
     alias pacfiles='_x pacman -Fl'
     alias pacdep='_x pacman -Si'
