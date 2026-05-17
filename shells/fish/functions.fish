@@ -1092,7 +1092,6 @@ function llist --description "Launchctl list"
 end
 
 
-
 function journal --description "Journalctl follow"
     journalctl -f -u $argv[1]
 end
@@ -1288,8 +1287,6 @@ end
 function roll --description "Roll dice"
     shuf -i 1-6 -n 1
 end
-
-
 
 
 function reload --description "Reload config"
@@ -1514,7 +1511,6 @@ end
 function linux_lsof --description "Lsof"
     sudo lsof -i -n -P
 end
-
 
 
 function 7z_compress; 7z a "$argv[1].7z" "$argv[1]"; end

@@ -4,26 +4,6 @@
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 mkcd() { mkdir -p "$1" && cd "$1"; }
 take() { mkdir -p "$1" && cd "$1"; }
 up() { local d=""; for i in $(seq 1 "${1:-1}"); do d="${d}../"; done; cd "$d" 2>/dev/null || cd ..; }
@@ -36,38 +16,11 @@ cdroot() { cd /; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 recent_dirs() { find "${1:-.}" -type d -mtime -1 -print 2>/dev/null | head -50; }
 recent_all() { find "${1:-.}" -ctime -1 -print 2>/dev/null | head -100; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 mkdt() { mkdir -p "$1" && cd "$1" && pwd; }
@@ -77,23 +30,6 @@ quick_cd() { cd "$@" && ls; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 dotfiles_cd() { cd "$DOTFILES_DIR" 2>/dev/null || cd; }
 
 extract() { if [ -f "$1" ]; then case "$1" in *.tar.bz2|*.tbz2) tar xjf "$1";; *.tar.gz|*.tgz) tar xzf "$1";; *.tar.xz|*.txz) tar xJf "$1";; *.tar) tar xf "$1";; *.bz2) bunzip2 "$1";; *.gz) gunzip "$1";; *.rar) unrar x "$1";; *.zip) unzip "$1";; *.Z) uncompress "$1";; *.7z) 7z x "$1";; *) echo "unknown: $1"; return 1;; esac; else echo "not found: $1"; return 1; fi; }
@@ -101,27 +37,6 @@ compress_tar_gz() { tar -czf "$1.tar.gz" "$1"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 compress_tar_bz2() { tar -cjf "$1.tar.bz2" "$1"; }
@@ -140,59 +55,12 @@ decompress_zip() { unzip "$1"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 decompress_gz() { gunzip "$1"; }
 decompress_bz2() { bunzip2 "$1"; }
 decompress_xz() { unxz "$1"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 decompress_7z() { 7z x "$1"; }
@@ -293,33 +161,6 @@ git_rebase_abort() { git rebase --abort; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 git_rebase_skip() { git rebase --skip; }
 git_reset_soft() { git reset --soft HEAD~"$1"; }
 git_reset_hard() { git reset --hard HEAD~"$1"; }
@@ -392,31 +233,6 @@ docker_prune_networks() { docker network prune -f; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 docker_clean_all() { docker system prune -af --volumes && docker rmi $(docker images -q) 2>/dev/null || true; }
@@ -499,29 +315,6 @@ kubectl_rollout_status() { kubectl rollout status deployment/"$1"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 kubectl_rollout_history() { kubectl rollout history deployment/"$1"; }
 kubectl_rollout_undo() { kubectl rollout undo deployment/"$1"; }
 kubectl_rollout_restart() { kubectl rollout restart deployment/"$1"; }
@@ -556,30 +349,6 @@ kubectl_taint_node() { kubectl taint node "$@"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 kubectl_cp_to_pod() { kubectl cp "$1" "$2:$3"; }
@@ -620,29 +389,6 @@ systemctl_daemon_reload() { sudo systemctl daemon-reload 2>/dev/null || return 0
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 systemctl_edit_override() { sudo systemctl edit "$1" 2>/dev/null || return 0; }
 systemctl_cat_unit() { systemctl cat "$1" 2>/dev/null || return 0; }
 systemctl_is_active() { systemctl is-active "$1" 2>/dev/null || return 0; }
@@ -668,26 +414,6 @@ pkg_install_tool() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) sudo pacman -S 
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 pkg_remove_tool() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) sudo pacman -Rns "$@" 2>/dev/null;; yay) yay -Rns "$@" 2>/dev/null;; apt|apt-get) sudo apt remove "$@" 2>/dev/null;; dnf) sudo dnf remove "$@" 2>/dev/null;; brew) brew uninstall "$@" 2>/dev/null;; zypper) sudo zypper remove "$@" 2>/dev/null;; apk) apk del "$@" 2>/dev/null;; xbps) sudo xbps-remove "$@" 2>/dev/null;; nix) nix profile remove "$@" 2>/dev/null;; *) echo "unknown pkg manager"; return 1;; esac; }
@@ -717,26 +443,6 @@ brew_update_all() { brew update && brew upgrade && brew cleanup 2>/dev/null; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 brew_services_start() { brew services start "$1" 2>/dev/null; }
 brew_services_stop() { brew services stop "$1" 2>/dev/null; }
 brew_services_list() { brew services list 2>/dev/null; }
@@ -759,25 +465,6 @@ venv_activate() { . "${1:-.venv}/bin/activate"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 venv_deactivate() { deactivate 2>/dev/null || true; }
 python_version() { python3 --version; }
 python_find() { which python3 || which python; }
@@ -797,31 +484,6 @@ npm_list_outdated() { npm outdated 2>/dev/null; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 npm_audit_fix() { npm audit fix 2>/dev/null; }
@@ -857,27 +519,6 @@ cargo_doc_open() { cargo doc --open; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 cargo_expand_macro() { cargo expand "$@"; }
 cargo_bloat_crate() { cargo bloat --crates 2>/dev/null; }
 cargo_clean_all() { cargo clean; }
@@ -910,28 +551,6 @@ whatismyip_external() { curl -fsSL https://ipinfo.io/json 2>/dev/null; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 whatismyip_local() { ip addr show | grep "inet " | awk '{print $2}' | cut -d/ -f1 | head -1; }
 check_port_open() { if command -v nc >/dev/null 2>&1; then nc -zv "$1" "$2" 2>&1; elif command -v nmap >/dev/null 2>&1; then nmap -p "$2" "$1"; else echo "check: nc or nmap needed"; fi; }
 check_port_listen() { ss -tlnp 2>/dev/null | grep ":$1 " || netstat -tlnp 2>/dev/null | grep ":$1 "; }
@@ -962,27 +581,6 @@ netstat_listening() { ss -tlnp 2>/dev/null || netstat -tlnp; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 backup_file() { cp -r "$1" "${1}.bak-$(date +%Y%m%d-%H%M%S)" && echo "backup: ${1}.bak-$(date +%Y%m%d-%H%M%S)"; }
 backup_dir() { tar -czf "${1%/}.tar.gz" "$1" && echo "backup: ${1%/}.tar.gz"; }
 backup_with_date() { tar -czf "${1%/}-$(date +%Y%m%d).tar.gz" "$1"; }
@@ -993,24 +591,6 @@ find_largest() { find "${1:-.}" -type f -exec ls -s {} + 2>/dev/null | sort -rn 
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 find_largest_dirs() { du -sh "${1:-.}"/*/ 2>/dev/null | sort -rh | head "${2:-20}"; }
@@ -1027,29 +607,6 @@ symlink_force() { ln -sf "$1" "$2"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 touch_all() { for f in "$@"; do touch "$f"; done; }
@@ -1082,27 +639,6 @@ sort_by_name() { ls -l "$@"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 unique_lines() { sort -u "$@"; }
 unique_count() { sort "$1" | uniq -c | sort -rn; }
 diff_summary() { diff -q "$@"; }
@@ -1131,25 +667,6 @@ dot_fix() { sh "$DOTFILES_DIR/install/install.sh" 2>/dev/null || echo "installer
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 dot_status() { git -C "$DOTFILES_DIR" status --short --branch 2>/dev/null || true; }
 dot_sync() { git -C "$DOTFILES_DIR" fetch --all --prune 2>/dev/null && git -C "$DOTFILES_DIR" pull --rebase --autostash 2>/dev/null; }
 dot_ver() { echo "$DOTFILES_VERSION"; }
@@ -1168,24 +685,6 @@ hash_md5() { printf "%s" "$1" | md5sum | cut -d' ' -f1; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ffmpeg_convert() { ffmpeg -i "$1" "${2:-output.mp4}"; }
 ffmpeg_compress() { ffmpeg -i "$1" -vcodec libx265 -crf "${2:-28}" "${1%.*}-compressed.mp4"; }
 ffmpeg_gif() { ffmpeg -i "$1" -vf "fps=${2:-10},scale=${3:-320}:-1" "${1%.*}.gif"; }
@@ -1202,25 +701,6 @@ image_resize() { convert "$1" -resize "${2:-50%}" "${1%.*}-resized.${1##*.}"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 image_compress() { convert "$1" -quality "${2:-85}" "${1%.*}-compressed.${1##*.}"; }
@@ -1248,27 +728,6 @@ aws_list_route53() { aws route53 list-hosted-zones --query 'HostedZones[*].[Name
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 aws_s3_browse() { aws s3 ls "s3://$1"; }
@@ -1302,22 +761,6 @@ terraform_console_tool() { terraform console; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 helm_repo_add() { helm repo add "$1" "$2"; }
 helm_repo_update() { helm repo update; }
 helm_repo_list() { helm repo list; }
@@ -1339,24 +782,6 @@ mysql_list_dbs() { mysql -u root -p -e "SHOW DATABASES;" 2>/dev/null || mysql -u
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 pg_dump_db() { pg_dump -U postgres "$1" > "${1}.sql"; }
@@ -1383,25 +808,6 @@ gpg_list_keys() { gpg --list-keys 2>/dev/null || true; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 gpg_list_secret_keys() { gpg --list-secret-keys 2>/dev/null || true; }
 gpg_export_key() { gpg --export -a "$1" > "${1}.asc"; }
 gpg_export_secret_key() { gpg --export-secret-keys -a "$1"; }
@@ -1425,25 +831,6 @@ openssl_check_conn() { echo | openssl s_client -connect "$1:${2:-443}" -serverna
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 openssl_rand_hex() { openssl rand -hex "${1:-32}"; }
@@ -1479,23 +866,6 @@ show_ip() { ip -br addr show 2>/dev/null || ifconfig; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 show_date_time() { date '+%A, %B %d, %Y %T %Z'; }
 show_timezone() { cat /etc/timezone 2>/dev/null || echo "$TZ"; }
 show_uptime() { uptime; }
@@ -1517,26 +887,6 @@ calc_float() { echo "$*" | bc -l; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 calc_int() { printf "%.0f\n" $(echo "$*" | bc -l 2>/dev/null) 2>/dev/null; }
@@ -1619,27 +969,6 @@ tar_list() { tar -tzf "$1"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 tar_compress_bz2() { tar -cjf "${2:-$1.tar.bz2}" "$1"; }
 tar_compress_xz() { tar -cJf "${2:-$1.tar.xz}" "$1"; }
 tar_decompress_bz2() { tar -xjf "$1"; }
@@ -1685,25 +1014,6 @@ gpg_list_keys_with_email() { gpg --list-keys --keyid-format LONG | grep -A1 "^pu
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 gpg_delete_key() { gpg --delete-key "$1"; }
 gpg_delete_secret_key() { gpg --delete-secret-key "$1"; }
 
@@ -1733,24 +1043,6 @@ docker_compose_unpause() { docker compose unpause; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 docker_compose_kill() { docker compose kill; }
 docker_compose_scale() { docker compose scale "$@"; }
 docker_compose_version() { docker compose version; }
@@ -1774,25 +1066,6 @@ docker_network_create_overlay() { docker network create -d overlay "$1"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 docker_network_connect() { docker network connect "$1" "$2"; }
@@ -1827,26 +1100,6 @@ docker_config_ls() { docker config ls; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 docker_plugin_ls() { docker plugin ls; }
@@ -1912,29 +1165,6 @@ helm_get_hooks() { helm get hooks "$1"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 helm_status_release() { helm status "$1"; }
 helm_test_ns() { helm test "$1" -n "$2"; }
 helm_create_chart() { helm create "$1"; }
@@ -1984,32 +1214,6 @@ gcloud_dns_list() { gcloud dns managed-zones list; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 gcloud_dns_records() { gcloud dns record-sets list --zone="$1"; }
@@ -2113,29 +1317,6 @@ poetry_install() { poetry install; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 poetry_add() { poetry add "$1"; }
 poetry_add_dev() { poetry add --dev "$1"; }
 poetry_build() { poetry build; }
@@ -2172,29 +1353,6 @@ npm_update_all() { npm update; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 npm_run_dev() { npm run dev; }
 npm_run_build() { npm run build; }
 npm_run_test() { npm run test; }
@@ -2222,36 +1380,6 @@ npm_cache_verify() { npm cache verify; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 npm_ls_top() { npm ls --depth=0; }
@@ -2376,28 +1504,6 @@ go_tool_covdata() { go tool covdata "$@"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 git_clone_github() { git clone "https://github.com/$1.git" "${2:-$(basename "$1")}"; }
 git_clone_gh_ssh() { git clone "git@github.com:$1.git" "${2:-$(basename "$1")}"; }
 git_clone_gitlab() { git clone "https://gitlab.com/$1.git" "${2:-$(basename "$1")}"; }
@@ -2428,26 +1534,6 @@ git_diff_unstaged() { git diff; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 git_diff_branches() { git diff "$1"..."$2"; }
 git_diff_commits() { git diff "$1" "$2"; }
 git_diff_summary_only() { git diff --name-status "$@"; }
@@ -2475,27 +1561,6 @@ git_merge_ff_only() { git merge --ff-only "$1"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 git_rebase_root() { git rebase -i --root; }
@@ -2532,26 +1597,6 @@ git_bisect_log() { git bisect log; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 git_bisect_run() { git bisect run "$1"; }
 git_blame_email() { git blame -e "$1"; }
 git_blame_date() { git blame --date=short "$1"; }
@@ -2585,27 +1630,6 @@ git_check_attr() { git check-attr "$1" "$2"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 git_show_refs() { git show-ref; }
 git_ls_files() { git ls-files; }
 git_ls_tree() { git ls-tree -r "$1"; }
@@ -2633,27 +1657,6 @@ systemctl_hibernate() { sudo systemctl hibernate 2>/dev/null || return 0; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 systemctl_suspend() { sudo systemctl suspend 2>/dev/null || return 0; }
 systemctl_hybrid_sleep() { sudo systemctl hybrid-sleep 2>/dev/null || return 0; }
 journalctl_user_unit() { journalctl --user -u "$1" 2>/dev/null || return 0; }
@@ -2678,30 +1681,6 @@ find_by_inode() { find "${2:-.}" -inum "$1" 2>/dev/null; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 find_by_depth() { find "${2:-.}" -maxdepth "$1" -name "$3" 2>/dev/null; }
@@ -2741,28 +1720,6 @@ network_http_head() { curl -sI "$1"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 network_http_options() { curl -sX OPTIONS "$1"; }
 network_http_download() { curl -fsSL -O "$1"; }
 network_http_download_as() { curl -fsSL -o "$2" "$1"; }
@@ -2796,32 +1753,6 @@ execute_node_script() { node "$1" "$@"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 execute_deno_script() { deno run "$1" "$@"; }
@@ -2933,27 +1864,6 @@ curl_cert_check() { curl --cacert "$1" -sS "$2"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 curl_cert_client() { curl --cert "$1" --key "$2" -sS "$3"; }
 curl_cookie_jar() { curl -c "$1" -b "$2" -sS "$3"; }
 curl_insecure_ssl() { curl -k -sS "$1"; }
@@ -3002,28 +1912,6 @@ git_flow_release_start() { git flow release start "$1"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 git_flow_release_finish() { git flow release finish "$1"; }
 git_flow_hotfix_start() { git flow hotfix start "$1"; }
 git_flow_hotfix_finish() { git flow hotfix finish "$1"; }
@@ -3049,33 +1937,6 @@ git_interactive_rebase() { git rebase -i HEAD~"${1:-10}"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 git_reword_commit() { git commit --amend --only -m "$1"; }
@@ -3145,35 +2006,6 @@ apk_list_updates() { apk list -u; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 apk_info_pkg() { apk info "$@"; }
@@ -3268,26 +2100,6 @@ file_head_first() { head -n "${1:-10}" "$2"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 file_head_last() { tail -n "${1:-10}" "$2"; }
 file_middle_lines() { sed -n "${1},${2}p" "$3"; }
 file_random_line() { shuf -n 1 "$1"; }
@@ -3329,34 +2141,6 @@ text_search_context() { grep -C "${3:-2}" "$1" "$2"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 text_search_regex() { grep -E "$1" "$2"; }
@@ -3428,25 +2212,6 @@ def get(d,p):
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 d=json.load(sys.stdin)
 print(json.dumps(get(d,'$1')))
 " "$1" 2>/dev/null; }
@@ -3459,26 +2224,6 @@ text_html_to_text() { lynx -dump "$1" 2>/dev/null || w3m -dump "$1" 2>/dev/null 
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 text_html_extract() { python3 -c "import sys; from html.parser import HTMLParser; p=HTMLParser(); p.feed(open(sys.argv[1]).read())" 2>/dev/null || echo "python needed"; }
@@ -3505,34 +2250,6 @@ tmux_next_window() { tmux next-window; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 tmux_prev_window() { tmux previous-window; }
@@ -3597,33 +2314,6 @@ bat_cat() { bat "$@" 2>/dev/null || cat "$@"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bat_lang() { bat -l "$1" "$2" 2>/dev/null || cat "$2"; }
 bat_theme_list() { bat --list-themes 2>/dev/null || echo "bat not installed"; }
 bat_diff() { bat --diff "$1" "$2" 2>/dev/null || diff -u "$1" "$2"; }
@@ -3654,29 +2344,6 @@ fzf_process() { ps aux | fzf | awk '{print $2}' | xargs -r kill; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 fzf_man() { man -k . | fzf | awk '{print $1}' | xargs -r man; }
 fzf_browse() { fzf --preview 'bat {}' --bind 'enter:become(nvim {})' 2>/dev/null; }
 fzf_cd() { cd "$(find "${1:-.}" -type d | fzf)" 2>/dev/null; }
@@ -3704,25 +2371,6 @@ license_mit() { curl -fsSL "https://raw.githubusercontent.com/licenses/license-t
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 license_apache() { curl -fsSL "https://raw.githubusercontent.com/licenses/license-templates/master/templates/apache2.txt" | sed "s/\[year\]/$(date +%Y)/;s/\[fullname\]/$1/" > LICENSE 2>/dev/null || echo "unable to fetch"; }
 license_gpl() { curl -fsSL "https://raw.githubusercontent.com/licenses/license-templates/master/templates/gpl3.txt" > LICENSE 2>/dev/null || echo "unable to fetch"; }
 license_bsd() { curl -fsSL "https://raw.githubusercontent.com/licenses/license-templates/master/templates/bsd2.txt" | sed "s/\[year\]/$(date +%Y)/;s/\[fullname\]/$1/" > LICENSE 2>/dev/null || echo "unable to fetch"; }
@@ -3734,30 +2382,6 @@ dockerignore_create() { echo -e ".git\n*.md\nDockerfile\ndocker-compose.yml\n.gi
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 editorconfig_create() { echo -e "root = true\n\n[*]\nend_of_line = lf\ninsert_final_newline = true\ncharset = utf-8\nindent_style = space\nindent_size = 2" > .editorconfig; }
@@ -3779,26 +2403,6 @@ orig() { for f in "$@"; do [ -f "$f" ] || { echo "missing: $f"; return 1; }; [ -
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 unorig() { for f in "$@"; do [ -f "$f" ] || { echo "missing: $f"; return 1; }; cp -av "$f" "${f%.org}"; done; }
 
 topcommands() { history | awk '{print $4}' | awk 'BEGIN{FS="|"}{print $1}' | sort | uniq -c | sort -n | tail -n "${1:-10}" | sort -nr; }
@@ -3815,27 +2419,6 @@ pg() { ps -ef | grep -i --color=yes "$@" | grep -v grep; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 stamp() { printf "%s" "$(date '+%F %T')  $*"; [ $# -gt 0 ] && echo; }
 
 stampcmd() { local o; o="$("$@" 2>&1)"; stamp "$o"; }
@@ -3849,24 +2432,6 @@ path_remove() { PATH="$(echo -n "$PATH" | awk -v RS=: -v ORS=: "\$0 != \"$1\"" |
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 path_append() { path_remove "$1"; PATH="${PATH:+"$PATH:"}$1"; }
 
 path_prepend() { path_remove "$1"; PATH="$1${PATH:+":$PATH"}"; }
@@ -3877,28 +2442,6 @@ there() { cd "$(readlink "$HOME/.shell.here")" 2>/dev/null || echo "no bookmark"
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 mkcd() { mkdir -p "$1" && cd "$1"; }
@@ -3918,35 +2461,6 @@ wanip() { _x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 pwdtail() { pwd | awk -F/ '{nlast=NF-1; print $nlast"/"$NF}'; }
 
 distribution() { local d="unknown"; [ -r /etc/os-release ] && { . /etc/os-release 2>/dev/null; case "${ID-}" in fedora|rhel|centos) d="redhat" ;; sles|opensuse*) d="suse" ;; ubuntu|debian) d="debian" ;; gentoo) d="gentoo" ;; arch|manjaro) d="arch" ;; slackware) d="slackware" ;; *) case "${ID_LIKE-}" in *fedora*|*rhel*|*centos*) d="redhat" ;; *sles*|*opensuse*) d="suse" ;; *ubuntu*|*debian*) d="debian" ;; *gentoo*) d="gentoo" ;; *arch*) d="arch" ;; esac ;; esac; }; echo "$d"; }
@@ -3963,24 +2477,6 @@ _linux_only() { _is_linux && "$@" || echo "Linux only" >&2; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ip_show() { if _is_linux; then _x ip addr show "$@"; else _x ifconfig "$@"; fi; }
 disk_usage() { if _is_linux; then _x df -h "$@"; else _x df -h "$@" 2>/dev/null || _x df "$@"; fi; }
 mem_info() { if _is_linux; then _x free -h; else _x vm_stat 2>/dev/null || _x free -h; fi; }
@@ -3989,24 +2485,6 @@ pkg_list() { if _is_linux; then _x pacman -Q 2>/dev/null || _x dpkg -l 2>/dev/nu
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 service_list() { if _is_linux; then _x systemctl list-units --type=service 2>/dev/null || _x service --status-all 2>/dev/null; else _x launchctl list 2>/dev/null; fi; }
@@ -4022,40 +2500,9 @@ swap() { mv "$1" "${1}.bak" && mv "$2" "$1" && mv "${1}.bak" "$2"; }
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 backup_dotfiles() {
@@ -4071,19 +2518,6 @@ backup_dotfiles() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 dotfiles_diff() {
     local _dir="${DOTFILES_DIR:-$HOME/.dotfiles}"
     [ -d "$_dir" ] || { echo "dotfiles directory not found: $_dir" >&2; return 1; }
@@ -4093,22 +2527,6 @@ dotfiles_diff() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 workon() {
@@ -4133,20 +2551,6 @@ workon() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 mkproject() {
@@ -4177,20 +2581,6 @@ GITIGNORE
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ffind() {
     [ $# -ge 1 ] || { echo "usage: ffind <pattern> [directory]" >&2; return 1; }
     local _pat="$1" _dir="${2:-.}"
@@ -4204,20 +2594,6 @@ ffind() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 grep_all() {
@@ -4243,19 +2619,6 @@ grep_all() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 sys_update() {
@@ -4285,21 +2648,6 @@ sys_update() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 disk_usage() {
     if [ $# -eq 0 ]; then
         du -sh -- * .[!.]* 2>/dev/null | sort -rh
@@ -4311,19 +2659,6 @@ disk_usage() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 mem_top() {
@@ -4340,19 +2675,6 @@ mem_top() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 cpu_top() {
     local _n="${1:-10}"
     if ps --version 2>/dev/null | grep -qi procps; then
@@ -4367,19 +2689,6 @@ cpu_top() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 git_cleanup() {
     git branch --merged | grep -v "^*\|main\|master\|develop" | xargs -r git branch -d
     git remote prune origin 2>/dev/null || true
@@ -4390,20 +2699,6 @@ git_cleanup() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 git_search() {
@@ -4419,18 +2714,6 @@ git_search() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 git_find() {
     [ $# -ge 1 ] || { echo "usage: git_find <string>" >&2; return 1; }
     git log --all -S "$1" --format="%h %ad %an <%ae>%n  %s%n" --date=short 2>/dev/null
@@ -4439,17 +2722,6 @@ git_find() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
 
 
 net_listen() {
@@ -4472,17 +2744,6 @@ net_listen() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
 local_ip() {
     if command -v ip >/dev/null 2>&1; then
         ip -4 addr show scope global 2>/dev/null | grep -oP 'inet \K[\d.]+'
@@ -4496,20 +2757,6 @@ local_ip() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 docker_clean_all() {
@@ -4533,19 +2780,6 @@ docker_clean_all() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 docker_compose_rebuild() {
     if [ $# -eq 0 ]; then
         echo "rebuilding all services..."
@@ -4561,19 +2795,6 @@ docker_compose_rebuild() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 compress() {
@@ -4598,21 +2819,6 @@ compress() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 backup_rotate() {
     [ $# -ge 1 ] || { echo "usage: backup_rotate <glob_pattern> [keep]" >&2; return 1; }
     local _pat="$1" _keep="${2:-7}" _files _count
@@ -4630,22 +2836,6 @@ backup_rotate() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 sys_info() {
@@ -4678,19 +2868,6 @@ sys_info() {
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 json_pretty() {
     if [ $# -ge 1 ]; then
         python3 -m json.tool "$1" 2>/dev/null || { echo "invalid JSON or file not found: $1" >&2; return 1; }
@@ -4702,19 +2879,6 @@ json_pretty() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 weather_report() {
@@ -4729,17 +2893,6 @@ weather_report() {
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
 
 
 markdown_preview() {

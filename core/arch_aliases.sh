@@ -9,24 +9,6 @@
 # =============================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 _detect_arch() {
     case "${DOTFILES_DISTRO:-$(. /etc/os-release 2>/dev/null && echo "$ID")}" in
         arch|artix|manjaro|endeavouros|garuda|archarm|archlabs|arcolinux|chakra|hyperbola|kaos|parabola|rebornos|siduction) return 0 ;;
@@ -38,35 +20,6 @@ _detect_arch || return
 # =============================================================================
 # AUR Helper Detection
 # =============================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 _AUR_HELPER=""

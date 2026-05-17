@@ -184,14 +184,9 @@ export GITLAB_TOKEN="${GITLAB_TOKEN:-}"
 # =============================================================================
 
 
-
-
 # =============================================================================
 # EDITORS
 # =============================================================================
-
-
-
 
 
 # VIMCONFIG — config directory
@@ -202,7 +197,6 @@ if command -v nvim >/dev/null 2>&1; then
 fi
 
 
-
 # VIM — system runtime files
 # VIMRUNTIME — runtime directory
 # VIMINIT — initialization commands
@@ -211,7 +205,6 @@ if command -v vim >/dev/null 2>&1; then
     export VIMRUNTIME="${VIMRUNTIME:-$VIM/vim91}"
     export VIMINIT="${VIMINIT:-}"
 fi
-
 
 
 # EMACS — t when running inside Emacs
@@ -226,10 +219,6 @@ if command -v emacs >/dev/null 2>&1; then
 fi
 
 
-
-
-
-
 if command -v code >/dev/null 2>&1; then
     export VSCODE_CLI="${VSCODE_CLI:-1}"
     export SERVICE_URL="${SERVICE_URL:-https://open-vsx.org/vscode/gallery}"
@@ -239,8 +228,6 @@ fi
 # =============================================================================
 # RUNTIMES
 # =============================================================================
-
-
 
 
 # GOBIN — binaries directory
@@ -257,11 +244,6 @@ if command -v go >/dev/null 2>&1; then
 fi
 
 
-
-
-
-
-
 if command -v rustc >/dev/null 2>&1; then
     export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
     export RUSTUP_HOME="${RUSTUP_HOME:-$HOME/.rustup}"
@@ -269,10 +251,6 @@ if command -v rustc >/dev/null 2>&1; then
     export CARGO_NET_GIT_FETCH_WITH_CLI="${CARGO_NET_GIT_FETCH_WITH_CLI:-true}"
     export PATH="$CARGO_HOME/bin${PATH:+:$PATH}"
 fi
-
-
-
-
 
 
 if command -v node >/dev/null 2>&1; then
@@ -283,10 +261,7 @@ if command -v node >/dev/null 2>&1; then
 fi
 
 
-
 # PYTHONSTARTUP — startup script
-
-
 
 
 if command -v python3 >/dev/null 2>&1; then
@@ -296,12 +271,6 @@ if command -v python3 >/dev/null 2>&1; then
     export PIP_CACHE_DIR="${PIP_CACHE_DIR:-$XDG_CACHE_HOME/pip}"
     export PYTHON_HISTORY="${PYTHON_HISTORY:-$XDG_STATE_HOME/python/history}"
 fi
-
-
-
-
-
-
 
 
 if command -v ruby >/dev/null 2>&1; then
@@ -314,22 +283,12 @@ if command -v ruby >/dev/null 2>&1; then
 fi
 
 
-
-
-
-
-
 if command -v java >/dev/null 2>&1; then
     export JAVA_HOME="${JAVA_HOME:-$(dirname "$(dirname "$(readlink -f "$(which java)")")")}"
     export _JAVA_OPTIONS="${_JAVA_OPTIONS:--Djava.awt.headless=true}"
     export GRADLE_OPTS="${GRADLE_OPTS:--Dorg.gradle.daemon=true -Dorg.gradle.parallel=true}"
     export MAVEN_OPTS="${MAVEN_OPTS:--Dmaven.artifact.threads=4}"
 fi
-
-
-
-
-
 
 
 if command -v julia >/dev/null 2>&1; then
@@ -344,12 +303,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
 if command -v docker >/dev/null 2>&1; then
     export DOCKER_HOST="${DOCKER_HOST:-unix:///run/user/$UID/docker.sock}"
     export DOCKER_CONFIG="${DOCKER_CONFIG:-$XDG_CONFIG_HOME/docker}"
@@ -359,25 +312,16 @@ if command -v docker >/dev/null 2>&1; then
 fi
 
 
-
-
-
 if command -v podman >/dev/null 2>&1; then
     export DOCKER_HOST="${DOCKER_HOST:-unix://$XDG_RUNTIME_DIR/podman/podman.sock}"
     export PODMAN_IGNORE_CGROUPSV1_WARNING="${PODMAN_IGNORE_CGROUPSV1_WARNING:-0}"
 fi
 
 
-
-
-
 if command -v nerdctl >/dev/null 2>&1; then
     export CONTAINERD_ADDRESS="${CONTAINERD_ADDRESS:-/run/containerd/containerd.sock}"
     export CONTAINERD_NAMESPACE="${CONTAINERD_NAMESPACE:-default}"
 fi
-
-
-
 
 
 if command -v skopeo >/dev/null 2>&1; then
@@ -390,23 +334,12 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
 if command -v kubectl >/dev/null 2>&1; then
     export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
     export KUBE_EDITOR="${KUBE_EDITOR:-nvim}"
     export KUBECTL_EXTERNAL_DIFF="${KUBECTL_EXTERNAL_DIFF:-diff}"
     export KUBE_CACHEDIR="${KUBE_CACHEDIR:-$XDG_CACHE_HOME/kube}"
 fi
-
-
-
-
-
-
 
 
 if command -v helm >/dev/null 2>&1; then
@@ -418,26 +351,16 @@ if command -v helm >/dev/null 2>&1; then
 fi
 
 
-
-
-
 if command -v k9s >/dev/null 2>&1; then
     export K9S_CONFIG_DIR="${K9S_CONFIG_DIR:-$XDG_CONFIG_HOME/k9s}"
     export K9S_CACHE_DIR="${K9S_CACHE_DIR:-$XDG_CACHE_HOME/k9s}"
 fi
 
 
-
-
-
 if command -v kustomize >/dev/null 2>&1; then
     export KUSTOMIZE_PLUGIN_HOME="${KUSTOMIZE_PLUGIN_HOME:-$XDG_CONFIG_HOME/kustomize/plugin}"
     export KUSTOMIZE_CONFIG_HOME="${KUSTOMIZE_CONFIG_HOME:-$XDG_CONFIG_HOME/kustomize}"
 fi
-
-
-
-
 
 
 if command -v argocd >/dev/null 2>&1; then
@@ -451,12 +374,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
 if command -v aws >/dev/null 2>&1; then
     export AWS_CONFIG_FILE="${AWS_CONFIG_FILE:-$XDG_CONFIG_HOME/aws/config}"
     export AWS_SHARED_CREDENTIALS_FILE="${AWS_SHARED_CREDENTIALS_FILE:-$XDG_CONFIG_HOME/aws/credentials}"
@@ -464,11 +381,6 @@ if command -v aws >/dev/null 2>&1; then
     export AWS_DEFAULT_OUTPUT="${AWS_DEFAULT_OUTPUT:-json}"
     export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
 fi
-
-
-
-
-
 
 
 if command -v gcloud >/dev/null 2>&1; then
@@ -479,12 +391,6 @@ if command -v gcloud >/dev/null 2>&1; then
 fi
 
 
-
-
-
-
-
-
 if command -v terraform >/dev/null 2>&1; then
     export TF_PLUGIN_CACHE_DIR="${TF_PLUGIN_CACHE_DIR:-$XDG_CACHE_HOME/terraform/plugins}"
     export TF_CLI_ARGS="${TF_CLI_ARGS:--no-color}"
@@ -492,12 +398,6 @@ if command -v terraform >/dev/null 2>&1; then
     export TF_LOG="${TF_LOG:-}"
     export TF_WORKSPACE="${TF_WORKSPACE:-default}"
 fi
-
-
-
-
-
-
 
 
 if command -v vault >/dev/null 2>&1; then
@@ -513,21 +413,12 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
 if command -v gh >/dev/null 2>&1; then
     export GH_CONFIG_DIR="${GH_CONFIG_DIR:-$XDG_CONFIG_HOME/gh}"
     export GH_EDITOR="${GH_EDITOR:-nvim}"
     export GH_HOST="${GH_HOST:-github.com}"
     export GH_PAGER="${GH_PAGER:-less}"
 fi
-
-
-
-
 
 
 if command -v glab >/dev/null 2>&1; then
@@ -541,12 +432,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
 if command -v mysql >/dev/null 2>&1; then
     export MYSQL_HISTFILE="${MYSQL_HISTFILE:-$XDG_DATA_HOME/mysql/history}"
     export MYSQL_HOST="${MYSQL_HOST:-localhost}"
@@ -554,9 +439,6 @@ if command -v mysql >/dev/null 2>&1; then
     export MYSQL_UNIX_PORT="${MYSQL_UNIX_PORT:-/run/mysqld/mysqld.sock}"
     export MYSQL_PS1="${MYSQL_PS1:-\\u@\\h [\\d]> }"
 fi
-
-
-
 
 
 # PGDATABASE — default database
@@ -573,18 +455,10 @@ if command -v psql >/dev/null 2>&1; then
 fi
 
 
-
-
-
 if command -v sqlite3 >/dev/null 2>&1; then
     export SQLITE_HISTORY="${SQLITE_HISTORY:-$XDG_DATA_HOME/sqlite/history}"
     export SQLITE_TMPDIR="${SQLITE_TMPDIR:-$TMPDIR}"
 fi
-
-
-
-
-
 
 
 if command -v redis-cli >/dev/null 2>&1; then
@@ -599,12 +473,9 @@ fi
 # =============================================================================
 
 
-
-
 if command -v btop >/dev/null 2>&1; then
     export BTOP_CONFIG_DIR="${BTOP_CONFIG_DIR:-$XDG_CONFIG_HOME/btop}"
 fi
-
 
 
 # HTOPRC — configuration file
@@ -617,18 +488,12 @@ fi
 # =============================================================================
 
 
-
 # NMAPDIR — data directory
 
 if command -v nmap >/dev/null 2>&1; then
     export NMAPDIR="${NMAPDIR:-$XDG_DATA_HOME/nmap}"
     export NMAP_PRIVILEGED="${NMAP_PRIVILEGED:-}"
 fi
-
-
-
-
-
 
 
 if command -v ngrok >/dev/null 2>&1; then
@@ -643,19 +508,10 @@ fi
 # =============================================================================
 
 
-
-
-
 if command -v yazi >/dev/null 2>&1; then
     export YAZI_CONFIG_DIR="${YAZI_CONFIG_DIR:-$XDG_CONFIG_HOME/yazi}"
     export YAZI_CACHE_DIR="${YAZI_CACHE_DIR:-$XDG_CACHE_HOME/yazi}"
 fi
-
-
-
-
-
-
 
 
 if command -v nnn >/dev/null 2>&1; then
@@ -665,11 +521,6 @@ if command -v nnn >/dev/null 2>&1; then
     export NNN_TRASH="${NNN_TRASH:-1}"
     export NNN_PLUG="${NNN_PLUG:-}"
 fi
-
-
-
-
-
 
 
 if command -v mc >/dev/null 2>&1; then
@@ -684,17 +535,10 @@ fi
 # =============================================================================
 
 
-
-
-
 if command -v gpg >/dev/null 2>&1; then
     export GPG_TTY="${GPG_TTY:-$(tty 2>/dev/null)}"
     export GNUPGHOME="${GNUPGHOME:-$HOME/.gnupg}"
 fi
-
-
-
-
 
 
 if command -v openssl >/dev/null 2>&1; then
@@ -704,18 +548,10 @@ if command -v openssl >/dev/null 2>&1; then
 fi
 
 
-
-
-
 if command -v age >/dev/null 2>&1; then
     export AGE_KEY_FILE="${AGE_KEY_FILE:-$XDG_CONFIG_HOME/age/keys.txt}"
     export AGE_DIR="${AGE_DIR:-$XDG_CONFIG_HOME/age}"
 fi
-
-
-
-
-
 
 
 if command -v sops >/dev/null 2>&1; then
@@ -724,12 +560,6 @@ if command -v sops >/dev/null 2>&1; then
     export SOPS_GCP_KMS="${SOPS_GCP_KMS:-}"
     export SOPS_PGP_FP="${SOPS_PGP_FP:-}"
 fi
-
-
-
-
-
-
 
 
 if command -v trivy >/dev/null 2>&1; then
@@ -745,19 +575,10 @@ fi
 # =============================================================================
 
 
-
-
-
 if command -v jq >/dev/null 2>&1; then
     export JQ_COLORS="${JQ_COLORS:-0:31:0:0:0:32:0:0}"
     export JQ_LIBRARY_PATH="${JQ_LIBRARY_PATH:-$XDG_DATA_HOME/jq}"
 fi
-
-
-
-
-
-
 
 
 if command -v fzf >/dev/null 2>&1; then
@@ -769,12 +590,6 @@ if command -v fzf >/dev/null 2>&1; then
 fi
 
 
-
-
-
-
-
-
 if command -v bat >/dev/null 2>&1; then
     export BAT_THEME="${BAT_THEME:-Nord}"
     export BAT_STYLE="${BAT_STYLE:-numbers,changes}"
@@ -784,24 +599,15 @@ if command -v bat >/dev/null 2>&1; then
 fi
 
 
-
-
 if command -v rg >/dev/null 2>&1; then
     export RIPGREP_CONFIG_PATH="${RIPGREP_CONFIG_PATH:-$XDG_CONFIG_HOME/ripgreprc}"
 fi
-
-
-
 
 
 if command -v fd >/dev/null 2>&1; then
     export FD_CONFIG_PATH="${FD_CONFIG_PATH:-$XDG_CONFIG_HOME/fd/fdignore}"
     export FD_CACHE_DIR="${FD_CACHE_DIR:-$XDG_CACHE_HOME/fd}"
 fi
-
-
-
-
 
 
 if command -v eza >/dev/null 2>&1; then
@@ -811,21 +617,12 @@ if command -v eza >/dev/null 2>&1; then
 fi
 
 
-
-
-
-
-
 if command -v zoxide >/dev/null 2>&1; then
     export _ZO_DATA_DIR="${_ZO_DATA_DIR:-$XDG_DATA_HOME/zoxide}"
     export _ZO_EXCLUDE_DIRS="${_ZO_EXCLUDE_DIRS:-/:/home/*/go/pkg}"
     export _ZO_RESOLVE_SYMLINKS="${_ZO_RESOLVE_SYMLINKS:-0}"
     export _ZO_ECHO="${_ZO_ECHO:-0}"
 fi
-
-
-
-
 
 
 if command -v starship >/dev/null 2>&1; then
@@ -839,8 +636,6 @@ fi
 # =============================================================================
 
 
-
-
 # FFREPORT — report logging
 
 if command -v ffmpeg >/dev/null 2>&1; then
@@ -850,10 +645,6 @@ if command -v ffmpeg >/dev/null 2>&1; then
 fi
 
 
-
-
-
-
 if command -v yt-dlp >/dev/null 2>&1; then
     export YT_DLP_CONFIG_HOME="${YT_DLP_CONFIG_HOME:-$XDG_CONFIG_HOME/yt-dlp}"
     export YT_DLP_CACHE_DIR="${YT_DLP_CACHE_DIR:-$XDG_CACHE_HOME/yt-dlp}"
@@ -861,21 +652,11 @@ if command -v yt-dlp >/dev/null 2>&1; then
 fi
 
 
-
-
-
-
 if command -v mpv >/dev/null 2>&1; then
     export MPV_HOME="${MPV_HOME:-$XDG_CONFIG_HOME/mpv}"
     export MPV_SCRIPT_OPTS="${MPV_SCRIPT_OPTS:-}"
     export MPV_CONFIG_DIR="${MPV_CONFIG_DIR:-$XDG_CONFIG_HOME/mpv}"
 fi
-
-
-
-
-
-
 
 
 if command -v magick >/dev/null 2>&1; then
@@ -891,17 +672,10 @@ fi
 # =============================================================================
 
 
-
-
-
 if command -v tmux >/dev/null 2>&1; then
     export TMUX_TMPDIR="${TMUX_TMPDIR:-$XDG_RUNTIME_DIR/tmux}"
     export TMUX_CONF="${TMUX_CONF:-$XDG_CONFIG_HOME/tmux/tmux.conf}"
 fi
-
-
-
-
 
 
 if command -v zellij >/dev/null 2>&1; then
@@ -915,49 +689,9 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
-
-
-
-
 # =============================================================================
 # Lazygit - Terminal UI for Git
 # =============================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v lazygit >/dev/null 2>&1; then
@@ -971,34 +705,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v delta >/dev/null 2>&1; then
     export DELTA_FEATURES="${DELTA_FEATURES:-+line-numbers}"
     export DELTA_PAGER="${DELTA_PAGER:-less -RFX}"
@@ -1008,36 +714,6 @@ fi
 # =============================================================================
 # Broot - File browser with tree view
 # =============================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v broot >/dev/null 2>&1; then
@@ -1052,37 +728,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v ranger >/dev/null 2>&1; then
     export RANGER_LOAD_DEFAULT_RC="${RANGER_LOAD_DEFAULT_RC:-FALSE}"
     export RANGER_CONFIG_DIR="${RANGER_CONFIG_DIR:-$XDG_CONFIG_HOME/ranger}"
@@ -1095,35 +740,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v lf >/dev/null 2>&1; then
     export LF_CONFIG_DIR="${LF_CONFIG_DIR:-$XDG_CONFIG_HOME/lf}"
     export LF_CACHE_DIR="${LF_CACHE_DIR:-$XDG_CACHE_HOME/lf}"
@@ -1134,41 +750,6 @@ fi
 # =============================================================================
 # NNN - Fast terminal file manager
 # =============================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v nnn >/dev/null 2>&1; then
@@ -1188,39 +769,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v mc >/dev/null 2>&1; then
     export MC_SKIN="${MC_SKIN:-$XDG_CONFIG_HOME/mc/skins/default.ini}"
     export MC_COLOR_TABLE="${MC_COLOR_TABLE:-gray-green}"
@@ -1235,35 +783,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v yazi >/dev/null 2>&1; then
     export YAZI_CONFIG_DIR="${YAZI_CONFIG_DIR:-$XDG_CONFIG_HOME/yazi}"
     export YAZI_CACHE_DIR="${YAZI_CACHE_DIR:-$XDG_CACHE_HOME/yazi}"
@@ -1276,36 +795,6 @@ fi
 # =============================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v broot >/dev/null 2>&1; then
     export BROOT_CONFIG_DIR="${BROOT_CONFIG_DIR:-$XDG_CONFIG_HOME/broot}"
     export BROOT_CACHE_DIR="${BROOT_CACHE_DIR:-$XDG_CACHE_HOME/broot}"
@@ -1316,34 +805,6 @@ fi
 # =============================================================================
 # Joshuto - Terminal file manager
 # =============================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v joshuto >/dev/null 2>&1; then

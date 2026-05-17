@@ -4,26 +4,6 @@
 _x() { if command -v "${1%% *}" >/dev/null 2>&1; then "$@"; else echo "missing: $1" >&2; return 127; fi; }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -54,28 +34,6 @@ alias q='exit'
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 alias lsa='ls -a'
 alias lsd='ls -d */'
 alias lsdot='ls -d .*'
@@ -99,25 +57,6 @@ alias lf='find . -maxdepth 1 -type f -exec ls -lh {} + 2>/dev/null | sort -k5 -h
 # -----------------------------------------------------------------------------
 # System Information — Dotfiles Management
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 alias dots='cd "$DOTFILES_DIR"'
@@ -147,44 +86,6 @@ alias dotinfo='echo "Dotfiles: $DOTFILES_DIR | Mode: ${DOTFILES_MODE:-unknown} |
 # -----------------------------------------------------------------------------
 # Git Operations
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 alias gap='git add -p'
@@ -287,24 +188,6 @@ alias gshn='git show --name-only'
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v gh >/dev/null 2>&1; then
     alias ghs='gh status'
     alias ghp='gh pr'
@@ -330,30 +213,6 @@ fi
 # -----------------------------------------------------------------------------
 # Docker Management
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v docker >/dev/null 2>&1; then
@@ -402,20 +261,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v skopeo >/dev/null 2>&1; then
     alias sk='skopeo'
     alias skc='skopeo copy'
@@ -445,24 +290,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v podman >/dev/null 2>&1; then
     alias pod='_x podman'
     alias podps='_x podman ps'
@@ -483,28 +310,6 @@ fi
 # -----------------------------------------------------------------------------
 # Kubernetes Operations
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v kubectl >/dev/null 2>&1; then
@@ -583,27 +388,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v helm >/dev/null 2>&1; then
     alias hl='_x helm'
     alias hls='_x helm list'
@@ -633,21 +417,6 @@ fi
 # -----------------------------------------------------------------------------
 # Systemd Service Management
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v systemctl >/dev/null 2>&1; then
@@ -680,24 +449,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v journalctl >/dev/null 2>&1; then
     alias jc='_x journalctl'
     alias jce='_x journalctl -e'
@@ -724,22 +475,6 @@ fi
 # -----------------------------------------------------------------------------
 # Package Managers — pacman / yay
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v pacman >/dev/null 2>&1; then
@@ -787,21 +522,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v apt >/dev/null 2>&1 || command -v apt-get >/dev/null 2>&1; then
     alias apt='_x apt'
     alias aptup='sudo apt update && sudo apt upgrade -y'
@@ -833,22 +553,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v dnf >/dev/null 2>&1; then
     alias dnf='_x dnf'
     alias dnfs='_x dnf search'
@@ -877,21 +581,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v brew >/dev/null 2>&1; then
     alias brew='_x brew'
     alias brews='_x brew search'
@@ -918,20 +607,6 @@ fi
 # -----------------------------------------------------------------------------
 # Package Managers — Flatpak / Snap / Nix / Zypper / APK
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v flatpak >/dev/null 2>&1; then
@@ -999,23 +674,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v node >/dev/null 2>&1; then
     alias nt='_x npm test'
     alias nb='_x npm run build'
@@ -1078,24 +736,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v cargo >/dev/null 2>&1; then
     alias cr='_x cargo'
     alias crb='_x cargo build'
@@ -1124,24 +764,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v go >/dev/null 2>&1; then
     alias go='_x go'
     alias gor='_x go run'
@@ -1166,24 +788,6 @@ fi
 # -----------------------------------------------------------------------------
 # Python Development
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v python3 >/dev/null 2>&1; then
@@ -1228,24 +832,6 @@ alias rstring='_x python3 -c "import secrets; print(secrets.token_hex())"'
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v ssh >/dev/null 2>&1; then
     alias ssh='_x ssh'
     alias ssha='_x ssh -A'
@@ -1258,24 +844,6 @@ fi
 # -----------------------------------------------------------------------------
 # GPG Operations
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v gpg >/dev/null 2>&1; then
@@ -1298,28 +866,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 alias myipl='ip addr show | grep "inet " | awk "{print \$2}" | cut -d/ -f1 | head -1'
 alias weather='curl -fsSL wttr.in'
 alias portlisten='ss -tlnp 2>/dev/null || netstat -tlnp'
@@ -1331,7 +877,6 @@ alias ipa='ip -br addr'
 alias ipr='ip route'
 alias nst='netstat -tulanp 2>/dev/null || ss -tulanp'
 alias trace='traceroute'
-
 
 
 alias ip='ip -br addr'
@@ -1384,25 +929,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 alias ps='ps auxf'
 alias pse='ps aux | grep'
 alias pst='_x pstree'
@@ -1429,28 +955,6 @@ alias top='_x btop 2>/dev/null || _x htop 2>/dev/null || command top'
 # -----------------------------------------------------------------------------
 # Text Processing
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 alias gri='grep -i'
@@ -1482,34 +986,9 @@ if command -v rg >/dev/null 2>&1; then
 fi
 
 
-
 # -----------------------------------------------------------------------------
 # File Operations
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 alias cp='cp -i'
@@ -1529,7 +1008,6 @@ alias ln='ln -s'
 alias lnh='readlink -f'
 # defined as function in core/functions.sh (backup_file)
 alias mount='mount | column -t'
-
 
 
 alias mkdir='mkdir -p'
@@ -1564,23 +1042,6 @@ alias lsof='_x lsof -i -P -n 2>/dev/null || echo "lsof needed"'
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 alias tart='tar -tzf'
 alias tarjx='tar -xjf'
 alias tarjc='tar -cjf'
@@ -1604,21 +1065,6 @@ fi
 # -----------------------------------------------------------------------------
 # Database Operations
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v mysql >/dev/null 2>&1; then
@@ -1649,21 +1095,6 @@ fi
 # -----------------------------------------------------------------------------
 # Cloud CLI — AWS / GCP / Azure
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 alias s3='_x s3cmd'
@@ -1706,23 +1137,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v ffmpeg >/dev/null 2>&1; then
     alias ffp='ffprobe'
     alias ffg='ffplay'
@@ -1748,29 +1162,6 @@ fi
 # -----------------------------------------------------------------------------
 # Utility Operations — Clipboard / Hashing / Encoding / Help
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # Clipboard
@@ -1799,7 +1190,6 @@ alias base64e='base64'
 alias base64d='base64 -d'
 alias urlenc='_x python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))"'
 alias urldec='_x python3 -c "import urllib.parse,sys; print(urllib.parse.unquote(sys.argv[1]))"'
-
 
 
 # Shell / System Utilities
@@ -1883,27 +1273,6 @@ alias man='_x tldr 2>/dev/null || command man'
 # -----------------------------------------------------------------------------
 # Development Tools — Tmux / Editors / Lazygit / Just
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # Tmux
@@ -2090,21 +1459,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if command -v terraform >/dev/null 2>&1; then
     alias tfv='_x terraform validate'
     alias tff='_x terraform fmt'
@@ -2134,21 +1488,6 @@ fi
 # -----------------------------------------------------------------------------
 # Secret Management — Age / SOPS / Vault / OpenSSL
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v age >/dev/null 2>&1; then
@@ -2186,19 +1525,6 @@ fi
 # -----------------------------------------------------------------------------
 # Backup Tools — Rclone / Restic / Borg / Kopia
 # -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if command -v rclone >/dev/null 2>&1; then
@@ -2239,16 +1565,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
 if command -v hyperfine >/dev/null 2>&1; then
     alias hf='hyperfine'
     alias hfw='hyperfine --warmup'
@@ -2264,29 +1580,6 @@ fi
 # -----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 alias pur='_x curl -fsSL "https://cht.sh/$1" 2>/dev/null'
 
 # Standalone duplicates preserved for compatibility
@@ -2299,13 +1592,7 @@ alias kns='_x kubectl config set-context --namespace'
 alias py='_x python3'
 
 
-
-
-
 # Miscellaneous shell utilities
 alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
-
-
-
 
 
