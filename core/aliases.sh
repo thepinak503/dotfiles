@@ -1343,8 +1343,8 @@ alias weather3='_x curl -fsSL "wttr.in?F" 2>/dev/null || echo "curl needed"'
 alias moon='_x curl -fsSL "wttr.in/Moon" 2>/dev/null || echo "curl needed"'
 alias dnst='dig +short'
 alias iftop='sudo iftop'
-alias ping='_x prettyping 2>/dev/null || ping'
-alias dig='_x dog 2>/dev/null || dig'
+alias ping='_x prettyping 2>/dev/null || command ping'
+alias dig='_x dog 2>/dev/null || command dig'
 
 if command -v dig >/dev/null 2>&1; then
     alias dns='dig +short'
@@ -1422,7 +1422,7 @@ alias psaux='ps aux'
 alias psf='ps auxf'
 alias psxl='ps aux --forest'
 alias psymod='lsmod'
-alias top='_x btop 2>/dev/null || _x htop 2>/dev/null || top'
+alias top='_x btop 2>/dev/null || _x htop 2>/dev/null || command top'
 
 # -----------------------------------------------------------------------------
 # Text Processing
@@ -1468,8 +1468,8 @@ alias tac='tac 2>/dev/null || tail -r'
 alias grepw='grep -w'
 alias grepr='grep -r'
 alias grex='grep -r --exclude-dir=.git --exclude-dir=node_modules'
-alias grep='_x rg --color=auto 2>/dev/null || grep --color=auto'
-alias diff='_x delta 2>/dev/null || diff --color=auto 2>/dev/null || diff'
+alias grep='_x rg --color=auto 2>/dev/null || command grep --color=auto'
+alias diff='_x delta 2>/dev/null || command diff --color=auto 2>/dev/null || command diff'
 
 if command -v rg >/dev/null 2>&1; then
     alias rg='rg --hidden --glob "!.git"'
@@ -1532,8 +1532,8 @@ alias mv='mv -i'
 alias rm='rm -i'
 alias mkdir='mkdir -p'
 alias bc='bc -l'
-alias find='_x fd 2>/dev/null || find'
-alias cat='_x bat --style=plain --paging=never 2>/dev/null || _x batcat --style=plain --paging=never 2>/dev/null || cat'
+alias find='_x fd 2>/dev/null || command find'
+alias cat='_x bat --style=plain --paging=never 2>/dev/null || _x batcat --style=plain --paging=never 2>/dev/null || command cat'
 alias fd='_x fd 2>/dev/null || find'
 alias ff='find . -type f -name'
 alias mkdir='mkdir -p'
@@ -1876,7 +1876,7 @@ alias idg='id -g'
 alias idu='id -u'
 alias shuffle='shuf'
 alias rsample='shuf -n'
-alias man='_x tldr 2>/dev/null || man'
+alias man='_x tldr 2>/dev/null || command man'
 
 # -----------------------------------------------------------------------------
 # Development Tools — Tmux / Editors / Lazygit / Just
@@ -2033,7 +2033,7 @@ if command -v navi >/dev/null 2>&1; then
 fi
 
 if command -v tldr >/dev/null 2>&1 || command -v tealdeer >/dev/null 2>&1; then
-    alias tldr='tldr 2>/dev/null || tealdeer'
+    alias tldr='command tldr 2>/dev/null || tealdeer'
 fi
 
 if command -v vivid >/dev/null 2>&1; then
