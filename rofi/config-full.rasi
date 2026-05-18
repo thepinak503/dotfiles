@@ -1,0 +1,16 @@
+@theme "themes/nord"
+
+configuration {
+  modi: "drun";
+  show-icons: true;
+  drun-display-format: "{name}";
+  font: "JetBrains Mono Nerd Font 16";
+  lines: 12;
+  columns: 5;
+  width: 60;
+  location: 0;
+  terminal: "kitty";
+  disable-history: true;
+  cycle: true;
+  sidebar-mode: false;
+}

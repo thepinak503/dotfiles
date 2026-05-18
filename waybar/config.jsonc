@@ -1,0 +1,114 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 36,
+  "margin-top": 0,
+  "margin-bottom": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+  "mod": "dock",
+  "exclusive": true,
+  "passthrough": false,
+  "spacing": 0,
+  "output": null,
+
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["hyprland/window"],
+  "modules-right": ["custom/media", "tray", "pulseaudio", "network", "cpu", "memory", "clock"],
+
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": false,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "urgent": "!"
+    },
+    "persistent-workspaces": {
+      "*": 9
+    }
+  },
+
+  "hyprland/window": {
+    "format": "{}",
+    "rewrite": {
+      "(.*) — Mozilla Firefox": " $1",
+      "(.*) - Visual Studio Code": " $1",
+      "(.*) - Code - OSS": " $1",
+      "(.*) - Obsidian": " $1"
+    },
+    "separate-outputs": true
+  },
+
+  "custom/media": {
+    "format": "{icon} {text}",
+    "return-type": "json",
+    "max-length": 40,
+    "exec": "~/.local/share/dotfiles/waybar/scripts/media.sh",
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous",
+    "smooth-scrolling-threshold": 5
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume:2}%",
+    "format-muted": " 0%",
+    "format-icons": {
+      "default": ["", "", ""]
+    },
+    "on-click": "pavucontrol",
+    "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+    "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
+    "scroll-step": 5,
+    "smooth-scrolling-threshold": 5
+  },
+
+  "network": {
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
+    "format-ethernet": " ",
+    "format-wifi": "{icon} ",
+    "format-disconnected": "󰤭",
+    "tooltip-format": "{ifname} via {gwaddr}",
+    "on-click": "nm-connection-editor"
+  },
+
+  "cpu": {
+    "format": " {usage:2}%",
+    "interval": 5,
+    "tooltip": false
+  },
+
+  "memory": {
+    "format": " {percentage:1}%",
+    "interval": 10,
+    "tooltip": true,
+    "tooltip-format": "{used:0.1f}GiB / {total:0.1f}GiB"
+  },
+
+  "clock": {
+    "format": "{:%H:%M}",
+    "format-alt": "{:%a %b %d}",
+    "tooltip-format": "{:%A, %B %d %Y}",
+    "interval": 30
+  }
+}

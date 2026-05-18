@@ -1,0 +1,96 @@
+#!/bin/bash
+
+WALLPAPER_DIR="$HOME/.local/share/dotfiles/wallpapers"
+API_KEY_FILE="$HOME/.local/share/dotfiles/.unsplash_key"
+CACHE_FILE="/tmp/wallpaper-list.json"
+
+mkdir -p "$WALLPAPER_DIR"
+
+fetch_github_list() {
+  local api_url="https://api.github.com/repos/linuxdotexe/nordic-wallpapers/contents/wallpapers"
+  if [[ -f "$CACHE_FILE" ]] && [[ $(find "$CACHE_FILE" -mmin +60) ]]; then
+    rm -f "$CACHE_FILE"
+  fi
+  if [[ ! -f "$CACHE_FILE" ]]; then
+    curl -sfL "$api_url" -o "$CACHE_FILE" 2>/dev/null
+  fi
+  if [[ ! -f "$CACHE_FILE" ]]; then
+    return 1
+  fi
+  local urls
+  urls=$(python3 -c "
+import json, random
+with open('$CACHE_FILE') as f:
+  data = json.load(f)
+images = [x['download_url'] for x in data if x['name'].lower().endswith(('.png','.jpg','.jpeg'))]
+if images:
+  print(random.choice(images))
+" 2>/dev/null)
+  echo "$urls"
+}
+
+download_github() {
+  local url
+  url=$(fetch_github_list)
+  if [[ -z "$url" ]]; then
+    return 1
+  fi
+  local ext="${url##*.}"
+  local path="$WALLPAPER_DIR/fetch_$(date +%s).$ext"
+  curl -sfL "$url" -o "$path" 2>/dev/null
+  echo "$path"
+}
+
+download_unsplash() {
+  local key
+  key=$(cat "$API_KEY_FILE" 2>/dev/null | tr -d ' \n')
+  if [[ -z "$key" ]]; then
+    return 1
+  fi
+  local json
+  json=$(curl -sfL "https://api.unsplash.com/photos/random?orientation=landscape&query=nature,landscape,minimal&content_filter=high" \
+    -H "Authorization: Client-ID $key" 2>/dev/null)
+  if [[ -z "$json" ]]; then
+    return 1
+  fi
+  local img_url
+  img_url=$(echo "$json" | python3 -c "import json,sys; print(json.load(sys.stdin)['urls']['full'])" 2>/dev/null)
+  if [[ -z "$img_url" ]]; then
+    return 1
+  fi
+  local path="$WALLPAPER_DIR/unsplash_$(date +%s).jpg"
+  curl -sfL "$img_url" -o "$path" 2>/dev/null
+  echo "$path"
+}
+
+apply_wallpaper() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    return 1
+  fi
+  local old
+  old=$(hyprctl hyprpaper listloaded 2>/dev/null)
+  hyprctl hyprpaper preload "$path" 2>/dev/null
+  hyprctl hyprpaper wallpaper ",$path" 2>/dev/null
+  for img in $old; do
+    if [[ "$img" != "$path" ]]; then
+      hyprctl hyprpaper unload "$img" 2>/dev/null
+    fi
+  done
+  notify-send -u low -i "$path" "Wallpaper" "Changed"
+}
+
+if [[ -f "$API_KEY_FILE" ]]; then
+  path=$(download_unsplash)
+fi
+
+if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
+  path=$(download_github)
+fi
+
+if [[ -f "$path" ]]; then
+  apply_wallpaper "$path"
+else
+  notify-send -u critical "Wallpaper" "Failed to fetch"
+  exit 1
+fi

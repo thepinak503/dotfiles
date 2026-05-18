@@ -1,0 +1,7 @@
+[server]
+top_margin = 0.35
+min_brightness = 5
+max_volume = 150
+show_percentage = true
+
+[client]

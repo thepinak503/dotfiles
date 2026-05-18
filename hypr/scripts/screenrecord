@@ -1,0 +1,16 @@
+#!/bin/bash
+# Screen recording with wf-recorder
+# Starts recording a selected region; saves to ~/Videos/
+
+mkdir -p "$HOME/Videos"
+
+if pgrep -x wf-recorder > /dev/null; then
+    pkill wf-recorder
+    notify-send -u low "Screen Recording Stopped" "Saved to ~/Videos/"
+    exit 0
+fi
+
+OUTPUT="$HOME/Videos/recording_$(date +%Y%m%d_%H%M%S).mp4"
+notify-send -u low "Screen Recording" "Select a region to record"
+wf-recorder -g "$(slurp)" -f "$OUTPUT" &>/dev/null &
+notify-send -u low "Screen Recording Started" "Press SUPER+SHIFT+Print to stop"

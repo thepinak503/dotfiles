@@ -1,18 +1,27 @@
 db_path = "~/.local/share/atuin/history.db"
-search_mode = "fuzzy"
+search_mode = "daemon-fuzzy"
 filter_mode = "global"
 style = "compact"
 inline_height = 15
 show_preview = true
 enter_accept = true
 secrets_filter = true
-workspaces = false
+workspaces = true
 show_help = true
 show_tabs = true
 auto_sync = false
 update_check = false
 store_failed = true
 strip_trailing_whitespace = true
+
+[daemon]
+enabled = true
+autostart = false
+
+[search]
+recency_score_multiplier = 2.0
+frequency_score_multiplier = 1.0
+frecency_score_multiplier = 1.0
 
 [stats]
 common_subcommands = ["git", "docker", "kubectl", "npm", "pnpm", "yarn", "cargo", "systemctl", "brew", "go", "nix"]

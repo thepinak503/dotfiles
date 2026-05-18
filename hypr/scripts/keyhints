@@ -1,0 +1,32 @@
+#!/bin/bash
+# Show interactive keybind cheatsheet via rofi
+# Parses keybinds.conf for display
+
+CONFIG_DIR="$HOME/.local/share/dotfiles/hypr/configs"
+KEYBIND_FILE="$CONFIG_DIR/keybinds.conf"
+
+if [ ! -f "$KEYBIND_FILE" ]; then
+    notify-send -u critical "Keyhints Error" "keybinds.conf not found"
+    exit 1
+fi
+
+# Build rofi menu entries from keybinds.conf
+entries=$(grep '^bind\s*=' "$KEYBIND_FILE" | sed 's/^bind\s*=\s*//' | \
+    while IFS=',' read -r mod key action rest; do
+        mod=$(echo "$mod" | sed 's/\$mainMod/SUPER/g; s/ SHIFT/ + SHIFT/g; s/ CONTROL/ + CTRL/g')
+        key=$(echo "$key" | xargs)
+        action=$(echo "$action" | xargs)
+        echo "$mod + $key → $action"
+    done)
+
+# Add special binds (bindel, bindl)
+entries+=$'\n'$(grep -E '^bind[el]?\s*=' "$KEYBIND_FILE" | sed 's/^bind[el]*\s*=\s*//' | \
+    while IFS=',' read -r mod key action rest; do
+        mod=$(echo "$mod" | sed 's/\$mainMod/SUPER/g')
+        key=$(echo "$key" | xargs)
+        action=$(echo "$action" | xargs)
+        echo "$mod + $key → $action"
+    done)
+
+echo "$entries" | rofi -dmenu -i -p "Keybinds" -mesg "SUPER = Windows key" \
+    -theme-str 'window {width: 50%; height: 80%;} listview {columns: 1; lines: 25;}'

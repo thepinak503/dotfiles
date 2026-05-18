@@ -1,0 +1,8 @@
+#!/bin/bash
+
+case "${1:-}" in
+  --inc) swayosd-client --output-volume raise ;;
+  --dec) swayosd-client --output-volume lower ;;
+  --toggle) swayosd-client --output-volume mute-toggle ;;
+  --toggle-mic) swayosd-client --input-volume mute-toggle ;;
+esac

@@ -1,0 +1,91 @@
+* {
+    red:                        rgba(191, 97, 106, 100%);
+    blue:                       rgba(94, 129, 172, 100%);
+    nord0:                      rgba(46, 52, 64, 100%);
+    nord1:                      rgba(59, 66, 82, 100%);
+    nord2:                      rgba(67, 76, 94, 100%);
+    nord3:                      rgba(76, 86, 106, 100%);
+    nord4:                      rgba(216, 222, 233, 100%);
+    nord5:                      rgba(229, 233, 240, 100%);
+    nord6:                      rgba(236, 239, 244, 100%);
+    nord7:                      rgba(143, 188, 187, 100%);
+    nord8:                      rgba(136, 192, 208, 100%);
+    nord9:                      rgba(129, 161, 193, 100%);
+    nord10:                     rgba(94, 129, 172, 100%);
+    nord11:                     rgba(191, 97, 106, 100%);
+    nord13:                     rgba(235, 203, 139, 100%);
+    nord14:                     rgba(163, 190, 140, 100%);
+    nord15:                     rgba(180, 142, 173, 100%);
+
+    background-color:           transparent;
+    text-color:                 var(nord4);
+}
+
+window {
+    background-color:           rgba(46, 52, 64, 92%);
+    border-color:               var(nord3);
+    border:                     2px;
+    border-radius:              8px;
+    padding:                    12px;
+}
+
+mainbox {
+    spacing:                    8px;
+}
+
+inputbar {
+    background-color:           var(nord1);
+    border-radius:              6px;
+    padding:                    8px 12px;
+    spacing:                    8px;
+    children:                   [prompt, entry];
+}
+
+prompt {
+    text-color:                 var(nord8);
+}
+
+entry {
+    text-color:                 var(nord6);
+    placeholder-color:          var(nord3);
+    placeholder:                "Search...";
+}
+
+listview {
+    spacing:                    4px;
+    padding:                    8px 0 0 0;
+    scrollbar:                  false;
+    layout:                     vertical;
+}
+
+element {
+    padding:                    8px 12px;
+    border-radius:              6px;
+    background-color:           transparent;
+    text-color:                 var(nord4);
+    cursor:                     pointer;
+    spacing:                    8px;
+}
+
+element icon {
+    size:                       24px;
+}
+
+element normal.normal {
+    background-color:           transparent;
+    text-color:                 var(nord4);
+}
+
+element selected.normal {
+    background-color:           var(nord2);
+    text-color:                 var(nord8);
+}
+
+element selected {
+    background-color:           var(nord1);
+    text-color:                 var(nord8);
+}
+
+button {
+    text-color:                 var(nord9);
+}

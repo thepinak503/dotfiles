@@ -1,0 +1,6 @@
+[Unit]
+Description=Daily wallpaper fetch
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/share/dotfiles/hypr/scripts/wallpaper-fetch
