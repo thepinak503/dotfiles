@@ -1,11015 +1,5410 @@
 const dotfilesData = {
   "aliases": [
     {
-      "category": "General",
+      "category": "",
       "name": "..",
       "cmd": "cd .."
     },
     {
-      "category": "General",
+      "category": "",
       "name": "...",
       "cmd": "cd ../.."
     },
     {
-      "category": "General",
+      "category": "",
       "name": "....",
       "cmd": "cd ../../.."
     },
     {
-      "category": "General",
+      "category": "",
       "name": ".....",
       "cmd": "cd ../../../.."
     },
     {
-      "category": "General",
+      "category": "",
+      "name": "a",
+      "cmd": "cd .."
+    },
+    {
+      "category": "",
+      "name": "aa",
+      "cmd": "cd ../.."
+    },
+    {
+      "category": "",
+      "name": "aaa",
+      "cmd": "cd ../../.."
+    },
+    {
+      "category": "",
+      "name": "aaaa",
+      "cmd": "cd ../../../.."
+    },
+    {
+      "category": "",
+      "name": "aaaaa",
+      "cmd": "cd ../../../.."
+    },
+    {
+      "category": "",
       "name": "home",
       "cmd": "cd ~"
     },
     {
-      "category": "General",
-      "name": "dots",
-      "cmd": "cd \"$DOTFILES_DIR\""
+      "category": "",
+      "name": "docs",
+      "cmd": "cd ~/Documents"
     },
     {
-      "category": "General",
-      "name": "dotfiles",
-      "cmd": "cd \"$DOTFILES_DIR\""
+      "category": "",
+      "name": "dt",
+      "cmd": "cd ~/Desktop"
     },
     {
-      "category": "General",
-      "name": "dotst",
-      "cmd": "git -C \"$DOTFILES_DIR\" status --short --branch"
+      "category": "",
+      "name": "tmp",
+      "cmd": "cd /tmp"
     },
     {
-      "category": "General",
-      "name": "edots",
-      "cmd": "$EDITOR \"$DOTFILES_DIR\""
+      "category": "",
+      "name": "root",
+      "cmd": "cd /"
     },
     {
-      "category": "General",
-      "name": "reload",
-      "cmd": "exec \"$SHELL\" -l"
+      "category": "",
+      "name": "bk",
+      "cmd": "cd -"
     },
     {
-      "category": "General",
-      "name": "pathlines",
-      "cmd": "printf '\\''%s\\n'\\'' ${PATH//:/\\n}"
+      "category": "",
+      "name": "x",
+      "cmd": "exit"
     },
     {
-      "category": "General",
-      "name": "mkdirp",
-      "cmd": "mkdir -p"
-    },
-    {
-      "category": "General",
-      "name": "please",
-      "cmd": "sudo"
-    },
-    {
-      "category": "General",
-      "name": "ports",
-      "cmd": "netstat -tulanp 2>/dev/null || ss -tulanp"
-    },
-    {
-      "category": "General",
-      "name": "myip",
-      "cmd": "curl -fsSL https://ifconfig.me 2>/dev/null || curl -fsSL https://ipinfo.io/ip 2>/dev/null"
-    },
-    {
-      "category": "General",
-      "name": "weather",
-      "cmd": "curl -fsSL wttr.in"
-    },
-    {
-      "category": "General",
-      "name": "serve",
-      "cmd": "python3 -m http.server"
-    },
-    {
-      "category": "General",
-      "name": "g",
-      "cmd": "git"
-    },
-    {
-      "category": "General",
-      "name": "gs",
-      "cmd": "git status --short --branch"
-    },
-    {
-      "category": "General",
-      "name": "ga",
-      "cmd": "git add"
-    },
-    {
-      "category": "General",
-      "name": "gaa",
-      "cmd": "git add -A"
-    },
-    {
-      "category": "General",
-      "name": "gc",
-      "cmd": "git commit"
-    },
-    {
-      "category": "General",
-      "name": "gcm",
-      "cmd": "git commit -m"
-    },
-    {
-      "category": "General",
-      "name": "gca",
-      "cmd": "git commit --amend"
-    },
-    {
-      "category": "General",
-      "name": "gp",
-      "cmd": "git push"
-    },
-    {
-      "category": "General",
-      "name": "gpf",
-      "cmd": "git push --force-with-lease"
-    },
-    {
-      "category": "General",
-      "name": "gpl",
-      "cmd": "git pull --rebase --autostash"
-    },
-    {
-      "category": "General",
-      "name": "gf",
-      "cmd": "git fetch --all --prune"
-    },
-    {
-      "category": "General",
-      "name": "gl",
-      "cmd": "git log --oneline --decorate --graph --all -30"
-    },
-    {
-      "category": "General",
-      "name": "gd",
-      "cmd": "git diff"
-    },
-    {
-      "category": "General",
-      "name": "gds",
-      "cmd": "git diff --staged"
-    },
-    {
-      "category": "General",
-      "name": "gb",
-      "cmd": "git branch"
-    },
-    {
-      "category": "General",
-      "name": "gco",
-      "cmd": "git checkout"
-    },
-    {
-      "category": "General",
-      "name": "gsw",
-      "cmd": "git switch"
-    },
-    {
-      "category": "General",
-      "name": "gst",
-      "cmd": "git stash push -u"
-    },
-    {
-      "category": "General",
-      "name": "gsp",
-      "cmd": "git stash pop"
-    },
-    {
-      "category": "General",
-      "name": "grbc",
-      "cmd": "git rebase --continue"
-    },
-    {
-      "category": "General",
-      "name": "grba",
-      "cmd": "git rebase --abort"
-    },
-    {
-      "category": "General",
-      "name": "ls",
-      "cmd": "eza --icons=auto --group-directories-first 2>/dev/null || ls"
-    },
-    {
-      "category": "General",
-      "name": "ll",
-      "cmd": "eza -lah --icons=auto --group-directories-first 2>/dev/null || ls -lah"
-    },
-    {
-      "category": "General",
-      "name": "la",
-      "cmd": "eza -a --icons=auto 2>/dev/null || ls -a"
-    },
-    {
-      "category": "General",
-      "name": "lt",
-      "cmd": "eza --tree --level=2 --icons=auto 2>/dev/null || find . -maxdepth 2 -print"
-    },
-    {
-      "category": "General",
-      "name": "cat",
-      "cmd": "bat --paging=never 2>/dev/null || cat"
-    },
-    {
-      "category": "General",
-      "name": "grep",
-      "cmd": "rg 2>/dev/null || grep"
-    },
-    {
-      "category": "General",
-      "name": "duh",
-      "cmd": "du -sh"
-    },
-    {
-      "category": "General",
-      "name": "dfh",
-      "cmd": "df -h"
-    },
-    {
-      "category": "General",
-      "name": "freeh",
-      "cmd": "free -h"
-    },
-    {
-      "category": "General",
-      "name": "psg",
-      "cmd": "ps aux | grep -i"
-    },
-    {
-      "category": "General",
-      "name": "topcpu",
-      "cmd": "ps aux --sort=-%cpu | head"
-    },
-    {
-      "category": "General",
-      "name": "topmem",
-      "cmd": "ps aux --sort=-%mem | head"
-    },
-    {
-      "category": "General",
-      "name": "j",
-      "cmd": "jobs -l"
-    },
-    {
-      "category": "General",
-      "name": "h",
-      "cmd": "history"
-    },
-    {
-      "category": "General",
+      "category": "",
       "name": "c",
       "cmd": "clear"
     },
     {
-      "category": "General",
+      "category": "",
       "name": "cls",
       "cmd": "clear"
     },
     {
-      "category": "General",
-      "name": "k",
-      "cmd": "kubectl"
+      "category": "",
+      "name": "clr",
+      "cmd": "clear"
     },
     {
-      "category": "General",
-      "name": "kgp",
-      "cmd": "kubectl get pods"
+      "category": "",
+      "name": "tmpdir",
+      "cmd": "cd $(mktemp -d)"
     },
     {
-      "category": "General",
-      "name": "kgs",
-      "cmd": "kubectl get svc"
+      "category": "",
+      "name": "-- -",
+      "cmd": "dash"
     },
     {
-      "category": "General",
-      "name": "kctx",
-      "cmd": "kubectl config current-context"
+      "category": "",
+      "name": ":q",
+      "cmd": "exit"
     },
     {
-      "category": "General",
-      "name": "d",
-      "cmd": "docker"
+      "category": "",
+      "name": "q",
+      "cmd": "exit"
     },
     {
-      "category": "General",
-      "name": "dps",
-      "cmd": "docker ps"
+      "category": "",
+      "name": "lsa",
+      "cmd": "ls -a"
     },
     {
-      "category": "General",
-      "name": "dpsa",
-      "cmd": "docker ps -a"
+      "category": "",
+      "name": "lsd",
+      "cmd": "ls -d */"
     },
     {
-      "category": "General",
-      "name": "di",
-      "cmd": "docker images"
+      "category": "",
+      "name": "lsdot",
+      "cmd": "ls -d .*"
     },
     {
-      "category": "General",
-      "name": "dc",
-      "cmd": "docker compose"
+      "category": "",
+      "name": "lsf",
+      "cmd": "ls -p | grep -v /"
     },
     {
-      "category": "General",
-      "name": "tf",
-      "cmd": "terraform"
+      "category": "",
+      "name": "lsbig",
+      "cmd": "ls -lS | head -20"
     },
     {
-      "category": "General",
-      "name": "tfi",
-      "cmd": "terraform init"
+      "category": "",
+      "name": "lshidden",
+      "cmd": "ls -d .* 2>/dev/null"
     },
     {
-      "category": "General",
-      "name": "tfp",
-      "cmd": "terraform plan"
+      "category": "",
+      "name": "ltree",
+      "cmd": "eza --tree --level=3 --icons=auto 2>/dev/null || find . -maxdepth 3 -print"
     },
     {
-      "category": "General",
-      "name": "tfa",
-      "cmd": "terraform apply"
+      "category": "",
+      "name": "l1",
+      "cmd": "ls -1"
     },
     {
-      "category": "General",
-      "name": "py",
-      "cmd": "python3"
+      "category": "",
+      "name": "lh",
+      "cmd": "command ls -lhS"
     },
     {
-      "category": "General",
-      "name": "pipup",
-      "cmd": "python3 -m pip install --upgrade pip"
+      "category": "",
+      "name": "lr",
+      "cmd": "command ls -lR"
     },
     {
-      "category": "General",
-      "name": "venv",
-      "cmd": "python3 -m venv .venv"
+      "category": "",
+      "name": "le",
+      "cmd": "command ls | grep -o '.[^.]*$' | sort | uniq"
     },
     {
-      "category": "General",
-      "name": "nr",
-      "cmd": "npm run"
+      "category": "",
+      "name": "lw",
+      "cmd": "command ls -ldh $(pwd)"
     },
     {
-      "category": "General",
-      "name": "ni",
-      "cmd": "npm install"
+      "category": "",
+      "name": "ls",
+      "cmd": "_x eza --group-directories-first --icons 2>/dev/null || _x exa --group-directories-first 2>/dev/null || command ls --color=auto 2>/dev/null || command ls -G"
     },
     {
-      "category": "General",
-      "name": "nt",
-      "cmd": "npm test"
+      "category": "",
+      "name": "ll",
+      "cmd": "_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || command ls -l"
     },
     {
-      "category": "General",
-      "name": "nd",
-      "cmd": "npm run dev"
+      "category": "",
+      "name": "la",
+      "cmd": "_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || command ls -la"
     },
     {
-      "category": "General",
+      "category": "",
+      "name": "lal",
+      "cmd": "_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || command ls -la"
+    },
+    {
+      "category": "",
+      "name": "lsl",
+      "cmd": "_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || command ls -l"
+    },
+    {
+      "category": "",
+      "name": "tree",
+      "cmd": "_x eza -T --icons 2>/dev/null || _x tree 2>/dev/null || echo \"tree/eza needed\""
+    },
+    {
+      "category": "",
+      "name": "dirs",
+      "cmd": "ls -d */"
+    },
+    {
+      "category": "",
+      "name": "ldir",
+      "cmd": "ls -d */"
+    },
+    {
+      "category": "",
+      "name": "lf",
+      "cmd": "find . -maxdepth 1 -type f -exec command ls -lh {} + 2>/dev/null | sort -k5 -h"
+    },
+    {
+      "category": "",
+      "name": "dots",
+      "cmd": "cd \"$DOTFILES_DIR\""
+    },
+    {
+      "category": "",
+      "name": "dotfiles",
+      "cmd": "cd \"$DOTFILES_DIR\""
+    },
+    {
+      "category": "",
+      "name": "dotst",
+      "cmd": "git -C \"$DOTFILES_DIR\" status --short --branch"
+    },
+    {
+      "category": "",
+      "name": "edots",
+      "cmd": "$EDITOR \"$DOTFILES_DIR\""
+    },
+    {
+      "category": "",
+      "name": "dotupdate",
+      "cmd": "bash \"$DOTFILES_DIR/bin/dotupdate.sh\""
+    },
+    {
+      "category": "",
+      "name": "dothealth",
+      "cmd": "bash \"$DOTFILES_DIR/bin/health_check.sh\""
+    },
+    {
+      "category": "",
+      "name": "dotbench",
+      "cmd": "bash \"$DOTFILES_DIR/bin/benchmark_shell.sh\""
+    },
+    {
+      "category": "",
+      "name": "dotfix",
+      "cmd": "sh \"$DOTFILES_DIR/install/install.sh\""
+    },
+    {
+      "category": "",
+      "name": "dotloadfull",
+      "cmd": ". \"$DOTFILES_DIR/core/aliases.sh\" && . \"$DOTFILES_DIR/core/functions.sh\""
+    },
+    {
+      "category": "",
+      "name": "dotbranch",
+      "cmd": "git -C \"$DOTFILES_DIR\" branch"
+    },
+    {
+      "category": "",
+      "name": "dotdiff",
+      "cmd": "git -C \"$DOTFILES_DIR\" diff"
+    },
+    {
+      "category": "",
+      "name": "dotdocs",
+      "cmd": "xdg-open \"$DOTFILES_DIR/docs/index.html\" 2>/dev/null || open \"$DOTFILES_DIR/docs/index.html\" 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "dotfetch",
+      "cmd": "git -C \"$DOTFILES_DIR\" fetch --all --prune"
+    },
+    {
+      "category": "",
+      "name": "dothelp",
+      "cmd": "echo \"Pinak'\\''s Dotfiles v$DOTFILES_VERSION — see dotdocs for docs\""
+    },
+    {
+      "category": "",
+      "name": "dotlog",
+      "cmd": "git -C \"$DOTFILES_DIR\" log --oneline --graph --decorate -20"
+    },
+    {
+      "category": "",
+      "name": "dotmode",
+      "cmd": "echo \"$DOTFILES_MODE\""
+    },
+    {
+      "category": "",
+      "name": "dotpush",
+      "cmd": "git -C \"$DOTFILES_DIR\" push"
+    },
+    {
+      "category": "",
+      "name": "dotreload",
+      "cmd": "exec \"$SHELL\" -l"
+    },
+    {
+      "category": "",
+      "name": "dotver",
+      "cmd": "echo \"$DOTFILES_VERSION\""
+    },
+    {
+      "category": "",
+      "name": "dsync",
+      "cmd": "dot_sync"
+    },
+    {
+      "category": "",
+      "name": "chmode",
+      "cmd": "export DOTFILES_MODE"
+    },
+    {
+      "category": "",
+      "name": "modestat",
+      "cmd": "echo \"Mode: ${DOTFILES_MODE:-unknown}\""
+    },
+    {
+      "category": "",
+      "name": "dotinfo",
+      "cmd": "echo \"Dotfiles: $DOTFILES_DIR | Mode: ${DOTFILES_MODE:-unknown} | Shell: $SHELL\""
+    },
+    {
+      "category": "",
+      "name": "gap",
+      "cmd": "git add -p"
+    },
+    {
+      "category": "",
+      "name": "gcm",
+      "cmd": "git commit -m"
+    },
+    {
+      "category": "",
+      "name": "gcan",
+      "cmd": "git commit --amend --no-edit"
+    },
+    {
+      "category": "",
+      "name": "gpl",
+      "cmd": "git pull --rebase --autostash"
+    },
+    {
+      "category": "",
+      "name": "gsw",
+      "cmd": "git switch"
+    },
+    {
+      "category": "",
+      "name": "grbc",
+      "cmd": "git rebase --continue"
+    },
+    {
+      "category": "",
+      "name": "grba",
+      "cmd": "git rebase --abort"
+    },
+    {
+      "category": "",
+      "name": "grbs",
+      "cmd": "git rebase --skip"
+    },
+    {
+      "category": "",
+      "name": "gpr",
+      "cmd": "git pull --rebase"
+    },
+    {
+      "category": "",
       "name": "prune",
       "cmd": "git remote prune origin"
     },
     {
-      "category": "General",
-      "name": "today",
-      "cmd": "date +%F"
-    },
-    {
-      "category": "General",
-      "name": "now",
-      "cmd": "date '\\''+%F %T'\\''"
-    },
-    {
-      "category": "General",
-      "name": "matrix",
-      "cmd": "printf '\\''01101000 01100101 01101100 01101100 01101111\\n'\\''"
-    },
-    {
-      "category": "General",
+      "category": "",
       "name": "shipit",
       "cmd": "git status --short && git push"
     },
     {
-      "category": "General",
-      "name": "focus",
-      "cmd": "printf '\\''\\033c'\\'' && date '\\''+%F %T'\\''"
+      "category": "",
+      "name": "glg",
+      "cmd": "git log --oneline --decorate --graph"
     },
     {
-      "category": "General",
-      "name": "coinflip",
-      "cmd": "awk '\\''BEGIN{srand(); print rand()<0.5?\"heads\":\"tails\"}'\\''"
+      "category": "",
+      "name": "gla",
+      "cmd": "git log --oneline --decorate --graph --all"
     },
     {
-      "category": "General",
-      "name": "pgithelp",
-      "cmd": "git status --short --help"
+      "category": "",
+      "name": "gcount",
+      "cmd": "git shortlog -sn"
     },
     {
-      "category": "General",
-      "name": "pgitversion",
-      "cmd": "git status --short --version"
+      "category": "",
+      "name": "gbl",
+      "cmd": "git blame -w"
     },
     {
-      "category": "General",
-      "name": "pgitlist",
-      "cmd": "git status --short list"
+      "category": "",
+      "name": "gcl",
+      "cmd": "git clone"
     },
     {
-      "category": "General",
-      "name": "pgitinfo",
-      "cmd": "git status --short info"
+      "category": "",
+      "name": "gdf",
+      "cmd": "git diff --name-only"
     },
     {
-      "category": "General",
-      "name": "pgitsearch",
-      "cmd": "git status --short search"
+      "category": "",
+      "name": "gdw",
+      "cmd": "git diff --word-diff"
     },
     {
-      "category": "General",
-      "name": "pgitshow",
-      "cmd": "git status --short show"
+      "category": "",
+      "name": "gdc",
+      "cmd": "git diff --cached"
     },
     {
-      "category": "General",
-      "name": "pgitstatus",
-      "cmd": "git status --short status"
+      "category": "",
+      "name": "gpsup",
+      "cmd": "git push --set-upstream origin HEAD"
     },
     {
-      "category": "General",
-      "name": "pgitclean",
-      "cmd": "git status --short clean"
+      "category": "",
+      "name": "grv",
+      "cmd": "git remote -v"
     },
     {
-      "category": "General",
-      "name": "pgitupdate",
-      "cmd": "git status --short update"
+      "category": "",
+      "name": "gsta",
+      "cmd": "git stash apply"
     },
     {
-      "category": "General",
-      "name": "pgitupgrade",
-      "cmd": "git status --short upgrade"
+      "category": "",
+      "name": "gstd",
+      "cmd": "git stash drop"
     },
     {
-      "category": "General",
-      "name": "pgitdry",
-      "cmd": "git status --short --dry-run"
+      "category": "",
+      "name": "gswc",
+      "cmd": "git switch -c"
     },
     {
-      "category": "General",
-      "name": "pgitverbose",
-      "cmd": "git status --short --verbose"
+      "category": "",
+      "name": "gcp",
+      "cmd": "git cherry-pick"
     },
     {
-      "category": "General",
-      "name": "pgitjson",
-      "cmd": "git status --short --json"
+      "category": "",
+      "name": "gmc",
+      "cmd": "git merge --continue"
     },
     {
-      "category": "General",
-      "name": "pgitquiet",
-      "cmd": "git status --short --quiet"
+      "category": "",
+      "name": "gma",
+      "cmd": "git merge --abort"
     },
     {
-      "category": "General",
-      "name": "pgitforce",
-      "cmd": "git status --short --force"
+      "category": "",
+      "name": "gff",
+      "cmd": "git merge --ff-only"
     },
     {
-      "category": "General",
-      "name": "pgitall",
-      "cmd": "git status --short --all"
+      "category": "",
+      "name": "gwp",
+      "cmd": "git worktree prune"
     },
     {
-      "category": "General",
-      "name": "pgitlong",
-      "cmd": "git status --short --long"
+      "category": "",
+      "name": "grepo",
+      "cmd": "git init"
     },
     {
-      "category": "General",
-      "name": "pgitshort",
-      "cmd": "git status --short --short"
+      "category": "",
+      "name": "gtags",
+      "cmd": "git tag -l"
     },
     {
-      "category": "General",
-      "name": "pgitdebug",
-      "cmd": "git status --short --debug"
+      "category": "",
+      "name": "gshow",
+      "cmd": "git show"
     },
     {
-      "category": "General",
-      "name": "pgittrace",
-      "cmd": "git status --short --trace"
+      "category": "",
+      "name": "gwip",
+      "cmd": "git add -A && git rm $(git ls-files --deleted) 2>/dev/null; git commit --no-verify -m \"wip\""
     },
     {
-      "category": "General",
-      "name": "pgitwatch",
-      "cmd": "git status --short watch"
+      "category": "",
+      "name": "gwipe",
+      "cmd": "git reset --hard && git clean --force -df"
     },
     {
-      "category": "General",
-      "name": "pgitdoctor",
-      "cmd": "git status --short doctor"
+      "category": "",
+      "name": "nah",
+      "cmd": "git reset --hard && git clean -df"
     },
     {
-      "category": "General",
-      "name": "pgitcheck",
-      "cmd": "git status --short check"
+      "category": "",
+      "name": "gbage",
+      "cmd": "for k in $(git branch -a | sed \"s/^..//;s/ ->.*//\" 2>/dev/null); do echo -e \"$(git show --pretty=format:\"%ci %cr\" $k -- 2>/dev/null | head -1)\\t$k\"; done | sort -r"
     },
     {
-      "category": "General",
-      "name": "pgitbuild",
-      "cmd": "git status --short build"
+      "category": "",
+      "name": "gmn",
+      "cmd": "git merge --no-ff --no-commit"
     },
     {
-      "category": "General",
-      "name": "pgittest",
-      "cmd": "git status --short test"
+      "category": "",
+      "name": "g",
+      "cmd": "git"
     },
     {
-      "category": "General",
-      "name": "pgitrun",
-      "cmd": "git status --short run"
+      "category": "",
+      "name": "ga",
+      "cmd": "git add"
     },
     {
-      "category": "General",
-      "name": "pgitedit",
-      "cmd": "git status --short edit"
+      "category": "",
+      "name": "gaa",
+      "cmd": "git add --all"
     },
     {
-      "category": "General",
-      "name": "pgitlogs",
-      "cmd": "git status --short logs"
+      "category": "",
+      "name": "gau",
+      "cmd": "git add -u"
     },
     {
-      "category": "General",
-      "name": "pgittop",
-      "cmd": "git status --short top"
+      "category": "",
+      "name": "gb",
+      "cmd": "git branch"
     },
     {
-      "category": "General",
-      "name": "pgittree",
-      "cmd": "git status --short tree"
+      "category": "",
+      "name": "gba",
+      "cmd": "git branch -a"
     },
     {
-      "category": "General",
-      "name": "pgitdiff",
-      "cmd": "git status --short diff"
+      "category": "",
+      "name": "gbd",
+      "cmd": "git branch -d"
     },
     {
-      "category": "General",
-      "name": "pgitapply",
-      "cmd": "git status --short apply"
+      "category": "",
+      "name": "gbm",
+      "cmd": "git branch -m"
     },
     {
-      "category": "General",
-      "name": "pgitinit",
-      "cmd": "git status --short init"
+      "category": "",
+      "name": "gbc",
+      "cmd": "git branch --show-current"
     },
     {
-      "category": "General",
-      "name": "pgitfmt",
-      "cmd": "git status --short fmt"
+      "category": "",
+      "name": "gc",
+      "cmd": "git commit -v"
     },
     {
-      "category": "General",
-      "name": "pgitlint",
-      "cmd": "git status --short lint"
+      "category": "",
+      "name": "gca",
+      "cmd": "git commit -a -v"
     },
     {
-      "category": "General",
-      "name": "pgitserve",
-      "cmd": "git status --short serve"
+      "category": "",
+      "name": "gcam",
+      "cmd": "git commit --amend --no-edit"
     },
     {
-      "category": "General",
-      "name": "pgitshell",
-      "cmd": "git status --short shell"
+      "category": "",
+      "name": "gcne",
+      "cmd": "git commit --no-edit"
     },
     {
-      "category": "General",
-      "name": "pgitenv",
-      "cmd": "git status --short env"
+      "category": "",
+      "name": "gcnv",
+      "cmd": "git commit --no-verify"
     },
     {
-      "category": "General",
-      "name": "pgitpath",
-      "cmd": "git status --short path"
+      "category": "",
+      "name": "gco",
+      "cmd": "git checkout"
     },
     {
-      "category": "General",
-      "name": "pgitcache",
-      "cmd": "git status --short cache"
+      "category": "",
+      "name": "gcb",
+      "cmd": "git checkout -b"
     },
     {
-      "category": "General",
-      "name": "pgitloghelp",
-      "cmd": "git log --oneline --decorate --help"
+      "category": "",
+      "name": "gd",
+      "cmd": "git diff"
     },
     {
-      "category": "General",
-      "name": "pgitlogversion",
-      "cmd": "git log --oneline --decorate --version"
+      "category": "",
+      "name": "gds",
+      "cmd": "git diff --stat"
     },
     {
-      "category": "General",
-      "name": "pgitloglist",
-      "cmd": "git log --oneline --decorate list"
+      "category": "",
+      "name": "gf",
+      "cmd": "git fetch"
     },
     {
-      "category": "General",
-      "name": "pgitloginfo",
-      "cmd": "git log --oneline --decorate info"
+      "category": "",
+      "name": "gfa",
+      "cmd": "git fetch --all"
     },
     {
-      "category": "General",
-      "name": "pgitlogsearch",
-      "cmd": "git log --oneline --decorate search"
+      "category": "",
+      "name": "gfr",
+      "cmd": "git fetch --prune"
     },
     {
-      "category": "General",
-      "name": "pgitlogshow",
-      "cmd": "git log --oneline --decorate show"
+      "category": "",
+      "name": "gi",
+      "cmd": "git init"
     },
     {
-      "category": "General",
-      "name": "pgitlogstatus",
-      "cmd": "git log --oneline --decorate status"
+      "category": "",
+      "name": "gl",
+      "cmd": "git log --oneline -n 20"
     },
     {
-      "category": "General",
-      "name": "pgitlogclean",
-      "cmd": "git log --oneline --decorate clean"
+      "category": "",
+      "name": "gp",
+      "cmd": "git push"
     },
     {
-      "category": "General",
-      "name": "pgitlogupdate",
-      "cmd": "git log --oneline --decorate update"
+      "category": "",
+      "name": "gpo",
+      "cmd": "git push origin"
     },
     {
-      "category": "General",
-      "name": "pgitlogupgrade",
-      "cmd": "git log --oneline --decorate upgrade"
+      "category": "",
+      "name": "gpoh",
+      "cmd": "git push origin HEAD"
     },
     {
-      "category": "General",
-      "name": "pgitlogdry",
-      "cmd": "git log --oneline --decorate --dry-run"
+      "category": "",
+      "name": "gpu",
+      "cmd": "git push --set-upstream origin"
     },
     {
-      "category": "General",
-      "name": "pgitlogverbose",
-      "cmd": "git log --oneline --decorate --verbose"
+      "category": "",
+      "name": "gplr",
+      "cmd": "git pull --rebase"
     },
     {
-      "category": "General",
-      "name": "pgitlogjson",
-      "cmd": "git log --oneline --decorate --json"
+      "category": "",
+      "name": "gr",
+      "cmd": "git remote -v"
     },
     {
-      "category": "General",
-      "name": "pgitlogquiet",
-      "cmd": "git log --oneline --decorate --quiet"
+      "category": "",
+      "name": "gra",
+      "cmd": "git remote add"
     },
     {
-      "category": "General",
-      "name": "pgitlogforce",
-      "cmd": "git log --oneline --decorate --force"
+      "category": "",
+      "name": "grm",
+      "cmd": "git remote remove"
     },
     {
-      "category": "General",
-      "name": "pgitlogall",
-      "cmd": "git log --oneline --decorate --all"
+      "category": "",
+      "name": "gs",
+      "cmd": "git status"
     },
     {
-      "category": "General",
-      "name": "pgitloglong",
-      "cmd": "git log --oneline --decorate --long"
+      "category": "",
+      "name": "gss",
+      "cmd": "git status --short"
     },
     {
-      "category": "General",
-      "name": "pgitlogshort",
-      "cmd": "git log --oneline --decorate --short"
+      "category": "",
+      "name": "gst",
+      "cmd": "git stash"
     },
     {
-      "category": "General",
-      "name": "pgitlogdebug",
-      "cmd": "git log --oneline --decorate --debug"
+      "category": "",
+      "name": "gstl",
+      "cmd": "git stash list"
     },
     {
-      "category": "General",
-      "name": "pgitlogtrace",
-      "cmd": "git log --oneline --decorate --trace"
+      "category": "",
+      "name": "gstp",
+      "cmd": "git stash pop"
     },
     {
-      "category": "General",
-      "name": "pgitlogwatch",
-      "cmd": "git log --oneline --decorate watch"
+      "category": "",
+      "name": "gt",
+      "cmd": "git tag"
     },
     {
-      "category": "General",
-      "name": "pgitlogdoctor",
-      "cmd": "git log --oneline --decorate doctor"
+      "category": "",
+      "name": "gtl",
+      "cmd": "git tag -l"
     },
     {
-      "category": "General",
-      "name": "pgitlogcheck",
-      "cmd": "git log --oneline --decorate check"
+      "category": "",
+      "name": "gtd",
+      "cmd": "git tag -d"
     },
     {
-      "category": "General",
-      "name": "pgitlogbuild",
-      "cmd": "git log --oneline --decorate build"
+      "category": "",
+      "name": "gtop",
+      "cmd": "gcd"
     },
     {
-      "category": "General",
-      "name": "pgitlogtest",
-      "cmd": "git log --oneline --decorate test"
+      "category": "",
+      "name": "grh",
+      "cmd": "git reset --hard"
     },
     {
-      "category": "General",
-      "name": "pgitlogrun",
-      "cmd": "git log --oneline --decorate run"
+      "category": "",
+      "name": "grs",
+      "cmd": "git reset --soft"
     },
     {
-      "category": "General",
-      "name": "pgitlogedit",
-      "cmd": "git log --oneline --decorate edit"
+      "category": "",
+      "name": "gm",
+      "cmd": "git merge"
     },
     {
-      "category": "General",
-      "name": "pgitloglogs",
-      "cmd": "git log --oneline --decorate logs"
+      "category": "",
+      "name": "gmnf",
+      "cmd": "git merge --no-ff"
     },
     {
-      "category": "General",
-      "name": "pgitlogtop",
-      "cmd": "git log --oneline --decorate top"
+      "category": "",
+      "name": "gmt",
+      "cmd": "git mergetool"
     },
     {
-      "category": "General",
-      "name": "pgitlogtree",
-      "cmd": "git log --oneline --decorate tree"
+      "category": "",
+      "name": "gmv",
+      "cmd": "git mv"
     },
     {
-      "category": "General",
-      "name": "pgitlogdiff",
-      "cmd": "git log --oneline --decorate diff"
+      "category": "",
+      "name": "grb",
+      "cmd": "git rebase"
     },
     {
-      "category": "General",
-      "name": "pgitlogapply",
-      "cmd": "git log --oneline --decorate apply"
+      "category": "",
+      "name": "grbi",
+      "cmd": "git rebase -i"
     },
     {
-      "category": "General",
-      "name": "pgitloginit",
-      "cmd": "git log --oneline --decorate init"
+      "category": "",
+      "name": "gcl1",
+      "cmd": "git clone --depth=1"
     },
     {
-      "category": "General",
-      "name": "pgitlogfmt",
-      "cmd": "git log --oneline --decorate fmt"
+      "category": "",
+      "name": "gcf",
+      "cmd": "git config"
     },
     {
-      "category": "General",
-      "name": "pgitloglint",
-      "cmd": "git log --oneline --decorate lint"
+      "category": "",
+      "name": "gcfl",
+      "cmd": "git config -l"
     },
     {
-      "category": "General",
-      "name": "pgitlogserve",
-      "cmd": "git log --oneline --decorate serve"
+      "category": "",
+      "name": "gk",
+      "cmd": "gitk"
     },
     {
-      "category": "General",
-      "name": "pgitlogshell",
-      "cmd": "git log --oneline --decorate shell"
+      "category": "",
+      "name": "gkw",
+      "cmd": "gitk --all"
     },
     {
-      "category": "General",
-      "name": "pgitlogenv",
-      "cmd": "git log --oneline --decorate env"
+      "category": "",
+      "name": "gsh",
+      "cmd": "git show"
     },
     {
-      "category": "General",
-      "name": "pgitlogpath",
-      "cmd": "git log --oneline --decorate path"
+      "category": "",
+      "name": "gshs",
+      "cmd": "git show --stat"
     },
     {
-      "category": "General",
-      "name": "pgitlogcache",
-      "cmd": "git log --oneline --decorate cache"
+      "category": "",
+      "name": "gshn",
+      "cmd": "git show --name-only"
     },
     {
-      "category": "General",
-      "name": "pfindhelp",
-      "cmd": "find . -maxdepth 3 -type f -name --help"
-    },
-    {
-      "category": "General",
-      "name": "pfindversion",
-      "cmd": "find . -maxdepth 3 -type f -name --version"
-    },
-    {
-      "category": "General",
-      "name": "pfindlist",
-      "cmd": "find . -maxdepth 3 -type f -name list"
-    },
-    {
-      "category": "General",
-      "name": "pfindinfo",
-      "cmd": "find . -maxdepth 3 -type f -name info"
-    },
-    {
-      "category": "General",
-      "name": "pfindsearch",
-      "cmd": "find . -maxdepth 3 -type f -name search"
-    },
-    {
-      "category": "General",
-      "name": "pfindshow",
-      "cmd": "find . -maxdepth 3 -type f -name show"
-    },
-    {
-      "category": "General",
-      "name": "pfindstatus",
-      "cmd": "find . -maxdepth 3 -type f -name status"
-    },
-    {
-      "category": "General",
-      "name": "pfindclean",
-      "cmd": "find . -maxdepth 3 -type f -name clean"
-    },
-    {
-      "category": "General",
-      "name": "pfindupdate",
-      "cmd": "find . -maxdepth 3 -type f -name update"
-    },
-    {
-      "category": "General",
-      "name": "pfindupgrade",
-      "cmd": "find . -maxdepth 3 -type f -name upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pfinddry",
-      "cmd": "find . -maxdepth 3 -type f -name --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pfindverbose",
-      "cmd": "find . -maxdepth 3 -type f -name --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pfindjson",
-      "cmd": "find . -maxdepth 3 -type f -name --json"
-    },
-    {
-      "category": "General",
-      "name": "pfindquiet",
-      "cmd": "find . -maxdepth 3 -type f -name --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pfindforce",
-      "cmd": "find . -maxdepth 3 -type f -name --force"
-    },
-    {
-      "category": "General",
-      "name": "pfindall",
-      "cmd": "find . -maxdepth 3 -type f -name --all"
-    },
-    {
-      "category": "General",
-      "name": "pfindlong",
-      "cmd": "find . -maxdepth 3 -type f -name --long"
-    },
-    {
-      "category": "General",
-      "name": "pfindshort",
-      "cmd": "find . -maxdepth 3 -type f -name --short"
-    },
-    {
-      "category": "General",
-      "name": "pfinddebug",
-      "cmd": "find . -maxdepth 3 -type f -name --debug"
-    },
-    {
-      "category": "General",
-      "name": "pfindtrace",
-      "cmd": "find . -maxdepth 3 -type f -name --trace"
-    },
-    {
-      "category": "General",
-      "name": "pfindwatch",
-      "cmd": "find . -maxdepth 3 -type f -name watch"
-    },
-    {
-      "category": "General",
-      "name": "pfinddoctor",
-      "cmd": "find . -maxdepth 3 -type f -name doctor"
-    },
-    {
-      "category": "General",
-      "name": "pfindcheck",
-      "cmd": "find . -maxdepth 3 -type f -name check"
-    },
-    {
-      "category": "General",
-      "name": "pfindbuild",
-      "cmd": "find . -maxdepth 3 -type f -name build"
-    },
-    {
-      "category": "General",
-      "name": "pfindtest",
-      "cmd": "find . -maxdepth 3 -type f -name test"
-    },
-    {
-      "category": "General",
-      "name": "pfindrun",
-      "cmd": "find . -maxdepth 3 -type f -name run"
-    },
-    {
-      "category": "General",
-      "name": "pfindedit",
-      "cmd": "find . -maxdepth 3 -type f -name edit"
-    },
-    {
-      "category": "General",
-      "name": "pfindlogs",
-      "cmd": "find . -maxdepth 3 -type f -name logs"
-    },
-    {
-      "category": "General",
-      "name": "pfindtop",
-      "cmd": "find . -maxdepth 3 -type f -name top"
-    },
-    {
-      "category": "General",
-      "name": "pfindtree",
-      "cmd": "find . -maxdepth 3 -type f -name tree"
-    },
-    {
-      "category": "General",
-      "name": "pfinddiff",
-      "cmd": "find . -maxdepth 3 -type f -name diff"
-    },
-    {
-      "category": "General",
-      "name": "pfindapply",
-      "cmd": "find . -maxdepth 3 -type f -name apply"
-    },
-    {
-      "category": "General",
-      "name": "pfindinit",
-      "cmd": "find . -maxdepth 3 -type f -name init"
-    },
-    {
-      "category": "General",
-      "name": "pfindfmt",
-      "cmd": "find . -maxdepth 3 -type f -name fmt"
-    },
-    {
-      "category": "General",
-      "name": "pfindlint",
-      "cmd": "find . -maxdepth 3 -type f -name lint"
-    },
-    {
-      "category": "General",
-      "name": "pfindserve",
-      "cmd": "find . -maxdepth 3 -type f -name serve"
-    },
-    {
-      "category": "General",
-      "name": "pfindshell",
-      "cmd": "find . -maxdepth 3 -type f -name shell"
-    },
-    {
-      "category": "General",
-      "name": "pfindenv",
-      "cmd": "find . -maxdepth 3 -type f -name env"
-    },
-    {
-      "category": "General",
-      "name": "pfindpath",
-      "cmd": "find . -maxdepth 3 -type f -name path"
-    },
-    {
-      "category": "General",
-      "name": "pfindcache",
-      "cmd": "find . -maxdepth 3 -type f -name cache"
-    },
-    {
-      "category": "General",
-      "name": "prghelp",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --help"
-    },
-    {
-      "category": "General",
-      "name": "prgversion",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --version"
-    },
-    {
-      "category": "General",
-      "name": "prglist",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' list"
-    },
-    {
-      "category": "General",
-      "name": "prginfo",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' info"
-    },
-    {
-      "category": "General",
-      "name": "prgsearch",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' search"
-    },
-    {
-      "category": "General",
-      "name": "prgshow",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' show"
-    },
-    {
-      "category": "General",
-      "name": "prgstatus",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' status"
-    },
-    {
-      "category": "General",
-      "name": "prgclean",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' clean"
-    },
-    {
-      "category": "General",
-      "name": "prgupdate",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' update"
-    },
-    {
-      "category": "General",
-      "name": "prgupgrade",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' upgrade"
-    },
-    {
-      "category": "General",
-      "name": "prgdry",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "prgverbose",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --verbose"
-    },
-    {
-      "category": "General",
-      "name": "prgjson",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --json"
-    },
-    {
-      "category": "General",
-      "name": "prgquiet",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --quiet"
-    },
-    {
-      "category": "General",
-      "name": "prgforce",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --force"
-    },
-    {
-      "category": "General",
-      "name": "prgall",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --all"
-    },
-    {
-      "category": "General",
-      "name": "prglong",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --long"
-    },
-    {
-      "category": "General",
-      "name": "prgshort",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --short"
-    },
-    {
-      "category": "General",
-      "name": "prgdebug",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --debug"
-    },
-    {
-      "category": "General",
-      "name": "prgtrace",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --trace"
-    },
-    {
-      "category": "General",
-      "name": "prgwatch",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' watch"
-    },
-    {
-      "category": "General",
-      "name": "prgdoctor",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' doctor"
-    },
-    {
-      "category": "General",
-      "name": "prgcheck",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' check"
-    },
-    {
-      "category": "General",
-      "name": "prgbuild",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' build"
-    },
-    {
-      "category": "General",
-      "name": "prgtest",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' test"
-    },
-    {
-      "category": "General",
-      "name": "prgrun",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' run"
-    },
-    {
-      "category": "General",
-      "name": "prgedit",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' edit"
-    },
-    {
-      "category": "General",
-      "name": "prglogs",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' logs"
-    },
-    {
-      "category": "General",
-      "name": "prgtop",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' top"
-    },
-    {
-      "category": "General",
-      "name": "prgtree",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' tree"
-    },
-    {
-      "category": "General",
-      "name": "prgdiff",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' diff"
-    },
-    {
-      "category": "General",
-      "name": "prgapply",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' apply"
-    },
-    {
-      "category": "General",
-      "name": "prginit",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' init"
-    },
-    {
-      "category": "General",
-      "name": "prgfmt",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' fmt"
-    },
-    {
-      "category": "General",
-      "name": "prglint",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' lint"
-    },
-    {
-      "category": "General",
-      "name": "prgserve",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' serve"
-    },
-    {
-      "category": "General",
-      "name": "prgshell",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' shell"
-    },
-    {
-      "category": "General",
-      "name": "prgenv",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' env"
-    },
-    {
-      "category": "General",
-      "name": "prgpath",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' path"
-    },
-    {
-      "category": "General",
-      "name": "prgcache",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' cache"
-    },
-    {
-      "category": "General",
-      "name": "pduhelp",
-      "cmd": "du -sh --help"
-    },
-    {
-      "category": "General",
-      "name": "pduversion",
-      "cmd": "du -sh --version"
-    },
-    {
-      "category": "General",
-      "name": "pdulist",
-      "cmd": "du -sh list"
-    },
-    {
-      "category": "General",
-      "name": "pduinfo",
-      "cmd": "du -sh info"
-    },
-    {
-      "category": "General",
-      "name": "pdusearch",
-      "cmd": "du -sh search"
-    },
-    {
-      "category": "General",
-      "name": "pdushow",
-      "cmd": "du -sh show"
-    },
-    {
-      "category": "General",
-      "name": "pdustatus",
-      "cmd": "du -sh status"
-    },
-    {
-      "category": "General",
-      "name": "pduclean",
-      "cmd": "du -sh clean"
-    },
-    {
-      "category": "General",
-      "name": "pduupdate",
-      "cmd": "du -sh update"
-    },
-    {
-      "category": "General",
-      "name": "pduupgrade",
-      "cmd": "du -sh upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pdudry",
-      "cmd": "du -sh --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pduverbose",
-      "cmd": "du -sh --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pdujson",
-      "cmd": "du -sh --json"
-    },
-    {
-      "category": "General",
-      "name": "pduquiet",
-      "cmd": "du -sh --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pduforce",
-      "cmd": "du -sh --force"
-    },
-    {
-      "category": "General",
-      "name": "pduall",
-      "cmd": "du -sh --all"
-    },
-    {
-      "category": "General",
-      "name": "pdulong",
-      "cmd": "du -sh --long"
-    },
-    {
-      "category": "General",
-      "name": "pdushort",
-      "cmd": "du -sh --short"
-    },
-    {
-      "category": "General",
-      "name": "pdudebug",
-      "cmd": "du -sh --debug"
-    },
-    {
-      "category": "General",
-      "name": "pdutrace",
-      "cmd": "du -sh --trace"
-    },
-    {
-      "category": "General",
-      "name": "pduwatch",
-      "cmd": "du -sh watch"
-    },
-    {
-      "category": "General",
-      "name": "pdudoctor",
-      "cmd": "du -sh doctor"
-    },
-    {
-      "category": "General",
-      "name": "pducheck",
-      "cmd": "du -sh check"
-    },
-    {
-      "category": "General",
-      "name": "pdubuild",
-      "cmd": "du -sh build"
-    },
-    {
-      "category": "General",
-      "name": "pdutest",
-      "cmd": "du -sh test"
-    },
-    {
-      "category": "General",
-      "name": "pdurun",
-      "cmd": "du -sh run"
-    },
-    {
-      "category": "General",
-      "name": "pduedit",
-      "cmd": "du -sh edit"
-    },
-    {
-      "category": "General",
-      "name": "pdulogs",
-      "cmd": "du -sh logs"
-    },
-    {
-      "category": "General",
-      "name": "pdutop",
-      "cmd": "du -sh top"
-    },
-    {
-      "category": "General",
-      "name": "pdutree",
-      "cmd": "du -sh tree"
-    },
-    {
-      "category": "General",
-      "name": "pdudiff",
-      "cmd": "du -sh diff"
-    },
-    {
-      "category": "General",
-      "name": "pduapply",
-      "cmd": "du -sh apply"
-    },
-    {
-      "category": "General",
-      "name": "pduinit",
-      "cmd": "du -sh init"
-    },
-    {
-      "category": "General",
-      "name": "pdufmt",
-      "cmd": "du -sh fmt"
-    },
-    {
-      "category": "General",
-      "name": "pdulint",
-      "cmd": "du -sh lint"
-    },
-    {
-      "category": "General",
-      "name": "pduserve",
-      "cmd": "du -sh serve"
-    },
-    {
-      "category": "General",
-      "name": "pdushell",
-      "cmd": "du -sh shell"
-    },
-    {
-      "category": "General",
-      "name": "pduenv",
-      "cmd": "du -sh env"
-    },
-    {
-      "category": "General",
-      "name": "pdupath",
-      "cmd": "du -sh path"
-    },
-    {
-      "category": "General",
-      "name": "pducache",
-      "cmd": "du -sh cache"
-    },
-    {
-      "category": "General",
-      "name": "pdockerhelp",
-      "cmd": "docker --help"
-    },
-    {
-      "category": "General",
-      "name": "pdockerversion",
-      "cmd": "docker --version"
-    },
-    {
-      "category": "General",
-      "name": "pdockerlist",
-      "cmd": "docker list"
-    },
-    {
-      "category": "General",
-      "name": "pdockerinfo",
-      "cmd": "docker info"
-    },
-    {
-      "category": "General",
-      "name": "pdockersearch",
-      "cmd": "docker search"
-    },
-    {
-      "category": "General",
-      "name": "pdockershow",
-      "cmd": "docker show"
-    },
-    {
-      "category": "General",
-      "name": "pdockerstatus",
-      "cmd": "docker status"
-    },
-    {
-      "category": "General",
-      "name": "pdockerclean",
-      "cmd": "docker clean"
-    },
-    {
-      "category": "General",
-      "name": "pdockerupdate",
-      "cmd": "docker update"
-    },
-    {
-      "category": "General",
-      "name": "pdockerupgrade",
-      "cmd": "docker upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pdockerdry",
-      "cmd": "docker --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pdockerverbose",
-      "cmd": "docker --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pdockerjson",
-      "cmd": "docker --json"
-    },
-    {
-      "category": "General",
-      "name": "pdockerquiet",
-      "cmd": "docker --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pdockerforce",
-      "cmd": "docker --force"
-    },
-    {
-      "category": "General",
-      "name": "pdockerall",
-      "cmd": "docker --all"
-    },
-    {
-      "category": "General",
-      "name": "pdockerlong",
-      "cmd": "docker --long"
-    },
-    {
-      "category": "General",
-      "name": "pdockershort",
-      "cmd": "docker --short"
-    },
-    {
-      "category": "General",
-      "name": "pdockerdebug",
-      "cmd": "docker --debug"
-    },
-    {
-      "category": "General",
-      "name": "pdockertrace",
-      "cmd": "docker --trace"
-    },
-    {
-      "category": "General",
-      "name": "pdockerwatch",
-      "cmd": "docker watch"
-    },
-    {
-      "category": "General",
-      "name": "pdockerdoctor",
-      "cmd": "docker doctor"
-    },
-    {
-      "category": "General",
-      "name": "pdockercheck",
-      "cmd": "docker check"
-    },
-    {
-      "category": "General",
-      "name": "pdockerbuild",
-      "cmd": "docker build"
-    },
-    {
-      "category": "General",
-      "name": "pdockertest",
-      "cmd": "docker test"
-    },
-    {
-      "category": "General",
-      "name": "pdockerrun",
-      "cmd": "docker run"
-    },
-    {
-      "category": "General",
-      "name": "pdockeredit",
-      "cmd": "docker edit"
-    },
-    {
-      "category": "General",
-      "name": "pdockerlogs",
-      "cmd": "docker logs"
-    },
-    {
-      "category": "General",
-      "name": "pdockertop",
-      "cmd": "docker top"
-    },
-    {
-      "category": "General",
-      "name": "pdockertree",
-      "cmd": "docker tree"
-    },
-    {
-      "category": "General",
-      "name": "pdockerdiff",
-      "cmd": "docker diff"
-    },
-    {
-      "category": "General",
-      "name": "pdockerapply",
-      "cmd": "docker apply"
-    },
-    {
-      "category": "General",
-      "name": "pdockerinit",
-      "cmd": "docker init"
-    },
-    {
-      "category": "General",
-      "name": "pdockerfmt",
-      "cmd": "docker fmt"
-    },
-    {
-      "category": "General",
-      "name": "pdockerlint",
-      "cmd": "docker lint"
-    },
-    {
-      "category": "General",
-      "name": "pdockerserve",
-      "cmd": "docker serve"
-    },
-    {
-      "category": "General",
-      "name": "pdockershell",
-      "cmd": "docker shell"
-    },
-    {
-      "category": "General",
-      "name": "pdockerenv",
-      "cmd": "docker env"
-    },
-    {
-      "category": "General",
-      "name": "pdockerpath",
-      "cmd": "docker path"
-    },
-    {
-      "category": "General",
-      "name": "pdockercache",
-      "cmd": "docker cache"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlhelp",
-      "cmd": "kubectl --help"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlversion",
-      "cmd": "kubectl --version"
-    },
-    {
-      "category": "General",
-      "name": "pkubectllist",
-      "cmd": "kubectl list"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlinfo",
-      "cmd": "kubectl info"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlsearch",
-      "cmd": "kubectl search"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlshow",
-      "cmd": "kubectl show"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlstatus",
-      "cmd": "kubectl status"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlclean",
-      "cmd": "kubectl clean"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlupdate",
-      "cmd": "kubectl update"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlupgrade",
-      "cmd": "kubectl upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pkubectldry",
-      "cmd": "kubectl --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlverbose",
-      "cmd": "kubectl --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pkubectljson",
-      "cmd": "kubectl --json"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlquiet",
-      "cmd": "kubectl --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlforce",
-      "cmd": "kubectl --force"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlall",
-      "cmd": "kubectl --all"
-    },
-    {
-      "category": "General",
-      "name": "pkubectllong",
-      "cmd": "kubectl --long"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlshort",
-      "cmd": "kubectl --short"
-    },
-    {
-      "category": "General",
-      "name": "pkubectldebug",
-      "cmd": "kubectl --debug"
-    },
-    {
-      "category": "General",
-      "name": "pkubectltrace",
-      "cmd": "kubectl --trace"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlwatch",
-      "cmd": "kubectl watch"
-    },
-    {
-      "category": "General",
-      "name": "pkubectldoctor",
-      "cmd": "kubectl doctor"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlcheck",
-      "cmd": "kubectl check"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlbuild",
-      "cmd": "kubectl build"
-    },
-    {
-      "category": "General",
-      "name": "pkubectltest",
-      "cmd": "kubectl test"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlrun",
-      "cmd": "kubectl run"
-    },
-    {
-      "category": "General",
-      "name": "pkubectledit",
-      "cmd": "kubectl edit"
-    },
-    {
-      "category": "General",
-      "name": "pkubectllogs",
-      "cmd": "kubectl logs"
-    },
-    {
-      "category": "General",
-      "name": "pkubectltop",
-      "cmd": "kubectl top"
-    },
-    {
-      "category": "General",
-      "name": "pkubectltree",
-      "cmd": "kubectl tree"
-    },
-    {
-      "category": "General",
-      "name": "pkubectldiff",
-      "cmd": "kubectl diff"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlapply",
-      "cmd": "kubectl apply"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlinit",
-      "cmd": "kubectl init"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlfmt",
-      "cmd": "kubectl fmt"
-    },
-    {
-      "category": "General",
-      "name": "pkubectllint",
-      "cmd": "kubectl lint"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlserve",
-      "cmd": "kubectl serve"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlshell",
-      "cmd": "kubectl shell"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlenv",
-      "cmd": "kubectl env"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlpath",
-      "cmd": "kubectl path"
-    },
-    {
-      "category": "General",
-      "name": "pkubectlcache",
-      "cmd": "kubectl cache"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlhelp",
-      "cmd": "systemctl --help"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlversion",
-      "cmd": "systemctl --version"
-    },
-    {
-      "category": "General",
-      "name": "psystemctllist",
-      "cmd": "systemctl list"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlinfo",
-      "cmd": "systemctl info"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlsearch",
-      "cmd": "systemctl search"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlshow",
-      "cmd": "systemctl show"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlstatus",
-      "cmd": "systemctl status"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlclean",
-      "cmd": "systemctl clean"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlupdate",
-      "cmd": "systemctl update"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlupgrade",
-      "cmd": "systemctl upgrade"
-    },
-    {
-      "category": "General",
-      "name": "psystemctldry",
-      "cmd": "systemctl --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlverbose",
-      "cmd": "systemctl --verbose"
-    },
-    {
-      "category": "General",
-      "name": "psystemctljson",
-      "cmd": "systemctl --json"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlquiet",
-      "cmd": "systemctl --quiet"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlforce",
-      "cmd": "systemctl --force"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlall",
-      "cmd": "systemctl --all"
-    },
-    {
-      "category": "General",
-      "name": "psystemctllong",
-      "cmd": "systemctl --long"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlshort",
-      "cmd": "systemctl --short"
-    },
-    {
-      "category": "General",
-      "name": "psystemctldebug",
-      "cmd": "systemctl --debug"
-    },
-    {
-      "category": "General",
-      "name": "psystemctltrace",
-      "cmd": "systemctl --trace"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlwatch",
-      "cmd": "systemctl watch"
-    },
-    {
-      "category": "General",
-      "name": "psystemctldoctor",
-      "cmd": "systemctl doctor"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlcheck",
-      "cmd": "systemctl check"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlbuild",
-      "cmd": "systemctl build"
-    },
-    {
-      "category": "General",
-      "name": "psystemctltest",
-      "cmd": "systemctl test"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlrun",
-      "cmd": "systemctl run"
-    },
-    {
-      "category": "General",
-      "name": "psystemctledit",
-      "cmd": "systemctl edit"
-    },
-    {
-      "category": "General",
-      "name": "psystemctllogs",
-      "cmd": "systemctl logs"
-    },
-    {
-      "category": "General",
-      "name": "psystemctltop",
-      "cmd": "systemctl top"
-    },
-    {
-      "category": "General",
-      "name": "psystemctltree",
-      "cmd": "systemctl tree"
-    },
-    {
-      "category": "General",
-      "name": "psystemctldiff",
-      "cmd": "systemctl diff"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlapply",
-      "cmd": "systemctl apply"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlinit",
-      "cmd": "systemctl init"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlfmt",
-      "cmd": "systemctl fmt"
-    },
-    {
-      "category": "General",
-      "name": "psystemctllint",
-      "cmd": "systemctl lint"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlserve",
-      "cmd": "systemctl serve"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlshell",
-      "cmd": "systemctl shell"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlenv",
-      "cmd": "systemctl env"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlpath",
-      "cmd": "systemctl path"
-    },
-    {
-      "category": "General",
-      "name": "psystemctlcache",
-      "cmd": "systemctl cache"
-    },
-    {
-      "category": "General",
-      "name": "pjournalhelp",
-      "cmd": "journalctl --help"
-    },
-    {
-      "category": "General",
-      "name": "pjournalversion",
-      "cmd": "journalctl --version"
-    },
-    {
-      "category": "General",
-      "name": "pjournallist",
-      "cmd": "journalctl list"
-    },
-    {
-      "category": "General",
-      "name": "pjournalinfo",
-      "cmd": "journalctl info"
-    },
-    {
-      "category": "General",
-      "name": "pjournalsearch",
-      "cmd": "journalctl search"
-    },
-    {
-      "category": "General",
-      "name": "pjournalshow",
-      "cmd": "journalctl show"
-    },
-    {
-      "category": "General",
-      "name": "pjournalstatus",
-      "cmd": "journalctl status"
-    },
-    {
-      "category": "General",
-      "name": "pjournalclean",
-      "cmd": "journalctl clean"
-    },
-    {
-      "category": "General",
-      "name": "pjournalupdate",
-      "cmd": "journalctl update"
-    },
-    {
-      "category": "General",
-      "name": "pjournalupgrade",
-      "cmd": "journalctl upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pjournaldry",
-      "cmd": "journalctl --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pjournalverbose",
-      "cmd": "journalctl --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pjournaljson",
-      "cmd": "journalctl --json"
-    },
-    {
-      "category": "General",
-      "name": "pjournalquiet",
-      "cmd": "journalctl --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pjournalforce",
-      "cmd": "journalctl --force"
-    },
-    {
-      "category": "General",
-      "name": "pjournalall",
-      "cmd": "journalctl --all"
-    },
-    {
-      "category": "General",
-      "name": "pjournallong",
-      "cmd": "journalctl --long"
-    },
-    {
-      "category": "General",
-      "name": "pjournalshort",
-      "cmd": "journalctl --short"
-    },
-    {
-      "category": "General",
-      "name": "pjournaldebug",
-      "cmd": "journalctl --debug"
-    },
-    {
-      "category": "General",
-      "name": "pjournaltrace",
-      "cmd": "journalctl --trace"
-    },
-    {
-      "category": "General",
-      "name": "pjournalwatch",
-      "cmd": "journalctl watch"
-    },
-    {
-      "category": "General",
-      "name": "pjournaldoctor",
-      "cmd": "journalctl doctor"
-    },
-    {
-      "category": "General",
-      "name": "pjournalcheck",
-      "cmd": "journalctl check"
-    },
-    {
-      "category": "General",
-      "name": "pjournalbuild",
-      "cmd": "journalctl build"
-    },
-    {
-      "category": "General",
-      "name": "pjournaltest",
-      "cmd": "journalctl test"
-    },
-    {
-      "category": "General",
-      "name": "pjournalrun",
-      "cmd": "journalctl run"
-    },
-    {
-      "category": "General",
-      "name": "pjournaledit",
-      "cmd": "journalctl edit"
-    },
-    {
-      "category": "General",
-      "name": "pjournallogs",
-      "cmd": "journalctl logs"
-    },
-    {
-      "category": "General",
-      "name": "pjournaltop",
-      "cmd": "journalctl top"
-    },
-    {
-      "category": "General",
-      "name": "pjournaltree",
-      "cmd": "journalctl tree"
-    },
-    {
-      "category": "General",
-      "name": "pjournaldiff",
-      "cmd": "journalctl diff"
-    },
-    {
-      "category": "General",
-      "name": "pjournalapply",
-      "cmd": "journalctl apply"
-    },
-    {
-      "category": "General",
-      "name": "pjournalinit",
-      "cmd": "journalctl init"
-    },
-    {
-      "category": "General",
-      "name": "pjournalfmt",
-      "cmd": "journalctl fmt"
-    },
-    {
-      "category": "General",
-      "name": "pjournallint",
-      "cmd": "journalctl lint"
-    },
-    {
-      "category": "General",
-      "name": "pjournalserve",
-      "cmd": "journalctl serve"
-    },
-    {
-      "category": "General",
-      "name": "pjournalshell",
-      "cmd": "journalctl shell"
-    },
-    {
-      "category": "General",
-      "name": "pjournalenv",
-      "cmd": "journalctl env"
-    },
-    {
-      "category": "General",
-      "name": "pjournalpath",
-      "cmd": "journalctl path"
-    },
-    {
-      "category": "General",
-      "name": "pjournalcache",
-      "cmd": "journalctl cache"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanhelp",
-      "cmd": "pacman --help"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanversion",
-      "cmd": "pacman --version"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanlist",
-      "cmd": "pacman list"
-    },
-    {
-      "category": "General",
-      "name": "ppacmaninfo",
-      "cmd": "pacman info"
-    },
-    {
-      "category": "General",
-      "name": "ppacmansearch",
-      "cmd": "pacman search"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanshow",
-      "cmd": "pacman show"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanstatus",
-      "cmd": "pacman status"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanclean",
-      "cmd": "pacman clean"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanupdate",
-      "cmd": "pacman update"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanupgrade",
-      "cmd": "pacman upgrade"
-    },
-    {
-      "category": "General",
-      "name": "ppacmandry",
-      "cmd": "pacman --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanverbose",
-      "cmd": "pacman --verbose"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanjson",
-      "cmd": "pacman --json"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanquiet",
-      "cmd": "pacman --quiet"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanforce",
-      "cmd": "pacman --force"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanall",
-      "cmd": "pacman --all"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanlong",
-      "cmd": "pacman --long"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanshort",
-      "cmd": "pacman --short"
-    },
-    {
-      "category": "General",
-      "name": "ppacmandebug",
-      "cmd": "pacman --debug"
-    },
-    {
-      "category": "General",
-      "name": "ppacmantrace",
-      "cmd": "pacman --trace"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanwatch",
-      "cmd": "pacman watch"
-    },
-    {
-      "category": "General",
-      "name": "ppacmandoctor",
-      "cmd": "pacman doctor"
-    },
-    {
-      "category": "General",
-      "name": "ppacmancheck",
-      "cmd": "pacman check"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanbuild",
-      "cmd": "pacman build"
-    },
-    {
-      "category": "General",
-      "name": "ppacmantest",
-      "cmd": "pacman test"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanrun",
-      "cmd": "pacman run"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanedit",
-      "cmd": "pacman edit"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanlogs",
-      "cmd": "pacman logs"
-    },
-    {
-      "category": "General",
-      "name": "ppacmantop",
-      "cmd": "pacman top"
-    },
-    {
-      "category": "General",
-      "name": "ppacmantree",
-      "cmd": "pacman tree"
-    },
-    {
-      "category": "General",
-      "name": "ppacmandiff",
-      "cmd": "pacman diff"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanapply",
-      "cmd": "pacman apply"
-    },
-    {
-      "category": "General",
-      "name": "ppacmaninit",
-      "cmd": "pacman init"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanfmt",
-      "cmd": "pacman fmt"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanlint",
-      "cmd": "pacman lint"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanserve",
-      "cmd": "pacman serve"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanshell",
-      "cmd": "pacman shell"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanenv",
-      "cmd": "pacman env"
-    },
-    {
-      "category": "General",
-      "name": "ppacmanpath",
-      "cmd": "pacman path"
-    },
-    {
-      "category": "General",
-      "name": "ppacmancache",
-      "cmd": "pacman cache"
-    },
-    {
-      "category": "General",
-      "name": "papthelp",
-      "cmd": "apt-cache --help"
-    },
-    {
-      "category": "General",
-      "name": "paptversion",
-      "cmd": "apt-cache --version"
-    },
-    {
-      "category": "General",
-      "name": "paptlist",
-      "cmd": "apt-cache list"
-    },
-    {
-      "category": "General",
-      "name": "paptinfo",
-      "cmd": "apt-cache info"
-    },
-    {
-      "category": "General",
-      "name": "paptsearch",
-      "cmd": "apt-cache search"
-    },
-    {
-      "category": "General",
-      "name": "paptshow",
-      "cmd": "apt-cache show"
-    },
-    {
-      "category": "General",
-      "name": "paptstatus",
-      "cmd": "apt-cache status"
-    },
-    {
-      "category": "General",
-      "name": "paptclean",
-      "cmd": "apt-cache clean"
-    },
-    {
-      "category": "General",
-      "name": "paptupdate",
-      "cmd": "apt-cache update"
-    },
-    {
-      "category": "General",
-      "name": "paptupgrade",
-      "cmd": "apt-cache upgrade"
-    },
-    {
-      "category": "General",
-      "name": "paptdry",
-      "cmd": "apt-cache --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "paptverbose",
-      "cmd": "apt-cache --verbose"
-    },
-    {
-      "category": "General",
-      "name": "paptjson",
-      "cmd": "apt-cache --json"
-    },
-    {
-      "category": "General",
-      "name": "paptquiet",
-      "cmd": "apt-cache --quiet"
-    },
-    {
-      "category": "General",
-      "name": "paptforce",
-      "cmd": "apt-cache --force"
-    },
-    {
-      "category": "General",
-      "name": "paptall",
-      "cmd": "apt-cache --all"
-    },
-    {
-      "category": "General",
-      "name": "paptlong",
-      "cmd": "apt-cache --long"
-    },
-    {
-      "category": "General",
-      "name": "paptshort",
-      "cmd": "apt-cache --short"
-    },
-    {
-      "category": "General",
-      "name": "paptdebug",
-      "cmd": "apt-cache --debug"
-    },
-    {
-      "category": "General",
-      "name": "papttrace",
-      "cmd": "apt-cache --trace"
-    },
-    {
-      "category": "General",
-      "name": "paptwatch",
-      "cmd": "apt-cache watch"
-    },
-    {
-      "category": "General",
-      "name": "paptdoctor",
-      "cmd": "apt-cache doctor"
-    },
-    {
-      "category": "General",
-      "name": "paptcheck",
-      "cmd": "apt-cache check"
-    },
-    {
-      "category": "General",
-      "name": "paptbuild",
-      "cmd": "apt-cache build"
-    },
-    {
-      "category": "General",
-      "name": "papttest",
-      "cmd": "apt-cache test"
-    },
-    {
-      "category": "General",
-      "name": "paptrun",
-      "cmd": "apt-cache run"
-    },
-    {
-      "category": "General",
-      "name": "paptedit",
-      "cmd": "apt-cache edit"
-    },
-    {
-      "category": "General",
-      "name": "paptlogs",
-      "cmd": "apt-cache logs"
-    },
-    {
-      "category": "General",
-      "name": "papttop",
-      "cmd": "apt-cache top"
-    },
-    {
-      "category": "General",
-      "name": "papttree",
-      "cmd": "apt-cache tree"
-    },
-    {
-      "category": "General",
-      "name": "paptdiff",
-      "cmd": "apt-cache diff"
-    },
-    {
-      "category": "General",
-      "name": "paptapply",
-      "cmd": "apt-cache apply"
-    },
-    {
-      "category": "General",
-      "name": "paptinit",
-      "cmd": "apt-cache init"
-    },
-    {
-      "category": "General",
-      "name": "paptfmt",
-      "cmd": "apt-cache fmt"
-    },
-    {
-      "category": "General",
-      "name": "paptlint",
-      "cmd": "apt-cache lint"
-    },
-    {
-      "category": "General",
-      "name": "paptserve",
-      "cmd": "apt-cache serve"
-    },
-    {
-      "category": "General",
-      "name": "paptshell",
-      "cmd": "apt-cache shell"
-    },
-    {
-      "category": "General",
-      "name": "paptenv",
-      "cmd": "apt-cache env"
-    },
-    {
-      "category": "General",
-      "name": "paptpath",
-      "cmd": "apt-cache path"
-    },
-    {
-      "category": "General",
-      "name": "paptcache",
-      "cmd": "apt-cache cache"
-    },
-    {
-      "category": "General",
-      "name": "pbrewhelp",
-      "cmd": "brew --help"
-    },
-    {
-      "category": "General",
-      "name": "pbrewversion",
-      "cmd": "brew --version"
-    },
-    {
-      "category": "General",
-      "name": "pbrewlist",
-      "cmd": "brew list"
-    },
-    {
-      "category": "General",
-      "name": "pbrewinfo",
-      "cmd": "brew info"
-    },
-    {
-      "category": "General",
-      "name": "pbrewsearch",
-      "cmd": "brew search"
-    },
-    {
-      "category": "General",
-      "name": "pbrewshow",
-      "cmd": "brew show"
-    },
-    {
-      "category": "General",
-      "name": "pbrewstatus",
-      "cmd": "brew status"
-    },
-    {
-      "category": "General",
-      "name": "pbrewclean",
-      "cmd": "brew clean"
-    },
-    {
-      "category": "General",
-      "name": "pbrewupdate",
-      "cmd": "brew update"
-    },
-    {
-      "category": "General",
-      "name": "pbrewupgrade",
-      "cmd": "brew upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pbrewdry",
-      "cmd": "brew --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pbrewverbose",
-      "cmd": "brew --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pbrewjson",
-      "cmd": "brew --json"
-    },
-    {
-      "category": "General",
-      "name": "pbrewquiet",
-      "cmd": "brew --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pbrewforce",
-      "cmd": "brew --force"
-    },
-    {
-      "category": "General",
-      "name": "pbrewall",
-      "cmd": "brew --all"
-    },
-    {
-      "category": "General",
-      "name": "pbrewlong",
-      "cmd": "brew --long"
-    },
-    {
-      "category": "General",
-      "name": "pbrewshort",
-      "cmd": "brew --short"
-    },
-    {
-      "category": "General",
-      "name": "pbrewdebug",
-      "cmd": "brew --debug"
-    },
-    {
-      "category": "General",
-      "name": "pbrewtrace",
-      "cmd": "brew --trace"
-    },
-    {
-      "category": "General",
-      "name": "pbrewwatch",
-      "cmd": "brew watch"
-    },
-    {
-      "category": "General",
-      "name": "pbrewdoctor",
-      "cmd": "brew doctor"
-    },
-    {
-      "category": "General",
-      "name": "pbrewcheck",
-      "cmd": "brew check"
-    },
-    {
-      "category": "General",
-      "name": "pbrewbuild",
-      "cmd": "brew build"
-    },
-    {
-      "category": "General",
-      "name": "pbrewtest",
-      "cmd": "brew test"
-    },
-    {
-      "category": "General",
-      "name": "pbrewrun",
-      "cmd": "brew run"
-    },
-    {
-      "category": "General",
-      "name": "pbrewedit",
-      "cmd": "brew edit"
-    },
-    {
-      "category": "General",
-      "name": "pbrewlogs",
-      "cmd": "brew logs"
-    },
-    {
-      "category": "General",
-      "name": "pbrewtop",
-      "cmd": "brew top"
-    },
-    {
-      "category": "General",
-      "name": "pbrewtree",
-      "cmd": "brew tree"
-    },
-    {
-      "category": "General",
-      "name": "pbrewdiff",
-      "cmd": "brew diff"
-    },
-    {
-      "category": "General",
-      "name": "pbrewapply",
-      "cmd": "brew apply"
-    },
-    {
-      "category": "General",
-      "name": "pbrewinit",
-      "cmd": "brew init"
-    },
-    {
-      "category": "General",
-      "name": "pbrewfmt",
-      "cmd": "brew fmt"
-    },
-    {
-      "category": "General",
-      "name": "pbrewlint",
-      "cmd": "brew lint"
-    },
-    {
-      "category": "General",
-      "name": "pbrewserve",
-      "cmd": "brew serve"
-    },
-    {
-      "category": "General",
-      "name": "pbrewshell",
-      "cmd": "brew shell"
-    },
-    {
-      "category": "General",
-      "name": "pbrewenv",
-      "cmd": "brew env"
-    },
-    {
-      "category": "General",
-      "name": "pbrewpath",
-      "cmd": "brew path"
-    },
-    {
-      "category": "General",
-      "name": "pbrewcache",
-      "cmd": "brew cache"
-    },
-    {
-      "category": "General",
-      "name": "pnpmhelp",
-      "cmd": "npm --help"
-    },
-    {
-      "category": "General",
-      "name": "pnpmversion",
-      "cmd": "npm --version"
-    },
-    {
-      "category": "General",
-      "name": "pnpmlist",
-      "cmd": "npm list"
-    },
-    {
-      "category": "General",
-      "name": "pnpminfo",
-      "cmd": "npm info"
-    },
-    {
-      "category": "General",
-      "name": "pnpmsearch",
-      "cmd": "npm search"
-    },
-    {
-      "category": "General",
-      "name": "pnpmshow",
-      "cmd": "npm show"
-    },
-    {
-      "category": "General",
-      "name": "pnpmstatus",
-      "cmd": "npm status"
-    },
-    {
-      "category": "General",
-      "name": "pnpmclean",
-      "cmd": "npm clean"
-    },
-    {
-      "category": "General",
-      "name": "pnpmupdate",
-      "cmd": "npm update"
-    },
-    {
-      "category": "General",
-      "name": "pnpmupgrade",
-      "cmd": "npm upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pnpmdry",
-      "cmd": "npm --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pnpmverbose",
-      "cmd": "npm --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pnpmjson",
-      "cmd": "npm --json"
-    },
-    {
-      "category": "General",
-      "name": "pnpmquiet",
-      "cmd": "npm --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pnpmforce",
-      "cmd": "npm --force"
-    },
-    {
-      "category": "General",
-      "name": "pnpmall",
-      "cmd": "npm --all"
-    },
-    {
-      "category": "General",
-      "name": "pnpmlong",
-      "cmd": "npm --long"
-    },
-    {
-      "category": "General",
-      "name": "pnpmshort",
-      "cmd": "npm --short"
-    },
-    {
-      "category": "General",
-      "name": "pnpmdebug",
-      "cmd": "npm --debug"
-    },
-    {
-      "category": "General",
-      "name": "pnpmtrace",
-      "cmd": "npm --trace"
-    },
-    {
-      "category": "General",
-      "name": "pnpmwatch",
-      "cmd": "npm watch"
-    },
-    {
-      "category": "General",
-      "name": "pnpmdoctor",
-      "cmd": "npm doctor"
-    },
-    {
-      "category": "General",
-      "name": "pnpmcheck",
-      "cmd": "npm check"
-    },
-    {
-      "category": "General",
-      "name": "pnpmbuild",
-      "cmd": "npm build"
-    },
-    {
-      "category": "General",
-      "name": "pnpmtest",
-      "cmd": "npm test"
-    },
-    {
-      "category": "General",
-      "name": "pnpmrun",
-      "cmd": "npm run"
-    },
-    {
-      "category": "General",
-      "name": "pnpmedit",
-      "cmd": "npm edit"
-    },
-    {
-      "category": "General",
-      "name": "pnpmlogs",
-      "cmd": "npm logs"
-    },
-    {
-      "category": "General",
-      "name": "pnpmtop",
-      "cmd": "npm top"
-    },
-    {
-      "category": "General",
-      "name": "pnpmtree",
-      "cmd": "npm tree"
-    },
-    {
-      "category": "General",
-      "name": "pnpmdiff",
-      "cmd": "npm diff"
-    },
-    {
-      "category": "General",
-      "name": "pnpmapply",
-      "cmd": "npm apply"
-    },
-    {
-      "category": "General",
-      "name": "pnpminit",
-      "cmd": "npm init"
-    },
-    {
-      "category": "General",
-      "name": "pnpmfmt",
-      "cmd": "npm fmt"
-    },
-    {
-      "category": "General",
-      "name": "pnpmlint",
-      "cmd": "npm lint"
-    },
-    {
-      "category": "General",
-      "name": "pnpmserve",
-      "cmd": "npm serve"
-    },
-    {
-      "category": "General",
-      "name": "pnpmshell",
-      "cmd": "npm shell"
-    },
-    {
-      "category": "General",
-      "name": "pnpmenv",
-      "cmd": "npm env"
-    },
-    {
-      "category": "General",
-      "name": "pnpmpath",
-      "cmd": "npm path"
-    },
-    {
-      "category": "General",
-      "name": "pnpmcache",
-      "cmd": "npm cache"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmhelp",
-      "cmd": "pnpm --help"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmversion",
-      "cmd": "pnpm --version"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmlist",
-      "cmd": "pnpm list"
-    },
-    {
-      "category": "General",
-      "name": "ppnpminfo",
-      "cmd": "pnpm info"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmsearch",
-      "cmd": "pnpm search"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmshow",
-      "cmd": "pnpm show"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmstatus",
-      "cmd": "pnpm status"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmclean",
-      "cmd": "pnpm clean"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmupdate",
-      "cmd": "pnpm update"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmupgrade",
-      "cmd": "pnpm upgrade"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmdry",
-      "cmd": "pnpm --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmverbose",
-      "cmd": "pnpm --verbose"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmjson",
-      "cmd": "pnpm --json"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmquiet",
-      "cmd": "pnpm --quiet"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmforce",
-      "cmd": "pnpm --force"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmall",
-      "cmd": "pnpm --all"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmlong",
-      "cmd": "pnpm --long"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmshort",
-      "cmd": "pnpm --short"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmdebug",
-      "cmd": "pnpm --debug"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmtrace",
-      "cmd": "pnpm --trace"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmwatch",
-      "cmd": "pnpm watch"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmdoctor",
-      "cmd": "pnpm doctor"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmcheck",
-      "cmd": "pnpm check"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmbuild",
-      "cmd": "pnpm build"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmtest",
-      "cmd": "pnpm test"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmrun",
-      "cmd": "pnpm run"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmedit",
-      "cmd": "pnpm edit"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmlogs",
-      "cmd": "pnpm logs"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmtop",
-      "cmd": "pnpm top"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmtree",
-      "cmd": "pnpm tree"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmdiff",
-      "cmd": "pnpm diff"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmapply",
-      "cmd": "pnpm apply"
-    },
-    {
-      "category": "General",
-      "name": "ppnpminit",
-      "cmd": "pnpm init"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmfmt",
-      "cmd": "pnpm fmt"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmlint",
-      "cmd": "pnpm lint"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmserve",
-      "cmd": "pnpm serve"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmshell",
-      "cmd": "pnpm shell"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmenv",
-      "cmd": "pnpm env"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmpath",
-      "cmd": "pnpm path"
-    },
-    {
-      "category": "General",
-      "name": "ppnpmcache",
-      "cmd": "pnpm cache"
-    },
-    {
-      "category": "General",
-      "name": "pyarnhelp",
-      "cmd": "yarn --help"
-    },
-    {
-      "category": "General",
-      "name": "pyarnversion",
-      "cmd": "yarn --version"
-    },
-    {
-      "category": "General",
-      "name": "pyarnlist",
-      "cmd": "yarn list"
-    },
-    {
-      "category": "General",
-      "name": "pyarninfo",
-      "cmd": "yarn info"
-    },
-    {
-      "category": "General",
-      "name": "pyarnsearch",
-      "cmd": "yarn search"
-    },
-    {
-      "category": "General",
-      "name": "pyarnshow",
-      "cmd": "yarn show"
-    },
-    {
-      "category": "General",
-      "name": "pyarnstatus",
-      "cmd": "yarn status"
-    },
-    {
-      "category": "General",
-      "name": "pyarnclean",
-      "cmd": "yarn clean"
-    },
-    {
-      "category": "General",
-      "name": "pyarnupdate",
-      "cmd": "yarn update"
-    },
-    {
-      "category": "General",
-      "name": "pyarnupgrade",
-      "cmd": "yarn upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pyarndry",
-      "cmd": "yarn --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pyarnverbose",
-      "cmd": "yarn --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pyarnjson",
-      "cmd": "yarn --json"
-    },
-    {
-      "category": "General",
-      "name": "pyarnquiet",
-      "cmd": "yarn --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pyarnforce",
-      "cmd": "yarn --force"
-    },
-    {
-      "category": "General",
-      "name": "pyarnall",
-      "cmd": "yarn --all"
-    },
-    {
-      "category": "General",
-      "name": "pyarnlong",
-      "cmd": "yarn --long"
-    },
-    {
-      "category": "General",
-      "name": "pyarnshort",
-      "cmd": "yarn --short"
-    },
-    {
-      "category": "General",
-      "name": "pyarndebug",
-      "cmd": "yarn --debug"
-    },
-    {
-      "category": "General",
-      "name": "pyarntrace",
-      "cmd": "yarn --trace"
-    },
-    {
-      "category": "General",
-      "name": "pyarnwatch",
-      "cmd": "yarn watch"
-    },
-    {
-      "category": "General",
-      "name": "pyarndoctor",
-      "cmd": "yarn doctor"
-    },
-    {
-      "category": "General",
-      "name": "pyarncheck",
-      "cmd": "yarn check"
-    },
-    {
-      "category": "General",
-      "name": "pyarnbuild",
-      "cmd": "yarn build"
-    },
-    {
-      "category": "General",
-      "name": "pyarntest",
-      "cmd": "yarn test"
-    },
-    {
-      "category": "General",
-      "name": "pyarnrun",
-      "cmd": "yarn run"
-    },
-    {
-      "category": "General",
-      "name": "pyarnedit",
-      "cmd": "yarn edit"
-    },
-    {
-      "category": "General",
-      "name": "pyarnlogs",
-      "cmd": "yarn logs"
-    },
-    {
-      "category": "General",
-      "name": "pyarntop",
-      "cmd": "yarn top"
-    },
-    {
-      "category": "General",
-      "name": "pyarntree",
-      "cmd": "yarn tree"
-    },
-    {
-      "category": "General",
-      "name": "pyarndiff",
-      "cmd": "yarn diff"
-    },
-    {
-      "category": "General",
-      "name": "pyarnapply",
-      "cmd": "yarn apply"
-    },
-    {
-      "category": "General",
-      "name": "pyarninit",
-      "cmd": "yarn init"
-    },
-    {
-      "category": "General",
-      "name": "pyarnfmt",
-      "cmd": "yarn fmt"
-    },
-    {
-      "category": "General",
-      "name": "pyarnlint",
-      "cmd": "yarn lint"
-    },
-    {
-      "category": "General",
-      "name": "pyarnserve",
-      "cmd": "yarn serve"
-    },
-    {
-      "category": "General",
-      "name": "pyarnshell",
-      "cmd": "yarn shell"
-    },
-    {
-      "category": "General",
-      "name": "pyarnenv",
-      "cmd": "yarn env"
-    },
-    {
-      "category": "General",
-      "name": "pyarnpath",
-      "cmd": "yarn path"
-    },
-    {
-      "category": "General",
-      "name": "pyarncache",
-      "cmd": "yarn cache"
-    },
-    {
-      "category": "General",
-      "name": "pcargohelp",
-      "cmd": "cargo --help"
-    },
-    {
-      "category": "General",
-      "name": "pcargoversion",
-      "cmd": "cargo --version"
-    },
-    {
-      "category": "General",
-      "name": "pcargolist",
-      "cmd": "cargo list"
-    },
-    {
-      "category": "General",
-      "name": "pcargoinfo",
-      "cmd": "cargo info"
-    },
-    {
-      "category": "General",
-      "name": "pcargosearch",
-      "cmd": "cargo search"
-    },
-    {
-      "category": "General",
-      "name": "pcargoshow",
-      "cmd": "cargo show"
-    },
-    {
-      "category": "General",
-      "name": "pcargostatus",
-      "cmd": "cargo status"
-    },
-    {
-      "category": "General",
-      "name": "pcargoclean",
-      "cmd": "cargo clean"
-    },
-    {
-      "category": "General",
-      "name": "pcargoupdate",
-      "cmd": "cargo update"
-    },
-    {
-      "category": "General",
-      "name": "pcargoupgrade",
-      "cmd": "cargo upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pcargodry",
-      "cmd": "cargo --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pcargoverbose",
-      "cmd": "cargo --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pcargojson",
-      "cmd": "cargo --json"
-    },
-    {
-      "category": "General",
-      "name": "pcargoquiet",
-      "cmd": "cargo --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pcargoforce",
-      "cmd": "cargo --force"
-    },
-    {
-      "category": "General",
-      "name": "pcargoall",
-      "cmd": "cargo --all"
-    },
-    {
-      "category": "General",
-      "name": "pcargolong",
-      "cmd": "cargo --long"
-    },
-    {
-      "category": "General",
-      "name": "pcargoshort",
-      "cmd": "cargo --short"
-    },
-    {
-      "category": "General",
-      "name": "pcargodebug",
-      "cmd": "cargo --debug"
-    },
-    {
-      "category": "General",
-      "name": "pcargotrace",
-      "cmd": "cargo --trace"
-    },
-    {
-      "category": "General",
-      "name": "pcargowatch",
-      "cmd": "cargo watch"
-    },
-    {
-      "category": "General",
-      "name": "pcargodoctor",
-      "cmd": "cargo doctor"
-    },
-    {
-      "category": "General",
-      "name": "pcargocheck",
-      "cmd": "cargo check"
-    },
-    {
-      "category": "General",
-      "name": "pcargobuild",
-      "cmd": "cargo build"
-    },
-    {
-      "category": "General",
-      "name": "pcargotest",
-      "cmd": "cargo test"
-    },
-    {
-      "category": "General",
-      "name": "pcargorun",
-      "cmd": "cargo run"
-    },
-    {
-      "category": "General",
-      "name": "pcargoedit",
-      "cmd": "cargo edit"
-    },
-    {
-      "category": "General",
-      "name": "pcargologs",
-      "cmd": "cargo logs"
-    },
-    {
-      "category": "General",
-      "name": "pcargotop",
-      "cmd": "cargo top"
-    },
-    {
-      "category": "General",
-      "name": "pcargotree",
-      "cmd": "cargo tree"
-    },
-    {
-      "category": "General",
-      "name": "pcargodiff",
-      "cmd": "cargo diff"
-    },
-    {
-      "category": "General",
-      "name": "pcargoapply",
-      "cmd": "cargo apply"
-    },
-    {
-      "category": "General",
-      "name": "pcargoinit",
-      "cmd": "cargo init"
-    },
-    {
-      "category": "General",
-      "name": "pcargofmt",
-      "cmd": "cargo fmt"
-    },
-    {
-      "category": "General",
-      "name": "pcargolint",
-      "cmd": "cargo lint"
-    },
-    {
-      "category": "General",
-      "name": "pcargoserve",
-      "cmd": "cargo serve"
-    },
-    {
-      "category": "General",
-      "name": "pcargoshell",
-      "cmd": "cargo shell"
-    },
-    {
-      "category": "General",
-      "name": "pcargoenv",
-      "cmd": "cargo env"
-    },
-    {
-      "category": "General",
-      "name": "pcargopath",
-      "cmd": "cargo path"
-    },
-    {
-      "category": "General",
-      "name": "pcargocache",
-      "cmd": "cargo cache"
-    },
-    {
-      "category": "General",
-      "name": "pgohelp",
-      "cmd": "go --help"
-    },
-    {
-      "category": "General",
-      "name": "pgoversion",
-      "cmd": "go --version"
-    },
-    {
-      "category": "General",
-      "name": "pgolist",
-      "cmd": "go list"
-    },
-    {
-      "category": "General",
-      "name": "pgoinfo",
-      "cmd": "go info"
-    },
-    {
-      "category": "General",
-      "name": "pgosearch",
-      "cmd": "go search"
-    },
-    {
-      "category": "General",
-      "name": "pgoshow",
-      "cmd": "go show"
-    },
-    {
-      "category": "General",
-      "name": "pgostatus",
-      "cmd": "go status"
-    },
-    {
-      "category": "General",
-      "name": "pgoclean",
-      "cmd": "go clean"
-    },
-    {
-      "category": "General",
-      "name": "pgoupdate",
-      "cmd": "go update"
-    },
-    {
-      "category": "General",
-      "name": "pgoupgrade",
-      "cmd": "go upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pgodry",
-      "cmd": "go --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pgoverbose",
-      "cmd": "go --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pgojson",
-      "cmd": "go --json"
-    },
-    {
-      "category": "General",
-      "name": "pgoquiet",
-      "cmd": "go --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pgoforce",
-      "cmd": "go --force"
-    },
-    {
-      "category": "General",
-      "name": "pgoall",
-      "cmd": "go --all"
-    },
-    {
-      "category": "General",
-      "name": "pgolong",
-      "cmd": "go --long"
-    },
-    {
-      "category": "General",
-      "name": "pgoshort",
-      "cmd": "go --short"
-    },
-    {
-      "category": "General",
-      "name": "pgodebug",
-      "cmd": "go --debug"
-    },
-    {
-      "category": "General",
-      "name": "pgotrace",
-      "cmd": "go --trace"
-    },
-    {
-      "category": "General",
-      "name": "pgowatch",
-      "cmd": "go watch"
-    },
-    {
-      "category": "General",
-      "name": "pgodoctor",
-      "cmd": "go doctor"
-    },
-    {
-      "category": "General",
-      "name": "pgocheck",
-      "cmd": "go check"
-    },
-    {
-      "category": "General",
-      "name": "pgobuild",
-      "cmd": "go build"
-    },
-    {
-      "category": "General",
-      "name": "pgotest",
-      "cmd": "go test"
-    },
-    {
-      "category": "General",
-      "name": "pgorun",
-      "cmd": "go run"
-    },
-    {
-      "category": "General",
-      "name": "pgoedit",
-      "cmd": "go edit"
-    },
-    {
-      "category": "General",
-      "name": "pgologs",
-      "cmd": "go logs"
-    },
-    {
-      "category": "General",
-      "name": "pgotop",
-      "cmd": "go top"
-    },
-    {
-      "category": "General",
-      "name": "pgotree",
-      "cmd": "go tree"
-    },
-    {
-      "category": "General",
-      "name": "pgodiff",
-      "cmd": "go diff"
-    },
-    {
-      "category": "General",
-      "name": "pgoapply",
-      "cmd": "go apply"
-    },
-    {
-      "category": "General",
-      "name": "pgoinit",
-      "cmd": "go init"
-    },
-    {
-      "category": "General",
-      "name": "pgofmt",
-      "cmd": "go fmt"
-    },
-    {
-      "category": "General",
-      "name": "pgolint",
-      "cmd": "go lint"
-    },
-    {
-      "category": "General",
-      "name": "pgoserve",
-      "cmd": "go serve"
-    },
-    {
-      "category": "General",
-      "name": "pgoshell",
-      "cmd": "go shell"
-    },
-    {
-      "category": "General",
-      "name": "pgoenv",
-      "cmd": "go env"
-    },
-    {
-      "category": "General",
-      "name": "pgopath",
-      "cmd": "go path"
-    },
-    {
-      "category": "General",
-      "name": "pgocache",
-      "cmd": "go cache"
-    },
-    {
-      "category": "General",
-      "name": "ppythonhelp",
-      "cmd": "python3 --help"
-    },
-    {
-      "category": "General",
-      "name": "ppythonversion",
-      "cmd": "python3 --version"
-    },
-    {
-      "category": "General",
-      "name": "ppythonlist",
-      "cmd": "python3 list"
-    },
-    {
-      "category": "General",
-      "name": "ppythoninfo",
-      "cmd": "python3 info"
-    },
-    {
-      "category": "General",
-      "name": "ppythonsearch",
-      "cmd": "python3 search"
-    },
-    {
-      "category": "General",
-      "name": "ppythonshow",
-      "cmd": "python3 show"
-    },
-    {
-      "category": "General",
-      "name": "ppythonstatus",
-      "cmd": "python3 status"
-    },
-    {
-      "category": "General",
-      "name": "ppythonclean",
-      "cmd": "python3 clean"
-    },
-    {
-      "category": "General",
-      "name": "ppythonupdate",
-      "cmd": "python3 update"
-    },
-    {
-      "category": "General",
-      "name": "ppythonupgrade",
-      "cmd": "python3 upgrade"
-    },
-    {
-      "category": "General",
-      "name": "ppythondry",
-      "cmd": "python3 --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "ppythonverbose",
-      "cmd": "python3 --verbose"
-    },
-    {
-      "category": "General",
-      "name": "ppythonjson",
-      "cmd": "python3 --json"
-    },
-    {
-      "category": "General",
-      "name": "ppythonquiet",
-      "cmd": "python3 --quiet"
-    },
-    {
-      "category": "General",
-      "name": "ppythonforce",
-      "cmd": "python3 --force"
-    },
-    {
-      "category": "General",
-      "name": "ppythonall",
-      "cmd": "python3 --all"
-    },
-    {
-      "category": "General",
-      "name": "ppythonlong",
-      "cmd": "python3 --long"
-    },
-    {
-      "category": "General",
-      "name": "ppythonshort",
-      "cmd": "python3 --short"
-    },
-    {
-      "category": "General",
-      "name": "ppythondebug",
-      "cmd": "python3 --debug"
-    },
-    {
-      "category": "General",
-      "name": "ppythontrace",
-      "cmd": "python3 --trace"
-    },
-    {
-      "category": "General",
-      "name": "ppythonwatch",
-      "cmd": "python3 watch"
-    },
-    {
-      "category": "General",
-      "name": "ppythondoctor",
-      "cmd": "python3 doctor"
-    },
-    {
-      "category": "General",
-      "name": "ppythoncheck",
-      "cmd": "python3 check"
-    },
-    {
-      "category": "General",
-      "name": "ppythonbuild",
-      "cmd": "python3 build"
-    },
-    {
-      "category": "General",
-      "name": "ppythontest",
-      "cmd": "python3 test"
-    },
-    {
-      "category": "General",
-      "name": "ppythonrun",
-      "cmd": "python3 run"
-    },
-    {
-      "category": "General",
-      "name": "ppythonedit",
-      "cmd": "python3 edit"
-    },
-    {
-      "category": "General",
-      "name": "ppythonlogs",
-      "cmd": "python3 logs"
-    },
-    {
-      "category": "General",
-      "name": "ppythontop",
-      "cmd": "python3 top"
-    },
-    {
-      "category": "General",
-      "name": "ppythontree",
-      "cmd": "python3 tree"
-    },
-    {
-      "category": "General",
-      "name": "ppythondiff",
-      "cmd": "python3 diff"
-    },
-    {
-      "category": "General",
-      "name": "ppythonapply",
-      "cmd": "python3 apply"
-    },
-    {
-      "category": "General",
-      "name": "ppythoninit",
-      "cmd": "python3 init"
-    },
-    {
-      "category": "General",
-      "name": "ppythonfmt",
-      "cmd": "python3 fmt"
-    },
-    {
-      "category": "General",
-      "name": "ppythonlint",
-      "cmd": "python3 lint"
-    },
-    {
-      "category": "General",
-      "name": "ppythonserve",
-      "cmd": "python3 serve"
-    },
-    {
-      "category": "General",
-      "name": "ppythonshell",
-      "cmd": "python3 shell"
-    },
-    {
-      "category": "General",
-      "name": "ppythonenv",
-      "cmd": "python3 env"
-    },
-    {
-      "category": "General",
-      "name": "ppythonpath",
-      "cmd": "python3 path"
-    },
-    {
-      "category": "General",
-      "name": "ppythoncache",
-      "cmd": "python3 cache"
-    },
-    {
-      "category": "General",
-      "name": "ppiphelp",
-      "cmd": "python3 -m pip --help"
-    },
-    {
-      "category": "General",
-      "name": "ppipversion",
-      "cmd": "python3 -m pip --version"
-    },
-    {
-      "category": "General",
-      "name": "ppiplist",
-      "cmd": "python3 -m pip list"
-    },
-    {
-      "category": "General",
-      "name": "ppipinfo",
-      "cmd": "python3 -m pip info"
-    },
-    {
-      "category": "General",
-      "name": "ppipsearch",
-      "cmd": "python3 -m pip search"
-    },
-    {
-      "category": "General",
-      "name": "ppipshow",
-      "cmd": "python3 -m pip show"
-    },
-    {
-      "category": "General",
-      "name": "ppipstatus",
-      "cmd": "python3 -m pip status"
-    },
-    {
-      "category": "General",
-      "name": "ppipclean",
-      "cmd": "python3 -m pip clean"
-    },
-    {
-      "category": "General",
-      "name": "ppipupdate",
-      "cmd": "python3 -m pip update"
-    },
-    {
-      "category": "General",
-      "name": "ppipupgrade",
-      "cmd": "python3 -m pip upgrade"
-    },
-    {
-      "category": "General",
-      "name": "ppipdry",
-      "cmd": "python3 -m pip --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "ppipverbose",
-      "cmd": "python3 -m pip --verbose"
-    },
-    {
-      "category": "General",
-      "name": "ppipjson",
-      "cmd": "python3 -m pip --json"
-    },
-    {
-      "category": "General",
-      "name": "ppipquiet",
-      "cmd": "python3 -m pip --quiet"
-    },
-    {
-      "category": "General",
-      "name": "ppipforce",
-      "cmd": "python3 -m pip --force"
-    },
-    {
-      "category": "General",
-      "name": "ppipall",
-      "cmd": "python3 -m pip --all"
-    },
-    {
-      "category": "General",
-      "name": "ppiplong",
-      "cmd": "python3 -m pip --long"
-    },
-    {
-      "category": "General",
-      "name": "ppipshort",
-      "cmd": "python3 -m pip --short"
-    },
-    {
-      "category": "General",
-      "name": "ppipdebug",
-      "cmd": "python3 -m pip --debug"
-    },
-    {
-      "category": "General",
-      "name": "ppiptrace",
-      "cmd": "python3 -m pip --trace"
-    },
-    {
-      "category": "General",
-      "name": "ppipwatch",
-      "cmd": "python3 -m pip watch"
-    },
-    {
-      "category": "General",
-      "name": "ppipdoctor",
-      "cmd": "python3 -m pip doctor"
-    },
-    {
-      "category": "General",
-      "name": "ppipcheck",
-      "cmd": "python3 -m pip check"
-    },
-    {
-      "category": "General",
-      "name": "ppipbuild",
-      "cmd": "python3 -m pip build"
-    },
-    {
-      "category": "General",
-      "name": "ppiptest",
-      "cmd": "python3 -m pip test"
-    },
-    {
-      "category": "General",
-      "name": "ppiprun",
-      "cmd": "python3 -m pip run"
-    },
-    {
-      "category": "General",
-      "name": "ppipedit",
-      "cmd": "python3 -m pip edit"
-    },
-    {
-      "category": "General",
-      "name": "ppiplogs",
-      "cmd": "python3 -m pip logs"
-    },
-    {
-      "category": "General",
-      "name": "ppiptop",
-      "cmd": "python3 -m pip top"
-    },
-    {
-      "category": "General",
-      "name": "ppiptree",
-      "cmd": "python3 -m pip tree"
-    },
-    {
-      "category": "General",
-      "name": "ppipdiff",
-      "cmd": "python3 -m pip diff"
-    },
-    {
-      "category": "General",
-      "name": "ppipapply",
-      "cmd": "python3 -m pip apply"
-    },
-    {
-      "category": "General",
-      "name": "ppipinit",
-      "cmd": "python3 -m pip init"
-    },
-    {
-      "category": "General",
-      "name": "ppipfmt",
-      "cmd": "python3 -m pip fmt"
-    },
-    {
-      "category": "General",
-      "name": "ppiplint",
-      "cmd": "python3 -m pip lint"
-    },
-    {
-      "category": "General",
-      "name": "ppipserve",
-      "cmd": "python3 -m pip serve"
-    },
-    {
-      "category": "General",
-      "name": "ppipshell",
-      "cmd": "python3 -m pip shell"
-    },
-    {
-      "category": "General",
-      "name": "ppipenv",
-      "cmd": "python3 -m pip env"
-    },
-    {
-      "category": "General",
-      "name": "ppippath",
-      "cmd": "python3 -m pip path"
-    },
-    {
-      "category": "General",
-      "name": "ppipcache",
-      "cmd": "python3 -m pip cache"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxhelp",
-      "cmd": "tmux --help"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxversion",
-      "cmd": "tmux --version"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxlist",
-      "cmd": "tmux list"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxinfo",
-      "cmd": "tmux info"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxsearch",
-      "cmd": "tmux search"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxshow",
-      "cmd": "tmux show"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxstatus",
-      "cmd": "tmux status"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxclean",
-      "cmd": "tmux clean"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxupdate",
-      "cmd": "tmux update"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxupgrade",
-      "cmd": "tmux upgrade"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxdry",
-      "cmd": "tmux --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxverbose",
-      "cmd": "tmux --verbose"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxjson",
-      "cmd": "tmux --json"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxquiet",
-      "cmd": "tmux --quiet"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxforce",
-      "cmd": "tmux --force"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxall",
-      "cmd": "tmux --all"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxlong",
-      "cmd": "tmux --long"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxshort",
-      "cmd": "tmux --short"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxdebug",
-      "cmd": "tmux --debug"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxtrace",
-      "cmd": "tmux --trace"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxwatch",
-      "cmd": "tmux watch"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxdoctor",
-      "cmd": "tmux doctor"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxcheck",
-      "cmd": "tmux check"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxbuild",
-      "cmd": "tmux build"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxtest",
-      "cmd": "tmux test"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxrun",
-      "cmd": "tmux run"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxedit",
-      "cmd": "tmux edit"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxlogs",
-      "cmd": "tmux logs"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxtop",
-      "cmd": "tmux top"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxtree",
-      "cmd": "tmux tree"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxdiff",
-      "cmd": "tmux diff"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxapply",
-      "cmd": "tmux apply"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxinit",
-      "cmd": "tmux init"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxfmt",
-      "cmd": "tmux fmt"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxlint",
-      "cmd": "tmux lint"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxserve",
-      "cmd": "tmux serve"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxshell",
-      "cmd": "tmux shell"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxenv",
-      "cmd": "tmux env"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxpath",
-      "cmd": "tmux path"
-    },
-    {
-      "category": "General",
-      "name": "ptmuxcache",
-      "cmd": "tmux cache"
-    },
-    {
-      "category": "General",
-      "name": "psshhelp",
-      "cmd": "ssh --help"
-    },
-    {
-      "category": "General",
-      "name": "psshversion",
-      "cmd": "ssh --version"
-    },
-    {
-      "category": "General",
-      "name": "psshlist",
-      "cmd": "ssh list"
-    },
-    {
-      "category": "General",
-      "name": "psshinfo",
-      "cmd": "ssh info"
-    },
-    {
-      "category": "General",
-      "name": "psshsearch",
-      "cmd": "ssh search"
-    },
-    {
-      "category": "General",
-      "name": "psshshow",
-      "cmd": "ssh show"
-    },
-    {
-      "category": "General",
-      "name": "psshstatus",
-      "cmd": "ssh status"
-    },
-    {
-      "category": "General",
-      "name": "psshclean",
-      "cmd": "ssh clean"
-    },
-    {
-      "category": "General",
-      "name": "psshupdate",
-      "cmd": "ssh update"
-    },
-    {
-      "category": "General",
-      "name": "psshupgrade",
-      "cmd": "ssh upgrade"
-    },
-    {
-      "category": "General",
-      "name": "psshdry",
-      "cmd": "ssh --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "psshverbose",
-      "cmd": "ssh --verbose"
-    },
-    {
-      "category": "General",
-      "name": "psshjson",
-      "cmd": "ssh --json"
-    },
-    {
-      "category": "General",
-      "name": "psshquiet",
-      "cmd": "ssh --quiet"
-    },
-    {
-      "category": "General",
-      "name": "psshforce",
-      "cmd": "ssh --force"
-    },
-    {
-      "category": "General",
-      "name": "psshall",
-      "cmd": "ssh --all"
-    },
-    {
-      "category": "General",
-      "name": "psshlong",
-      "cmd": "ssh --long"
-    },
-    {
-      "category": "General",
-      "name": "psshshort",
-      "cmd": "ssh --short"
-    },
-    {
-      "category": "General",
-      "name": "psshdebug",
-      "cmd": "ssh --debug"
-    },
-    {
-      "category": "General",
-      "name": "psshtrace",
-      "cmd": "ssh --trace"
-    },
-    {
-      "category": "General",
-      "name": "psshwatch",
-      "cmd": "ssh watch"
-    },
-    {
-      "category": "General",
-      "name": "psshdoctor",
-      "cmd": "ssh doctor"
-    },
-    {
-      "category": "General",
-      "name": "psshcheck",
-      "cmd": "ssh check"
-    },
-    {
-      "category": "General",
-      "name": "psshbuild",
-      "cmd": "ssh build"
-    },
-    {
-      "category": "General",
-      "name": "psshtest",
-      "cmd": "ssh test"
-    },
-    {
-      "category": "General",
-      "name": "psshrun",
-      "cmd": "ssh run"
-    },
-    {
-      "category": "General",
-      "name": "psshedit",
-      "cmd": "ssh edit"
-    },
-    {
-      "category": "General",
-      "name": "psshlogs",
-      "cmd": "ssh logs"
-    },
-    {
-      "category": "General",
-      "name": "psshtop",
-      "cmd": "ssh top"
-    },
-    {
-      "category": "General",
-      "name": "psshtree",
-      "cmd": "ssh tree"
-    },
-    {
-      "category": "General",
-      "name": "psshdiff",
-      "cmd": "ssh diff"
-    },
-    {
-      "category": "General",
-      "name": "psshapply",
-      "cmd": "ssh apply"
-    },
-    {
-      "category": "General",
-      "name": "psshinit",
-      "cmd": "ssh init"
-    },
-    {
-      "category": "General",
-      "name": "psshfmt",
-      "cmd": "ssh fmt"
-    },
-    {
-      "category": "General",
-      "name": "psshlint",
-      "cmd": "ssh lint"
-    },
-    {
-      "category": "General",
-      "name": "psshserve",
-      "cmd": "ssh serve"
-    },
-    {
-      "category": "General",
-      "name": "psshshell",
-      "cmd": "ssh shell"
-    },
-    {
-      "category": "General",
-      "name": "psshenv",
-      "cmd": "ssh env"
-    },
-    {
-      "category": "General",
-      "name": "psshpath",
-      "cmd": "ssh path"
-    },
-    {
-      "category": "General",
-      "name": "psshcache",
-      "cmd": "ssh cache"
-    },
-    {
-      "category": "General",
-      "name": "pcurlhelp",
-      "cmd": "curl -fsSL --help"
-    },
-    {
-      "category": "General",
-      "name": "pcurlversion",
-      "cmd": "curl -fsSL --version"
-    },
-    {
-      "category": "General",
-      "name": "pcurllist",
-      "cmd": "curl -fsSL list"
-    },
-    {
-      "category": "General",
-      "name": "pcurlinfo",
-      "cmd": "curl -fsSL info"
-    },
-    {
-      "category": "General",
-      "name": "pcurlsearch",
-      "cmd": "curl -fsSL search"
-    },
-    {
-      "category": "General",
-      "name": "pcurlshow",
-      "cmd": "curl -fsSL show"
-    },
-    {
-      "category": "General",
-      "name": "pcurlstatus",
-      "cmd": "curl -fsSL status"
-    },
-    {
-      "category": "General",
-      "name": "pcurlclean",
-      "cmd": "curl -fsSL clean"
-    },
-    {
-      "category": "General",
-      "name": "pcurlupdate",
-      "cmd": "curl -fsSL update"
-    },
-    {
-      "category": "General",
-      "name": "pcurlupgrade",
-      "cmd": "curl -fsSL upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pcurldry",
-      "cmd": "curl -fsSL --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pcurlverbose",
-      "cmd": "curl -fsSL --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pcurljson",
-      "cmd": "curl -fsSL --json"
-    },
-    {
-      "category": "General",
-      "name": "pcurlquiet",
-      "cmd": "curl -fsSL --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pcurlforce",
-      "cmd": "curl -fsSL --force"
-    },
-    {
-      "category": "General",
-      "name": "pcurlall",
-      "cmd": "curl -fsSL --all"
-    },
-    {
-      "category": "General",
-      "name": "pcurllong",
-      "cmd": "curl -fsSL --long"
-    },
-    {
-      "category": "General",
-      "name": "pcurlshort",
-      "cmd": "curl -fsSL --short"
-    },
-    {
-      "category": "General",
-      "name": "pcurldebug",
-      "cmd": "curl -fsSL --debug"
-    },
-    {
-      "category": "General",
-      "name": "pcurltrace",
-      "cmd": "curl -fsSL --trace"
-    },
-    {
-      "category": "General",
-      "name": "pcurlwatch",
-      "cmd": "curl -fsSL watch"
-    },
-    {
-      "category": "General",
-      "name": "pcurldoctor",
-      "cmd": "curl -fsSL doctor"
-    },
-    {
-      "category": "General",
-      "name": "pcurlcheck",
-      "cmd": "curl -fsSL check"
-    },
-    {
-      "category": "General",
-      "name": "pcurlbuild",
-      "cmd": "curl -fsSL build"
-    },
-    {
-      "category": "General",
-      "name": "pcurltest",
-      "cmd": "curl -fsSL test"
-    },
-    {
-      "category": "General",
-      "name": "pcurlrun",
-      "cmd": "curl -fsSL run"
-    },
-    {
-      "category": "General",
-      "name": "pcurledit",
-      "cmd": "curl -fsSL edit"
-    },
-    {
-      "category": "General",
-      "name": "pcurllogs",
-      "cmd": "curl -fsSL logs"
-    },
-    {
-      "category": "General",
-      "name": "pcurltop",
-      "cmd": "curl -fsSL top"
-    },
-    {
-      "category": "General",
-      "name": "pcurltree",
-      "cmd": "curl -fsSL tree"
-    },
-    {
-      "category": "General",
-      "name": "pcurldiff",
-      "cmd": "curl -fsSL diff"
-    },
-    {
-      "category": "General",
-      "name": "pcurlapply",
-      "cmd": "curl -fsSL apply"
-    },
-    {
-      "category": "General",
-      "name": "pcurlinit",
-      "cmd": "curl -fsSL init"
-    },
-    {
-      "category": "General",
-      "name": "pcurlfmt",
-      "cmd": "curl -fsSL fmt"
-    },
-    {
-      "category": "General",
-      "name": "pcurllint",
-      "cmd": "curl -fsSL lint"
-    },
-    {
-      "category": "General",
-      "name": "pcurlserve",
-      "cmd": "curl -fsSL serve"
-    },
-    {
-      "category": "General",
-      "name": "pcurlshell",
-      "cmd": "curl -fsSL shell"
-    },
-    {
-      "category": "General",
-      "name": "pcurlenv",
-      "cmd": "curl -fsSL env"
-    },
-    {
-      "category": "General",
-      "name": "pcurlpath",
-      "cmd": "curl -fsSL path"
-    },
-    {
-      "category": "General",
-      "name": "pcurlcache",
-      "cmd": "curl -fsSL cache"
-    },
-    {
-      "category": "General",
-      "name": "ptarhelp",
-      "cmd": "tar --help"
-    },
-    {
-      "category": "General",
-      "name": "ptarversion",
-      "cmd": "tar --version"
-    },
-    {
-      "category": "General",
-      "name": "ptarlist",
-      "cmd": "tar list"
-    },
-    {
-      "category": "General",
-      "name": "ptarinfo",
-      "cmd": "tar info"
-    },
-    {
-      "category": "General",
-      "name": "ptarsearch",
-      "cmd": "tar search"
-    },
-    {
-      "category": "General",
-      "name": "ptarshow",
-      "cmd": "tar show"
-    },
-    {
-      "category": "General",
-      "name": "ptarstatus",
-      "cmd": "tar status"
-    },
-    {
-      "category": "General",
-      "name": "ptarclean",
-      "cmd": "tar clean"
-    },
-    {
-      "category": "General",
-      "name": "ptarupdate",
-      "cmd": "tar update"
-    },
-    {
-      "category": "General",
-      "name": "ptarupgrade",
-      "cmd": "tar upgrade"
-    },
-    {
-      "category": "General",
-      "name": "ptardry",
-      "cmd": "tar --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "ptarverbose",
-      "cmd": "tar --verbose"
-    },
-    {
-      "category": "General",
-      "name": "ptarjson",
-      "cmd": "tar --json"
-    },
-    {
-      "category": "General",
-      "name": "ptarquiet",
-      "cmd": "tar --quiet"
-    },
-    {
-      "category": "General",
-      "name": "ptarforce",
-      "cmd": "tar --force"
-    },
-    {
-      "category": "General",
-      "name": "ptarall",
-      "cmd": "tar --all"
-    },
-    {
-      "category": "General",
-      "name": "ptarlong",
-      "cmd": "tar --long"
-    },
-    {
-      "category": "General",
-      "name": "ptarshort",
-      "cmd": "tar --short"
-    },
-    {
-      "category": "General",
-      "name": "ptardebug",
-      "cmd": "tar --debug"
-    },
-    {
-      "category": "General",
-      "name": "ptartrace",
-      "cmd": "tar --trace"
-    },
-    {
-      "category": "General",
-      "name": "ptarwatch",
-      "cmd": "tar watch"
-    },
-    {
-      "category": "General",
-      "name": "ptardoctor",
-      "cmd": "tar doctor"
-    },
-    {
-      "category": "General",
-      "name": "ptarcheck",
-      "cmd": "tar check"
-    },
-    {
-      "category": "General",
-      "name": "ptarbuild",
-      "cmd": "tar build"
-    },
-    {
-      "category": "General",
-      "name": "ptartest",
-      "cmd": "tar test"
-    },
-    {
-      "category": "General",
-      "name": "ptarrun",
-      "cmd": "tar run"
-    },
-    {
-      "category": "General",
-      "name": "ptaredit",
-      "cmd": "tar edit"
-    },
-    {
-      "category": "General",
-      "name": "ptarlogs",
-      "cmd": "tar logs"
-    },
-    {
-      "category": "General",
-      "name": "ptartop",
-      "cmd": "tar top"
-    },
-    {
-      "category": "General",
-      "name": "ptartree",
-      "cmd": "tar tree"
-    },
-    {
-      "category": "General",
-      "name": "ptardiff",
-      "cmd": "tar diff"
-    },
-    {
-      "category": "General",
-      "name": "ptarapply",
-      "cmd": "tar apply"
-    },
-    {
-      "category": "General",
-      "name": "ptarinit",
-      "cmd": "tar init"
-    },
-    {
-      "category": "General",
-      "name": "ptarfmt",
-      "cmd": "tar fmt"
-    },
-    {
-      "category": "General",
-      "name": "ptarlint",
-      "cmd": "tar lint"
-    },
-    {
-      "category": "General",
-      "name": "ptarserve",
-      "cmd": "tar serve"
-    },
-    {
-      "category": "General",
-      "name": "ptarshell",
-      "cmd": "tar shell"
-    },
-    {
-      "category": "General",
-      "name": "ptarenv",
-      "cmd": "tar env"
-    },
-    {
-      "category": "General",
-      "name": "ptarpath",
-      "cmd": "tar path"
-    },
-    {
-      "category": "General",
-      "name": "ptarcache",
-      "cmd": "tar cache"
-    },
-    {
-      "category": "General",
-      "name": "pziphelp",
-      "cmd": "zip --help"
-    },
-    {
-      "category": "General",
-      "name": "pzipversion",
-      "cmd": "zip --version"
-    },
-    {
-      "category": "General",
-      "name": "pziplist",
-      "cmd": "zip list"
-    },
-    {
-      "category": "General",
-      "name": "pzipinfo",
-      "cmd": "zip info"
-    },
-    {
-      "category": "General",
-      "name": "pzipsearch",
-      "cmd": "zip search"
-    },
-    {
-      "category": "General",
-      "name": "pzipshow",
-      "cmd": "zip show"
-    },
-    {
-      "category": "General",
-      "name": "pzipstatus",
-      "cmd": "zip status"
-    },
-    {
-      "category": "General",
-      "name": "pzipclean",
-      "cmd": "zip clean"
-    },
-    {
-      "category": "General",
-      "name": "pzipupdate",
-      "cmd": "zip update"
-    },
-    {
-      "category": "General",
-      "name": "pzipupgrade",
-      "cmd": "zip upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pzipdry",
-      "cmd": "zip --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pzipverbose",
-      "cmd": "zip --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pzipjson",
-      "cmd": "zip --json"
-    },
-    {
-      "category": "General",
-      "name": "pzipquiet",
-      "cmd": "zip --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pzipforce",
-      "cmd": "zip --force"
-    },
-    {
-      "category": "General",
-      "name": "pzipall",
-      "cmd": "zip --all"
-    },
-    {
-      "category": "General",
-      "name": "pziplong",
-      "cmd": "zip --long"
-    },
-    {
-      "category": "General",
-      "name": "pzipshort",
-      "cmd": "zip --short"
-    },
-    {
-      "category": "General",
-      "name": "pzipdebug",
-      "cmd": "zip --debug"
-    },
-    {
-      "category": "General",
-      "name": "pziptrace",
-      "cmd": "zip --trace"
-    },
-    {
-      "category": "General",
-      "name": "pzipwatch",
-      "cmd": "zip watch"
-    },
-    {
-      "category": "General",
-      "name": "pzipdoctor",
-      "cmd": "zip doctor"
-    },
-    {
-      "category": "General",
-      "name": "pzipcheck",
-      "cmd": "zip check"
-    },
-    {
-      "category": "General",
-      "name": "pzipbuild",
-      "cmd": "zip build"
-    },
-    {
-      "category": "General",
-      "name": "pziptest",
-      "cmd": "zip test"
-    },
-    {
-      "category": "General",
-      "name": "pziprun",
-      "cmd": "zip run"
-    },
-    {
-      "category": "General",
-      "name": "pzipedit",
-      "cmd": "zip edit"
-    },
-    {
-      "category": "General",
-      "name": "pziplogs",
-      "cmd": "zip logs"
-    },
-    {
-      "category": "General",
-      "name": "pziptop",
-      "cmd": "zip top"
-    },
-    {
-      "category": "General",
-      "name": "pziptree",
-      "cmd": "zip tree"
-    },
-    {
-      "category": "General",
-      "name": "pzipdiff",
-      "cmd": "zip diff"
-    },
-    {
-      "category": "General",
-      "name": "pzipapply",
-      "cmd": "zip apply"
-    },
-    {
-      "category": "General",
-      "name": "pzipinit",
-      "cmd": "zip init"
-    },
-    {
-      "category": "General",
-      "name": "pzipfmt",
-      "cmd": "zip fmt"
-    },
-    {
-      "category": "General",
-      "name": "pziplint",
-      "cmd": "zip lint"
-    },
-    {
-      "category": "General",
-      "name": "pzipserve",
-      "cmd": "zip serve"
-    },
-    {
-      "category": "General",
-      "name": "pzipshell",
-      "cmd": "zip shell"
-    },
-    {
-      "category": "General",
-      "name": "pzipenv",
-      "cmd": "zip env"
-    },
-    {
-      "category": "General",
-      "name": "pzippath",
-      "cmd": "zip path"
-    },
-    {
-      "category": "General",
-      "name": "pzipcache",
-      "cmd": "zip cache"
-    },
-    {
-      "category": "General",
-      "name": "popensslhelp",
-      "cmd": "openssl --help"
-    },
-    {
-      "category": "General",
-      "name": "popensslversion",
-      "cmd": "openssl --version"
-    },
-    {
-      "category": "General",
-      "name": "popenssllist",
-      "cmd": "openssl list"
-    },
-    {
-      "category": "General",
-      "name": "popensslinfo",
-      "cmd": "openssl info"
-    },
-    {
-      "category": "General",
-      "name": "popensslsearch",
-      "cmd": "openssl search"
-    },
-    {
-      "category": "General",
-      "name": "popensslshow",
-      "cmd": "openssl show"
-    },
-    {
-      "category": "General",
-      "name": "popensslstatus",
-      "cmd": "openssl status"
-    },
-    {
-      "category": "General",
-      "name": "popensslclean",
-      "cmd": "openssl clean"
-    },
-    {
-      "category": "General",
-      "name": "popensslupdate",
-      "cmd": "openssl update"
-    },
-    {
-      "category": "General",
-      "name": "popensslupgrade",
-      "cmd": "openssl upgrade"
-    },
-    {
-      "category": "General",
-      "name": "popenssldry",
-      "cmd": "openssl --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "popensslverbose",
-      "cmd": "openssl --verbose"
-    },
-    {
-      "category": "General",
-      "name": "popenssljson",
-      "cmd": "openssl --json"
-    },
-    {
-      "category": "General",
-      "name": "popensslquiet",
-      "cmd": "openssl --quiet"
-    },
-    {
-      "category": "General",
-      "name": "popensslforce",
-      "cmd": "openssl --force"
-    },
-    {
-      "category": "General",
-      "name": "popensslall",
-      "cmd": "openssl --all"
-    },
-    {
-      "category": "General",
-      "name": "popenssllong",
-      "cmd": "openssl --long"
-    },
-    {
-      "category": "General",
-      "name": "popensslshort",
-      "cmd": "openssl --short"
-    },
-    {
-      "category": "General",
-      "name": "popenssldebug",
-      "cmd": "openssl --debug"
-    },
-    {
-      "category": "General",
-      "name": "popenssltrace",
-      "cmd": "openssl --trace"
-    },
-    {
-      "category": "General",
-      "name": "popensslwatch",
-      "cmd": "openssl watch"
-    },
-    {
-      "category": "General",
-      "name": "popenssldoctor",
-      "cmd": "openssl doctor"
-    },
-    {
-      "category": "General",
-      "name": "popensslcheck",
-      "cmd": "openssl check"
-    },
-    {
-      "category": "General",
-      "name": "popensslbuild",
-      "cmd": "openssl build"
-    },
-    {
-      "category": "General",
-      "name": "popenssltest",
-      "cmd": "openssl test"
-    },
-    {
-      "category": "General",
-      "name": "popensslrun",
-      "cmd": "openssl run"
-    },
-    {
-      "category": "General",
-      "name": "popenssledit",
-      "cmd": "openssl edit"
-    },
-    {
-      "category": "General",
-      "name": "popenssllogs",
-      "cmd": "openssl logs"
-    },
-    {
-      "category": "General",
-      "name": "popenssltop",
-      "cmd": "openssl top"
-    },
-    {
-      "category": "General",
-      "name": "popenssltree",
-      "cmd": "openssl tree"
-    },
-    {
-      "category": "General",
-      "name": "popenssldiff",
-      "cmd": "openssl diff"
-    },
-    {
-      "category": "General",
-      "name": "popensslapply",
-      "cmd": "openssl apply"
-    },
-    {
-      "category": "General",
-      "name": "popensslinit",
-      "cmd": "openssl init"
-    },
-    {
-      "category": "General",
-      "name": "popensslfmt",
-      "cmd": "openssl fmt"
-    },
-    {
-      "category": "General",
-      "name": "popenssllint",
-      "cmd": "openssl lint"
-    },
-    {
-      "category": "General",
-      "name": "popensslserve",
-      "cmd": "openssl serve"
-    },
-    {
-      "category": "General",
-      "name": "popensslshell",
-      "cmd": "openssl shell"
-    },
-    {
-      "category": "General",
-      "name": "popensslenv",
-      "cmd": "openssl env"
-    },
-    {
-      "category": "General",
-      "name": "popensslpath",
-      "cmd": "openssl path"
-    },
-    {
-      "category": "General",
-      "name": "popensslcache",
-      "cmd": "openssl cache"
-    },
-    {
-      "category": "General",
-      "name": "pffmpeghelp",
-      "cmd": "ffmpeg --help"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegversion",
-      "cmd": "ffmpeg --version"
-    },
-    {
-      "category": "General",
-      "name": "pffmpeglist",
-      "cmd": "ffmpeg list"
-    },
-    {
-      "category": "General",
-      "name": "pffmpeginfo",
-      "cmd": "ffmpeg info"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegsearch",
-      "cmd": "ffmpeg search"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegshow",
-      "cmd": "ffmpeg show"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegstatus",
-      "cmd": "ffmpeg status"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegclean",
-      "cmd": "ffmpeg clean"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegupdate",
-      "cmd": "ffmpeg update"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegupgrade",
-      "cmd": "ffmpeg upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegdry",
-      "cmd": "ffmpeg --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegverbose",
-      "cmd": "ffmpeg --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegjson",
-      "cmd": "ffmpeg --json"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegquiet",
-      "cmd": "ffmpeg --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegforce",
-      "cmd": "ffmpeg --force"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegall",
-      "cmd": "ffmpeg --all"
-    },
-    {
-      "category": "General",
-      "name": "pffmpeglong",
-      "cmd": "ffmpeg --long"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegshort",
-      "cmd": "ffmpeg --short"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegdebug",
-      "cmd": "ffmpeg --debug"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegtrace",
-      "cmd": "ffmpeg --trace"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegwatch",
-      "cmd": "ffmpeg watch"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegdoctor",
-      "cmd": "ffmpeg doctor"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegcheck",
-      "cmd": "ffmpeg check"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegbuild",
-      "cmd": "ffmpeg build"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegtest",
-      "cmd": "ffmpeg test"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegrun",
-      "cmd": "ffmpeg run"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegedit",
-      "cmd": "ffmpeg edit"
-    },
-    {
-      "category": "General",
-      "name": "pffmpeglogs",
-      "cmd": "ffmpeg logs"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegtop",
-      "cmd": "ffmpeg top"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegtree",
-      "cmd": "ffmpeg tree"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegdiff",
-      "cmd": "ffmpeg diff"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegapply",
-      "cmd": "ffmpeg apply"
-    },
-    {
-      "category": "General",
-      "name": "pffmpeginit",
-      "cmd": "ffmpeg init"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegfmt",
-      "cmd": "ffmpeg fmt"
-    },
-    {
-      "category": "General",
-      "name": "pffmpeglint",
-      "cmd": "ffmpeg lint"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegserve",
-      "cmd": "ffmpeg serve"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegshell",
-      "cmd": "ffmpeg shell"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegenv",
-      "cmd": "ffmpeg env"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegpath",
-      "cmd": "ffmpeg path"
-    },
-    {
-      "category": "General",
-      "name": "pffmpegcache",
-      "cmd": "ffmpeg cache"
-    },
-    {
-      "category": "General",
-      "name": "pmakehelp",
-      "cmd": "make --help"
-    },
-    {
-      "category": "General",
-      "name": "pmakeversion",
-      "cmd": "make --version"
-    },
-    {
-      "category": "General",
-      "name": "pmakelist",
-      "cmd": "make list"
-    },
-    {
-      "category": "General",
-      "name": "pmakeinfo",
-      "cmd": "make info"
-    },
-    {
-      "category": "General",
-      "name": "pmakesearch",
-      "cmd": "make search"
-    },
-    {
-      "category": "General",
-      "name": "pmakeshow",
-      "cmd": "make show"
-    },
-    {
-      "category": "General",
-      "name": "pmakestatus",
-      "cmd": "make status"
-    },
-    {
-      "category": "General",
-      "name": "pmakeclean",
-      "cmd": "make clean"
-    },
-    {
-      "category": "General",
-      "name": "pmakeupdate",
-      "cmd": "make update"
-    },
-    {
-      "category": "General",
-      "name": "pmakeupgrade",
-      "cmd": "make upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pmakedry",
-      "cmd": "make --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pmakeverbose",
-      "cmd": "make --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pmakejson",
-      "cmd": "make --json"
-    },
-    {
-      "category": "General",
-      "name": "pmakequiet",
-      "cmd": "make --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pmakeforce",
-      "cmd": "make --force"
-    },
-    {
-      "category": "General",
-      "name": "pmakeall",
-      "cmd": "make --all"
-    },
-    {
-      "category": "General",
-      "name": "pmakelong",
-      "cmd": "make --long"
-    },
-    {
-      "category": "General",
-      "name": "pmakeshort",
-      "cmd": "make --short"
-    },
-    {
-      "category": "General",
-      "name": "pmakedebug",
-      "cmd": "make --debug"
-    },
-    {
-      "category": "General",
-      "name": "pmaketrace",
-      "cmd": "make --trace"
-    },
-    {
-      "category": "General",
-      "name": "pmakewatch",
-      "cmd": "make watch"
-    },
-    {
-      "category": "General",
-      "name": "pmakedoctor",
-      "cmd": "make doctor"
-    },
-    {
-      "category": "General",
-      "name": "pmakecheck",
-      "cmd": "make check"
-    },
-    {
-      "category": "General",
-      "name": "pmakebuild",
-      "cmd": "make build"
-    },
-    {
-      "category": "General",
-      "name": "pmaketest",
-      "cmd": "make test"
-    },
-    {
-      "category": "General",
-      "name": "pmakerun",
-      "cmd": "make run"
-    },
-    {
-      "category": "General",
-      "name": "pmakeedit",
-      "cmd": "make edit"
-    },
-    {
-      "category": "General",
-      "name": "pmakelogs",
-      "cmd": "make logs"
-    },
-    {
-      "category": "General",
-      "name": "pmaketop",
-      "cmd": "make top"
-    },
-    {
-      "category": "General",
-      "name": "pmaketree",
-      "cmd": "make tree"
-    },
-    {
-      "category": "General",
-      "name": "pmakediff",
-      "cmd": "make diff"
-    },
-    {
-      "category": "General",
-      "name": "pmakeapply",
-      "cmd": "make apply"
-    },
-    {
-      "category": "General",
-      "name": "pmakeinit",
-      "cmd": "make init"
-    },
-    {
-      "category": "General",
-      "name": "pmakefmt",
-      "cmd": "make fmt"
-    },
-    {
-      "category": "General",
-      "name": "pmakelint",
-      "cmd": "make lint"
-    },
-    {
-      "category": "General",
-      "name": "pmakeserve",
-      "cmd": "make serve"
-    },
-    {
-      "category": "General",
-      "name": "pmakeshell",
-      "cmd": "make shell"
-    },
-    {
-      "category": "General",
-      "name": "pmakeenv",
-      "cmd": "make env"
-    },
-    {
-      "category": "General",
-      "name": "pmakepath",
-      "cmd": "make path"
-    },
-    {
-      "category": "General",
-      "name": "pmakecache",
-      "cmd": "make cache"
-    },
-    {
-      "category": "General",
-      "name": "pjusthelp",
-      "cmd": "just --help"
-    },
-    {
-      "category": "General",
-      "name": "pjustversion",
-      "cmd": "just --version"
-    },
-    {
-      "category": "General",
-      "name": "pjustlist",
-      "cmd": "just list"
-    },
-    {
-      "category": "General",
-      "name": "pjustinfo",
-      "cmd": "just info"
-    },
-    {
-      "category": "General",
-      "name": "pjustsearch",
-      "cmd": "just search"
-    },
-    {
-      "category": "General",
-      "name": "pjustshow",
-      "cmd": "just show"
-    },
-    {
-      "category": "General",
-      "name": "pjuststatus",
-      "cmd": "just status"
-    },
-    {
-      "category": "General",
-      "name": "pjustclean",
-      "cmd": "just clean"
-    },
-    {
-      "category": "General",
-      "name": "pjustupdate",
-      "cmd": "just update"
-    },
-    {
-      "category": "General",
-      "name": "pjustupgrade",
-      "cmd": "just upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pjustdry",
-      "cmd": "just --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pjustverbose",
-      "cmd": "just --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pjustjson",
-      "cmd": "just --json"
-    },
-    {
-      "category": "General",
-      "name": "pjustquiet",
-      "cmd": "just --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pjustforce",
-      "cmd": "just --force"
-    },
-    {
-      "category": "General",
-      "name": "pjustall",
-      "cmd": "just --all"
-    },
-    {
-      "category": "General",
-      "name": "pjustlong",
-      "cmd": "just --long"
-    },
-    {
-      "category": "General",
-      "name": "pjustshort",
-      "cmd": "just --short"
-    },
-    {
-      "category": "General",
-      "name": "pjustdebug",
-      "cmd": "just --debug"
-    },
-    {
-      "category": "General",
-      "name": "pjusttrace",
-      "cmd": "just --trace"
-    },
-    {
-      "category": "General",
-      "name": "pjustwatch",
-      "cmd": "just watch"
-    },
-    {
-      "category": "General",
-      "name": "pjustdoctor",
-      "cmd": "just doctor"
-    },
-    {
-      "category": "General",
-      "name": "pjustcheck",
-      "cmd": "just check"
-    },
-    {
-      "category": "General",
-      "name": "pjustbuild",
-      "cmd": "just build"
-    },
-    {
-      "category": "General",
-      "name": "pjusttest",
-      "cmd": "just test"
-    },
-    {
-      "category": "General",
-      "name": "pjustrun",
-      "cmd": "just run"
-    },
-    {
-      "category": "General",
-      "name": "pjustedit",
-      "cmd": "just edit"
-    },
-    {
-      "category": "General",
-      "name": "pjustlogs",
-      "cmd": "just logs"
-    },
-    {
-      "category": "General",
-      "name": "pjusttop",
-      "cmd": "just top"
-    },
-    {
-      "category": "General",
-      "name": "pjusttree",
-      "cmd": "just tree"
-    },
-    {
-      "category": "General",
-      "name": "pjustdiff",
-      "cmd": "just diff"
-    },
-    {
-      "category": "General",
-      "name": "pjustapply",
-      "cmd": "just apply"
-    },
-    {
-      "category": "General",
-      "name": "pjustinit",
-      "cmd": "just init"
-    },
-    {
-      "category": "General",
-      "name": "pjustfmt",
-      "cmd": "just fmt"
-    },
-    {
-      "category": "General",
-      "name": "pjustlint",
-      "cmd": "just lint"
-    },
-    {
-      "category": "General",
-      "name": "pjustserve",
-      "cmd": "just serve"
-    },
-    {
-      "category": "General",
-      "name": "pjustshell",
-      "cmd": "just shell"
-    },
-    {
-      "category": "General",
-      "name": "pjustenv",
-      "cmd": "just env"
-    },
-    {
-      "category": "General",
-      "name": "pjustpath",
-      "cmd": "just path"
-    },
-    {
-      "category": "General",
-      "name": "pjustcache",
-      "cmd": "just cache"
-    },
-    {
-      "category": "General",
-      "name": "pterraformhelp",
-      "cmd": "terraform --help"
-    },
-    {
-      "category": "General",
-      "name": "pterraformversion",
-      "cmd": "terraform --version"
-    },
-    {
-      "category": "General",
-      "name": "pterraformlist",
-      "cmd": "terraform list"
-    },
-    {
-      "category": "General",
-      "name": "pterraforminfo",
-      "cmd": "terraform info"
-    },
-    {
-      "category": "General",
-      "name": "pterraformsearch",
-      "cmd": "terraform search"
-    },
-    {
-      "category": "General",
-      "name": "pterraformshow",
-      "cmd": "terraform show"
-    },
-    {
-      "category": "General",
-      "name": "pterraformstatus",
-      "cmd": "terraform status"
-    },
-    {
-      "category": "General",
-      "name": "pterraformclean",
-      "cmd": "terraform clean"
-    },
-    {
-      "category": "General",
-      "name": "pterraformupdate",
-      "cmd": "terraform update"
-    },
-    {
-      "category": "General",
-      "name": "pterraformupgrade",
-      "cmd": "terraform upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pterraformdry",
-      "cmd": "terraform --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pterraformverbose",
-      "cmd": "terraform --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pterraformjson",
-      "cmd": "terraform --json"
-    },
-    {
-      "category": "General",
-      "name": "pterraformquiet",
-      "cmd": "terraform --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pterraformforce",
-      "cmd": "terraform --force"
-    },
-    {
-      "category": "General",
-      "name": "pterraformall",
-      "cmd": "terraform --all"
-    },
-    {
-      "category": "General",
-      "name": "pterraformlong",
-      "cmd": "terraform --long"
-    },
-    {
-      "category": "General",
-      "name": "pterraformshort",
-      "cmd": "terraform --short"
-    },
-    {
-      "category": "General",
-      "name": "pterraformdebug",
-      "cmd": "terraform --debug"
-    },
-    {
-      "category": "General",
-      "name": "pterraformtrace",
-      "cmd": "terraform --trace"
-    },
-    {
-      "category": "General",
-      "name": "pterraformwatch",
-      "cmd": "terraform watch"
-    },
-    {
-      "category": "General",
-      "name": "pterraformdoctor",
-      "cmd": "terraform doctor"
-    },
-    {
-      "category": "General",
-      "name": "pterraformcheck",
-      "cmd": "terraform check"
-    },
-    {
-      "category": "General",
-      "name": "pterraformbuild",
-      "cmd": "terraform build"
-    },
-    {
-      "category": "General",
-      "name": "pterraformtest",
-      "cmd": "terraform test"
-    },
-    {
-      "category": "General",
-      "name": "pterraformrun",
-      "cmd": "terraform run"
-    },
-    {
-      "category": "General",
-      "name": "pterraformedit",
-      "cmd": "terraform edit"
-    },
-    {
-      "category": "General",
-      "name": "pterraformlogs",
-      "cmd": "terraform logs"
-    },
-    {
-      "category": "General",
-      "name": "pterraformtop",
-      "cmd": "terraform top"
-    },
-    {
-      "category": "General",
-      "name": "pterraformtree",
-      "cmd": "terraform tree"
-    },
-    {
-      "category": "General",
-      "name": "pterraformdiff",
-      "cmd": "terraform diff"
-    },
-    {
-      "category": "General",
-      "name": "pterraformapply",
-      "cmd": "terraform apply"
-    },
-    {
-      "category": "General",
-      "name": "pterraforminit",
-      "cmd": "terraform init"
-    },
-    {
-      "category": "General",
-      "name": "pterraformfmt",
-      "cmd": "terraform fmt"
-    },
-    {
-      "category": "General",
-      "name": "pterraformlint",
-      "cmd": "terraform lint"
-    },
-    {
-      "category": "General",
-      "name": "pterraformserve",
-      "cmd": "terraform serve"
-    },
-    {
-      "category": "General",
-      "name": "pterraformshell",
-      "cmd": "terraform shell"
-    },
-    {
-      "category": "General",
-      "name": "pterraformenv",
-      "cmd": "terraform env"
-    },
-    {
-      "category": "General",
-      "name": "pterraformpath",
-      "cmd": "terraform path"
-    },
-    {
-      "category": "General",
-      "name": "pterraformcache",
-      "cmd": "terraform cache"
-    },
-    {
-      "category": "General",
-      "name": "pansiblehelp",
-      "cmd": "ansible --help"
-    },
-    {
-      "category": "General",
-      "name": "pansibleversion",
-      "cmd": "ansible --version"
-    },
-    {
-      "category": "General",
-      "name": "pansiblelist",
-      "cmd": "ansible list"
-    },
-    {
-      "category": "General",
-      "name": "pansibleinfo",
-      "cmd": "ansible info"
-    },
-    {
-      "category": "General",
-      "name": "pansiblesearch",
-      "cmd": "ansible search"
-    },
-    {
-      "category": "General",
-      "name": "pansibleshow",
-      "cmd": "ansible show"
-    },
-    {
-      "category": "General",
-      "name": "pansiblestatus",
-      "cmd": "ansible status"
-    },
-    {
-      "category": "General",
-      "name": "pansibleclean",
-      "cmd": "ansible clean"
-    },
-    {
-      "category": "General",
-      "name": "pansibleupdate",
-      "cmd": "ansible update"
-    },
-    {
-      "category": "General",
-      "name": "pansibleupgrade",
-      "cmd": "ansible upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pansibledry",
-      "cmd": "ansible --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pansibleverbose",
-      "cmd": "ansible --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pansiblejson",
-      "cmd": "ansible --json"
-    },
-    {
-      "category": "General",
-      "name": "pansiblequiet",
-      "cmd": "ansible --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pansibleforce",
-      "cmd": "ansible --force"
-    },
-    {
-      "category": "General",
-      "name": "pansibleall",
-      "cmd": "ansible --all"
-    },
-    {
-      "category": "General",
-      "name": "pansiblelong",
-      "cmd": "ansible --long"
-    },
-    {
-      "category": "General",
-      "name": "pansibleshort",
-      "cmd": "ansible --short"
-    },
-    {
-      "category": "General",
-      "name": "pansibledebug",
-      "cmd": "ansible --debug"
-    },
-    {
-      "category": "General",
-      "name": "pansibletrace",
-      "cmd": "ansible --trace"
-    },
-    {
-      "category": "General",
-      "name": "pansiblewatch",
-      "cmd": "ansible watch"
-    },
-    {
-      "category": "General",
-      "name": "pansibledoctor",
-      "cmd": "ansible doctor"
-    },
-    {
-      "category": "General",
-      "name": "pansiblecheck",
-      "cmd": "ansible check"
-    },
-    {
-      "category": "General",
-      "name": "pansiblebuild",
-      "cmd": "ansible build"
-    },
-    {
-      "category": "General",
-      "name": "pansibletest",
-      "cmd": "ansible test"
-    },
-    {
-      "category": "General",
-      "name": "pansiblerun",
-      "cmd": "ansible run"
-    },
-    {
-      "category": "General",
-      "name": "pansibleedit",
-      "cmd": "ansible edit"
-    },
-    {
-      "category": "General",
-      "name": "pansiblelogs",
-      "cmd": "ansible logs"
-    },
-    {
-      "category": "General",
-      "name": "pansibletop",
-      "cmd": "ansible top"
-    },
-    {
-      "category": "General",
-      "name": "pansibletree",
-      "cmd": "ansible tree"
-    },
-    {
-      "category": "General",
-      "name": "pansiblediff",
-      "cmd": "ansible diff"
-    },
-    {
-      "category": "General",
-      "name": "pansibleapply",
-      "cmd": "ansible apply"
-    },
-    {
-      "category": "General",
-      "name": "pansibleinit",
-      "cmd": "ansible init"
-    },
-    {
-      "category": "General",
-      "name": "pansiblefmt",
-      "cmd": "ansible fmt"
-    },
-    {
-      "category": "General",
-      "name": "pansiblelint",
-      "cmd": "ansible lint"
-    },
-    {
-      "category": "General",
-      "name": "pansibleserve",
-      "cmd": "ansible serve"
-    },
-    {
-      "category": "General",
-      "name": "pansibleshell",
-      "cmd": "ansible shell"
-    },
-    {
-      "category": "General",
-      "name": "pansibleenv",
-      "cmd": "ansible env"
-    },
-    {
-      "category": "General",
-      "name": "pansiblepath",
-      "cmd": "ansible path"
-    },
-    {
-      "category": "General",
-      "name": "pansiblecache",
-      "cmd": "ansible cache"
-    },
-    {
-      "category": "General",
-      "name": "phelmhelp",
-      "cmd": "helm --help"
-    },
-    {
-      "category": "General",
-      "name": "phelmversion",
-      "cmd": "helm --version"
-    },
-    {
-      "category": "General",
-      "name": "phelmlist",
-      "cmd": "helm list"
-    },
-    {
-      "category": "General",
-      "name": "phelminfo",
-      "cmd": "helm info"
-    },
-    {
-      "category": "General",
-      "name": "phelmsearch",
-      "cmd": "helm search"
-    },
-    {
-      "category": "General",
-      "name": "phelmshow",
-      "cmd": "helm show"
-    },
-    {
-      "category": "General",
-      "name": "phelmstatus",
-      "cmd": "helm status"
-    },
-    {
-      "category": "General",
-      "name": "phelmclean",
-      "cmd": "helm clean"
-    },
-    {
-      "category": "General",
-      "name": "phelmupdate",
-      "cmd": "helm update"
-    },
-    {
-      "category": "General",
-      "name": "phelmupgrade",
-      "cmd": "helm upgrade"
-    },
-    {
-      "category": "General",
-      "name": "phelmdry",
-      "cmd": "helm --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "phelmverbose",
-      "cmd": "helm --verbose"
-    },
-    {
-      "category": "General",
-      "name": "phelmjson",
-      "cmd": "helm --json"
-    },
-    {
-      "category": "General",
-      "name": "phelmquiet",
-      "cmd": "helm --quiet"
-    },
-    {
-      "category": "General",
-      "name": "phelmforce",
-      "cmd": "helm --force"
-    },
-    {
-      "category": "General",
-      "name": "phelmall",
-      "cmd": "helm --all"
-    },
-    {
-      "category": "General",
-      "name": "phelmlong",
-      "cmd": "helm --long"
-    },
-    {
-      "category": "General",
-      "name": "phelmshort",
-      "cmd": "helm --short"
-    },
-    {
-      "category": "General",
-      "name": "phelmdebug",
-      "cmd": "helm --debug"
-    },
-    {
-      "category": "General",
-      "name": "phelmtrace",
-      "cmd": "helm --trace"
-    },
-    {
-      "category": "General",
-      "name": "phelmwatch",
-      "cmd": "helm watch"
-    },
-    {
-      "category": "General",
-      "name": "phelmdoctor",
-      "cmd": "helm doctor"
-    },
-    {
-      "category": "General",
-      "name": "phelmcheck",
-      "cmd": "helm check"
-    },
-    {
-      "category": "General",
-      "name": "phelmbuild",
-      "cmd": "helm build"
-    },
-    {
-      "category": "General",
-      "name": "phelmtest",
-      "cmd": "helm test"
-    },
-    {
-      "category": "General",
-      "name": "phelmrun",
-      "cmd": "helm run"
-    },
-    {
-      "category": "General",
-      "name": "phelmedit",
-      "cmd": "helm edit"
-    },
-    {
-      "category": "General",
-      "name": "phelmlogs",
-      "cmd": "helm logs"
-    },
-    {
-      "category": "General",
-      "name": "phelmtop",
-      "cmd": "helm top"
-    },
-    {
-      "category": "General",
-      "name": "phelmtree",
-      "cmd": "helm tree"
-    },
-    {
-      "category": "General",
-      "name": "phelmdiff",
-      "cmd": "helm diff"
-    },
-    {
-      "category": "General",
-      "name": "phelmapply",
-      "cmd": "helm apply"
-    },
-    {
-      "category": "General",
-      "name": "phelminit",
-      "cmd": "helm init"
-    },
-    {
-      "category": "General",
-      "name": "phelmfmt",
-      "cmd": "helm fmt"
-    },
-    {
-      "category": "General",
-      "name": "phelmlint",
-      "cmd": "helm lint"
-    },
-    {
-      "category": "General",
-      "name": "phelmserve",
-      "cmd": "helm serve"
-    },
-    {
-      "category": "General",
-      "name": "phelmshell",
-      "cmd": "helm shell"
-    },
-    {
-      "category": "General",
-      "name": "phelmenv",
-      "cmd": "helm env"
-    },
-    {
-      "category": "General",
-      "name": "phelmpath",
-      "cmd": "helm path"
-    },
-    {
-      "category": "General",
-      "name": "phelmcache",
-      "cmd": "helm cache"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanhelp",
-      "cmd": "podman --help"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanversion",
-      "cmd": "podman --version"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanlist",
-      "cmd": "podman list"
-    },
-    {
-      "category": "General",
-      "name": "ppodmaninfo",
-      "cmd": "podman info"
-    },
-    {
-      "category": "General",
-      "name": "ppodmansearch",
-      "cmd": "podman search"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanshow",
-      "cmd": "podman show"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanstatus",
-      "cmd": "podman status"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanclean",
-      "cmd": "podman clean"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanupdate",
-      "cmd": "podman update"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanupgrade",
-      "cmd": "podman upgrade"
-    },
-    {
-      "category": "General",
-      "name": "ppodmandry",
-      "cmd": "podman --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanverbose",
-      "cmd": "podman --verbose"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanjson",
-      "cmd": "podman --json"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanquiet",
-      "cmd": "podman --quiet"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanforce",
-      "cmd": "podman --force"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanall",
-      "cmd": "podman --all"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanlong",
-      "cmd": "podman --long"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanshort",
-      "cmd": "podman --short"
-    },
-    {
-      "category": "General",
-      "name": "ppodmandebug",
-      "cmd": "podman --debug"
-    },
-    {
-      "category": "General",
-      "name": "ppodmantrace",
-      "cmd": "podman --trace"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanwatch",
-      "cmd": "podman watch"
-    },
-    {
-      "category": "General",
-      "name": "ppodmandoctor",
-      "cmd": "podman doctor"
-    },
-    {
-      "category": "General",
-      "name": "ppodmancheck",
-      "cmd": "podman check"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanbuild",
-      "cmd": "podman build"
-    },
-    {
-      "category": "General",
-      "name": "ppodmantest",
-      "cmd": "podman test"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanrun",
-      "cmd": "podman run"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanedit",
-      "cmd": "podman edit"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanlogs",
-      "cmd": "podman logs"
-    },
-    {
-      "category": "General",
-      "name": "ppodmantop",
-      "cmd": "podman top"
-    },
-    {
-      "category": "General",
-      "name": "ppodmantree",
-      "cmd": "podman tree"
-    },
-    {
-      "category": "General",
-      "name": "ppodmandiff",
-      "cmd": "podman diff"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanapply",
-      "cmd": "podman apply"
-    },
-    {
-      "category": "General",
-      "name": "ppodmaninit",
-      "cmd": "podman init"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanfmt",
-      "cmd": "podman fmt"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanlint",
-      "cmd": "podman lint"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanserve",
-      "cmd": "podman serve"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanshell",
-      "cmd": "podman shell"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanenv",
-      "cmd": "podman env"
-    },
-    {
-      "category": "General",
-      "name": "ppodmanpath",
-      "cmd": "podman path"
-    },
-    {
-      "category": "General",
-      "name": "ppodmancache",
-      "cmd": "podman cache"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakhelp",
-      "cmd": "flatpak --help"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakversion",
-      "cmd": "flatpak --version"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaklist",
-      "cmd": "flatpak list"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakinfo",
-      "cmd": "flatpak info"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaksearch",
-      "cmd": "flatpak search"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakshow",
-      "cmd": "flatpak show"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakstatus",
-      "cmd": "flatpak status"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakclean",
-      "cmd": "flatpak clean"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakupdate",
-      "cmd": "flatpak update"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakupgrade",
-      "cmd": "flatpak upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakdry",
-      "cmd": "flatpak --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakverbose",
-      "cmd": "flatpak --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakjson",
-      "cmd": "flatpak --json"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakquiet",
-      "cmd": "flatpak --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakforce",
-      "cmd": "flatpak --force"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakall",
-      "cmd": "flatpak --all"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaklong",
-      "cmd": "flatpak --long"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakshort",
-      "cmd": "flatpak --short"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakdebug",
-      "cmd": "flatpak --debug"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaktrace",
-      "cmd": "flatpak --trace"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakwatch",
-      "cmd": "flatpak watch"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakdoctor",
-      "cmd": "flatpak doctor"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakcheck",
-      "cmd": "flatpak check"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakbuild",
-      "cmd": "flatpak build"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaktest",
-      "cmd": "flatpak test"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakrun",
-      "cmd": "flatpak run"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakedit",
-      "cmd": "flatpak edit"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaklogs",
-      "cmd": "flatpak logs"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaktop",
-      "cmd": "flatpak top"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaktree",
-      "cmd": "flatpak tree"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakdiff",
-      "cmd": "flatpak diff"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakapply",
-      "cmd": "flatpak apply"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakinit",
-      "cmd": "flatpak init"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakfmt",
-      "cmd": "flatpak fmt"
-    },
-    {
-      "category": "General",
-      "name": "pflatpaklint",
-      "cmd": "flatpak lint"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakserve",
-      "cmd": "flatpak serve"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakshell",
-      "cmd": "flatpak shell"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakenv",
-      "cmd": "flatpak env"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakpath",
-      "cmd": "flatpak path"
-    },
-    {
-      "category": "General",
-      "name": "pflatpakcache",
-      "cmd": "flatpak cache"
-    },
-    {
-      "category": "General",
-      "name": "psnaphelp",
-      "cmd": "snap --help"
-    },
-    {
-      "category": "General",
-      "name": "psnapversion",
-      "cmd": "snap --version"
-    },
-    {
-      "category": "General",
-      "name": "psnaplist",
-      "cmd": "snap list"
-    },
-    {
-      "category": "General",
-      "name": "psnapinfo",
-      "cmd": "snap info"
-    },
-    {
-      "category": "General",
-      "name": "psnapsearch",
-      "cmd": "snap search"
-    },
-    {
-      "category": "General",
-      "name": "psnapshow",
-      "cmd": "snap show"
-    },
-    {
-      "category": "General",
-      "name": "psnapstatus",
-      "cmd": "snap status"
-    },
-    {
-      "category": "General",
-      "name": "psnapclean",
-      "cmd": "snap clean"
-    },
-    {
-      "category": "General",
-      "name": "psnapupdate",
-      "cmd": "snap update"
-    },
-    {
-      "category": "General",
-      "name": "psnapupgrade",
-      "cmd": "snap upgrade"
-    },
-    {
-      "category": "General",
-      "name": "psnapdry",
-      "cmd": "snap --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "psnapverbose",
-      "cmd": "snap --verbose"
-    },
-    {
-      "category": "General",
-      "name": "psnapjson",
-      "cmd": "snap --json"
-    },
-    {
-      "category": "General",
-      "name": "psnapquiet",
-      "cmd": "snap --quiet"
-    },
-    {
-      "category": "General",
-      "name": "psnapforce",
-      "cmd": "snap --force"
-    },
-    {
-      "category": "General",
-      "name": "psnapall",
-      "cmd": "snap --all"
-    },
-    {
-      "category": "General",
-      "name": "psnaplong",
-      "cmd": "snap --long"
-    },
-    {
-      "category": "General",
-      "name": "psnapshort",
-      "cmd": "snap --short"
-    },
-    {
-      "category": "General",
-      "name": "psnapdebug",
-      "cmd": "snap --debug"
-    },
-    {
-      "category": "General",
-      "name": "psnaptrace",
-      "cmd": "snap --trace"
-    },
-    {
-      "category": "General",
-      "name": "psnapwatch",
-      "cmd": "snap watch"
-    },
-    {
-      "category": "General",
-      "name": "psnapdoctor",
-      "cmd": "snap doctor"
-    },
-    {
-      "category": "General",
-      "name": "psnapcheck",
-      "cmd": "snap check"
-    },
-    {
-      "category": "General",
-      "name": "psnapbuild",
-      "cmd": "snap build"
-    },
-    {
-      "category": "General",
-      "name": "psnaptest",
-      "cmd": "snap test"
-    },
-    {
-      "category": "General",
-      "name": "psnaprun",
-      "cmd": "snap run"
-    },
-    {
-      "category": "General",
-      "name": "psnapedit",
-      "cmd": "snap edit"
-    },
-    {
-      "category": "General",
-      "name": "psnaplogs",
-      "cmd": "snap logs"
-    },
-    {
-      "category": "General",
-      "name": "psnaptop",
-      "cmd": "snap top"
-    },
-    {
-      "category": "General",
-      "name": "psnaptree",
-      "cmd": "snap tree"
-    },
-    {
-      "category": "General",
-      "name": "psnapdiff",
-      "cmd": "snap diff"
-    },
-    {
-      "category": "General",
-      "name": "psnapapply",
-      "cmd": "snap apply"
-    },
-    {
-      "category": "General",
-      "name": "psnapinit",
-      "cmd": "snap init"
-    },
-    {
-      "category": "General",
-      "name": "psnapfmt",
-      "cmd": "snap fmt"
-    },
-    {
-      "category": "General",
-      "name": "psnaplint",
-      "cmd": "snap lint"
-    },
-    {
-      "category": "General",
-      "name": "psnapserve",
-      "cmd": "snap serve"
-    },
-    {
-      "category": "General",
-      "name": "psnapshell",
-      "cmd": "snap shell"
-    },
-    {
-      "category": "General",
-      "name": "psnapenv",
-      "cmd": "snap env"
-    },
-    {
-      "category": "General",
-      "name": "psnappath",
-      "cmd": "snap path"
-    },
-    {
-      "category": "General",
-      "name": "psnapcache",
-      "cmd": "snap cache"
-    },
-    {
-      "category": "General",
-      "name": "pnixhelp",
-      "cmd": "nix --help"
-    },
-    {
-      "category": "General",
-      "name": "pnixversion",
-      "cmd": "nix --version"
-    },
-    {
-      "category": "General",
-      "name": "pnixlist",
-      "cmd": "nix list"
-    },
-    {
-      "category": "General",
-      "name": "pnixinfo",
-      "cmd": "nix info"
-    },
-    {
-      "category": "General",
-      "name": "pnixsearch",
-      "cmd": "nix search"
-    },
-    {
-      "category": "General",
-      "name": "pnixshow",
-      "cmd": "nix show"
-    },
-    {
-      "category": "General",
-      "name": "pnixstatus",
-      "cmd": "nix status"
-    },
-    {
-      "category": "General",
-      "name": "pnixclean",
-      "cmd": "nix clean"
-    },
-    {
-      "category": "General",
-      "name": "pnixupdate",
-      "cmd": "nix update"
-    },
-    {
-      "category": "General",
-      "name": "pnixupgrade",
-      "cmd": "nix upgrade"
-    },
-    {
-      "category": "General",
-      "name": "pnixdry",
-      "cmd": "nix --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "pnixverbose",
-      "cmd": "nix --verbose"
-    },
-    {
-      "category": "General",
-      "name": "pnixjson",
-      "cmd": "nix --json"
-    },
-    {
-      "category": "General",
-      "name": "pnixquiet",
-      "cmd": "nix --quiet"
-    },
-    {
-      "category": "General",
-      "name": "pnixforce",
-      "cmd": "nix --force"
-    },
-    {
-      "category": "General",
-      "name": "pnixall",
-      "cmd": "nix --all"
-    },
-    {
-      "category": "General",
-      "name": "pnixlong",
-      "cmd": "nix --long"
-    },
-    {
-      "category": "General",
-      "name": "pnixshort",
-      "cmd": "nix --short"
-    },
-    {
-      "category": "General",
-      "name": "pnixdebug",
-      "cmd": "nix --debug"
-    },
-    {
-      "category": "General",
-      "name": "pnixtrace",
-      "cmd": "nix --trace"
-    },
-    {
-      "category": "General",
-      "name": "pnixwatch",
-      "cmd": "nix watch"
-    },
-    {
-      "category": "General",
-      "name": "pnixdoctor",
-      "cmd": "nix doctor"
-    },
-    {
-      "category": "General",
-      "name": "pnixcheck",
-      "cmd": "nix check"
-    },
-    {
-      "category": "General",
-      "name": "pnixbuild",
-      "cmd": "nix build"
-    },
-    {
-      "category": "General",
-      "name": "pnixtest",
-      "cmd": "nix test"
-    },
-    {
-      "category": "General",
-      "name": "pnixrun",
-      "cmd": "nix run"
-    },
-    {
-      "category": "General",
-      "name": "pnixedit",
-      "cmd": "nix edit"
-    },
-    {
-      "category": "General",
-      "name": "pnixlogs",
-      "cmd": "nix logs"
-    },
-    {
-      "category": "General",
-      "name": "pnixtop",
-      "cmd": "nix top"
-    },
-    {
-      "category": "General",
-      "name": "pnixtree",
-      "cmd": "nix tree"
-    },
-    {
-      "category": "General",
-      "name": "pnixdiff",
-      "cmd": "nix diff"
-    },
-    {
-      "category": "General",
-      "name": "pnixapply",
-      "cmd": "nix apply"
-    },
-    {
-      "category": "General",
-      "name": "pnixinit",
-      "cmd": "nix init"
-    },
-    {
-      "category": "General",
-      "name": "pnixfmt",
-      "cmd": "nix fmt"
-    },
-    {
-      "category": "General",
-      "name": "pnixlint",
-      "cmd": "nix lint"
-    },
-    {
-      "category": "General",
-      "name": "pnixserve",
-      "cmd": "nix serve"
-    },
-    {
-      "category": "General",
-      "name": "pnixshell",
-      "cmd": "nix shell"
-    },
-    {
-      "category": "General",
-      "name": "pnixenv",
-      "cmd": "nix env"
-    },
-    {
-      "category": "General",
-      "name": "pnixpath",
-      "cmd": "nix path"
-    },
-    {
-      "category": "General",
-      "name": "pnixcache",
-      "cmd": "nix cache"
-    },
-    {
-      "category": "General",
-      "name": "pghhelp",
-      "cmd": "gh --help"
-    },
-    {
-      "category": "General",
-      "name": "pghversion",
-      "cmd": "gh --version"
-    },
-    {
-      "category": "General",
-      "name": "pghlist",
-      "cmd": "gh list"
-    },
-    {
-      "category": "General",
-      "name": "pghinfo",
-      "cmd": "gh info"
-    },
-    {
-      "category": "General",
-      "name": "pghsearch",
-      "cmd": "gh search"
-    },
-    {
-      "category": "General",
-      "name": "pghshow",
-      "cmd": "gh show"
-    },
-    {
-      "category": "General",
-      "name": "pghstatus",
+      "category": "",
+      "name": "ghs",
       "cmd": "gh status"
     },
     {
-      "category": "General",
-      "name": "pghclean",
-      "cmd": "gh clean"
+      "category": "",
+      "name": "ghp",
+      "cmd": "gh pr"
     },
     {
-      "category": "General",
-      "name": "pghupdate",
-      "cmd": "gh update"
+      "category": "",
+      "name": "ghpl",
+      "cmd": "gh pr list"
     },
     {
-      "category": "General",
-      "name": "pghupgrade",
-      "cmd": "gh upgrade"
+      "category": "",
+      "name": "ghpc",
+      "cmd": "gh pr create"
     },
     {
-      "category": "General",
-      "name": "pghdry",
-      "cmd": "gh --dry-run"
+      "category": "",
+      "name": "ghpm",
+      "cmd": "gh pr merge"
     },
     {
-      "category": "General",
-      "name": "pghverbose",
-      "cmd": "gh --verbose"
+      "category": "",
+      "name": "ghco",
+      "cmd": "gh pr checkout"
     },
     {
-      "category": "General",
-      "name": "pghjson",
-      "cmd": "gh --json"
+      "category": "",
+      "name": "ghi",
+      "cmd": "gh issue"
     },
     {
-      "category": "General",
-      "name": "pghquiet",
-      "cmd": "gh --quiet"
+      "category": "",
+      "name": "ghil",
+      "cmd": "gh issue list"
     },
     {
-      "category": "General",
-      "name": "pghforce",
-      "cmd": "gh --force"
+      "category": "",
+      "name": "ghic",
+      "cmd": "gh issue create"
     },
     {
-      "category": "General",
-      "name": "pghall",
-      "cmd": "gh --all"
+      "category": "",
+      "name": "ghr",
+      "cmd": "gh release"
     },
     {
-      "category": "General",
-      "name": "pghlong",
-      "cmd": "gh --long"
+      "category": "",
+      "name": "ghrl",
+      "cmd": "gh release list"
     },
     {
-      "category": "General",
-      "name": "pghshort",
-      "cmd": "gh --short"
+      "category": "",
+      "name": "ghrc",
+      "cmd": "gh release create"
     },
     {
-      "category": "General",
-      "name": "pghdebug",
-      "cmd": "gh --debug"
+      "category": "",
+      "name": "ghrd",
+      "cmd": "gh release download"
     },
     {
-      "category": "General",
-      "name": "pghtrace",
-      "cmd": "gh --trace"
+      "category": "",
+      "name": "ghrv",
+      "cmd": "gh release view"
     },
     {
-      "category": "General",
-      "name": "pghwatch",
-      "cmd": "gh watch"
+      "category": "",
+      "name": "ghrep",
+      "cmd": "gh repo"
     },
     {
-      "category": "General",
-      "name": "pghdoctor",
-      "cmd": "gh doctor"
+      "category": "",
+      "name": "ghrepv",
+      "cmd": "gh repo view"
     },
     {
-      "category": "General",
-      "name": "pghcheck",
-      "cmd": "gh check"
+      "category": "",
+      "name": "ghcl",
+      "cmd": "gh repo clone"
     },
     {
-      "category": "General",
-      "name": "pghbuild",
-      "cmd": "gh build"
+      "category": "",
+      "name": "ghcr",
+      "cmd": "gh repo create"
     },
     {
-      "category": "General",
-      "name": "pghtest",
-      "cmd": "gh test"
+      "category": "",
+      "name": "ghw",
+      "cmd": "gh workflow"
     },
     {
-      "category": "General",
-      "name": "pghrun",
-      "cmd": "gh run"
+      "category": "",
+      "name": "dk",
+      "cmd": "_x docker"
     },
     {
-      "category": "General",
-      "name": "pghedit",
-      "cmd": "gh edit"
+      "category": "",
+      "name": "dkps",
+      "cmd": "_x docker ps"
     },
     {
-      "category": "General",
-      "name": "pghlogs",
-      "cmd": "gh logs"
+      "category": "",
+      "name": "dkpsa",
+      "cmd": "_x docker ps -a"
     },
     {
-      "category": "General",
-      "name": "pghtop",
-      "cmd": "gh top"
+      "category": "",
+      "name": "dkim",
+      "cmd": "_x docker images"
     },
     {
-      "category": "General",
-      "name": "pghtree",
-      "cmd": "gh tree"
+      "category": "",
+      "name": "dkex",
+      "cmd": "_x docker exec -it"
     },
     {
-      "category": "General",
-      "name": "pghdiff",
-      "cmd": "gh diff"
+      "category": "",
+      "name": "dklogs",
+      "cmd": "_x docker logs -f"
     },
     {
-      "category": "General",
-      "name": "pghapply",
-      "cmd": "gh apply"
+      "category": "",
+      "name": "dklogst",
+      "cmd": "_x docker logs --tail 100 -f"
     },
     {
-      "category": "General",
-      "name": "pghinit",
-      "cmd": "gh init"
+      "category": "",
+      "name": "dkstop",
+      "cmd": "_x docker stop $(docker ps -q)"
     },
     {
-      "category": "General",
-      "name": "pghfmt",
-      "cmd": "gh fmt"
+      "category": "",
+      "name": "dkrm",
+      "cmd": "_x docker rm $(docker ps -aq)"
     },
     {
-      "category": "General",
-      "name": "pghlint",
-      "cmd": "gh lint"
+      "category": "",
+      "name": "dkrmi",
+      "cmd": "_x docker rmi $(docker images -q)"
     },
     {
-      "category": "General",
-      "name": "pghserve",
-      "cmd": "gh serve"
+      "category": "",
+      "name": "dkprune",
+      "cmd": "_x docker system prune -af"
     },
     {
-      "category": "General",
-      "name": "pghshell",
-      "cmd": "gh shell"
+      "category": "",
+      "name": "dkclean",
+      "cmd": "_x docker system prune -af --volumes"
     },
     {
-      "category": "General",
-      "name": "pghenv",
-      "cmd": "gh env"
+      "category": "",
+      "name": "dkbuild",
+      "cmd": "_x docker build -t"
     },
     {
-      "category": "General",
-      "name": "pghpath",
-      "cmd": "gh path"
+      "category": "",
+      "name": "dkrun",
+      "cmd": "_x docker run -it --rm"
     },
     {
-      "category": "General",
-      "name": "pghcache",
-      "cmd": "gh cache"
+      "category": "",
+      "name": "dkrunbg",
+      "cmd": "_x docker run -d"
     },
     {
-      "category": "General",
-      "name": "px0001",
-      "cmd": "git log --oneline --decorate --version"
+      "category": "",
+      "name": "dkexec",
+      "cmd": "_x docker exec -it"
     },
     {
-      "category": "General",
-      "name": "px0002",
-      "cmd": "find . -maxdepth 3 -type f -name list"
+      "category": "",
+      "name": "dkstart",
+      "cmd": "_x docker start"
     },
     {
-      "category": "General",
-      "name": "px0003",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' info"
+      "category": "",
+      "name": "dkrestart",
+      "cmd": "_x docker restart"
     },
     {
-      "category": "General",
-      "name": "px0004",
-      "cmd": "du -sh search"
+      "category": "",
+      "name": "dkpause",
+      "cmd": "_x docker pause"
     },
     {
-      "category": "General",
-      "name": "px0005",
-      "cmd": "docker show"
+      "category": "",
+      "name": "dkunpause",
+      "cmd": "_x docker unpause"
     },
     {
-      "category": "General",
-      "name": "px0006",
-      "cmd": "kubectl status"
+      "category": "",
+      "name": "dktop",
+      "cmd": "_x docker top"
     },
     {
-      "category": "General",
-      "name": "px0007",
-      "cmd": "systemctl clean"
+      "category": "",
+      "name": "dkstats",
+      "cmd": "_x docker stats"
     },
     {
-      "category": "General",
-      "name": "px0008",
-      "cmd": "journalctl update"
+      "category": "",
+      "name": "dkcp",
+      "cmd": "_x docker cp"
     },
     {
-      "category": "General",
-      "name": "px0009",
-      "cmd": "pacman upgrade"
+      "category": "",
+      "name": "dkport",
+      "cmd": "_x docker port"
     },
     {
-      "category": "General",
-      "name": "px0010",
-      "cmd": "apt-cache --dry-run"
+      "category": "",
+      "name": "dkcom",
+      "cmd": "_x docker compose"
     },
     {
-      "category": "General",
-      "name": "px0011",
-      "cmd": "brew --verbose"
+      "category": "",
+      "name": "dkup",
+      "cmd": "_x docker compose up -d"
     },
     {
-      "category": "General",
-      "name": "px0012",
-      "cmd": "npm --json"
+      "category": "",
+      "name": "dkdown",
+      "cmd": "_x docker compose down"
     },
     {
-      "category": "General",
-      "name": "px0013",
-      "cmd": "pnpm --quiet"
+      "category": "",
+      "name": "dkpsall",
+      "cmd": "_x docker compose ps"
     },
     {
-      "category": "General",
-      "name": "px0014",
-      "cmd": "yarn --force"
+      "category": "",
+      "name": "dklogsall",
+      "cmd": "_x docker compose logs -f"
     },
     {
-      "category": "General",
-      "name": "px0015",
-      "cmd": "cargo --all"
+      "category": "",
+      "name": "dknet",
+      "cmd": "_x docker network ls"
     },
     {
-      "category": "General",
-      "name": "px0016",
-      "cmd": "go --long"
+      "category": "",
+      "name": "dkvol",
+      "cmd": "_x docker volume ls"
     },
     {
-      "category": "General",
-      "name": "px0017",
-      "cmd": "python3 --short"
+      "category": "",
+      "name": "dksys",
+      "cmd": "_x docker system df"
     },
     {
-      "category": "General",
-      "name": "px0018",
-      "cmd": "python3 -m pip --debug"
+      "category": "",
+      "name": "docker-ip",
+      "cmd": "_x docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null"
     },
     {
-      "category": "General",
-      "name": "px0019",
-      "cmd": "tmux --trace"
+      "category": "",
+      "name": "dstats",
+      "cmd": "_x docker stats --no-stream"
     },
     {
-      "category": "General",
-      "name": "px0020",
-      "cmd": "ssh watch"
+      "category": "",
+      "name": "lzd",
+      "cmd": "lazydocker"
     },
     {
-      "category": "General",
-      "name": "px0021",
-      "cmd": "curl -fsSL doctor"
+      "category": "",
+      "name": "sk",
+      "cmd": "skopeo"
     },
     {
-      "category": "General",
-      "name": "px0022",
-      "cmd": "tar check"
+      "category": "",
+      "name": "skc",
+      "cmd": "skopeo copy"
     },
     {
-      "category": "General",
-      "name": "px0023",
-      "cmd": "zip build"
+      "category": "",
+      "name": "skl",
+      "cmd": "skopeo list-tags"
     },
     {
-      "category": "General",
-      "name": "px0024",
-      "cmd": "openssl test"
+      "category": "",
+      "name": "ski",
+      "cmd": "skopeo inspect"
     },
     {
-      "category": "General",
-      "name": "px0025",
-      "cmd": "ffmpeg run"
+      "category": "",
+      "name": "sks",
+      "cmd": "skopeo sync"
     },
     {
-      "category": "General",
-      "name": "px0026",
-      "cmd": "make edit"
+      "category": "",
+      "name": "hado",
+      "cmd": "hadolint"
     },
     {
-      "category": "General",
-      "name": "px0027",
-      "cmd": "just logs"
+      "category": "",
+      "name": "trivyi",
+      "cmd": "trivy image"
     },
     {
-      "category": "General",
-      "name": "px0028",
-      "cmd": "terraform top"
+      "category": "",
+      "name": "trivyf",
+      "cmd": "trivy fs"
     },
     {
-      "category": "General",
-      "name": "px0029",
-      "cmd": "ansible tree"
+      "category": "",
+      "name": "trivyr",
+      "cmd": "trivy repo"
     },
     {
-      "category": "General",
-      "name": "px0030",
-      "cmd": "helm diff"
+      "category": "",
+      "name": "cosignv",
+      "cmd": "cosign verify"
     },
     {
-      "category": "General",
-      "name": "px0031",
-      "cmd": "podman apply"
+      "category": "",
+      "name": "cosigns",
+      "cmd": "cosign sign"
     },
     {
-      "category": "General",
-      "name": "px0032",
-      "cmd": "flatpak init"
+      "category": "",
+      "name": "pod",
+      "cmd": "_x podman"
     },
     {
-      "category": "General",
-      "name": "px0033",
-      "cmd": "snap fmt"
+      "category": "",
+      "name": "podps",
+      "cmd": "_x podman ps"
     },
     {
-      "category": "General",
-      "name": "px0034",
-      "cmd": "nix lint"
+      "category": "",
+      "name": "podpsa",
+      "cmd": "_x podman ps -a"
     },
     {
-      "category": "General",
-      "name": "px0035",
-      "cmd": "gh serve"
+      "category": "",
+      "name": "podim",
+      "cmd": "_x podman images"
     },
     {
-      "category": "General",
-      "name": "px0036",
-      "cmd": "git status --short shell"
+      "category": "",
+      "name": "podex",
+      "cmd": "_x podman exec -it"
     },
     {
-      "category": "General",
-      "name": "px0037",
-      "cmd": "git log --oneline --decorate env"
+      "category": "",
+      "name": "podlogs",
+      "cmd": "_x podman logs -f"
     },
     {
-      "category": "General",
-      "name": "px0038",
-      "cmd": "find . -maxdepth 3 -type f -name path"
+      "category": "",
+      "name": "podstop",
+      "cmd": "_x podman stop $(podman ps -q)"
     },
     {
-      "category": "General",
-      "name": "px0039",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' cache"
+      "category": "",
+      "name": "podrm",
+      "cmd": "_x podman rm $(podman ps -aq)"
     },
     {
-      "category": "General",
-      "name": "px0040",
-      "cmd": "du -sh --help"
+      "category": "",
+      "name": "podprune",
+      "cmd": "_x podman system prune -af"
     },
     {
-      "category": "General",
-      "name": "px0041",
-      "cmd": "docker --version"
+      "category": "",
+      "name": "podbuild",
+      "cmd": "_x podman build -t"
     },
     {
-      "category": "General",
-      "name": "px0042",
-      "cmd": "kubectl list"
+      "category": "",
+      "name": "podrun",
+      "cmd": "_x podman run -it --rm"
     },
     {
-      "category": "General",
-      "name": "px0043",
-      "cmd": "systemctl info"
+      "category": "",
+      "name": "podcom",
+      "cmd": "_x podman compose"
     },
     {
-      "category": "General",
-      "name": "px0044",
-      "cmd": "journalctl search"
+      "category": "",
+      "name": "podup",
+      "cmd": "_x podman compose up -d"
     },
     {
-      "category": "General",
-      "name": "px0045",
-      "cmd": "pacman show"
+      "category": "",
+      "name": "poddown",
+      "cmd": "_x podman compose down"
     },
     {
-      "category": "General",
-      "name": "px0046",
-      "cmd": "apt-cache status"
+      "category": "",
+      "name": "kgpw",
+      "cmd": "_x kubectl get pods -w"
     },
     {
-      "category": "General",
-      "name": "px0047",
-      "cmd": "brew clean"
+      "category": "",
+      "name": "kgns",
+      "cmd": "_x kubectl get namespaces"
     },
     {
-      "category": "General",
-      "name": "px0048",
-      "cmd": "npm update"
+      "category": "",
+      "name": "kuse",
+      "cmd": "_x kubectl config use-context"
     },
     {
-      "category": "General",
-      "name": "px0049",
-      "cmd": "pnpm upgrade"
+      "category": "",
+      "name": "kd",
+      "cmd": "_x kubectl describe"
     },
     {
-      "category": "General",
-      "name": "px0050",
-      "cmd": "yarn --dry-run"
+      "category": "",
+      "name": "kdp",
+      "cmd": "_x kubectl describe pod"
     },
     {
-      "category": "General",
-      "name": "px0051",
-      "cmd": "cargo --verbose"
+      "category": "",
+      "name": "kds",
+      "cmd": "_x kubectl describe svc"
     },
     {
-      "category": "General",
-      "name": "px0052",
-      "cmd": "go --json"
+      "category": "",
+      "name": "kdd",
+      "cmd": "_x kubectl describe deployment"
     },
     {
-      "category": "General",
-      "name": "px0053",
-      "cmd": "python3 --quiet"
+      "category": "",
+      "name": "kl",
+      "cmd": "_x kubectl logs"
     },
     {
-      "category": "General",
-      "name": "px0054",
-      "cmd": "python3 -m pip --force"
+      "category": "",
+      "name": "klf",
+      "cmd": "_x kubectl logs -f"
     },
     {
-      "category": "General",
-      "name": "px0055",
-      "cmd": "tmux --all"
+      "category": "",
+      "name": "ka",
+      "cmd": "_x kubectl apply -f"
     },
     {
-      "category": "General",
-      "name": "px0056",
-      "cmd": "ssh --long"
+      "category": "",
+      "name": "kpf",
+      "cmd": "_x kubectl port-forward"
     },
     {
-      "category": "General",
-      "name": "px0057",
-      "cmd": "curl -fsSL --short"
+      "category": "",
+      "name": "kexec",
+      "cmd": "_x kubectl exec -it"
     },
     {
-      "category": "General",
-      "name": "px0058",
-      "cmd": "tar --debug"
+      "category": "",
+      "name": "ktop",
+      "cmd": "_x kubectl top pods"
     },
     {
-      "category": "General",
-      "name": "px0059",
-      "cmd": "zip --trace"
+      "category": "",
+      "name": "ktopn",
+      "cmd": "_x kubectl top nodes"
     },
     {
-      "category": "General",
-      "name": "px0060",
-      "cmd": "openssl watch"
+      "category": "",
+      "name": "kedit",
+      "cmd": "_x kubectl edit"
     },
     {
-      "category": "General",
-      "name": "px0061",
-      "cmd": "ffmpeg doctor"
+      "category": "",
+      "name": "kc",
+      "cmd": "_x kubectl create"
     },
     {
-      "category": "General",
-      "name": "px0062",
-      "cmd": "make check"
+      "category": "",
+      "name": "kcf",
+      "cmd": "_x kubectl create -f"
     },
     {
-      "category": "General",
-      "name": "px0063",
-      "cmd": "just build"
+      "category": "",
+      "name": "kroll",
+      "cmd": "_x kubectl rollout status"
     },
     {
-      "category": "General",
-      "name": "px0064",
-      "cmd": "terraform test"
+      "category": "",
+      "name": "krestart",
+      "cmd": "_x kubectl rollout restart"
     },
     {
-      "category": "General",
-      "name": "px0065",
-      "cmd": "ansible run"
+      "category": "",
+      "name": "klabel",
+      "cmd": "_x kubectl label"
     },
     {
-      "category": "General",
-      "name": "px0066",
-      "cmd": "helm edit"
+      "category": "",
+      "name": "ktaint",
+      "cmd": "_x kubectl taint"
     },
     {
-      "category": "General",
-      "name": "px0067",
-      "cmd": "podman logs"
+      "category": "",
+      "name": "kcord",
+      "cmd": "_x kubectl cordon"
     },
     {
-      "category": "General",
-      "name": "px0068",
-      "cmd": "flatpak top"
+      "category": "",
+      "name": "kuncord",
+      "cmd": "_x kubectl uncordon"
     },
     {
-      "category": "General",
-      "name": "px0069",
-      "cmd": "snap tree"
+      "category": "",
+      "name": "kdrain",
+      "cmd": "_x kubectl drain"
     },
     {
-      "category": "General",
-      "name": "px0070",
-      "cmd": "nix diff"
+      "category": "",
+      "name": "kapi",
+      "cmd": "_x kubectl api-resources"
     },
     {
-      "category": "General",
-      "name": "px0071",
-      "cmd": "gh apply"
+      "category": "",
+      "name": "kexplain",
+      "cmd": "_x kubectl explain"
     },
     {
-      "category": "General",
-      "name": "px0072",
-      "cmd": "git status --short init"
+      "category": "",
+      "name": "kns",
+      "cmd": "_x kubectl config set-context --namespace"
     },
     {
-      "category": "General",
-      "name": "px0073",
-      "cmd": "git log --oneline --decorate fmt"
+      "category": "",
+      "name": "kindc",
+      "cmd": "kind create cluster"
     },
     {
-      "category": "General",
-      "name": "px0074",
-      "cmd": "find . -maxdepth 3 -type f -name lint"
+      "category": "",
+      "name": "kindd",
+      "cmd": "kind delete cluster"
     },
     {
-      "category": "General",
-      "name": "px0075",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' serve"
+      "category": "",
+      "name": "kindg",
+      "cmd": "kind get clusters"
     },
     {
-      "category": "General",
-      "name": "px0076",
-      "cmd": "du -sh shell"
+      "category": "",
+      "name": "kindk",
+      "cmd": "kind get kubeconfig"
     },
     {
-      "category": "General",
-      "name": "px0077",
-      "cmd": "docker env"
+      "category": "",
+      "name": "mk",
+      "cmd": "minikube"
     },
     {
-      "category": "General",
-      "name": "px0078",
-      "cmd": "kubectl path"
+      "category": "",
+      "name": "mks",
+      "cmd": "minikube start"
     },
     {
-      "category": "General",
-      "name": "px0079",
-      "cmd": "systemctl cache"
+      "category": "",
+      "name": "mkstop",
+      "cmd": "minikube stop"
     },
     {
-      "category": "General",
-      "name": "px0080",
-      "cmd": "journalctl --help"
+      "category": "",
+      "name": "mkd",
+      "cmd": "minikube delete"
     },
     {
-      "category": "General",
-      "name": "px0081",
-      "cmd": "pacman --version"
+      "category": "",
+      "name": "mkst",
+      "cmd": "minikube status"
     },
     {
-      "category": "General",
-      "name": "px0082",
-      "cmd": "apt-cache list"
+      "category": "",
+      "name": "mkpa",
+      "cmd": "minikube pause"
     },
     {
-      "category": "General",
-      "name": "px0083",
-      "cmd": "brew info"
+      "category": "",
+      "name": "mkun",
+      "cmd": "minikube unpause"
     },
     {
-      "category": "General",
-      "name": "px0084",
-      "cmd": "npm search"
+      "category": "",
+      "name": "mkdash",
+      "cmd": "minikube dashboard"
     },
     {
-      "category": "General",
-      "name": "px0085",
-      "cmd": "pnpm show"
+      "category": "",
+      "name": "kip",
+      "cmd": "minikube ip"
     },
     {
-      "category": "General",
-      "name": "px0086",
-      "cmd": "yarn status"
+      "category": "",
+      "name": "mkadd",
+      "cmd": "minikube addons list"
     },
     {
-      "category": "General",
-      "name": "px0087",
-      "cmd": "cargo clean"
+      "category": "",
+      "name": "k0",
+      "cmd": "k0s"
     },
     {
-      "category": "General",
-      "name": "px0088",
-      "cmd": "go update"
+      "category": "",
+      "name": "k0s",
+      "cmd": "k0s status"
     },
     {
-      "category": "General",
-      "name": "px0089",
-      "cmd": "python3 upgrade"
+      "category": "",
+      "name": "k0c",
+      "cmd": "k0s kubectl"
     },
     {
-      "category": "General",
-      "name": "px0090",
-      "cmd": "python3 -m pip --dry-run"
+      "category": "",
+      "name": "k0start",
+      "cmd": "k0s controller"
     },
     {
-      "category": "General",
-      "name": "px0091",
-      "cmd": "tmux --verbose"
+      "category": "",
+      "name": "tals",
+      "cmd": "talosctl version"
     },
     {
-      "category": "General",
-      "name": "px0092",
-      "cmd": "ssh --json"
+      "category": "",
+      "name": "talc",
+      "cmd": "talosctl config"
     },
     {
-      "category": "General",
-      "name": "px0093",
-      "cmd": "curl -fsSL --quiet"
+      "category": "",
+      "name": "argo",
+      "cmd": "argocd"
     },
     {
-      "category": "General",
-      "name": "px0094",
-      "cmd": "tar --force"
+      "category": "",
+      "name": "argol",
+      "cmd": "argocd login"
     },
     {
-      "category": "General",
-      "name": "px0095",
-      "cmd": "zip --all"
+      "category": "",
+      "name": "argos",
+      "cmd": "argocd app sync"
     },
     {
-      "category": "General",
-      "name": "px0096",
-      "cmd": "openssl --long"
+      "category": "",
+      "name": "argog",
+      "cmd": "argocd app get"
     },
     {
-      "category": "General",
-      "name": "px0097",
-      "cmd": "ffmpeg --short"
+      "category": "",
+      "name": "argolist",
+      "cmd": "argocd app list"
     },
     {
-      "category": "General",
-      "name": "px0098",
-      "cmd": "make --debug"
+      "category": "",
+      "name": "argodiff",
+      "cmd": "argocd app diff"
     },
     {
-      "category": "General",
-      "name": "px0099",
-      "cmd": "just --trace"
+      "category": "",
+      "name": "hl",
+      "cmd": "_x helm"
     },
     {
-      "category": "General",
-      "name": "px0100",
-      "cmd": "terraform watch"
+      "category": "",
+      "name": "hls",
+      "cmd": "_x helm list"
     },
     {
-      "category": "General",
-      "name": "px0101",
-      "cmd": "ansible doctor"
+      "category": "",
+      "name": "hli",
+      "cmd": "_x helm install"
     },
     {
-      "category": "General",
-      "name": "px0102",
-      "cmd": "helm check"
+      "category": "",
+      "name": "hlu",
+      "cmd": "_x helm upgrade"
     },
     {
-      "category": "General",
-      "name": "px0103",
-      "cmd": "podman build"
+      "category": "",
+      "name": "hlui",
+      "cmd": "_x helm upgrade --install"
     },
     {
-      "category": "General",
-      "name": "px0104",
-      "cmd": "flatpak test"
+      "category": "",
+      "name": "hld",
+      "cmd": "_x helm delete"
     },
     {
-      "category": "General",
-      "name": "px0105",
-      "cmd": "snap run"
+      "category": "",
+      "name": "hlr",
+      "cmd": "_x helm rollback"
     },
     {
-      "category": "General",
-      "name": "px0106",
-      "cmd": "nix edit"
+      "category": "",
+      "name": "hlg",
+      "cmd": "_x helm get"
     },
     {
-      "category": "General",
-      "name": "px0107",
-      "cmd": "gh logs"
+      "category": "",
+      "name": "hlga",
+      "cmd": "_x helm get all"
     },
     {
-      "category": "General",
-      "name": "px0108",
-      "cmd": "git status --short top"
+      "category": "",
+      "name": "hlgs",
+      "cmd": "_x helm get values"
     },
     {
-      "category": "General",
-      "name": "px0109",
-      "cmd": "git log --oneline --decorate tree"
+      "category": "",
+      "name": "hlh",
+      "cmd": "_x helm history"
     },
     {
-      "category": "General",
-      "name": "px0110",
-      "cmd": "find . -maxdepth 3 -type f -name diff"
+      "category": "",
+      "name": "hlsh",
+      "cmd": "_x helm show"
     },
     {
-      "category": "General",
-      "name": "px0111",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' apply"
+      "category": "",
+      "name": "hlshc",
+      "cmd": "_x helm show chart"
     },
     {
-      "category": "General",
-      "name": "px0112",
-      "cmd": "du -sh init"
+      "category": "",
+      "name": "hlshv",
+      "cmd": "_x helm show values"
     },
     {
-      "category": "General",
-      "name": "px0113",
-      "cmd": "docker fmt"
+      "category": "",
+      "name": "hlrepo",
+      "cmd": "_x helm repo"
     },
     {
-      "category": "General",
-      "name": "px0114",
-      "cmd": "kubectl lint"
+      "category": "",
+      "name": "hlrl",
+      "cmd": "_x helm repo list"
     },
     {
-      "category": "General",
-      "name": "px0115",
-      "cmd": "systemctl serve"
+      "category": "",
+      "name": "hlra",
+      "cmd": "_x helm repo add"
     },
     {
-      "category": "General",
-      "name": "px0116",
-      "cmd": "journalctl shell"
+      "category": "",
+      "name": "hlru",
+      "cmd": "_x helm repo update"
     },
     {
-      "category": "General",
-      "name": "px0117",
-      "cmd": "pacman env"
+      "category": "",
+      "name": "hlsea",
+      "cmd": "_x helm search"
     },
     {
-      "category": "General",
-      "name": "px0118",
-      "cmd": "apt-cache path"
+      "category": "",
+      "name": "hlver",
+      "cmd": "_x helm version"
     },
     {
-      "category": "General",
-      "name": "px0119",
-      "cmd": "brew cache"
+      "category": "",
+      "name": "hlcomp",
+      "cmd": "_x helm completion"
     },
     {
-      "category": "General",
-      "name": "px0120",
-      "cmd": "npm --help"
+      "category": "",
+      "name": "hlplug",
+      "cmd": "_x helm plugin"
     },
     {
-      "category": "General",
-      "name": "px0121",
-      "cmd": "pnpm --version"
+      "category": "",
+      "name": "hlpl",
+      "cmd": "_x helm plugin list"
     },
     {
-      "category": "General",
-      "name": "px0122",
-      "cmd": "yarn list"
+      "category": "",
+      "name": "scsr",
+      "cmd": "_x systemctl restart"
     },
     {
-      "category": "General",
-      "name": "px0123",
-      "cmd": "cargo info"
+      "category": "",
+      "name": "scse",
+      "cmd": "_x systemctl enable"
     },
     {
-      "category": "General",
-      "name": "px0124",
-      "cmd": "go search"
+      "category": "",
+      "name": "scsd",
+      "cmd": "_x systemctl disable"
     },
     {
-      "category": "General",
-      "name": "px0125",
-      "cmd": "python3 show"
+      "category": "",
+      "name": "scn",
+      "cmd": "_x systemctl daemon-reload"
     },
     {
-      "category": "General",
-      "name": "px0126",
-      "cmd": "python3 -m pip status"
+      "category": "",
+      "name": "scens",
+      "cmd": "_x systemctl enable --now"
     },
     {
-      "category": "General",
-      "name": "px0127",
-      "cmd": "tmux clean"
+      "category": "",
+      "name": "scdis",
+      "cmd": "_x systemctl disable --now"
     },
     {
-      "category": "General",
-      "name": "px0128",
-      "cmd": "ssh update"
+      "category": "",
+      "name": "scu",
+      "cmd": "_x systemctl --user"
     },
     {
-      "category": "General",
-      "name": "px0129",
-      "cmd": "curl -fsSL upgrade"
+      "category": "",
+      "name": "scus",
+      "cmd": "_x systemctl --user status"
     },
     {
-      "category": "General",
-      "name": "px0130",
-      "cmd": "tar --dry-run"
+      "category": "",
+      "name": "scust",
+      "cmd": "_x systemctl --user start"
     },
     {
-      "category": "General",
-      "name": "px0131",
-      "cmd": "zip --verbose"
+      "category": "",
+      "name": "scusp",
+      "cmd": "_x systemctl --user stop"
     },
     {
-      "category": "General",
-      "name": "px0132",
-      "cmd": "openssl --json"
+      "category": "",
+      "name": "scusr",
+      "cmd": "_x systemctl --user restart"
     },
     {
-      "category": "General",
-      "name": "px0133",
-      "cmd": "ffmpeg --quiet"
+      "category": "",
+      "name": "scuse",
+      "cmd": "_x systemctl --user enable"
     },
     {
-      "category": "General",
-      "name": "px0134",
-      "cmd": "make --force"
+      "category": "",
+      "name": "scusd",
+      "cmd": "_x systemctl --user disable"
     },
     {
-      "category": "General",
-      "name": "px0135",
-      "cmd": "just --all"
+      "category": "",
+      "name": "scl",
+      "cmd": "_x systemctl list-units"
     },
     {
-      "category": "General",
-      "name": "px0136",
-      "cmd": "terraform --long"
+      "category": "",
+      "name": "scla",
+      "cmd": "_x systemctl list-units --all"
     },
     {
-      "category": "General",
-      "name": "px0137",
-      "cmd": "ansible --short"
+      "category": "",
+      "name": "scfail",
+      "cmd": "_x systemctl list-units --failed"
     },
     {
-      "category": "General",
-      "name": "px0138",
-      "cmd": "helm --debug"
+      "category": "",
+      "name": "scmask",
+      "cmd": "_x systemctl mask"
     },
     {
-      "category": "General",
-      "name": "px0139",
-      "cmd": "podman --trace"
+      "category": "",
+      "name": "scunmask",
+      "cmd": "_x systemctl unmask"
     },
     {
-      "category": "General",
-      "name": "px0140",
-      "cmd": "flatpak watch"
+      "category": "",
+      "name": "sccat",
+      "cmd": "_x systemctl cat"
     },
     {
-      "category": "General",
-      "name": "px0141",
-      "cmd": "snap doctor"
+      "category": "",
+      "name": "sclist",
+      "cmd": "_x systemctl list-unit-files"
     },
     {
-      "category": "General",
-      "name": "px0142",
-      "cmd": "nix check"
+      "category": "",
+      "name": "scon",
+      "cmd": "_x systemctl is-active"
     },
     {
-      "category": "General",
-      "name": "px0143",
-      "cmd": "gh build"
+      "category": "",
+      "name": "serv",
+      "cmd": "_x systemctl"
     },
     {
-      "category": "General",
-      "name": "px0144",
-      "cmd": "git status --short test"
+      "category": "",
+      "name": "jc",
+      "cmd": "_x journalctl"
     },
     {
-      "category": "General",
-      "name": "px0145",
-      "cmd": "git log --oneline --decorate run"
+      "category": "",
+      "name": "jce",
+      "cmd": "_x journalctl -e"
     },
     {
-      "category": "General",
-      "name": "px0146",
-      "cmd": "find . -maxdepth 3 -type f -name edit"
+      "category": "",
+      "name": "jcf",
+      "cmd": "_x journalctl -f"
     },
     {
-      "category": "General",
-      "name": "px0147",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' logs"
+      "category": "",
+      "name": "jcu",
+      "cmd": "_x journalctl -u"
     },
     {
-      "category": "General",
-      "name": "px0148",
-      "cmd": "du -sh top"
+      "category": "",
+      "name": "jcub",
+      "cmd": "_x journalctl -u -b"
     },
     {
-      "category": "General",
-      "name": "px0149",
-      "cmd": "docker tree"
+      "category": "",
+      "name": "jcs",
+      "cmd": "_x journalctl --since"
     },
     {
-      "category": "General",
-      "name": "px0150",
-      "cmd": "kubectl diff"
+      "category": "",
+      "name": "jct",
+      "cmd": "_x journalctl --until"
     },
     {
-      "category": "General",
-      "name": "px0151",
-      "cmd": "systemctl apply"
+      "category": "",
+      "name": "jcp",
+      "cmd": "_x journalctl -p err"
     },
     {
-      "category": "General",
-      "name": "px0152",
-      "cmd": "journalctl init"
+      "category": "",
+      "name": "jcdf",
+      "cmd": "_x journalctl --disk-usage"
     },
     {
-      "category": "General",
-      "name": "px0153",
-      "cmd": "pacman fmt"
+      "category": "",
+      "name": "jcro",
+      "cmd": "_x journalctl --rotate"
     },
     {
-      "category": "General",
-      "name": "px0154",
-      "cmd": "apt-cache lint"
+      "category": "",
+      "name": "jcv",
+      "cmd": "_x journalctl --verify"
     },
     {
-      "category": "General",
-      "name": "px0155",
-      "cmd": "brew serve"
+      "category": "",
+      "name": "jcemerg",
+      "cmd": "_x journalctl -p emerg"
     },
     {
-      "category": "General",
-      "name": "px0156",
-      "cmd": "npm shell"
+      "category": "",
+      "name": "jcalert",
+      "cmd": "_x journalctl -p alert"
     },
     {
-      "category": "General",
-      "name": "px0157",
-      "cmd": "pnpm env"
+      "category": "",
+      "name": "jccrit",
+      "cmd": "_x journalctl -p crit"
     },
     {
-      "category": "General",
-      "name": "px0158",
-      "cmd": "yarn path"
+      "category": "",
+      "name": "jcwarn",
+      "cmd": "_x journalctl -p warning"
     },
     {
-      "category": "General",
-      "name": "px0159",
-      "cmd": "cargo cache"
+      "category": "",
+      "name": "jcnotice",
+      "cmd": "_x journalctl -p notice"
     },
     {
-      "category": "General",
-      "name": "px0160",
-      "cmd": "go --help"
+      "category": "",
+      "name": "jcinfo",
+      "cmd": "_x journalctl -p info"
     },
     {
-      "category": "General",
-      "name": "px0161",
-      "cmd": "python3 --version"
+      "category": "",
+      "name": "jcdebug",
+      "cmd": "_x journalctl -p debug"
     },
     {
-      "category": "General",
-      "name": "px0162",
-      "cmd": "python3 -m pip list"
+      "category": "",
+      "name": "jcboot",
+      "cmd": "_x journalctl -b"
     },
     {
-      "category": "General",
-      "name": "px0163",
-      "cmd": "tmux info"
+      "category": "",
+      "name": "jrnl",
+      "cmd": "_x journalctl"
     },
     {
-      "category": "General",
-      "name": "px0164",
-      "cmd": "ssh search"
+      "category": "",
+      "name": "pac",
+      "cmd": "sudo pacman"
     },
     {
-      "category": "General",
-      "name": "px0165",
-      "cmd": "curl -fsSL show"
+      "category": "",
+      "name": "pacs",
+      "cmd": "_x pacman -Ss"
     },
     {
-      "category": "General",
-      "name": "px0166",
-      "cmd": "tar status"
+      "category": "",
+      "name": "pacsi",
+      "cmd": "_x pacman -Si"
     },
     {
-      "category": "General",
-      "name": "px0167",
-      "cmd": "zip clean"
+      "category": "",
+      "name": "pacq",
+      "cmd": "_x pacman -Q"
     },
     {
-      "category": "General",
-      "name": "px0168",
-      "cmd": "openssl update"
+      "category": "",
+      "name": "pacqi",
+      "cmd": "_x pacman -Qi"
     },
     {
-      "category": "General",
-      "name": "px0169",
-      "cmd": "ffmpeg upgrade"
+      "category": "",
+      "name": "pacql",
+      "cmd": "_x pacman -Ql"
     },
     {
-      "category": "General",
-      "name": "px0170",
-      "cmd": "make --dry-run"
+      "category": "",
+      "name": "pacqo",
+      "cmd": "_x pacman -Qo"
     },
     {
-      "category": "General",
-      "name": "px0171",
-      "cmd": "just --verbose"
+      "category": "",
+      "name": "pacqs",
+      "cmd": "_x pacman -Qs"
     },
     {
-      "category": "General",
-      "name": "px0172",
-      "cmd": "terraform --json"
+      "category": "",
+      "name": "pacup",
+      "cmd": "sudo pacman -Syu"
     },
     {
-      "category": "General",
-      "name": "px0173",
-      "cmd": "ansible --quiet"
+      "category": "",
+      "name": "pacin",
+      "cmd": "sudo pacman -S"
     },
     {
-      "category": "General",
-      "name": "px0174",
-      "cmd": "helm --force"
+      "category": "",
+      "name": "pacrm",
+      "cmd": "sudo pacman -Rns"
     },
     {
-      "category": "General",
-      "name": "px0175",
-      "cmd": "podman --all"
+      "category": "",
+      "name": "pacrmu",
+      "cmd": "sudo pacman -Rdd"
     },
     {
-      "category": "General",
-      "name": "px0176",
-      "cmd": "flatpak --long"
+      "category": "",
+      "name": "pacor",
+      "cmd": "sudo pacman -Sc"
     },
     {
-      "category": "General",
-      "name": "px0177",
-      "cmd": "snap --short"
+      "category": "",
+      "name": "pacowned",
+      "cmd": "_x pacman -Qii"
     },
     {
-      "category": "General",
-      "name": "px0178",
-      "cmd": "nix --debug"
+      "category": "",
+      "name": "pacorph",
+      "cmd": "_x pacman -Qtdq"
     },
     {
-      "category": "General",
-      "name": "px0179",
-      "cmd": "gh --trace"
+      "category": "",
+      "name": "pacclean",
+      "cmd": "sudo pacman -Rns $(pacman -Qtdq 2>/dev/null)"
     },
     {
-      "category": "General",
-      "name": "px0180",
-      "cmd": "git status --short watch"
+      "category": "",
+      "name": "paclsorph",
+      "cmd": "_x pacman -Qtd"
     },
     {
-      "category": "General",
-      "name": "px0181",
-      "cmd": "git log --oneline --decorate doctor"
+      "category": "",
+      "name": "pacfiles",
+      "cmd": "_x pacman -Fl"
     },
     {
-      "category": "General",
-      "name": "px0182",
-      "cmd": "find . -maxdepth 3 -type f -name check"
+      "category": "",
+      "name": "pacdep",
+      "cmd": "_x pacman -Si"
     },
     {
-      "category": "General",
-      "name": "px0183",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' build"
+      "category": "",
+      "name": "pacwhy",
+      "cmd": "_x pacman -D --asexplicit"
     },
     {
-      "category": "General",
-      "name": "px0184",
-      "cmd": "du -sh test"
+      "category": "",
+      "name": "fixpacman",
+      "cmd": "sudo rm -f /var/lib/pacman/db.lck"
     },
     {
-      "category": "General",
-      "name": "px0185",
-      "cmd": "docker run"
+      "category": "",
+      "name": "yays",
+      "cmd": "yay -Ss"
     },
     {
-      "category": "General",
-      "name": "px0186",
-      "cmd": "kubectl edit"
+      "category": "",
+      "name": "yayq",
+      "cmd": "yay -Q"
     },
     {
-      "category": "General",
-      "name": "px0187",
-      "cmd": "systemctl logs"
+      "category": "",
+      "name": "yayup",
+      "cmd": "yay -Syu"
     },
     {
-      "category": "General",
-      "name": "px0188",
-      "cmd": "journalctl top"
+      "category": "",
+      "name": "yayi",
+      "cmd": "yay -S"
     },
     {
-      "category": "General",
-      "name": "px0189",
-      "cmd": "pacman tree"
+      "category": "",
+      "name": "yayrm",
+      "cmd": "yay -Rns"
     },
     {
-      "category": "General",
-      "name": "px0190",
-      "cmd": "apt-cache diff"
+      "category": "",
+      "name": "yayclean",
+      "cmd": "yay -Sc"
     },
     {
-      "category": "General",
-      "name": "px0191",
-      "cmd": "brew apply"
+      "category": "",
+      "name": "yaygendb",
+      "cmd": "yay -Y --gendb"
     },
     {
-      "category": "General",
-      "name": "px0192",
-      "cmd": "npm init"
+      "category": "",
+      "name": "yaydev",
+      "cmd": "yay -S --devel"
     },
     {
-      "category": "General",
-      "name": "px0193",
-      "cmd": "pnpm fmt"
+      "category": "",
+      "name": "yayfiles",
+      "cmd": "yay -Fl"
     },
     {
-      "category": "General",
-      "name": "px0194",
-      "cmd": "yarn lint"
+      "category": "",
+      "name": "yayf",
+      "cmd": "yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
     },
     {
-      "category": "General",
-      "name": "px0195",
-      "cmd": "cargo serve"
+      "category": "",
+      "name": "apt",
+      "cmd": "_x apt"
     },
     {
-      "category": "General",
-      "name": "px0196",
-      "cmd": "go shell"
+      "category": "",
+      "name": "aptup",
+      "cmd": "sudo apt update && sudo apt upgrade -y"
     },
     {
-      "category": "General",
-      "name": "px0197",
-      "cmd": "python3 env"
+      "category": "",
+      "name": "aptin",
+      "cmd": "sudo apt install"
     },
     {
-      "category": "General",
-      "name": "px0198",
-      "cmd": "python3 -m pip path"
+      "category": "",
+      "name": "aptr",
+      "cmd": "sudo apt remove"
     },
     {
-      "category": "General",
-      "name": "px0199",
-      "cmd": "tmux cache"
+      "category": "",
+      "name": "aptp",
+      "cmd": "sudo apt purge"
     },
     {
-      "category": "General",
-      "name": "px0200",
-      "cmd": "ssh --help"
+      "category": "",
+      "name": "apts",
+      "cmd": "_x apt search"
     },
     {
-      "category": "General",
-      "name": "px0201",
-      "cmd": "curl -fsSL --version"
+      "category": "",
+      "name": "aptsh",
+      "cmd": "_x apt show"
     },
     {
-      "category": "General",
-      "name": "px0202",
-      "cmd": "tar list"
+      "category": "",
+      "name": "aptq",
+      "cmd": "dpkg -l"
     },
     {
-      "category": "General",
-      "name": "px0203",
-      "cmd": "zip info"
+      "category": "",
+      "name": "aptqi",
+      "cmd": "dpkg -l | grep"
     },
     {
-      "category": "General",
-      "name": "px0204",
-      "cmd": "openssl search"
+      "category": "",
+      "name": "aptau",
+      "cmd": "sudo apt autoremove"
     },
     {
-      "category": "General",
-      "name": "px0205",
-      "cmd": "ffmpeg show"
+      "category": "",
+      "name": "aptd",
+      "cmd": "sudo apt download"
     },
     {
-      "category": "General",
-      "name": "px0206",
-      "cmd": "make status"
+      "category": "",
+      "name": "aptsrc",
+      "cmd": "sudo apt source"
     },
     {
-      "category": "General",
-      "name": "px0207",
-      "cmd": "just clean"
+      "category": "",
+      "name": "aptbuild",
+      "cmd": "sudo apt build-dep"
     },
     {
-      "category": "General",
-      "name": "px0208",
-      "cmd": "terraform update"
+      "category": "",
+      "name": "aptpolicy",
+      "cmd": "_x apt policy"
     },
     {
-      "category": "General",
-      "name": "px0209",
-      "cmd": "ansible upgrade"
+      "category": "",
+      "name": "aptchangelog",
+      "cmd": "_x apt changelog"
     },
     {
-      "category": "General",
-      "name": "px0210",
-      "cmd": "helm --dry-run"
+      "category": "",
+      "name": "aptlistup",
+      "cmd": "_x apt list --upgradable"
     },
     {
-      "category": "General",
-      "name": "px0211",
-      "cmd": "podman --verbose"
+      "category": "",
+      "name": "aptlistins",
+      "cmd": "_x apt list --installed"
     },
     {
-      "category": "General",
-      "name": "px0212",
-      "cmd": "flatpak --json"
+      "category": "",
+      "name": "apthold",
+      "cmd": "sudo apt-mark hold"
     },
     {
-      "category": "General",
-      "name": "px0213",
-      "cmd": "snap --quiet"
+      "category": "",
+      "name": "aptunhold",
+      "cmd": "sudo apt-mark unhold"
     },
     {
-      "category": "General",
-      "name": "px0214",
-      "cmd": "nix --force"
+      "category": "",
+      "name": "aptshowhold",
+      "cmd": "apt-mark showhold"
     },
     {
-      "category": "General",
-      "name": "px0215",
-      "cmd": "gh --all"
+      "category": "",
+      "name": "aptfix",
+      "cmd": "sudo apt --fix-broken install"
     },
     {
-      "category": "General",
-      "name": "px0216",
-      "cmd": "git status --short --long"
+      "category": "",
+      "name": "aptupdate",
+      "cmd": "sudo apt update"
     },
     {
-      "category": "General",
-      "name": "px0217",
-      "cmd": "git log --oneline --decorate --short"
+      "category": "",
+      "name": "aptdistup",
+      "cmd": "sudo apt full-upgrade"
     },
     {
-      "category": "General",
-      "name": "px0218",
-      "cmd": "find . -maxdepth 3 -type f -name --debug"
+      "category": "",
+      "name": "dnf",
+      "cmd": "_x dnf"
     },
     {
-      "category": "General",
-      "name": "px0219",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --trace"
+      "category": "",
+      "name": "dnfs",
+      "cmd": "_x dnf search"
     },
     {
-      "category": "General",
-      "name": "px0220",
-      "cmd": "du -sh watch"
+      "category": "",
+      "name": "dnfsi",
+      "cmd": "_x dnf info"
     },
     {
-      "category": "General",
-      "name": "px0221",
-      "cmd": "docker doctor"
+      "category": "",
+      "name": "dnfup",
+      "cmd": "sudo dnf upgrade"
     },
     {
-      "category": "General",
-      "name": "px0222",
-      "cmd": "kubectl check"
+      "category": "",
+      "name": "dnfi",
+      "cmd": "sudo dnf install"
     },
     {
-      "category": "General",
-      "name": "px0223",
-      "cmd": "systemctl build"
+      "category": "",
+      "name": "dnfrm",
+      "cmd": "sudo dnf remove"
     },
     {
-      "category": "General",
-      "name": "px0224",
-      "cmd": "journalctl test"
+      "category": "",
+      "name": "dnfau",
+      "cmd": "sudo dnf autoremove"
     },
     {
-      "category": "General",
-      "name": "px0225",
-      "cmd": "pacman run"
+      "category": "",
+      "name": "dnfq",
+      "cmd": "_x dnf list installed"
     },
     {
-      "category": "General",
-      "name": "px0226",
-      "cmd": "apt-cache edit"
+      "category": "",
+      "name": "dnfqi",
+      "cmd": "_x dnf list installed | grep"
     },
     {
-      "category": "General",
-      "name": "px0227",
-      "cmd": "brew logs"
+      "category": "",
+      "name": "dnfrep",
+      "cmd": "_x dnf repolist"
     },
     {
-      "category": "General",
-      "name": "px0228",
-      "cmd": "npm top"
+      "category": "",
+      "name": "dnfre",
+      "cmd": "_x dnf group list"
     },
     {
-      "category": "General",
-      "name": "px0229",
-      "cmd": "pnpm tree"
+      "category": "",
+      "name": "dnfcache",
+      "cmd": "sudo dnf clean all"
     },
     {
-      "category": "General",
-      "name": "px0230",
-      "cmd": "yarn diff"
+      "category": "",
+      "name": "dnfhist",
+      "cmd": "_x dnf history"
     },
     {
-      "category": "General",
-      "name": "px0231",
-      "cmd": "cargo apply"
+      "category": "",
+      "name": "dnfhistinfo",
+      "cmd": "_x dnf history info"
     },
     {
-      "category": "General",
-      "name": "px0232",
-      "cmd": "go init"
+      "category": "",
+      "name": "dnfroll",
+      "cmd": "_x dnf history rollback"
     },
     {
-      "category": "General",
-      "name": "px0233",
-      "cmd": "python3 fmt"
+      "category": "",
+      "name": "dnfdowng",
+      "cmd": "_x dnf downgrade"
     },
     {
-      "category": "General",
-      "name": "px0234",
-      "cmd": "python3 -m pip lint"
+      "category": "",
+      "name": "dnflocal",
+      "cmd": "sudo dnf localinstall"
     },
     {
-      "category": "General",
-      "name": "px0235",
-      "cmd": "tmux serve"
+      "category": "",
+      "name": "dnfprov",
+      "cmd": "_x dnf provides"
     },
     {
-      "category": "General",
-      "name": "px0236",
-      "cmd": "ssh shell"
+      "category": "",
+      "name": "dnfchk",
+      "cmd": "_x dnf check-update"
     },
     {
-      "category": "General",
-      "name": "px0237",
-      "cmd": "curl -fsSL env"
+      "category": "",
+      "name": "dnfmod",
+      "cmd": "_x dnf module"
     },
     {
-      "category": "General",
-      "name": "px0238",
-      "cmd": "tar path"
+      "category": "",
+      "name": "brew",
+      "cmd": "_x brew"
     },
     {
-      "category": "General",
-      "name": "px0239",
-      "cmd": "zip cache"
+      "category": "",
+      "name": "brews",
+      "cmd": "_x brew search"
     },
     {
-      "category": "General",
-      "name": "px0240",
-      "cmd": "openssl --help"
+      "category": "",
+      "name": "brewin",
+      "cmd": "_x brew install"
     },
     {
-      "category": "General",
-      "name": "px0241",
-      "cmd": "ffmpeg --version"
+      "category": "",
+      "name": "brewrm",
+      "cmd": "_x brew uninstall"
     },
     {
-      "category": "General",
-      "name": "px0242",
-      "cmd": "make list"
+      "category": "",
+      "name": "brewq",
+      "cmd": "_x brew list"
     },
     {
-      "category": "General",
-      "name": "px0243",
-      "cmd": "just info"
+      "category": "",
+      "name": "brewsrv",
+      "cmd": "_x brew services"
     },
     {
-      "category": "General",
-      "name": "px0244",
-      "cmd": "terraform search"
+      "category": "",
+      "name": "brewsrvl",
+      "cmd": "_x brew services list"
     },
     {
-      "category": "General",
-      "name": "px0245",
-      "cmd": "ansible show"
+      "category": "",
+      "name": "brewsrvr",
+      "cmd": "_x brew services restart"
     },
     {
-      "category": "General",
-      "name": "px0246",
-      "cmd": "helm status"
+      "category": "",
+      "name": "brewup",
+      "cmd": "_x brew update && brew upgrade"
     },
     {
-      "category": "General",
-      "name": "px0247",
-      "cmd": "podman clean"
+      "category": "",
+      "name": "brewupc",
+      "cmd": "_x brew update && brew upgrade && brew cleanup"
     },
     {
-      "category": "General",
-      "name": "px0248",
-      "cmd": "flatpak update"
+      "category": "",
+      "name": "brewclean",
+      "cmd": "_x brew cleanup"
     },
     {
-      "category": "General",
-      "name": "px0249",
-      "cmd": "snap upgrade"
+      "category": "",
+      "name": "brewdoc",
+      "cmd": "_x brew doctor"
     },
     {
-      "category": "General",
-      "name": "px0250",
-      "cmd": "nix --dry-run"
+      "category": "",
+      "name": "brewout",
+      "cmd": "_x brew outdated"
     },
     {
-      "category": "General",
-      "name": "px0251",
-      "cmd": "gh --verbose"
+      "category": "",
+      "name": "brewpin",
+      "cmd": "_x brew pin"
     },
     {
-      "category": "General",
-      "name": "px0252",
-      "cmd": "git status --short --json"
+      "category": "",
+      "name": "brewsr",
+      "cmd": "_x brew tap"
     },
     {
-      "category": "General",
-      "name": "px0253",
-      "cmd": "git log --oneline --decorate --quiet"
+      "category": "",
+      "name": "brewinfo",
+      "cmd": "_x brew info"
     },
     {
-      "category": "General",
-      "name": "px0254",
-      "cmd": "find . -maxdepth 3 -type f -name --force"
+      "category": "",
+      "name": "brewcask",
+      "cmd": "_x brew install --cask"
     },
     {
-      "category": "General",
-      "name": "px0255",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --all"
+      "category": "",
+      "name": "brewdep",
+      "cmd": "_x brew deps"
     },
     {
-      "category": "General",
-      "name": "px0256",
-      "cmd": "du -sh --long"
+      "category": "",
+      "name": "brewuses",
+      "cmd": "_x brew uses"
     },
     {
-      "category": "General",
-      "name": "px0257",
-      "cmd": "docker --short"
+      "category": "",
+      "name": "brewleaves",
+      "cmd": "_x brew leaves"
     },
     {
-      "category": "General",
-      "name": "px0258",
-      "cmd": "kubectl --debug"
+      "category": "",
+      "name": "flat",
+      "cmd": "flatpak"
     },
     {
-      "category": "General",
-      "name": "px0259",
-      "cmd": "systemctl --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0260",
-      "cmd": "journalctl watch"
-    },
-    {
-      "category": "General",
-      "name": "px0261",
-      "cmd": "pacman doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0262",
-      "cmd": "apt-cache check"
-    },
-    {
-      "category": "General",
-      "name": "px0263",
-      "cmd": "brew build"
-    },
-    {
-      "category": "General",
-      "name": "px0264",
-      "cmd": "npm test"
-    },
-    {
-      "category": "General",
-      "name": "px0265",
-      "cmd": "pnpm run"
-    },
-    {
-      "category": "General",
-      "name": "px0266",
-      "cmd": "yarn edit"
-    },
-    {
-      "category": "General",
-      "name": "px0267",
-      "cmd": "cargo logs"
-    },
-    {
-      "category": "General",
-      "name": "px0268",
-      "cmd": "go top"
-    },
-    {
-      "category": "General",
-      "name": "px0269",
-      "cmd": "python3 tree"
-    },
-    {
-      "category": "General",
-      "name": "px0270",
-      "cmd": "python3 -m pip diff"
-    },
-    {
-      "category": "General",
-      "name": "px0271",
-      "cmd": "tmux apply"
-    },
-    {
-      "category": "General",
-      "name": "px0272",
-      "cmd": "ssh init"
-    },
-    {
-      "category": "General",
-      "name": "px0273",
-      "cmd": "curl -fsSL fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0274",
-      "cmd": "tar lint"
-    },
-    {
-      "category": "General",
-      "name": "px0275",
-      "cmd": "zip serve"
-    },
-    {
-      "category": "General",
-      "name": "px0276",
-      "cmd": "openssl shell"
-    },
-    {
-      "category": "General",
-      "name": "px0277",
-      "cmd": "ffmpeg env"
-    },
-    {
-      "category": "General",
-      "name": "px0278",
-      "cmd": "make path"
-    },
-    {
-      "category": "General",
-      "name": "px0279",
-      "cmd": "just cache"
-    },
-    {
-      "category": "General",
-      "name": "px0280",
-      "cmd": "terraform --help"
-    },
-    {
-      "category": "General",
-      "name": "px0281",
-      "cmd": "ansible --version"
-    },
-    {
-      "category": "General",
-      "name": "px0282",
-      "cmd": "helm list"
-    },
-    {
-      "category": "General",
-      "name": "px0283",
-      "cmd": "podman info"
-    },
-    {
-      "category": "General",
-      "name": "px0284",
+      "category": "",
+      "name": "flats",
       "cmd": "flatpak search"
     },
     {
-      "category": "General",
-      "name": "px0285",
-      "cmd": "snap show"
+      "category": "",
+      "name": "flati",
+      "cmd": "flatpak install"
     },
     {
-      "category": "General",
-      "name": "px0286",
-      "cmd": "nix status"
+      "category": "",
+      "name": "flatrm",
+      "cmd": "flatpak uninstall"
     },
     {
-      "category": "General",
-      "name": "px0287",
-      "cmd": "gh clean"
-    },
-    {
-      "category": "General",
-      "name": "px0288",
-      "cmd": "git status --short update"
-    },
-    {
-      "category": "General",
-      "name": "px0289",
-      "cmd": "git log --oneline --decorate upgrade"
-    },
-    {
-      "category": "General",
-      "name": "px0290",
-      "cmd": "find . -maxdepth 3 -type f -name --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "px0291",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --verbose"
-    },
-    {
-      "category": "General",
-      "name": "px0292",
-      "cmd": "du -sh --json"
-    },
-    {
-      "category": "General",
-      "name": "px0293",
-      "cmd": "docker --quiet"
-    },
-    {
-      "category": "General",
-      "name": "px0294",
-      "cmd": "kubectl --force"
-    },
-    {
-      "category": "General",
-      "name": "px0295",
-      "cmd": "systemctl --all"
-    },
-    {
-      "category": "General",
-      "name": "px0296",
-      "cmd": "journalctl --long"
-    },
-    {
-      "category": "General",
-      "name": "px0297",
-      "cmd": "pacman --short"
-    },
-    {
-      "category": "General",
-      "name": "px0298",
-      "cmd": "apt-cache --debug"
-    },
-    {
-      "category": "General",
-      "name": "px0299",
-      "cmd": "brew --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0300",
-      "cmd": "npm watch"
-    },
-    {
-      "category": "General",
-      "name": "px0301",
-      "cmd": "pnpm doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0302",
-      "cmd": "yarn check"
-    },
-    {
-      "category": "General",
-      "name": "px0303",
-      "cmd": "cargo build"
-    },
-    {
-      "category": "General",
-      "name": "px0304",
-      "cmd": "go test"
-    },
-    {
-      "category": "General",
-      "name": "px0305",
-      "cmd": "python3 run"
-    },
-    {
-      "category": "General",
-      "name": "px0306",
-      "cmd": "python3 -m pip edit"
-    },
-    {
-      "category": "General",
-      "name": "px0307",
-      "cmd": "tmux logs"
-    },
-    {
-      "category": "General",
-      "name": "px0308",
-      "cmd": "ssh top"
-    },
-    {
-      "category": "General",
-      "name": "px0309",
-      "cmd": "curl -fsSL tree"
-    },
-    {
-      "category": "General",
-      "name": "px0310",
-      "cmd": "tar diff"
-    },
-    {
-      "category": "General",
-      "name": "px0311",
-      "cmd": "zip apply"
-    },
-    {
-      "category": "General",
-      "name": "px0312",
-      "cmd": "openssl init"
-    },
-    {
-      "category": "General",
-      "name": "px0313",
-      "cmd": "ffmpeg fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0314",
-      "cmd": "make lint"
-    },
-    {
-      "category": "General",
-      "name": "px0315",
-      "cmd": "just serve"
-    },
-    {
-      "category": "General",
-      "name": "px0316",
-      "cmd": "terraform shell"
-    },
-    {
-      "category": "General",
-      "name": "px0317",
-      "cmd": "ansible env"
-    },
-    {
-      "category": "General",
-      "name": "px0318",
-      "cmd": "helm path"
-    },
-    {
-      "category": "General",
-      "name": "px0319",
-      "cmd": "podman cache"
-    },
-    {
-      "category": "General",
-      "name": "px0320",
-      "cmd": "flatpak --help"
-    },
-    {
-      "category": "General",
-      "name": "px0321",
-      "cmd": "snap --version"
-    },
-    {
-      "category": "General",
-      "name": "px0322",
-      "cmd": "nix list"
-    },
-    {
-      "category": "General",
-      "name": "px0323",
-      "cmd": "gh info"
-    },
-    {
-      "category": "General",
-      "name": "px0324",
-      "cmd": "git status --short search"
-    },
-    {
-      "category": "General",
-      "name": "px0325",
-      "cmd": "git log --oneline --decorate show"
-    },
-    {
-      "category": "General",
-      "name": "px0326",
-      "cmd": "find . -maxdepth 3 -type f -name status"
-    },
-    {
-      "category": "General",
-      "name": "px0327",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' clean"
-    },
-    {
-      "category": "General",
-      "name": "px0328",
-      "cmd": "du -sh update"
-    },
-    {
-      "category": "General",
-      "name": "px0329",
-      "cmd": "docker upgrade"
-    },
-    {
-      "category": "General",
-      "name": "px0330",
-      "cmd": "kubectl --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "px0331",
-      "cmd": "systemctl --verbose"
-    },
-    {
-      "category": "General",
-      "name": "px0332",
-      "cmd": "journalctl --json"
-    },
-    {
-      "category": "General",
-      "name": "px0333",
-      "cmd": "pacman --quiet"
-    },
-    {
-      "category": "General",
-      "name": "px0334",
-      "cmd": "apt-cache --force"
-    },
-    {
-      "category": "General",
-      "name": "px0335",
-      "cmd": "brew --all"
-    },
-    {
-      "category": "General",
-      "name": "px0336",
-      "cmd": "npm --long"
-    },
-    {
-      "category": "General",
-      "name": "px0337",
-      "cmd": "pnpm --short"
-    },
-    {
-      "category": "General",
-      "name": "px0338",
-      "cmd": "yarn --debug"
-    },
-    {
-      "category": "General",
-      "name": "px0339",
-      "cmd": "cargo --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0340",
-      "cmd": "go watch"
-    },
-    {
-      "category": "General",
-      "name": "px0341",
-      "cmd": "python3 doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0342",
-      "cmd": "python3 -m pip check"
-    },
-    {
-      "category": "General",
-      "name": "px0343",
-      "cmd": "tmux build"
-    },
-    {
-      "category": "General",
-      "name": "px0344",
-      "cmd": "ssh test"
-    },
-    {
-      "category": "General",
-      "name": "px0345",
-      "cmd": "curl -fsSL run"
-    },
-    {
-      "category": "General",
-      "name": "px0346",
-      "cmd": "tar edit"
-    },
-    {
-      "category": "General",
-      "name": "px0347",
-      "cmd": "zip logs"
-    },
-    {
-      "category": "General",
-      "name": "px0348",
-      "cmd": "openssl top"
-    },
-    {
-      "category": "General",
-      "name": "px0349",
-      "cmd": "ffmpeg tree"
-    },
-    {
-      "category": "General",
-      "name": "px0350",
-      "cmd": "make diff"
-    },
-    {
-      "category": "General",
-      "name": "px0351",
-      "cmd": "just apply"
-    },
-    {
-      "category": "General",
-      "name": "px0352",
-      "cmd": "terraform init"
-    },
-    {
-      "category": "General",
-      "name": "px0353",
-      "cmd": "ansible fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0354",
-      "cmd": "helm lint"
-    },
-    {
-      "category": "General",
-      "name": "px0355",
-      "cmd": "podman serve"
-    },
-    {
-      "category": "General",
-      "name": "px0356",
-      "cmd": "flatpak shell"
-    },
-    {
-      "category": "General",
-      "name": "px0357",
-      "cmd": "snap env"
-    },
-    {
-      "category": "General",
-      "name": "px0358",
-      "cmd": "nix path"
-    },
-    {
-      "category": "General",
-      "name": "px0359",
-      "cmd": "gh cache"
-    },
-    {
-      "category": "General",
-      "name": "px0360",
-      "cmd": "git status --short --help"
-    },
-    {
-      "category": "General",
-      "name": "px0361",
-      "cmd": "git log --oneline --decorate --version"
-    },
-    {
-      "category": "General",
-      "name": "px0362",
-      "cmd": "find . -maxdepth 3 -type f -name list"
-    },
-    {
-      "category": "General",
-      "name": "px0363",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' info"
-    },
-    {
-      "category": "General",
-      "name": "px0364",
-      "cmd": "du -sh search"
-    },
-    {
-      "category": "General",
-      "name": "px0365",
-      "cmd": "docker show"
-    },
-    {
-      "category": "General",
-      "name": "px0366",
-      "cmd": "kubectl status"
-    },
-    {
-      "category": "General",
-      "name": "px0367",
-      "cmd": "systemctl clean"
-    },
-    {
-      "category": "General",
-      "name": "px0368",
-      "cmd": "journalctl update"
-    },
-    {
-      "category": "General",
-      "name": "px0369",
-      "cmd": "pacman upgrade"
-    },
-    {
-      "category": "General",
-      "name": "px0370",
-      "cmd": "apt-cache --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "px0371",
-      "cmd": "brew --verbose"
-    },
-    {
-      "category": "General",
-      "name": "px0372",
-      "cmd": "npm --json"
-    },
-    {
-      "category": "General",
-      "name": "px0373",
-      "cmd": "pnpm --quiet"
-    },
-    {
-      "category": "General",
-      "name": "px0374",
-      "cmd": "yarn --force"
-    },
-    {
-      "category": "General",
-      "name": "px0375",
-      "cmd": "cargo --all"
-    },
-    {
-      "category": "General",
-      "name": "px0376",
-      "cmd": "go --long"
-    },
-    {
-      "category": "General",
-      "name": "px0377",
-      "cmd": "python3 --short"
-    },
-    {
-      "category": "General",
-      "name": "px0378",
-      "cmd": "python3 -m pip --debug"
-    },
-    {
-      "category": "General",
-      "name": "px0379",
-      "cmd": "tmux --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0380",
-      "cmd": "ssh watch"
-    },
-    {
-      "category": "General",
-      "name": "px0381",
-      "cmd": "curl -fsSL doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0382",
-      "cmd": "tar check"
-    },
-    {
-      "category": "General",
-      "name": "px0383",
-      "cmd": "zip build"
-    },
-    {
-      "category": "General",
-      "name": "px0384",
-      "cmd": "openssl test"
-    },
-    {
-      "category": "General",
-      "name": "px0385",
-      "cmd": "ffmpeg run"
-    },
-    {
-      "category": "General",
-      "name": "px0386",
-      "cmd": "make edit"
-    },
-    {
-      "category": "General",
-      "name": "px0387",
-      "cmd": "just logs"
-    },
-    {
-      "category": "General",
-      "name": "px0388",
-      "cmd": "terraform top"
-    },
-    {
-      "category": "General",
-      "name": "px0389",
-      "cmd": "ansible tree"
-    },
-    {
-      "category": "General",
-      "name": "px0390",
-      "cmd": "helm diff"
-    },
-    {
-      "category": "General",
-      "name": "px0391",
-      "cmd": "podman apply"
-    },
-    {
-      "category": "General",
-      "name": "px0392",
-      "cmd": "flatpak init"
-    },
-    {
-      "category": "General",
-      "name": "px0393",
-      "cmd": "snap fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0394",
-      "cmd": "nix lint"
-    },
-    {
-      "category": "General",
-      "name": "px0395",
-      "cmd": "gh serve"
-    },
-    {
-      "category": "General",
-      "name": "px0396",
-      "cmd": "git status --short shell"
-    },
-    {
-      "category": "General",
-      "name": "px0397",
-      "cmd": "git log --oneline --decorate env"
-    },
-    {
-      "category": "General",
-      "name": "px0398",
-      "cmd": "find . -maxdepth 3 -type f -name path"
-    },
-    {
-      "category": "General",
-      "name": "px0399",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' cache"
-    },
-    {
-      "category": "General",
-      "name": "px0400",
-      "cmd": "du -sh --help"
-    },
-    {
-      "category": "General",
-      "name": "px0401",
-      "cmd": "docker --version"
-    },
-    {
-      "category": "General",
-      "name": "px0402",
-      "cmd": "kubectl list"
-    },
-    {
-      "category": "General",
-      "name": "px0403",
-      "cmd": "systemctl info"
-    },
-    {
-      "category": "General",
-      "name": "px0404",
-      "cmd": "journalctl search"
-    },
-    {
-      "category": "General",
-      "name": "px0405",
-      "cmd": "pacman show"
-    },
-    {
-      "category": "General",
-      "name": "px0406",
-      "cmd": "apt-cache status"
-    },
-    {
-      "category": "General",
-      "name": "px0407",
-      "cmd": "brew clean"
-    },
-    {
-      "category": "General",
-      "name": "px0408",
-      "cmd": "npm update"
-    },
-    {
-      "category": "General",
-      "name": "px0409",
-      "cmd": "pnpm upgrade"
-    },
-    {
-      "category": "General",
-      "name": "px0410",
-      "cmd": "yarn --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "px0411",
-      "cmd": "cargo --verbose"
-    },
-    {
-      "category": "General",
-      "name": "px0412",
-      "cmd": "go --json"
-    },
-    {
-      "category": "General",
-      "name": "px0413",
-      "cmd": "python3 --quiet"
-    },
-    {
-      "category": "General",
-      "name": "px0414",
-      "cmd": "python3 -m pip --force"
-    },
-    {
-      "category": "General",
-      "name": "px0415",
-      "cmd": "tmux --all"
-    },
-    {
-      "category": "General",
-      "name": "px0416",
-      "cmd": "ssh --long"
-    },
-    {
-      "category": "General",
-      "name": "px0417",
-      "cmd": "curl -fsSL --short"
-    },
-    {
-      "category": "General",
-      "name": "px0418",
-      "cmd": "tar --debug"
-    },
-    {
-      "category": "General",
-      "name": "px0419",
-      "cmd": "zip --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0420",
-      "cmd": "openssl watch"
-    },
-    {
-      "category": "General",
-      "name": "px0421",
-      "cmd": "ffmpeg doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0422",
-      "cmd": "make check"
-    },
-    {
-      "category": "General",
-      "name": "px0423",
-      "cmd": "just build"
-    },
-    {
-      "category": "General",
-      "name": "px0424",
-      "cmd": "terraform test"
-    },
-    {
-      "category": "General",
-      "name": "px0425",
-      "cmd": "ansible run"
-    },
-    {
-      "category": "General",
-      "name": "px0426",
-      "cmd": "helm edit"
-    },
-    {
-      "category": "General",
-      "name": "px0427",
-      "cmd": "podman logs"
-    },
-    {
-      "category": "General",
-      "name": "px0428",
-      "cmd": "flatpak top"
-    },
-    {
-      "category": "General",
-      "name": "px0429",
-      "cmd": "snap tree"
-    },
-    {
-      "category": "General",
-      "name": "px0430",
-      "cmd": "nix diff"
-    },
-    {
-      "category": "General",
-      "name": "px0431",
-      "cmd": "gh apply"
-    },
-    {
-      "category": "General",
-      "name": "px0432",
-      "cmd": "git status --short init"
-    },
-    {
-      "category": "General",
-      "name": "px0433",
-      "cmd": "git log --oneline --decorate fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0434",
-      "cmd": "find . -maxdepth 3 -type f -name lint"
-    },
-    {
-      "category": "General",
-      "name": "px0435",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' serve"
-    },
-    {
-      "category": "General",
-      "name": "px0436",
-      "cmd": "du -sh shell"
-    },
-    {
-      "category": "General",
-      "name": "px0437",
-      "cmd": "docker env"
-    },
-    {
-      "category": "General",
-      "name": "px0438",
-      "cmd": "kubectl path"
-    },
-    {
-      "category": "General",
-      "name": "px0439",
-      "cmd": "systemctl cache"
-    },
-    {
-      "category": "General",
-      "name": "px0440",
-      "cmd": "journalctl --help"
-    },
-    {
-      "category": "General",
-      "name": "px0441",
-      "cmd": "pacman --version"
-    },
-    {
-      "category": "General",
-      "name": "px0442",
-      "cmd": "apt-cache list"
-    },
-    {
-      "category": "General",
-      "name": "px0443",
-      "cmd": "brew info"
-    },
-    {
-      "category": "General",
-      "name": "px0444",
-      "cmd": "npm search"
-    },
-    {
-      "category": "General",
-      "name": "px0445",
-      "cmd": "pnpm show"
-    },
-    {
-      "category": "General",
-      "name": "px0446",
-      "cmd": "yarn status"
-    },
-    {
-      "category": "General",
-      "name": "px0447",
-      "cmd": "cargo clean"
-    },
-    {
-      "category": "General",
-      "name": "px0448",
-      "cmd": "go update"
-    },
-    {
-      "category": "General",
-      "name": "px0449",
-      "cmd": "python3 upgrade"
-    },
-    {
-      "category": "General",
-      "name": "px0450",
-      "cmd": "python3 -m pip --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "px0451",
-      "cmd": "tmux --verbose"
-    },
-    {
-      "category": "General",
-      "name": "px0452",
-      "cmd": "ssh --json"
-    },
-    {
-      "category": "General",
-      "name": "px0453",
-      "cmd": "curl -fsSL --quiet"
-    },
-    {
-      "category": "General",
-      "name": "px0454",
-      "cmd": "tar --force"
-    },
-    {
-      "category": "General",
-      "name": "px0455",
-      "cmd": "zip --all"
-    },
-    {
-      "category": "General",
-      "name": "px0456",
-      "cmd": "openssl --long"
-    },
-    {
-      "category": "General",
-      "name": "px0457",
-      "cmd": "ffmpeg --short"
-    },
-    {
-      "category": "General",
-      "name": "px0458",
-      "cmd": "make --debug"
-    },
-    {
-      "category": "General",
-      "name": "px0459",
-      "cmd": "just --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0460",
-      "cmd": "terraform watch"
-    },
-    {
-      "category": "General",
-      "name": "px0461",
-      "cmd": "ansible doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0462",
-      "cmd": "helm check"
-    },
-    {
-      "category": "General",
-      "name": "px0463",
-      "cmd": "podman build"
-    },
-    {
-      "category": "General",
-      "name": "px0464",
-      "cmd": "flatpak test"
-    },
-    {
-      "category": "General",
-      "name": "px0465",
-      "cmd": "snap run"
-    },
-    {
-      "category": "General",
-      "name": "px0466",
-      "cmd": "nix edit"
-    },
-    {
-      "category": "General",
-      "name": "px0467",
-      "cmd": "gh logs"
-    },
-    {
-      "category": "General",
-      "name": "px0468",
-      "cmd": "git status --short top"
-    },
-    {
-      "category": "General",
-      "name": "px0469",
-      "cmd": "git log --oneline --decorate tree"
-    },
-    {
-      "category": "General",
-      "name": "px0470",
-      "cmd": "find . -maxdepth 3 -type f -name diff"
-    },
-    {
-      "category": "General",
-      "name": "px0471",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' apply"
-    },
-    {
-      "category": "General",
-      "name": "px0472",
-      "cmd": "du -sh init"
-    },
-    {
-      "category": "General",
-      "name": "px0473",
-      "cmd": "docker fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0474",
-      "cmd": "kubectl lint"
-    },
-    {
-      "category": "General",
-      "name": "px0475",
-      "cmd": "systemctl serve"
-    },
-    {
-      "category": "General",
-      "name": "px0476",
-      "cmd": "journalctl shell"
-    },
-    {
-      "category": "General",
-      "name": "px0477",
-      "cmd": "pacman env"
-    },
-    {
-      "category": "General",
-      "name": "px0478",
-      "cmd": "apt-cache path"
-    },
-    {
-      "category": "General",
-      "name": "px0479",
-      "cmd": "brew cache"
-    },
-    {
-      "category": "General",
-      "name": "px0480",
-      "cmd": "npm --help"
-    },
-    {
-      "category": "General",
-      "name": "px0481",
-      "cmd": "pnpm --version"
-    },
-    {
-      "category": "General",
-      "name": "px0482",
-      "cmd": "yarn list"
-    },
-    {
-      "category": "General",
-      "name": "px0483",
-      "cmd": "cargo info"
-    },
-    {
-      "category": "General",
-      "name": "px0484",
-      "cmd": "go search"
-    },
-    {
-      "category": "General",
-      "name": "px0485",
-      "cmd": "python3 show"
-    },
-    {
-      "category": "General",
-      "name": "px0486",
-      "cmd": "python3 -m pip status"
-    },
-    {
-      "category": "General",
-      "name": "px0487",
-      "cmd": "tmux clean"
-    },
-    {
-      "category": "General",
-      "name": "px0488",
-      "cmd": "ssh update"
-    },
-    {
-      "category": "General",
-      "name": "px0489",
-      "cmd": "curl -fsSL upgrade"
-    },
-    {
-      "category": "General",
-      "name": "px0490",
-      "cmd": "tar --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "px0491",
-      "cmd": "zip --verbose"
-    },
-    {
-      "category": "General",
-      "name": "px0492",
-      "cmd": "openssl --json"
-    },
-    {
-      "category": "General",
-      "name": "px0493",
-      "cmd": "ffmpeg --quiet"
-    },
-    {
-      "category": "General",
-      "name": "px0494",
-      "cmd": "make --force"
-    },
-    {
-      "category": "General",
-      "name": "px0495",
-      "cmd": "just --all"
-    },
-    {
-      "category": "General",
-      "name": "px0496",
-      "cmd": "terraform --long"
-    },
-    {
-      "category": "General",
-      "name": "px0497",
-      "cmd": "ansible --short"
-    },
-    {
-      "category": "General",
-      "name": "px0498",
-      "cmd": "helm --debug"
-    },
-    {
-      "category": "General",
-      "name": "px0499",
-      "cmd": "podman --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0500",
-      "cmd": "flatpak watch"
-    },
-    {
-      "category": "General",
-      "name": "px0501",
-      "cmd": "snap doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0502",
-      "cmd": "nix check"
-    },
-    {
-      "category": "General",
-      "name": "px0503",
-      "cmd": "gh build"
-    },
-    {
-      "category": "General",
-      "name": "px0504",
-      "cmd": "git status --short test"
-    },
-    {
-      "category": "General",
-      "name": "px0505",
-      "cmd": "git log --oneline --decorate run"
-    },
-    {
-      "category": "General",
-      "name": "px0506",
-      "cmd": "find . -maxdepth 3 -type f -name edit"
-    },
-    {
-      "category": "General",
-      "name": "px0507",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' logs"
-    },
-    {
-      "category": "General",
-      "name": "px0508",
-      "cmd": "du -sh top"
-    },
-    {
-      "category": "General",
-      "name": "px0509",
-      "cmd": "docker tree"
-    },
-    {
-      "category": "General",
-      "name": "px0510",
-      "cmd": "kubectl diff"
-    },
-    {
-      "category": "General",
-      "name": "px0511",
-      "cmd": "systemctl apply"
-    },
-    {
-      "category": "General",
-      "name": "px0512",
-      "cmd": "journalctl init"
-    },
-    {
-      "category": "General",
-      "name": "px0513",
-      "cmd": "pacman fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0514",
-      "cmd": "apt-cache lint"
-    },
-    {
-      "category": "General",
-      "name": "px0515",
-      "cmd": "brew serve"
-    },
-    {
-      "category": "General",
-      "name": "px0516",
-      "cmd": "npm shell"
-    },
-    {
-      "category": "General",
-      "name": "px0517",
-      "cmd": "pnpm env"
-    },
-    {
-      "category": "General",
-      "name": "px0518",
-      "cmd": "yarn path"
-    },
-    {
-      "category": "General",
-      "name": "px0519",
-      "cmd": "cargo cache"
-    },
-    {
-      "category": "General",
-      "name": "px0520",
-      "cmd": "go --help"
-    },
-    {
-      "category": "General",
-      "name": "px0521",
-      "cmd": "python3 --version"
-    },
-    {
-      "category": "General",
-      "name": "px0522",
-      "cmd": "python3 -m pip list"
-    },
-    {
-      "category": "General",
-      "name": "px0523",
-      "cmd": "tmux info"
-    },
-    {
-      "category": "General",
-      "name": "px0524",
-      "cmd": "ssh search"
-    },
-    {
-      "category": "General",
-      "name": "px0525",
-      "cmd": "curl -fsSL show"
-    },
-    {
-      "category": "General",
-      "name": "px0526",
-      "cmd": "tar status"
-    },
-    {
-      "category": "General",
-      "name": "px0527",
-      "cmd": "zip clean"
-    },
-    {
-      "category": "General",
-      "name": "px0528",
-      "cmd": "openssl update"
-    },
-    {
-      "category": "General",
-      "name": "px0529",
-      "cmd": "ffmpeg upgrade"
-    },
-    {
-      "category": "General",
-      "name": "px0530",
-      "cmd": "make --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "px0531",
-      "cmd": "just --verbose"
-    },
-    {
-      "category": "General",
-      "name": "px0532",
-      "cmd": "terraform --json"
-    },
-    {
-      "category": "General",
-      "name": "px0533",
-      "cmd": "ansible --quiet"
-    },
-    {
-      "category": "General",
-      "name": "px0534",
-      "cmd": "helm --force"
-    },
-    {
-      "category": "General",
-      "name": "px0535",
-      "cmd": "podman --all"
-    },
-    {
-      "category": "General",
-      "name": "px0536",
-      "cmd": "flatpak --long"
-    },
-    {
-      "category": "General",
-      "name": "px0537",
-      "cmd": "snap --short"
-    },
-    {
-      "category": "General",
-      "name": "px0538",
-      "cmd": "nix --debug"
-    },
-    {
-      "category": "General",
-      "name": "px0539",
-      "cmd": "gh --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0540",
-      "cmd": "git status --short watch"
-    },
-    {
-      "category": "General",
-      "name": "px0541",
-      "cmd": "git log --oneline --decorate doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0542",
-      "cmd": "find . -maxdepth 3 -type f -name check"
-    },
-    {
-      "category": "General",
-      "name": "px0543",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' build"
-    },
-    {
-      "category": "General",
-      "name": "px0544",
-      "cmd": "du -sh test"
-    },
-    {
-      "category": "General",
-      "name": "px0545",
-      "cmd": "docker run"
-    },
-    {
-      "category": "General",
-      "name": "px0546",
-      "cmd": "kubectl edit"
-    },
-    {
-      "category": "General",
-      "name": "px0547",
-      "cmd": "systemctl logs"
-    },
-    {
-      "category": "General",
-      "name": "px0548",
-      "cmd": "journalctl top"
-    },
-    {
-      "category": "General",
-      "name": "px0549",
-      "cmd": "pacman tree"
-    },
-    {
-      "category": "General",
-      "name": "px0550",
-      "cmd": "apt-cache diff"
-    },
-    {
-      "category": "General",
-      "name": "px0551",
-      "cmd": "brew apply"
-    },
-    {
-      "category": "General",
-      "name": "px0552",
-      "cmd": "npm init"
-    },
-    {
-      "category": "General",
-      "name": "px0553",
-      "cmd": "pnpm fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0554",
-      "cmd": "yarn lint"
-    },
-    {
-      "category": "General",
-      "name": "px0555",
-      "cmd": "cargo serve"
-    },
-    {
-      "category": "General",
-      "name": "px0556",
-      "cmd": "go shell"
-    },
-    {
-      "category": "General",
-      "name": "px0557",
-      "cmd": "python3 env"
-    },
-    {
-      "category": "General",
-      "name": "px0558",
-      "cmd": "python3 -m pip path"
-    },
-    {
-      "category": "General",
-      "name": "px0559",
-      "cmd": "tmux cache"
-    },
-    {
-      "category": "General",
-      "name": "px0560",
-      "cmd": "ssh --help"
-    },
-    {
-      "category": "General",
-      "name": "px0561",
-      "cmd": "curl -fsSL --version"
-    },
-    {
-      "category": "General",
-      "name": "px0562",
-      "cmd": "tar list"
-    },
-    {
-      "category": "General",
-      "name": "px0563",
-      "cmd": "zip info"
-    },
-    {
-      "category": "General",
-      "name": "px0564",
-      "cmd": "openssl search"
-    },
-    {
-      "category": "General",
-      "name": "px0565",
-      "cmd": "ffmpeg show"
-    },
-    {
-      "category": "General",
-      "name": "px0566",
-      "cmd": "make status"
-    },
-    {
-      "category": "General",
-      "name": "px0567",
-      "cmd": "just clean"
-    },
-    {
-      "category": "General",
-      "name": "px0568",
-      "cmd": "terraform update"
-    },
-    {
-      "category": "General",
-      "name": "px0569",
-      "cmd": "ansible upgrade"
-    },
-    {
-      "category": "General",
-      "name": "px0570",
-      "cmd": "helm --dry-run"
-    },
-    {
-      "category": "General",
-      "name": "px0571",
-      "cmd": "podman --verbose"
-    },
-    {
-      "category": "General",
-      "name": "px0572",
-      "cmd": "flatpak --json"
-    },
-    {
-      "category": "General",
-      "name": "px0573",
-      "cmd": "snap --quiet"
-    },
-    {
-      "category": "General",
-      "name": "px0574",
-      "cmd": "nix --force"
-    },
-    {
-      "category": "General",
-      "name": "px0575",
-      "cmd": "gh --all"
-    },
-    {
-      "category": "General",
-      "name": "px0576",
-      "cmd": "git status --short --long"
-    },
-    {
-      "category": "General",
-      "name": "px0577",
-      "cmd": "git log --oneline --decorate --short"
-    },
-    {
-      "category": "General",
-      "name": "px0578",
-      "cmd": "find . -maxdepth 3 -type f -name --debug"
-    },
-    {
-      "category": "General",
-      "name": "px0579",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --trace"
-    },
-    {
-      "category": "General",
-      "name": "px0580",
-      "cmd": "du -sh watch"
-    },
-    {
-      "category": "General",
-      "name": "px0581",
-      "cmd": "docker doctor"
-    },
-    {
-      "category": "General",
-      "name": "px0582",
-      "cmd": "kubectl check"
-    },
-    {
-      "category": "General",
-      "name": "px0583",
-      "cmd": "systemctl build"
-    },
-    {
-      "category": "General",
-      "name": "px0584",
-      "cmd": "journalctl test"
-    },
-    {
-      "category": "General",
-      "name": "px0585",
-      "cmd": "pacman run"
-    },
-    {
-      "category": "General",
-      "name": "px0586",
-      "cmd": "apt-cache edit"
-    },
-    {
-      "category": "General",
-      "name": "px0587",
-      "cmd": "brew logs"
-    },
-    {
-      "category": "General",
-      "name": "px0588",
-      "cmd": "npm top"
-    },
-    {
-      "category": "General",
-      "name": "px0589",
-      "cmd": "pnpm tree"
-    },
-    {
-      "category": "General",
-      "name": "px0590",
-      "cmd": "yarn diff"
-    },
-    {
-      "category": "General",
-      "name": "px0591",
-      "cmd": "cargo apply"
-    },
-    {
-      "category": "General",
-      "name": "px0592",
-      "cmd": "go init"
-    },
-    {
-      "category": "General",
-      "name": "px0593",
-      "cmd": "python3 fmt"
-    },
-    {
-      "category": "General",
-      "name": "px0594",
-      "cmd": "python3 -m pip lint"
-    },
-    {
-      "category": "General",
-      "name": "px0595",
-      "cmd": "tmux serve"
-    },
-    {
-      "category": "General",
-      "name": "px0596",
-      "cmd": "ssh shell"
-    },
-    {
-      "category": "General",
-      "name": "px0597",
-      "cmd": "curl -fsSL env"
-    },
-    {
-      "category": "General",
-      "name": "px0598",
-      "cmd": "tar path"
-    },
-    {
-      "category": "General",
-      "name": "px0599",
-      "cmd": "zip cache"
-    },
-    {
-      "category": "General",
-      "name": "px0600",
-      "cmd": "openssl --help"
-    },
-    {
-      "category": "General",
-      "name": "px0601",
-      "cmd": "ffmpeg --version"
-    },
-    {
-      "category": "General",
-      "name": "px0602",
-      "cmd": "make list"
-    },
-    {
-      "category": "General",
-      "name": "px0603",
-      "cmd": "just info"
-    },
-    {
-      "category": "General",
-      "name": "px0604",
-      "cmd": "terraform search"
-    },
-    {
-      "category": "General",
-      "name": "px0605",
-      "cmd": "ansible show"
-    },
-    {
-      "category": "General",
-      "name": "px0606",
-      "cmd": "helm status"
-    },
-    {
-      "category": "General",
-      "name": "px0607",
-      "cmd": "podman clean"
-    },
-    {
-      "category": "General",
-      "name": "px0608",
+      "category": "",
+      "name": "flatup",
       "cmd": "flatpak update"
     },
     {
-      "category": "General",
-      "name": "px0609",
-      "cmd": "snap upgrade"
+      "category": "",
+      "name": "flatq",
+      "cmd": "flatpak list"
     },
     {
-      "category": "General",
-      "name": "px0610",
-      "cmd": "nix --dry-run"
+      "category": "",
+      "name": "flatrun",
+      "cmd": "flatpak run"
     },
     {
-      "category": "General",
-      "name": "px0611",
-      "cmd": "gh --verbose"
+      "category": "",
+      "name": "flatinfo",
+      "cmd": "flatpak info"
     },
     {
-      "category": "General",
-      "name": "px0612",
-      "cmd": "git status --short --json"
+      "category": "",
+      "name": "flatover",
+      "cmd": "flatpak override"
     },
     {
-      "category": "General",
-      "name": "px0613",
-      "cmd": "git log --oneline --decorate --quiet"
+      "category": "",
+      "name": "snaps",
+      "cmd": "snap search"
     },
     {
-      "category": "General",
-      "name": "px0614",
-      "cmd": "find . -maxdepth 3 -type f -name --force"
+      "category": "",
+      "name": "snapi",
+      "cmd": "sudo snap install"
     },
     {
-      "category": "General",
-      "name": "px0615",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --all"
+      "category": "",
+      "name": "snaprm",
+      "cmd": "sudo snap remove"
     },
     {
-      "category": "General",
-      "name": "px0616",
-      "cmd": "du -sh --long"
+      "category": "",
+      "name": "snapup",
+      "cmd": "sudo snap refresh"
     },
     {
-      "category": "General",
-      "name": "px0617",
-      "cmd": "docker --short"
+      "category": "",
+      "name": "snapq",
+      "cmd": "snap list"
     },
     {
-      "category": "General",
-      "name": "px0618",
-      "cmd": "kubectl --debug"
+      "category": "",
+      "name": "snapinfo",
+      "cmd": "snap info"
     },
     {
-      "category": "General",
-      "name": "px0619",
-      "cmd": "systemctl --trace"
+      "category": "",
+      "name": "snapch",
+      "cmd": "sudo snap changes"
     },
     {
-      "category": "General",
-      "name": "px0620",
-      "cmd": "journalctl watch"
+      "category": "",
+      "name": "nixs",
+      "cmd": "nix search"
     },
     {
-      "category": "General",
-      "name": "px0621",
-      "cmd": "pacman doctor"
+      "category": "",
+      "name": "nixsh",
+      "cmd": "nix shell"
     },
     {
-      "category": "General",
-      "name": "px0622",
-      "cmd": "apt-cache check"
+      "category": "",
+      "name": "nixi",
+      "cmd": "nix profile install"
     },
     {
-      "category": "General",
-      "name": "px0623",
-      "cmd": "brew build"
+      "category": "",
+      "name": "nixrm",
+      "cmd": "nix profile remove"
     },
     {
-      "category": "General",
-      "name": "px0624",
-      "cmd": "npm test"
+      "category": "",
+      "name": "nixup",
+      "cmd": "nix profile upgrade"
     },
     {
-      "category": "General",
-      "name": "px0625",
-      "cmd": "pnpm run"
+      "category": "",
+      "name": "nixq",
+      "cmd": "nix profile list"
     },
     {
-      "category": "General",
-      "name": "px0626",
-      "cmd": "yarn edit"
+      "category": "",
+      "name": "nixdev",
+      "cmd": "nix develop"
     },
     {
-      "category": "General",
-      "name": "px0627",
-      "cmd": "cargo logs"
+      "category": "",
+      "name": "nixbuild",
+      "cmd": "nix build"
     },
     {
-      "category": "General",
-      "name": "px0628",
-      "cmd": "go top"
+      "category": "",
+      "name": "nixrun",
+      "cmd": "nix run"
     },
     {
-      "category": "General",
-      "name": "px0629",
-      "cmd": "python3 tree"
+      "category": "",
+      "name": "nixgc",
+      "cmd": "nix store gc"
     },
     {
-      "category": "General",
-      "name": "px0630",
-      "cmd": "python3 -m pip diff"
+      "category": "",
+      "name": "nixopt",
+      "cmd": "nix store optimise"
     },
     {
-      "category": "General",
-      "name": "px0631",
-      "cmd": "tmux apply"
+      "category": "",
+      "name": "zyp",
+      "cmd": "sudo zypper"
     },
     {
-      "category": "General",
-      "name": "px0632",
-      "cmd": "ssh init"
+      "category": "",
+      "name": "zyps",
+      "cmd": "zypper search"
     },
     {
-      "category": "General",
-      "name": "px0633",
-      "cmd": "curl -fsSL fmt"
+      "category": "",
+      "name": "zypi",
+      "cmd": "sudo zypper install"
     },
     {
-      "category": "General",
-      "name": "px0634",
-      "cmd": "tar lint"
+      "category": "",
+      "name": "zypr",
+      "cmd": "sudo zypper remove"
     },
     {
-      "category": "General",
-      "name": "px0635",
-      "cmd": "zip serve"
+      "category": "",
+      "name": "zypup",
+      "cmd": "sudo zypper update"
     },
     {
-      "category": "General",
-      "name": "px0636",
-      "cmd": "openssl shell"
+      "category": "",
+      "name": "zypdup",
+      "cmd": "sudo zypper dist-upgrade"
     },
     {
-      "category": "General",
-      "name": "px0637",
-      "cmd": "ffmpeg env"
+      "category": "",
+      "name": "zypl",
+      "cmd": "zypper list-installed"
     },
     {
-      "category": "General",
-      "name": "px0638",
-      "cmd": "make path"
+      "category": "",
+      "name": "zypclean",
+      "cmd": "sudo zypper clean"
     },
     {
-      "category": "General",
-      "name": "px0639",
-      "cmd": "just cache"
+      "category": "",
+      "name": "zyplr",
+      "cmd": "zypper lr"
     },
     {
-      "category": "General",
-      "name": "px0640",
-      "cmd": "terraform --help"
+      "category": "",
+      "name": "zypprov",
+      "cmd": "zypper what-provides"
     },
     {
-      "category": "General",
-      "name": "px0641",
-      "cmd": "ansible --version"
+      "category": "",
+      "name": "apks",
+      "cmd": "apk search"
     },
     {
-      "category": "General",
-      "name": "px0642",
-      "cmd": "helm list"
+      "category": "",
+      "name": "apki",
+      "cmd": "apk add"
     },
     {
-      "category": "General",
-      "name": "px0643",
-      "cmd": "podman info"
+      "category": "",
+      "name": "apkrm",
+      "cmd": "apk del"
     },
     {
-      "category": "General",
-      "name": "px0644",
-      "cmd": "flatpak search"
+      "category": "",
+      "name": "apkup",
+      "cmd": "apk update && apk upgrade"
     },
     {
-      "category": "General",
-      "name": "px0645",
-      "cmd": "snap show"
+      "category": "",
+      "name": "apkq",
+      "cmd": "apk list"
     },
     {
-      "category": "General",
-      "name": "px0646",
-      "cmd": "nix status"
+      "category": "",
+      "name": "apkqi",
+      "cmd": "apk list -I"
     },
     {
-      "category": "General",
-      "name": "px0647",
-      "cmd": "gh clean"
+      "category": "",
+      "name": "apkinfo",
+      "cmd": "apk info"
     },
     {
-      "category": "General",
-      "name": "px0648",
-      "cmd": "git status --short update"
+      "category": "",
+      "name": "apkclean",
+      "cmd": "apk cache clean"
     },
     {
-      "category": "General",
-      "name": "px0649",
-      "cmd": "git log --oneline --decorate upgrade"
+      "category": "",
+      "name": "nt",
+      "cmd": "_x npm test"
     },
     {
-      "category": "General",
-      "name": "px0650",
-      "cmd": "find . -maxdepth 3 -type f -name --dry-run"
+      "category": "",
+      "name": "nb",
+      "cmd": "_x npm run build"
     },
     {
-      "category": "General",
-      "name": "px0651",
-      "cmd": "rg --hidden --glob '\\''!.git'\\'' --verbose"
+      "category": "",
+      "name": "nrn",
+      "cmd": "_x npm run --"
     },
     {
-      "category": "General",
-      "name": "px0652",
-      "cmd": "du -sh --json"
+      "category": "",
+      "name": "np",
+      "cmd": "_x npm publish"
     },
     {
-      "category": "General",
-      "name": "px0653",
-      "cmd": "docker --quiet"
+      "category": "",
+      "name": "nup",
+      "cmd": "_x npm update"
     },
     {
-      "category": "General",
-      "name": "px0654",
-      "cmd": "kubectl --force"
+      "category": "",
+      "name": "nout",
+      "cmd": "_x npm outdated"
     },
     {
-      "category": "General",
-      "name": "px0655",
-      "cmd": "systemctl --all"
+      "category": "",
+      "name": "nls",
+      "cmd": "_x npm list"
     },
     {
-      "category": "General",
-      "name": "px0656",
-      "cmd": "journalctl --long"
+      "category": "",
+      "name": "ndoc",
+      "cmd": "_x npm docs"
     },
     {
-      "category": "General",
-      "name": "px0657",
-      "cmd": "pacman --short"
+      "category": "",
+      "name": "ninit",
+      "cmd": "_x npm init -y"
     },
     {
-      "category": "General",
-      "name": "px0658",
-      "cmd": "apt-cache --debug"
+      "category": "",
+      "name": "nstar",
+      "cmd": "_x npm star"
     },
     {
-      "category": "General",
-      "name": "px0659",
-      "cmd": "brew --trace"
+      "category": "",
+      "name": "nuni",
+      "cmd": "_x npm uninstall"
     },
     {
-      "category": "General",
-      "name": "px0660",
-      "cmd": "npm watch"
+      "category": "",
+      "name": "nlex",
+      "cmd": "_x npm exec"
     },
     {
-      "category": "General",
-      "name": "px0661",
-      "cmd": "pnpm doctor"
+      "category": "",
+      "name": "nwhy",
+      "cmd": "_x npm why"
     },
     {
-      "category": "General",
-      "name": "px0662",
-      "cmd": "yarn check"
+      "category": "",
+      "name": "naud",
+      "cmd": "_x npm audit"
     },
     {
-      "category": "General",
-      "name": "px0663",
-      "cmd": "cargo build"
+      "category": "",
+      "name": "naux",
+      "cmd": "_x npm audit fix"
     },
     {
-      "category": "General",
-      "name": "px0664",
-      "cmd": "go test"
+      "category": "",
+      "name": "pn",
+      "cmd": "_x pnpm"
     },
     {
-      "category": "General",
-      "name": "px0665",
-      "cmd": "python3 run"
+      "category": "",
+      "name": "pni",
+      "cmd": "_x pnpm install"
     },
     {
-      "category": "General",
-      "name": "px0666",
-      "cmd": "python3 -m pip edit"
+      "category": "",
+      "name": "pnr",
+      "cmd": "_x pnpm run"
     },
     {
-      "category": "General",
-      "name": "px0667",
-      "cmd": "tmux logs"
+      "category": "",
+      "name": "pnd",
+      "cmd": "_x pnpm run dev"
     },
     {
-      "category": "General",
-      "name": "px0668",
-      "cmd": "ssh top"
+      "category": "",
+      "name": "pnb",
+      "cmd": "_x pnpm run build"
     },
     {
-      "category": "General",
-      "name": "px0669",
-      "cmd": "curl -fsSL tree"
+      "category": "",
+      "name": "pnt",
+      "cmd": "_x pnpm test"
     },
     {
-      "category": "General",
-      "name": "px0670",
-      "cmd": "tar diff"
+      "category": "",
+      "name": "pna",
+      "cmd": "_x pnpm add"
     },
     {
-      "category": "General",
-      "name": "px0671",
-      "cmd": "zip apply"
+      "category": "",
+      "name": "pnad",
+      "cmd": "_x pnpm add -D"
     },
     {
-      "category": "General",
-      "name": "px0672",
-      "cmd": "openssl init"
+      "category": "",
+      "name": "pnrm",
+      "cmd": "_x pnpm remove"
     },
     {
-      "category": "General",
-      "name": "px0673",
-      "cmd": "ffmpeg fmt"
+      "category": "",
+      "name": "pnup",
+      "cmd": "_x pnpm update"
     },
     {
-      "category": "General",
-      "name": "px0674",
-      "cmd": "make lint"
+      "category": "",
+      "name": "pnout",
+      "cmd": "_x pnpm outdated"
     },
     {
-      "category": "General",
-      "name": "px0675",
-      "cmd": "just serve"
+      "category": "",
+      "name": "pnls",
+      "cmd": "_x pnpm list"
     },
     {
-      "category": "General",
-      "name": "px0676",
-      "cmd": "terraform shell"
+      "category": "",
+      "name": "pninit",
+      "cmd": "_x pnpm init"
     },
     {
-      "category": "General",
-      "name": "px0677",
-      "cmd": "ansible env"
+      "category": "",
+      "name": "pnpub",
+      "cmd": "_x pnpm publish"
     },
     {
-      "category": "General",
-      "name": "px0678",
-      "cmd": "helm path"
+      "category": "",
+      "name": "pnlint",
+      "cmd": "_x pnpm lint"
     },
     {
-      "category": "General",
-      "name": "px0679",
-      "cmd": "podman cache"
+      "category": "",
+      "name": "pnex",
+      "cmd": "_x pnpm exec"
+    },
+    {
+      "category": "",
+      "name": "pnlc",
+      "cmd": "_x pnpm lint:check"
+    },
+    {
+      "category": "",
+      "name": "pnstore",
+      "cmd": "_x pnpm store"
+    },
+    {
+      "category": "",
+      "name": "y",
+      "cmd": "yarn"
+    },
+    {
+      "category": "",
+      "name": "ya",
+      "cmd": "yarn add"
+    },
+    {
+      "category": "",
+      "name": "yad",
+      "cmd": "yarn add -D"
+    },
+    {
+      "category": "",
+      "name": "yr",
+      "cmd": "yarn run"
+    },
+    {
+      "category": "",
+      "name": "yb",
+      "cmd": "yarn build"
+    },
+    {
+      "category": "",
+      "name": "yd",
+      "cmd": "yarn dev"
+    },
+    {
+      "category": "",
+      "name": "yt",
+      "cmd": "yarn test"
+    },
+    {
+      "category": "",
+      "name": "yrm",
+      "cmd": "yarn remove"
+    },
+    {
+      "category": "",
+      "name": "yls",
+      "cmd": "yarn list"
+    },
+    {
+      "category": "",
+      "name": "yinit",
+      "cmd": "yarn init"
+    },
+    {
+      "category": "",
+      "name": "ypub",
+      "cmd": "yarn publish"
+    },
+    {
+      "category": "",
+      "name": "ylint",
+      "cmd": "yarn lint"
+    },
+    {
+      "category": "",
+      "name": "ygl",
+      "cmd": "yarn global list"
+    },
+    {
+      "category": "",
+      "name": "yga",
+      "cmd": "yarn global add"
+    },
+    {
+      "category": "",
+      "name": "cr",
+      "cmd": "_x cargo"
+    },
+    {
+      "category": "",
+      "name": "crb",
+      "cmd": "_x cargo build"
+    },
+    {
+      "category": "",
+      "name": "crbr",
+      "cmd": "_x cargo build --release"
+    },
+    {
+      "category": "",
+      "name": "crr",
+      "cmd": "_x cargo run"
+    },
+    {
+      "category": "",
+      "name": "crrr",
+      "cmd": "_x cargo run --release"
+    },
+    {
+      "category": "",
+      "name": "crt",
+      "cmd": "_x cargo test"
+    },
+    {
+      "category": "",
+      "name": "crcl",
+      "cmd": "_x cargo clippy"
+    },
+    {
+      "category": "",
+      "name": "crf",
+      "cmd": "_x cargo fmt"
+    },
+    {
+      "category": "",
+      "name": "crc",
+      "cmd": "_x cargo check"
+    },
+    {
+      "category": "",
+      "name": "crd",
+      "cmd": "_x cargo doc"
+    },
+    {
+      "category": "",
+      "name": "crp",
+      "cmd": "_x cargo publish"
+    },
+    {
+      "category": "",
+      "name": "cru",
+      "cmd": "_x cargo update"
+    },
+    {
+      "category": "",
+      "name": "crout",
+      "cmd": "_x cargo outdated"
+    },
+    {
+      "category": "",
+      "name": "crclean",
+      "cmd": "_x cargo clean"
+    },
+    {
+      "category": "",
+      "name": "crbench",
+      "cmd": "_x cargo bench"
+    },
+    {
+      "category": "",
+      "name": "crfix",
+      "cmd": "_x cargo fix"
+    },
+    {
+      "category": "",
+      "name": "crl",
+      "cmd": "_x cargo +nightly"
+    },
+    {
+      "category": "",
+      "name": "crw",
+      "cmd": "_x cargo watch"
+    },
+    {
+      "category": "",
+      "name": "cradd",
+      "cmd": "_x cargo add"
+    },
+    {
+      "category": "",
+      "name": "crrm",
+      "cmd": "_x cargo remove"
+    },
+    {
+      "category": "",
+      "name": "go",
+      "cmd": "_x go"
+    },
+    {
+      "category": "",
+      "name": "gor",
+      "cmd": "_x go run"
+    },
+    {
+      "category": "",
+      "name": "gob",
+      "cmd": "_x go build"
+    },
+    {
+      "category": "",
+      "name": "got",
+      "cmd": "_x go test"
+    },
+    {
+      "category": "",
+      "name": "gotv",
+      "cmd": "_x go test -v ./..."
+    },
+    {
+      "category": "",
+      "name": "goi",
+      "cmd": "_x go install"
+    },
+    {
+      "category": "",
+      "name": "gom",
+      "cmd": "_x go mod"
+    },
+    {
+      "category": "",
+      "name": "gomt",
+      "cmd": "_x go mod tidy"
+    },
+    {
+      "category": "",
+      "name": "gomv",
+      "cmd": "_x go mod vendor"
+    },
+    {
+      "category": "",
+      "name": "gog",
+      "cmd": "_x go get"
+    },
+    {
+      "category": "",
+      "name": "gof",
+      "cmd": "_x go fmt ./..."
+    },
+    {
+      "category": "",
+      "name": "gol",
+      "cmd": "_x go vet ./..."
+    },
+    {
+      "category": "",
+      "name": "godoc",
+      "cmd": "_x go doc"
+    },
+    {
+      "category": "",
+      "name": "gogen",
+      "cmd": "_x go generate ./..."
+    },
+    {
+      "category": "",
+      "name": "goc",
+      "cmd": "_x go clean"
+    },
+    {
+      "category": "",
+      "name": "gocache",
+      "cmd": "_x go clean -cache"
+    },
+    {
+      "category": "",
+      "name": "goenv",
+      "cmd": "_x go env"
+    },
+    {
+      "category": "",
+      "name": "gop",
+      "cmd": "_x go tool pprof"
+    },
+    {
+      "category": "",
+      "name": "py",
+      "cmd": "_x python3"
+    },
+    {
+      "category": "",
+      "name": "py2",
+      "cmd": "python2 2>/dev/null || python3"
+    },
+    {
+      "category": "",
+      "name": "py3",
+      "cmd": "_x python3"
+    },
+    {
+      "category": "",
+      "name": "pipup",
+      "cmd": "_x python3 -m pip install --upgrade pip"
+    },
+    {
+      "category": "",
+      "name": "venv",
+      "cmd": "_x python3 -m venv .venv"
+    },
+    {
+      "category": "",
+      "name": "akt",
+      "cmd": "source .venv/bin/activate"
+    },
+    {
+      "category": "",
+      "name": "dakt",
+      "cmd": "deactivate"
+    },
+    {
+      "category": "",
+      "name": "pyreq",
+      "cmd": "_x pip freeze > requirements.txt"
+    },
+    {
+      "category": "",
+      "name": "pyr",
+      "cmd": "_x python3 -m pip install -r requirements.txt"
+    },
+    {
+      "category": "",
+      "name": "pyi",
+      "cmd": "_x python3 -i"
+    },
+    {
+      "category": "",
+      "name": "pym",
+      "cmd": "_x python3 -m"
+    },
+    {
+      "category": "",
+      "name": "pyt",
+      "cmd": "_x python3 -m pytest"
+    },
+    {
+      "category": "",
+      "name": "pyun",
+      "cmd": "_x python3 -m unittest"
+    },
+    {
+      "category": "",
+      "name": "pip",
+      "cmd": "pip3 2>/dev/null || pip"
+    },
+    {
+      "category": "",
+      "name": "pi",
+      "cmd": "_x pip install"
+    },
+    {
+      "category": "",
+      "name": "piu",
+      "cmd": "_x pip install --upgrade"
+    },
+    {
+      "category": "",
+      "name": "pir",
+      "cmd": "_x pip install -r requirements.txt"
+    },
+    {
+      "category": "",
+      "name": "pls",
+      "cmd": "_x pip list"
+    },
+    {
+      "category": "",
+      "name": "pout",
+      "cmd": "_x pip list --outdated"
+    },
+    {
+      "category": "",
+      "name": "psh",
+      "cmd": "_x pip show"
+    },
+    {
+      "category": "",
+      "name": "pch",
+      "cmd": "_x pip check"
+    },
+    {
+      "category": "",
+      "name": "pdown",
+      "cmd": "_x pip download"
+    },
+    {
+      "category": "",
+      "name": "phash",
+      "cmd": "_x pip hash"
+    },
+    {
+      "category": "",
+      "name": "json",
+      "cmd": "python3 -m json.tool 2>/dev/null || echo \"python3 needed\""
+    },
+    {
+      "category": "",
+      "name": "xml",
+      "cmd": "_x xmllint --format - 2>/dev/null || echo \"xmllint needed\""
+    },
+    {
+      "category": "",
+      "name": "yaml",
+      "cmd": "_x python3 -c \"import sys,yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, default_flow_style=False)\" 2>/dev/null || echo \"python3+yaml needed\""
+    },
+    {
+      "category": "",
+      "name": "csv",
+      "cmd": "_x python3 -c \"import sys,csv; r=csv.reader(sys.stdin); [print(l) for l in r]\" 2>/dev/null || column -t -s, 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "ts",
+      "cmd": "_x python3 -c \"import sys,json; [print(json.dumps(eval(l))) for l in sys.stdin]\" 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "math",
+      "cmd": "_x python3 -c"
+    },
+    {
+      "category": "",
+      "name": "rstring",
+      "cmd": "_x python3 -c \"import secrets; print(secrets.token_hex())\""
+    },
+    {
+      "category": "",
+      "name": "ssh",
+      "cmd": "_x ssh"
+    },
+    {
+      "category": "",
+      "name": "ssha",
+      "cmd": "_x ssh -A"
+    },
+    {
+      "category": "",
+      "name": "sshi",
+      "cmd": "_x ssh -o StrictHostKeyChecking=no"
+    },
+    {
+      "category": "",
+      "name": "ssk",
+      "cmd": "ssh-keygen"
+    },
+    {
+      "category": "",
+      "name": "sskr",
+      "cmd": "ssh-keygen -R"
+    },
+    {
+      "category": "",
+      "name": "ssc",
+      "cmd": "ssh-copy-id"
+    },
+    {
+      "category": "",
+      "name": "gpg",
+      "cmd": "_x gpg"
+    },
+    {
+      "category": "",
+      "name": "gpge",
+      "cmd": "_x gpg -e"
+    },
+    {
+      "category": "",
+      "name": "gpgd",
+      "cmd": "_x gpg -d"
+    },
+    {
+      "category": "",
+      "name": "gpgs",
+      "cmd": "_x gpg -s"
+    },
+    {
+      "category": "",
+      "name": "gpgv",
+      "cmd": "_x gpg --verify"
+    },
+    {
+      "category": "",
+      "name": "gpgl",
+      "cmd": "_x gpg --list-keys"
+    },
+    {
+      "category": "",
+      "name": "gpgls",
+      "cmd": "_x gpg --list-secret-keys"
+    },
+    {
+      "category": "",
+      "name": "gpgk",
+      "cmd": "_x gpg --list-keys"
+    },
+    {
+      "category": "",
+      "name": "gpgex",
+      "cmd": "_x gpg --export"
+    },
+    {
+      "category": "",
+      "name": "gpgimport",
+      "cmd": "_x gpg --import"
+    },
+    {
+      "category": "",
+      "name": "gpgrecv",
+      "cmd": "_x gpg --recv-keys"
+    },
+    {
+      "category": "",
+      "name": "gpgens",
+      "cmd": "_x gpg --gen-key"
+    },
+    {
+      "category": "",
+      "name": "myipl",
+      "cmd": "ip addr show | grep \"inet \" | awk \"{print \\$2}\" | cut -d/ -f1 | head -1"
+    },
+    {
+      "category": "",
+      "name": "weather",
+      "cmd": "curl -fsSL wttr.in"
+    },
+    {
+      "category": "",
+      "name": "portlisten",
+      "cmd": "ss -tlnp 2>/dev/null || netstat -tlnp"
+    },
+    {
+      "category": "",
+      "name": "pingf",
+      "cmd": "ping -c 100 -s 1472 -f"
+    },
+    {
+      "category": "",
+      "name": "pb",
+      "cmd": "ping -c 4 8.8.8.8"
+    },
+    {
+      "category": "",
+      "name": "net",
+      "cmd": "ip -br addr"
+    },
+    {
+      "category": "",
+      "name": "ipl",
+      "cmd": "ip -br link"
+    },
+    {
+      "category": "",
+      "name": "ipa",
+      "cmd": "ip -br addr"
+    },
+    {
+      "category": "",
+      "name": "ipr",
+      "cmd": "ip route"
+    },
+    {
+      "category": "",
+      "name": "nst",
+      "cmd": "netstat -tulanp 2>/dev/null || ss -tulanp"
+    },
+    {
+      "category": "",
+      "name": "trace",
+      "cmd": "traceroute"
+    },
+    {
+      "category": "",
+      "name": "ip",
+      "cmd": "ip -br addr"
+    },
+    {
+      "category": "",
+      "name": "myip",
+      "cmd": "_x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || echo \"N/A\""
+    },
+    {
+      "category": "",
+      "name": "dns",
+      "cmd": "_x dig +short"
+    },
+    {
+      "category": "",
+      "name": "flush",
+      "cmd": "_x sudo resolvectl flush-caches 2>/dev/null || _x sudo systemd-resolve --flush-caches 2>/dev/null || _x sudo killall -HUP mDNSResponder 2>/dev/null || echo \"no flush\""
+    },
+    {
+      "category": "",
+      "name": "speed",
+      "cmd": "_x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | _x python3 - 2>/dev/null || echo \"speedtest-cli needed\""
+    },
+    {
+      "category": "",
+      "name": "weather3",
+      "cmd": "_x curl -fsSL \"wttr.in?F\" 2>/dev/null || echo \"curl needed\""
+    },
+    {
+      "category": "",
+      "name": "moon",
+      "cmd": "_x curl -fsSL \"wttr.in/Moon\" 2>/dev/null || echo \"curl needed\""
+    },
+    {
+      "category": "",
+      "name": "dnst",
+      "cmd": "dig +short"
+    },
+    {
+      "category": "",
+      "name": "iftop",
+      "cmd": "sudo iftop"
+    },
+    {
+      "category": "",
+      "name": "ping",
+      "cmd": "_x prettyping 2>/dev/null || command ping"
+    },
+    {
+      "category": "",
+      "name": "dig",
+      "cmd": "_x dog 2>/dev/null || command dig"
+    },
+    {
+      "category": "",
+      "name": "dns",
+      "cmd": "dig +short"
+    },
+    {
+      "category": "",
+      "name": "dnsx",
+      "cmd": "dig ANY +short"
+    },
+    {
+      "category": "",
+      "name": "dnsmx",
+      "cmd": "dig MX +short"
+    },
+    {
+      "category": "",
+      "name": "dnsns",
+      "cmd": "dig NS +short"
+    },
+    {
+      "category": "",
+      "name": "dnstxt",
+      "cmd": "dig TXT +short"
+    },
+    {
+      "category": "",
+      "name": "dnsany",
+      "cmd": "dig ANY"
+    },
+    {
+      "category": "",
+      "name": "nm",
+      "cmd": "nmap"
+    },
+    {
+      "category": "",
+      "name": "nms",
+      "cmd": "nmap -sn"
+    },
+    {
+      "category": "",
+      "name": "nmp",
+      "cmd": "nmap -sV -sC"
+    },
+    {
+      "category": "",
+      "name": "nmo",
+      "cmd": "nmap -O"
+    },
+    {
+      "category": "",
+      "name": "cur",
+      "cmd": "curl -fsSL"
+    },
+    {
+      "category": "",
+      "name": "curh",
+      "cmd": "curl -I"
+    },
+    {
+      "category": "",
+      "name": "curv",
+      "cmd": "curl -v"
+    },
+    {
+      "category": "",
+      "name": "curj",
+      "cmd": "curl -s | jq ."
+    },
+    {
+      "category": "",
+      "name": "curd",
+      "cmd": "curl -X DELETE"
+    },
+    {
+      "category": "",
+      "name": "curp",
+      "cmd": "curl -X POST"
+    },
+    {
+      "category": "",
+      "name": "curu",
+      "cmd": "curl -X PUT"
+    },
+    {
+      "category": "",
+      "name": "wg",
+      "cmd": "wget -c"
+    },
+    {
+      "category": "",
+      "name": "wgr",
+      "cmd": "wget -r -np -nH"
+    },
+    {
+      "category": "",
+      "name": "ps",
+      "cmd": "ps auxf"
+    },
+    {
+      "category": "",
+      "name": "pse",
+      "cmd": "ps aux | grep"
+    },
+    {
+      "category": "",
+      "name": "pst",
+      "cmd": "_x pstree"
+    },
+    {
+      "category": "",
+      "name": "psea",
+      "cmd": "ps -e"
+    },
+    {
+      "category": "",
+      "name": "kill9",
+      "cmd": "kill -9"
+    },
+    {
+      "category": "",
+      "name": "kill15",
+      "cmd": "kill -15"
+    },
+    {
+      "category": "",
+      "name": "pkillf",
+      "cmd": "_x pkill -f"
+    },
+    {
+      "category": "",
+      "name": "pid",
+      "cmd": "_x pgrep -f"
+    },
+    {
+      "category": "",
+      "name": "nice",
+      "cmd": "nice -n"
+    },
+    {
+      "category": "",
+      "name": "renice",
+      "cmd": "renice -n"
+    },
+    {
+      "category": "",
+      "name": "topcpu",
+      "cmd": "ps aux --sort=-%cpu | head 2>/dev/null || ps aux -r | head"
+    },
+    {
+      "category": "",
+      "name": "topmem",
+      "cmd": "ps aux --sort=-%mem | head 2>/dev/null || ps aux -m | head"
+    },
+    {
+      "category": "",
+      "name": "iotop",
+      "cmd": "iotop -o 2>/dev/null || echo \"iotop not found\""
+    },
+    {
+      "category": "",
+      "name": "pscpu",
+      "cmd": "ps aux --sort=-%cpu"
+    },
+    {
+      "category": "",
+      "name": "psmem",
+      "cmd": "ps aux --sort=-%mem"
+    },
+    {
+      "category": "",
+      "name": "psuser",
+      "cmd": "ps -u"
+    },
+    {
+      "category": "",
+      "name": "psi",
+      "cmd": "ps aux | grep -i"
+    },
+    {
+      "category": "",
+      "name": "psaux",
+      "cmd": "ps aux"
+    },
+    {
+      "category": "",
+      "name": "psf",
+      "cmd": "ps auxf"
+    },
+    {
+      "category": "",
+      "name": "psxl",
+      "cmd": "ps aux --forest"
+    },
+    {
+      "category": "",
+      "name": "psymod",
+      "cmd": "lsmod"
+    },
+    {
+      "category": "",
+      "name": "top",
+      "cmd": "_x btop 2>/dev/null || _x htop 2>/dev/null || command top"
+    },
+    {
+      "category": "",
+      "name": "gri",
+      "cmd": "grep -i"
+    },
+    {
+      "category": "",
+      "name": "grr",
+      "cmd": "grep -r"
+    },
+    {
+      "category": "",
+      "name": "grri",
+      "cmd": "grep -ri"
+    },
+    {
+      "category": "",
+      "name": "grl",
+      "cmd": "grep -rl"
+    },
+    {
+      "category": "",
+      "name": "grc",
+      "cmd": "grep -c"
+    },
+    {
+      "category": "",
+      "name": "uniqc",
+      "cmd": "sort | uniq -c | sort -rn"
+    },
+    {
+      "category": "",
+      "name": "wcw",
+      "cmd": "wc -w"
+    },
+    {
+      "category": "",
+      "name": "column",
+      "cmd": "column -t"
+    },
+    {
+      "category": "",
+      "name": "diffy",
+      "cmd": "diff -y"
+    },
+    {
+      "category": "",
+      "name": "tair",
+      "cmd": "tail -f"
+    },
+    {
+      "category": "",
+      "name": "taill",
+      "cmd": "tail -100"
+    },
+    {
+      "category": "",
+      "name": "headl",
+      "cmd": "head -100"
+    },
+    {
+      "category": "",
+      "name": "nl",
+      "cmd": "nl -ba"
+    },
+    {
+      "category": "",
+      "name": "tac",
+      "cmd": "tac 2>/dev/null || tail -r"
+    },
+    {
+      "category": "",
+      "name": "grepw",
+      "cmd": "grep -w"
+    },
+    {
+      "category": "",
+      "name": "grepr",
+      "cmd": "grep -r"
+    },
+    {
+      "category": "",
+      "name": "grex",
+      "cmd": "grep -r --exclude-dir=.git --exclude-dir=node_modules"
+    },
+    {
+      "category": "",
+      "name": "grep",
+      "cmd": "_x rg --color=auto 2>/dev/null || command grep --color=auto"
+    },
+    {
+      "category": "",
+      "name": "diff",
+      "cmd": "_x delta 2>/dev/null || command diff --color=auto 2>/dev/null || command diff"
+    },
+    {
+      "category": "",
+      "name": "rg",
+      "cmd": "rg --hidden --glob \"!.git\""
+    },
+    {
+      "category": "",
+      "name": "rgi",
+      "cmd": "rg -i --hidden --glob \"!.git\""
+    },
+    {
+      "category": "",
+      "name": "rgf",
+      "cmd": "rg --files"
+    },
+    {
+      "category": "",
+      "name": "rgl",
+      "cmd": "rg --files-with-matches"
+    },
+    {
+      "category": "",
+      "name": "rgc",
+      "cmd": "rg --count"
+    },
+    {
+      "category": "",
+      "name": "cp",
+      "cmd": "cp -i"
+    },
+    {
+      "category": "",
+      "name": "mv",
+      "cmd": "mv -i"
+    },
+    {
+      "category": "",
+      "name": "rm",
+      "cmd": "rm -i"
+    },
+    {
+      "category": "",
+      "name": "rmr",
+      "cmd": "rm -r"
+    },
+    {
+      "category": "",
+      "name": "rmf",
+      "cmd": "rm -f"
+    },
+    {
+      "category": "",
+      "name": "cpf",
+      "cmd": "cp -f"
+    },
+    {
+      "category": "",
+      "name": "mvfs",
+      "cmd": "mv -f"
+    },
+    {
+      "category": "",
+      "name": "cpv",
+      "cmd": "_x rsync -ah --progress"
+    },
+    {
+      "category": "",
+      "name": "mkd",
+      "cmd": "mkdir -p"
+    },
+    {
+      "category": "",
+      "name": "rsync",
+      "cmd": "_x rsync -avz --progress"
+    },
+    {
+      "category": "",
+      "name": "rsyncdn",
+      "cmd": "_x rsync -avz --dry-run --progress"
+    },
+    {
+      "category": "",
+      "name": "chx",
+      "cmd": "chmod +x"
+    },
+    {
+      "category": "",
+      "name": "chm",
+      "cmd": "chmod"
+    },
+    {
+      "category": "",
+      "name": "ln",
+      "cmd": "ln -s"
+    },
+    {
+      "category": "",
+      "name": "lnh",
+      "cmd": "readlink -f"
+    },
+    {
+      "category": "",
+      "name": "mount",
+      "cmd": "mount | column -t"
+    },
+    {
+      "category": "",
+      "name": "mkdir",
+      "cmd": "mkdir -p"
+    },
+    {
+      "category": "",
+      "name": "bc",
+      "cmd": "bc -l"
+    },
+    {
+      "category": "",
+      "name": "find",
+      "cmd": "_x fd 2>/dev/null || command find"
+    },
+    {
+      "category": "",
+      "name": "cat",
+      "cmd": "_x bat --style=plain --paging=never 2>/dev/null || _x batcat --style=plain --paging=never 2>/dev/null || command cat"
+    },
+    {
+      "category": "",
+      "name": "fd",
+      "cmd": "_x fd 2>/dev/null || find"
+    },
+    {
+      "category": "",
+      "name": "ff",
+      "cmd": "find . -type f -name"
+    },
+    {
+      "category": "",
+      "name": "wget",
+      "cmd": "_x wget 2>/dev/null || _x curl -fSL -o 2>/dev/null || echo \"no download tool\""
+    },
+    {
+      "category": "",
+      "name": "fd",
+      "cmd": "fd --hidden"
+    },
+    {
+      "category": "",
+      "name": "fdi",
+      "cmd": "fd -i"
+    },
+    {
+      "category": "",
+      "name": "shred",
+      "cmd": "shred -uz"
+    },
+    {
+      "category": "",
+      "name": "shredf",
+      "cmd": "shred -uz -n 7"
+    },
+    {
+      "category": "",
+      "name": "lsofi",
+      "cmd": "lsof -i"
+    },
+    {
+      "category": "",
+      "name": "lsofp",
+      "cmd": "lsof -P"
+    },
+    {
+      "category": "",
+      "name": "lsofn",
+      "cmd": "lsof -nP"
+    },
+    {
+      "category": "",
+      "name": "lsof",
+      "cmd": "_x lsof -i -P -n 2>/dev/null || echo \"lsof needed\""
+    },
+    {
+      "category": "",
+      "name": "tart",
+      "cmd": "tar -tzf"
+    },
+    {
+      "category": "",
+      "name": "tarjx",
+      "cmd": "tar -xjf"
+    },
+    {
+      "category": "",
+      "name": "tarjc",
+      "cmd": "tar -cjf"
+    },
+    {
+      "category": "",
+      "name": "tarzx",
+      "cmd": "tar -xJf"
+    },
+    {
+      "category": "",
+      "name": "tarzc",
+      "cmd": "tar -cJf"
+    },
+    {
+      "category": "",
+      "name": "tarl",
+      "cmd": "tar -tvf"
+    },
+    {
+      "category": "",
+      "name": "gunz",
+      "cmd": "gunzip"
+    },
+    {
+      "category": "",
+      "name": "bz2",
+      "cmd": "bzip2"
+    },
+    {
+      "category": "",
+      "name": "bunz",
+      "cmd": "bunzip2"
+    },
+    {
+      "category": "",
+      "name": "7z",
+      "cmd": "7z"
+    },
+    {
+      "category": "",
+      "name": "7zx",
+      "cmd": "7z x"
+    },
+    {
+      "category": "",
+      "name": "7za",
+      "cmd": "7z a"
+    },
+    {
+      "category": "",
+      "name": "rarx",
+      "cmd": "unrar x"
+    },
+    {
+      "category": "",
+      "name": "ouchd",
+      "cmd": "ouch decompress"
+    },
+    {
+      "category": "",
+      "name": "ouchc",
+      "cmd": "ouch compress"
+    },
+    {
+      "category": "",
+      "name": "ouchl",
+      "cmd": "ouch list"
+    },
+    {
+      "category": "",
+      "name": "myq",
+      "cmd": "mysql"
+    },
+    {
+      "category": "",
+      "name": "myqr",
+      "cmd": "mysql -u root -p"
+    },
+    {
+      "category": "",
+      "name": "mydump",
+      "cmd": "mysqldump"
+    },
+    {
+      "category": "",
+      "name": "mydumpr",
+      "cmd": "mysqldump -u root -p"
+    },
+    {
+      "category": "",
+      "name": "psqlr",
+      "cmd": "psql -U postgres"
+    },
+    {
+      "category": "",
+      "name": "pgdump",
+      "cmd": "pg_dump"
+    },
+    {
+      "category": "",
+      "name": "pgres",
+      "cmd": "pg_restore"
+    },
+    {
+      "category": "",
+      "name": "sq3",
+      "cmd": "sqlite3"
+    },
+    {
+      "category": "",
+      "name": "sq3d",
+      "cmd": "sqlite3 .dump"
+    },
+    {
+      "category": "",
+      "name": "rcli",
+      "cmd": "redis-cli"
+    },
+    {
+      "category": "",
+      "name": "rcliping",
+      "cmd": "redis-cli ping"
+    },
+    {
+      "category": "",
+      "name": "rcliinfo",
+      "cmd": "redis-cli info"
+    },
+    {
+      "category": "",
+      "name": "rclimon",
+      "cmd": "redis-cli monitor"
+    },
+    {
+      "category": "",
+      "name": "s3",
+      "cmd": "_x s3cmd"
+    },
+    {
+      "category": "",
+      "name": "awsw",
+      "cmd": "aws sts get-caller-identity"
+    },
+    {
+      "category": "",
+      "name": "awsinfo",
+      "cmd": "aws ec2 describe-instances"
+    },
+    {
+      "category": "",
+      "name": "awss3",
+      "cmd": "aws s3"
+    },
+    {
+      "category": "",
+      "name": "awss3ls",
+      "cmd": "aws s3 ls"
+    },
+    {
+      "category": "",
+      "name": "awslb",
+      "cmd": "aws elb describe-load-balancers"
+    },
+    {
+      "category": "",
+      "name": "awsecs",
+      "cmd": "aws ecs list-clusters"
+    },
+    {
+      "category": "",
+      "name": "awsecr",
+      "cmd": "aws ecr describe-repositories"
+    },
+    {
+      "category": "",
+      "name": "awslam",
+      "cmd": "aws lambda list-functions"
+    },
+    {
+      "category": "",
+      "name": "awslog",
+      "cmd": "aws logs describe-log-groups"
+    },
+    {
+      "category": "",
+      "name": "awscw",
+      "cmd": "aws cloudwatch"
+    },
+    {
+      "category": "",
+      "name": "awsiam",
+      "cmd": "aws iam list-users"
+    },
+    {
+      "category": "",
+      "name": "awsr53",
+      "cmd": "aws route53 list-hosted-zones"
+    },
+    {
+      "category": "",
+      "name": "gcl",
+      "cmd": "gcloud"
+    },
+    {
+      "category": "",
+      "name": "gcls",
+      "cmd": "gcloud compute ssh"
+    },
+    {
+      "category": "",
+      "name": "gcll",
+      "cmd": "gcloud compute instances list"
+    },
+    {
+      "category": "",
+      "name": "gclc",
+      "cmd": "gcloud container clusters list"
+    },
+    {
+      "category": "",
+      "name": "gclgke",
+      "cmd": "gcloud container clusters get-credentials"
+    },
+    {
+      "category": "",
+      "name": "gcllogs",
+      "cmd": "gcloud logging list"
+    },
+    {
+      "category": "",
+      "name": "azl",
+      "cmd": "az vm list"
+    },
+    {
+      "category": "",
+      "name": "azs",
+      "cmd": "az vm start"
+    },
+    {
+      "category": "",
+      "name": "azst",
+      "cmd": "az vm stop"
+    },
+    {
+      "category": "",
+      "name": "azr",
+      "cmd": "az vm restart"
+    },
+    {
+      "category": "",
+      "name": "azg",
+      "cmd": "az group list"
+    },
+    {
+      "category": "",
+      "name": "azaks",
+      "cmd": "az aks list"
+    },
+    {
+      "category": "",
+      "name": "ffp",
+      "cmd": "ffprobe"
+    },
+    {
+      "category": "",
+      "name": "ffg",
+      "cmd": "ffplay"
+    },
+    {
+      "category": "",
+      "name": "ffconvert",
+      "cmd": "ffmpeg -i"
+    },
+    {
+      "category": "",
+      "name": "ffmp3",
+      "cmd": "ffmpeg -i \"$1\" -q:a 0 \"${1%.*}.mp3\""
+    },
+    {
+      "category": "",
+      "name": "ffcompress",
+      "cmd": "ffmpeg -i \"$1\" -vcodec libx265 -crf 28"
+    },
+    {
+      "category": "",
+      "name": "ffgif",
+      "cmd": "ffmpeg -i \"$1\" -vf \"fps=10,scale=320:-1\" \"${1%.*}.gif\""
+    },
+    {
+      "category": "",
+      "name": "ffscreencap",
+      "cmd": "ffmpeg -f x11grab -video_size 1920x1080 -i :0.0"
+    },
+    {
+      "category": "",
+      "name": "img",
+      "cmd": "convert"
+    },
+    {
+      "category": "",
+      "name": "imgres",
+      "cmd": "convert -resize"
+    },
+    {
+      "category": "",
+      "name": "imgfmt",
+      "cmd": "convert -format"
+    },
+    {
+      "category": "",
+      "name": "imgcompress",
+      "cmd": "convert -quality 85"
+    },
+    {
+      "category": "",
+      "name": "gpul",
+      "cmd": "nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv"
+    },
+    {
+      "category": "",
+      "name": "gputop",
+      "cmd": "nvidia-smi dmon -s pucvmet"
+    },
+    {
+      "category": "",
+      "name": "pbcopy",
+      "cmd": "xclip -selection clipboard"
+    },
+    {
+      "category": "",
+      "name": "pbpaste",
+      "cmd": "xclip -selection clipboard -o"
+    },
+    {
+      "category": "",
+      "name": "pbcopy",
+      "cmd": "wl-copy"
+    },
+    {
+      "category": "",
+      "name": "pbpaste",
+      "cmd": "wl-paste"
+    },
+    {
+      "category": "",
+      "name": "pbc",
+      "cmd": "pbcopy"
+    },
+    {
+      "category": "",
+      "name": "pbp",
+      "cmd": "pbpaste"
+    },
+    {
+      "category": "",
+      "name": "cpy",
+      "cmd": "(command -v xclip >/dev/null 2>&1 && xclip -selection clipboard) || (command -v wl-copy >/dev/null 2>&1 && wl-copy) || (command -v pbcopy >/dev/null 2>&1 && pbcopy) || echo \"missing: clipboard tool\" >&2"
+    },
+    {
+      "category": "",
+      "name": "clickpaste",
+      "cmd": "sleep 3; xdotool type \"$(xclip -o -selection clipboard)\""
+    },
+    {
+      "category": "",
+      "name": "randpw",
+      "cmd": "openssl rand -base64 16 2>/dev/null || python3 -c \"import secrets; print(secrets.token_urlsafe(16))\""
+    },
+    {
+      "category": "",
+      "name": "sha",
+      "cmd": "shasum -a 256"
+    },
+    {
+      "category": "",
+      "name": "md5sum",
+      "cmd": "md5 2>/dev/null || command md5sum"
+    },
+    {
+      "category": "",
+      "name": "hex",
+      "cmd": "xxd"
+    },
+    {
+      "category": "",
+      "name": "base64e",
+      "cmd": "base64"
+    },
+    {
+      "category": "",
+      "name": "base64d",
+      "cmd": "base64 -d"
+    },
+    {
+      "category": "",
+      "name": "urlenc",
+      "cmd": "_x python3 -c \"import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))\""
+    },
+    {
+      "category": "",
+      "name": "urldec",
+      "cmd": "_x python3 -c \"import urllib.parse,sys; print(urllib.parse.unquote(sys.argv[1]))\""
+    },
+    {
+      "category": "",
+      "name": "please",
+      "cmd": "sudo"
+    },
+    {
+      "category": "",
+      "name": "pathlines",
+      "cmd": "printf \"%s\\n\" ${PATH//:/\\\\n}"
+    },
+    {
+      "category": "",
+      "name": "mkdirp",
+      "cmd": "mkdir -p"
+    },
+    {
+      "category": "",
+      "name": "focus",
+      "cmd": "printf \"\\033c\" && date +\"%F %T\""
+    },
+    {
+      "category": "",
+      "name": "h",
+      "cmd": "history"
+    },
+    {
+      "category": "",
+      "name": "j",
+      "cmd": "jobs -l"
+    },
+    {
+      "category": "",
+      "name": "duh",
+      "cmd": "du -sh"
+    },
+    {
+      "category": "",
+      "name": "dfh",
+      "cmd": "df -h"
+    },
+    {
+      "category": "",
+      "name": "freeh",
+      "cmd": "free -h"
+    },
+    {
+      "category": "",
+      "name": "free",
+      "cmd": "free -h"
+    },
+    {
+      "category": "",
+      "name": "du",
+      "cmd": "du -h"
+    },
+    {
+      "category": "",
+      "name": "dud",
+      "cmd": "du -h --max-depth=1"
+    },
+    {
+      "category": "",
+      "name": "du2",
+      "cmd": "du -sh --max-depth=2"
+    },
+    {
+      "category": "",
+      "name": "dux",
+      "cmd": "du -sh * | sort -h"
+    },
+    {
+      "category": "",
+      "name": "duk",
+      "cmd": "du -sh * | sort -h"
+    },
+    {
+      "category": "",
+      "name": "duf",
+      "cmd": "du -sh * | sort -h"
+    },
+    {
+      "category": "",
+      "name": "duls",
+      "cmd": "du -sm * | sort -n"
+    },
+    {
+      "category": "",
+      "name": "dus",
+      "cmd": "du -sh .[!.]* * 2>/dev/null | sort -h"
+    },
+    {
+      "category": "",
+      "name": "usage",
+      "cmd": "du -sh * 2>/dev/null | sort -h"
+    },
+    {
+      "category": "",
+      "name": "dfT",
+      "cmd": "df -hT"
+    },
+    {
+      "category": "",
+      "name": "df",
+      "cmd": "df -h"
+    },
+    {
+      "category": "",
+      "name": "diskspace",
+      "cmd": "df -h"
+    },
+    {
+      "category": "",
+      "name": "blk",
+      "cmd": "lsblk -f"
+    },
+    {
+      "category": "",
+      "name": "disks",
+      "cmd": "lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT"
+    },
+    {
+      "category": "",
+      "name": "fdisk",
+      "cmd": "fdisk -l"
+    },
+    {
+      "category": "",
+      "name": "smart",
+      "cmd": "sudo smartctl -a"
+    },
+    {
+      "category": "",
+      "name": "cpuinfo",
+      "cmd": "lscpu 2>/dev/null || sysctl -n machdep.cpu.brand_string"
+    },
+    {
+      "category": "",
+      "name": "meminfo",
+      "cmd": "free -h"
+    },
+    {
+      "category": "",
+      "name": "dmesg",
+      "cmd": "dmesg -T"
+    },
+    {
+      "category": "",
+      "name": "uname",
+      "cmd": "uname -a"
+    },
+    {
+      "category": "",
+      "name": "dateutc",
+      "cmd": "date -u"
+    },
+    {
+      "category": "",
+      "name": "caldate",
+      "cmd": "cal"
+    },
+    {
+      "category": "",
+      "name": "nproc",
+      "cmd": "nproc 2>/dev/null || sysctl -n hw.ncpu"
+    },
+    {
+      "category": "",
+      "name": "release",
+      "cmd": "cat /etc/os-release 2>/dev/null || cat /usr/lib/os-release"
+    },
+    {
+      "category": "",
+      "name": "arch",
+      "cmd": "uname -m"
+    },
+    {
+      "category": "",
+      "name": "findsuid",
+      "cmd": "find / -perm -4000 -type f"
+    },
+    {
+      "category": "",
+      "name": "timestamp",
+      "cmd": "date +%s"
+    },
+    {
+      "category": "",
+      "name": "today",
+      "cmd": "date +%F"
+    },
+    {
+      "category": "",
+      "name": "week",
+      "cmd": "date +%V"
+    },
+    {
+      "category": "",
+      "name": "count",
+      "cmd": "wc -l"
+    },
+    {
+      "category": "",
+      "name": "lines",
+      "cmd": "cat -n"
+    },
+    {
+      "category": "",
+      "name": "cht",
+      "cmd": "curl -fsSL \"https://cht.sh/$1\""
+    },
+    {
+      "category": "",
+      "name": "learn",
+      "cmd": "curl -fsSL \"https://learnxinyminutes.com/docs/$1\""
+    },
+    {
+      "category": "",
+      "name": "cheat",
+      "cmd": "curl -fsSL \"https://cheat.sh/$1\""
+    },
+    {
+      "category": "",
+      "name": "try",
+      "cmd": "curl -fsSL https://cht.sh"
+    },
+    {
+      "category": "",
+      "name": "tldrl",
+      "cmd": "curl -fsSL https://cheat.sh"
+    },
+    {
+      "category": "",
+      "name": "what",
+      "cmd": "type"
+    },
+    {
+      "category": "",
+      "name": "ali",
+      "cmd": "alias"
+    },
+    {
+      "category": "",
+      "name": "envg",
+      "cmd": "env | grep"
+    },
+    {
+      "category": "",
+      "name": "fn",
+      "cmd": "declare -f 2>/dev/null || typeset -f"
+    },
+    {
+      "category": "",
+      "name": "path",
+      "cmd": "echo \\$PATH | tr ':' '\\\\n' | sort -u"
+    },
+    {
+      "category": "",
+      "name": "nohist",
+      "cmd": "unset HISTFILE"
+    },
+    {
+      "category": "",
+      "name": "clhist",
+      "cmd": "HISTSIZE=0; HISTSIZE=5000"
+    },
+    {
+      "category": "",
+      "name": "histgrep",
+      "cmd": "history | grep -i"
+    },
+    {
+      "category": "",
+      "name": "cleanshell",
+      "cmd": "env - bash --norc --noprofile"
+    },
+    {
+      "category": "",
+      "name": "topcmds",
+      "cmd": "topcommands"
+    },
+    {
+      "category": "",
+      "name": "port",
+      "cmd": "_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || echo \"no port tool\""
+    },
+    {
+      "category": "",
+      "name": "ports",
+      "cmd": "_x ss -tulpn 2>/dev/null || _x netstat -tulpn 2>/dev/null || _x lsof -i -n -P 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "listen",
+      "cmd": "_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "connections",
+      "cmd": "_x ss -tunp 2>/dev/null || _x netstat -tunp 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "dsstore",
+      "cmd": "find . -name \".DS_Store\" -type f -delete -print 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "mirrorsite",
+      "cmd": "_x wget -m -k -K -E -e robots=off 2>/dev/null || echo \"wget needed\""
+    },
+    {
+      "category": "",
+      "name": "sep",
+      "cmd": "printf \"=%.0s\" $(seq 1 $(tput cols))"
+    },
+    {
+      "category": "",
+      "name": "countfiles",
+      "cmd": "for t in files links directories; do echo $(find . -type ${t:0:1} 2>/dev/null | wc -l) $t; done 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "tstamp",
+      "cmd": "stamp"
+    },
+    {
+      "category": "",
+      "name": "idg",
+      "cmd": "id -g"
+    },
+    {
+      "category": "",
+      "name": "idu",
+      "cmd": "id -u"
+    },
+    {
+      "category": "",
+      "name": "shuffle",
+      "cmd": "shuf"
+    },
+    {
+      "category": "",
+      "name": "rsample",
+      "cmd": "shuf -n"
+    },
+    {
+      "category": "",
+      "name": "man",
+      "cmd": "_x tldr 2>/dev/null || command man"
+    },
+    {
+      "category": "",
+      "name": "tad",
+      "cmd": "_x tmux attach -d"
+    },
+    {
+      "category": "",
+      "name": "tl",
+      "cmd": "_x tmux list-sessions"
+    },
+    {
+      "category": "",
+      "name": "tn",
+      "cmd": "_x tmux new-session -s"
+    },
+    {
+      "category": "",
+      "name": "tk",
+      "cmd": "_x tmux kill-session -t"
+    },
+    {
+      "category": "",
+      "name": "tks",
+      "cmd": "_x tmux kill-server"
+    },
+    {
+      "category": "",
+      "name": "tsw",
+      "cmd": "_x tmux switch-client"
+    },
+    {
+      "category": "",
+      "name": "trn",
+      "cmd": "_x tmux rename-session"
+    },
+    {
+      "category": "",
+      "name": "tlp",
+      "cmd": "_x tmux list-panes"
+    },
+    {
+      "category": "",
+      "name": "tsplit",
+      "cmd": "_x tmux split-window -h"
+    },
+    {
+      "category": "",
+      "name": "tsplitv",
+      "cmd": "_x tmux split-window"
+    },
+    {
+      "category": "",
+      "name": "tprev",
+      "cmd": "_x tmux previous-window"
+    },
+    {
+      "category": "",
+      "name": "tnext",
+      "cmd": "_x tmux next-window"
+    },
+    {
+      "category": "",
+      "name": "tswap",
+      "cmd": "_x tmux swap-window"
+    },
+    {
+      "category": "",
+      "name": "vim",
+      "cmd": "nvim 2>/dev/null || command vim"
+    },
+    {
+      "category": "",
+      "name": "sv",
+      "cmd": "nvim 2>/dev/null || command vim"
+    },
+    {
+      "category": "",
+      "name": "nv",
+      "cmd": "nvim"
+    },
+    {
+      "category": "",
+      "name": "codel",
+      "cmd": "code ."
+    },
+    {
+      "category": "",
+      "name": "svi",
+      "cmd": "sudo nvim"
+    },
+    {
+      "category": "",
+      "name": "vis",
+      "cmd": "nvim \"+set si\""
+    },
+    {
+      "category": "",
+      "name": "svi",
+      "cmd": "sudo vim"
+    },
+    {
+      "category": "",
+      "name": "vis",
+      "cmd": "vim \"+set si\""
+    },
+    {
+      "category": "",
+      "name": "lg",
+      "cmd": "lazygit"
+    },
+    {
+      "category": "",
+      "name": "yz",
+      "cmd": "yazi"
+    },
+    {
+      "category": "",
+      "name": "zj",
+      "cmd": "zellij"
+    },
+    {
+      "category": "",
+      "name": "zja",
+      "cmd": "zellij attach"
+    },
+    {
+      "category": "",
+      "name": "zjl",
+      "cmd": "zellij list-sessions"
+    },
+    {
+      "category": "",
+      "name": "justl",
+      "cmd": "just --list"
+    },
+    {
+      "category": "",
+      "name": "mk",
+      "cmd": "make"
+    },
+    {
+      "category": "",
+      "name": "mkc",
+      "cmd": "make clean"
+    },
+    {
+      "category": "",
+      "name": "mki",
+      "cmd": "make install"
+    },
+    {
+      "category": "",
+      "name": "mkt",
+      "cmd": "make test"
+    },
+    {
+      "category": "",
+      "name": "atu",
+      "cmd": "atuin"
+    },
+    {
+      "category": "",
+      "name": "atus",
+      "cmd": "atuin search"
+    },
+    {
+      "category": "",
+      "name": "atul",
+      "cmd": "atuin login"
+    },
+    {
+      "category": "",
+      "name": "atur",
+      "cmd": "atuin register"
+    },
+    {
+      "category": "",
+      "name": "atusync",
+      "cmd": "atuin sync"
+    },
+    {
+      "category": "",
+      "name": "atust",
+      "cmd": "atuin status"
+    },
+    {
+      "category": "",
+      "name": "atuh",
+      "cmd": "atuin history"
+    },
+    {
+      "category": "",
+      "name": "atuhl",
+      "cmd": "atuin history list"
+    },
+    {
+      "category": "",
+      "name": "atustats",
+      "cmd": "atuin stats"
+    },
+    {
+      "category": "",
+      "name": "dir",
+      "cmd": "direnv"
+    },
+    {
+      "category": "",
+      "name": "dira",
+      "cmd": "direnv allow"
+    },
+    {
+      "category": "",
+      "name": "dird",
+      "cmd": "direnv deny"
+    },
+    {
+      "category": "",
+      "name": "dirr",
+      "cmd": "direnv reload"
+    },
+    {
+      "category": "",
+      "name": "dire",
+      "cmd": "direnv edit"
+    },
+    {
+      "category": "",
+      "name": "dirv",
+      "cmd": "direnv view"
+    },
+    {
+      "category": "",
+      "name": "dirh",
+      "cmd": "direnv hook"
+    },
+    {
+      "category": "",
+      "name": "fz",
+      "cmd": "fzf"
+    },
+    {
+      "category": "",
+      "name": "fzp",
+      "cmd": "fzf --preview"
+    },
+    {
+      "category": "",
+      "name": "jqc",
+      "cmd": "jq -c"
+    },
+    {
+      "category": "",
+      "name": "jqr",
+      "cmd": "jq -r"
+    },
+    {
+      "category": "",
+      "name": "jqs",
+      "cmd": "jq -S"
+    },
+    {
+      "category": "",
+      "name": "yqe",
+      "cmd": "yq eval"
+    },
+    {
+      "category": "",
+      "name": "yqp",
+      "cmd": "yq eval -P"
+    },
+    {
+      "category": "",
+      "name": "glows",
+      "cmd": "glow -s"
+    },
+    {
+      "category": "",
+      "name": "doga",
+      "cmd": "dog A"
+    },
+    {
+      "category": "",
+      "name": "dogmx",
+      "cmd": "dog MX"
+    },
+    {
+      "category": "",
+      "name": "dogns",
+      "cmd": "dog NS"
+    },
+    {
+      "category": "",
+      "name": "dogtxt",
+      "cmd": "dog TXT"
+    },
+    {
+      "category": "",
+      "name": "band",
+      "cmd": "bandwhich"
+    },
+    {
+      "category": "",
+      "name": "bandl",
+      "cmd": "bandwhich -r"
+    },
+    {
+      "category": "",
+      "name": "naviq",
+      "cmd": "navi --query"
+    },
+    {
+      "category": "",
+      "name": "tldr",
+      "cmd": "command tldr 2>/dev/null || tealdeer"
+    },
+    {
+      "category": "",
+      "name": "vividg",
+      "cmd": "vivid generate"
+    },
+    {
+      "category": "",
+      "name": "vividt",
+      "cmd": "vivid themes"
+    },
+    {
+      "category": "",
+      "name": "chez",
+      "cmd": "chezmoi"
+    },
+    {
+      "category": "",
+      "name": "cheza",
+      "cmd": "chezmoi apply"
+    },
+    {
+      "category": "",
+      "name": "chezd",
+      "cmd": "chezmoi diff"
+    },
+    {
+      "category": "",
+      "name": "cheze",
+      "cmd": "chezmoi edit"
+    },
+    {
+      "category": "",
+      "name": "chezad",
+      "cmd": "chezmoi add"
+    },
+    {
+      "category": "",
+      "name": "chezup",
+      "cmd": "chezmoi update"
+    },
+    {
+      "category": "",
+      "name": "chezcd",
+      "cmd": "chezmoi cd"
+    },
+    {
+      "category": "",
+      "name": "chezi",
+      "cmd": "chezmoi init"
+    },
+    {
+      "category": "",
+      "name": "chezs",
+      "cmd": "chezmoi status"
+    },
+    {
+      "category": "",
+      "name": "chezr",
+      "cmd": "chezmoi re-add"
+    },
+    {
+      "category": "",
+      "name": "actl",
+      "cmd": "act -l"
+    },
+    {
+      "category": "",
+      "name": "actp",
+      "cmd": "act -p"
+    },
+    {
+      "category": "",
+      "name": "actpush",
+      "cmd": "act push"
+    },
+    {
+      "category": "",
+      "name": "actpr",
+      "cmd": "act pull_request"
+    },
+    {
+      "category": "",
+      "name": "actw",
+      "cmd": "act -W"
+    },
+    {
+      "category": "",
+      "name": "vg",
+      "cmd": "vagrant"
+    },
+    {
+      "category": "",
+      "name": "vgu",
+      "cmd": "vagrant up"
+    },
+    {
+      "category": "",
+      "name": "vgh",
+      "cmd": "vagrant halt"
+    },
+    {
+      "category": "",
+      "name": "vgd",
+      "cmd": "vagrant destroy"
+    },
+    {
+      "category": "",
+      "name": "vgs",
+      "cmd": "vagrant status"
+    },
+    {
+      "category": "",
+      "name": "vgssh",
+      "cmd": "vagrant ssh"
+    },
+    {
+      "category": "",
+      "name": "vgp",
+      "cmd": "vagrant provision"
+    },
+    {
+      "category": "",
+      "name": "vgreload",
+      "cmd": "vagrant reload"
+    },
+    {
+      "category": "",
+      "name": "vgbox",
+      "cmd": "vagrant box list"
+    },
+    {
+      "category": "",
+      "name": "pk",
+      "cmd": "packer"
+    },
+    {
+      "category": "",
+      "name": "pkb",
+      "cmd": "packer build"
+    },
+    {
+      "category": "",
+      "name": "pkv",
+      "cmd": "packer validate"
+    },
+    {
+      "category": "",
+      "name": "pkf",
+      "cmd": "packer fmt"
+    },
+    {
+      "category": "",
+      "name": "pkinit",
+      "cmd": "packer init"
+    },
+    {
+      "category": "",
+      "name": "tfv",
+      "cmd": "_x terraform validate"
+    },
+    {
+      "category": "",
+      "name": "tff",
+      "cmd": "_x terraform fmt"
+    },
+    {
+      "category": "",
+      "name": "tfw",
+      "cmd": "_x terraform workspace"
+    },
+    {
+      "category": "",
+      "name": "tfwl",
+      "cmd": "_x terraform workspace list"
+    },
+    {
+      "category": "",
+      "name": "tfws",
+      "cmd": "_x terraform workspace select"
+    },
+    {
+      "category": "",
+      "name": "tfs",
+      "cmd": "_x terraform show"
+    },
+    {
+      "category": "",
+      "name": "tfo",
+      "cmd": "_x terraform output"
+    },
+    {
+      "category": "",
+      "name": "tfst",
+      "cmd": "_x terraform state"
+    },
+    {
+      "category": "",
+      "name": "tfstl",
+      "cmd": "_x terraform state list"
+    },
+    {
+      "category": "",
+      "name": "tfimp",
+      "cmd": "_x terraform import"
+    },
+    {
+      "category": "",
+      "name": "tfprov",
+      "cmd": "_x terraform providers"
+    },
+    {
+      "category": "",
+      "name": "tfgraph",
+      "cmd": "_x terraform graph"
+    },
+    {
+      "category": "",
+      "name": "tfconsole",
+      "cmd": "_x terraform console"
+    },
+    {
+      "category": "",
+      "name": "an",
+      "cmd": "_x ansible"
+    },
+    {
+      "category": "",
+      "name": "anp",
+      "cmd": "_x ansible-playbook"
+    },
+    {
+      "category": "",
+      "name": "ang",
+      "cmd": "_x ansible-galaxy"
+    },
+    {
+      "category": "",
+      "name": "anv",
+      "cmd": "_x ansible-vault"
+    },
+    {
+      "category": "",
+      "name": "and",
+      "cmd": "_x ansible-doc"
+    },
+    {
+      "category": "",
+      "name": "ancon",
+      "cmd": "_x ansible-config"
+    },
+    {
+      "category": "",
+      "name": "aninv",
+      "cmd": "_x ansible-inventory"
+    },
+    {
+      "category": "",
+      "name": "agee",
+      "cmd": "age -e"
+    },
+    {
+      "category": "",
+      "name": "aged",
+      "cmd": "age -d"
+    },
+    {
+      "category": "",
+      "name": "agegen",
+      "cmd": "age-keygen"
+    },
+    {
+      "category": "",
+      "name": "sopse",
+      "cmd": "sops -e"
+    },
+    {
+      "category": "",
+      "name": "sopsd",
+      "cmd": "sops -d"
+    },
+    {
+      "category": "",
+      "name": "sopsi",
+      "cmd": "sops -i"
+    },
+    {
+      "category": "",
+      "name": "vaults",
+      "cmd": "vault status"
+    },
+    {
+      "category": "",
+      "name": "vaultl",
+      "cmd": "vault login"
+    },
+    {
+      "category": "",
+      "name": "vaultkv",
+      "cmd": "vault kv"
+    },
+    {
+      "category": "",
+      "name": "vaultkvg",
+      "cmd": "vault kv get"
+    },
+    {
+      "category": "",
+      "name": "vaultkvp",
+      "cmd": "vault kv put"
+    },
+    {
+      "category": "",
+      "name": "vaultkvd",
+      "cmd": "vault kv delete"
+    },
+    {
+      "category": "",
+      "name": "vaultr",
+      "cmd": "vault read"
+    },
+    {
+      "category": "",
+      "name": "vaultw",
+      "cmd": "vault write"
+    },
+    {
+      "category": "",
+      "name": "ossl",
+      "cmd": "openssl"
+    },
+    {
+      "category": "",
+      "name": "osslcsr",
+      "cmd": "openssl req -new -newkey rsa:2048 -nodes"
+    },
+    {
+      "category": "",
+      "name": "osslchk",
+      "cmd": "openssl s_client -connect"
+    },
+    {
+      "category": "",
+      "name": "osslx",
+      "cmd": "openssl x509 -in"
+    },
+    {
+      "category": "",
+      "name": "osslr",
+      "cmd": "openssl rand -hex"
+    },
+    {
+      "category": "",
+      "name": "osslgen",
+      "cmd": "openssl genrsa"
+    },
+    {
+      "category": "",
+      "name": "rcl",
+      "cmd": "rclone"
+    },
+    {
+      "category": "",
+      "name": "rclls",
+      "cmd": "rclone ls"
+    },
+    {
+      "category": "",
+      "name": "rclsync",
+      "cmd": "rclone sync"
+    },
+    {
+      "category": "",
+      "name": "rclc",
+      "cmd": "rclone copy"
+    },
+    {
+      "category": "",
+      "name": "rclmv",
+      "cmd": "rclone move"
+    },
+    {
+      "category": "",
+      "name": "rest",
+      "cmd": "restic"
+    },
+    {
+      "category": "",
+      "name": "restb",
+      "cmd": "restic backup"
+    },
+    {
+      "category": "",
+      "name": "restr",
+      "cmd": "restic restore"
+    },
+    {
+      "category": "",
+      "name": "rests",
+      "cmd": "restic snapshots"
+    },
+    {
+      "category": "",
+      "name": "restc",
+      "cmd": "restic check"
+    },
+    {
+      "category": "",
+      "name": "borgc",
+      "cmd": "borg create"
+    },
+    {
+      "category": "",
+      "name": "borge",
+      "cmd": "borg extract"
+    },
+    {
+      "category": "",
+      "name": "borgl",
+      "cmd": "borg list"
+    },
+    {
+      "category": "",
+      "name": "borgi",
+      "cmd": "borg info"
+    },
+    {
+      "category": "",
+      "name": "borgd",
+      "cmd": "borg delete"
+    },
+    {
+      "category": "",
+      "name": "borgpr",
+      "cmd": "borg prune"
+    },
+    {
+      "category": "",
+      "name": "kop",
+      "cmd": "kopia"
+    },
+    {
+      "category": "",
+      "name": "kops",
+      "cmd": "kopia snapshot create"
+    },
+    {
+      "category": "",
+      "name": "kopl",
+      "cmd": "kopia snapshot list"
+    },
+    {
+      "category": "",
+      "name": "kopm",
+      "cmd": "kopia mount"
+    },
+    {
+      "category": "",
+      "name": "kopc",
+      "cmd": "kopia cache clear"
+    },
+    {
+      "category": "",
+      "name": "hf",
+      "cmd": "hyperfine"
+    },
+    {
+      "category": "",
+      "name": "hfw",
+      "cmd": "hyperfine --warmup"
+    },
+    {
+      "category": "",
+      "name": "ffet",
+      "cmd": "_x fastfetch"
+    },
+    {
+      "category": "",
+      "name": "ffetl",
+      "cmd": "_x fastfetch -l"
+    },
+    {
+      "category": "",
+      "name": "pur",
+      "cmd": "_x curl -fsSL \"https://cht.sh/$1\" 2>/dev/null"
+    },
+    {
+      "category": "",
+      "name": "pod",
+      "cmd": "_x podman"
+    },
+    {
+      "category": "",
+      "name": "podps",
+      "cmd": "_x podman ps"
+    },
+    {
+      "category": "",
+      "name": "podrun",
+      "cmd": "_x podman run -it --rm"
+    },
+    {
+      "category": "",
+      "name": "podimg",
+      "cmd": "_x podman images"
+    },
+    {
+      "category": "",
+      "name": "dstats",
+      "cmd": "_x docker stats --no-stream"
+    },
+    {
+      "category": "",
+      "name": "kns",
+      "cmd": "_x kubectl config set-context --namespace"
+    },
+    {
+      "category": "",
+      "name": "py",
+      "cmd": "_x python3"
+    },
+    {
+      "category": "",
+      "name": "clickpaste",
+      "cmd": "sleep 3; xdotool type \"$(xclip -o -selection clipboard)\""
+    },
+    {
+      "category": "",
+      "name": "nuke-opencode",
+      "cmd": "rm -rf ~/.local/share/opencode ~/.cache/opencode"
     }
   ],
   "functions": [
     {
       "category": "General",
       "name": "mkcd",
-      "desc": "!/usr/bin/env bash"
+      "desc": "No description available."
     },
     {
       "category": "General",
       "name": "take",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "up",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "back",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "cdup",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "cdhome",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "cdroot",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "recent_dirs",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "recent_all",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "mkdt",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "quick_cd",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "dotfiles_cd",
       "desc": "No description available."
     },
     {
@@ -11019,32 +5414,92 @@ const dotfilesData = {
     },
     {
       "category": "General",
-      "name": "pathuniq",
+      "name": "compress_tar_gz",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "dothealth",
+      "name": "compress_tar_bz2",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "dotbench",
+      "name": "compress_tar_xz",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "dotfix",
+      "name": "compress_zip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "recent",
+      "name": "compress_gz",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "jsonfmt",
+      "name": "compress_bz2",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "compress_xz",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "compress_7z",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_tar_gz",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_tar_bz2",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_tar_xz",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_zip",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_gz",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_bz2",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_xz",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_7z",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "decompress_rar",
+      "desc": "No description available."
+    },
+    {
+      "category": "General",
+      "name": "list_archive",
       "desc": "No description available."
     },
     {
@@ -11054,10954 +5509,10104 @@ const dotfilesData = {
     },
     {
       "category": "General",
-      "name": "p_show_repo",
+      "name": "jsonfmt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_branch",
+      "name": "yamlfmt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_commit",
+      "name": "pathuniq",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_file",
+      "name": "distribution",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_dir",
+      "name": "distro_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_json",
+      "name": "kernel_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_yaml",
+      "name": "shell_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_env",
+      "name": "uptime_pretty",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_path",
+      "name": "sysinfo_summary",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_port",
+      "name": "cpu_temp",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_process",
+      "name": "memory_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_service",
+      "name": "swap_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_log",
+      "name": "disk_usage_summary",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_cache",
+      "name": "load_average",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_disk",
+      "name": "sysinfo_quick",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_mem",
+      "name": "confirm",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_cpu",
+      "name": "trash_put",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_net",
+      "name": "trash_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_docker",
+      "name": "trash_empty",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_kube",
+      "name": "trash_restore",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_node",
+      "name": "scan_secrets",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_python",
+      "name": "gpg_agent_ensure",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_rust",
+      "name": "gpg_agent_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_go",
+      "name": "safe_dl",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_web",
+      "name": "clipclear",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_ssh",
+      "name": "sudotime",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_tmux",
+      "name": "sudocheck",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_git",
+      "name": "env_secrets",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_pkg",
+      "name": "shred_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_show_note",
+      "name": "file_encrypt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_repo",
+      "name": "file_decrypt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_branch",
+      "name": "ssh_keygen_ed25519",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_commit",
+      "name": "ssh_keygen_rsa",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_file",
+      "name": "ssh_key_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_dir",
+      "name": "ssh_agent_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_json",
+      "name": "check_breach",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_yaml",
+      "name": "git_branch_current",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_env",
+      "name": "git_branch_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_path",
+      "name": "git_branch_delete_merged",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_port",
+      "name": "git_branch_rename",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_process",
+      "name": "git_branch_list_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_service",
+      "name": "git_log_today",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_log",
+      "name": "git_log_author",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_cache",
+      "name": "git_log_graph",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_disk",
+      "name": "git_log_oneline",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_mem",
+      "name": "git_log_search",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_cpu",
+      "name": "git_log_date_range",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_net",
+      "name": "git_log_since",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_docker",
+      "name": "git_log_until",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_kube",
+      "name": "git_diff_stat",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_node",
+      "name": "git_diff_word",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_python",
+      "name": "git_diff_summary",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_rust",
+      "name": "git_commit_verbose",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_go",
+      "name": "git_commit_signed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_web",
+      "name": "git_pull_rebase_auto",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_ssh",
+      "name": "git_push_force_lease",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_tmux",
+      "name": "git_push_upstream",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_git",
+      "name": "git_stash_save",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_pkg",
+      "name": "git_stash_apply",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_open_note",
+      "name": "git_stash_drop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_repo",
+      "name": "git_stash_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_branch",
+      "name": "git_stash_pop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_commit",
+      "name": "git_stash_show",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_file",
+      "name": "git_tag_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_dir",
+      "name": "git_tag_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_json",
+      "name": "git_tag_push",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_yaml",
+      "name": "git_tag_push_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_env",
+      "name": "git_tag_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_path",
+      "name": "git_remote_add_upstream",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_port",
+      "name": "git_remote_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_process",
+      "name": "git_remote_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_service",
+      "name": "git_clean_branches",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_log",
+      "name": "git_squash_last",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_cache",
+      "name": "git_rebase_interactive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_disk",
+      "name": "git_rebase_continue",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_mem",
+      "name": "git_rebase_abort",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_cpu",
+      "name": "git_rebase_skip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_net",
+      "name": "git_reset_soft",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_docker",
+      "name": "git_reset_hard",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_kube",
+      "name": "git_reset_mixed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_node",
+      "name": "git_reflog_show",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_python",
+      "name": "git_reflog_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_rust",
+      "name": "git_worktree_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_go",
+      "name": "git_worktree_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_web",
+      "name": "git_submodule_update",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_ssh",
+      "name": "git_submodule_foreach",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_tmux",
+      "name": "git_blame_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_git",
+      "name": "git_grep_search",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_pkg",
+      "name": "git_ignore_local",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_list_note",
+      "name": "git_archive_branch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_repo",
+      "name": "git_config_set_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_branch",
+      "name": "git_config_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_commit",
+      "name": "git_config_list_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_file",
+      "name": "git_contributors",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_dir",
+      "name": "git_contributors_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_json",
+      "name": "git_files_changed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_yaml",
+      "name": "git_commit_stats",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_env",
+      "name": "git_branch_age",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_path",
+      "name": "git_amend_noedit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_port",
+      "name": "git_amend_message",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_process",
+      "name": "git_commit_empty",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_service",
+      "name": "git_checkout_new_branch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_log",
+      "name": "git_merge_ff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_cache",
+      "name": "git_merge_noff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_disk",
+      "name": "git_merge_squash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_mem",
+      "name": "git_merge_abort",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_cpu",
+      "name": "git_merge_continue",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_net",
+      "name": "git_cherry_pick",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_docker",
+      "name": "git_cherry_pick_nocommit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_kube",
+      "name": "git_cherry_pick_continue",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_node",
+      "name": "git_cherry_pick_abort",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_python",
+      "name": "git_revert_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_rust",
+      "name": "git_clone_shallow",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_go",
+      "name": "git_clone_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_web",
+      "name": "git_fetch_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_ssh",
+      "name": "git_fetch_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_tmux",
+      "name": "git_push_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_git",
+      "name": "git_push_tags",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_pkg",
+      "name": "git_pull_ff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_find_note",
+      "name": "git_pull_rebase",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_repo",
+      "name": "git_pull_autostash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_branch",
+      "name": "git_status_short",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_commit",
+      "name": "git_diff_cached",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_file",
+      "name": "git_diff_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_dir",
+      "name": "git_log_stat",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_json",
+      "name": "git_verify_tags",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_yaml",
+      "name": "git_branch_diff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_env",
+      "name": "git_branch_log",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_path",
+      "name": "docker_ps_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_port",
+      "name": "docker_ps_running",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_process",
+      "name": "docker_ps_stopped",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_service",
+      "name": "docker_stop_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_log",
+      "name": "docker_stop_latest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_cache",
+      "name": "docker_rm_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_disk",
+      "name": "docker_rm_exited",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_mem",
+      "name": "docker_rm_stopped",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_cpu",
+      "name": "docker_rmi_dangling",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_net",
+      "name": "docker_rmi_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_docker",
+      "name": "docker_prune_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_kube",
+      "name": "docker_prune_images",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_node",
+      "name": "docker_prune_containers",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_python",
+      "name": "docker_prune_volumes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_rust",
+      "name": "docker_prune_networks",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_go",
+      "name": "docker_clean_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_web",
+      "name": "docker_exec_sh",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_ssh",
+      "name": "docker_exec_bash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_tmux",
+      "name": "docker_logs_tail",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_git",
+      "name": "docker_logs_since",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_pkg",
+      "name": "docker_run_detach",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_sync_note",
+      "name": "docker_run_interactive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_repo",
+      "name": "docker_run_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_branch",
+      "name": "docker_run_port",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_commit",
+      "name": "docker_run_volume",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_file",
+      "name": "docker_build_tag",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_dir",
+      "name": "docker_build_nocache",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_json",
+      "name": "docker_push_tag",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_yaml",
+      "name": "docker_pull_latest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_env",
+      "name": "docker_stats_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_path",
+      "name": "docker_stats_live",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_port",
+      "name": "docker_top_container",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_process",
+      "name": "docker_inspect_ip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_service",
+      "name": "docker_network_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_log",
+      "name": "docker_network_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_cache",
+      "name": "docker_volume_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_disk",
+      "name": "docker_volume_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_mem",
+      "name": "docker_volume_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_cpu",
+      "name": "docker_save_image",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_net",
+      "name": "docker_load_image",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_docker",
+      "name": "docker_login_registry",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_kube",
+      "name": "docker_tag_image",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_node",
+      "name": "docker_export_container",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_python",
+      "name": "docker_import_image",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_rust",
+      "name": "docker_system_df",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_go",
+      "name": "docker_system_events",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_web",
+      "name": "docker_system_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_ssh",
+      "name": "docker_compose_up_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_tmux",
+      "name": "docker_compose_down_volumes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_git",
+      "name": "docker_compose_restart",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_pkg",
+      "name": "docker_compose_stop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_clean_note",
+      "name": "docker_compose_pull",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_repo",
+      "name": "docker_compose_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_branch",
+      "name": "docker_compose_logs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_commit",
+      "name": "docker_compose_logs_tail",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_file",
+      "name": "docker_compose_ps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_dir",
+      "name": "docker_compose_exec",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_json",
+      "name": "docker_compose_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_yaml",
+      "name": "docker_compose_up_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_env",
+      "name": "docker_compose_stop_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_path",
+      "name": "docker_compose_restart_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_port",
+      "name": "docker_compose_build_nocache",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_process",
+      "name": "docker_compose_down_remove_orphans",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_service",
+      "name": "docker_compose_ps_services",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_log",
+      "name": "docker_compose_exec_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_cache",
+      "name": "docker_compose_run_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_disk",
+      "name": "kubectl_get_pods_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_mem",
+      "name": "kubectl_get_pods_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_cpu",
+      "name": "kubectl_get_pods_wide",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_net",
+      "name": "kubectl_get_pods_watch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_docker",
+      "name": "kubectl_get_svc_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_kube",
+      "name": "kubectl_get_deployments_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_node",
+      "name": "kubectl_get_nodes_detail",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_python",
+      "name": "kubectl_get_namespaces_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_rust",
+      "name": "kubectl_describe_pod_detail",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_go",
+      "name": "kubectl_logs_tail",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_web",
+      "name": "kubectl_logs_previous",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_ssh",
+      "name": "kubectl_logs_since",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_tmux",
+      "name": "kubectl_logs_all_containers",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_git",
+      "name": "kubectl_exec_bash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_pkg",
+      "name": "kubectl_exec_sh",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_watch_note",
+      "name": "kubectl_port_forward_svc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_repo",
+      "name": "kubectl_port_forward_pod",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_branch",
+      "name": "kubectl_apply_dir",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_commit",
+      "name": "kubectl_apply_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_file",
+      "name": "kubectl_delete_pod_force",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_dir",
+      "name": "kubectl_rollout_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_json",
+      "name": "kubectl_rollout_history",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_yaml",
+      "name": "kubectl_rollout_undo",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_env",
+      "name": "kubectl_rollout_restart",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_path",
+      "name": "kubectl_scale_deployment",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_port",
+      "name": "kubectl_scale_statefulset",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_process",
+      "name": "kubectl_cordon_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_service",
+      "name": "kubectl_uncordon_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_log",
+      "name": "kubectl_drain_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_cache",
+      "name": "kubectl_config_current",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_disk",
+      "name": "kubectl_config_set_namespace",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_mem",
+      "name": "kubectl_config_get_contexts",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_cpu",
+      "name": "kubectl_context_switch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_net",
+      "name": "kubectl_top_pods_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_docker",
+      "name": "kubectl_top_nodes_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_kube",
+      "name": "kubectl_api_resources_short",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_node",
+      "name": "kubectl_explain_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_python",
+      "name": "kubectl_auth_cani",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_rust",
+      "name": "kubectl_create_namespace",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_go",
+      "name": "kubectl_create_configmap",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_web",
+      "name": "kubectl_create_secret",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_ssh",
+      "name": "kubectl_get_events",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_tmux",
+      "name": "kubectl_get_events_warn",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_git",
+      "name": "kubectl_run_pod",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_pkg",
+      "name": "kubectl_run_deployment",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_check_note",
+      "name": "kubectl_get_all_ingress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_repo",
+      "name": "kubectl_get_all_configmap",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_branch",
+      "name": "kubectl_get_all_secret",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_commit",
+      "name": "kubectl_get_all_pvc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_file",
+      "name": "kubectl_get_all_storageclass",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_dir",
+      "name": "kubectl_label_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_json",
+      "name": "kubectl_taint_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_yaml",
+      "name": "kubectl_cp_to_pod",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_env",
+      "name": "kubectl_cp_from_pod",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_path",
+      "name": "kubectl_get_events_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_port",
+      "name": "kubectl_get_all_pv",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_process",
+      "name": "kubectl_top_pod_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_service",
+      "name": "kubectl_logs_pod_container",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_log",
+      "name": "kubectl_exec_bash_pod_container",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_cache",
+      "name": "kubectl_port_forward_deployment",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_disk",
+      "name": "kubectl_apply_kustomize",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_mem",
+      "name": "kubectl_delete_all_deployments",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_cpu",
+      "name": "kubectl_rollout_pause",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_net",
+      "name": "kubectl_rollout_resume",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_docker",
+      "name": "kubectl_scale_to_zero",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_kube",
+      "name": "k8s_pods",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_node",
+      "name": "k8s_svc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_python",
+      "name": "k8s_deploy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_rust",
+      "name": "k8s_exec",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_go",
+      "name": "k8s_exec_bash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_web",
+      "name": "k8s_logs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_ssh",
+      "name": "k8s_port_fw",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_tmux",
+      "name": "systemctl_status_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_git",
+      "name": "systemctl_list_failed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_pkg",
+      "name": "systemctl_list_enabled",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_build_note",
+      "name": "systemctl_start_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_repo",
+      "name": "systemctl_stop_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_branch",
+      "name": "systemctl_restart_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_commit",
+      "name": "systemctl_enable_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_file",
+      "name": "systemctl_disable_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_dir",
+      "name": "systemctl_mask_unit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_json",
+      "name": "systemctl_unmask_unit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_yaml",
+      "name": "systemctl_daemon_reload",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_env",
+      "name": "systemctl_edit_override",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_path",
+      "name": "systemctl_cat_unit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_port",
+      "name": "systemctl_is_active",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_process",
+      "name": "systemctl_is_enabled",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_service",
+      "name": "systemctl_analyze_time",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_log",
+      "name": "systemctl_analyze_blame",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_cache",
+      "name": "systemctl_list_timers",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_disk",
+      "name": "systemctl_list_sockets",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_mem",
+      "name": "journalctl_logs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_cpu",
+      "name": "journalctl_follow",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_net",
+      "name": "journalctl_unit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_docker",
+      "name": "journalctl_unit_today",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_kube",
+      "name": "journalctl_unit_yesterday",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_node",
+      "name": "journalctl_boot",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_python",
+      "name": "journalctl_errors",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_rust",
+      "name": "journalctl_warnings",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_go",
+      "name": "journalctl_disk_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_web",
+      "name": "journalctl_vacuum_size",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_ssh",
+      "name": "journalctl_vacuum_time",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_tmux",
+      "name": "pkg_update_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_git",
+      "name": "pkg_install_tool",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_pkg",
+      "name": "pkg_remove_tool",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_test_note",
+      "name": "pkg_search_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_repo",
+      "name": "pkg_list_installed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_branch",
+      "name": "pkg_list_outdated",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_commit",
+      "name": "pkg_clean_cache",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_file",
+      "name": "pkg_show_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_dir",
+      "name": "pacman_clean_orphans",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_json",
+      "name": "pacman_list_orphans",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_yaml",
+      "name": "pacman_list_explicit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_env",
+      "name": "pacman_verify_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_path",
+      "name": "apt_broken_fix",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_port",
+      "name": "apt_search_installed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_process",
+      "name": "apt_list_upgradable",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_service",
+      "name": "apt_list_installed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_log",
+      "name": "apt_add_ppa",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_cache",
+      "name": "apt_remove_ppa",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_disk",
+      "name": "dnf_list_groups",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_mem",
+      "name": "dnf_history_rollback",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_cpu",
+      "name": "brew_find_leaves",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_net",
+      "name": "brew_list_deps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_docker",
+      "name": "brew_clean_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_kube",
+      "name": "brew_update_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_node",
+      "name": "brew_services_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_python",
+      "name": "brew_services_stop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_rust",
+      "name": "brew_services_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_go",
+      "name": "brew_outdated_formula",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_web",
+      "name": "flatpak_list_apps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_ssh",
+      "name": "flatpak_update_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_tmux",
+      "name": "snap_list_apps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_git",
+      "name": "snap_update_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_pkg",
+      "name": "pip_install_reqs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_ship_note",
+      "name": "pip_freeze_reqs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_repo",
+      "name": "pip_list_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_branch",
+      "name": "pip_list_outdated",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_commit",
+      "name": "pip_show_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_file",
+      "name": "pip_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_dir",
+      "name": "venv_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_json",
+      "name": "venv_activate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_yaml",
+      "name": "venv_deactivate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_env",
+      "name": "python_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_path",
+      "name": "python_find",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_port",
+      "name": "pyright_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_process",
+      "name": "pytest_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_service",
+      "name": "pytest_coverage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_log",
+      "name": "mypy_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_cache",
+      "name": "flake8_lint",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_disk",
+      "name": "black_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_mem",
+      "name": "pip_install_uv",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_cpu",
+      "name": "pip_cache_clean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_net",
+      "name": "pip_download_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_docker",
+      "name": "pip_hash_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_kube",
+      "name": "npm_list_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_node",
+      "name": "npm_list_outdated",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_python",
+      "name": "npm_audit_fix",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_rust",
+      "name": "npm_cache_clean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_go",
+      "name": "npm_docs_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_web",
+      "name": "npm_why_dep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_ssh",
+      "name": "npm_ci_clean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_tmux",
+      "name": "npm_dedupe",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_git",
+      "name": "npm_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_pkg",
+      "name": "npm_version_bump",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_scan_note",
+      "name": "pnpm_store_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_repo",
+      "name": "pnpm_dedupe",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_branch",
+      "name": "pnpm_lint",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_commit",
+      "name": "yarn_upgrade_interactive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_file",
+      "name": "yarn_outdated",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_dir",
+      "name": "yarn_why",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_json",
+      "name": "node_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_yaml",
+      "name": "node_run_script",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_env",
+      "name": "nvm_use",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_path",
+      "name": "nvm_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_port",
+      "name": "nvm_install",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_process",
+      "name": "cargo_update_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_service",
+      "name": "cargo_tree_deps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_log",
+      "name": "cargo_build_release",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_cache",
+      "name": "cargo_bench_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_disk",
+      "name": "cargo_test_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_mem",
+      "name": "cargo_clippy_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_cpu",
+      "name": "cargo_fmt_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_net",
+      "name": "cargo_doc_open",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_docker",
+      "name": "cargo_expand_macro",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_kube",
+      "name": "cargo_bloat_crate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_node",
+      "name": "cargo_clean_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_python",
+      "name": "cargo_audit_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_rust",
+      "name": "cargo_outdated_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_go",
+      "name": "cargo_check_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_web",
+      "name": "cargo_publish_crate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_ssh",
+      "name": "cargo_test_nocapture",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_tmux",
+      "name": "go_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_git",
+      "name": "go_env_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_pkg",
+      "name": "go_deps_graph",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_count_note",
+      "name": "go_test_cover",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_repo",
+      "name": "go_build_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_branch",
+      "name": "go_install_latest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_commit",
+      "name": "go_mod_tidy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_file",
+      "name": "go_mod_vendor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_dir",
+      "name": "go_vet_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_json",
+      "name": "go_clean_cache",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_yaml",
+      "name": "go_generate_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_env",
+      "name": "go_fmt_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_path",
+      "name": "go_lint_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_port",
+      "name": "go_run_dir",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_process",
+      "name": "go_test_race",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_service",
+      "name": "whatismyip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_log",
+      "name": "whatismyip_external",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_cache",
+      "name": "whatismyip_local",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_disk",
+      "name": "check_port_open",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_mem",
+      "name": "check_port_listen",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_cpu",
+      "name": "check_port_pid",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_net",
+      "name": "kill_port_process",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_docker",
+      "name": "dns_lookup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_kube",
+      "name": "dns_reverse",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_node",
+      "name": "dns_mx_lookup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_python",
+      "name": "dns_ns_lookup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_rust",
+      "name": "dns_txt_lookup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_go",
+      "name": "dns_any",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_web",
+      "name": "ping_test",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_ssh",
+      "name": "speedtest_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_tmux",
+      "name": "ssl_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_git",
+      "name": "http_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_pkg",
+      "name": "http_headers",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_serve_note",
+      "name": "download_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_repo",
+      "name": "download_extract",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_branch",
+      "name": "ip_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_commit",
+      "name": "mac_lookup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_file",
+      "name": "whois_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_dir",
+      "name": "traceroute_path",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_json",
+      "name": "bandwidth_test",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_yaml",
+      "name": "netstat_connections",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_env",
+      "name": "netstat_listening",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_path",
+      "name": "backup_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_port",
+      "name": "backup_dir",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_process",
+      "name": "backup_with_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_service",
+      "name": "count_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_log",
+      "name": "count_dirs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_cache",
+      "name": "count_lines_total",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_disk",
+      "name": "find_largest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_mem",
+      "name": "find_largest_dirs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_cpu",
+      "name": "find_newest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_net",
+      "name": "find_oldest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_docker",
+      "name": "find_empty_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_kube",
+      "name": "find_empty_dirs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_node",
+      "name": "find_duplicates",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_python",
+      "name": "copy_with_progress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_rust",
+      "name": "copy_and_cd",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_go",
+      "name": "move_and_cd",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_web",
+      "name": "rename_extension",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_ssh",
+      "name": "symlink_force",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_tmux",
+      "name": "touch_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_git",
+      "name": "show_permissions",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_pkg",
+      "name": "show_owner",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_trace_note",
+      "name": "file_size",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_repo",
+      "name": "file_extension",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_branch",
+      "name": "checksum_sha256",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_commit",
+      "name": "checksum_md5",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_file",
+      "name": "verify_checksum",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_dir",
+      "name": "count_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_json",
+      "name": "count_words",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_yaml",
+      "name": "count_chars",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_env",
+      "name": "grep_search",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_path",
+      "name": "grep_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_port",
+      "name": "grep_invert",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_process",
+      "name": "grep_context",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_service",
+      "name": "grep_count",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_log",
+      "name": "grep_word",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_cache",
+      "name": "sed_replace",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_disk",
+      "name": "sed_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_mem",
+      "name": "awk_column",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_cpu",
+      "name": "awk_calc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_net",
+      "name": "sort_by_size",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_docker",
+      "name": "sort_by_time",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_kube",
+      "name": "sort_by_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_node",
+      "name": "unique_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_python",
+      "name": "unique_count",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_rust",
+      "name": "diff_summary",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_go",
+      "name": "csv_view",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_web",
+      "name": "json_validate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_ssh",
+      "name": "yaml_validate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_tmux",
+      "name": "hex_dump",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_git",
+      "name": "xml_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_pkg",
+      "name": "make_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_doctor_note",
+      "name": "make_clean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_repo",
+      "name": "make_install",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_branch",
+      "name": "make_test",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_commit",
+      "name": "make_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_file",
+      "name": "make_distclean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_dir",
+      "name": "just_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_json",
+      "name": "just_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_yaml",
+      "name": "just_edit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_env",
+      "name": "dot_docs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_path",
+      "name": "dot_update",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_port",
+      "name": "dot_health",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_process",
+      "name": "dot_bench",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_service",
+      "name": "dot_fix",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_log",
+      "name": "dot_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_cache",
+      "name": "dot_sync",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_disk",
+      "name": "dot_ver",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_mem",
+      "name": "generate_password",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_cpu",
+      "name": "generate_uuid",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_net",
+      "name": "generate_token",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_docker",
+      "name": "encode_base64",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_kube",
+      "name": "decode_base64",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_node",
+      "name": "url_encode",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_python",
+      "name": "url_decode",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_rust",
+      "name": "hash_string",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_go",
+      "name": "hash_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_web",
+      "name": "hash_md5",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_ssh",
+      "name": "ffmpeg_convert",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_tmux",
+      "name": "ffmpeg_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_git",
+      "name": "ffmpeg_gif",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_pkg",
+      "name": "ffmpeg_screenshot",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_bench_note",
+      "name": "ffmpeg_extract_audio",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_repo",
+      "name": "ffmpeg_merge_video",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_branch",
+      "name": "ffmpeg_resize_video",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_commit",
+      "name": "ffmpeg_crop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_file",
+      "name": "ffmpeg_speed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_dir",
+      "name": "ffmpeg_metadata",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_json",
+      "name": "ffmpeg_png_sequence",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_yaml",
+      "name": "ffmpeg_stream",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_env",
+      "name": "image_resize",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_path",
+      "name": "image_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_port",
+      "name": "image_convert",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_process",
+      "name": "image_crop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_service",
+      "name": "image_rotate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_log",
+      "name": "image_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_cache",
+      "name": "image_trim",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_disk",
+      "name": "exif_show",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_mem",
+      "name": "exif_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_cpu",
+      "name": "ffmpeg_volume",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_net",
+      "name": "ffmpeg_concat",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_docker",
+      "name": "gif_optimize",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_kube",
+      "name": "aws_whoami",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_node",
+      "name": "aws_list_s3",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_python",
+      "name": "aws_list_ec2",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_rust",
+      "name": "aws_list_lambda",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_go",
+      "name": "aws_list_ecs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_web",
+      "name": "aws_list_eks",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_ssh",
+      "name": "aws_list_iam",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_tmux",
+      "name": "aws_list_vpc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_git",
+      "name": "aws_list_logs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_pkg",
+      "name": "aws_list_route53",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_pack_note",
+      "name": "aws_s3_browse",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_repo",
+      "name": "aws_s3_sync_up",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_branch",
+      "name": "aws_s3_sync_down",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_commit",
+      "name": "gcloud_list_instances",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_file",
+      "name": "gcloud_list_clusters",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_dir",
+      "name": "gcloud_get_creds",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_json",
+      "name": "gcloud_ssh",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_yaml",
+      "name": "gcloud_list_projects",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_env",
+      "name": "gcloud_list_images",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_path",
+      "name": "gcloud_list_disks",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_port",
+      "name": "az_list_vms",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_process",
+      "name": "az_list_aks",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_service",
+      "name": "az_list_groups",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_log",
+      "name": "terraform_init_re",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_cache",
+      "name": "terraform_plan_out",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_disk",
+      "name": "terraform_apply_auto",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_mem",
+      "name": "terraform_destroy_auto",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_cpu",
+      "name": "terraform_workspace_new",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_net",
+      "name": "terraform_workspace_show",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_docker",
+      "name": "terraform_workspace_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_kube",
+      "name": "terraform_state_pull",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_node",
+      "name": "terraform_state_push",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_python",
+      "name": "terraform_fmt_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_rust",
+      "name": "terraform_validate_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_go",
+      "name": "terraform_refresh_state",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_web",
+      "name": "terraform_console_tool",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_ssh",
+      "name": "helm_repo_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_tmux",
+      "name": "helm_repo_update",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_git",
+      "name": "helm_repo_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_pkg",
+      "name": "helm_search_repo",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_peek_note",
+      "name": "helm_upgrade_install_full",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_repo",
+      "name": "helm_get_values_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_branch",
+      "name": "helm_list_releases_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_commit",
+      "name": "helm_uninstall_release",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_file",
+      "name": "helm_rollback_release",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_dir",
+      "name": "helm_history_show",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_json",
+      "name": "helm_dry_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_yaml",
+      "name": "helm_test_release",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_env",
+      "name": "helm_template_render",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_path",
+      "name": "mysql_dump_db",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_port",
+      "name": "mysql_import_db",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_process",
+      "name": "mysql_run_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_service",
+      "name": "mysql_list_dbs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_log",
+      "name": "pg_dump_db",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_cache",
+      "name": "pg_import_db",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_disk",
+      "name": "pg_list_dbs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_mem",
+      "name": "pg_run_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_cpu",
+      "name": "sqlite_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_net",
+      "name": "sqlite_tables",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_docker",
+      "name": "sqlite_schema",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_kube",
+      "name": "sqlite_dump",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_node",
+      "name": "redis_ping",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_python",
+      "name": "redis_flush",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_rust",
+      "name": "redis_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_go",
+      "name": "redis_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_web",
+      "name": "redis_keys",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_ssh",
+      "name": "redis_get",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_tmux",
+      "name": "redis_set",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_git",
+      "name": "mongosh_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_pkg",
+      "name": "mongosh_list_dbs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "p_tail_note",
+      "name": "gpg_list_keys",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0001",
+      "name": "gpg_list_secret_keys",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0002",
+      "name": "gpg_export_key",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0003",
+      "name": "gpg_export_secret_key",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0004",
+      "name": "gpg_import_key",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0005",
+      "name": "gpg_encrypt_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0006",
+      "name": "gpg_decrypt_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0007",
+      "name": "gpg_sign_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0008",
+      "name": "gpg_verify_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0009",
+      "name": "gpg_recv_keys",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0010",
+      "name": "gpg_refresh_keys",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0011",
+      "name": "gpg_encrypt_symmetric",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0012",
+      "name": "gpg_key_id",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0013",
+      "name": "gpg_key_fingerprint",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0014",
+      "name": "gpg_set_trust",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0015",
+      "name": "openssl_gen_rsa",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0016",
+      "name": "openssl_gen_csr",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0017",
+      "name": "openssl_self_sign",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0018",
+      "name": "openssl_check_cert",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0019",
+      "name": "openssl_check_expiry",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0020",
+      "name": "openssl_check_conn",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0021",
+      "name": "openssl_rand_hex",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0022",
+      "name": "openssl_rand_base64",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0023",
+      "name": "openssl_check_modulus",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0024",
+      "name": "openssl_check_key",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0025",
+      "name": "show_path",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0026",
+      "name": "show_env",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0027",
+      "name": "show_aliases",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0028",
+      "name": "show_functions",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0029",
+      "name": "show_banner",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0030",
+      "name": "show_calendar",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0031",
+      "name": "show_weather",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0032",
+      "name": "show_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0033",
+      "name": "show_date_utc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0034",
+      "name": "show_datetime",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0035",
+      "name": "date_iso_8601",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0036",
+      "name": "date_unix_ts",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0037",
+      "name": "date_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0038",
+      "name": "random_number",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0039",
+      "name": "random_string",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0040",
+      "name": "repeat_command",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0041",
+      "name": "run_with_timeout",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0042",
+      "name": "watch_command",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0043",
+      "name": "retry_command",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0044",
+      "name": "quiet_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0045",
+      "name": "dry_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0046",
+      "name": "confirm_action",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0047",
+      "name": "show_ip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0048",
+      "name": "show_date_time",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0049",
+      "name": "show_timezone",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0050",
+      "name": "show_uptime",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0051",
+      "name": "show_ram_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0052",
+      "name": "show_disk_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0053",
+      "name": "show_cpu_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0054",
+      "name": "show_kernel",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0055",
+      "name": "show_os",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0056",
+      "name": "show_host",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0057",
+      "name": "show_users",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0058",
+      "name": "show_last",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0059",
+      "name": "show_ssh_keys",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0060",
+      "name": "show_docker_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0061",
+      "name": "show_kubectl_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0062",
+      "name": "show_git_config",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0063",
+      "name": "show_battery_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0064",
+      "name": "calc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0065",
+      "name": "calc_float",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0066",
+      "name": "calc_int",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0067",
+      "name": "calc_sci",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0068",
+      "name": "hex_to_dec",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0069",
+      "name": "dec_to_hex",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0070",
+      "name": "bin_to_dec",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0071",
+      "name": "dec_to_bin",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0072",
+      "name": "byte_convert",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0073",
+      "name": "time_convert",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0074",
+      "name": "csv_sum",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0075",
+      "name": "csv_avg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0076",
+      "name": "csv_max",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0077",
+      "name": "csv_min",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0078",
+      "name": "csv_head",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0079",
+      "name": "csv_tail",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0080",
+      "name": "csv_cols",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0081",
+      "name": "docker_compose_ps_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0082",
+      "name": "docker_compose_images",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0083",
+      "name": "docker_compose_config",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0084",
+      "name": "docker_compose_top_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0085",
+      "name": "docker_container_inspect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0086",
+      "name": "docker_container_ip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0087",
+      "name": "docker_image_history",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0088",
+      "name": "docker_image_inspect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0089",
+      "name": "docker_network_inspect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0090",
+      "name": "docker_volume_inspect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0091",
+      "name": "docker_compose_build_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0092",
+      "name": "docker_compose_pull_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0093",
+      "name": "docker_compose_create_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0094",
+      "name": "docker_compose_start_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0095",
+      "name": "docker_compose_kill_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0096",
+      "name": "docker_compose_pause_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0097",
+      "name": "docker_compose_unpause_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0098",
+      "name": "docker_system_prune_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0099",
+      "name": "kubectl_get_pod_yaml",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0100",
+      "name": "kubectl_get_svc_yaml",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0101",
+      "name": "kubectl_get_deploy_yaml",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0102",
+      "name": "kubectl_get_all_yaml",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0103",
+      "name": "kubectl_describe_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0104",
+      "name": "kubectl_describe_svc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0105",
+      "name": "kubectl_describe_deploy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0106",
+      "name": "kubectl_logs_multiple",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0107",
+      "name": "kubectl_exec_command",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0108",
+      "name": "kubectl_scale_to_replicas",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0109",
+      "name": "kubectl_label_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0110",
+      "name": "kubectl_label_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0111",
+      "name": "kubectl_annotate_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0112",
+      "name": "kubectl_rollback",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0113",
+      "name": "kubectl_watch_pods",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0114",
+      "name": "kubectl_watch_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0115",
+      "name": "kubectl_proxy_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0116",
+      "name": "kubectl_port_forward_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0117",
+      "name": "get_cpu_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0118",
+      "name": "get_memory_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0119",
+      "name": "get_disk_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0120",
+      "name": "get_network_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0121",
+      "name": "get_system_load",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0122",
+      "name": "get_running_processes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0123",
+      "name": "get_listening_ports",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0124",
+      "name": "get_logged_in_users",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0125",
+      "name": "get_last_reboot",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0126",
+      "name": "get_uptime_pretty",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0127",
+      "name": "get_installed_packages",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0128",
+      "name": "get_battery_percent",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0129",
+      "name": "get_battery_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0130",
+      "name": "get_temperature_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0131",
+      "name": "get_gpu_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0132",
+      "name": "get_disk_usage_root",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0133",
+      "name": "get_swap_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0134",
+      "name": "get_shell_process",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0135",
+      "name": "get_display_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0136",
+      "name": "tar_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0137",
+      "name": "tar_decompress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0138",
+      "name": "tar_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0139",
+      "name": "tar_compress_bz2",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0140",
+      "name": "tar_compress_xz",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0141",
+      "name": "tar_decompress_bz2",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0142",
+      "name": "tar_decompress_xz",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0143",
+      "name": "gzip_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0144",
+      "name": "gzip_decompress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0145",
+      "name": "gzip_level",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0146",
+      "name": "bzip2_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0147",
+      "name": "bzip2_decompress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0148",
+      "name": "bzip2_level",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0149",
+      "name": "xz_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0150",
+      "name": "xz_decompress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0151",
+      "name": "xz_level",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0152",
+      "name": "zip_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0153",
+      "name": "zip_decompress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0154",
+      "name": "zip_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0155",
+      "name": "zip_encrypt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0156",
+      "name": "7z_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0157",
+      "name": "7z_decompress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0158",
+      "name": "7z_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0159",
+      "name": "7z_encrypt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0160",
+      "name": "rar_decompress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0161",
+      "name": "rar_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0162",
+      "name": "uncompress_auto",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0163",
+      "name": "gpg_encrypt_asymmetric",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0164",
+      "name": "gpg_decrypt_asymmetric",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0165",
+      "name": "gpg_encrypt_sym",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0166",
+      "name": "gpg_decrypt_sym",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0167",
+      "name": "gpg_sign_detached",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0168",
+      "name": "gpg_verify_detached",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0169",
+      "name": "gpg_export_key_armor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0170",
+      "name": "gpg_export_secret_key_armor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0171",
+      "name": "gpg_import_key_armor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0172",
+      "name": "gpg_recv_keyserver",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0173",
+      "name": "gpg_refresh_keyserver",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0174",
+      "name": "gpg_key_details",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0175",
+      "name": "gpg_key_fpr",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0176",
+      "name": "gpg_list_keys_with_id",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0177",
+      "name": "gpg_list_keys_with_email",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0178",
+      "name": "gpg_delete_key",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0179",
+      "name": "gpg_delete_secret_key",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0180",
+      "name": "docker_run_shell",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0181",
+      "name": "docker_run_bash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0182",
+      "name": "docker_exec_root",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0183",
+      "name": "docker_exec_user",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0184",
+      "name": "docker_logs_tail_n",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0185",
+      "name": "docker_logs_timestamps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0186",
+      "name": "docker_logs_until",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0187",
+      "name": "docker_stats_no_stream",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0188",
+      "name": "docker_ps_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0189",
+      "name": "docker_ps_by_image",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0190",
+      "name": "docker_ps_volume",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0191",
+      "name": "docker_ps_network",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0192",
+      "name": "docker_image_dangling",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0193",
+      "name": "docker_image_by_repo",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0194",
+      "name": "docker_prune_build_cache",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0195",
+      "name": "docker_system_disk_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0196",
+      "name": "docker_compose_down_rmi",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0197",
+      "name": "docker_compose_down_timeout",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0198",
+      "name": "docker_compose_events",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0199",
+      "name": "docker_compose_pause",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0200",
+      "name": "docker_compose_unpause",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0201",
+      "name": "docker_compose_kill",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0202",
+      "name": "docker_compose_scale",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0203",
+      "name": "docker_compose_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0204",
+      "name": "docker_save_gz",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0205",
+      "name": "docker_load_gz",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0206",
+      "name": "docker_container_port",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0207",
+      "name": "docker_container_diff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0208",
+      "name": "docker_container_top",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0209",
+      "name": "docker_container_rename",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0210",
+      "name": "docker_container_pause",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0211",
+      "name": "docker_container_unpause",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0212",
+      "name": "docker_container_wait",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0213",
+      "name": "docker_container_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0214",
+      "name": "docker_container_cp_to",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0215",
+      "name": "docker_container_cp_from",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0216",
+      "name": "docker_image_build_from",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0217",
+      "name": "docker_image_tag_latest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0218",
+      "name": "docker_image_squash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0219",
+      "name": "docker_network_create_bridge",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0220",
+      "name": "docker_network_create_overlay",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0221",
+      "name": "docker_network_connect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0222",
+      "name": "docker_network_disconnect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0223",
+      "name": "docker_network_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0224",
+      "name": "docker_volume_create_named",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0225",
+      "name": "docker_volume_backup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0226",
+      "name": "docker_volume_restore",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0227",
+      "name": "docker_compose_up_recreate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0228",
+      "name": "docker_compose_up_scale",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0229",
+      "name": "docker_build_prune_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0230",
+      "name": "docker_build_prune_cache",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0231",
+      "name": "docker_system_events_since",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0232",
+      "name": "docker_system_events_until",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0233",
+      "name": "docker_system_info_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0234",
+      "name": "docker_swarm_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0235",
+      "name": "docker_swarm_leave",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0236",
+      "name": "docker_swarm_join",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0237",
+      "name": "docker_swarm_node_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0238",
+      "name": "docker_swarm_service_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0239",
+      "name": "docker_swarm_service_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0240",
+      "name": "docker_swarm_stack_deploy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0241",
+      "name": "docker_swarm_stack_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0242",
+      "name": "docker_swarm_stack_rm",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0243",
+      "name": "docker_swarm_stack_services",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0244",
+      "name": "docker_swarm_stack_ps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0245",
+      "name": "docker_secret_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0246",
+      "name": "docker_secret_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0247",
+      "name": "docker_config_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0248",
+      "name": "docker_config_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0249",
+      "name": "docker_plugin_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0250",
+      "name": "docker_plugin_install",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0251",
+      "name": "docker_plugin_disable",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0252",
+      "name": "docker_plugin_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0253",
+      "name": "kubectl_get_pods_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0254",
+      "name": "kubectl_get_svc_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0255",
+      "name": "kubectl_get_deploy_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0256",
+      "name": "kubectl_get_configmap_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0257",
+      "name": "kubectl_get_secret_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0258",
+      "name": "kubectl_get_ingress_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0259",
+      "name": "kubectl_get_pvc_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0260",
+      "name": "kubectl_get_hpa_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0261",
+      "name": "kubectl_create_cronjob",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0262",
+      "name": "kubectl_create_job",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0263",
+      "name": "kubectl_create_deployment",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0264",
+      "name": "kubectl_create_service_nodeport",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0265",
+      "name": "kubectl_create_service_clusterip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0266",
+      "name": "kubectl_create_ingress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0267",
+      "name": "kubectl_set_image",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0268",
+      "name": "kubectl_set_env",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0269",
+      "name": "kubectl_set_resources",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0270",
+      "name": "kubectl_autoscale_deployment",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0271",
+      "name": "kubectl_get_events_warn_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0272",
+      "name": "kubectl_cordon_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0273",
+      "name": "kubectl_uncordon_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0274",
+      "name": "kubectl_node_ready",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0275",
+      "name": "kubectl_node_details",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0276",
+      "name": "kubectl_top_node_sort",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0277",
+      "name": "kubectl_config_view",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0278",
+      "name": "kubectl_config_rename_context",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0279",
+      "name": "kubectl_config_delete_context",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0280",
+      "name": "kubectl_config_use_namespace",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0281",
+      "name": "kubectl_auth_reconcil",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0282",
+      "name": "kubectl_api_versions",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0283",
+      "name": "kubectl_completion_bash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0284",
+      "name": "kubectl_completion_zsh",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0285",
+      "name": "kubectl_completion_fish",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0286",
+      "name": "kubectl_plugin_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0287",
+      "name": "kubectl_cp_pod_to_local",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0288",
+      "name": "kubectl_cp_local_to_pod",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0289",
+      "name": "kubectl_wait_pod_ready",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0290",
+      "name": "kubectl_wait_deploy_ready",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0291",
+      "name": "kubectl_wait_node_ready",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0292",
+      "name": "helm_search_hub",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0293",
+      "name": "helm_search_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0294",
+      "name": "helm_pull_chart",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0295",
+      "name": "helm_pull_chart_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0296",
+      "name": "helm_install_chart",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0297",
+      "name": "helm_upgrade_release",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0298",
+      "name": "helm_upgrade_install",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0299",
+      "name": "helm_rollback_revision",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0300",
+      "name": "helm_list_releases",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0301",
+      "name": "helm_list_releases_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0302",
+      "name": "helm_get_manifest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0303",
+      "name": "helm_get_notes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0304",
+      "name": "helm_get_hooks",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0305",
+      "name": "helm_status_release",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0306",
+      "name": "helm_test_ns",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0307",
+      "name": "helm_create_chart",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0308",
+      "name": "helm_package_chart",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0309",
+      "name": "helm_lint_chart",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0310",
+      "name": "helm_dep_update",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0311",
+      "name": "helm_dep_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0312",
+      "name": "helm_show_chart",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0313",
+      "name": "helm_show_values",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0314",
+      "name": "helm_show_readme",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0315",
+      "name": "terraform_plan_destroy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0316",
+      "name": "terraform_apply_target",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0317",
+      "name": "terraform_taint_resource",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0318",
+      "name": "terraform_untaint_resource",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0319",
+      "name": "terraform_import_resource",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0320",
+      "name": "terraform_output_raw",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0321",
+      "name": "terraform_state_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0322",
+      "name": "terraform_state_rm",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0323",
+      "name": "terraform_state_mv",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0324",
+      "name": "terraform_state_show",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0325",
+      "name": "terraform_workspace_select",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0326",
+      "name": "terraform_workspace_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0327",
+      "name": "terraform_version_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0328",
+      "name": "terraform_providers_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0329",
+      "name": "terraform_lock_hcl",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0330",
+      "name": "terraform_graph_deps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0331",
+      "name": "terraform_console_expr",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0332",
+      "name": "terraform_get_modules",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0333",
+      "name": "terraform_validate_quiet",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0334",
+      "name": "gcloud_auth_login",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0335",
+      "name": "gcloud_auth_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0336",
+      "name": "gcloud_auth_application",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0337",
+      "name": "gcloud_config_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0338",
+      "name": "gcloud_config_set",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0339",
+      "name": "gcloud_config_set_project",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0340",
+      "name": "gcloud_config_set_region",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0341",
+      "name": "gcloud_config_set_zone",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0342",
+      "name": "gcloud_storage_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0343",
+      "name": "gcloud_storage_cp",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0344",
+      "name": "gcloud_storage_rsync",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0345",
+      "name": "gcloud_storage_buckets",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0346",
+      "name": "gcloud_firewall_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0347",
+      "name": "gcloud_firewall_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0348",
+      "name": "gcloud_dns_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0349",
+      "name": "gcloud_dns_records",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0350",
+      "name": "gcloud_iam_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0351",
+      "name": "gcloud_iam_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0352",
+      "name": "gcloud_iam_keys",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0353",
+      "name": "gcloud_build_submit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0354",
+      "name": "gcloud_build_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0355",
+      "name": "gcloud_run_deploy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0356",
+      "name": "gcloud_run_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0357",
+      "name": "gcloud_sql_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0358",
+      "name": "gcloud_sql_connect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0359",
+      "name": "gcloud_kms_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0360",
+      "name": "gcloud_kms_encrypt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0361",
+      "name": "gcloud_kms_decrypt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0362",
+      "name": "aws_ec2_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0363",
+      "name": "aws_ec2_stop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0364",
+      "name": "aws_ec2_reboot",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0365",
+      "name": "aws_ec2_terminate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0366",
+      "name": "aws_ec2_instances",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0367",
+      "name": "aws_ec2_instances_running",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0368",
+      "name": "aws_ec2_instances_stopped",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0369",
+      "name": "aws_ec2_keypairs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0370",
+      "name": "aws_ec2_security_groups",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0371",
+      "name": "aws_ec2_volumes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0372",
+      "name": "aws_ec2_snapshots",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0373",
+      "name": "aws_ec2_subnets",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0374",
+      "name": "aws_s3_buckets",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0375",
+      "name": "aws_s3_size",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0376",
+      "name": "aws_s3_presign",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0377",
+      "name": "aws_s3_website",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0378",
+      "name": "aws_lambda_invoke",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0379",
+      "name": "aws_lambda_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0380",
+      "name": "aws_lambda_logs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0381",
+      "name": "aws_iam_users",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0382",
+      "name": "aws_iam_roles",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0383",
+      "name": "aws_iam_policies",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0384",
+      "name": "aws_iam_groups",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0385",
+      "name": "aws_logs_groups",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0386",
+      "name": "aws_logs_tail",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0387",
+      "name": "aws_logs_filter",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0388",
+      "name": "aws_route53_zones",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0389",
+      "name": "aws_route53_records",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0390",
+      "name": "aws_cf_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0391",
+      "name": "aws_cf_invalidate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0392",
+      "name": "aws_sqs_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0393",
+      "name": "aws_sqs_send",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0394",
+      "name": "aws_sns_topics",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0395",
+      "name": "aws_sns_publish",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0396",
+      "name": "aws_dynamo_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0397",
+      "name": "aws_dynamo_scan",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0398",
+      "name": "aws_dynamo_get",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0399",
+      "name": "aws_dynamo_put",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0400",
+      "name": "aws_dynamo_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0401",
+      "name": "aws_cw_alarms",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0402",
+      "name": "aws_cw_metrics",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0403",
+      "name": "aws_cw_logs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0404",
+      "name": "aws_ecr_repos",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0405",
+      "name": "aws_ecr_images",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0406",
+      "name": "aws_ecr_login",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0407",
+      "name": "aws_ecs_clusters",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0408",
+      "name": "aws_ecs_services",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0409",
+      "name": "aws_ecs_tasks",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0410",
+      "name": "aws_ecs_describe",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0411",
+      "name": "aws_eks_clusters",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0412",
+      "name": "aws_eks_update_kubeconfig",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0413",
+      "name": "aws_elasticache_clusters",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0414",
+      "name": "aws_rds_instances",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0415",
+      "name": "aws_rds_snapshots",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0416",
+      "name": "aws_stepfunctions_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0417",
+      "name": "aws_apigateway_apis",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0418",
+      "name": "aws_cognito_pools",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0419",
+      "name": "pip_install_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0420",
+      "name": "pip_install_user",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0421",
+      "name": "pip_install_editable",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0422",
+      "name": "pip_install_reqs_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0423",
+      "name": "pip_uninstall_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0424",
+      "name": "pip_upgrade_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0425",
+      "name": "pip_upgrade_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0426",
+      "name": "pip_install_pipx",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0427",
+      "name": "pipx_list_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0428",
+      "name": "pipx_run_bin",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0429",
+      "name": "pipx_upgrade_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0430",
+      "name": "venv_create_python",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0431",
+      "name": "venv_create_system",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0432",
+      "name": "venv_list_packages",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0433",
+      "name": "venv_export_reqs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0434",
+      "name": "pytest_run_verbose",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0435",
+      "name": "pytest_run_failfast",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0436",
+      "name": "pytest_run_parallel",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0437",
+      "name": "pytest_run_coverage_html",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0438",
+      "name": "pytest_run_last_failed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0439",
+      "name": "ruff_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0440",
+      "name": "ruff_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0441",
+      "name": "ruff_fix",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0442",
+      "name": "poetry_install",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0443",
+      "name": "poetry_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0444",
+      "name": "poetry_add_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0445",
+      "name": "poetry_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0446",
+      "name": "poetry_publish",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0447",
+      "name": "poetry_update_lock",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0448",
+      "name": "poetry_export_reqs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0449",
+      "name": "poetry_shell",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0450",
+      "name": "poetry_run_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0451",
+      "name": "pyenv_versions",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0452",
+      "name": "pyenv_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0453",
+      "name": "pyenv_local",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0454",
+      "name": "pyenv_install_python",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0455",
+      "name": "pyenv_uninstall_python",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0456",
+      "name": "pyenv_virtualenv_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0457",
+      "name": "pyenv_virtualenv_activate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0458",
+      "name": "pyenv_virtualenv_deactivate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0459",
+      "name": "conda_env_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0460",
+      "name": "conda_env_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0461",
+      "name": "conda_env_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0462",
+      "name": "conda_install_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0463",
+      "name": "conda_update_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0464",
+      "name": "npm_init_project",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0465",
+      "name": "npm_init_ts",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0466",
+      "name": "npm_install_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0467",
+      "name": "npm_install_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0468",
+      "name": "npm_install_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0469",
+      "name": "npm_install_optional",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0470",
+      "name": "npm_uninstall_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0471",
+      "name": "npm_update_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0472",
+      "name": "npm_update_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0473",
+      "name": "npm_run_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0474",
+      "name": "npm_run_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0475",
+      "name": "npm_run_test",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0476",
+      "name": "npm_run_lint",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0477",
+      "name": "npm_run_typecheck",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0478",
+      "name": "npm_run_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0479",
+      "name": "npm_publish_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0480",
+      "name": "npm_publish_dryrun",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0481",
+      "name": "npm_unpublish_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0482",
+      "name": "npm_link_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0483",
+      "name": "npm_unlink_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0484",
+      "name": "npm_link_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0485",
+      "name": "npm_whoami",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0486",
+      "name": "npm_token_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0487",
+      "name": "npm_token_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0488",
+      "name": "npm_token_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0489",
+      "name": "npm_team_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0490",
+      "name": "npm_access_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0491",
+      "name": "npm_view_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0492",
+      "name": "npm_search_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0493",
+      "name": "npm_pack_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0494",
+      "name": "npm_rebuild_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0495",
+      "name": "npm_cache_ls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0496",
+      "name": "npm_cache_verify",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0497",
+      "name": "npm_ls_top",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0498",
+      "name": "npm_ls_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0499",
+      "name": "npm_fund_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0500",
+      "name": "npm_org_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0501",
+      "name": "npm_stars_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0502",
+      "name": "pnpm_install",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0503",
+      "name": "pnpm_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0504",
+      "name": "pnpm_add_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0505",
+      "name": "pnpm_add_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0506",
+      "name": "pnpm_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0507",
+      "name": "pnpm_update",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0508",
+      "name": "pnpm_run_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0509",
+      "name": "pnpm_run_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0510",
+      "name": "pnpm_run_test",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0511",
+      "name": "pnpm_run_lint",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0512",
+      "name": "pnpm_ls_depth",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0513",
+      "name": "pnpm_outdated",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0514",
+      "name": "pnpm_audit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0515",
+      "name": "pnpm_audit_fix",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0516",
+      "name": "pnpm_rebuild",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0517",
+      "name": "pnpm_store_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0518",
+      "name": "pnpm_store_path",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0519",
+      "name": "pnpm_fetch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0520",
+      "name": "pnpm_pack",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0521",
+      "name": "pnpm_publish",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0522",
+      "name": "yarn_add_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0523",
+      "name": "yarn_add_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0524",
+      "name": "yarn_remove_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0525",
+      "name": "yarn_install_frozen",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0526",
+      "name": "yarn_install_immutable",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0527",
+      "name": "yarn_run_dev",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0528",
+      "name": "yarn_run_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0529",
+      "name": "yarn_run_test",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0530",
+      "name": "yarn_run_lint",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0531",
+      "name": "yarn_run_typecheck",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0532",
+      "name": "yarn_workspace_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0533",
+      "name": "yarn_workspace_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0534",
+      "name": "yarn_why_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0535",
+      "name": "yarn_link_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0536",
+      "name": "yarn_unlink_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0537",
+      "name": "yarn_publish_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0538",
+      "name": "yarn_info_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0539",
+      "name": "yarn_cache_clean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0540",
+      "name": "nvm_list_remote",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0541",
+      "name": "nvm_list_local",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0542",
+      "name": "nvm_install_lts",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0543",
+      "name": "nvm_use_default",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0544",
+      "name": "nvm_alias_default",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0545",
+      "name": "nvm_current_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0546",
+      "name": "nvm_which_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0547",
+      "name": "nvm_uninstall_node",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0548",
+      "name": "node_eval",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0549",
+      "name": "node_inspect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0550",
+      "name": "node_check_syntax",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0551",
+      "name": "node_print_v8",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0552",
+      "name": "node_print_versions",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0553",
+      "name": "tsc_compile",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0554",
+      "name": "tsc_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0555",
+      "name": "tsc_watch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0556",
+      "name": "tsc_noemit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0557",
+      "name": "tsc_build",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0558",
+      "name": "ts_node_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0559",
+      "name": "cargo_new_project",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0560",
+      "name": "cargo_init_project",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0561",
+      "name": "cargo_add_dep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0562",
+      "name": "cargo_add_dev_dep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0563",
+      "name": "cargo_add_build_dep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0564",
+      "name": "cargo_rm_dep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0565",
+      "name": "cargo_upgrade_dep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0566",
+      "name": "cargo_upgrade_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0567",
+      "name": "cargo_workspace_member",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0568",
+      "name": "cargo_run_example",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0569",
+      "name": "cargo_run_bin",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0570",
+      "name": "cargo_test_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0571",
+      "name": "cargo_test_doc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0572",
+      "name": "cargo_test_ignored",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0573",
+      "name": "cargo_bench",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0574",
+      "name": "cargo_build_debug",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0575",
+      "name": "cargo_build_release_clean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0576",
+      "name": "cargo_check_warnings",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0577",
+      "name": "cargo_fix_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0578",
+      "name": "cargo_metadata_deps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0579",
+      "name": "cargo_vendor_deps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0580",
+      "name": "cargo_publish_dryrun",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0581",
+      "name": "cargo_owner_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0582",
+      "name": "cargo_owner_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0583",
+      "name": "cargo_owner_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0584",
+      "name": "cargo_yank_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0585",
+      "name": "cargo_unyank_version",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0586",
+      "name": "cargo_workspace_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0587",
+      "name": "cargo_licenses",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0588",
+      "name": "cargo_lint_clippy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0589",
+      "name": "cargo_fmt_rust",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0590",
+      "name": "go_test_short",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0591",
+      "name": "go_test_bench",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0592",
+      "name": "go_test_cover_html",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0593",
+      "name": "go_test_cover_func",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0594",
+      "name": "go_build_linux",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0595",
+      "name": "go_build_darwin",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0596",
+      "name": "go_build_windows",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0597",
+      "name": "go_build_cross",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0598",
+      "name": "go_get_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0599",
+      "name": "go_install_tool",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0600",
+      "name": "go_doc_view",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0601",
+      "name": "go_doc_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0602",
+      "name": "go_clean_modcache",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0603",
+      "name": "go_mod_download",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0604",
+      "name": "go_mod_verify",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0605",
+      "name": "go_mod_why",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0606",
+      "name": "go_work_use",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0607",
+      "name": "go_work_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0608",
+      "name": "go_work_sync",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0609",
+      "name": "go_tool_pprof",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0610",
+      "name": "go_tool_trace",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0611",
+      "name": "go_tool_objdump",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0612",
+      "name": "go_tool_covdata",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0613",
+      "name": "git_clone_github",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0614",
+      "name": "git_clone_gh_ssh",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0615",
+      "name": "git_clone_gitlab",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0616",
+      "name": "git_clone_bitbucket",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0617",
+      "name": "git_clone_bare",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0618",
+      "name": "git_clone_mirror",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0619",
+      "name": "git_branch_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0620",
+      "name": "git_branch_switch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0621",
+      "name": "git_branch_switch_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0622",
+      "name": "git_branch_rename_remote",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0623",
+      "name": "git_branch_purge",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0624",
+      "name": "git_branch_merged",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0625",
+      "name": "git_branch_not_merged",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0626",
+      "name": "git_branch_tracking",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0627",
+      "name": "git_branch_sort",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0628",
+      "name": "git_log_stats",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0629",
+      "name": "git_log_patch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0630",
+      "name": "git_log_short",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0631",
+      "name": "git_log_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0632",
+      "name": "git_log_between",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0633",
+      "name": "git_log_graph_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0634",
+      "name": "git_log_author_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0635",
+      "name": "git_log_diff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0636",
+      "name": "git_diff_staged",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0637",
+      "name": "git_diff_unstaged",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0638",
+      "name": "git_diff_branches",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0639",
+      "name": "git_diff_commits",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0640",
+      "name": "git_diff_summary_only",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0641",
+      "name": "git_diff_word_highlight",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0642",
+      "name": "git_diff_patch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0643",
+      "name": "git_commit_sign",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0644",
+      "name": "git_commit_fixup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0645",
+      "name": "git_commit_squash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0646",
+      "name": "git_commit_allow_empty",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0647",
+      "name": "git_commit_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0648",
+      "name": "git_stash_save_msg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0649",
+      "name": "git_stash_apply_drop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0650",
+      "name": "git_stash_branch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0651",
+      "name": "git_stash_clear_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0652",
+      "name": "git_stash_show_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0653",
+      "name": "git_stash_list_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0654",
+      "name": "git_remote_add_origin",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0655",
+      "name": "git_remote_set_url",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0656",
+      "name": "git_remote_rename",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0657",
+      "name": "git_remote_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0658",
+      "name": "git_remote_get_url",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0659",
+      "name": "git_remote_update",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0660",
+      "name": "git_merge_squash_branch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0661",
+      "name": "git_merge_ff_only",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0662",
+      "name": "git_rebase_root",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0663",
+      "name": "git_rebase_onto",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0664",
+      "name": "git_rebase_editor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0665",
+      "name": "git_reset_keep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0666",
+      "name": "git_reset_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0667",
+      "name": "git_reset_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0668",
+      "name": "git_reset_to_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0669",
+      "name": "git_cherry_pick_range",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0670",
+      "name": "git_revert_no_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0671",
+      "name": "git_revert_abort",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0672",
+      "name": "git_revert_continue",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0673",
+      "name": "git_amend_author",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0674",
+      "name": "git_amend_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0675",
+      "name": "git_amend_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0676",
+      "name": "git_worktree_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0677",
+      "name": "git_worktree_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0678",
+      "name": "git_worktree_lock",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0679",
+      "name": "git_worktree_unlock",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0680",
+      "name": "git_submodule_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0681",
+      "name": "git_submodule_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0682",
+      "name": "git_submodule_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0683",
+      "name": "git_submodule_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0684",
+      "name": "git_submodule_sync",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0685",
+      "name": "git_submodule_update_remote",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0686",
+      "name": "git_bisect_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0687",
+      "name": "git_bisect_good",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0688",
+      "name": "git_bisect_bad",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0689",
+      "name": "git_bisect_reset",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0690",
+      "name": "git_bisect_log",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0691",
+      "name": "git_bisect_run",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0692",
+      "name": "git_blame_email",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0693",
+      "name": "git_blame_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0694",
+      "name": "git_grep_string",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0695",
+      "name": "git_grep_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0696",
+      "name": "git_grep_context",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0697",
+      "name": "git_ignore_global",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0698",
+      "name": "git_ignore_template",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0699",
+      "name": "git_attributes_text",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0700",
+      "name": "git_config_user",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0701",
+      "name": "git_config_global_user",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0702",
+      "name": "git_config_diff_tool",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0703",
+      "name": "git_config_merge_tool",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0704",
+      "name": "git_config_signing",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0705",
+      "name": "git_config_autocorrect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0706",
+      "name": "git_config_pull_rebase",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0707",
+      "name": "git_config_push_default",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0708",
+      "name": "git_notes_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0709",
+      "name": "git_notes_show",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0710",
+      "name": "git_notes_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0711",
+      "name": "git_replace_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0712",
+      "name": "git_archive_zip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0713",
+      "name": "git_archive_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0714",
+      "name": "git_describe_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0715",
+      "name": "git_verify_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0716",
+      "name": "git_verify_tag",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0717",
+      "name": "git_check_ignore",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0718",
+      "name": "git_check_attr",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0719",
+      "name": "git_show_refs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0720",
+      "name": "git_ls_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0721",
+      "name": "git_ls_tree",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0722",
+      "name": "git_count_objects",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0723",
+      "name": "git_fsck_repair",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0724",
+      "name": "git_gc_aggressive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0725",
+      "name": "git_repack_optimize",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0726",
+      "name": "git_clean_ignored",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0727",
+      "name": "git_clean_dry",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0728",
+      "name": "git_archive_export",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0729",
+      "name": "systemctl_reload_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0730",
+      "name": "systemctl_reenable_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0731",
+      "name": "systemctl_preset_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0732",
+      "name": "systemctl_add_wants",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0733",
+      "name": "systemctl_list_deps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0734",
+      "name": "systemctl_show_unit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0735",
+      "name": "systemctl_list_units_by_type",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0736",
+      "name": "systemctl_list_machines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0737",
+      "name": "systemctl_poweroff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0738",
+      "name": "systemctl_reboot",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0739",
+      "name": "systemctl_hibernate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0740",
+      "name": "systemctl_suspend",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0741",
+      "name": "systemctl_hybrid_sleep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0742",
+      "name": "journalctl_user_unit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0743",
+      "name": "journalctl_priority",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0744",
+      "name": "journalctl_since_time",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0745",
+      "name": "journalctl_until_time",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0746",
+      "name": "journalctl_output_json",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0747",
+      "name": "journalctl_catalog",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0748",
+      "name": "journalctl_merge",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0749",
+      "name": "journalctl_no_pager",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0750",
+      "name": "journalctl_reverse",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0751",
+      "name": "journalctl_follow_unit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0752",
+      "name": "journalctl_kernel",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0753",
+      "name": "journalctl_list_boots",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0754",
+      "name": "find_by_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0755",
+      "name": "find_by_regex",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0756",
+      "name": "find_by_size",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0757",
+      "name": "find_by_type",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0758",
+      "name": "find_by_perm",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0759",
+      "name": "find_by_inode",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0760",
+      "name": "find_by_depth",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0761",
+      "name": "find_by_user",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0762",
+      "name": "find_by_group",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0763",
+      "name": "find_by_newer",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0764",
+      "name": "find_by_accessed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0765",
+      "name": "find_by_modified",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0766",
+      "name": "find_by_changed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0767",
+      "name": "find_broken_symlinks",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0768",
+      "name": "find_suid_binaries",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0769",
+      "name": "find_sgid_binaries",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0770",
+      "name": "find_world_writable",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0771",
+      "name": "find_large_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0772",
+      "name": "find_recent_changed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0773",
+      "name": "find_recent_accessed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0774",
+      "name": "find_hidden_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0775",
+      "name": "find_exec_command",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0776",
+      "name": "find_delete_by_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0777",
+      "name": "network_scan_ports",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0778",
+      "name": "network_scan_subnet",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0779",
+      "name": "network_traceroute_path",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0780",
+      "name": "network_ping_flood",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0781",
+      "name": "network_ping_count",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0782",
+      "name": "network_mtr_report",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0783",
+      "name": "network_dig_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0784",
+      "name": "network_dig_short",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0785",
+      "name": "network_dns_test",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0786",
+      "name": "network_http_get",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0787",
+      "name": "network_http_post",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0788",
+      "name": "network_http_put",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0789",
+      "name": "network_http_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0790",
+      "name": "network_http_head",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0791",
+      "name": "network_http_options",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0792",
+      "name": "network_http_download",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0793",
+      "name": "network_http_download_as",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0794",
+      "name": "network_http_resume",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0795",
+      "name": "network_http_rate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0796",
+      "name": "network_http_compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0797",
+      "name": "network_http_cookie",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0798",
+      "name": "network_http_header",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0799",
+      "name": "network_ssl_cert",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0800",
+      "name": "network_ssl_chain",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0801",
+      "name": "network_whois_domain",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0802",
+      "name": "network_tcpdump_interface",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0803",
+      "name": "network_tcpdump_port",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0804",
+      "name": "network_tcpdump_host",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0805",
+      "name": "execute_as_user",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0806",
+      "name": "execute_as_root",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0807",
+      "name": "execute_command_each",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0808",
+      "name": "execute_parallel",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0809",
+      "name": "execute_in_dir",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0810",
+      "name": "execute_with_log",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0811",
+      "name": "execute_retry",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0812",
+      "name": "execute_timeout",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0813",
+      "name": "execute_background",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0814",
+      "name": "execute_if_available",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0815",
+      "name": "execute_chroot_cmd",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0816",
+      "name": "execute_shell_script",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0817",
+      "name": "execute_bash_script",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0818",
+      "name": "execute_python_script",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0819",
+      "name": "execute_node_script",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0820",
+      "name": "execute_deno_script",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0821",
+      "name": "eval_math",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0822",
+      "name": "eval_condition",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0823",
+      "name": "eval_command_time",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0824",
+      "name": "eval_memory_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0825",
+      "name": "eval_shell_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0826",
+      "name": "eval_shfmt",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0827",
+      "name": "eval_bash_nounset",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0828",
+      "name": "eval_bash_xtrace",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0829",
+      "name": "eval_zsh_nounset",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0830",
+      "name": "eval_python_syntax",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0831",
+      "name": "eval_node_syntax",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0832",
+      "name": "disk_usage_human",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0833",
+      "name": "disk_usage_total",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0834",
+      "name": "disk_usage_sort",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0835",
+      "name": "disk_usage_depth",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0836",
+      "name": "disk_usage_by_ext",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0837",
+      "name": "disk_free_summary",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0838",
+      "name": "disk_free_inodes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0839",
+      "name": "disk_free_type",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0840",
+      "name": "disk_free_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0841",
+      "name": "disk_mount_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0842",
+      "name": "disk_mount_by_device",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0843",
+      "name": "disk_fs_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0844",
+      "name": "disk_fs_repair",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0845",
+      "name": "disk_blkid",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0846",
+      "name": "disk_lsblk_tree",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0847",
+      "name": "disk_lsblk_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0848",
+      "name": "disk_lsblk_size",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0849",
+      "name": "disk_smart_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0850",
+      "name": "disk_smart_health",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0851",
+      "name": "disk_iostat",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0852",
+      "name": "disk_iotop",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0853",
+      "name": "process_list_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0854",
+      "name": "process_tree",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0855",
+      "name": "process_tree_pid",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0856",
+      "name": "process_by_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0857",
+      "name": "process_by_user",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0858",
+      "name": "process_kill_by_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0859",
+      "name": "process_kill_by_pid",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0860",
+      "name": "process_kill_force",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0861",
+      "name": "process_kill_all_user",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0862",
+      "name": "process_nice_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0863",
+      "name": "process_renice",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0864",
+      "name": "process_threads",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0865",
+      "name": "process_fds",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0866",
+      "name": "process_env_vars",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0867",
+      "name": "process_priority",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0868",
+      "name": "process_dump_stack",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0869",
+      "name": "process_cputime",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0870",
+      "name": "process_children",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0871",
+      "name": "process_zombies",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0872",
+      "name": "process_hung",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0873",
+      "name": "ssh_keygen_ecdsa",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0874",
+      "name": "ssh_keygen_ed25519_sk",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0875",
+      "name": "ssh_copy_id_port",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0876",
+      "name": "ssh_config_host",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0877",
+      "name": "ssh_config_edit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0878",
+      "name": "ssh_test_conn",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0879",
+      "name": "ssh_tunnel_local",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0880",
+      "name": "ssh_tunnel_remote",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0881",
+      "name": "ssh_tunnel_dynamic",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0882",
+      "name": "ssh_tunnel_jump",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0883",
+      "name": "ssh_agent_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0884",
+      "name": "ssh_agent_add_key",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0885",
+      "name": "ssh_agent_remove_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0886",
+      "name": "ssh_agent_remove_key",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0887",
+      "name": "ssh_agent_load_default",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0888",
+      "name": "ssh_key_fingerprint",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0889",
+      "name": "ssh_key_fingerprint_sha256",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0890",
+      "name": "ssh_key_fingerprint_md5",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0891",
+      "name": "ssh_key_visual",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0892",
+      "name": "ssh_key_change_pass",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0893",
+      "name": "ssh_key_from_remote",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0894",
+      "name": "ssh_known_hosts_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0895",
+      "name": "ssh_known_hosts_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0896",
+      "name": "ssh_sftp_get",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0897",
+      "name": "ssh_sftp_put",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0898",
+      "name": "ssh_scp_copy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0899",
+      "name": "ssh_scp_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0900",
+      "name": "ssh_mosh_connect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0901",
+      "name": "ssh_proxy_command",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0902",
+      "name": "ssh_config_validate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0903",
+      "name": "ssh_escape_sequences",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0904",
+      "name": "curl_json_post",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0905",
+      "name": "curl_json_put",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0906",
+      "name": "curl_json_patch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0907",
+      "name": "curl_form_post",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0908",
+      "name": "curl_upload_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0909",
+      "name": "curl_download_resume",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0910",
+      "name": "curl_auth_basic",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0911",
+      "name": "curl_auth_bearer",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0912",
+      "name": "curl_proxy_use",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0913",
+      "name": "curl_limit_rate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0914",
+      "name": "curl_timeout_conn",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0915",
+      "name": "curl_timeout_max",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0916",
+      "name": "curl_retry_conn",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0917",
+      "name": "curl_follow_redirect",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0918",
+      "name": "curl_verbose_dump",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0919",
+      "name": "curl_cert_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0920",
+      "name": "curl_cert_client",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0921",
+      "name": "curl_cookie_jar",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0922",
+      "name": "curl_insecure_ssl",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0923",
+      "name": "curl_range_request",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0924",
+      "name": "curl_if_modified",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0925",
+      "name": "curl_http2_use",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0926",
+      "name": "curl_http2_push",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0927",
+      "name": "curl_speed_limit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0928",
+      "name": "curl_interface_bind",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0929",
+      "name": "curl_dns_server",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0930",
+      "name": "curl_write_output",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0931",
+      "name": "curl_silent_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0932",
+      "name": "curl_parallel_fetch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0933",
+      "name": "git_config_http_proxy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0934",
+      "name": "git_config_no_proxy",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0935",
+      "name": "git_config_ssh_command",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0936",
+      "name": "git_config_credential_helper",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0937",
+      "name": "git_config_excludes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0938",
+      "name": "git_config_autocrlf",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0939",
+      "name": "git_config_safecrlf",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0940",
+      "name": "git_config_symlink",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0941",
+      "name": "git_config_editor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0942",
+      "name": "git_config_merge_ff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0943",
+      "name": "git_config_push_followtags",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0944",
+      "name": "git_config_rebase_autostash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0945",
+      "name": "git_config_rebase_autosquash",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0946",
+      "name": "git_config_color_ui",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0947",
+      "name": "git_config_init_default",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0948",
+      "name": "git_config_fetch_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0949",
+      "name": "git_config_diff_algorithm",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0950",
+      "name": "git_config_diff_renames",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0951",
+      "name": "git_config_pull_ff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0952",
+      "name": "git_config_tag_sort",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0953",
+      "name": "git_alias_set",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0954",
+      "name": "git_alias_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0955",
+      "name": "git_alias_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0956",
+      "name": "git_hook_precommit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0957",
+      "name": "git_hook_install",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0958",
+      "name": "git_flow_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0959",
+      "name": "git_flow_feature_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0960",
+      "name": "git_flow_feature_finish",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0961",
+      "name": "git_flow_release_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0962",
+      "name": "git_flow_release_finish",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0963",
+      "name": "git_flow_hotfix_start",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0964",
+      "name": "git_flow_hotfix_finish",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0965",
+      "name": "git_svn_clone",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0966",
+      "name": "git_svn_rebase",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0967",
+      "name": "git_svn_dcommit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0968",
+      "name": "git_lfs_install",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0969",
+      "name": "git_lfs_track",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0970",
+      "name": "git_lfs_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0971",
+      "name": "git_lfs_pull",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0972",
+      "name": "git_lfs_push",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0973",
+      "name": "git_lfs_migrate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0974",
+      "name": "git_cherry_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0975",
+      "name": "git_patch_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0976",
+      "name": "git_patch_apply",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0977",
+      "name": "git_patch_apply_stat",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0978",
+      "name": "git_patch_apply_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0979",
+      "name": "git_range_diff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0980",
+      "name": "git_bundle_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0981",
+      "name": "git_bundle_verify",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0982",
+      "name": "git_bundle_unbundle",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0983",
+      "name": "git_interactive_rebase",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0984",
+      "name": "git_reword_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0985",
+      "name": "git_split_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0986",
+      "name": "git_undo_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0987",
+      "name": "git_undo_commit_keep",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0988",
+      "name": "git_undo_last_commit_msg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0989",
+      "name": "git_stage_interactive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0990",
+      "name": "git_stage_partial",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0991",
+      "name": "git_unstage_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0992",
+      "name": "git_unstage_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0993",
+      "name": "git_discard_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0994",
+      "name": "git_discard_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0995",
+      "name": "git_files_untracked",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0996",
+      "name": "git_files_modified",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0997",
+      "name": "git_files_staged",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0998",
+      "name": "git_files_conflict",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_0999",
+      "name": "git_status_porcelain",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1000",
+      "name": "git_status_ignored",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1001",
+      "name": "git_reflog_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1002",
+      "name": "git_reflog_expire",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1003",
+      "name": "git_reflog_delete_old",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1004",
+      "name": "git_blob_size",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1005",
+      "name": "git_obj_type",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1006",
+      "name": "git_show_tree",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1007",
+      "name": "git_show_commit_body",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1008",
+      "name": "git_show_files_in_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1009",
+      "name": "git_compare_branches",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1010",
+      "name": "git_squash_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1011",
+      "name": "git_contributors_count",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1012",
+      "name": "git_contributors_top",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1013",
+      "name": "git_contributors_by_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1014",
+      "name": "git_first_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1015",
+      "name": "git_last_commit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1016",
+      "name": "git_tag_annotated",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1017",
+      "name": "git_tag_sign",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1018",
+      "name": "git_tag_verify_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1019",
+      "name": "git_tag_date",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1020",
+      "name": "git_tag_contains",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1021",
+      "name": "git_tag_latest",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1022",
+      "name": "git_subtree_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1023",
+      "name": "git_subtree_pull",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1024",
+      "name": "git_subtree_push",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1025",
+      "name": "git_subtree_merge",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1026",
+      "name": "git_subtree_split",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1027",
+      "name": "git_worktree_list_paths",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1028",
+      "name": "git_notes_append",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1029",
+      "name": "git_notes_remove",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1030",
+      "name": "git_notes_prune",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1031",
+      "name": "git_replace_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1032",
+      "name": "git_replace_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1033",
+      "name": "git_rerere_enable",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1034",
+      "name": "git_rerere_status",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1035",
+      "name": "git_rerere_gc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1036",
+      "name": "pkg_cache_clean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1037",
+      "name": "pkg_download_only",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1038",
+      "name": "pkg_list_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1039",
+      "name": "pkg_show_deps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1040",
+      "name": "pkg_what_provides",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1041",
+      "name": "pkg_download_source",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1042",
+      "name": "apk_add_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1043",
+      "name": "apk_remove_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1044",
+      "name": "apk_search_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1045",
+      "name": "apk_list_installed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1046",
+      "name": "apk_list_updates",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1047",
+      "name": "apk_info_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1048",
+      "name": "apk_cache_clean",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1049",
+      "name": "apk_upgrade_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1050",
+      "name": "rpm_list_pkgs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1051",
+      "name": "rpm_info_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1052",
+      "name": "rpm_verify_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1053",
+      "name": "rpm_list_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1054",
+      "name": "dpkg_list_pkgs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1055",
+      "name": "dpkg_info_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1056",
+      "name": "dpkg_verify_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1057",
+      "name": "dpkg_configure_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1058",
+      "name": "dpkg_reconfigure_pkg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1059",
+      "name": "dpkg_list_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1060",
+      "name": "flatpak_install_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1061",
+      "name": "flatpak_remove_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1062",
+      "name": "flatpak_run_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1063",
+      "name": "flatpak_search_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1064",
+      "name": "flatpak_info_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1065",
+      "name": "flatpak_update_apps",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1066",
+      "name": "flatpak_list_runtime",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1067",
+      "name": "snap_install_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1068",
+      "name": "snap_remove_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1069",
+      "name": "snap_search_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1070",
+      "name": "snap_info_app",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1071",
+      "name": "snap_list_services",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1072",
+      "name": "snap_start_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1073",
+      "name": "snap_stop_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1074",
+      "name": "snap_restart_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1075",
+      "name": "snap_enable_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1076",
+      "name": "snap_disable_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1077",
+      "name": "snap_logs_service",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1078",
+      "name": "time_date_now",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1079",
+      "name": "time_date_utc",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1080",
+      "name": "time_date_epoch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1081",
+      "name": "time_date_iso",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1082",
+      "name": "time_date_from_epoch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1083",
+      "name": "time_date_from_string",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1084",
+      "name": "time_date_next",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1085",
+      "name": "time_date_last",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1086",
+      "name": "time_date_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1087",
+      "name": "time_date_sub",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1088",
+      "name": "time_date_diff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1089",
+      "name": "time_stopwatch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1090",
+      "name": "time_countdown",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1091",
+      "name": "time_sleep_random",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1092",
+      "name": "time_timer_set",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1093",
+      "name": "time_timer_check",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1094",
+      "name": "time_timer_clear",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1095",
+      "name": "time_wait_port",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1096",
+      "name": "time_wait_url",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1097",
+      "name": "time_wait_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1098",
+      "name": "time_wait_process",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1099",
+      "name": "file_touch_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1100",
+      "name": "file_remove_force",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1101",
+      "name": "file_remove_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1102",
+      "name": "file_remove_interactive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1103",
+      "name": "file_copy_backup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1104",
+      "name": "file_copy_preserve",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1105",
+      "name": "file_copy_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1106",
+      "name": "file_copy_verbose",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1107",
+      "name": "file_move_force",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1108",
+      "name": "file_move_interactive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1109",
+      "name": "file_move_verbose",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1110",
+      "name": "file_move_backup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1111",
+      "name": "file_symlink_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1112",
+      "name": "file_symlink_hard",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1113",
+      "name": "file_symlink_edit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1114",
+      "name": "file_chmod_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1115",
+      "name": "file_chmod_dirs",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1116",
+      "name": "file_chown_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1117",
+      "name": "file_chgrp_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1118",
+      "name": "file_compare",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1119",
+      "name": "file_compare_quiet",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1120",
+      "name": "file_compare_side",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1121",
+      "name": "file_patch_dry",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1122",
+      "name": "file_patch_apply",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1123",
+      "name": "file_patch_reverse",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1124",
+      "name": "file_merge_interactive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1125",
+      "name": "file_join_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1126",
+      "name": "file_split_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1127",
+      "name": "file_head_bytes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1128",
+      "name": "file_tail_bytes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1129",
+      "name": "file_tail_follow",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1130",
+      "name": "file_tail_follow_name",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1131",
+      "name": "file_head_first",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1132",
+      "name": "file_head_last",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1133",
+      "name": "file_middle_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1134",
+      "name": "file_random_line",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1135",
+      "name": "file_shuffle_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1136",
+      "name": "file_reverse_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1137",
+      "name": "file_number_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1138",
+      "name": "file_trim_trailing",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1139",
+      "name": "file_trim_leading",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1140",
+      "name": "file_trim_both",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1141",
+      "name": "file_dos_to_unix",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1142",
+      "name": "file_unix_to_dos",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1143",
+      "name": "file_remove_blank",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1144",
+      "name": "file_remove_duplicates",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1145",
+      "name": "file_replace_string",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1146",
+      "name": "file_insert_line",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1147",
+      "name": "file_append_line",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1148",
+      "name": "file_prepend_line",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1149",
+      "name": "file_encrypt_aes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1150",
+      "name": "file_decrypt_aes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1151",
+      "name": "file_encrypt_gpg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1152",
+      "name": "file_decrypt_gpg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1153",
+      "name": "file_compress_gzip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1154",
+      "name": "file_compress_bzip2",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1155",
+      "name": "file_compress_xz",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1156",
+      "name": "file_compress_zip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1157",
+      "name": "file_compress_tar",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1158",
+      "name": "file_compress_7z",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1159",
+      "name": "file_extract_auto",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1160",
+      "name": "file_watch_changes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1161",
+      "name": "file_watch_clear",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1162",
+      "name": "text_search",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1163",
+      "name": "text_search_recursive",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1164",
+      "name": "text_search_word",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1165",
+      "name": "text_search_case",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1166",
+      "name": "text_search_inverse",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1167",
+      "name": "text_search_count",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1168",
+      "name": "text_search_context",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1169",
+      "name": "text_search_regex",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1170",
+      "name": "text_search_fixed",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1171",
+      "name": "text_search_only_match",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1172",
+      "name": "text_search_binary",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1173",
+      "name": "text_search_recursive_full",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1174",
+      "name": "text_search_exclude",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1175",
+      "name": "text_search_exclude_dir",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1176",
+      "name": "text_search_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1177",
+      "name": "text_search_file_types",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1178",
+      "name": "text_replace_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1179",
+      "name": "text_replace_line",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1180",
+      "name": "text_replace_first",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1181",
+      "name": "text_replace_regex",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1182",
+      "name": "text_delete_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1183",
+      "name": "text_delete_empty",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1184",
+      "name": "text_delete_matching",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1185",
+      "name": "text_extract_between",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1186",
+      "name": "text_extract_column",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1187",
+      "name": "text_extract_field",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1188",
+      "name": "text_extract_urls",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1189",
+      "name": "text_extract_emails",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1190",
+      "name": "text_extract_ips",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1191",
+      "name": "text_count_words",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1192",
+      "name": "text_count_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1193",
+      "name": "text_count_chars",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1194",
+      "name": "text_count_freq",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1195",
+      "name": "text_sort_alpha",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1196",
+      "name": "text_sort_numeric",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1197",
+      "name": "text_sort_reverse",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1198",
+      "name": "text_sort_unique",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1199",
+      "name": "text_merge_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1200",
+      "name": "text_split_on_delim",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1201",
+      "name": "text_join_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1202",
+      "name": "text_wrap_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1203",
+      "name": "text_indent_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1204",
+      "name": "text_unindent_lines",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1205",
+      "name": "text_uppercase",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1206",
+      "name": "text_lowercase",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1207",
+      "name": "text_capitalize",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1208",
+      "name": "text_reverse_chars",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1209",
+      "name": "text_rot13",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1210",
+      "name": "text_xml_pretty",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1211",
+      "name": "text_xml_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1212",
+      "name": "text_xml_validate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1213",
+      "name": "text_json_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1214",
+      "name": "text_json_minify",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1215",
+      "name": "text_json_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1216",
+      "name": "text_json_flatten",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1217",
+      "name": "text_yaml_format",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1218",
+      "name": "text_yaml_to_json",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1219",
+      "name": "text_yaml_validate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1220",
+      "name": "text_csv_to_json",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1221",
+      "name": "text_html_to_text",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1222",
+      "name": "text_html_extract",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1223",
+      "name": "text_markdown_render",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1224",
+      "name": "text_diff_chars",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1225",
+      "name": "text_diff_words",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1226",
+      "name": "text_diff_side",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1227",
+      "name": "text_patch_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1228",
+      "name": "screen_session_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1229",
+      "name": "screen_session_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1230",
+      "name": "screen_session_attach",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1231",
+      "name": "screen_session_detach",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1232",
+      "name": "screen_session_kill",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1233",
+      "name": "screen_session_reattach",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1234",
+      "name": "tmux_new_session",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1235",
+      "name": "tmux_attach_session",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1236",
+      "name": "tmux_list_sessions",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1237",
+      "name": "tmux_kill_session",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1238",
+      "name": "tmux_split_horizontal",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1239",
+      "name": "tmux_split_vertical",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1240",
+      "name": "tmux_new_window",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1241",
+      "name": "tmux_next_window",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1242",
+      "name": "tmux_prev_window",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1243",
+      "name": "tmux_rename_session",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1244",
+      "name": "tmux_rename_window",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1245",
+      "name": "tmux_kill_window",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1246",
+      "name": "tmux_detach_client",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1247",
+      "name": "tmux_swap_pane",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1248",
+      "name": "tmux_rotate_panes",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1249",
+      "name": "tmux_send_keys",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1250",
+      "name": "tmux_capture_pane",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1251",
+      "name": "tmux_save_buffer",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1252",
+      "name": "tmux_set_option",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1253",
+      "name": "tmux_show_options",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1254",
+      "name": "tmux_resize_pane",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1255",
+      "name": "tmux_choose_tree",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1256",
+      "name": "tmux_list_clients",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1257",
+      "name": "tmux_list_buffers",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1258",
+      "name": "zellij_session_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1259",
+      "name": "zellij_session_attach",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1260",
+      "name": "zellij_session_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1261",
+      "name": "zellij_session_kill",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1262",
+      "name": "zellij_action_rename",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1263",
+      "name": "zellij_action_move",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1264",
+      "name": "zellij_action_resize",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1265",
+      "name": "lazygit_open",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1266",
+      "name": "lazydocker_open",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1267",
+      "name": "k9s_open",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1268",
+      "name": "htop_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1269",
+      "name": "btop_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1270",
+      "name": "nvtop_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1271",
+      "name": "glances_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1272",
+      "name": "iftop_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1273",
+      "name": "nethogs_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1274",
+      "name": "iotop_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1275",
+      "name": "ctop_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1276",
+      "name": "ytop_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1277",
+      "name": "bashtop_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1278",
+      "name": "procs_process_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1279",
+      "name": "bandwhich_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1280",
+      "name": "dog_dns_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1281",
+      "name": "doggo_dns_query",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1282",
+      "name": "duf_disk_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1283",
+      "name": "dust_disk_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1284",
+      "name": "bottom_monitor",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1285",
+      "name": "gping_ping",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1286",
+      "name": "grex_regex_gen",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1287",
+      "name": "gron_json_flatten",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1288",
+      "name": "gron_json_unflatten",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1289",
+      "name": "xh_get",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1290",
+      "name": "xh_post",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1291",
+      "name": "xh_put",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1292",
+      "name": "xh_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1293",
+      "name": "httpie_get",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1294",
+      "name": "httpie_post",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1295",
+      "name": "httpie_put",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1296",
+      "name": "httpie_delete",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1297",
+      "name": "bat_cat",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1298",
+      "name": "bat_lang",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1299",
+      "name": "bat_theme_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1300",
+      "name": "bat_diff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1301",
+      "name": "eza_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1302",
+      "name": "eza_tree",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1303",
+      "name": "eza_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1304",
+      "name": "lsd_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1305",
+      "name": "lsd_tree",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1306",
+      "name": "fd_find",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1307",
+      "name": "fd_find_type",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1308",
+      "name": "fd_find_exec",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1309",
+      "name": "rg_search",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1310",
+      "name": "rg_search_files",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1311",
+      "name": "rg_search_context",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1312",
+      "name": "rg_search_word",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1313",
+      "name": "sd_replace",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1314",
+      "name": "fzf_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1315",
+      "name": "fzf_dir",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1316",
+      "name": "fzf_kill",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1317",
+      "name": "fzf_ssh",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1318",
+      "name": "fzf_git_branch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1319",
+      "name": "fzf_git_log",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1320",
+      "name": "fzf_git_diff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1321",
+      "name": "fzf_history",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1322",
+      "name": "fzf_process",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1323",
+      "name": "fzf_man",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1324",
+      "name": "fzf_browse",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1325",
+      "name": "fzf_cd",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1326",
+      "name": "fzf_search",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1327",
+      "name": "fzf_rg",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1328",
+      "name": "tree_show",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1329",
+      "name": "tree_level",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1330",
+      "name": "tree_dirs_only",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1331",
+      "name": "tree_with_hidden",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1332",
+      "name": "tree_size",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1333",
+      "name": "tree_xml",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1334",
+      "name": "tree_json",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1335",
+      "name": "tree_html",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1336",
+      "name": "todo_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1337",
+      "name": "todo_count",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1338",
+      "name": "todo_by_type",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1339",
+      "name": "todo_add",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1340",
+      "name": "todo_show_file",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1341",
+      "name": "license_mit",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1342",
+      "name": "license_apache",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1343",
+      "name": "license_gpl",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1344",
+      "name": "license_bsd",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1345",
+      "name": "license_unlicense",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1346",
+      "name": "gitignore_fetch",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1347",
+      "name": "gitignore_append",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1348",
+      "name": "gitignore_list",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1349",
+      "name": "dockerignore_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1350",
+      "name": "editorconfig_create",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1351",
+      "name": "prettier_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1352",
+      "name": "eslint_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1353",
+      "name": "tsconfig_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1354",
+      "name": "package_json_init",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1355",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1356",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1357",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1358",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1359",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1360",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1361",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1362",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1363",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1364",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1365",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1366",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1367",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1368",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1369",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1370",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1371",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1372",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1373",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1374",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1375",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1376",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1377",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1378",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1379",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1380",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1381",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1382",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1383",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1384",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1385",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1386",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1387",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1388",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1389",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1390",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1391",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1392",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1393",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1394",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1395",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1396",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1397",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1398",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1399",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1400",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1401",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1402",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1403",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1404",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1405",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1406",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1407",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1408",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1409",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1410",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1411",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1412",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1413",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1414",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1415",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1416",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1417",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1418",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1419",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1420",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1421",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1422",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1423",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1424",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1425",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1426",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1427",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1428",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1429",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1430",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1431",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1432",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1433",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1434",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1435",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1436",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1437",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1438",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1439",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1440",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1441",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1442",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1443",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1444",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1445",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1446",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1447",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1448",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1449",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1450",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1451",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1452",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1453",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1454",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1455",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1456",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1457",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1458",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1459",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1460",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1461",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1462",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1463",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1464",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1465",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1466",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1467",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1468",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1469",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1470",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1471",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1472",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1473",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1474",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1475",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1476",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1477",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1478",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1479",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1480",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1481",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1482",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1483",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1484",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1485",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1486",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1487",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1488",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1489",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1490",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1491",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1492",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1493",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1494",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1495",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1496",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1497",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1498",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1499",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1500",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1501",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1502",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1503",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1504",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1505",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1506",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1507",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1508",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1509",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1510",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1511",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1512",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1513",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1514",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1515",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1516",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1517",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1518",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1519",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1520",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1521",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1522",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1523",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1524",
-      "desc": "No description available."
-    },
-    {
-      "category": "General",
-      "name": "pfn_1525",
-      "desc": "No description available."
+      "name": "bak",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1526",
-      "desc": "No description available."
+      "name": "unbak",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1527",
-      "desc": "No description available."
+      "name": "orig",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1528",
-      "desc": "No description available."
+      "name": "unorig",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1529",
-      "desc": "No description available."
+      "name": "topcommands",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1530",
-      "desc": "No description available."
+      "name": "puniq",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1531",
-      "desc": "No description available."
+      "name": "findup",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1532",
-      "desc": "No description available."
+      "name": "cdup",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1533",
-      "desc": "No description available."
+      "name": "pg",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1534",
-      "desc": "No description available."
+      "name": "stamp",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1535",
-      "desc": "No description available."
+      "name": "stampcmd",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1536",
-      "desc": "No description available."
+      "name": "clip",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1537",
-      "desc": "No description available."
+      "name": "path_remove",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1538",
-      "desc": "No description available."
+      "name": "path_append",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1539",
-      "desc": "No description available."
+      "name": "path_prepend",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1540",
-      "desc": "No description available."
+      "name": "here",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1541",
-      "desc": "No description available."
+      "name": "there",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1542",
-      "desc": "No description available."
+      "name": "mkcd",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1543",
-      "desc": "No description available."
+      "name": "gcd",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1544",
-      "desc": "No description available."
+      "name": "gbs",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1545",
-      "desc": "No description available."
+      "name": "extract",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1546",
-      "desc": "No description available."
+      "name": "colors",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1547",
-      "desc": "No description available."
+      "name": "wanip",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1548",
-      "desc": "No description available."
+      "name": "pwdtail",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1549",
-      "desc": "No description available."
+      "name": "distribution",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1550",
-      "desc": "No description available."
+      "name": "_os",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1551",
-      "desc": "No description available."
+      "name": "_is_mac",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1552",
-      "desc": "No description available."
+      "name": "_is_linux",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1553",
-      "desc": "No description available."
+      "name": "_is_bsd",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1554",
-      "desc": "No description available."
+      "name": "_mac_only",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1555",
-      "desc": "No description available."
+      "name": "_linux_only",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1556",
-      "desc": "No description available."
+      "name": "ip_show",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1557",
-      "desc": "No description available."
+      "name": "disk_usage",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1558",
-      "desc": "No description available."
+      "name": "mem_info",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1559",
-      "desc": "No description available."
+      "name": "cpu_info",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1560",
-      "desc": "No description available."
+      "name": "pkg_list",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1561",
-      "desc": "No description available."
+      "name": "service_list",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1562",
-      "desc": "No description available."
+      "name": "ssh_keys",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1563",
-      "desc": "No description available."
+      "name": "open_file",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1564",
-      "desc": "No description available."
+      "name": "copy_cmd",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1565",
-      "desc": "No description available."
+      "name": "paste_cmd",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1566",
-      "desc": "No description available."
+      "name": "cdf",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1567",
-      "desc": "No description available."
+      "name": "swap",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1568",
-      "desc": "No description available."
+      "name": "backup_dotfiles",
+      "desc": "_x defined in core/aliases.sh"
     },
     {
       "category": "General",
-      "name": "pfn_1569",
+      "name": "dotfiles_diff",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1570",
+      "name": "workon",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1571",
+      "name": "mkproject",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1572",
+      "name": "ffind",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1573",
+      "name": "grep_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1574",
+      "name": "sys_update",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1575",
+      "name": "disk_usage",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1576",
+      "name": "mem_top",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1577",
+      "name": "cpu_top",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1578",
+      "name": "git_cleanup",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1579",
+      "name": "git_search",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1580",
+      "name": "git_find",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1581",
+      "name": "net_listen",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1582",
+      "name": "local_ip",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1583",
+      "name": "docker_clean_all",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1584",
+      "name": "docker_compose_rebuild",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1585",
+      "name": "compress",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1586",
+      "name": "backup_rotate",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1587",
+      "name": "sys_info",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1588",
+      "name": "json_pretty",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1589",
+      "name": "weather_report",
       "desc": "No description available."
     },
     {
       "category": "General",
-      "name": "pfn_1590",
+      "name": "markdown_preview",
       "desc": "No description available."
     }
   ],
-  "generatedAt": "2026-04-22T06:41:09.392Z"
+  "generatedAt": "2026-05-19T06:20:35.666Z"
 };

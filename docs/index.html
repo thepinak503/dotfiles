@@ -340,11 +340,11 @@ h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; }
 <h3 id="listing">Listing</h3>
 <div class="grid">
 <div class="card">
-<code>l</code> <code>ll</code> <code>la</code> <code>lr</code> <code>lt</code> <code>lh</code>
+<code>l</code> <code>ll</code> <code>la</code> <code>lal</code> <code>lsl</code> <code>lr</code> <code>lt</code> <code>lh</code>
 <code>lk</code> <code>lx</code> <code>lc</code> <code>lu</code> <code>l1</code>
 <code>lm</code> <code>lf</code> <code>ldir</code> <code>lsize</code>
 <code>lnew</code> <code>lold</code> <code>ldot</code> <code>lsr</code>
-<p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3)">All ls variants. <code>tree</code> and <code>treed</code> also available.</p>
+<p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3)"><code>ll</code> = long, <code>la</code> = all, <code>lal</code> = long+all, <code>lsl</code> = long (alias-safe). All use <code>command ls</code> fallback — never error. <code>tree</code>/<code>treed</code> also available.</p>
 </div>
 </div>
 
@@ -569,6 +569,10 @@ _x() {
 <div class="card"><h4>ChrisTitusTech</h4><p><code>countfiles pwdtail distribution svi vis clickpaste yayf</code></p></div>
 <div class="card"><h4>bahamas10</h4><p><code>gmb gbd gcm gmm gho untiny over truecolor_rainbow</code></p></div>
 <div class="card"><h4>mathiasbynens</h4><p>Prompt patterns, color handling, cross-platform design</p></div>
+</div>
+
+<div class="box note" style="margin:1rem 0">
+<strong>Recent fixes (May 2026):</strong> ls/ll/la/lal/lsl no longer alias-chain or error. Fish functions no longer recurse. Zsh aliases cleaned of bash-isms. See <a href="faq.html">FAQ</a> for full changelog.
 </div>
 
 <div class="box" style="margin:2rem 0;text-align:center;color:var(--fg3);font-size:0.85rem">

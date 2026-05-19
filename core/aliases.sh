@@ -42,17 +42,19 @@ alias lsbig='ls -lS | head -20'
 alias lshidden='ls -d .* 2>/dev/null'
 alias ltree='eza --tree --level=3 --icons=auto 2>/dev/null || find . -maxdepth 3 -print'
 alias l1='ls -1'
-alias lh='ls -lhS'
-alias lr='ls -lR'
-alias le="ls | grep -o '.[^.]*$' | sort | uniq"
-alias lw='ls -ldh $(pwd)'
-alias ls='_x eza --group-directories-first --icons 2>/dev/null || _x exa --group-directories-first 2>/dev/null || ls --color=auto 2>/dev/null || ls -G'
-alias ll='_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || ls -l'
-alias la='_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || ls -la'
+alias lh='command ls -lhS'
+alias lr='command ls -lR'
+alias le="command ls | grep -o '.[^.]*$' | sort | uniq"
+alias lw='command ls -ldh $(pwd)'
+alias ls='_x eza --group-directories-first --icons 2>/dev/null || _x exa --group-directories-first 2>/dev/null || command ls --color=auto 2>/dev/null || command ls -G'
+alias ll='_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || command ls -l'
+alias la='_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || command ls -la'
+alias lal='_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || command ls -la'
+alias lsl='_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || command ls -l'
 alias tree='_x eza -T --icons 2>/dev/null || _x tree 2>/dev/null || echo "tree/eza needed"'
 alias dirs='ls -d */'
 alias ldir='ls -d */'
-alias lf='find . -maxdepth 1 -type f -exec ls -lh {} + 2>/dev/null | sort -k5 -h'
+alias lf='find . -maxdepth 1 -type f -exec command ls -lh {} + 2>/dev/null | sort -k5 -h'
 
 # -----------------------------------------------------------------------------
 # System Information — Dotfiles Management
@@ -1594,5 +1596,6 @@ alias py='_x python3'
 
 # Miscellaneous shell utilities
 alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
+alias nuke-opencode='rm -rf ~/.local/share/opencode ~/.cache/opencode'
 
 

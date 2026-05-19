@@ -72,11 +72,11 @@ function take --description "Make and cd into directory"
 end
 
 function pushd --description "Push directory"
-    pushd $argv[1] >/dev/null; and ls
+    command pushd $argv[1] >/dev/null; and ls
 end
 
 function popd --description "Pop directory"
-    popd >/dev/null
+    command popd >/dev/null
 end
 
 function cdd --description "Go to Downloads"
@@ -250,7 +250,7 @@ function dus --description "Disk usage sum"
 end
 
 function df --description "Disk free"
-    df -h
+    command df -h
 end
 
 
@@ -405,7 +405,7 @@ function nano --description "Nano"
 end
 
 function code --description "VS Code"
-    code $argv
+    command code $argv
 end
 
 function edit --description "Edit"
@@ -785,7 +785,7 @@ end
 
 
 function ping --description "Ping host"
-    ping -c 4 $argv[1]
+    command ping -c 4 $argv[1]
 end
 
 function curli --description "Curl headers"
@@ -801,7 +801,7 @@ function curlj --description "Curl JSON"
 end
 
 function wget --description "Wget"
-    wget -c $argv[1]
+    command wget -c $argv[1]
 end
 
 function nc --description "Netcat"
@@ -809,7 +809,7 @@ function nc --description "Netcat"
 end
 
 function dig --description "DNS lookup"
-    dig +short $argv[1]
+    command dig +short $argv[1]
 end
 
 function ns --description "Nslookup"
@@ -6163,15 +6163,6 @@ end
 
 alias tips='sectips'
 alias securitytips='sectips'
-
-function _x --description "Run command if available"
-    if type -q $argv[1]
-        command $argv
-    else
-        echo "missing: $argv[1]" >&2
-        return 127
-    end
-end
 
 function bak --description "Backup file with timestamp"
     for f in $argv

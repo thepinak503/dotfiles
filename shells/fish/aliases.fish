@@ -30,6 +30,10 @@ alias x 'exit'
 alias c 'clear'
 alias cls 'clear'
 alias ls 'eza --icons=auto --group-directories-first 2>/dev/null || command ls'
+alias ll 'eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
+alias la 'eza -a --icons=auto --group-directories-first 2>/dev/null || command ls -A'
+alias lal 'eza -la --icons=auto --group-directories-first 2>/dev/null || command ls -la'
+alias lsl 'eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
 alias lsa 'ls -a'
 alias lsd 'ls -d */'
 alias lsdot 'ls -d .*'
@@ -888,7 +892,7 @@ if type -q ffmpeg
     alias ffg 'ffplay'
     alias ffconvert 'ffmpeg -i'
     function ffmp3; ffmpeg -i $argv[1] -q:a 0 (string replace -r '\.[^.]+$' '.mp3' $argv[1]); end
-    alias ffcompress 'ffmpeg -i "$1" -vcodec libx265 -crf 28'
+    function ffcompress; ffmpeg -i $argv[1] -vcodec libx265 -crf 28 $argv[2]; end
     function ffgif; ffmpeg -i $argv[1] -vf "fps=10,scale=320:-1" (string replace -r '\.[^.]+$' '.gif' $argv[1]); end
     alias ffscreencap 'ffmpeg -f x11grab -video_size 1920x1080 -i :0.0'
 end
@@ -925,7 +929,7 @@ alias info 'info'
 alias what 'type'
 alias ali 'alias'
 alias envg 'env | grep'
-alias fn 'declare -f 2>/dev/null || typeset -f'
+alias fn='functions 2>/dev/null || command -v'
 alias dsync 'dot_sync'
 alias chmode 'export DOTFILES_MODE'
 function modestat; echo "Mode: $DOTFILES_MODE"; end

@@ -97,8 +97,10 @@ alias builtinl='enable'
 
 # List/File tools
 alias ls='eza --icons=auto --group-directories-first 2>/dev/null || command ls'
-alias ll='ls -Al'
-alias la='ls -A'
+alias ll='eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
+alias la='eza -a --icons=auto --group-directories-first 2>/dev/null || command ls -A'
+alias lal='eza -la --icons=auto --group-directories-first 2>/dev/null || command ls -la'
+alias lsl='eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
 alias lsa='ls -a'
 alias lsd='ls -d */'
 alias lsdot='ls -d .*'
@@ -1329,7 +1331,7 @@ alias hme='_x home-manager edit'
 alias hmc='_x home-manager generations'
 
 shopt -s autocd 2>/dev/null
-cd() { builtin cd "$@" && ls; }
+cd() { builtin cd "$@" && eza --icons=auto --group-directories-first 2>/dev/null || command ls; }
 
 alias grep='command grep --color=auto'
 alias egrep='command grep -E'
@@ -1350,7 +1352,7 @@ alias more='command less'
 alias zgrep='command zgrep --color=auto'
 alias mkit='mkdir -p'
 alias mkdir='mkdir -p'
-alias rmdir='rm -rf'
+alias rmdir='_x rmdir 2>/dev/null || rm -rf'
 alias rmall='rm -rf ./*'
 alias lnb='ln -sf'
 alias lnv='ln -sfv'
