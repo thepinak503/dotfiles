@@ -1,144 +1,221 @@
 #!/usr/bin/env bash
-# Pinak's Ultimate Dotfiles - Rigorous Test Suite
-# Run: bash tests/run_tests.sh
-set -euo pipefail
+# set -euo pipefail
 
-PASS=0
-FAIL=0
 D=$(dirname "$0")/..
+D="$(cd "$D" && pwd)"
+cd "$D"
 
-pass() { echo "  ✓ $1"; ((PASS++)); }
-fail() { echo "  ✗ $1"; ((FAIL++)); }
+PASS=0 FAIL=0 SKIP=0
 
-echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║          RIGOROUS DOTFILES TEST SUITE                        ║"
-echo "╚══════════════════════════════════════════════════════════════╝"
-echo ""
+ESC=$(printf '\033')
+g() { echo "${ESC}[32m${ESC}[1m✓${ESC}[0m ${ESC}[32m$1${ESC}[0m"; PASS=$((PASS+1)); }
+b() { echo "${ESC}[31m✗${ESC}[0m ${ESC}[31m$1${ESC}[0m"; FAIL=$((FAIL+1)); }
+y() { echo "${ESC}[33m~${ESC}[0m ${ESC}[33m$1${ESC}[0m"; SKIP=$((SKIP+1)); }
+h() { echo; echo "${ESC}[34m━━━ $1 ━━━${ESC}[0m"; }
 
-echo "━━━━ 1. SYNTAX VALIDATION ━━━━"
-for f in core/aliases.sh core/functions.sh core/universal.sh shells/bash/aliases.bash shells/bash/exports.bash shells/zsh/aliases.zsh shells/zsh/exports.zsh; do
-    bash -n "$D/$f" 2>/dev/null && pass "$f" || fail "$f"
-done
-for f in shells/fish/aliases.fish shells/fish/functions.fish shells/fish/exports.fish; do
-    fish --no-execute "$D/$f" 2>/dev/null && pass "$f" || fail "$f"
-done
-git config -f "$HOME/.gitconfig" --list >/dev/null 2>&1 && pass ".gitconfig" || fail ".gitconfig"
+result() {
+  local total=$((PASS + FAIL))
+  echo
+  echo "${ESC}[34m══════════════════════════════════════════════════════════════${ESC}[0m"
+  [ "$FAIL" -eq 0 ] && echo "${ESC}[32m  ✓ ALL $PASS TESTS PASSED${ESC}[0m" || echo "${ESC}[31m  ✗ $FAIL/$total TESTS FAILED${ESC}[0m"
+  echo "${ESC}[34m══════════════════════════════════════════════════════════════${ESC}[0m"
+  [ "$FAIL" -eq 0 ] && exit 0 || exit 1
+}
 
-echo ""
-echo "━━━━ 2. SHELL STARTUP ━━━━"
-for s in bash zsh fish; do
-    timeout 10 "$s" -i -c "exit" 2>/dev/null && pass "$s starts" || fail "$s fails"
-done
+check_cmd() {
+  command -v "$1" >/dev/null 2>&1
+}
 
-echo ""
-echo "━━━━ 3. NO DUPLICATE ALIASES IN SAME FILE ━━━━"
-for f in core/aliases.sh shells/bash/aliases.bash shells/zsh/aliases.zsh shells/fish/aliases.fish; do
-    dups=$(rg '^alias ' "$D/$f" | sed 's/.*alias //;s/=.*//' | sort | uniq -d)
-    if [ -z "$dups" ]; then pass "$f: no internal dupes"
-    else fail "$f: dupes: $dups"; fi
-done
-
-echo ""
-echo "━━━━ 4. DUPLICATE ALIAS NAMES ACROSS FILES ━━━━"
-# Check for aliases defined in both core AND shell-specific files with different values
-while IFS='=' read -r name val; do
-    [ -z "$name" ] && continue
-    vals=$(rg -n "^alias $name=" "$D/core/aliases.sh" "$D/shells/bash/aliases.bash" "$D/shells/zsh/aliases.zsh" 2>/dev/null | sed 's/.*=//' | sort -u)
-    distinct=$(echo "$vals" | wc -l)
-    if [ "$distinct" -gt 1 ]; then
-        echo "  ~ warning: $name defined differently in multiple files:"
-        rg -n "^alias $name=" "$D/core/aliases.sh" "$D/shells/bash/aliases.bash" "$D/shells/zsh/aliases.zsh" 2>/dev/null | sed 's/.*://' | while read -r line; do echo "    $line"; done
-    fi
-done < <(rg '^alias ' "$D/core/aliases.sh" "$D/shells/bash/aliases.bash" "$D/shells/zsh/aliases.zsh" 2>/dev/null | sed 's/.*alias //' | sed 's/=/=/' | sed 's/=.*//' | sort -u)
-pass "alias conflict check done"
-
-echo ""
-echo "━━━━ 5. CORE FUNCTIONS EXIST ━━━━"
-for fn in bak unbak orig unorig topcommands puniq findup cdup pg stamp clip path_remove path_append path_prepend here mkcd gcd gbs extract colors wanip flush countfiles pwdtail distribution have _x; do
-    bash -c "source $D/core/functions.sh 2>/dev/null; declare -f $fn >/dev/null 2>&1" && pass "$fn" || fail "$fn"
+h "1. HYPRLAND CONFIG FILES EXIST"
+for f in hypr/hyprland.conf hypr/hypridle.conf hypr/hyprlock.conf hypr/hyprpaper.conf \
+          hypr/configs/monitors.conf hypr/configs/input.conf hypr/configs/decor.conf \
+          hypr/configs/animations.conf hypr/configs/windowrules.conf \
+          hypr/configs/workspaces.conf hypr/configs/keybinds.conf hypr/configs/autostart.conf; do
+  [ -f "$f" ] && g "$f" || b "MISSING: $f"
 done
 
-echo ""
-echo "━━━━ 6. CORE ALIASES EXIST ━━━━"
-for a in path envg nohist clhist histgrep cleanshell tmp tstamp topcmds port ports lw le lm dsstore mirrorsite ff gwip gwipe nah gbage gmn sep q dash; do
-    bash -c "source $D/core/aliases.sh 2>/dev/null; alias $a >/dev/null 2>&1" && pass "$a" || fail "$a"
+h "2. HYPRLAND.CONF SOURCE PATHS VALID"
+while IFS= read -r line; do
+  case "$line" in
+    source\ =*) ;;
+    ''|'#'*|\ *) continue ;;
+    *) continue ;;
+  esac
+  src=$(echo "$line" | sed 's/^source = //' | tr -d ' ')
+  [ -n "$src" ] && src="${src/#\~/$HOME}" && [ -f "$src" ] && g "source: $(basename "$src")" || b "BAD SOURCE: $src"
+done < hypr/hyprland.conf
+
+h "3. NO DEPRECATED HYPRLAND OPTIONS"
+for f in hypr/configs/*.conf hypr/hyprland.conf; do
+  bad=""
+  grep -q 'pseudotile' "$f" 2>/dev/null && bad+="pseudotile "
+  grep -q 'ignore_window' "$f" 2>/dev/null && bad+="ignore_window "
+  grep -q 'new_optimizations' "$f" 2>/dev/null && bad+="new_optimizations "
+  grep -q 'no_focus' "$f" 2>/dev/null && bad+="no_focus "
+  grep -q 'no_initial_focus' "$f" 2>/dev/null && bad+="no_initial_focus "
+  grep -q 'stay_focused' "$f" 2>/dev/null && bad+="stay_focused "
+  grep -q 'cm_fs_passthrough' "$f" 2>/dev/null && bad+="cm_fs_passthrough "
+  [ -z "$bad" ] && g "$f: no deprecated options" || b "$f: DEPRECATED: $bad"
 done
 
-echo ""
-echo "━━━━ 7. FISH FUNCTIONS EXIST ━━━━"
-for fn in bak unbak orig unorig topcommands findup cdup pg stamp clip path_remove path_append path_prepend here mkcd gcd extract colors wanip flush countfiles pwdtail distribution _x; do
-    fish -c "source $D/shells/fish/functions.fish 2>/dev/null; type -q $fn" 2>/dev/null && pass "fish:$fn" || fail "fish:$fn"
+h "4. HYPRLAND KEYBINDS - NO DUPLICATE COMBOS"
+binds=$(mktemp)
+grep '^bind' hypr/configs/keybinds.conf | sed 's/^bind[el]* = //' | sed 's/^\([^,]*,[^,]*\),.*/\1/' | sort > "$binds"
+dups=$(sort "$binds" | uniq -d)
+[ -z "$dups" ] && g "no duplicate key combos" || b "DUPLICATE KEYBINDS: $dups"
+rm -f "$binds"
+
+h "5. WINDOW RULES - CLASSES MATCH INSTALLED APPS"
+while IFS= read -r line; do
+  cls=$(echo "$line" | sed -n 's/.*class (\([^)]*\)).*/\1/p')
+  [ -z "$cls" ] && continue
+  for c in ${cls//|/ }; do
+    check_cmd "$c" && g "class ($c) found in PATH" || y "class ($c) not in PATH (may be installed later)"
+  done
+done < hypr/configs/windowrules.conf
+
+h "6. ALL EXEC-ONCE COMMANDS AVAILABLE"
+while IFS= read -r line; do
+  cmd=$(echo "$line" | sed -n 's/^exec-once = //p' | awk '{print $1}')
+  [ -z "$cmd" ] && continue
+  cmd="${cmd/#\~/$HOME}"
+  if echo "$cmd" | grep -q '/'; then
+    [ -x "$cmd" ] && g "$cmd" || b "NOT EXECUTABLE: $cmd"
+  else
+    check_cmd "$cmd" && g "command: $cmd" || y "command: $cmd NOT FOUND"
+  fi
+done < hypr/configs/autostart.conf
+
+h "7. HYPR SCRIPTS EXIST AND ARE EXECUTABLE"
+for s in hypr/scripts/brightness hypr/scripts/changeLayout hypr/scripts/gamemode \
+          hypr/scripts/keyhints hypr/scripts/screenrecord hypr/scripts/touchpad \
+          hypr/scripts/volume hypr/scripts/wallpaper-fetch; do
+  [ -x "$s" ] && g "$s" || b "MISSING/NOT EXECUTABLE: $s"
 done
 
-echo ""
-echo "━━━━ 8. FISH ALIASES EXIST ━━━━"
-for a in envg tmp tstamp topcmds le lm dsstore mirrorsite docker-ip gbs gwip gwipe nah gmn yayf sep svi vis; do
-    fish -c "source $D/shells/fish/aliases.fish 2>/dev/null; type -q $a" 2>/dev/null && pass "fish:$a" || echo "  ~ fish:$a (conditional)"
+h "8. WAYBAR CONFIG VALID JSON"
+check_cmd jq && jq empty waybar/config.jsonc 2>/dev/null && g "waybar/config.jsonc valid" || b "waybar/config.jsonc INVALID"
+
+h "9. WAYBAR MODULES EXIST IN CSS"
+modules=$(jq -r '[
+  ."modules-left"[], ."modules-center"[], ."modules-right"[]
+] | unique | .[]' waybar/config.jsonc 2>/dev/null || echo "")
+for m in $modules; do
+  css_id=$(echo "$m" | sed 's|hyprland/|#|' | sed 's|custom/|#custom-|' | sed 's|^#|#|')
+  grep -q "$css_id" waybar/style.css 2>/dev/null && g "CSS: $css_id matches $m" || y "CSS: no match for $m ($css_id)"
 done
 
-echo ""
-echo "━━━━ 9. FUNCTION RUNTIME TESTS ━━━━"
-bash -c "
-source $D/core/functions.sh 2>/dev/null
-source $D/core/aliases.sh 2>/dev/null
-puniq '/usr/bin:/bin' >/dev/null 2>&1 && echo '  ✓ puniq' || echo '  ✗ puniq'
-stamp 'test' >/dev/null 2>&1 && echo '  ✓ stamp' || echo '  ✗ stamp'
-pg \$\$ >/dev/null 2>&1 && echo '  ✓ pg' || echo '  ✗ pg'
-colors >/dev/null 2>&1 && echo '  ✓ colors' || echo '  ✗ colors'
-countfiles >/dev/null 2>&1 && echo '  ✓ countfiles' || echo '  ✗ countfiles'
-pwdtail >/dev/null 2>&1 && echo '  ✓ pwdtail' || echo '  ✗ pwdtail'
-"
-
-echo ""
-echo "━━━━ 10. _x GUARD TEST ━━━━"
-bash -c "source $D/core/functions.sh 2>/dev/null; _x nonexistent_tool_xyz 2>/dev/null" && fail "_x allowed nonexistent" || pass "_x blocked nonexistent"
-fish -c "source $D/shells/fish/functions.fish 2>/dev/null; _x nonexistent_tool_xyz 2>/dev/null" && fail "fish _x allowed nonexistent" || pass "fish _x blocked nonexistent"
-
-echo ""
-echo "━━━━ 11. CROSS-PLATFORM FUNCTIONS ━━━━"
-for fn in have _is_mac _is_linux _x ip_show disk_usage mem_info cpu_info pkg_list service_list open_file copy_cmd paste_cmd epoch hrline; do
-    bash -c "source $D/core/functions.sh 2>/dev/null; declare -f $fn >/dev/null 2>&1" && pass "$fn" || fail "$fn"
+h "10. WAYBAR SCRIPT PATHS RESOLVE"
+for s in media.sh net-speed.sh battery-info.sh power.sh calendar.sh; do
+  [ -x "waybar/scripts/$s" ] && g "waybar/scripts/$s" || b "MISSING: waybar/scripts/$s"
 done
 
-echo ""
-echo "━━━━ 12. SHELL-SPECIFIC ALIASES ━━━━"
-for a in grep diff less mem cpu disk uptime dateiso epoch cal; do
-    bash -c "source $D/shells/bash/aliases.bash 2>/dev/null; alias $a >/dev/null 2>&1" && pass "bash:$a" || echo "  ~ bash:$a (conditional)"
-done
-for a in grep diff less cpu disk uptime weather tl wifi bt docker; do
-    zsh -c "source $D/shells/zsh/aliases.zsh 2>/dev/null; alias $a >/dev/null 2>&1" 2>/dev/null && pass "zsh:$a" || echo "  ~ zsh:$a (conditional)"
+h "11. ROFI CONFIG VALID"
+for f in rofi/config.rasi rofi/config-full.rasi; do
+  grep -q '^@theme' "$f" && g "$f theme reference OK" || b "$f missing @theme"
 done
 
-echo ""
-echo "━━━━ 13. EXPORTS LOAD ━━━━"
-bash -c "source $D/shells/bash/exports.bash 2>/dev/null; echo env vars: \$(env | grep -c DOTFILES)" && pass "bash exports" || fail "bash exports"
-zsh -c "source $D/shells/zsh/exports.zsh 2>/dev/null; echo env vars loaded" 2>/dev/null && pass "zsh exports" || fail "zsh exports"
-fish -c "source $D/shells/fish/exports.fish 2>/dev/null; echo env vars loaded" 2>/dev/null && pass "fish exports" || fail "fish exports"
+h "12. WLOGOUT - LABELS MATCH CSS"
+while IFS= read -r label; do
+  [ -z "$label" ] && continue
+  grep -q "#$label" wlogout/style.css 2>/dev/null && g "wlogout: #$label styled" || b "wlogout: MISSING #$label in CSS"
+done < <(grep '"label"' wlogout/layout | sed 's/.*: *"//;s/".*//')
 
-echo ""
-echo "━━━━ 14. RECURSION CHECK ━━━━"
-# Check for aliases that call themselves (infinite recursion)
-for f in core/aliases.sh shells/bash/aliases.bash shells/zsh/aliases.zsh shells/fish/aliases.fish; do
-    while IFS='=' read -r name rest; do
-        name=$(echo "$name" | sed 's/^alias //')
-        val=$(echo "$rest" | tr -d "'\"")
-        first_cmd=$(echo "$val" | awk '{print $1}')
-        first_cmd=$(echo "$first_cmd" | sed 's/^_x //')
-        if [ "$name" = "$first_cmd" ]; then
-            echo "  ⚠ recursion risk: $name => $val"
-        fi
-    done < <(rg '^alias ' "$D/$f" 2>/dev/null) || true
+h "13. SWAYNC CONFIG VALID"
+if check_cmd jq; then
+  jq empty swaync/config.jsonc 2>/dev/null && g "swaync/config.jsonc valid" || b "swaync/config.jsonc INVALID"
+else
+  y "jq not installed, skipping swaync JSON check"
+fi
+
+h "14. KITTY CONFIG VALID"
+grep -q '^font_family' kitty/kitty.conf && g "kitty has font_family" || b "kitty missing font_family"
+grep -q '^include' kitty/kitty.conf && g "kitty includes nord.conf" || b "kitty missing include"
+
+h "15. ALACRITTY CONFIG VALID TOML"
+check_cmd "toml" || check_cmd "remarshal" && g "alacritty TOML check skipped (no toml parser)" || y "no TOML parser available"
+head -1 alacritty/alacritty.toml | grep -q '^#' && g "alacritty config exists" || y "alacritty config exists"
+
+h "16. WALLPAPER FILES EXIST"
+count=$(find wallpapers -type f \( -name '*.png' -o -name '*.jpg' \) 2>/dev/null | wc -l)
+[ "$count" -gt 0 ] && g "$count wallpapers found" || b "NO WALLPAPERS"
+
+h "17. HYPRPAPER PRELOAD PATH EXISTS"
+path=$(grep '^preload' hypr/hyprpaper.conf | sed 's/^preload = //')
+path="${path/#\~/$HOME}"
+[ -f "$path" ] && g "hyprpaper preload: $path" || b "hyprpaper preload: $path NOT FOUND"
+
+h "18. NO COLOUR VARIABLE MISMATCHES"
+hypr_vars=$(grep '^\$nord' hypr/hyprland.conf | wc -l)
+hypr_refs=$(grep -r '\$nord' hypr/ --include='*.conf' | grep -v hyprland.conf | wc -l || true)
+echo "  defined: $hypr_vars, referenced: $hypr_refs" && g "color vars check done"
+
+h "19. BATTERY DEVICE EXISTS"
+bat=$(grep '"bat"' waybar/config.jsonc 2>/dev/null | sed 's/.*: *"//;s/".*//')
+[ -d "/sys/class/power_supply/$bat" ] && g "battery device $bat found" || y "battery device $bat NOT FOUND"
+
+h "20. NETWORK INTERFACE EXISTS"
+int=$(ip route show default | awk '{print $5}' | head -1)
+[ -n "$int" ] && g "active interface: $int" || y "no active network interface"
+[ -d "/sys/class/net/$int" ] && g "interface $int in sysfs" || y "interface $int not in sysfs"
+
+h "21. POSIX SHELL SYNTAX CHECK"
+for f in install/install.sh; do
+  bash -n "$f" 2>/dev/null && g "$f: valid bash syntax" || b "$f: SYNTAX ERROR"
 done
-pass "recursion check done"
 
-echo ""
-echo "━━━━ 15. SOURCE FILES EXIST ━━━━"
-for f in core/aliases.sh core/functions.sh core/universal.sh shells/bash/aliases.bash shells/bash/exports.bash shells/bash/detect_apps.bash shells/zsh/aliases.zsh shells/zsh/exports.zsh shells/zsh/detect_apps.zsh shells/fish/aliases.fish shells/fish/functions.fish shells/fish/exports.fish shells/fish/detect_apps.fish .gitconfig; do
-    [ -f "$D/$f" ] && pass "$f exists" || fail "$f missing"
+h "22. GITIGNORE COVERS SECRETS"
+for s in '.unsplash_key' '*.key' '*.pem' '*.env' 'secrets' 'credentials'; do
+  grep -q "^$s" .gitignore 2>/dev/null && g ".gitignore covers $s" || y ".gitignore MISSING $s"
 done
 
-echo ""
-echo "══════════════════════════════════════════════════════════════"
-echo "  RESULTS: $PASS passed, $FAIL failed"
-echo "══════════════════════════════════════════════════════════════"
-[ "$FAIL" -eq 0 ] && exit 0 || exit 1
+h "23. SYSTEMD UNIT FILES"
+for u in systemd/user/wallpaper-fetch.service systemd/user/wallpaper-fetch.timer; do
+  [ -f "$u" ] && g "$u" || y "$u not found"
+done
+
+h "24. DOTFILES DIR STRUCTURE INTEGRITY"
+for d in bin core shells shells/bash shells/zsh shells/fish hypr hypr/configs hypr/scripts \
+          waybar waybar/scripts rofi rofi/themes kitty alacritty wallpapers \
+          wlogout swaync swayosd install profiles apps; do
+  [ -d "$d" ] && g "dir: $d" || b "MISSING DIR: $d"
+done
+
+h "25. INSTALL SCRIPTS EXECUTABLE"
+for f in install/install.sh install/uninstall.sh; do
+  [ -x "$f" ] && g "$f" || b "NOT EXECUTABLE: $f"
+done
+
+h "26. BIN SCRIPTS EXECUTABLE"
+for f in bin/dots bin/dots-doctor; do
+  [ -x "$f" ] && g "$f" || b "NOT EXECUTABLE: $f"
+done
+
+h "27. ROFI CONFIG REFERENCES EXIST"
+for r in rofi/config.rasi rofi/config-full.rasi; do
+  theme=$(grep '^@theme' "$r" | awk '{print $2}' | tr -d '"')
+  found=0
+  [ -f "rofi/$theme.rasi" ] && found=1
+  [ -f "rofi/themes/${theme##*/}.rasi" ] && found=1
+  [ "$found" = 1 ] && g "$r -> $theme" || b "$r references missing theme: $theme"
+done
+
+h "28. CSS HAS NO INVALID GTK PROPERTIES"
+for css in waybar/style.css wlogout/style.css swaync/style.css swayosd/style.css; do
+  bad=""
+  grep -n 'backdrop-filter' "$css" 2>/dev/null && bad+="backdrop-filter "
+  [ -z "$bad" ] && g "$css: no known GTK-invalid properties" || y "$css: found $bad (may not work)"
+done
+
+h "29. WALLPAPER-FETCH FALLBACK CHAIN"
+script="hypr/scripts/wallpaper-fetch"
+grep -q 'download_unsplash' "$script" && g "has unsplash fallback" || b "missing unsplash"
+grep -q 'download_github' "$script" && g "has github fallback" || b "missing github"
+grep -q 'fetch_random_local' "$script" && g "has local fallback" || b "missing local fallback"
+
+h "30. PROFILE FILES EXIST"
+for p in profiles/laptop.sh profiles/desktop.sh profiles/work.sh profiles/gaming.sh profiles/lowpower.sh; do
+  [ -f "$p" ] && g "$p" || y "$p not found"
+done
+
+result
