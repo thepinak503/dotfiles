@@ -55,6 +55,7 @@ for f in hypr/configs/*.conf hypr/hyprland.conf; do
   grep -q 'no_initial_focus' "$f" 2>/dev/null && bad+="no_initial_focus "
   grep -q 'stay_focused' "$f" 2>/dev/null && bad+="stay_focused "
   grep -q 'cm_fs_passthrough' "$f" 2>/dev/null && bad+="cm_fs_passthrough "
+  grep -q 'render {' "$f" 2>/dev/null && bad+="render_block "
   [ -z "$bad" ] && g "$f: no deprecated options" || b "$f: DEPRECATED: $bad"
 done
 
