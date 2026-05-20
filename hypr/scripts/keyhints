@@ -1,32 +1,115 @@
 #!/bin/bash
 # Show interactive keybind cheatsheet via rofi
-# Parses keybinds.conf for display
+# Parses keybinds.lua for display
 
-CONFIG_DIR="$HOME/.local/share/dotfiles/hypr/configs"
-KEYBIND_FILE="$CONFIG_DIR/keybinds.conf"
+KEYBIND_FILE="$HOME/.local/share/dotfiles/hypr/configs/keybinds.lua"
 
 if [ ! -f "$KEYBIND_FILE" ]; then
-    notify-send -u critical "Keyhints Error" "keybinds.conf not found"
+    notify-send -u critical "Keyhints Error" "keybinds.lua not found"
     exit 1
 fi
 
-# Build rofi menu entries from keybinds.conf
-entries=$(grep '^bind\s*=' "$KEYBIND_FILE" | sed 's/^bind\s*=\s*//' | \
-    while IFS=',' read -r mod key action rest; do
-        mod=$(echo "$mod" | sed 's/\$mainMod/SUPER/g; s/ SHIFT/ + SHIFT/g; s/ CONTROL/ + CTRL/g')
-        key=$(echo "$key" | xargs)
-        action=$(echo "$action" | xargs)
-        echo "$mod + $key → $action"
-    done)
+entries=$(python3 - "$KEYBIND_FILE" <<'EOF'
+import re
+import sys
 
-# Add special binds (bindel, bindl)
-entries+=$'\n'$(grep -E '^bind[el]?\s*=' "$KEYBIND_FILE" | sed 's/^bind[el]*\s*=\s*//' | \
-    while IFS=',' read -r mod key action rest; do
-        mod=$(echo "$mod" | sed 's/\$mainMod/SUPER/g')
-        key=$(echo "$key" | xargs)
-        action=$(echo "$action" | xargs)
-        echo "$mod + $key → $action"
-    done)
+lua_file = sys.argv[1]
+
+mappings = {
+    'hl.dsp.window.close()': 'close active window',
+    'hl.dsp.window.fullscreen()': 'toggle fullscreen',
+    'hl.dsp.window.float({ action = "toggle" })': 'toggle floating status',
+    'hl.dsp.window.pseudo()': 'toggle pseudo layout',
+    'hl.dsp.layout("togglesplit")': 'toggle split direction (dwindle)',
+    'hl.dsp.group.toggle()': 'toggle window group',
+    'hl.dsp.group.next()': 'next group window',
+    'hl.dsp.group.prev()': 'previous group window',
+    'hl.dsp.group.lock_active({ action = "toggle" })': 'toggle lock active group',
+    'hl.dsp.window.drag()': 'drag window (mouse)',
+    'hl.dsp.window.resize()': 'resize window (mouse)',
+    'hl.dsp.workspace.toggle_special("magic")': 'toggle special workspace (scratchpad)',
+}
+
+def parse_bind(line):
+    match = re.search(r'hl\.bind\(\s*(.*?)\s*,\s*(.*)\s*\)', line)
+    if not match:
+        return None
+    keys_raw = match.group(1).strip()
+    action_raw = match.group(2).strip()
+
+    # Clean keys
+    keys = keys_raw.replace('mainMod .. "', 'SUPER').replace('"', '')
+    keys = re.sub(r'\s*\+\s*', ' + ', keys)
+    
+    # Handle loop variables
+    if '.. i' in keys:
+        keys = keys.replace('.. i', '[1-9]')
+
+    # Clean action
+    # Check mappings
+    for k, v in mappings.items():
+        if k in action_raw:
+            return f"{keys:<32} →  {v}"
+
+    # Check for exec_cmd
+    exec_match = re.search(r'hl\.dsp\.exec_cmd\("(.*?)"\)', action_raw)
+    if exec_match:
+        cmd = exec_match.group(1)
+        if len(cmd) > 50:
+            cmd = cmd[:47] + "..."
+        return f"{keys:<32} →  exec {cmd}"
+
+    # Check for focus
+    focus_match = re.search(r'hl\.dsp\.focus\(\{\s*direction\s*=\s*"(.*?)"\s*\}\)', action_raw)
+    if focus_match:
+        return f"{keys:<32} →  focus window {focus_match.group(1)}"
+    
+    # Check for focus workspace
+    focus_ws_match = re.search(r'hl\.dsp\.focus\(\{\s*workspace\s*=\s*(.*?)\s*\}\)', action_raw)
+    if focus_ws_match:
+        ws = focus_ws_match.group(1).strip()
+        if ws == 'i':
+            ws = '[1-9]'
+        return f"{keys:<32} →  switch to workspace {ws}"
+
+    # Check for window move
+    move_match = re.search(r'hl\.dsp\.window\.move\(\{\s*direction\s*=\s*"(.*?)"\s*\}\)', action_raw)
+    if move_match:
+        return f"{keys:<32} →  move window {move_match.group(1)}"
+    
+    # Check for window move to workspace
+    move_ws_match = re.search(r'hl\.dsp\.window\.move\(\{\s*workspace\s*=\s*(.*?)\s*\}\)', action_raw)
+    if move_ws_match:
+        ws = move_ws_match.group(1).strip()
+        if ws == 'i':
+            ws = '[1-9]'
+        return f"{keys:<32} →  move window to workspace {ws}"
+
+    # Check for window swap
+    swap_match = re.search(r'hl\.dsp\.window\.swap\(\{\s*direction\s*=\s*"(.*?)"\s*\}\)', action_raw)
+    if swap_match:
+        return f"{keys:<32} →  swap window {swap_match.group(1)}"
+
+    # Check for inline dispatch functions
+    dispatch_match = re.findall(r'hl\.dispatch\("(.*?)",\s*"(.*?)"\)', action_raw)
+    if dispatch_match:
+        return f"{keys:<32} →  dispatch {dispatch_match[0][0]} {dispatch_match[0][1]}"
+    
+    dispatch_single = re.findall(r'hl\.dispatch\("(.*?)"\)', action_raw)
+    if dispatch_single:
+        return f"{keys:<32} →  dispatch {dispatch_single[0]}"
+
+    return f"{keys:<32} →  {action_raw}"
+
+with open(lua_file, 'r') as f:
+    for line in f:
+        line = line.strip()
+        if line.startswith('hl.bind'):
+            res = parse_bind(line)
+            if res:
+                print(res)
+EOF
+)
 
 echo "$entries" | rofi -dmenu -i -p "Keybinds" -mesg "SUPER = Windows key" \
-    -theme-str 'window {width: 50%; height: 80%;} listview {columns: 1; lines: 25;}'
+    -theme-str 'window {width: 55%; height: 80%;} listview {columns: 1; lines: 25;}'
