@@ -152,7 +152,13 @@ pkg_name() {
                 tmux)          echo "tmux" ;;
                 btop)          echo "btop" ;;
                 ncdu)          echo "ncdu" ;;
-                tldr)          echo "tealdeer" ;;
+                tldr)
+                    if command -v tealdeer >/dev/null 2>&1; then
+                        echo "tealdeer"
+                    else
+                        echo "tldr"
+                    fi
+                    ;;
                 direnv)        echo "direnv" ;;
                 hyperfine)     echo "hyperfine" ;;
                 bash-preexec)  echo "bash-preexec" ;;
