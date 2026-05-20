@@ -123,3 +123,7 @@ case $- in *i*) command -v fastfetch >/dev/null && fastfetch -c ~/.config/fastfe
   unset _du_file _du_age
 }
 
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/pinak/.local/bin:$PATH"

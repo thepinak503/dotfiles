@@ -920,9 +920,9 @@ alias urldec '_x python3 -c "import urllib.parse,sys; print(urllib.parse.unquote
 
 alias count 'wc -l'
 alias lines 'cat -n'
-alias cht 'curl -fsSL "https://cht.sh/$1"'
-alias learn 'curl -fsSL "https://learnxinyminutes.com/docs/$1"'
-alias cheat 'curl -fsSL "https://cheat.sh/$1"'
+function cht; curl -fsSL "https://cht.sh/$argv[1]"; end
+function learn; curl -fsSL "https://learnxinyminutes.com/docs/$argv[1]"; end
+function cheat; curl -fsSL "https://cheat.sh/$argv[1]"; end
 alias man 'man'
 alias help 'help'
 alias info 'info'
@@ -1746,7 +1746,7 @@ alias pfilechm 'chmod'
 alias pfileown 'chown'
 alias pfilegrp 'chgrp'
 alias pfileln 'ln -sf'
-alias pfilebak 'cp -r "$1" "$1.bak"'
+function pfilebak; cp -r "$argv[1]" "$argv[1].bak"; end
 alias pfiletouch 'touch'
 alias pfileread 'cat -n'
 alias pfileless 'less -N'

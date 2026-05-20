@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # -----------------------------------------------------------------------------
 # Navigation
 
@@ -123,7 +124,7 @@ alias gshow='git show'
 alias gwip='git add -A && git rm $(git ls-files --deleted) 2>/dev/null; git commit --no-verify -m "wip"'
 alias gwipe='git reset --hard && git clean --force -df'
 alias nah='git reset --hard && git clean -df'
-alias gbage='for k in $(git branch -a | sed "s/^..//;s/ ->.*//" 2>/dev/null); do echo -e "$(git show --pretty=format:"%ci %cr" $k -- 2>/dev/null | head -1)\t$k"; done | sort -r'
+gbage() { for k in $(git branch -a | sed 's/^..//;s/ ->.*//' 2>/dev/null); do echo -e "$(git show --pretty=format:"%ci %cr" "$k" -- 2>/dev/null | head -1)\t$k"; done | sort -r; }
 alias gmn='git merge --no-ff --no-commit'
 alias g='git'
 alias ga='git add'
@@ -866,7 +867,7 @@ fi
 # -----------------------------------------------------------------------------
 
 
-alias myipl='ip addr show | grep "inet " | awk "{print \$2}" | cut -d/ -f1 | head -1'
+myipl() { ip addr show | grep "inet " | awk '{print $2}' | cut -d/ -f1 | head -1; }
 alias weather='curl -fsSL wttr.in'
 alias portlisten='ss -tlnp 2>/dev/null || netstat -tlnp'
 alias pingf='ping -c 100 -s 1472 -f'
@@ -1141,9 +1142,9 @@ if command -v ffmpeg >/dev/null 2>&1; then
     alias ffp='ffprobe'
     alias ffg='ffplay'
     alias ffconvert='ffmpeg -i'
-    alias ffmp3='ffmpeg -i "$1" -q:a 0 "${1%.*}.mp3"'
-    alias ffcompress='ffmpeg -i "$1" -vcodec libx265 -crf 28'
-    alias ffgif='ffmpeg -i "$1" -vf "fps=10,scale=320:-1" "${1%.*}.gif"'
+    ffmp3() { ffmpeg -i "$1" -q:a 0 "${1%.*}.mp3"; }
+    ffcompress() { ffmpeg -i "$1" -vcodec libx265 -crf 28 "${1%.*}-compressed.mp4"; }
+    ffgif() { ffmpeg -i "$1" -vf "fps=10,scale=320:-1" "${1%.*}.gif"; }
     alias ffscreencap='ffmpeg -f x11grab -video_size 1920x1080 -i :0.0'
 fi
 
@@ -1236,11 +1237,11 @@ alias today='date +%F'
 alias week='date +%V'
 alias count='wc -l'
 alias lines='cat -n'
-alias cht='curl -fsSL "https://cht.sh/$1"'
+cht() { curl -fsSL "https://cht.sh/$1"; }
 
-alias learn='curl -fsSL "https://learnxinyminutes.com/docs/$1"'
+learn() { curl -fsSL "https://learnxinyminutes.com/docs/$1"; }
 
-alias cheat='curl -fsSL "https://cheat.sh/$1"'
+cheat() { curl -fsSL "https://cheat.sh/$1"; }
 alias try='curl -fsSL https://cht.sh'
 alias tldrl='curl -fsSL https://cheat.sh'
 alias what='type'
@@ -1262,7 +1263,7 @@ alias connections='_x ss -tunp 2>/dev/null || _x netstat -tunp 2>/dev/null'
 alias dsstore='find . -name ".DS_Store" -type f -delete -print 2>/dev/null'
 alias mirrorsite='_x wget -m -k -K -E -e robots=off 2>/dev/null || echo "wget needed"'
 alias sep='printf "=%.0s" $(seq 1 $(tput cols))'
-alias countfiles='for t in files links directories; do echo $(find . -type ${t:0:1} 2>/dev/null | wc -l) $t; done 2>/dev/null'
+countfiles() { echo "$(find . -type f 2>/dev/null | wc -l) files"; echo "$(find . -type l 2>/dev/null | wc -l) links"; echo "$(find . -type d 2>/dev/null | wc -l) directories"; }
 alias tstamp='stamp'
 alias idg='id -g'
 alias idu='id -u'
@@ -1580,7 +1581,7 @@ fi
 # -----------------------------------------------------------------------------
 
 
-alias pur='_x curl -fsSL "https://cht.sh/$1" 2>/dev/null'
+pur() { _x curl -fsSL "https://cht.sh/$1" 2>/dev/null; }
 
 # Standalone duplicates preserved for compatibility
 alias pod='_x podman'

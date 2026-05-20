@@ -15,3 +15,6 @@ elif [ -n "$BASH_VERSION" ]; then
     export DOTFILES_DIR="$HOME/.local/share/dotfiles"
     [[ -f ~/.bashrc ]] && source ~/.bashrc
 fi
+
+# Added by Antigravity CLI installer
+export PATH="/home/pinak/.local/bin:$PATH"

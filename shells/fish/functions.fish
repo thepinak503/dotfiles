@@ -12,11 +12,11 @@ function detect_os --description "Detect operating system"
     else if test -f /etc/arch-release
         echo "arch"
     else if test -f /etc/debian_version
-        echo "debian"
+        echo "Debian"
     else if test -f /etc/fedora-release
         echo "fedora"
     else
-        echo "linux"
+        echo "Linux"
     end
 end
 

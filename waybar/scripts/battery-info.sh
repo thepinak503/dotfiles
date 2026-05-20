@@ -14,7 +14,12 @@ energy_full=$(cat "$bat/energy_full" 2>/dev/null || cat "$bat/charge_full" 2>/de
 energy_full_design=$(cat "$bat/energy_full_design" 2>/dev/null || cat "$bat/charge_full_design" 2>/dev/null || echo "0")
 cycle_count=$(cat "$bat/cycle_count" 2>/dev/null || echo "N/A")
 voltage=$(cat "$bat/voltage_now" 2>/dev/null || echo "0")
-temp=$(cat "$bat/temp" 2>/dev/null || echo "N/A")
+raw_temp=$(cat "$bat/temp" 2>/dev/null || echo "")
+if [ -n "$raw_temp" ] && [ "$raw_temp" != "0" ]; then
+  temp=$(awk "BEGIN { printf \"%.1f\", $raw_temp / 10 }")
+else
+  temp="N/A"
+fi
 manufacturer=$(cat "$bat/manufacturer" 2>/dev/null || echo "Unknown")
 model=$(cat "$bat/model_name" 2>/dev/null || echo "Unknown")
 technology=$(cat "$bat/technology" 2>/dev/null || echo "Unknown")
@@ -71,6 +76,7 @@ yad --title="Battery Info" \
 <b>Cycles:</b>      ${cycles_text}\n\
 <b>Power:</b>       ${power} W\n\
 <b>Voltage:</b>     ${voltage} V\n\
+<b>Temp:</b>        ${temp} °C\n\
 <b>Technology:</b>  ${technology}\n\
 <b>Plugged:</b>     ${on_ac}\
 </span>" \

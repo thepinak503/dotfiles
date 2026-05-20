@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+# shellcheck shell=sh
 DOTFILES_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles"
 DOTFILES_CACHE_FILE="$DOTFILES_CACHE_DIR/init.cache"
 DOTFILES_CACHE_BREW="$DOTFILES_CACHE_DIR/brew.env"
@@ -43,7 +45,7 @@ _cache_gen() {
               *arch*) distro="arch" ;;
               *debian*|*ubuntu*) distro="debian" ;;
               *fedora*|*rhel*|*centos*) distro="fedora" ;;
-              *suse*|*opensuse*) distro="suse" ;;
+              *opensuse*|*suse*) distro="suse" ;;
               *) distro="$ID" ;;
             esac
             ;;

@@ -117,3 +117,8 @@ fi;; esac
 }
 
 true
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/pinak/.local/bin:$PATH"
+export PATH="/home/pinak/.local/bin:$PATH"

@@ -14,7 +14,8 @@ if [ "$playerctl_status" = "Playing" ] || [ "$playerctl_status" = "Paused" ]; th
     text="$title"
   fi
 
-  printf '{"text":"%s","class":"%s","alt":"%s"}\n' \
+  printf '{"text":"%s %s","class":"%s","alt":"%s"}\n' \
+    "$status_icon" \
     "$text" \
     "$(echo "$playerctl_status" | tr '[:upper:]' '[:lower:]')" \
     "$playerctl_status"

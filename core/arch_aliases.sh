@@ -110,6 +110,7 @@ if [ -n "$_AUR_HELPER" ]; then
     _h="$_AUR_HELPER"
 
 
+    # shellcheck disable=SC2139
     alias aurs="$_h -Ss"
     alias aurq="$_h -Q"
     alias aurqi="$_h -Qi"

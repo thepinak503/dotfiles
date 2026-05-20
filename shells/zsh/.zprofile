@@ -7,3 +7,6 @@ if command -v brew >/dev/null 2>&1; then
 fi
 
 [[ -f ~/.zshrc ]] && source ~/.zshrc
+
+# Added by Antigravity CLI installer
+export PATH="/home/pinak/.local/bin:$PATH"

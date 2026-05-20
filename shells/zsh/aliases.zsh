@@ -1357,7 +1357,7 @@ alias cpu='_x lscpu 2>/dev/null || echo "no cpu info"'
 alias disk='_x df -h 2>/dev/null || _x df 2>/dev/null'
 alias disks='_x lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT 2>/dev/null || echo "no disk tool"'
 alias sensors='_x sensors 2>/dev/null || echo "no sensors"'
-alias temp='cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null | head -1 | awk "{print \$1/1000\"°C\"}" || echo "no temp info"'
+temp() { cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null | head -1 | awk '{print $1/1000 "°C"}' || echo "no temp info"; }
 alias pci='_x lspci 2>/dev/null | cut -d" " -f2- | head -20 || echo "no lspci"'
 alias usb='_x lsusb 2>/dev/null | cut -d" " -f7- | head -20 || echo "no lsusb"'
 alias modules='_x lsmod 2>/dev/null | head -20 || echo "no lsmod"'

@@ -1,509 +1,803 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pinak's Ultimate Dotfiles - Documentation</title>
-<style>
-:root {
-  --bg: #ffffff;
-  --bg2: #f5f5f5;
-  --bg3: #eaeaea;
-  --fg: #333333;
-  --fg2: #555555;
-  --fg3: #888888;
-  --link: #1b6fba;
-  --link-hover: #003399;
-  --green: #205020;
-  --red: #802020;
-  --blue: #2040a0;
-  --orange: #804020;
-  --border: #d4d4d4;
-  --code-bg: #f8f8f8;
-  --sidebar-bg: #fafafa;
-  --accent: #1b6fba;
-  --warn-bg: #fffff0;
-  --warn-border: #e0d070;
-  --note-bg: #f0f8ff;
-  --note-border: #70a0d0;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-  font-size: 15px; line-height: 1.6; color: var(--fg); background: var(--bg);
-  display: flex; min-height: 100vh;
-}
-
-/* Sidebar */
-#sidebar {
-  width: 280px; flex-shrink: 0; background: var(--sidebar-bg);
-  border-right: 1px solid var(--border); padding: 1.5rem 0;
-  position: sticky; top: 0; height: 100vh; overflow-y: auto;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-#sidebar h2 { font-size: 1rem; color: var(--fg2); padding: 0.5rem 1.25rem; font-weight: 600; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; transition: color 0.2s; }
-#sidebar a {
-  display: block; padding: 0.3rem 1.25rem; color: var(--fg2);
-  text-decoration: none; font-size: 0.85rem; transition: all 0.15s ease;
-  border-left: 3px solid transparent;
-}
-#sidebar a:hover { color: var(--link); background: var(--bg2); border-left-color: var(--link); }
-#sidebar .h3 { padding-left: 2.25rem; font-size: 0.8rem; }
-#sidebar .h4 { padding-left: 3.25rem; font-size: 0.75rem; }
-.sidebar-toggle { display: none; position: fixed; top: 0.5rem; left: 0.5rem; z-index: 100; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 0.4rem 0.6rem; cursor: pointer; font-size: 1.2rem; color: var(--fg); transition: background 0.2s; }
-.sidebar-toggle:hover { background: var(--bg2); }
-#sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 98; opacity: 0; transition: opacity 0.3s; }
-
-/* Main */
-#content { flex: 1; max-width: 900px; margin: 0 auto; padding: 2rem 2.5rem; }
-h1 { font-size: 2rem; color: var(--fg); font-weight: 700; margin-bottom: 0.25rem; transition: color 0.3s; }
-h1 .subtitle { font-size: 1rem; font-weight: 400; color: var(--fg3); display: block; margin-top: 0.25rem; }
-h2 { font-size: 1.4rem; color: var(--fg); font-weight: 600; margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); transition: border-color 0.3s; }
-h3 { font-size: 1.1rem; color: var(--fg2); font-weight: 600; margin: 1.5rem 0 0.5rem; }
-h4 { font-size: 1rem; color: var(--fg2); font-weight: 600; margin: 1rem 0 0.4rem; }
-p { margin: 0.5rem 0; }
-a { color: var(--link); text-decoration: none; transition: color 0.15s, text-decoration 0.15s; }
-a:hover { color: var(--link-hover); text-decoration: underline; }
-ul, ol { margin: 0.5rem 0; padding-left: 1.5rem; }
-li { margin: 0.25rem 0; }
-code, .cmd { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 0.85rem; background: var(--code-bg); padding: 0.15rem 0.35rem; border-radius: 3px; border: 1px solid var(--border); transition: background 0.2s; }
-code:hover { background: var(--bg3); }
-pre.code {
-  background: var(--code-bg); border: 1px solid var(--border); border-radius: 4px;
-  padding: 0.75rem 1rem; margin: 0.5rem 0; overflow-x: auto;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  font-size: 0.8rem; line-height: 1.5; tab-size: 4;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-pre.code:hover { border-color: var(--link); box-shadow: 0 0 0 1px rgba(27,111,186,0.1); }
-pre.code .cm { color: #888; font-style: italic; }
-pre.code .kw { color: var(--blue); font-weight: 600; }
-pre.code .fn { color: var(--green); }
-pre.code .str { color: var(--red); }
-pre.code .num { color: var(--orange); }
-
-/* Boxes */
-.box { border: 1px solid var(--border); border-radius: 4px; padding: 0.75rem 1rem; margin: 0.75rem 0; transition: all 0.2s; }
-.box:hover { border-color: var(--link); }
-.box.note { background: var(--note-bg); border-color: var(--note-border); }
-.box.warn { background: var(--warn-bg); border-color: var(--warn-border); }
-.box h4 { margin: 0 0 0.25rem; font-size: 0.9rem; }
-.box p { margin: 0.25rem 0; font-size: 0.9rem; }
-
-/* Tables */
-table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; transition: opacity 0.3s; }
-th, td { padding: 0.4rem 0.6rem; text-align: left; border: 1px solid var(--border); vertical-align: top; }
-th { background: var(--bg2); font-weight: 600; color: var(--fg2); }
-tr:nth-child(even) { background: var(--bg2); }
-tr:hover td { background: #f0f4f8; transition: background 0.15s; }
-
-/* Tags */
-.tag { display: inline-block; padding: 0.08rem 0.35rem; border-radius: 3px; font-size: 0.7rem; font-weight: 600; transition: transform 0.15s, box-shadow 0.15s; }
-.tag:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.tag.bash { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
-.tag.zsh { background: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
-.tag.fish { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
-.tag.all { background: #f3e5f5; color: #6a1b9a; border: 1px solid #ce93d8; }
-.tag.mac { background: #fce4ec; color: #c62828; border: 1px solid #ef9a9a; }
-.tag.linux { background: #e0f2f1; color: #00695c; border: 1px solid #80cbc4; }
-
-/* Grid */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; margin: 0.75rem 0; }
-.card { border: 1px solid var(--border); border-radius: 4px; padding: 1rem; transition: all 0.2s; background: var(--bg); }
-.card:hover { border-color: var(--link); box-shadow: 0 2px 8px rgba(27,111,186,0.08); transform: translateY(-1px); }
-.card h4 { margin: 0 0 0.5rem; font-size: 0.95rem; color: var(--fg); }
-.card p { margin: 0.25rem 0; font-size: 0.85rem; color: var(--fg2); }
-.card pre.code { margin: 0.5rem 0; }
-
-/* TOC */
-.toc-wrapper { border: 1px solid var(--border); border-radius: 4px; padding: 1rem; margin: 1rem 0; background: var(--bg2); }
-.toc-wrapper h3 { margin: 0 0 0.5rem; font-size: 1rem; }
-.toc-wrapper ul { list-style: none; padding: 0; }
-.toc-wrapper li { margin: 0; }
-.toc-wrapper a { display: block; padding: 0.15rem 0.5rem; font-size: 0.85rem; border-left: 2px solid transparent; transition: all 0.15s; }
-.toc-wrapper a:hover { border-left-color: var(--link); background: var(--bg); }
-.toc-wrapper .l3 { padding-left: 1.5rem; font-size: 0.8rem; }
-
-/* Animations */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-#content > * { animation: fadeIn 0.4s ease forwards; }
-#content > *:nth-child(1) { animation-delay: 0s; }
-#content > *:nth-child(2) { animation-delay: 0.05s; }
-#content > *:nth-child(3) { animation-delay: 0.1s; }
-#content > *:nth-child(4) { animation-delay: 0.15s; }
-#content > *:nth-child(5) { animation-delay: 0.2s; }
-
-.anchor { color: var(--fg3); font-size: 0.8rem; margin-left: 0.3rem; opacity: 0; transition: opacity 0.2s; }
-h2:hover .anchor, h3:hover .anchor, h4:hover .anchor { opacity: 1; }
-
-/* Responsive */
-@media (max-width: 768px) {
-  body { flex-direction: column; }
-  #sidebar { position: fixed; left: -300px; top: 0; height: 100vh; z-index: 99; transition: left 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
-  #sidebar.open { left: 0; }
-  .sidebar-toggle { display: block; }
-  #sidebar-overlay.show { display: block; opacity: 1; }
-  #content { padding: 1.5rem 1rem; max-width: 100%; }
-  .grid { grid-template-columns: 1fr; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pinak's Ultimate Dotfiles - Documentation</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">☰</button>
-<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">☰</button>
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<nav id="sidebar">
-<h2>📋 Contents</h2>
-<a href="#overview">Overview</a>
-<a href="#architecture" class="h3">Architecture</a>
-<a href="#quick-start" class="h3">Quick Start</a>
-<a href="#core-functions">Core Functions</a>
-<a href="#backup" class="h3">Backup</a>
-<a href="#navigation" class="h3">Navigation</a>
-<a href="#network" class="h3">Network</a>
-<a href="#system" class="h3">System</a>
-<a href="#security" class="h3">Security</a>
-<a href="#text" class="h3">Text &amp; Data</a>
-<a href="#cross-platform">Cross-Platform</a>
-<a href="#aliases">Aliases</a>
-<a href="#listing" class="h3">Listing</a>
-<a href="#grep-find" class="h3">Grep &amp; Find</a>
-<a href="#packages" class="h3">Packages</a>
-<a href="#docker" class="h3">Docker</a>
-<a href="#kubernetes" class="h3">Kubernetes</a>
-<a href="#git">Git</a>
-<a href="#git-aliases" class="h3">Aliases</a>
-<a href="#git-functions" class="h3">Functions</a>
-<a href="#env">Environment</a>
-<a href="#starship">Starship</a>
-<a href="#fastfetch">Fastfetch</a>
-<a href="#x-guard">_x Guard System</a>
-<a href="#testing">Testing</a>
-<a href="#sources">Sources</a>
-</nav>
+  <nav id="sidebar">
+    <h2>📋 Contents</h2>
+    <a href="#overview">Overview</a>
+    <a href="#architecture" class="h3">Architecture</a>
+    <a href="#quick-start" class="h3">Quick Start</a>
+    <a href="#core-functions">Core Functions</a>
+    <a href="#backup" class="h3">Backup</a>
+    <a href="#navigation" class="h3">Navigation</a>
+    <a href="#network" class="h3">Network</a>
+    <a href="#system" class="h3">System</a>
+    <a href="#security" class="h3">Security</a>
+    <a href="#text" class="h3">Text &amp; Data</a>
+    <a href="#cross-platform">Cross-Platform</a>
+    <a href="#aliases">Aliases</a>
+    <a href="#listing" class="h3">Listing</a>
+    <a href="#grep-find" class="h3">Grep &amp; Find</a>
+    <a href="#packages" class="h3">Packages</a>
+    <a href="#docker" class="h3">Docker</a>
+    <a href="#kubernetes" class="h3">Kubernetes</a>
+    <a href="#git">Git</a>
+    <a href="#git-aliases" class="h3">Aliases</a>
+    <a href="#git-functions" class="h3">Functions</a>
+    <a href="#env">Environment</a>
+    <a href="#starship">Starship</a>
+    <a href="#fastfetch">Fastfetch</a>
+    <a href="#x-guard">_x Guard System</a>
+    <a href="#testing">Testing</a>
+    <a href="#sources">Sources</a>
+  </nav>
 
-<div id="content">
+  <div id="content">
 
-<h1 id="overview">Pinak's Ultimate Dotfiles <span class="subtitle">20,000+ lines · bash + zsh + fish · Linux + macOS</span></h1>
+    <h1 id="overview">Pinak's Ultimate Dotfiles <span class="subtitle">bash + zsh + fish · Linux + macOS</span></h1>
 
-<div class="box note" style="margin-top:1rem">
-<strong>⏣</strong> Every command is runtime-guarded. If a tool is missing, you get <code>missing: &lt;tool&gt;</code> instead of a cryptic error.
-</div>
+    <div class="box note" style="margin-top:1rem">
+      <strong>⏣</strong> Every command is runtime-guarded. If a tool is missing, you get
+      <code>missing: &lt;tool&gt;</code> instead of a cryptic error.
+    </div>
 
-<div class="toc-wrapper">
-<h3>Table of Contents</h3>
-<ul>
-<li><a href="#overview">1. Overview</a></li>
-<li><a href="#core-functions">2. Core Functions</a></li>
-<li><a href="#cross-platform">3. Cross-Platform Helpers</a></li>
-<li><a href="#aliases">4. Aliases</a></li>
-<li><a href="#git">5. Git Integration</a></li>
-<li><a href="#env">6. Environment</a></li>
-<li><a href="#starship">7. Starship Prompt</a></li>
-<li><a href="#fastfetch">8. Fastfetch</a></li>
-<li><a href="#x-guard">9. _x Guard System</a></li>
-<li><a href="#testing">10. Testing</a></li>
-<li><a href="#sources">11. Sources</a></li>
-</ul>
-</div>
+    <div class="toc-wrapper">
+      <h3>Table of Contents</h3>
+      <ul>
+        <li><a href="#overview">1. Overview</a></li>
+        <li><a href="#core-functions">2. Core Functions</a></li>
+        <li><a href="#cross-platform">3. Cross-Platform Helpers</a></li>
+        <li><a href="#aliases">4. Aliases</a></li>
+        <li><a href="#git">5. Git Integration</a></li>
+        <li><a href="#env">6. Environment</a></li>
+        <li><a href="#starship">7. Starship Prompt</a></li>
+        <li><a href="#fastfetch">8. Fastfetch</a></li>
+        <li><a href="#x-guard">9. _x Guard System</a></li>
+        <li><a href="#testing">10. Testing</a></li>
+        <li><a href="#sources">11. Sources</a></li>
+      </ul>
+    </div>
 
-<h2 id="architecture">Architecture</h2>
-<div class="grid">
-<div class="card">
-<h4>core/</h4>
-<p>Cross-shell aliases, functions, and utilities shared by bash and zsh.</p>
-<code>aliases.sh</code> <code>functions.sh</code> <code>universal.sh</code>
-</div>
-<div class="card">
-<h4>shells/bash/</h4>
-<p>Bash-specific configs.</p>
-<code>aliases.bash</code> <code>exports.bash</code> <code>detect_apps.bash</code>
-</div>
-<div class="card">
-<h4>shells/zsh/</h4>
-<p>Zsh-specific configs.</p>
-<code>aliases.zsh</code> <code>exports.zsh</code> <code>detect_apps.zsh</code>
-</div>
-<div class="card">
-<h4>shells/fish/</h4>
-<p>Fish-specific configs.</p>
-<code>aliases.fish</code> <code>functions.fish</code> <code>exports.fish</code></div>
-<div class="card">
-<h4>apps/</h4>
-<p>Application configs.</p>
-<code>starship-linux.toml</code> <code>starship-mac.toml</code> <code>fastfetch/config.jsonc</code>
-</div>
-<div class="card">
-<h4>docs/</h4>
-<p>Documentation.</p>
-<code>index.html</code>
-</div>
-</div>
+    <h2 id="architecture">Architecture</h2>
+    <div class="grid">
+      <div class="card">
+        <h4>core/</h4>
+        <p>Cross-shell aliases, functions, and utilities shared by bash and zsh.</p>
+        <code>aliases.sh</code> <code>functions.sh</code> <code>universal.sh</code>
+      </div>
+      <div class="card">
+        <h4>shells/bash/</h4>
+        <p>Bash-specific configs.</p>
+        <code>aliases.bash</code> <code>exports.bash</code> <code>detect_apps.bash</code>
+      </div>
+      <div class="card">
+        <h4>shells/zsh/</h4>
+        <p>Zsh-specific configs.</p>
+        <code>aliases.zsh</code> <code>exports.zsh</code> <code>detect_apps.zsh</code>
+      </div>
+      <div class="card">
+        <h4>shells/fish/</h4>
+        <p>Fish-specific configs.</p>
+        <code>aliases.fish</code> <code>functions.fish</code> <code>exports.fish</code>
+      </div>
+      <div class="card">
+        <h4>apps/</h4>
+        <p>Application configs.</p>
+        <code>starship-linux.toml</code> <code>starship-mac.toml</code> <code>fastfetch/config.jsonc</code>
+      </div>
+      <div class="card">
+        <h4>docs/</h4>
+        <p>Documentation.</p>
+        <code>index.html</code>
+      </div>
+    </div>
 
-<h2 id="core-functions">2. Core Functions</h2>
+    <h2 id="core-functions">2. Core Functions</h2>
 
-<h3 id="backup">Backup</h3>
-<table>
-<tr><th>Function</th><th>Description</th><th>Syntax</th></tr>
-<tr><td><code>bak</code></td><td>Backup file with timestamp suffix</td><td><code>bak &lt;file&gt;</code></td></tr>
-<tr><td><code>unbak</code></td><td>Restore newest backup</td><td><code>unbak &lt;file&gt;</code></td></tr>
-<tr><td><code>orig</code></td><td>Create <code>.org</code> backup</td><td><code>orig &lt;file&gt;</code></td></tr>
-<tr><td><code>unorig</code></td><td>Restore from <code>.org</code></td><td><code>unorig &lt;file&gt;</code></td></tr>
-</table>
+    <h3 id="backup">Backup</h3>
+    <table>
+      <tr>
+        <th>Function</th>
+        <th>Description</th>
+        <th>Syntax</th>
+      </tr>
+      <tr>
+        <td><code>bak</code></td>
+        <td>Backup file with timestamp suffix</td>
+        <td><code>bak &lt;file&gt;</code></td>
+      </tr>
+      <tr>
+        <td><code>unbak</code></td>
+        <td>Restore newest backup</td>
+        <td><code>unbak &lt;file&gt;</code></td>
+      </tr>
+      <tr>
+        <td><code>orig</code></td>
+        <td>Create <code>.org</code> backup</td>
+        <td><code>orig &lt;file&gt;</code></td>
+      </tr>
+      <tr>
+        <td><code>unorig</code></td>
+        <td>Restore from <code>.org</code></td>
+        <td><code>unorig &lt;file&gt;</code></td>
+      </tr>
+    </table>
 
-<h3 id="navigation">Navigation</h3>
-<table>
-<tr><th>Command</th><th>Description</th></tr>
-<tr><td><code>here</code></td><td>Bookmark current directory (<code>~/.shell.here</code>)</td></tr>
-<tr><td><code>there</code></td><td>Jump to bookmarked directory</td></tr>
-<tr><td><code>mkcd &lt;dir&gt;</code></td><td>Create directory and cd into it</td></tr>
-<tr><td><code>gcd</code></td><td>Go to git root directory</td></tr>
-<tr><td><code>cdup &lt;file&gt;</code></td><td>cd up to directory containing file</td></tr>
-<tr><td><code>findup &lt;file&gt;</code></td><td>Find file in parent directories</td></tr>
-<tr><td><code>dash</code></td><td><code>cd -</code> (previous directory)</td></tr>
-</table>
+    <h3 id="navigation">Navigation</h3>
+    <table>
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>here</code></td>
+        <td>Bookmark current directory (<code>~/.shell.here</code>)</td>
+      </tr>
+      <tr>
+        <td><code>there</code></td>
+        <td>Jump to bookmarked directory</td>
+      </tr>
+      <tr>
+        <td><code>mkcd &lt;dir&gt;</code></td>
+        <td>Create directory and cd into it</td>
+      </tr>
+      <tr>
+        <td><code>gcd</code></td>
+        <td>Go to git root directory</td>
+      </tr>
+      <tr>
+        <td><code>cdup &lt;file&gt;</code></td>
+        <td>cd up to directory containing file</td>
+      </tr>
+      <tr>
+        <td><code>findup &lt;file&gt;</code></td>
+        <td>Find file in parent directories</td>
+      </tr>
+      <tr>
+        <td><code>dash</code></td>
+        <td><code>cd -</code> (previous directory)</td>
+      </tr>
+    </table>
 
-<h3 id="network">Network</h3>
-<table>
-<tr><th>Command</th><th>Description</th><th>Fallback Chain</th></tr>
-<tr><td><code>wanip</code> / <code>myip</code></td><td>Show public IP</td><td><code>dig</code> → <code>curl ifconfig.me</code> → <code>curl icanhazip.com</code></td></tr>
-<tr><td><code>myip4</code> / <code>myip6</code></td><td>Show specific IP version</td><td><code>dig</code> → <code>curl -4/-6</code></td></tr>
-<tr><td><code>localip</code></td><td>Show local IP address</td><td><code>ip</code> → <code>ifconfig</code> → <code>hostname -I</code></td></tr>
-<tr><td><code>port</code> / <code>ports</code></td><td>Show open/listening ports</td><td><code>ss</code> → <code>netstat</code> → <code>lsof</code></td></tr>
-<tr><td><code>flush</code></td><td>Flush DNS cache</td><td><code>systemd-resolve</code> → <code>dscacheutil</code></td></tr>
-<tr><td><code>dns_lookup</code></td><td>DNS resolution</td><td><code>dig</code> → <code>host</code> → <code>nslookup</code></td></tr>
-<tr><td><code>http_status</code></td><td>HTTP status code</td><td><code>curl -sI</code></td></tr>
-<tr><td><code>http_headers</code></td><td>HTTP response headers</td><td><code>curl -sI</code></td></tr>
-<tr><td><code>download</code></td><td>Download file</td><td><code>curl</code> → <code>wget</code></td></tr>
-<tr><td><code>weather</code></td><td>Show weather (wttr.in)</td><td><code>curl</code></td></tr>
-<tr><td><code>speedtest</code></td><td>Internet speed test</td><td><code>curl</code> → <code>python3</code></td></tr>
-</table>
+    <h3 id="network">Network</h3>
+    <table>
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+        <th>Fallback Chain</th>
+      </tr>
+      <tr>
+        <td><code>wanip</code> / <code>myip</code></td>
+        <td>Show public IP</td>
+        <td><code>dig</code> → <code>curl ifconfig.me</code> → <code>curl icanhazip.com</code></td>
+      </tr>
+      <tr>
+        <td><code>myip4</code> / <code>myip6</code></td>
+        <td>Show specific IP version</td>
+        <td><code>dig</code> → <code>curl -4/-6</code></td>
+      </tr>
+      <tr>
+        <td><code>localip</code></td>
+        <td>Show local IP address</td>
+        <td><code>ip</code> → <code>ifconfig</code> → <code>hostname -I</code></td>
+      </tr>
+      <tr>
+        <td><code>port</code> / <code>ports</code></td>
+        <td>Show open/listening ports</td>
+        <td><code>ss</code> → <code>netstat</code> → <code>lsof</code></td>
+      </tr>
+      <tr>
+        <td><code>flush</code></td>
+        <td>Flush DNS cache</td>
+        <td><code>systemd-resolve</code> → <code>dscacheutil</code></td>
+      </tr>
+      <tr>
+        <td><code>dns_lookup</code></td>
+        <td>DNS resolution</td>
+        <td><code>dig</code> → <code>host</code> → <code>nslookup</code></td>
+      </tr>
+      <tr>
+        <td><code>http_status</code></td>
+        <td>HTTP status code</td>
+        <td><code>curl -sI</code></td>
+      </tr>
+      <tr>
+        <td><code>http_headers</code></td>
+        <td>HTTP response headers</td>
+        <td><code>curl -sI</code></td>
+      </tr>
+      <tr>
+        <td><code>download</code></td>
+        <td>Download file</td>
+        <td><code>curl</code> → <code>wget</code></td>
+      </tr>
+      <tr>
+        <td><code>weather</code></td>
+        <td>Show weather (wttr.in)</td>
+        <td><code>curl</code></td>
+      </tr>
+      <tr>
+        <td><code>speedtest</code></td>
+        <td>Internet speed test</td>
+        <td><code>curl</code> → <code>python3</code></td>
+      </tr>
+    </table>
 
-<h3 id="system">System</h3>
-<table>
-<tr><th>Command</th><th>Description</th></tr>
-<tr><td><code>sysinfo</code></td><td>Comprehensive system information</td></tr>
-<tr><td><code>sysinfo_full</code></td><td>Extended system info with network + disks</td></tr>
-<tr><td><code>diag_shell</code></td><td>Shell environment diagnostics</td></tr>
-<tr><td><code>diag_network</code></td><td>Network diagnostics (DNS, HTTP, ping, speed)</td></tr>
-<tr><td><code>diag_permissions</code></td><td>Permission security audit</td></tr>
-<tr><td><code>diag_tools</code></td><td>Check availability of 50+ tools</td></tr>
-<tr><td><code>diag_all</code></td><td>Run all diagnostics</td></tr>
-<tr><td><code>env_info</code></td><td>Environment variable overview</td></tr>
-<tr><td><code>env_path</code></td><td>PATH analysis with missing dir detection</td></tr>
-<tr><td><code>env_aliases</code></td><td>Check which aliases have guarded tools</td></tr>
-</table>
+    <h3 id="system">System</h3>
+    <table>
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>sysinfo</code></td>
+        <td>Comprehensive system information</td>
+      </tr>
+      <tr>
+        <td><code>sysinfo_full</code></td>
+        <td>Extended system info with network + disks</td>
+      </tr>
+      <tr>
+        <td><code>diag_shell</code></td>
+        <td>Shell environment diagnostics</td>
+      </tr>
+      <tr>
+        <td><code>diag_network</code></td>
+        <td>Network diagnostics (DNS, HTTP, ping, speed)</td>
+      </tr>
+      <tr>
+        <td><code>diag_permissions</code></td>
+        <td>Permission security audit</td>
+      </tr>
+      <tr>
+        <td><code>diag_tools</code></td>
+        <td>Check availability of 50+ tools</td>
+      </tr>
+      <tr>
+        <td><code>diag_all</code></td>
+        <td>Run all diagnostics</td>
+      </tr>
+      <tr>
+        <td><code>env_info</code></td>
+        <td>Environment variable overview</td>
+      </tr>
+      <tr>
+        <td><code>env_path</code></td>
+        <td>PATH analysis with missing dir detection</td>
+      </tr>
+      <tr>
+        <td><code>env_aliases</code></td>
+        <td>Check which aliases have guarded tools</td>
+      </tr>
+    </table>
 
-<h3 id="security">Security</h3>
-<table>
-<tr><th>Command</th><th>Description</th></tr>
-<tr><td><code>sec_audit</code></td><td>Security audit (SSH, sudo, ports, services)</td></tr>
-<tr><td><code>encrypt_aes</code> / <code>decrypt_aes</code></td><td>AES-256 file encryption</td></tr>
-<tr><td><code>encrypt_gpg</code> / <code>decrypt_gpg</code></td><td>GPG file encryption</td></tr>
-<tr><td><code>sign_file</code> / <code>verify_file</code></td><td>GPG signing and verification</td></tr>
-<tr><td><code>gpg_list_keys</code></td><td>List GPG keys</td></tr>
-</table>
+    <h3 id="security">Security</h3>
+    <table>
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>sec_audit</code></td>
+        <td>Security audit (SSH, sudo, ports, services)</td>
+      </tr>
+      <tr>
+        <td><code>encrypt_aes</code> / <code>decrypt_aes</code></td>
+        <td>AES-256 file encryption</td>
+      </tr>
+      <tr>
+        <td><code>encrypt_gpg</code> / <code>decrypt_gpg</code></td>
+        <td>GPG file encryption</td>
+      </tr>
+      <tr>
+        <td><code>sign_file</code> / <code>verify_file</code></td>
+        <td>GPG signing and verification</td>
+      </tr>
+      <tr>
+        <td><code>gpg_list_keys</code></td>
+        <td>List GPG keys</td>
+      </tr>
+    </table>
 
-<h3 id="text">Text &amp; Data Processing</h3>
-<table>
-<tr><th>Command</th><th>Description</th></tr>
-<tr><td><code>json</code></td><td>Format JSON from stdin</td></tr>
-<tr><td><code>xml</code></td><td>Format XML from stdin</td></tr>
-<tr><td><code>yaml</code></td><td>Format YAML from stdin</td></tr>
-<tr><td><code>csv</code></td><td>Format CSV from stdin</td></tr>
-<tr><td><code>text_lower</code> / <code>text_upper</code></td><td>Case conversion</td></tr>
-<tr><td><code>text_reverse</code></td><td>Reverse stdin characters</td></tr>
-<tr><td><code>text_count_words</code> / <code>text_count_lines</code> / <code>text_count_chars</code></td><td>Count statistics</td></tr>
-<tr><td><code>text_columns</code></td><td>Columnate output</td></tr>
-<tr><td><code>hash_md5</code> / <code>hash_sha1</code> / <code>hash_sha256</code> / <code>hash_sha512</code></td><td>File hashing</td></tr>
-</table>
+    <h3 id="text">Text &amp; Data Processing</h3>
+    <table>
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>json</code></td>
+        <td>Format JSON from stdin</td>
+      </tr>
+      <tr>
+        <td><code>xml</code></td>
+        <td>Format XML from stdin</td>
+      </tr>
+      <tr>
+        <td><code>yaml</code></td>
+        <td>Format YAML from stdin</td>
+      </tr>
+      <tr>
+        <td><code>csv</code></td>
+        <td>Format CSV from stdin</td>
+      </tr>
+      <tr>
+        <td><code>text_lower</code> / <code>text_upper</code></td>
+        <td>Case conversion</td>
+      </tr>
+      <tr>
+        <td><code>text_reverse</code></td>
+        <td>Reverse stdin characters</td>
+      </tr>
+      <tr>
+        <td><code>text_count_words</code> / <code>text_count_lines</code> / <code>text_count_chars</code></td>
+        <td>Count statistics</td>
+      </tr>
+      <tr>
+        <td><code>text_columns</code></td>
+        <td>Columnate output</td>
+      </tr>
+      <tr>
+        <td><code>hash_md5</code> / <code>hash_sha1</code> / <code>hash_sha256</code> / <code>hash_sha512</code></td>
+        <td>File hashing</td>
+      </tr>
+    </table>
 
-<h2 id="cross-platform">3. Cross-Platform Helpers</h2>
-<p>These functions automatically detect the operating system and use the appropriate command:</p>
-<table>
-<tr><th>Function</th><th>Linux</th><th>macOS</th><th>Fallback</th></tr>
-<tr><td><code>ip_show</code></td><td><code>ip addr show</code></td><td><code>ifconfig</code></td><td>-</td></tr>
-<tr><td><code>disk_usage</code></td><td><code>df -h</code></td><td><code>df -h</code></td><td><code>df</code></td></tr>
-<tr><td><code>mem_info</code></td><td><code>free -h</code></td><td><code>vm_stat</code></td><td><code>free -h</code></td></tr>
-<tr><td><code>cpu_info</code></td><td><code>lscpu</code></td><td><code>sysctl machdep.cpu</code></td><td>-</td></tr>
-<tr><td><code>pkg_list</code></td><td><code>pacman -Q</code></td><td><code>brew list</code></td><td><code>dpkg -l</code> / <code>rpm -qa</code></td></tr>
-<tr><td><code>pkg_install</code></td><td><code>pacman -S</code></td><td><code>brew install</code></td><td><code>apt install</code> / <code>dnf install</code></td></tr>
-<tr><td><code>service_list</code></td><td><code>systemctl</code></td><td><code>launchctl list</code></td><td><code>service --status-all</code></td></tr>
-<tr><td><code>open_file</code></td><td><code>xdg-open</code></td><td><code>open</code></td><td>-</td></tr>
-<tr><td><code>copy_cmd</code></td><td><code>xclip</code> / <code>wl-copy</code></td><td><code>pbcopy</code></td><td>-</td></tr>
-<tr><td><code>paste_cmd</code></td><td><code>xclip -o</code> / <code>wl-paste</code></td><td><code>pbpaste</code></td><td>-</td></tr>
-</table>
+    <h2 id="cross-platform">3. Cross-Platform Helpers</h2>
+    <p>These functions automatically detect the operating system and use the appropriate command:</p>
+    <table>
+      <tr>
+        <th>Function</th>
+        <th>Linux</th>
+        <th>macOS</th>
+        <th>Fallback</th>
+      </tr>
+      <tr>
+        <td><code>ip_show</code></td>
+        <td><code>ip addr show</code></td>
+        <td><code>ifconfig</code></td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td><code>disk_usage</code></td>
+        <td><code>df -h</code></td>
+        <td><code>df -h</code></td>
+        <td><code>df</code></td>
+      </tr>
+      <tr>
+        <td><code>mem_info</code></td>
+        <td><code>free -h</code></td>
+        <td><code>vm_stat</code></td>
+        <td><code>free -h</code></td>
+      </tr>
+      <tr>
+        <td><code>cpu_info</code></td>
+        <td><code>lscpu</code></td>
+        <td><code>sysctl machdep.cpu</code></td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td><code>pkg_list</code></td>
+        <td><code>pacman -Q</code></td>
+        <td><code>brew list</code></td>
+        <td><code>dpkg -l</code> / <code>rpm -qa</code></td>
+      </tr>
+      <tr>
+        <td><code>pkg_install</code></td>
+        <td><code>pacman -S</code></td>
+        <td><code>brew install</code></td>
+        <td><code>apt install</code> / <code>dnf install</code></td>
+      </tr>
+      <tr>
+        <td><code>service_list</code></td>
+        <td><code>systemctl</code></td>
+        <td><code>launchctl list</code></td>
+        <td><code>service --status-all</code></td>
+      </tr>
+      <tr>
+        <td><code>open_file</code></td>
+        <td><code>xdg-open</code></td>
+        <td><code>open</code></td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td><code>copy_cmd</code></td>
+        <td><code>xclip</code> / <code>wl-copy</code></td>
+        <td><code>pbcopy</code></td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td><code>paste_cmd</code></td>
+        <td><code>xclip -o</code> / <code>wl-paste</code></td>
+        <td><code>pbpaste</code></td>
+        <td>-</td>
+      </tr>
+    </table>
 
-<h2 id="aliases">4. Aliases</h2>
+    <h2 id="aliases">4. Aliases</h2>
 
-<h3 id="listing">Listing</h3>
-<div class="grid">
-<div class="card">
-<code>l</code> <code>ll</code> <code>la</code> <code>lal</code> <code>lsl</code> <code>lr</code> <code>lt</code> <code>lh</code>
-<code>lk</code> <code>lx</code> <code>lc</code> <code>lu</code> <code>l1</code>
-<code>lm</code> <code>lf</code> <code>ldir</code> <code>lsize</code>
-<code>lnew</code> <code>lold</code> <code>ldot</code> <code>lsr</code>
-<p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3)"><code>ll</code> = long, <code>la</code> = all, <code>lal</code> = long+all, <code>lsl</code> = long (alias-safe). All use <code>command ls</code> fallback — never error. <code>tree</code>/<code>treed</code> also available.</p>
-</div>
-</div>
+    <h3 id="listing">Listing</h3>
+    <div class="grid">
+      <div class="card">
+        <code>l</code> <code>ll</code> <code>la</code> <code>lal</code> <code>lsl</code> <code>lr</code> <code>lt</code>
+        <code>lh</code>
+        <code>lk</code> <code>lx</code> <code>lc</code> <code>lu</code> <code>l1</code>
+        <code>lm</code> <code>lf</code> <code>ldir</code> <code>lsize</code>
+        <code>lnew</code> <code>lold</code> <code>ldot</code> <code>lsr</code>
+        <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3)"><code>ll</code> = long, <code>la</code> = all,
+          <code>lal</code> = long+all, <code>lsl</code> = long (alias-safe). All use <code>command ls</code> fallback —
+          never error. <code>tree</code>/<code>treed</code> also available.</p>
+      </div>
+    </div>
 
-<h3 id="grep-find">Grep &amp; Find</h3>
-<div class="grid">
-<div class="card">
-<code>grep</code> <code>egrep</code> <code>fgrep</code> <code>rgrep</code>
-<code>grepi</code> <code>grepr</code> <code>grepx</code> <code>grepp</code>
-<code>grepj</code> <code>grepc</code> <code>ff</code> <code>findup</code>
-<p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3)"><code>grep</code> tries <code>rg</code> first, falls back to <code>grep --color=auto</code>.</p>
-</div>
-</div>
+    <h3 id="grep-find">Grep &amp; Find</h3>
+    <div class="grid">
+      <div class="card">
+        <code>grep</code> <code>egrep</code> <code>fgrep</code> <code>rgrep</code>
+        <code>grepi</code> <code>grepr</code> <code>grepx</code> <code>grepp</code>
+        <code>grepj</code> <code>grepc</code> <code>ff</code> <code>findup</code>
+        <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3)"><code>grep</code> tries <code>rg</code> first,
+          falls back to <code>grep --color=auto</code>.</p>
+      </div>
+    </div>
 
-<h3 id="packages">Package Managers</h3>
-<table>
-<tr><th>Alias</th><th>Command</th><th>Auto-Detect</th></tr>
-<tr><td><code>pkg_install</code></td><td>Install package</td><td>pacman → apt → dnf → zypper → brew</td></tr>
-<tr><td><code>pkg_remove</code></td><td>Remove package</td><td>pacman → apt → dnf → brew</td></tr>
-<tr><td><code>pkg_search</code></td><td>Search packages</td><td>pacman → apt → dnf → brew</td></tr>
-<tr><td><code>pkg_update</code></td><td>Update system</td><td>pacman → apt → dnf → brew</td></tr>
-<tr><td><code>pkg_info</code></td><td>Package info</td><td>pacman → apt → dnf → brew</td></tr>
-<tr><td><code>pkg_files</code></td><td>Package file list</td><td>pacman → dpkg</td></tr>
-</table>
+    <h3 id="packages">Package Managers</h3>
+    <table>
+      <tr>
+        <th>Alias</th>
+        <th>Command</th>
+        <th>Auto-Detect</th>
+      </tr>
+      <tr>
+        <td><code>pkg_install</code></td>
+        <td>Install package</td>
+        <td>pacman → apt → dnf → zypper → brew</td>
+      </tr>
+      <tr>
+        <td><code>pkg_remove</code></td>
+        <td>Remove package</td>
+        <td>pacman → apt → dnf → brew</td>
+      </tr>
+      <tr>
+        <td><code>pkg_search</code></td>
+        <td>Search packages</td>
+        <td>pacman → apt → dnf → brew</td>
+      </tr>
+      <tr>
+        <td><code>pkg_update</code></td>
+        <td>Update system</td>
+        <td>pacman → apt → dnf → brew</td>
+      </tr>
+      <tr>
+        <td><code>pkg_info</code></td>
+        <td>Package info</td>
+        <td>pacman → apt → dnf → brew</td>
+      </tr>
+      <tr>
+        <td><code>pkg_files</code></td>
+        <td>Package file list</td>
+        <td>pacman → dpkg</td>
+      </tr>
+    </table>
 
-<h3 id="docker">Docker</h3>
-<table>
-<tr><th>Prefix</th><th>Count</th><th>Examples</th></tr>
-<tr><td><code>dk</code></td><td>40+</td><td><code>dkps dki dkrm dkup dkdown dklogs dkexec dkrun dkprune dkstats docker-ip docker_shell docker_cleanup</code></td></tr>
-<tr><td><code>pdk</code></td><td>68</td><td>Full docker command set with <code>pdk</code> prefix</td></tr>
-</table>
+    <h3 id="docker">Docker</h3>
+    <table>
+      <tr>
+        <th>Prefix</th>
+        <th>Count</th>
+        <th>Examples</th>
+      </tr>
+      <tr>
+        <td><code>dk</code></td>
+        <td>40+</td>
+        <td>
+          <code>dkps dki dkrm dkup dkdown dklogs dkexec dkrun dkprune dkstats docker-ip docker_shell docker_cleanup</code>
+        </td>
+      </tr>
+      <tr>
+        <td><code>pdk</code></td>
+        <td>68</td>
+        <td>Full docker command set with <code>pdk</code> prefix</td>
+      </tr>
+    </table>
 
-<h3 id="kubernetes">Kubernetes</h3>
-<table>
-<tr><th>Prefix</th><th>Count</th><th>Examples</th></tr>
-<tr><td><code>k</code></td><td>50+</td><td><code>k kg kgp kgs kl kex kaf kpf ktop kctx kns kroll kscale</code></td></tr>
-<tr><td><code>pk</code></td><td>64</td><td>Full kubectl command set with <code>pk</code> prefix</td></tr>
-</table>
+    <h3 id="kubernetes">Kubernetes</h3>
+    <table>
+      <tr>
+        <th>Prefix</th>
+        <th>Count</th>
+        <th>Examples</th>
+      </tr>
+      <tr>
+        <td><code>k</code></td>
+        <td>50+</td>
+        <td><code>k kg kgp kgs kl kex kaf kpf ktop kctx kns kroll kscale</code></td>
+      </tr>
+      <tr>
+        <td><code>pk</code></td>
+        <td>64</td>
+        <td>Full kubectl command set with <code>pk</code> prefix</td>
+      </tr>
+    </table>
 
-<h2 id="git">5. Git Integration</h2>
+    <h2 id="git">5. Git Integration</h2>
 
-<h3 id="git-aliases">Git Aliases (40+)</h3>
-<div class="grid">
-<div class="card">
-<h4>Basic</h4>
-<code>st co ci br cp r rh rl</code>
-</div>
-<div class="card">
-<h4>Commit</h4>
-<code>cm cma ca caa amend empty</code>
-</div>
-<div class="card">
-<h4>Log</h4>
-<code>ls ll lc last wtf</code>
-</div>
-<div class="card">
-<h4>Diff</h4>
-<code>d dc dlc df</code>
-</div>
-<div class="card">
-<h4>Undo</h4>
-<code>unstage unadd uncommit undo hreset</code>
-</div>
-<div class="card">
-<h4>Branch</h4>
-<code>dm lasttag lt tags branches remotes fall</code>
-</div>
-<div class="card">
-<h4>Merge</h4>
-<code>ours theirs gmn</code>
-</div>
-<div class="card">
-<h4>Assume</h4>
-<code>assume unassume assumed unassumeall assumeall</code>
-</div>
-<div class="card">
-<h4>Misc</h4>
-<code>whoami fix aliases la ignore sba sbu wl</code>
-</div>
-</div>
+    <h3 id="git-aliases">Git Aliases (40+)</h3>
+    <div class="grid">
+      <div class="card">
+        <h4>Basic</h4>
+        <code>st co ci br cp r rh rl</code>
+      </div>
+      <div class="card">
+        <h4>Commit</h4>
+        <code>cm cma ca caa amend empty</code>
+      </div>
+      <div class="card">
+        <h4>Log</h4>
+        <code>ls ll lc last wtf</code>
+      </div>
+      <div class="card">
+        <h4>Diff</h4>
+        <code>d dc dlc df</code>
+      </div>
+      <div class="card">
+        <h4>Undo</h4>
+        <code>unstage unadd uncommit undo hreset</code>
+      </div>
+      <div class="card">
+        <h4>Branch</h4>
+        <code>dm lasttag lt tags branches remotes fall</code>
+      </div>
+      <div class="card">
+        <h4>Merge</h4>
+        <code>ours theirs gmn</code>
+      </div>
+      <div class="card">
+        <h4>Assume</h4>
+        <code>assume unassume assumed unassumeall assumeall</code>
+      </div>
+      <div class="card">
+        <h4>Misc</h4>
+        <code>whoami fix aliases la ignore sba sbu wl</code>
+      </div>
+    </div>
 
-<h3 id="git-functions">Git Functions</h3>
-<table>
-<tr><th>Function</th><th>Description</th></tr>
-<tr><td><code>gmb</code></td><td>Detect main branch name (works with master/main)</td></tr>
-<tr><td><code>gbd</code></td><td>Diff current branch against main</td></tr>
-<tr><td><code>gcm</code></td><td>Checkout main branch and pull</td></tr>
-<tr><td><code>gmm</code></td><td>Merge main into current branch</td></tr>
-<tr><td><code>gho</code></td><td>Open current repo/path on GitHub</td></tr>
-<tr><td><code>nb</code></td><td>Create new branch with timestamp</td></tr>
-<tr><td><code>gfix</code></td><td>Rebase interactive HEAD~N</td></tr>
-<tr><td><code>gfrb</code></td><td>Fetch and rebase on origin/HEAD</td></tr>
-<tr><td><code>gup</code></td><td>Pull with rebase</td></tr>
-<tr><td><code>gundo</code></td><td>Undo last commit (soft reset)</td></tr>
-<tr><td><code>gclean</code></td><td>Clean working directory</td></tr>
-<tr><td><code>gprune</code></td><td>Prune remote branches</td></tr>
-<tr><td><code>gstash</code> / <code>gstashp</code> / <code>gstashl</code></td><td>Stash operations</td></tr>
-<tr><td><code>glogg</code> / <code>glog1</code></td><td>Pretty log views</td></tr>
-<tr><td><code>gcontrib</code></td><td>Contributor statistics</td></tr>
-<tr><td><code>git_cleanup</code></td><td>Prune + delete merged branches</td></tr>
-<tr><td><code>git_find_big</code></td><td>Find largest files in history</td></tr>
-<tr><td><code>git_find_text</code></td><td>Search commit contents</td></tr>
-<tr><td><code>git_rewrite_author</code></td><td>Rewrite commit author</td></tr>
-</table>
+    <h3 id="git-functions">Git Functions</h3>
+    <table>
+      <tr>
+        <th>Function</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><code>gmb</code></td>
+        <td>Detect main branch name (works with master/main)</td>
+      </tr>
+      <tr>
+        <td><code>gbd</code></td>
+        <td>Diff current branch against main</td>
+      </tr>
+      <tr>
+        <td><code>gcm</code></td>
+        <td>Checkout main branch and pull</td>
+      </tr>
+      <tr>
+        <td><code>gmm</code></td>
+        <td>Merge main into current branch</td>
+      </tr>
+      <tr>
+        <td><code>gho</code></td>
+        <td>Open current repo/path on GitHub</td>
+      </tr>
+      <tr>
+        <td><code>nb</code></td>
+        <td>Create new branch with timestamp</td>
+      </tr>
+      <tr>
+        <td><code>gfix</code></td>
+        <td>Rebase interactive HEAD~N</td>
+      </tr>
+      <tr>
+        <td><code>gfrb</code></td>
+        <td>Fetch and rebase on origin/HEAD</td>
+      </tr>
+      <tr>
+        <td><code>gup</code></td>
+        <td>Pull with rebase</td>
+      </tr>
+      <tr>
+        <td><code>gundo</code></td>
+        <td>Undo last commit (soft reset)</td>
+      </tr>
+      <tr>
+        <td><code>gclean</code></td>
+        <td>Clean working directory</td>
+      </tr>
+      <tr>
+        <td><code>gprune</code></td>
+        <td>Prune remote branches</td>
+      </tr>
+      <tr>
+        <td><code>gstash</code> / <code>gstashp</code> / <code>gstashl</code></td>
+        <td>Stash operations</td>
+      </tr>
+      <tr>
+        <td><code>glogg</code> / <code>glog1</code></td>
+        <td>Pretty log views</td>
+      </tr>
+      <tr>
+        <td><code>gcontrib</code></td>
+        <td>Contributor statistics</td>
+      </tr>
+      <tr>
+        <td><code>git_cleanup</code></td>
+        <td>Prune + delete merged branches</td>
+      </tr>
+      <tr>
+        <td><code>git_find_big</code></td>
+        <td>Find largest files in history</td>
+      </tr>
+      <tr>
+        <td><code>git_find_text</code></td>
+        <td>Search commit contents</td>
+      </tr>
+      <tr>
+        <td><code>git_rewrite_author</code></td>
+        <td>Rewrite commit author</td>
+      </tr>
+    </table>
 
-<h3>URL Shorthands</h3>
-<div class="box note">
-<p><code>git clone gh:user/repo</code> → <code>git@github.com:user/repo</code></p>
-<p><code>git clone github:user/repo</code> → <code>git://github.com/user/repo</code></p>
-<p><code>git clone gst:user/repo</code> → <code>git@gist.github.com:user/repo</code></p>
-</div>
+    <h3>URL Shorthands</h3>
+    <div class="box note">
+      <p><code>git clone gh:user/repo</code> → <code>git@github.com:user/repo</code></p>
+      <p><code>git clone github:user/repo</code> → <code>git://github.com/user/repo</code></p>
+      <p><code>git clone gst:user/repo</code> → <code>git@gist.github.com:user/repo</code></p>
+    </div>
 
-<h2 id="env">6. Environment Variables</h2>
-<table>
-<tr><th>Variable</th><th>Default</th><th>Category</th></tr>
-<tr><td><code>EDITOR</code></td><td>nvim</td><td rowspan="4">Editors</td></tr>
-<tr><td><code>VISUAL</code></td><td>nvim</td></tr>
-<tr><td><code>PAGER</code></td><td>less</td></tr>
-<tr><td><code>BROWSER</code></td><td>xdg-open</td></tr>
-<tr><td><code>HISTSIZE</code></td><td>50000</td><td rowspan="4">History</td></tr>
-<tr><td><code>HISTFILESIZE</code></td><td>100000</td></tr>
-<tr><td><code>HISTCONTROL</code></td><td>ignoreboth:erasedups</td></tr>
-<tr><td><code>HISTTIMEFORMAT</code></td><td>[%F %T]</td></tr>
-<tr><td><code>XDG_CONFIG_HOME</code></td><td>$HOME/.config</td><td rowspan="4">XDG</td></tr>
-<tr><td><code>XDG_DATA_HOME</code></td><td>$HOME/.local/share</td></tr>
-<tr><td><code>XDG_CACHE_HOME</code></td><td>$HOME/.cache</td></tr>
-<tr><td><code>XDG_STATE_HOME</code></td><td>$HOME/.local/state</td></tr>
-<tr><td><code>FZF_DEFAULT_COMMAND</code></td><td>rg --files --hidden</td><td rowspan="2">FZF</td></tr>
-<tr><td><code>FZF_DEFAULT_OPTS</code></td><td>--height=40% --layout=reverse --border</td></tr>
-<tr><td><code>BAT_THEME</code></td><td>Nord</td><td rowspan="2">Bat</td></tr>
-<tr><td><code>BAT_STYLE</code></td><td>numbers,changes</td></tr>
-<tr><td><code>DELTA_FEATURES</code></td><td>+line-numbers</td><td>Git Delta</td></tr>
-<tr><td><code>DOCKER_BUILDKIT</code></td><td>1</td><td rowspan="3">Docker</td></tr>
-<tr><td><code>COMPOSE_DOCKER_CLI_BUILD</code></td><td>1</td></tr>
-<tr><td><code>DOCKER_DEFAULT_PLATFORM</code></td><td>linux/amd64</td></tr>
-<tr><td><code>GIT_PAGER</code></td><td>delta</td><td>Git</td></tr>
-<tr><td><code>KUBE_EDITOR</code></td><td>nvim</td><td>Kubernetes</td></tr>
-<tr><td><code>TF_IN_AUTOMATION</code></td><td>1</td><td>Terraform</td></tr>
-<tr><td><code>HOMEBREW_NO_ANALYTICS</code></td><td>1</td><td>Homebrew</td></tr>
-</table>
+    <h2 id="env">6. Environment Variables</h2>
+    <table>
+      <tr>
+        <th>Variable</th>
+        <th>Default</th>
+        <th>Category</th>
+      </tr>
+      <tr>
+        <td><code>EDITOR</code></td>
+        <td>nvim</td>
+        <td rowspan="4">Editors</td>
+      </tr>
+      <tr>
+        <td><code>VISUAL</code></td>
+        <td>nvim</td>
+      </tr>
+      <tr>
+        <td><code>PAGER</code></td>
+        <td>less</td>
+      </tr>
+      <tr>
+        <td><code>BROWSER</code></td>
+        <td>xdg-open</td>
+      </tr>
+      <tr>
+        <td><code>HISTSIZE</code></td>
+        <td>50000</td>
+        <td rowspan="4">History</td>
+      </tr>
+      <tr>
+        <td><code>HISTFILESIZE</code></td>
+        <td>100000</td>
+      </tr>
+      <tr>
+        <td><code>HISTCONTROL</code></td>
+        <td>ignoreboth:erasedups</td>
+      </tr>
+      <tr>
+        <td><code>HISTTIMEFORMAT</code></td>
+        <td>[%F %T]</td>
+      </tr>
+      <tr>
+        <td><code>XDG_CONFIG_HOME</code></td>
+        <td>$HOME/.config</td>
+        <td rowspan="4">XDG</td>
+      </tr>
+      <tr>
+        <td><code>XDG_DATA_HOME</code></td>
+        <td>$HOME/.local/share</td>
+      </tr>
+      <tr>
+        <td><code>XDG_CACHE_HOME</code></td>
+        <td>$HOME/.cache</td>
+      </tr>
+      <tr>
+        <td><code>XDG_STATE_HOME</code></td>
+        <td>$HOME/.local/state</td>
+      </tr>
+      <tr>
+        <td><code>FZF_DEFAULT_COMMAND</code></td>
+        <td>rg --files --hidden</td>
+        <td rowspan="2">FZF</td>
+      </tr>
+      <tr>
+        <td><code>FZF_DEFAULT_OPTS</code></td>
+        <td>--height=40% --layout=reverse --border</td>
+      </tr>
+      <tr>
+        <td><code>BAT_THEME</code></td>
+        <td>Nord</td>
+        <td rowspan="2">Bat</td>
+      </tr>
+      <tr>
+        <td><code>BAT_STYLE</code></td>
+        <td>numbers,changes</td>
+      </tr>
+      <tr>
+        <td><code>DELTA_FEATURES</code></td>
+        <td>+line-numbers</td>
+        <td>Git Delta</td>
+      </tr>
+      <tr>
+        <td><code>DOCKER_BUILDKIT</code></td>
+        <td>1</td>
+        <td rowspan="3">Docker</td>
+      </tr>
+      <tr>
+        <td><code>COMPOSE_DOCKER_CLI_BUILD</code></td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td><code>DOCKER_DEFAULT_PLATFORM</code></td>
+        <td>linux/amd64</td>
+      </tr>
+      <tr>
+        <td><code>GIT_PAGER</code></td>
+        <td>delta</td>
+        <td>Git</td>
+      </tr>
+      <tr>
+        <td><code>KUBE_EDITOR</code></td>
+        <td>nvim</td>
+        <td>Kubernetes</td>
+      </tr>
+      <tr>
+        <td><code>TF_IN_AUTOMATION</code></td>
+        <td>1</td>
+        <td>Terraform</td>
+      </tr>
+      <tr>
+        <td><code>HOMEBREW_NO_ANALYTICS</code></td>
+        <td>1</td>
+        <td>Homebrew</td>
+      </tr>
+    </table>
 
-<h2 id="starship">7. Starship Prompt</h2>
-<div class="card">
-<h4>Tokyo Night Theme</h4>
-<p>Single-line dynamic prompt:</p>
-<pre class="code">🐧 ~/projects/myapp  main !10  Tue 18:21:25  🔋 100% ❯</pre>
-<ul>
-<li>Penguin icon for Linux, Apple logo for macOS</li>
-<li>All modules auto-detect (python, node, rust, go, docker, k8s, terraform, etc.)</li>
-<li>Git branch + status (dirty/staged/untracked)</li>
-<li>Command duration in right prompt</li>
-<li>Battery percentage</li>
-<li>Tokyo Night palette: #a3aed2, #769ff0, #394260, #212736</li>
-<li><code>command_timeout=500ms</code> — no lag</li>
-</ul>
-</div>
+    <h2 id="starship">7. Starship Prompt</h2>
+    <div class="card">
+      <h4>Tokyo Night Theme</h4>
+      <p>Single-line dynamic prompt:</p>
+      <pre class="code">🐧 ~/projects/myapp  main !10  Tue 18:21:25  🔋 100% ❯</pre>
+      <ul>
+        <li>Penguin icon for Linux, Apple logo for macOS</li>
+        <li>All modules auto-detect (python, node, rust, go, docker, k8s, terraform, etc.)</li>
+        <li>Git branch + status (dirty/staged/untracked)</li>
+        <li>Command duration in right prompt</li>
+        <li>Battery percentage</li>
+        <li>Tokyo Night palette: #a3aed2, #769ff0, #394260, #212736</li>
+        <li><code>command_timeout=500ms</code> — no lag</li>
+      </ul>
+    </div>
 
-<h2 id="fastfetch">8. Fastfetch</h2>
-<div class="card">
-<pre class="code">OS        ➤  Arch Linux x86_64     Packages  ➤  7760 (pacman)
+    <h2 id="fastfetch">8. Fastfetch</h2>
+    <div class="card">
+      <pre class="code">OS        ➤  Arch Linux x86_64     Packages  ➤  7760 (pacman)
 Kernel    ➤  Linux 7.1.0-rc2       Shell     ➤  bash 5.3.9
 Host      ➤  HP ProBook 430 G5     WM        ➤  KWin (Wayland)
 OS Age    ➤  16 days               DE        ➤  KDE Plasma 6.6.4
@@ -511,13 +805,14 @@ Uptime    ➤  2h 30m                Terminal  ➤  wezterm
 CPU       ➤  i7-8550U (8) @ 4GHz   Memory    ➤  4.05 / 15.99 GB
 GPU       ➤  Intel UHD 620         Disk      ➤  184.72 / 250.37 GB
 Battery   ➤  19% [AC Connected]    Public IP ➤  137.59.69.109</pre>
-</div>
+    </div>
 
-<h2 id="x-guard">9. _x Runtime Guard System</h2>
-<div class="box note">
-<p><strong>This is the core innovation.</strong> Every alias and function uses <code>_x</code> to check tool availability at runtime:</p>
-</div>
-<pre class="code"><span class="cm"># Instead of brittle:</span>
+    <h2 id="x-guard">9. _x Runtime Guard System</h2>
+    <div class="box note">
+      <p><strong>This is the core innovation.</strong> Every alias and function uses <code>_x</code> to check tool
+        availability at runtime:</p>
+    </div>
+    <pre class="code"><span class="cm"># Instead of brittle:</span>
 alias dkps='docker ps'  <span class="cm"># fails if docker missing</span>
 
 <span class="cm"># We use:</span>
@@ -532,68 +827,102 @@ _x() {
         <span class="kw">return</span> 127
     <span class="kw">fi</span>
 }</pre>
-<p>Every command works on every system — if the tool is installed it runs, otherwise you get a clean <code>missing: &lt;tool&gt;</code> message. No more cryptic errors on cross-platform setups.</p>
+    <p>Every command works on every system — if the tool is installed it runs, otherwise you get a clean
+      <code>missing: &lt;tool&gt;</code> message. No more cryptic errors on cross-platform setups.</p>
 
-<h2 id="testing">10. Testing</h2>
-<p>Run the rigorous test suite:</p>
-<pre class="code">bash tests/run_tests.sh</pre>
-<p>Tests cover:</p>
-<ol>
-<li>Syntax validation for all 11 shell files</li>
-<li>Shell startup (bash, zsh, fish)</li>
-<li>No duplicate aliases within files</li>
-<li>Cross-file alias conflict detection</li>
-<li>Core function existence (24 functions)</li>
-<li>Core alias existence (25+ aliases)</li>
-<li>Fish function existence</li>
-<li>Fish alias existence</li>
-<li>Function runtime tests</li>
-<li><code>_x</code> guard test (nonexistent tool blocked)</li>
-<li>Cross-platform helper functions</li>
-<li>Shell-specific aliases</li>
-<li>Exports loading</li>
-<li>Recursion detection</li>
-<li>Source file existence</li>
-</ol>
+    <h2 id="testing">10. Testing</h2>
+    <p>Run the rigorous test suite:</p>
+    <pre class="code">bash tests/run_tests.sh</pre>
+    <p>Tests cover:</p>
+    <ol>
+      <li>Syntax validation for all 11 shell files</li>
+      <li>Shell startup (bash, zsh, fish)</li>
+      <li>No duplicate aliases within files</li>
+      <li>Cross-file alias conflict detection</li>
+      <li>Core function existence (24 functions)</li>
+      <li>Core alias existence (25+ aliases)</li>
+      <li>Fish function existence</li>
+      <li>Fish alias existence</li>
+      <li>Function runtime tests</li>
+      <li><code>_x</code> guard test (nonexistent tool blocked)</li>
+      <li>Cross-platform helper functions</li>
+      <li>Shell-specific aliases</li>
+      <li>Exports loading</li>
+      <li>Recursion detection</li>
+      <li>Source file existence</li>
+    </ol>
 
-<h2 id="sources">11. Sources</h2>
-<p>Features pillaged from the best dotfiles across GitHub:</p>
-<div class="grid">
-<div class="card"><h4>Hari Sekhon / DevOps-Bash-tools</h4><p><code>bak unbak orig unorig topcommands puniq findup cdup pg clip stamp</code></p></div>
-<div class="card"><h4>Nicola Paolucci / cfg</h4><p>Git aliases: <code>assume unassume ours theirs undo empty lasttag</code></p></div>
-<div class="card"><h4>dotfiles 9 / Falkor</h4><p>Git aliases: <code>br bv b tarball scontrib lcontrib</code></p></div>
-<div class="card"><h4>dotfiles 29 / AkinSho</h4><p>Git config: delta, autoStash, URL shorthands</p></div>
-<div class="card"><h4>dotfiles 32</h4><p><code>path_remove path_append path_prepend here there</code></p></div>
-<div class="card"><h4>dotfiles 72</h4><p><code>extract colors wanip flush</code></p></div>
-<div class="card"><h4>dusky</h4><p><code>mkcd</code></p></div>
-<div class="card"><h4>ChrisTitusTech</h4><p><code>countfiles pwdtail distribution svi vis clickpaste yayf</code></p></div>
-<div class="card"><h4>bahamas10</h4><p><code>gmb gbd gcm gmm gho untiny over truecolor_rainbow</code></p></div>
-<div class="card"><h4>mathiasbynens</h4><p>Prompt patterns, color handling, cross-platform design</p></div>
-</div>
+    <h2 id="sources">11. Sources</h2>
+    <p>Features pillaged from the best dotfiles across GitHub:</p>
+    <div class="grid">
+      <div class="card">
+        <h4>Hari Sekhon / DevOps-Bash-tools</h4>
+        <p><code>bak unbak orig unorig topcommands puniq findup cdup pg clip stamp</code></p>
+      </div>
+      <div class="card">
+        <h4>Nicola Paolucci / cfg</h4>
+        <p>Git aliases: <code>assume unassume ours theirs undo empty lasttag</code></p>
+      </div>
+      <div class="card">
+        <h4>dotfiles 9 / Falkor</h4>
+        <p>Git aliases: <code>br bv b tarball scontrib lcontrib</code></p>
+      </div>
+      <div class="card">
+        <h4>dotfiles 29 / AkinSho</h4>
+        <p>Git config: delta, autoStash, URL shorthands</p>
+      </div>
+      <div class="card">
+        <h4>dotfiles 32</h4>
+        <p><code>path_remove path_append path_prepend here there</code></p>
+      </div>
+      <div class="card">
+        <h4>dotfiles 72</h4>
+        <p><code>extract colors wanip flush</code></p>
+      </div>
+      <div class="card">
+        <h4>dusky</h4>
+        <p><code>mkcd</code></p>
+      </div>
+      <div class="card">
+        <h4>ChrisTitusTech</h4>
+        <p><code>countfiles pwdtail distribution svi vis clickpaste yayf</code></p>
+      </div>
+      <div class="card">
+        <h4>bahamas10</h4>
+        <p><code>gmb gbd gcm gmm gho untiny over truecolor_rainbow</code></p>
+      </div>
+      <div class="card">
+        <h4>mathiasbynens</h4>
+        <p>Prompt patterns, color handling, cross-platform design</p>
+      </div>
+    </div>
 
-<div class="box note" style="margin:1rem 0">
-<strong>Recent fixes (May 2026):</strong> ls/ll/la/lal/lsl no longer alias-chain or error. Fish functions no longer recurse. Zsh aliases cleaned of bash-isms. See <a href="faq.html">FAQ</a> for full changelog.
-</div>
+    <div class="box note" style="margin:1rem 0">
+      <strong>Recent fixes (May 2026):</strong> ls/ll/la/lal/lsl no longer alias-chain or error. Fish functions no
+      longer recurse. Zsh aliases cleaned of bash-isms. See <a href="faq.html">FAQ</a> for full changelog.
+    </div>
 
-<div class="box" style="margin:2rem 0;text-align:center;color:var(--fg3);font-size:0.85rem">
-<p>Pinak's Ultimate Dotfiles — 20,000+ lines · <code>bash</code> · <code>zsh</code> · <code>fish</code> · Linux · macOS</p>
-<p style="margin-top:0.25rem">Open with: <code>dotdocs</code></p>
-</div>
+    <div class="box" style="margin:2rem 0;text-align:center;color:var(--fg3);font-size:0.85rem">
+      <p>Pinak's Ultimate Dotfiles — 20,000+ lines · <code>bash</code> · <code>zsh</code> · <code>fish</code> · Linux ·
+        macOS</p>
+      <p style="margin-top:0.25rem">Open with: <code>dotdocs</code></p>
+    </div>
 
-</div>
+  </div>
 
-<script>
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebar-overlay').classList.toggle('show');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('show');
-}
-document.addEventListener('click', function(e) {
-  if (e.target.closest('#sidebar a')) closeSidebar();
-});
-</script>
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('show');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('show');
+    }
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('#sidebar a')) closeSidebar();
+    });
+  </script>
 </body>
+
 </html>

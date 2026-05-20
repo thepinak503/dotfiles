@@ -223,3 +223,7 @@ end
 # Fish history control - similar to bash HISTCONTROL
 
 set fish_history_unique true
+
+
+# Added by Antigravity CLI installer
+set -gx PATH "/home/pinak/.local/bin" $PATH
