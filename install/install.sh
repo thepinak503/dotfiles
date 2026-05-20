@@ -152,7 +152,7 @@ pkg_name() {
                 tmux)          echo "tmux" ;;
                 btop)          echo "btop" ;;
                 ncdu)          echo "ncdu" ;;
-                tldr)          echo "tldr" ;;
+                tldr)          echo "tealdeer" ;;
                 direnv)        echo "direnv" ;;
                 hyperfine)     echo "hyperfine" ;;
                 bash-preexec)  echo "bash-preexec" ;;
@@ -161,8 +161,8 @@ pkg_name() {
                 lazydocker)    echo "lazydocker" ;;
                 zellij)        echo "zellij" ;;
                 fzf)           echo "fzf" ;;
-                docker)        echo "docker.io" ;;
-                docker-compose) echo "docker-compose-v2" ;;
+                docker)        echo "docker" ;;
+                docker-compose) echo "docker-compose" ;;
                 podman)        echo "podman" ;;
                 kubectl)       echo "kubectl" ;;
                 helm)          echo "helm" ;;
