@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-interface="wlan0"
+interface=$(ip route show default | awk '{print $5}' | head -1)
+[ -z "$interface" ] && interface="wlan0"
 
 line=$(grep "$interface" /proc/net/dev)
 if [ -z "$line" ]; then
