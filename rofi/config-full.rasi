@@ -4,10 +4,10 @@ configuration {
   modi: "drun";
   show-icons: true;
   drun-display-format: "{name}";
-  font: "JetBrains Mono Nerd Font 16";
-  lines: 8;
-  columns: 3;
-  width: 50;
+  font: "JetBrains Mono Nerd Font 14";
+  lines: 6;
+  columns: 2;
+  width: 30;
   location: 0;
   terminal: "kitty";
   disable-history: true;
