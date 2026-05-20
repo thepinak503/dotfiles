@@ -22,8 +22,8 @@
 }
 
 window {
-    background-color:           rgba(46, 52, 64, 80%);
-    border-color:               rgba(67, 76, 94, 60%);
+    background-color:           rgba(46, 52, 64, 85%);
+    border-color:               #4c566a;
     border:                     1px;
     border-radius:              16px;
     padding:                    10px;
@@ -35,7 +35,7 @@ mainbox {
 }
 
 inputbar {
-    background-color:           rgba(59, 66, 82, 40%);
+    background-color:           #3b4252;
     border-radius:              10px;
     padding:                    10px 14px;
     spacing:                    10px;
@@ -67,7 +67,6 @@ element {
     text-color:                 var(nord4);
     cursor:                     pointer;
     spacing:                    10px;
-    transition:                 0.15s ease;
 }
 
 element icon {
@@ -80,39 +79,25 @@ element normal.normal {
 }
 
 element selected.normal {
-    background-color:           rgba(67, 76, 94, 50%);
+    background-color:           #434c5e;
     text-color:                 var(nord8);
 }
 
 element selected {
-    background-color:           rgba(67, 76, 94, 50%);
+    background-color:           #434c5e;
     text-color:                 var(nord8);
-}
-
-element selected:hover {
-    background-color:           rgba(76, 86, 106, 50%);
-    text-color:                 var(nord6);
 }
 
 button {
     text-color:                 var(nord9);
     border-radius:              8px;
     padding:                    6px 12px;
-    background-color:           rgba(59, 66, 82, 30%);
-}
-
-button:hover {
-    background-color:           rgba(76, 86, 106, 40%);
-    text-color:                 var(nord8);
+    background-color:           #3b4252;
 }
 
 scrollbar {
     width:                      4px;
     border-radius:              2px;
-    background-color:           rgba(59, 66, 82, 30%);
-    handle-color:               rgba(136, 192, 208, 40%);
-}
-
-scrollbar:hover {
-    handle-color:               rgba(136, 192, 208, 70%);
+    background-color:           #3b4252;
+    handle-color:               #88c0d0;
 }
