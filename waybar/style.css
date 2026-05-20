@@ -164,6 +164,23 @@ window#waybar.empty #window {
   background: rgba(129, 161, 193, 0.1);
 }
 
+#temperature {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #d08770;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#temperature:hover {
+  background: rgba(208, 135, 112, 0.1);
+}
+
+#temperature.critical {
+  color: #bf616a;
+}
+
 #custom-net-speed {
   margin: 0 2px;
   padding: 2px 8px;

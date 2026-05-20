@@ -14,7 +14,7 @@
 
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": ["custom/media"],
-  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "battery", "clock", "custom/power"],
+  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "temperature", "battery", "clock", "custom/power"],
 
   "hyprland/workspaces": {
     "disable-scroll": false,
@@ -104,6 +104,14 @@
     "interval": 10,
     "tooltip": true,
     "tooltip-format": "{used:0.1f}GiB / {total:0.1f}GiB"
+  },
+
+  "temperature": {
+    "critical-threshold": 85,
+    "format": " {temperatureC}°C",
+    "interval": 5,
+    "tooltip": true,
+    "tooltip-format": "CPU: {temperatureC}°C  {temperatureF}°F"
   },
 
   "custom/net-speed": {
