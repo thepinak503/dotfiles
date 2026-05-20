@@ -3,8 +3,21 @@
 WALLPAPER_DIR="$HOME/.local/share/dotfiles/wallpapers"
 API_KEY_FILE="$HOME/.local/share/dotfiles/.unsplash_key"
 CACHE_FILE="/tmp/wallpaper-list.json"
+QUIET="${1:-}"
 
 mkdir -p "$WALLPAPER_DIR"
+
+fetch_random_local() {
+  local wallpapers
+  wallpapers=("$WALLPAPER_DIR"/*.{png,jpg,jpeg} 2>/dev/null)
+  for w in "${wallpapers[@]}"; do
+    if [[ -f "$w" ]] && [[ "$(basename "$w")" != "nord_default.png" ]]; then
+      echo "$w"
+      return 0
+    fi
+  done
+  return 1
+}
 
 fetch_github_list() {
   local api_url="https://api.github.com/repos/linuxdotexe/nordic-wallpapers/contents/wallpapers"
@@ -77,7 +90,7 @@ apply_wallpaper() {
       hyprctl hyprpaper unload "$img" 2>/dev/null
     fi
   done
-  notify-send -u low -i "$path" "Wallpaper" "Changed"
+  [[ -z "$QUIET" ]] && notify-send -u low -i "$path" "Wallpaper" "Changed"
 }
 
 if [[ -f "$API_KEY_FILE" ]]; then
@@ -88,9 +101,13 @@ if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
   path=$(download_github)
 fi
 
+if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
+  path=$(fetch_random_local)
+fi
+
 if [[ -f "$path" ]]; then
   apply_wallpaper "$path"
 else
-  notify-send -u critical "Wallpaper" "Failed to fetch"
+  [[ -z "$QUIET" ]] && notify-send -u critical "Wallpaper" "No wallpaper available"
   exit 1
 fi
