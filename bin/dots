@@ -1,0 +1,424 @@
+#!/usr/bin/env bash
+set -euo pipefail
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
+DOTFILES_STATE_DIR="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}"
+DOTS_VERSION="2.0.0"
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
+CYAN='\033[0;36m'; PURPLE='\033[0;35m'; BOLD='\033[1m'; NC='\033[0m'
+mkdir -p "$DOTFILES_STATE_DIR/logs"
+
+usage() {
+    cat <<EOF
+${CYAN}${BOLD}  dots v${DOTS_VERSION}${NC} — Dotfiles CLI
+
+${BOLD}USAGE${NC}
+  dots <command> [options]
+
+${BOLD}COMMANDS${NC}
+  ${GREEN}doctor${NC}       Run health check with auto-fix
+  ${GREEN}update${NC}       Pull latest dotfiles (safe, with rollback)
+  ${GREEN}rollback${NC}     Restore previous dotfiles state
+  ${GREEN}status${NC}       Quick dotfiles status summary
+  ${GREEN}profile${NC}      Switch machine profile (laptop/desktop/work/gaming/lowpower)
+  ${GREEN}reload${NC}       Hot-reload configs (waybar, hypr, kitty, tmux, shell)
+  ${GREEN}logs${NC}         View dotfiles logs
+  ${GREEN}install${NC}      Run the cross-distro installer
+  ${GREEN}docs${NC}         Open documentation website
+  ${GREEN}benchmark${NC}    Benchmark shell startup times
+  ${GREEN}safe${NC}         Launch a minimal rescue shell
+  ${GREEN}help${NC}         Show this help message
+
+${BOLD}EXAMPLES${NC}
+  dots doctor              # Full health check
+  dots doctor --fix        # Auto-fix issues
+  dots update              # Pull + snapshot
+  dots profile laptop      # Switch to laptop profile
+  dots reload waybar       # Reload only waybar
+  dots safe                # Launch rescue shell
+EOF
+}
+
+log() { local lvl="$1" msg="$2"; echo "[$(date '+%Y-%m-%d %H:%M:%S')] [$lvl] $msg" >> "$DOTFILES_STATE_DIR/logs/dots.log"; }
+info() { echo -e "  ${GREEN}✓${NC} $1"; log "INFO" "$1"; }
+warn() { echo -e "  ${YELLOW}⚠${NC} $1"; log "WARN" "$1"; }
+err()  { echo -e "  ${RED}✗${NC} $1" >&2; log "ERROR" "$1"; }
+header() { echo ""; echo -e "${CYAN}═══════════════════════════════════════════${NC}"; echo -e "  ${BOLD}$1${NC}"; echo -e "${CYAN}═══════════════════════════════════════════${NC}"; }
+
+cmd_doctor() {
+    "$DOTFILES_DIR/bin/dots-doctor" "$@"
+}
+
+cmd_update() {
+    header "DOTFILES UPDATE"
+    local AUTO_FLAG=""
+    for arg in "$@"; do [ "$arg" = "-y" ] || [ "$arg" = "--yes" ] && AUTO_FLAG="--yes"; done
+    if [ ! -d "$DOTFILES_DIR/.git" ]; then err "Not a git repository"; exit 1; fi
+    local SNAPSHOT="$DOTFILES_STATE_DIR/backups/pre-update-$(date +%Y%m%d-%H%M%S).tar.gz"
+    mkdir -p "$DOTFILES_STATE_DIR/backups"
+    info "Creating pre-update snapshot..."
+    tar czf "$SNAPSHOT" -C "$(dirname "$DOTFILES_DIR")" "$(basename "$DOTFILES_DIR")" 2>/dev/null || warn "Snapshot failed (non-critical)"
+    OLD_HASH=$(git -C "$DOTFILES_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")
+    if bash "$DOTFILES_DIR/bin/dotupdate.sh" "$AUTO_FLAG"; then
+        NEW_HASH=$(git -C "$DOTFILES_DIR" rev-parse --short HEAD 2>/dev/null || echo "unknown")
+        info "Updated: $OLD_HASH → $NEW_HASH"
+        RUN_INSTALLER=false
+        CHANGED_FILES=$(git -C "$DOTFILES_DIR" diff --name-only "$OLD_HASH".."$NEW_HASH" 2>/dev/null || true)
+        if echo "$CHANGED_FILES" | grep -q "install/install.sh"; then
+            warn "Installer changed — re-run installer?"
+            if [ "$AUTO_FLAG" = "--yes" ] || { [ -t 0 ] && read -r -p "  Re-run installer? [y/N] " ans && [[ "$ans" =~ ^[yY] ]]; }; then
+                bash "$DOTFILES_DIR/install/install.sh" --yes --minimal
+            fi
+        fi
+        if echo "$CHANGED_FILES" | grep -qE "hypr/|waybar/|kitty/"; then
+            info "Desktop configs changed — reload them with 'dots reload'"
+        fi
+        echo -e "  ${YELLOW}Rollback available:${NC} dots rollback"
+    else
+        err "Update failed — snapshot saved at $SNAPSHOT"
+        echo -e "  ${YELLOW}To restore:${NC} tar xzf $SNAPSHOT -C ~/"
+    fi
+}
+
+cmd_rollback() {
+    header "DOTFILES ROLLBACK"
+    local BACKUP_DIR="$DOTFILES_STATE_DIR/backups"
+    if [ ! -d "$BACKUP_DIR" ]; then err "No backups found at $BACKUP_DIR"; exit 1; fi
+    SNAPSHOTS=()
+    while IFS= read -r f; do SNAPSHOTS+=("$f"); done < <(ls -t "$BACKUP_DIR"/pre-update-*.tar.gz 2>/dev/null)
+    if [ ${#SNAPSHOTS[@]} -eq 0 ]; then err "No pre-update snapshots found"; exit 1; fi
+    echo "  Available snapshots:"
+    for i in "${!SNAPSHOTS[@]}"; do
+        local SIZE
+        SIZE=$(du -h "${SNAPSHOTS[$i]}" 2>/dev/null | cut -f1)
+        echo "    $((i+1))) $(basename "${SNAPSHOTS[$i]}") ($SIZE)"
+    done
+    echo ""
+    read -r -p "  Restore which snapshot? [1] " CHOICE
+    CHOICE=${CHOICE:-1}
+    if ! [[ "$CHOICE" =~ ^[0-9]+$ ]] || [ "$CHOICE" -lt 1 ] || [ "$CHOICE" -gt "${#SNAPSHOTS[@]}" ]; then
+        err "Invalid choice"; exit 1
+    fi
+    local SELECTED="${SNAPSHOTS[$((CHOICE-1))]}"
+    echo -e "  ${YELLOW}This will overwrite current dotfiles.${NC}"
+    read -r -p "  Continue? [y/N] " CONFIRM
+    if [[ ! "$CONFIRM" =~ ^[yY] ]]; then info "Cancelled"; exit 0; fi
+    info "Restoring $(basename "$SELECTED")..."
+    rm -rf "$DOTFILES_DIR" 2>/dev/null || true
+    tar xzf "$SELECTED" -C "$HOME" 2>/dev/null || { err "Restore failed"; exit 1; }
+    info "Rollback complete — reload shell with 'exec \$SHELL -l'"
+}
+
+cmd_status() {
+    header "DOTFILES STATUS"
+    printf "  ${BOLD}Directory:${NC}  %s\n" "$DOTFILES_DIR"
+    printf "  ${BOLD}Version:${NC}    %s\n" "$DOTS_VERSION"
+    if [ -d "$DOTFILES_DIR/.git" ]; then
+        local BRANCH HASH STATUS AHEAD
+        BRANCH=$(git -C "$DOTFILES_DIR" symbolic-ref --short HEAD 2>/dev/null || echo "detached")
+        HASH=$(git -C "$DOTFILES_DIR" rev-parse --short HEAD 2>/dev/null || echo "?")
+        STATUS=$(git -C "$DOTFILES_DIR" status --porcelain 2>/dev/null | wc -l)
+        AHEAD=$(git -C "$DOTFILES_DIR" rev-list --count HEAD..@{u} 2>/dev/null || echo "?")
+        printf "  ${BOLD}Branch:${NC}     %s (%s)\n" "$BRANCH" "$HASH"
+        printf "  ${BOLD}Changes:${NC}    %s uncommitted\n" "$STATUS"
+        [ "$AHEAD" != "?" ] && [ "$AHEAD" -gt 0 ] && printf "  ${YELLOW}⚠ Ahead:${NC}      %s commits unpushed\n" "$AHEAD"
+    else
+        warn "Not a git repository"
+    fi
+    local PROFILE_FILE="$DOTFILES_STATE_DIR/profile"
+    if [ -f "$PROFILE_FILE" ]; then
+        printf "  ${BOLD}Profile:${NC}    %s\n" "$(cat "$PROFILE_FILE")"
+    fi
+    # Quick tool check
+    local MISSING=0
+    for tool in starship eza bat fd rg fzf zoxide; do
+        command -v "$tool" >/dev/null 2>&1 || MISSING=$((MISSING+1))
+    done
+    if [ "$MISSING" -gt 0 ]; then
+        printf "  ${YELLOW}⚠ Tools:${NC}      %s core tools missing (run 'dots doctor')\n" "$MISSING"
+    else
+        printf "  ${GREEN}✓ Tools:${NC}      All core tools present\n"
+    fi
+    local CACHE_FILE="$DOTFILES_STATE_DIR/last_update_check"
+    if [ -f "$CACHE_FILE" ]; then
+        local LAST_TS LAST_DATE
+        LAST_TS=$(cat "$CACHE_FILE" 2>/dev/null || echo "0")
+        LAST_DATE=$(date -d "@$LAST_TS" '+%Y-%m-%d %H:%M' 2>/dev/null || echo "unknown")
+        printf "  ${BOLD}Last check:${NC}  %s\n" "$LAST_DATE"
+    fi
+}
+
+cmd_profile() {
+    local PROFILE="${1:-}"
+    local PROFILES_DIR="$DOTFILES_DIR/profiles"
+    local PROFILE_FILE="$DOTFILES_STATE_DIR/profile"
+    mkdir -p "$PROFILES_DIR"
+
+    if [ -z "$PROFILE" ] || [ "$PROFILE" = "list" ]; then
+        header "MACHINE PROFILES"
+        if [ -f "$PROFILE_FILE" ]; then
+            printf "  ${BOLD}Active:${NC}     %s\n" "$(cat "$PROFILE_FILE")"
+        else
+            warn "No active profile (using defaults)"
+        fi
+        echo ""
+        echo "  Available:"
+        for p in "$PROFILES_DIR"/*.sh; do
+            [ -f "$p" ] || continue
+            local NAME SIZE
+            NAME=$(basename "$p" .sh)
+            SIZE=$(wc -l < "$p" 2>/dev/null || echo "0")
+            echo "    ${CYAN}$NAME${NC} (${SIZE} lines)"
+            # Show first comment as description
+            grep "^#" "$p" 2>/dev/null | head -3 | sed 's/^/      /'
+        done
+        echo ""
+        echo "  ${YELLOW}Usage:${NC} dots profile <name>"
+        echo "  Create new: touch $PROFILES_DIR/<name>.sh"
+        return
+    fi
+
+    local PROFILE_SCRIPT="$PROFILES_DIR/$PROFILE.sh"
+    if [ ! -f "$PROFILE_SCRIPT" ]; then
+        # Built-in presets
+        case "$PROFILE" in
+            laptop)
+                cat > "$PROFILE_SCRIPT" <<-PROFEOF
+# Laptop profile — battery optimized
+DOTFILES_PROFILE="laptop"
+export BATTERY_OPTIMIZED=true
+export DOTS_DISABLE_BLUR=true
+export DOTS_DISABLE_ANIMATIONS=true
+export DOTS_SCREEN_TIMEOUT=60
+export DOTS_TOUCHPAD_ENABLED=true
+PROFEOF
+                info "Created laptop profile"
+                ;;
+            desktop)
+                cat > "$PROFILE_SCRIPT" <<-PROFEOF
+# Desktop profile — performance
+DOTFILES_PROFILE="desktop"
+export BATTERY_OPTIMIZED=false
+export DOTS_DISABLE_BLUR=false
+export DOTS_DISABLE_ANIMATIONS=false
+export DOTS_SCREEN_TIMEOUT=300
+export DOTS_TOUCHPAD_ENABLED=false
+PROFEOF
+                info "Created desktop profile"
+                ;;
+            work)
+                cat > "$PROFILE_SCRIPT" <<-PROFEOF
+# Work profile — VPN, certs, professional
+DOTFILES_PROFILE="work"
+export DOTS_WORK_MODE=true
+export DOTS_DISABLE_BLUR=false
+export DOTS_NOTIFICATIONS=visible
+PROFEOF
+                info "Created work profile"
+                ;;
+            gaming)
+                cat > "$PROFILE_SCRIPT" <<-PROFEOF
+# Gaming profile — max performance
+DOTFILES_PROFILE="gaming"
+export DOTS_GAMING_MODE=true
+export DOTS_DISABLE_BLUR=true
+export DOTS_DISABLE_ANIMATIONS=true
+export DOTS_DISABLE_SHADOWS=true
+export DOTS_DISABLE_COMPOSITOR=true
+export DOTS_PERFORMANCE_GOVERNOR=true
+PROFEOF
+                info "Created gaming profile"
+                ;;
+            lowpower)
+                cat > "$PROFILE_SCRIPT" <<-PROFEOF
+# Low power profile — max battery saving
+DOTFILES_PROFILE="lowpower"
+export BATTERY_OPTIMIZED=true
+export DOTS_DISABLE_BLUR=true
+export DOTS_DISABLE_ANIMATIONS=true
+export DOTS_SCREEN_TIMEOUT=30
+export DOTS_BACKLIGHT=30
+export DOTS_DISABLE_WIFI=false
+export DOTS_PERFORMANCE_GOVERNOR=false
+PROFEOF
+                info "Created lowpower profile"
+                ;;
+            *)
+                err "Unknown profile '$PROFILE'. Available: laptop, desktop, work, gaming, lowpower"
+                err "Or create your own at $PROFILES_DIR/$PROFILE.sh"
+                exit 1
+                ;;
+        esac
+        PROFILE_SCRIPT="$PROFILES_DIR/$PROFILE.sh"
+    fi
+
+    echo "$PROFILE" > "$PROFILE_FILE"
+    # Source into current env
+    # shellcheck source=/dev/null
+    . "$PROFILE_SCRIPT" 2>/dev/null || true
+    info "Switched to profile: ${CYAN}$PROFILE${NC}"
+
+    echo ""
+    echo "  ${BOLD}Profile variables:${NC}"
+    grep "^export " "$PROFILE_SCRIPT" 2>/dev/null | sed 's/export //' | while IFS= read -r line; do
+        echo "    ${YELLOW}$line${NC}"
+    done
+    echo ""
+    info "Profile saved. Apply with 'exec \$SHELL -l' or source: . $PROFILE_SCRIPT"
+}
+
+cmd_reload() {
+    local TARGET="${1:-all}"
+    header "CONFIG RELOAD"
+    case "$TARGET" in
+        all)
+            cmd_reload waybar
+            cmd_reload hypr
+            cmd_reload kitty
+            cmd_reload tmux
+            cmd_reload shell
+            ;;
+        waybar)
+            if pgrep -x waybar >/dev/null 2>&1; then
+                killall -SIGUSR2 waybar 2>/dev/null || { killall waybar 2>/dev/null; waybar -b >/dev/null 2>&1 & disown; }
+                info "Waybar reloaded"
+            else
+                warn "Waybar not running"
+            fi
+            ;;
+        hypr)
+            if command -v hyprctl >/dev/null 2>&1; then
+                hyprctl reload >/dev/null 2>&1 && info "Hyprland reloaded" || err "Hyprland reload failed"
+            else
+                warn "Hyprctl not found"
+            fi
+            ;;
+        kitty)
+            if command -v kitty >/dev/null 2>&1 && command -v kitty @ >/dev/null 2>&1; then
+                kitty @ load-config 2>/dev/null && info "Kitty reloaded" || warn "Kitty reload failed (no running instance?)"
+            else
+                warn "Kitty not found or no running instance"
+            fi
+            ;;
+        tmux)
+            if command -v tmux >/dev/null 2>&1 && tmux info >/dev/null 2>&1; then
+                tmux source-file "$HOME/.tmux.conf" 2>/dev/null && info "Tmux reloaded" || warn "Tmux reload failed"
+            else
+                warn "Tmux not running"
+            fi
+            ;;
+        shell)
+            info "Reloading shell..."
+            exec "$SHELL" -l
+            ;;
+        *)
+            err "Unknown target '$TARGET'. Try: waybar, hypr, kitty, tmux, shell, all"
+            exit 1
+            ;;
+    esac
+}
+
+cmd_logs() {
+    local LOG_DIR="$DOTFILES_STATE_DIR/logs"
+    mkdir -p "$LOG_DIR"
+    local MODE="${1:-all}"
+    case "$MODE" in
+        all)
+            header "ALL LOGS"
+            for f in "$LOG_DIR"/*.log; do
+                [ -f "$f" ] || continue
+                echo -e "${CYAN}$(basename "$f")${NC}"
+                tail -20 "$f" | sed 's/^/  /'
+                echo ""
+            done
+            ;;
+        errors)
+            header "ERROR LOGS"
+            for f in "$LOG_DIR"/*.log; do
+                [ -f "$f" ] || continue
+                grep -i "ERROR" "$f" 2>/dev/null | sed 's/^/  /' || echo "  (no errors)"
+            done
+            ;;
+        doctor)
+            [ -f "$LOG_DIR/doctor.log" ] && tail -50 "$LOG_DIR/doctor.log" | sed 's/^/  /' || echo "  (no doctor logs)"
+            ;;
+        update)
+            [ -f "$DOTFILES_STATE_DIR/autoupdate.log" ] && tail -20 "$DOTFILES_STATE_DIR/autoupdate.log" | sed 's/^/  /' || echo "  (no update logs)"
+            ;;
+        clear)
+            rm -f "$LOG_DIR"/*.log
+            info "Logs cleared"
+            ;;
+        *)
+            [ -f "$LOG_DIR/$MODE.log" ] && tail -30 "$LOG_DIR/$MODE.log" | sed 's/^/  /' || echo "  (no $MODE logs)"
+            ;;
+    esac
+}
+
+cmd_install() {
+    bash "$DOTFILES_DIR/install/install.sh" "$@"
+}
+
+cmd_docs() {
+    if [ -f "$DOTFILES_DIR/docs/index.html" ]; then
+        if command -v xdg-open >/dev/null 2>&1; then
+            xdg-open "$DOTFILES_DIR/docs/index.html" 2>/dev/null
+        elif command -v open >/dev/null 2>&1; then
+            open "$DOTFILES_DIR/docs/index.html" 2>/dev/null
+        else
+            echo "Open $DOTFILES_DIR/docs/index.html in your browser"
+        fi
+        info "Opened docs"
+    else
+        err "Docs not found at $DOTFILES_DIR/docs/index.html"
+    fi
+}
+
+cmd_benchmark() {
+    bash "$DOTFILES_DIR/bin/benchmark_shell.sh" "$@"
+}
+
+cmd_safe() {
+    echo -e "${YELLOW}  ┌──────────────────────────────────────────┐${NC}"
+    echo -e "${YELLOW}  │        DOTS SAFE MODE                     │${NC}"
+    echo -e "${YELLOW}  │  Minimal shell — no aliases, no plugins   │${NC}"
+    echo -e "${YELLOW}  │  Type 'exit' to return to normal shell    │${NC}"
+    echo -e "${YELLOW}  └──────────────────────────────────────────┘${NC}"
+    echo ""
+    if [ -n "${BASH_VERSION:-}" ]; then
+        export PS1="[safe] \w \$ "
+        bash --norc --noprofile
+    elif [ -n "${ZSH_VERSION:-}" ]; then
+        env -i HOME="$HOME" TERM="$TERM" PATH="/bin:/usr/bin:/usr/local/bin:$HOME/.local/bin" zsh -f
+    else
+        sh
+    fi
+}
+
+main() {
+    local CMD="${1:-help}"
+    shift 2>/dev/null || true
+
+    case "$CMD" in
+        doctor|check|health)    cmd_doctor "$@" ;;
+        update|up|pull)         cmd_update "$@" ;;
+        rollback|restore|rb)    cmd_rollback "$@" ;;
+        status|st)              cmd_status "$@" ;;
+        profile|prof)           cmd_profile "$@" ;;
+        reload|restart)         cmd_reload "$@" ;;
+        logs|log)               cmd_logs "$@" ;;
+        install|fix|setup)      cmd_install "$@" ;;
+        docs|doc|helpme)        cmd_docs "$@" ;;
+        benchmark|bench)        cmd_benchmark "$@" ;;
+        safe|rescue)            cmd_safe "$@" ;;
+        help|--help|-h)         usage ;;
+        version|--version|-v)   echo "dots v$DOTS_VERSION" ;;
+        *)
+            err "Unknown command: $CMD"
+            echo ""
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"
