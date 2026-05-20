@@ -117,6 +117,30 @@ window#waybar.empty #window {
   color: #81a1c1;
 }
 
+#custom-net-speed {
+  margin: 0 4px;
+  padding: 0 6px;
+  color: #a3be8c;
+}
+
+#battery {
+  margin: 0 4px;
+  padding: 0 6px;
+  color: #d8dee9;
+}
+
+#battery.warning {
+  color: #ebcb8b;
+}
+
+#battery.critical {
+  color: #bf616a;
+}
+
+#battery.charging {
+  color: #a3be8c;
+}
+
 #clock {
   margin: 0 4px;
   padding: 0 8px 0 6px;
