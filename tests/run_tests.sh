@@ -27,14 +27,14 @@ check_cmd() {
 }
 
 h "1. HYPRLAND CONFIG FILES EXIST"
-for f in hypr/hyprland.conf hypr/hypridle.conf hypr/hyprlock.conf hypr/hyprpaper.conf \
-          hypr/configs/monitors.conf hypr/configs/input.conf hypr/configs/decor.conf \
-          hypr/configs/animations.conf hypr/configs/windowrules.conf \
-          hypr/configs/workspaces.conf hypr/configs/keybinds.conf hypr/configs/autostart.conf; do
+for f in hypr/hyprland.lua hypr/hypridle.conf hypr/hyprlock.conf hypr/hyprpaper.conf \
+          hypr/configs/monitors.lua hypr/configs/input.lua hypr/configs/decor.lua \
+          hypr/configs/animations.lua hypr/configs/windowrules.lua \
+          hypr/configs/workspaces.lua hypr/configs/keybinds.lua hypr/configs/autostart.lua; do
   [ -f "$f" ] && g "$f" || b "MISSING: $f"
 done
 
-h "2. HYPRLAND.CONF SOURCE PATHS VALID"
+h "2. HYPRLAND.LUA SOURCE PATHS VALID"
 while IFS= read -r line; do
   case "$line" in
     source\ =*) ;;
@@ -43,10 +43,10 @@ while IFS= read -r line; do
   esac
   src=$(echo "$line" | sed 's/^source = //' | tr -d ' ')
   [ -n "$src" ] && src="${src/#\~/$HOME}" && [ -f "$src" ] && g "source: $(basename "$src")" || b "BAD SOURCE: $src"
-done < hypr/hyprland.conf
+done < hypr/hyprland.lua
 
 h "3. NO DEPRECATED HYPRLAND OPTIONS"
-for f in hypr/configs/*.conf hypr/hyprland.conf; do
+for f in hypr/configs/*.lua hypr/hyprland.lua; do
   bad=""
   grep -q 'pseudotile' "$f" 2>/dev/null && bad+="pseudotile "
   grep -q 'ignore_window' "$f" 2>/dev/null && bad+="ignore_window "
@@ -61,23 +61,23 @@ done
 
 h "4. HYPRLAND KEYBINDS - NO DUPLICATE COMBOS"
 binds=$(mktemp)
-grep '^bind' hypr/configs/keybinds.conf | sed 's/^bind[el]* = //' | sed 's/^\([^,]*,[^,]*\),.*/\1/' | sort > "$binds"
+grep 'hl\.bind' hypr/configs/keybinds.lua | sed -n 's/.*hl\.bind(\([^,]*\),.*/\1/p' | sort > "$binds"
 dups=$(sort "$binds" | uniq -d)
 [ -z "$dups" ] && g "no duplicate key combos" || b "DUPLICATE KEYBINDS: $dups"
 rm -f "$binds"
 
 h "5. WINDOW RULES - CLASSES MATCH INSTALLED APPS"
 while IFS= read -r line; do
-  cls=$(echo "$line" | sed -n 's/.*class (\([^)]*\)).*/\1/p')
+  cls=$(echo "$line" | sed -n 's/.*class = "\([^"]*\)".*/\1/p' | tr -d '()')
   [ -z "$cls" ] && continue
   for c in ${cls//|/ }; do
     check_cmd "$c" && g "class ($c) found in PATH" || y "class ($c) not in PATH (may be installed later)"
   done
-done < hypr/configs/windowrules.conf
+done < hypr/configs/windowrules.lua
 
 h "6. ALL EXEC-ONCE COMMANDS AVAILABLE"
 while IFS= read -r line; do
-  cmd=$(echo "$line" | sed -n 's/^exec-once = //p' | awk '{print $1}')
+  cmd=$(echo "$line" | sed -n 's/.*hl\.exec_cmd("\([^"]*\)").*/\1/p' | awk '{print $1}')
   [ -z "$cmd" ] && continue
   cmd="${cmd/#\~/$HOME}"
   if echo "$cmd" | grep -q '/'; then
@@ -85,7 +85,7 @@ while IFS= read -r line; do
   else
     check_cmd "$cmd" && g "command: $cmd" || y "command: $cmd NOT FOUND"
   fi
-done < hypr/configs/autostart.conf
+done < hypr/configs/autostart.lua
 
 h "7. HYPR SCRIPTS EXIST AND ARE EXECUTABLE"
 for s in hypr/scripts/brightness hypr/scripts/changeLayout hypr/scripts/gamemode \
@@ -147,8 +147,8 @@ path="${path/#\~/$HOME}"
 [ -f "$path" ] && g "hyprpaper preload: $path" || b "hyprpaper preload: $path NOT FOUND"
 
 h "18. NO COLOUR VARIABLE MISMATCHES"
-hypr_vars=$(grep '^\$nord' hypr/hyprland.conf | wc -l)
-hypr_refs=$(grep -r '\$nord' hypr/ --include='*.conf' | grep -v hyprland.conf | wc -l || true)
+hypr_vars=$(grep -c 'nord[0-9]* *=' hypr/hyprland.lua || true)
+hypr_refs=$(grep -r 'nord\.nord' hypr/ --include='*.lua' | grep -v hyprland.lua | wc -l || true)
 echo "  defined: $hypr_vars, referenced: $hypr_refs" && g "color vars check done"
 
 h "19. BATTERY DEVICE EXISTS"
@@ -160,10 +160,22 @@ int=$(ip route show default | awk '{print $5}' | head -1)
 [ -n "$int" ] && g "active interface: $int" || y "no active network interface"
 [ -d "/sys/class/net/$int" ] && g "interface $int in sysfs" || y "interface $int not in sysfs"
 
-h "21. POSIX SHELL SYNTAX CHECK"
-for f in install/install.sh; do
-  bash -n "$f" 2>/dev/null && g "$f: valid bash syntax" || b "$f: SYNTAX ERROR"
-done
+h "21. SHELL SCRIPT SYNTAX CHECK"
+while IFS= read -r f; do
+  bash -n "$f" 2>/dev/null && g "$f: valid syntax" || b "$f: SYNTAX ERROR"
+done < <(find . -type f \( -name "*.sh" -o -name "*.bash" \) -not -path "*/\.*" 2>/dev/null)
+
+if command -v zsh >/dev/null 2>&1; then
+  while IFS= read -r f; do
+    zsh -n "$f" 2>/dev/null && g "$f: valid syntax" || b "$f: SYNTAX ERROR"
+  done < <(find . -type f -name "*.zsh" -not -path "*/\.*" 2>/dev/null)
+fi
+
+if command -v fish >/dev/null 2>&1; then
+  while IFS= read -r f; do
+    fish -n "$f" 2>/dev/null && g "$f: valid syntax" || b "$f: SYNTAX ERROR"
+  done < <(find . -type f -name "*.fish" -not -path "*/\.*" 2>/dev/null)
+fi
 
 h "22. GITIGNORE COVERS SECRETS"
 for s in '.unsplash_key' '*.key' '*.pem' '*.env' 'secrets' 'credentials'; do
