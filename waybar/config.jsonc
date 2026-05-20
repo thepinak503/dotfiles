@@ -1,23 +1,23 @@
 {
   "layer": "top",
-  "position": "top",
-  "height": 36,
+  "position": "bottom",
+  "height": 40,
   "margin-top": 0,
   "margin-bottom": 0,
-  "margin-left": 0,
-  "margin-right": 0,
+  "margin-left": 8,
+  "margin-right": 8,
   "mod": "dock",
   "exclusive": true,
   "passthrough": false,
-  "spacing": 0,
+  "spacing": 4,
   "output": null,
 
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
-  "modules-center": [],
-  "modules-right": ["custom/media", "tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "battery", "clock"],
+  "modules-center": ["custom/media"],
+  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "battery", "clock", "custom/power"],
 
   "hyprland/workspaces": {
-    "disable-scroll": true,
+    "disable-scroll": false,
     "all-outputs": false,
     "format": "{icon}",
     "format-icons": {
@@ -45,13 +45,14 @@
       "(.*) - Code - OSS": " $1",
       "(.*) - Obsidian": " $1"
     },
-    "separate-outputs": true
+    "separate-outputs": true,
+    "max-length": 40
   },
 
   "custom/media": {
     "format": "{icon} {text}",
     "return-type": "json",
-    "max-length": 40,
+    "max-length": 50,
     "exec": "~/.local/share/dotfiles/waybar/scripts/media.sh",
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
@@ -60,8 +61,8 @@
   },
 
   "tray": {
-    "icon-size": 16,
-    "spacing": 8
+    "icon-size": 18,
+    "spacing": 6
   },
 
   "pulseaudio": {
@@ -136,5 +137,13 @@
     "tooltip-format": "{:%A, %B %d %Y}",
     "interval": 10,
     "on-click": "~/.local/share/dotfiles/waybar/scripts/calendar.sh"
+  },
+
+  "custom/power": {
+    "format": "{}",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/power.sh",
+    "return-type": "json",
+    "on-click": "wlogout",
+    "tooltip": false
   }
 }

@@ -1,10 +1,10 @@
 window#osd {
-  border-radius: 12px;
-  border: 2px solid #4c566a;
-  background: rgba(46, 52, 64, 0.9);
+  border-radius: 16px;
+  border: 1px solid rgba(76, 86, 106, 0.5);
+  background: rgba(46, 52, 64, 0.7);
 }
 window#osd #container {
-  margin: 20px;
+  margin: 24px;
 }
 window#osd image {
   color: #88c0d0;
@@ -30,14 +30,14 @@ window#osd segment {
   min-height: inherit;
   border-radius: inherit;
   border: none;
-  background: rgba(76, 86, 106, 0.6);
+  background: rgba(76, 86, 106, 0.4);
 }
 window#osd progress,
 window#osd segment.active {
   min-height: inherit;
   border-radius: inherit;
   border: none;
-  background: linear-gradient(90deg, #5e81ac, #88c0d0);
+  background: linear-gradient(90deg, #5e81ac, #88c0d0, #8fbcbb);
 }
 window#osd segment {
   margin-left: 6px;
