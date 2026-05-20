@@ -1832,7 +1832,7 @@ alias putilurld '_x python3 -c "import urllib.parse,sys; print(urllib.parse.unqu
 alias putiljson '_x python3 -m json.tool'
 alias putilyaml '_x python3 -c "import sys,yaml,json; print(yaml.dump(json.load(sys.stdin)))"'
 alias putilxml 'xmllint --format'
-function putiltimer; set start (date +%s); eval $argv; set code $status; set end (date +%s); echo "elapsed: "(math "$end - $start")"s"; return $code; end
+function putiltimer; set start (date +%s); $argv; set code $status; set end (date +%s); echo "elapsed: "(math "$end - $start")"s"; return $code; end
 alias putilbench 'hyperfine'
 alias putilrand 'shuf -i'
 alias putilseq 'seq'

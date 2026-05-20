@@ -87,7 +87,7 @@ disk_usage_summary() { df -h / 2>/dev/null | awk 'NR==2 {print "Disk: " $3 " / "
 load_average() { uptime | awk -F'load average:' '{print "Load:" $2}'; }
 sysinfo_quick() { echo "$(distribution) $(kernel_version) $(memory_usage) $(disk_usage_summary)"; }
 
-confirm() { printf "%s [y/N] " "$*"; read -r _ans; case "$_ans" in [yY]|[yY][eE][sS]) "$@";; *) echo "aborted" >&2; return 1;; esac; }
+confirm() { printf "%s [y/N] " "$*"; read -r _ans; case "$_ans" in [yY]|[yY][eE][sS]) return 0;; *) echo "aborted" >&2; return 1;; esac; }
 trash_put() { mkdir -p "$HOME/.local/share/Trash/files"; for f in "$@"; do [ -e "$f" ] || continue; local _ts; _ts=$(date +%s); mv "$f" "$HOME/.local/share/Trash/files/$(basename "$f").$_ts"; done; }
 trash_list() { ls -la "$HOME/.local/share/Trash/files" 2>/dev/null || echo "trash is empty"; }
 trash_empty() { rm -rf "$HOME/.local/share/Trash/files"/* "$HOME/.local/share/Trash/info"/* 2>/dev/null; echo "trash cleared"; }

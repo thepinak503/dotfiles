@@ -46,6 +46,15 @@ fi
 info() { printf "  ${GREEN}✓${NC} %s\n" "$1"; }
 warn() { printf "  ${YELLOW}⚠${NC} %s\n" "$1"; }
 error() { printf "  ${RED}✗${NC} %s\n" "$1" >&2; }
+_safe_curl_exec() {
+    _url="$1" _shell="${2:-sh}" _tmp="/tmp/dots_install_$$.sh"
+    curl -fsSL "$_url" -o "$_tmp" 2>/dev/null || { warn "download failed: $_url"; return 1; }
+    [ -s "$_tmp" ] && head -c2 "$_tmp" | grep -q '^#!' || { warn "invalid/missing script from $_url"; rm -f "$_tmp"; return 1; }
+    chmod +x "$_tmp"
+    "$_shell" "$_tmp" 2>&1 || true
+    _ret=$?; rm -f "$_tmp"; return $_ret
+}
+
 header() {
     printf "\n${CYAN}═══════════════════════════════════════════${NC}\n"
     printf "  ${BOLD}%s${NC}\n" "$1"
@@ -580,6 +589,18 @@ pkg_name() {
 # =============================================================================
 # INSTALL FUNCTIONS
 # =============================================================================
+_check_sudo() {
+    case "$PM" in nix|brew) return 0 ;; esac
+    command -v sudo >/dev/null 2>&1 || { error "sudo is required for package installation ($PM)"; return 1; }
+    sudo -n true 2>/dev/null && return 0
+    if ask_yes_no "sudo required for $PM installs. Run sudo -v?" y; then
+        sudo -v || { error "sudo authentication failed"; return 1; }
+    else
+        error "sudo required but not granted. Run installer with --yes or authenticate via sudo -v first"
+        return 1
+    fi
+}
+
 install_package() {
     _pkg=$1
     _real_pkg=$(pkg_name "$_pkg")
@@ -640,6 +661,7 @@ install_if_asked() {
 
 install_list() {
     _label=$1; shift
+    _check_sudo || return 1
     header "$_label"
     for _tool in "$@"; do
         install_if_asked "$_tool" "$_tool"
@@ -735,7 +757,7 @@ post_install_fixes() {
             cargo install zoxide --locked >/dev/null 2>&1 && info "zoxide installed" || warn "zoxide install via cargo failed"
         elif command -v curl >/dev/null 2>&1; then
             info "Installing zoxide via standalone script"
-            curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh >/dev/null 2>&1 || warn "zoxide install failed"
+            _safe_curl_exec https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh >/dev/null 2>&1 || warn "zoxide install failed"
         fi
     fi
     if ! command -v atuin >/dev/null 2>&1 && [ "$PM" != "brew" ] && [ "$PM" != "pacman" ]; then
@@ -744,7 +766,7 @@ post_install_fixes() {
             cargo install atuin --locked >/dev/null 2>&1 && info "atuin installed" || warn "atuin install via cargo failed"
         elif command -v curl >/dev/null 2>&1; then
             info "Installing atuin via standalone script"
-            curl -sS https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh | sh >/dev/null 2>&1 || warn "atuin install failed"
+            _safe_curl_exec https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh >/dev/null 2>&1 || warn "atuin install failed"
         fi
     fi
     if ! command -v fastfetch >/dev/null 2>&1 && [ "$PM" != "pacman" ]; then
@@ -842,7 +864,7 @@ if [ "$DISTRO" = "macos" ] || [ "$PM" = "brew" ]; then
         printf "  ${YELLOW}⚠${NC} Homebrew not found.\n"
         if ask_yes_no "Install Homebrew?" y; then
             info "Installing Homebrew..."
-            NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" 2>&1 || true
+            NONINTERACTIVE=1 _safe_curl_exec https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh bash
             if command -v brew >/dev/null 2>&1; then
                 PM="brew"
                 info "Homebrew installed successfully"

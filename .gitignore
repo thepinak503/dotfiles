@@ -7,3 +7,5 @@ backups/
 scratch/
 zcompiled/
 docs/data.js
+logs/
+.unsplash_key
