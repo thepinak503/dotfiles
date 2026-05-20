@@ -35,7 +35,7 @@ if [ -n "$BASH_VERSION" ]; then
         *nobash*) : ;;
         *)            _bash_precmd_log() {
                local code=$?
-               [ $code -eq 0 ] && return
+               [ "$code" -eq 0 ] 2>/dev/null && return
                [ -z "${_DOTFILES_LAST_CMD:-}" ] && return
                local ts=$(date '+%Y-%m-%d %H:%M:%S')
                printf '%s %s CMD="%s"\n' "$ts" "EXIT=$code" "$_DOTFILES_LAST_CMD" >> "$DOTFILES_LOG_FILE" 2>/dev/null
@@ -57,7 +57,7 @@ if [ -n "$ZSH_VERSION" ]; then
         *) _zsh_preexec_log() { _DOTFILES_LAST_CMD="$1"; }
            _zsh_precmd_log() {
                local code=$?
-               [ $code -eq 0 ] && return
+               [ "$code" -eq 0 ] 2>/dev/null && return
                [ -z "${_DOTFILES_LAST_CMD:-}" ] && return
                local ts=$(date '+%Y-%m-%d %H:%M:%S')
                printf '%s %s CMD="%s"\n' "$ts" "EXIT=$code" "$_DOTFILES_LAST_CMD" >> "$DOTFILES_LOG_FILE" 2>/dev/null
