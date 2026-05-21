@@ -20,10 +20,10 @@ hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
 
 -- Groups
-hl.bind(mainMod .. " + G", hl.dsp.group.toggle())
-hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.group.next())
-hl.bind(mainMod .. " + CTRL + Tab", hl.dsp.group.prev())
-hl.bind(mainMod .. " + SHIFT + G", hl.dsp.group.lock({ action = "toggle" }))
+hl.bind(mainMod .. " + G", function() hl.dispatch("togglegroup", "") end)
+hl.bind(mainMod .. " + SHIFT + Tab", function() hl.dispatch("groupnext", "") end)
+hl.bind(mainMod .. " + CTRL + Tab", function() hl.dispatch("groupprev", "") end)
+hl.bind(mainMod .. " + SHIFT + G", function() hl.dispatch("lockactivegroup", "toggle") end)
 hl.bind(mainMod .. " + CTRL + G", function() hl.dispatch("moveintogroup", "forward") end)
 hl.bind(mainMod .. " + CTRL + SHIFT + G", function() hl.dispatch("moveoutofgroup") end)
 
