@@ -18,7 +18,7 @@ instance = "Alacritty"
 general = "Alacritty"
 
 [scrolling]
-history = 10000
+history = 100000
 multiplier = 3
 
 [colors]
