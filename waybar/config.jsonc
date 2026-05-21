@@ -3,7 +3,7 @@
   "position": "bottom",
   "height": 40,
   "margin-top": 0,
-  "margin-bottom": 0,
+  "margin-bottom": 8,
   "margin-left": 8,
   "margin-right": 8,
   "mod": "dock",

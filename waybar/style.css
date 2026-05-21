@@ -10,13 +10,14 @@ window#waybar {
   background: rgba(46, 52, 64, 0.55);
   border-top: 2px solid transparent;
   border-image: linear-gradient(90deg, #5e81ac, #88c0d0, #8fbcbb) 1;
-  border-radius: 12px 12px 0 0;
+  border-radius: 12px;
   color: #d8dee9;
   transition: background 0.3s ease;
 }
 
 window#waybar.empty {
   background: rgba(46, 52, 64, 0.45);
+  border-radius: 12px;
 }
 
 tooltip {
