@@ -14,7 +14,7 @@
 
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": ["custom/media"],
-  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "temperature", "battery", "clock", "custom/power"],
+  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "temperature", "power-profiles-daemon", "battery", "clock", "custom/power"],
 
   "hyprland/workspaces": {
     "disable-scroll": false,
@@ -120,6 +120,20 @@
     "interval": 2,
     "exec": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh",
     "tooltip": false
+  },
+
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "format-icons": {
+      "default": "",
+      "power-saver": "",
+      "balanced": "",
+      "performance": ""
+    },
+    "tooltip": true,
+    "tooltip-format": "Power Profile: {profile}",
+    "on-click": "~/.local/share/dotfiles/waybar/scripts/power-profile-cycle.sh",
+    "on-click-right": "powerprofilesctl set balanced"
   },
 
   "battery": {
