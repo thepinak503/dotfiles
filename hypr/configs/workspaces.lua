@@ -2,8 +2,8 @@
 hl.config({
     dwindle = {
         preserve_split = true,
-        default_split_ratio = 1.5,
-        smart_split = false,
+        default_split_ratio = 1,
+        smart_split = true,
         smart_resizing = true,
         permanent_direction_override = true,
     },
