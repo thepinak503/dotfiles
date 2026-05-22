@@ -1,18 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Installation - Pinak's Dotfiles</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<aside>
-<div class="brand">Pinak's Dotfiles</div>
-<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="active">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="">FAQ</a></nav>
 
-</aside>
-<main>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Installation - Pinak's Dotfiles</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">☰</button>
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <nav id="sidebar">
+    <h2>📖 Manual Pages</h2>
+    <a href="index.html">Main Page</a>
+    <a href="install.html" class="active">Installation</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="bash.html">Bash Manual</a>
+    <a href="zsh.html">Zsh Manual</a>
+    <a href="fish.html">Fish Manual</a>
+    <a href="starship.html">Starship Config</a>
+    <a href="fastfetch.html">Fastfetch Theme</a>
+    <a href="performance.html">Performance</a>
+    <a href="features.html">Feature Matrix</a>
+    <a href="reference.html">Quick Reference</a>
+    <a href="diagnostics.html">Diagnostics</a>
+    <a href="faq.html">FAQ</a>
+  </nav>
+
+  <main id="content">
 <header class="top"><span>Manual</span><h1>Installation</h1></header>
 
 <section><h2>Supported Systems</h2><table><tbody><tr><th>Primary target</th><td>Arch Linux, EndeavourOS, Manjaro, Garuda, CachyOS, and related pacman systems</td></tr><tr><th>Secondary targets</th><td>Debian/Ubuntu, Fedora, openSUSE, Alpine, Void, generic Linux</td></tr><tr><th>macOS</th><td>Supported through Homebrew and the macOS Starship profile</td></tr></tbody></table></section>
@@ -21,6 +38,23 @@
 cd ~/.dotfiles
 sh install.sh</code></pre></section>
 <section><h2>Linked Paths</h2><table><tbody><tr><th>Bash</th><td><code>~/.bashrc</code></td></tr><tr><th>Zsh</th><td><code>~/.zshrc</code>, <code>~/.zprofile</code></td></tr><tr><th>Fish</th><td><code>~/.config/fish/config.fish</code></td></tr><tr><th>Starship</th><td><code>~/.config/starship.toml</code></td></tr><tr><th>Fastfetch</th><td><code>~/.config/fastfetch/config.jsonc</code></td></tr><tr><th>Git</th><td><code>~/.gitconfig</code></td></tr></tbody></table></section>
-</main>
+  </main>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('show');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('show');
+    }
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('#sidebar a')) {
+        closeSidebar();
+      }
+    });
+  </script>
 </body>
+
 </html>

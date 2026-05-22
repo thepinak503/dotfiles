@@ -1,24 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FAQ - Pinak's Dotfiles</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<aside>
-<div class="brand">Pinak's Dotfiles</div>
-<nav><a href="index.html" class="">Main Page</a><a href="install.html" class="">Installation</a><a href="architecture.html" class="">Architecture</a><a href="bash.html" class="">Bash</a><a href="zsh.html" class="">Zsh</a><a href="fish.html" class="">Fish</a><a href="starship.html" class="">Starship</a><a href="fastfetch.html" class="">Fastfetch</a><a href="performance.html" class="">Performance</a><a href="features.html" class="">Feature Matrix</a><a href="reference.html" class="">Reference</a><a href="diagnostics.html" class="">Diagnostics</a><a href="faq.html" class="active">FAQ</a></nav>
 
-</aside>
-<main>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FAQ - Pinak's Dotfiles</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">☰</button>
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <nav id="sidebar">
+    <h2>📖 Manual Pages</h2>
+    <a href="index.html">Main Page</a>
+    <a href="install.html">Installation</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="bash.html">Bash Manual</a>
+    <a href="zsh.html">Zsh Manual</a>
+    <a href="fish.html">Fish Manual</a>
+    <a href="starship.html">Starship Config</a>
+    <a href="fastfetch.html">Fastfetch Theme</a>
+    <a href="performance.html">Performance</a>
+    <a href="features.html">Feature Matrix</a>
+    <a href="reference.html">Quick Reference</a>
+    <a href="diagnostics.html">Diagnostics</a>
+    <a href="faq.html" class="active">FAQ</a>
+  </nav>
+
+  <main id="content">
 <header class="top"><span>Manual</span><h1>FAQ</h1></header>
 
 <section><h2>Can This Be Best-In-Class?</h2><p>For a personal dotfiles repository, yes: it is modular, generated where large catalogs would otherwise drift, validated across shells, and optimized for fast default startup. It is not universally best for every user because terminals, fonts, policies, and package managers differ.</p></section>
 <section><h2>Why Does Bash Sometimes Miss Starship?</h2><p>Bash only reads <code>~/.bashrc</code> for interactive non-login shells. Login shells may read <code>~/.bash_profile</code>, <code>~/.bash_login</code>, or <code>~/.profile</code>. Source <code>~/.bashrc</code> from the login file and ensure <code>starship</code> is installed on <code>PATH</code>.</p></section>
 <section><h2>Are All Commands Distro-Agnostic?</h2><p>No large shell catalog is perfectly distro-agnostic. The default startup path is conservative, but package-manager commands, Linux-only paths, Docker/Kubernetes helpers, and GNU/BSD differences can still require local adjustment.</p></section>
 <section><h2>Recent Fixes (May 2026)</h2><table><tbody><tr><th>Fix</th><th>Files</th><th>Description</th></tr><tr><td>ls/ll/la/lal/lsl alias safety</td><td>bash, zsh, fish, core</td><td>All listing aliases are now independent (no alias chaining). Each uses <code>command ls</code> fallback — no recursion, no errors.</td></tr><tr><td>cd() function fix</td><td>bash, zsh</td><td><code>cd()</code> now calls <code>eza</code> directly (bash/zsh do not expand aliases inside functions).</td></tr><tr><td>Fish recursive functions</td><td>fish</td><td><code>df, code, ping, wget, dig, pushd, popd</code> no longer infinitely recurse — all use <code>command</code> prefix.</td></tr><tr><td>Bash-isms in zsh aliases</td><td>zsh</td><td>Removed <code>shopt</code>, <code>enable</code>, bash-style <code>history -c</code> from zsh aliases. Fixed shebang.</td></tr><tr><td>Fish bash-isms</td><td>fish</td><td>Fixed <code>ffcompress</code> (was using <code>$1</code> instead of <code>$argv</code>), fixed <code>fn</code> (was using bash <code>declare/typeset</code>).</td></tr><tr><td>Dangerous rmdir alias</td><td>bash, zsh</td><td><code>rmdir</code> no longer runs <code>rm -rf</code> — now tries <code>_x rmdir</code> first with safe fallback.</td></tr><tr><td>Duplicate _x function</td><td>fish</td><td>Removed duplicate <code>_x</code> from <code>functions.fish</code> (was already defined in <code>aliases.fish</code>).</td></tr></tbody></table></section>
-</main>
+  </main>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('show');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('show');
+    }
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('#sidebar a')) {
+        closeSidebar();
+      }
+    });
+  </script>
 </body>
+
 </html>

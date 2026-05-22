@@ -45,18 +45,16 @@ hl.bind(mainMod .. " + ALT + SHIFT + L", hl.dsp.window.swap({ direction = "right
 hl.bind(mainMod .. " + ALT + SHIFT + K", hl.dsp.window.swap({ direction = "up" }))
 hl.bind(mainMod .. " + ALT + SHIFT + J", hl.dsp.window.swap({ direction = "down" }))
 
--- Help
-hl.bind(mainMod .. " + SHIFT + H", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/keyhints"))
 
 -- Mouse actions
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + SHIFT + mouse:272", hl.dsp.window.resize(), { mouse = true })
 
 -- Active window resize (keyboard)
-hl.bind(mainMod .. " + left",  function() hl.dispatch("resizeactive", "-30 0") end)
-hl.bind(mainMod .. " + right", function() hl.dispatch("resizeactive", "30 0") end)
-hl.bind(mainMod .. " + up",    function() hl.dispatch("resizeactive", "0 -30") end)
-hl.bind(mainMod .. " + down",  function() hl.dispatch("resizeactive", "0 30") end)
+hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.resize({ x = -30, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.resize({ x = 30, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.resize({ x = 0, y = -30, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.resize({ x = 0, y = 30, relative = true }), { repeating = true })
 
 -- Workspaces 1-9
 for i = 1, 9 do
@@ -89,7 +87,7 @@ hl.bind(mainMod .. " + CTRL + S",  hl.dsp.exec_cmd("hyprshot -m region --clipboa
 hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenrecord"))
 
 -- Layout
-hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/changeLayout"))
+hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/changeLayout"))
 
 -- Touchpad Toggle
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/touchpad"))

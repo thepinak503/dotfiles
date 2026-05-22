@@ -93,6 +93,11 @@ bindkey '^_' undo
 [[ -f "$DOTFILES_DIR/shells/zsh/aliases.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/aliases.zsh"
 
 
+# Disable alias expansion temporarily while sourcing scripts to avoid function definition conflicts
+_aliases_was_on=0
+[[ -o aliases ]] && _aliases_was_on=1
+unsetopt aliases
+
 [[ -f "$DOTFILES_DIR/core/functions.sh" ]] && source "$DOTFILES_DIR/core/functions.sh"
 
 
@@ -108,6 +113,10 @@ bindkey '^_' undo
 [[ -f "$DOTFILES_DIR/core/ssh-agent.sh" ]] && source "$DOTFILES_DIR/core/ssh-agent.sh"
 [[ -f "$DOTFILES_DIR/core/battery.sh" ]] && source "$DOTFILES_DIR/core/battery.sh"
 [[ -f "$DOTFILES_DIR/core/tools.sh" ]] && source "$DOTFILES_DIR/core/tools.sh"
+
+# Restore alias expansion if it was enabled
+[[ $_aliases_was_on -eq 1 ]] && setopt aliases
+unset _aliases_was_on
 
 
 [[ -f "$DOTFILES_DIR/shells/zsh/modes/ultimate.zsh" ]] && source "$DOTFILES_DIR/shells/zsh/modes/ultimate.zsh"

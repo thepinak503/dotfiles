@@ -2151,7 +2151,7 @@ function docker_build_prune_cache; docker builder prune -f; end
 
 function docker_build_tag; docker build -t "$argv[1]" .; end
 
-function docker_clean_all; docker system prune -af --volumes; and docker rmi $(docker images -q) 2>/dev/null; or true; end
+function docker_clean_all; docker system prune -af --volumes; and docker rmi (docker images -q) 2>/dev/null; or true; end
 
 function docker_compose_build; docker compose build; end
 
@@ -2379,15 +2379,15 @@ function docker_pull_latest; docker pull "$argv[1]"; end
 
 function docker_push_tag; docker push "$argv[1]"; end
 
-function docker_rm_all; docker rm $(docker ps -aq) 2>/dev/null; or true; end
+function docker_rm_all; docker rm (docker ps -aq) 2>/dev/null; or true; end
 
-function docker_rm_exited; docker rm $(docker ps -a -q -f status=exited) 2>/dev/null; or true; end
+function docker_rm_exited; docker rm (docker ps -a -q -f status=exited) 2>/dev/null; or true; end
 
 function docker_rm_stopped; docker container prune -f; end
 
-function docker_rmi_all; docker rmi $(docker images -q) 2>/dev/null; or true; end
+function docker_rmi_all; docker rmi (docker images -q) 2>/dev/null; or true; end
 
-function docker_rmi_dangling; docker rmi $(docker images -f dangling=true -q) 2>/dev/null; or true; end
+function docker_rmi_dangling; docker rmi (docker images -f dangling=true -q) 2>/dev/null; or true; end
 
 function docker_run_bash; docker run -it --rm "$argv[1]" /bin/bash; end
 
@@ -2417,7 +2417,7 @@ function docker_stats_live; docker stats; end
 
 function docker_stats_no_stream; docker stats --no-stream; end
 
-function docker_stop_all; docker stop $(docker ps -q) 2>/dev/null; or true; end
+function docker_stop_all; docker stop (docker ps -q) 2>/dev/null; or true; end
 
 function docker_stop_latest; docker ps -ql | xargs -r docker stop; end
 
@@ -3603,7 +3603,7 @@ function git_tag_push_all; git push --tags; end
 
 function git_tag_sign; git tag -s "$argv[1]" -m "$argv[2]"; end
 
-function git_tag_verify_all; git tag -v $(git tag) 2>&1 | grep -B1 "Good\|Bad"; or true; end
+function git_tag_verify_all; git tag -v (git tag) 2>&1 | grep -B1 "Good\|Bad"; or true; end
 
 function git_undo_commit; git reset --soft HEAD~1; end
 
@@ -4527,7 +4527,7 @@ function openssl_self_sign; openssl req -x509 -newkey rsa:4096 -keyout "(if set 
 
 function package_json_init; echo -e "{\n  \"name\": \"$argv[1]\",\n  \"version\": \"1.0.0\",\n  \"main\": \"index.js\",\n  \"scripts\": {},\n  \"license\": \"MIT\"\n}" > package.json; end
 
-function pacman_clean_orphans; sudo pacman -Rns $(pacman -Qtdq) 2>/dev/null; or echo "no orphans"; end
+function pacman_clean_orphans; sudo pacman -Rns (pacman -Qtdq) 2>/dev/null; or echo "no orphans"; end
 
 function pacman_list_explicit; pacman -Qe 2>/dev/null; end
 

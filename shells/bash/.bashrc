@@ -86,6 +86,10 @@ fi
 
 [[ -f "$DOTFILES_DIR/shells/bash/aliases.bash" ]] && source "$DOTFILES_DIR/shells/bash/aliases.bash"
 
+# Disable alias expansion temporarily while sourcing scripts to avoid function definition conflicts
+_expand_aliases_was_on=0
+shopt -q expand_aliases && _expand_aliases_was_on=1
+shopt -u expand_aliases
 
 [[ -f "$DOTFILES_DIR/core/functions.sh" ]] && source "$DOTFILES_DIR/core/functions.sh"
 
@@ -107,6 +111,10 @@ fi;; esac
 [[ -f "$DOTFILES_DIR/core/ssh-agent.sh" ]] && source "$DOTFILES_DIR/core/ssh-agent.sh"
 [[ -f "$DOTFILES_DIR/core/battery.sh" ]] && source "$DOTFILES_DIR/core/battery.sh"
 [[ -f "$DOTFILES_DIR/core/tools.sh" ]] && source "$DOTFILES_DIR/core/tools.sh"
+
+# Restore alias expansion if it was enabled
+[ $_expand_aliases_was_on -eq 1 ] && shopt -s expand_aliases
+unset _expand_aliases_was_on
 
 
 [[ -z "$DOTFILES_NO_UPDATE" && $- == *i* ]] && {
