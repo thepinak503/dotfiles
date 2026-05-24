@@ -1,5 +1,5 @@
 * {
-  font-family: "JetBrains Mono Nerd Font", "Noto Sans", sans-serif;
+  font-family: "CaskaydiaCove Nerd Font", "Noto Sans", sans-serif;
 }
 
 .notification-row {
@@ -200,7 +200,7 @@
   margin: 2px;
   color: #d8dee9;
   font-size: 13px;
-  font-family: "JetBrains Mono Nerd Font";
+  font-family: "CaskaydiaCove Nerd Font";
   border: 1px solid transparent;
   transition: all 0.15s ease;
 }

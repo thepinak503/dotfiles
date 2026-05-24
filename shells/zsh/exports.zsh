@@ -123,7 +123,7 @@ export PROMPT_DIRTRIM="${PROMPT_DIRTRIM:-3}"
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ENV_HINTS=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
-export AWS_PAGER="${AWS_PAGER:-}"
+# export AWS_PAGER="${AWS_PAGER:-}"
 export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
 export KUBE_EDITOR="${KUBE_EDITOR:-nvim}"
 export HELM_CACHE_HOME="${HELM_CACHE_HOME:-$XDG_CACHE_HOME/helm}"
@@ -417,16 +417,16 @@ fi
 # CLOUD
 # -----------------------------------------------------------------------------
 
-if command -v aws >/dev/null 2>&1; then
-    export AWS_CONFIG_FILE="${AWS_CONFIG_FILE:-$XDG_CONFIG_HOME/aws/config}"
-    export AWS_SHARED_CREDENTIALS_FILE="${AWS_SHARED_CREDENTIALS_FILE:-$XDG_CONFIG_HOME/aws/credentials}"
-    export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
-    export AWS_DEFAULT_OUTPUT="${AWS_DEFAULT_OUTPUT:-json}"
-    export AWS_PAGER="${AWS_PAGER:-}"
-    export AWS_PROFILE="${AWS_PROFILE:-default}"
-    export AWS_MAX_ATTEMPTS="${AWS_MAX_ATTEMPTS:-5}"
-    export AWS_RETRY_MODE="${AWS_RETRY_MODE:-standard}"
-fi
+# if command -v aws >/dev/null 2>&1; then
+#     export AWS_CONFIG_FILE="${AWS_CONFIG_FILE:-$XDG_CONFIG_HOME/aws/config}"
+#     export AWS_SHARED_CREDENTIALS_FILE="${AWS_SHARED_CREDENTIALS_FILE:-$XDG_CONFIG_HOME/aws/credentials}"
+#     export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+#     export AWS_DEFAULT_OUTPUT="${AWS_DEFAULT_OUTPUT:-json}"
+#     export AWS_PAGER="${AWS_PAGER:-}"
+#     export AWS_PROFILE="${AWS_PROFILE:-default}"
+#     export AWS_MAX_ATTEMPTS="${AWS_MAX_ATTEMPTS:-5}"
+#     export AWS_RETRY_MODE="${AWS_RETRY_MODE:-standard}"
+# fi
 
 if command -v gcloud >/dev/null 2>&1; then
     export CLOUDSDK_CONFIG="${CLOUDSDK_CONFIG:-$XDG_CONFIG_HOME/gcloud}"

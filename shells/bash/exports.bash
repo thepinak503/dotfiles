@@ -142,9 +142,9 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export DOTNET_NOLOGO=1
 export POWERSHELL_TELEMETRY_OPTOUT=1
 export AZURE_CORE_COLLECT_TELEMETRY=0
-export AWS_REGION="${AWS_REGION:-us-east-1}"
-export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
-export AWS_PAGER="${AWS_PAGER:-}"
+# export AWS_REGION="${AWS_REGION:-us-east-1}"
+# export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+# export AWS_PAGER="${AWS_PAGER:-}"
 export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
 export KUBE_EDITOR="${KUBE_EDITOR:-nvim}"
 export HELM_EXPERIMENTAL_OCI=1
@@ -498,9 +498,9 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export DOTNET_NOLOGO=1
 export POWERSHELL_TELEMETRY_OPTOUT=1
 export AZURE_CORE_COLLECT_TELEMETRY=0
-export AWS_REGION="${AWS_REGION:-us-east-1}"
-export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
-export AWS_PAGER="${AWS_PAGER:-}"
+# export AWS_REGION="${AWS_REGION:-us-east-1}"
+# export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+# export AWS_PAGER="${AWS_PAGER:-}"
 export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
 export KUBE_EDITOR="${KUBE_EDITOR:-nvim}"
 export HELM_EXPERIMENTAL_OCI=1
@@ -730,13 +730,13 @@ fi
 # =============================================================================
 
 
-if command -v aws >/dev/null 2>&1; then
-    export AWS_CONFIG_FILE="${AWS_CONFIG_FILE:-$XDG_CONFIG_HOME/aws/config}"
-    export AWS_SHARED_CREDENTIALS_FILE="${AWS_SHARED_CREDENTIALS_FILE:-$XDG_CONFIG_HOME/aws/credentials}"
-    export AWS_PROFILE="${AWS_PROFILE:-default}"
-    export AWS_DEFAULT_OUTPUT="${AWS_DEFAULT_OUTPUT:-json}"
-    export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
-fi
+# if command -v aws >/dev/null 2>&1; then
+#     export AWS_CONFIG_FILE="${AWS_CONFIG_FILE:-$XDG_CONFIG_HOME/aws/config}"
+#     export AWS_SHARED_CREDENTIALS_FILE="${AWS_SHARED_CREDENTIALS_FILE:-$XDG_CONFIG_HOME/aws/credentials}"
+#     export AWS_PROFILE="${AWS_PROFILE:-default}"
+#     export AWS_DEFAULT_OUTPUT="${AWS_DEFAULT_OUTPUT:-json}"
+#     export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+# fi
 
 
 if command -v gcloud >/dev/null 2>&1; then
@@ -1173,13 +1173,13 @@ fi
 # =============================================================================
 
 
-if command -v aws >/dev/null 2>&1; then
-    export AWS_CONFIG_FILE="${AWS_CONFIG_FILE:-$XDG_CONFIG_HOME/aws/config}"
-    export AWS_SHARED_CREDENTIALS_FILE="${AWS_SHARED_CREDENTIALS_FILE:-$XDG_CONFIG_HOME/aws/credentials}"
-    export AWS_PROFILE="${AWS_PROFILE:-default}"
-    export AWS_DEFAULT_OUTPUT="${AWS_DEFAULT_OUTPUT:-json}"
-    export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
-fi
+# if command -v aws >/dev/null 2>&1; then
+#     export AWS_CONFIG_FILE="${AWS_CONFIG_FILE:-$XDG_CONFIG_HOME/aws/config}"
+#     export AWS_SHARED_CREDENTIALS_FILE="${AWS_SHARED_CREDENTIALS_FILE:-$XDG_CONFIG_HOME/aws/credentials}"
+#     export AWS_PROFILE="${AWS_PROFILE:-default}"
+#     export AWS_DEFAULT_OUTPUT="${AWS_DEFAULT_OUTPUT:-json}"
+#     export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+# fi
 
 
 if command -v gcloud >/dev/null 2>&1; then

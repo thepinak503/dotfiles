@@ -11,7 +11,7 @@ window#osd image {
 }
 window#osd label {
   color: #d8dee9;
-  font-family: "JetBrains Mono Nerd Font";
+  font-family: "CaskaydiaCove Nerd Font";
   font-weight: bold;
 }
 window#osd progressbar:disabled,
