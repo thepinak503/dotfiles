@@ -1583,7 +1583,8 @@ fi
 
 pur() { _x curl -fsSL "https://cht.sh/$1" 2>/dev/null; }
 
-# Standalone duplicates preserved for compatibility
+# Standalone compatibility aliases — kept outside conditional blocks for quick access.
+# All guarded with _x() so missing tools print a warning instead of crashing the shell.
 alias pod='_x podman'
 alias podps='_x podman ps'
 alias podrun='_x podman run -it --rm'
@@ -1592,9 +1593,11 @@ alias dstats='_x docker stats --no-stream'
 alias kns='_x kubectl config set-context --namespace'
 alias py='_x python3'
 
+# Clipboard paste via xdotool — guarded against missing tools
+# Uses command -v check instead of _x() because it chains two tools
+alias clickpaste='command -v xdotool >/dev/null 2>&1 && command -v xclip >/dev/null 2>&1 && sleep 3 && xdotool type "$(xclip -o -selection clipboard)" || echo "missing: xdotool/xclip" >&2'
 
-# Miscellaneous shell utilities
-alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
-alias nuke-opencode='rm -rf ~/.local/share/opencode ~/.cache/opencode'
+# Clean up opencode cache — guarded with || true and 2>/dev/null for missing directories
+alias nuke-opencode='rm -rf ~/.local/share/opencode ~/.cache/opencode 2>/dev/null; echo "opencode cache cleaned"'
 
 

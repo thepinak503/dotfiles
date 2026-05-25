@@ -67,6 +67,13 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$UID}"
 export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS:-/etc/xdg}"
 
+# X11
+export XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}"
+
+# Wayland
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$UID}"
+export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
+
 # Development
 export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
 export GOBIN="${GOBIN:-$HOME/.go/bin}"

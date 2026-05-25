@@ -147,7 +147,8 @@ hyprctl reload 2>/dev/null || true
 if pgrep -x waybar >/dev/null 2>&1; then
     killall waybar 2>/dev/null || true
     sleep 0.3
-    waybar &
+    waybar -c "$REPO_DIR/waybar/config.jsonc" -s "$REPO_DIR/waybar/style.css" & disown
+    waybar -c "$REPO_DIR/waybar/config-bottom.jsonc" -s "$REPO_DIR/waybar/style.css" & disown
 fi
 
 # Swaync
@@ -163,12 +164,11 @@ if pgrep -x swayosd-server >/dev/null 2>&1; then
 fi
 
 # Kitty — set colors in running instances
-if command -v kitty >/dev/null 2>&1 && [ -S /tmp/kitty 2>/dev/null ] || [ -S /tmp/kitty-* 2>/dev/null ]; then
-    KITTY_SOCKET=$(ls /tmp/kitty-* 2>/dev/null | head -1)
-    if [ -n "$KITTY_SOCKET" ]; then
-        kitty @ --to "unix:$KITTY_SOCKET" set-colors --all "$REPO_DIR/kitty/nord.conf" 2>/dev/null || true
-    fi
+KITTY_SOCKET=$(find /tmp/kitty-* -maxdepth 0 -type s 2>/dev/null | head -1)
+if [ -n "$KITTY_SOCKET" ] && command -v kitty >/dev/null 2>&1; then
+    kitty @ --to "unix:$KITTY_SOCKET" set-colors --all "$REPO_DIR/kitty/nord.conf" 2>/dev/null || true
 fi
+unset KITTY_SOCKET
 
 # Alacritty — send SIGHUP to reload config (if live_config_reload is not on)
 if command -v alacritty >/dev/null 2>&1; then

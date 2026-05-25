@@ -1,0 +1,11 @@
+#!/bin/bash
+# Reload waybar only
+
+set -euo pipefail
+
+DOTFILES="$HOME/.local/share/dotfiles"
+
+killall -q waybar 2>/dev/null || true
+sleep 0.3
+waybar -c "$DOTFILES/waybar/config.jsonc" -s "$DOTFILES/waybar/style.css" & disown
+waybar -c "$DOTFILES/waybar/config-bottom.jsonc" -s "$DOTFILES/waybar/style.css" & disown

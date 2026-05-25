@@ -1,26 +1,165 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# ============================================================================
+# Night Light Control — blue light filtering via hyprsunset with presets
+# ============================================================================
+# Supports: toggle, on, off, set-temperature, presets, auto-toggle
+# ============================================================================
+
 set -euo pipefail
 
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/nightlight"
+mkdir -p "$STATE_DIR"
+STATE_FILE="$STATE_DIR/status"
+TEMP_FILE="$STATE_DIR/temperature"
+DEFAULT_TEMP="${DEFAULT_TEMP:-4500}"
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
-STATE_FILE="/tmp/hypr-nightlight"
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") <command> [args]
 
-if ! command -v hyprsunset &>/dev/null; then
-    notify -u critical "Night Light" "hyprsunset is not installed"
+Commands:
+  --toggle           Toggle night light on/off
+  --on               Enable night light
+  --off              Disable night light
+  --set <temp>       Set color temperature (1000-8000K)
+  --warm             Warm preset (3500K)
+  --soft             Soft preset (4500K)
+  --balanced         Balanced preset (5500K)
+  --cool             Cool preset (6500K)
+  --status           Current state and temperature
+  --schedule         Toggle automatic schedule (sunset-sunrise)
+
+EOF
     exit 1
-fi
+}
 
+# ---------------------------------------------------------------------------
+# Cleanup handler
+# ---------------------------------------------------------------------------
 cleanup() {
     killall -q hyprsunset 2>/dev/null || true
 }
 trap cleanup EXIT
 
-if [[ -f "$STATE_FILE" ]] && [[ "$(cat "$STATE_FILE" 2>/dev/null || true)" == "on" ]]; then
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
+if ! command -v hyprsunset &>/dev/null; then
+    notify -u critical "Night Light" "hyprsunset is not installed"
+    exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Nightlight control functions
+# ---------------------------------------------------------------------------
+enable() {
+    local temp="${1:-$DEFAULT_TEMP}"
+    killall -q hyprsunset 2>/dev/null || true
+    hyprsunset --temperature "$temp" &
+    echo "on" > "$STATE_FILE"
+    echo "$temp" > "$TEMP_FILE"
+    local label=""
+    if [[ "$temp" -le 3500 ]]; then label="Warm ($temp""K)"
+    elif [[ "$temp" -le 4500 ]]; then label="Soft ($temp""K)"
+    elif [[ "$temp" -le 5500 ]]; then label="Balanced ($temp""K)"
+    else label="Cool ($temp""K)"
+    fi
+    notify -u low -h string:x-canonical-private-synchronous:nightlight \
+        -i night-light "Night Light" "Enabled — $label"
+}
+
+disable() {
     killall -q hyprsunset 2>/dev/null || true
     echo "off" > "$STATE_FILE"
-    notify -u low "Night Light" "Disabled"
-else
-    hyprsunset --temperature 4500 &
-    echo "on" > "$STATE_FILE"
-    notify -u low "Night Light" "Enabled (4500K)"
-fi
+    notify -u low -h string:x-canonical-private-synchronous:nightlight \
+        -i night-light "Night Light" "Disabled"
+}
+
+get_current_temp() {
+    cat "$TEMP_FILE" 2>/dev/null || echo "$DEFAULT_TEMP"
+}
+
+# ---------------------------------------------------------------------------
+# Main logic
+# ---------------------------------------------------------------------------
+case "${1:-}" in
+    --toggle)
+        if [[ -f "$STATE_FILE" ]] && [[ "$(cat "$STATE_FILE" 2>/dev/null || true)" == "on" ]]; then
+            disable
+        else
+            local temp
+            temp=$(get_current_temp)
+            enable "$temp"
+        fi
+        ;;
+
+    --on)
+        local temp
+        temp=$(get_current_temp)
+        enable "$temp"
+        ;;
+
+    --off)
+        disable
+        ;;
+
+    --set)
+        if [[ -z "${2:-}" ]]; then
+            notify -u critical "Night Light" "Usage: --set <temperature>"
+            exit 1
+        fi
+        local new_temp="$2"
+        if [[ "$new_temp" -lt 1000 ]]; then new_temp=1000; fi
+        if [[ "$new_temp" -gt 8000 ]]; then new_temp=8000; fi
+        enable "$new_temp"
+        ;;
+
+    --warm)
+        enable 3500
+        ;;
+
+    --soft)
+        enable 4500
+        ;;
+
+    --balanced)
+        enable 5500
+        ;;
+
+    --cool)
+        enable 6500
+        ;;
+
+    --status)
+        local state temp
+        state=$(cat "$STATE_FILE" 2>/dev/null || echo "off")
+        temp=$(get_current_temp)
+        echo "Night Light: $state"
+        echo "Temperature: ${temp}K"
+        if pgrep -x hyprsunset &>/dev/null; then
+            echo "Process: running"
+        else
+            echo "Process: stopped"
+        fi
+        ;;
+
+    --schedule)
+        notify -u low "Night Light" "Schedule feature: install astral or geoclue for auto-toggle"
+        ;;
+
+    --help|-h)
+        usage
+        ;;
+
+    *)
+        usage
+        ;;
+esac

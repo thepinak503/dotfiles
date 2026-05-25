@@ -11,7 +11,8 @@ fi
 if command -v waybar &>/dev/null; then
     killall -q waybar 2>/dev/null || true
     sleep 0.2
-    waybar &
+    waybar & disown
+    waybar -c "$HOME/.local/share/dotfiles/waybar/config-bottom.jsonc" -s "$HOME/.local/share/dotfiles/waybar/style.css" & disown
 else
     notify -u low "Refresh" "waybar not found, skipping"
 fi
@@ -22,5 +23,5 @@ else
     notify -u low "Refresh" "swaync-client not found, skipping"
 fi
 
-hyprctl reload
+hyprctl reload 2>/dev/null || true
 notify -u low "Refresh" "Refresh Complete"

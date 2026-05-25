@@ -218,10 +218,10 @@ if command -v docker >/dev/null 2>&1; then
 docker_ps_all() { docker ps -a; }
 docker_ps_running() { docker ps; }
 docker_ps_stopped() { docker ps -a --filter status=exited; }
-docker_stop_all() { docker stop $(docker ps -q) 2>/dev/null || true; }
+docker_stop_all() { docker ps -q | xargs -r docker stop 2>/dev/null || true; }
 docker_stop_latest() { docker ps -ql | xargs -r docker stop; }
-docker_rm_all() { docker rm $(docker ps -aq) 2>/dev/null || true; }
-docker_rm_exited() { docker rm $(docker ps -a -q -f status=exited) 2>/dev/null || true; }
+docker_rm_all() { docker ps -aq | xargs -r docker rm 2>/dev/null || true; }
+docker_rm_exited() { docker ps -a -q -f status=exited | xargs -r docker rm 2>/dev/null || true; }
 docker_rm_stopped() { docker container prune -f; }
 docker_rmi_dangling() { docker rmi $(docker images -f dangling=true -q) 2>/dev/null || true; }
 docker_rmi_all() { docker rmi $(docker images -q) 2>/dev/null || true; }

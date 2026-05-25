@@ -220,10 +220,7 @@ end
 
 # =============================================================================
 
-# Fish history control - similar to bash HISTCONTROL
+# Fish history deduplication - suppress errors if option is unsupported in older fish versions
+set fish_history_unique true 2>/dev/null
 
-set fish_history_unique true
 
-
-# Added by Antigravity CLI installer
-set -gx PATH "/home/pinak/.local/bin" $PATH

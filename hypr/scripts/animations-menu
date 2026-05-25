@@ -16,7 +16,8 @@ if ! command -v hyprctl &>/dev/null; then
     exit 1
 fi
 
-PROFILES=$(ls -1 "$ANIM_DIR"/*.lua 2>/dev/null | xargs -I{} basename {} .lua)
+# Find animation profiles safely using find (avoids SC2011: ls parsing)
+PROFILES=$(find "$ANIM_DIR" -maxdepth 1 -name '*.lua' -exec basename {} .lua \; 2>/dev/null | sort)
 
 if [[ -z "$PROFILES" ]]; then
     notify -u critical "Animation Profiles" "No profiles found in $ANIM_DIR"
@@ -32,7 +33,7 @@ fi
 PROFILE_FILE="$ANIM_DIR/$CHOICE.lua"
 if [[ -f "$PROFILE_FILE" ]]; then
     cp "$PROFILE_FILE" "$CONFIG_DIR/animations.lua"
-    hyprctl reload
+    hyprctl reload 2>/dev/null || true
     notify -u low "Animation Profile" "Switched to: $CHOICE"
 else
     notify -u critical "Animation Profiles" "Profile '$CHOICE' not found"

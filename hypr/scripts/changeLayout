@@ -12,20 +12,20 @@ LAYOUT=$(hyprctl -j getoption general:layout | jq -r '.str') || true
 
 case $LAYOUT in
   master)
-    hyprctl keyword general:layout dwindle
-    hyprctl keyword unbind SUPER,J
-    hyprctl keyword unbind SUPER,K
-    hyprctl keyword bind SUPER,J,layoutmsg,cyclenext
-    hyprctl keyword bind SUPER,K,layoutmsg,cycleprev
+    hyprctl keyword general:layout dwindle 2>/dev/null || true
+    hyprctl keyword unbind SUPER,J 2>/dev/null || true
+    hyprctl keyword unbind SUPER,K 2>/dev/null || true
+    hyprctl keyword bind SUPER,J,layoutmsg,cyclenext 2>/dev/null || true
+    hyprctl keyword bind SUPER,K,layoutmsg,cycleprev 2>/dev/null || true
     notify -u low "Dwindle Layout"
     ;;
   dwindle)
-    hyprctl keyword general:layout master
-    hyprctl keyword unbind SUPER,J
-    hyprctl keyword unbind SUPER,K
-    hyprctl keyword unbind SUPER,O
-    hyprctl keyword bind SUPER,J,cyclenext
-    hyprctl keyword bind SUPER,K,cycleprev,prev
+    hyprctl keyword general:layout master 2>/dev/null || true
+    hyprctl keyword unbind SUPER,J 2>/dev/null || true
+    hyprctl keyword unbind SUPER,K 2>/dev/null || true
+    hyprctl keyword unbind SUPER,O 2>/dev/null || true
+    hyprctl keyword bind SUPER,J,cyclenext 2>/dev/null || true
+    hyprctl keyword bind SUPER,K,cycleprev,prev 2>/dev/null || true
     notify -u low "Master Layout"
     ;;
   *)

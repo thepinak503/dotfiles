@@ -10,6 +10,10 @@
   "layer-shell": true,
   "control-center-layer": "top",
   "cssPriority": "application",
+
+  // ---------------------------------------------------------------------------
+  // Notification display settings
+  // ---------------------------------------------------------------------------
   "notification-icon-size": 32,
   "notification-body-image-height": 160,
   "notification-body-image-width": 200,
@@ -17,8 +21,8 @@
   "timeout-low": 4,
   "timeout-critical": 10,
   "fit-to-screen": true,
-  "control-center-width": 400,
-  "control-center-height": 700,
+  "control-center-width": 420,
+  "control-center-height": 720,
   "notification-window-width": 380,
   "keyboard-shortcuts": true,
   "image-visibility": "when-available",
@@ -26,15 +30,56 @@
   "hide-on-action": true,
   "script-fail-notify": true,
   "transition-time": 200,
+
+  // ---------------------------------------------------------------------------
+  // Exec scripts triggered by notifications
+  // ---------------------------------------------------------------------------
   "scripts": {
+    "example-script": {
+      "exec": "notify-send 'Script triggered'",
+      "app-name": "example-app"
+    }
   },
+
+  // ---------------------------------------------------------------------------
+  // Notification visibility rules
+  // ---------------------------------------------------------------------------
   "notification-visibility": {
     "example-app-name": {
       "state": "ignored",
       "urgency": "low",
       "app-name": "example-app-name"
+    },
+    "firefox": {
+      "state": "transient",
+      "urgency": "normal",
+      "app-name": "firefox"
+    },
+    "discord": {
+      "state": "transient",
+      "urgency": "normal",
+      "app-name": "discord"
+    },
+    "slack": {
+      "state": "transient",
+      "urgency": "normal",
+      "app-name": "Slack"
+    },
+    "org.telegram.desktop": {
+      "state": "transient",
+      "urgency": "normal",
+      "app-name": "org.telegram.desktop"
+    },
+    "signal": {
+      "state": "transient",
+      "urgency": "normal",
+      "app-name": "signal"
     }
   },
+
+  // ---------------------------------------------------------------------------
+  // Widget layout and configuration
+  // ---------------------------------------------------------------------------
   "widgets": [
     "inhibitors",
     "title",
@@ -60,57 +105,76 @@
       "text": "Do Not Disturb"
     },
     "mpris": {
-      "image-size": 40,
-      "image-radius": 8
+      "image-size": 48,
+      "image-radius": 10,
+      "image-position": "left"
     },
     "buttons-grid": {
       "type": "buttons-grid",
       "action-buttons": [
         {
-          "label": "󰌾",
+          "label": "\uF023",
           "type": "toggle",
           "action": "hyprlock",
           "active": false
         },
         {
-          "label": "",
+          "label": "\uF011",
           "type": "toggle",
           "action": "wlogout",
           "active": false
         },
         {
-          "label": "󰦛",
+          "label": "\uF03B",
           "type": "toggle",
           "action": "~/.local/share/dotfiles/hypr/scripts/screenshot --area",
           "active": false
         },
         {
-          "label": "󰇧",
+          "label": "\uF1FB",
           "type": "toggle",
           "action": "firefox",
           "active": false
         },
         {
-          "label": "󰖩",
+          "label": "\uF0AC",
           "type": "toggle",
           "action": "nm-connection-editor",
           "active": false
         },
         {
-          "label": "󰂲",
+          "label": "\uF0A0",
           "type": "toggle",
           "action": "blueman-manager",
+          "active": false
+        },
+        {
+          "label": "\uF07C",
+          "type": "toggle",
+          "action": "thunar",
+          "active": false
+        },
+        {
+          "label": "\uF013",
+          "type": "toggle",
+          "action": "~/.local/share/dotfiles/hypr/scripts/settings-menu",
           "active": false
         }
       ]
     },
     "volume": {
       "type": "volume",
-      "label": "󰕾"
+      "label": "\uF028",
+      "show-percentage": true,
+      "step": 5
     },
     "backlight": {
       "type": "backlight",
-      "label": "󰃟"
+      "label": "\uF0EB",
+      "show-percentage": true,
+      "step": 5,
+      "min": 1,
+      "max": 100
     }
   }
 }

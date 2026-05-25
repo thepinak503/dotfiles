@@ -51,7 +51,7 @@ fi
 
 
 if _detect_app zoxide; then
-    eval "$(zoxide init zsh)"
+    eval "$(zoxide init zsh 2>/dev/null)" || true
 fi
 
 # =============================================================================
@@ -60,7 +60,7 @@ fi
 
 
 if _detect_app atuin; then
-    eval "$(atuin init zsh)"
+    eval "$(atuin init zsh 2>/dev/null)" || true
 fi
 
 # =============================================================================

@@ -8,14 +8,16 @@
 
 window#waybar {
   background: rgba(46, 52, 64, 0.55);
-  border-radius: 0 0 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(76, 86, 106, 0.4);
   color: #d8dee9;
   transition: background 0.3s ease;
 }
 
 window#waybar.empty {
   background: rgba(46, 52, 64, 0.45);
-  border-radius: 0 0 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(76, 86, 106, 0.3);
 }
 
 tooltip {
@@ -234,29 +236,58 @@ window#waybar.empty #window {
   background: rgba(136, 192, 208, 0.08);
 }
 
-#custom-theme {
-  margin: 0 2px;
-  padding: 2px 8px;
-  color: #d8dee9;
+#custom-settings,
+#custom-light_dark,
+#custom-nightlight,
+#custom-swaync,
+#custom-cycle_wall,
+#custom-screenshot,
+#custom-blur,
+#custom-refresh {
+  margin: 0 4px;
+  padding: 2px 10px;
+  color: #81a1c1;
+  font-size: 16px;
   border-radius: 8px;
-  font-size: 14px;
   transition: all 0.15s ease;
 }
 
-#custom-theme:hover {
-  background: rgba(136, 192, 208, 0.1);
+#custom-settings:hover,
+#custom-light_dark:hover,
+#custom-nightlight:hover,
+#custom-swaync:hover,
+#custom-cycle_wall:hover,
+#custom-screenshot:hover,
+#custom-blur:hover,
+#custom-refresh:hover {
+  background: rgba(136, 192, 208, 0.12);
   color: #88c0d0;
 }
 
-#custom-theme.light {
-  color: #ebcb8b;
-}
+#custom-settings { color: #b48ead; }
+
+#custom-light_dark.dark { color: #ebcb8b; }
+#custom-light_dark.light { color: #d08770; }
+
+#custom-nightlight.on { color: #d08770; }
+
+#custom-swaync.dnd { color: #bf616a; }
+
+#custom-cycle_wall { color: #a3be8c; }
+#custom-cycle_wall:hover { color: #b1d3a0; }
+
+#custom-screenshot { color: #8fbcbb; }
+#custom-screenshot:hover { color: #a9d5d4; }
+
+#custom-blur.on { color: #88c0d0; }
+#custom-blur.low { color: #81a1c1; }
+#custom-blur.off { color: #4c566a; }
 
 #custom-power {
-  margin: 0 2px;
-  padding: 2px 4px;
+  margin: 0 4px;
+  padding: 2px 10px;
+  font-size: 16px;
   color: #bf616a;
-  font-size: 14px;
   border-radius: 8px;
   transition: all 0.15s ease;
 }
@@ -265,3 +296,5 @@ window#waybar.empty #window {
   background: rgba(191, 97, 106, 0.15);
   color: #eceff4;
 }
+
+

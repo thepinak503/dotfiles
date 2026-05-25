@@ -16,5 +16,3 @@ elif [ -n "$BASH_VERSION" ]; then
     [[ -f ~/.bashrc ]] && source ~/.bashrc
 fi
 
-# Added by Antigravity CLI installer
-export PATH="/home/pinak/.local/bin:$PATH"

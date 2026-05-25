@@ -8,14 +8,16 @@
 
 window#waybar {
   background: rgba(236, 239, 244, 0.75);
-  border-radius: 0 0 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(182, 190, 202, 0.5);
   color: #2e3440;
   transition: background 0.3s ease;
 }
 
 window#waybar.empty {
   background: rgba(236, 239, 244, 0.6);
-  border-radius: 0 0 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(182, 190, 202, 0.4);
 }
 
 tooltip {
@@ -234,29 +236,58 @@ window#waybar.empty #window {
   background: rgba(59, 110, 156, 0.08);
 }
 
-#custom-theme {
-  margin: 0 2px;
-  padding: 2px 8px;
-  color: #2e3440;
+#custom-settings,
+#custom-light_dark,
+#custom-nightlight,
+#custom-swaync,
+#custom-cycle_wall,
+#custom-screenshot,
+#custom-blur,
+#custom-refresh {
+  margin: 0 4px;
+  padding: 2px 10px;
+  color: #5c7a9e;
+  font-size: 16px;
   border-radius: 8px;
-  font-size: 14px;
   transition: all 0.15s ease;
 }
 
-#custom-theme:hover {
-  background: rgba(59, 110, 156, 0.1);
+#custom-settings:hover,
+#custom-light_dark:hover,
+#custom-nightlight:hover,
+#custom-swaync:hover,
+#custom-cycle_wall:hover,
+#custom-screenshot:hover,
+#custom-blur:hover,
+#custom-refresh:hover {
+  background: rgba(59, 110, 156, 0.12);
   color: #3b6e9c;
 }
 
-#custom-theme.light {
-  color: #d08770;
-}
+#custom-settings { color: #8f5e8f; }
+
+#custom-light_dark.dark { color: #b48d4a; }
+#custom-light_dark.light { color: #b8724a; }
+
+#custom-nightlight.on { color: #b8724a; }
+
+#custom-swaync.dnd { color: #bf616a; }
+
+#custom-cycle_wall { color: #5c8a6e; }
+#custom-cycle_wall:hover { color: #7aa88c; }
+
+#custom-screenshot { color: #5c8a8a; }
+#custom-screenshot:hover { color: #7aaaaa; }
+
+#custom-blur.on { color: #3b6e9c; }
+#custom-blur.low { color: #5c7a9e; }
+#custom-blur.off { color: #b6beca; }
 
 #custom-power {
-  margin: 0 2px;
-  padding: 2px 4px;
+  margin: 0 4px;
+  padding: 2px 10px;
+  font-size: 16px;
   color: #bf616a;
-  font-size: 14px;
   border-radius: 8px;
   transition: all 0.15s ease;
 }
@@ -265,3 +296,5 @@ window#waybar.empty #window {
   background: rgba(191, 97, 106, 0.15);
   color: #3b4252;
 }
+
+

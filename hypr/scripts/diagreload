@@ -1,0 +1,10 @@
+#!/bin/bash
+# Run full diagnostic, then wait for keypress
+
+set -euo pipefail
+
+"$HOME/.local/share/dotfiles/hypr/scripts/diagnose"
+
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+read -rp "  Press ENTER to exit..." _

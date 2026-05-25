@@ -51,7 +51,7 @@ fi
 
 
 if _detect_app zoxide; then
-    eval "$(zoxide init bash 2>/dev/null)"
+    eval "$(zoxide init bash 2>/dev/null)" || true
 fi
 
 # =============================================================================
@@ -61,7 +61,7 @@ fi
 
 if _detect_app atuin; then
     [[ -f /usr/share/bash-preexec/bash-preexec.sh ]] && source /usr/share/bash-preexec/bash-preexec.sh
-    eval "$(atuin init bash 2>/dev/null)"
+    eval "$(atuin init bash 2>/dev/null)" || true
 fi
 
 # =============================================================================

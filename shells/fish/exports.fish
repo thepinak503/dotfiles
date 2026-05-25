@@ -56,6 +56,13 @@ set -gx XDG_RUNTIME_DIR /run/user/(id -u)
 set -gx XDG_DATA_DIRS /usr/local/share:/usr/share
 set -gx XDG_CONFIG_DIRS /etc/xdg
 
+# X11
+set -q XAUTHORITY; or set -gx XAUTHORITY $HOME/.Xauthority
+
+# Wayland
+set -q XDG_RUNTIME_DIR; or set -gx XDG_RUNTIME_DIR /run/user/(id -u)
+set -q WAYLAND_DISPLAY; or set -gx WAYLAND_DISPLAY wayland-0
+
 # Development
 set -gx CARGO_HOME $HOME/.cargo
 set -gx GOBIN $HOME/.go/bin

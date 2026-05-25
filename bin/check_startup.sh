@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 DOTFILES_LOG_FILE="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}/errors.log"
 BOLD="\033[1m"
 GREEN="\033[1;32m"
@@ -27,7 +28,7 @@ check_shell() {
             fish -i -c "exit" 2>"$tmp_err"
             ;;
     esac
-    grep -vE "set: Tried to change the read-only variable|job control" "$tmp_err" > "${tmp_err}.filtered"
+    grep -vE "set: Tried to change the read-only variable|job control" "$tmp_err" > "${tmp_err}.filtered" || true
     if [ -s "${tmp_err}.filtered" ]; then
         echo -e "${RED}FAILED${RESET}"
         echo -e "${BOLD}Errors found in $shell_name startup:${RESET}"

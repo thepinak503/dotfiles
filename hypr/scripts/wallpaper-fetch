@@ -36,9 +36,9 @@ apply_wallpaper() {
     local path="$1"
     [[ ! -f "$path" ]] && return 1
     local old
-    old=$(hyprctl hyprpaper listloaded 2>/dev/null)
-    hyprctl hyprpaper preload "$path" >/dev/null 2>&1
-    hyprctl hyprpaper wallpaper ",$path"
+    old=$(hyprctl hyprpaper listloaded 2>/dev/null || true)
+    hyprctl hyprpaper preload "$path" >/dev/null 2>&1 || true
+    hyprctl hyprpaper wallpaper ",$path" 2>/dev/null || true
     for img in $old; do
         if [[ "$img" != "$path" ]]; then
             hyprctl hyprpaper unload "$img" >/dev/null 2>&1 || true
@@ -53,24 +53,25 @@ apply_wallpaper() {
 # --- Nord wallpaper helpers ---
 
 list_nord() {
-    local f result=()
-    while IFS= read -r -d $'\0' f; do
+    local f
+    find "$WALLPAPER_DIR" -maxdepth 1 -type f -name 'nord_*' \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' \) -print0 2>/dev/null | sort -z | while IFS= read -r -d $'\0' f; do
         local base
         base=$(basename "$f")
         [[ "$base" == "nord_default.png" || "$base" == "nord_light.png" ]] && continue
-        result+=("$f")
-    done < <(find "$WALLPAPER_DIR" -maxdepth 1 -type f -name 'nord_*' \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' \) -print0 2>/dev/null | sort -z)
-    echo "${result[@]}"
+        printf '%s\0' "$f"
+    done
 }
 
 nord_random() {
-    local files=($(list_nord))
+    local files=()
+    while IFS= read -r -d $'\0' f; do files+=("$f"); done < <(list_nord)
     [[ ${#files[@]} -eq 0 ]] && return 1
     echo "${files[RANDOM % ${#files[@]}]}"
 }
 
 nord_next() {
-    local files=($(list_nord))
+    local files=()
+    while IFS= read -r -d $'\0' f; do files+=("$f"); done < <(list_nord)
     [[ ${#files[@]} -eq 0 ]] && return 1
     local idx=0
     [[ -f "$STATE_FILE" ]] && idx=$(cat "$STATE_FILE")
@@ -80,7 +81,8 @@ nord_next() {
 }
 
 nord_dark() {
-    local files=($(list_nord))
+    local files=()
+    while IFS= read -r -d $'\0' f; do files+=("$f"); done < <(list_nord)
     [[ ${#files[@]} -eq 0 ]] && return 1
     # prefer darker wallpapers: city rain, outer space, planets, etc.
     local dark_keywords="cityrain outer_space planets earth_in_space about_to_die lightning"
@@ -103,7 +105,8 @@ nord_dark() {
 }
 
 nord_light() {
-    local files=($(list_nord))
+    local files=()
+    while IFS= read -r -d $'\0' f; do files+=("$f"); done < <(list_nord)
     [[ ${#files[@]} -eq 0 ]] && return 1
     # prefer lighter wallpapers: desert, furkapass, abstract, minimal
     local light_keywords="desert furkapass abstract minimal lighthouse mountain nordhills nordic_triangle"

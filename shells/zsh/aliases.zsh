@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 # Zsh-specific aliases - 2000 unique, no duplicates
 
-# Navigation
+##### Navigation
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -35,7 +35,7 @@ alias srv='cd /srv'
 alias bk='cd -'
 alias prev='cd -'
 
-# Exit/Clear/History
+##### Exit/Clear/History
 alias x='exit'
 alias q='exit'
 alias quit='exit'
@@ -56,7 +56,7 @@ alias hg='history | grep'
 alias hgr='history -r'
 alias hw='history -w'
 
-# System info
+##### System info
 alias dotst='git -C "$DOTFILES_DIR" status --short --branch'
 alias edots='$EDITOR "$DOTFILES_DIR"'
 alias dotupdate='bash "$DOTFILES_DIR/bin/dotupdate.sh"'
@@ -86,7 +86,7 @@ alias sete='set -e'
 alias setu='set -u'
 alias setpipefail='setopt pipefail'
 
-# List/File tools
+##### List/File tools
 alias ls='eza --icons=auto --group-directories-first 2>/dev/null || command ls'
 alias ll='eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
 alias la='eza -a --icons=auto --group-directories-first 2>/dev/null || command ls -A'
@@ -135,7 +135,7 @@ alias lauth='ls -lZ' 2>/dev/null || true
 alias lctx='ls -lZ' 2>/dev/null || true
 alias treed='_x eza -T --only-dirs 2>/dev/null || _x tree -CAFd 2>/dev/null || echo "tree needed"'
 
-# Cat/View/Pager
+##### Cat/View/Pager
 alias cat='bat --paging=never 2>/dev/null || command cat'
 alias find='fd 2>/dev/null || command find'
 alias duh='du -sh'
@@ -147,7 +147,7 @@ alias pager='command less'
 alias p='command less'
 alias m='command less'
 
-# Git
+##### Git
 alias g='git'
 alias gs='git status'
 alias gss='git status --short'
@@ -325,7 +325,7 @@ alias ghcr='gh repo create'
 alias ghw='gh workflow'
 alias ghlab='glab'
 
-# Docker
+##### Docker
 alias dk='_x docker'
 alias dkps='_x docker ps'
 alias dkpsa='_x docker ps -a'
@@ -420,7 +420,7 @@ alias dklzd='lazydocker 2>/dev/null || docker'
 alias dksc='_x docker scout' 2>/dev/null || true
 alias dkscout='_x docker scout' 2>/dev/null || true
 
-# Podman
+##### Podman
 alias pod='_x podman'
 alias podps='_x podman ps'
 alias podpsa='_x podman ps -a'
@@ -462,7 +462,7 @@ alias podstop='_x podman machine stop'
 alias podssh='_x podman machine ssh'
 alias podins='_x podman inspect'
 
-# Kubernetes
+##### Kubernetes
 alias k='_x kubectl'
 alias kg='_x kubectl get'
 alias kgp='_x kubectl get pods'
@@ -613,7 +613,7 @@ alias argodiff='argocd app diff'
 alias argosync='argocd app sync'
 alias argofresh='argocd app sync --force'
 
-# Helm
+##### Helm
 alias hls='_x helm list'
 alias hlsa='_x helm list --all'
 alias hlsn='_x helm list -n'
@@ -672,7 +672,7 @@ alias htest='_x helm test'
 alias hcreate='_x helm create'
 alias hrep='_x helm repo'
 
-# Systemd
+##### Systemd
 alias sc='_x systemctl'
 alias scs='_x systemctl status'
 alias scst='_x systemctl start'
@@ -751,7 +751,7 @@ alias scconflicts='_x systemctl list-dependencies --before'
 alias scdeps='_x systemctl list-dependencies'
 alias scdepsr='_x systemctl list-dependencies --reverse'
 
-# Journald
+##### Journald
 alias jc='_x journalctl'
 alias jce='_x journalctl -e'
 alias jcf='_x journalctl -f'
@@ -834,7 +834,7 @@ alias jcunit='_x journalctl _SYSTEMD_UNIT='
 alias jcsl='_x journalctl -x'
 alias jcexplain='_x journalctl -x'
 
-# Package managers - Arch/Pacman
+##### Package managers - Arch/Pacman
 alias pac='sudo pacman'
 alias pacs='_x pacman -Ss'
 alias pacsi='_x pacman -Si'
@@ -900,7 +900,7 @@ alias pactest='_x pacman -Dk'
 alias pacdbg='_x pacman -Qqg base-devel'
 alias pacbase='_x pacman -S base base-devel'
 
-# AUR Helpers
+##### AUR Helpers
 alias yay='_x yay'
 alias yays='_x yay -Ss'
 alias yayq='_x yay -Q'
@@ -943,7 +943,7 @@ alias aurs='_x yay -Ss 2>/dev/null || paru -Ss'
 alias auri='_x yay -S 2>/dev/null || paru -S'
 alias aurup='_x yay -Syu 2>/dev/null || paru -Syu'
 
-# Debian/Ubuntu/APT
+##### Debian/Ubuntu/APT
 alias apt='_x apt'
 alias aptup='sudo apt update && sudo apt upgrade -y'
 alias aptu='sudo apt update && sudo apt upgrade -y'
@@ -1033,7 +1033,7 @@ alias snapup='sudo snap refresh'
 alias snapfind='snap find'
 alias snapinfo='snap info'
 
-# Fedora/RHEL/DNF
+##### Fedora/RHEL/DNF
 
 alias dnfs='_x dnf search'
 alias dnfsi='_x dnf info'
@@ -1129,7 +1129,7 @@ alias yumrm='sudo dnf remove'
 alias yumsearch='_x dnf search'
 alias yumclean='sudo dnf clean all'
 
-# Homebrew
+##### Homebrew
 
 alias brews='_x brew search'
 alias brewse='_x brew search'
@@ -1216,7 +1216,7 @@ alias brewconfig='_x brew config'
 alias brewenvs='_x brew shellenv'
 alias brewenv='eval "$(brew shellenv)"'
 
-# Flatpak
+##### Flatpak
 alias flat='_x flatpak'
 alias flakpak='_x flatpak'
 alias flats='_x flatpak search'
@@ -1276,7 +1276,7 @@ alias flatsys='_x flatpak --system'
 alias flataddflathub='_x flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo'
 alias flataddflathubbeta='_x flatpak remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo'
 
-# Nix
+##### Nix
 alias nix='_x nix'
 alias nixs='_x nix search'
 alias nixsearch='_x nix search'
@@ -1321,9 +1321,12 @@ alias hmg='_x home-manager generations'
 alias hme='_x home-manager edit'
 alias hmc='_x home-manager generations'
 
+##### Misc / System utilities
+
 setopt AUTO_CD 2>/dev/null
 cd() { builtin cd "$@" && eza --icons=auto --group-directories-first 2>/dev/null || command ls; }
 
+##### Grep / Diff / Pager
 alias grep='command grep --color=auto'
 alias egrep='command grep -E'
 alias fgrep='command grep -F'
@@ -1336,11 +1339,14 @@ alias grepp='command grep -r --include="*.py"'
 alias grepj='command grep -r --include="*.js" --include="*.ts"'
 alias grepc='command grep -r --include="*.c" --include="*.h" --include="*.cpp" --include="*.hpp"'
 alias diff='command diff --color=auto 2>/dev/null || command diff'
+alias w='command w 2>/dev/null || echo "no w"'
 alias wdiff='command diff --side-by-side --width=160'
 alias vdiff='_x nvim -d 2>/dev/null || _x vimdiff 2>/dev/null || echo "no vimdiff"'
 alias less='command less -RFX'
 alias more='command less'
 alias zgrep='command zgrep --color=auto'
+
+##### File / Mount / Perms
 alias mkit='mkdir -p'
 alias mkdir='mkdir -p'
 alias rmdir='_x rmdir 2>/dev/null || rm -rf'
@@ -1352,6 +1358,8 @@ alias own='sudo chown $USER:$USER 2>/dev/null'
 alias ownr='sudo chown -R $USER:$USER 2>/dev/null'
 alias mnt='_x sudo mount 2>/dev/null || echo "no mount"'
 alias umnt='_x sudo umount 2>/dev/null || echo "no umount"'
+
+##### Power / System info
 alias mem='_x free -h 2>/dev/null || echo "no mem info"'
 alias cpu='_x lscpu 2>/dev/null || echo "no cpu info"'
 alias disk='_x df -h 2>/dev/null || _x df 2>/dev/null'
@@ -1365,12 +1373,16 @@ alias dmesg='_x dmesg -T 2>/dev/null | tail -20 || echo "no dmesg"'
 alias dmesgw='_x dmesg -T 2>/dev/null | grep -i "error\|warn\|fail" | tail -20 || echo "no dmesg"'
 alias last='last -n 20 2>/dev/null || echo "no last"'
 alias uptime='uptime 2>/dev/null'
+
+##### Date / Audio / Tools
 alias dateiso='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias datefmt='date "+%Y-%m-%d %H:%M:%S"'
 alias cal='cal -3 2>/dev/null || cal 2>/dev/null'
 alias week='date +%V'
 alias weather='_x curl -fsSL wttr.in 2>/dev/null || echo "curl needed"'
 alias tl='_x tldr 2>/dev/null || echo "tldr needed"'
+
+##### Network / Containers
 alias wifi='_x nmtui 2>/dev/null || _x nmcli 2>/dev/null || echo "no network tool"'
 alias bt='_x bluetoothctl 2>/dev/null || echo "no bluetooth"'
 alias docker='_x docker'

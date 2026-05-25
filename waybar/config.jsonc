@@ -1,21 +1,37 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 40,
-  "margin-top": 0,
-  "margin-bottom": 8,
+  "height": 36,
+  "margin-top": 8,
+  "margin-bottom": 4,
   "margin-left": 8,
   "margin-right": 8,
   "mod": "dock",
   "exclusive": true,
   "passthrough": false,
-  "spacing": 4,
+  "spacing": 2,
   "output": null,
-
-  "modules-left": ["hyprland/workspaces", "hyprland/window"],
-  "modules-center": ["custom/media"],
-  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "temperature", "power-profiles-daemon", "battery", "custom/theme", "clock", "custom/power", "custom/settings", "custom/hint", "custom/cycle_wall", "custom/light_dark", "custom/nightlight", "custom/swaync"],
-
+  "blur": true,
+  "all-outputs": false,
+  "modules-left": [
+    "hyprland/workspaces",
+    "hyprland/window"
+  ],
+  "modules-center": [
+    "custom/media"
+  ],
+  "modules-right": [
+    "tray",
+    "pulseaudio",
+    "network",
+    "custom/net-speed",
+    "cpu",
+    "memory",
+    "temperature",
+    "power-profiles-daemon",
+    "battery",
+    "clock"
+  ],
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": false,
@@ -34,94 +50,139 @@
     },
     "persistent-workspaces": {
       "*": 9
-    }
+    },
+    "on-click": "hyprctl dispatch workspace 1",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1"
   },
-
   "hyprland/window": {
     "format": "{}",
     "rewrite": {
       "(.*) — Mozilla Firefox": " $1",
       "(.*) - Visual Studio Code": " $1",
       "(.*) - Code - OSS": " $1",
-      "(.*) - Obsidian": " $1"
+      "(.*) - Obsidian": " $1",
+      "(.*) — Discord": " $1",
+      "(.*) — Signal": " $1",
+      "(.*) — Slack": " $1",
+      "(.*) — Spotify": " $1",
+      "(.*) - Thunar": " $1",
+      "(.*) - Nautilus": " $1",
+      "(.*) - Terminal": " $1",
+      "(.*) — Kitty": " $1",
+      "(.*) - Alacritty": " $1",
+      "(.*) - Neovim": " $1",
+      "(.*) - Vim": " $1",
+      "(.*) - htop": " $1",
+      "(.*) - btop": " $1",
+      "(.*) - Settings": " $1"
     },
     "separate-outputs": true,
-    "max-length": 40
+    "max-length": 40,
+    "tooltip": true,
+    "tooltip-format": "{title} on {output}"
   },
-
   "custom/media": {
     "format": "{icon} {text}",
     "return-type": "json",
     "max-length": 50,
     "exec": "~/.local/share/dotfiles/waybar/scripts/media.sh",
+    "exec-if": "playerctl -l 2>/dev/null | grep -q .",
     "on-click": "playerctl play-pause",
+    "on-click-middle": "playerctl stop",
+    "on-click-right": "playerctl previous",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous",
-    "smooth-scrolling-threshold": 5
+    "smooth-scrolling-threshold": 5,
+    "tooltip": true,
+    "tooltip-format": "Now playing on {playerName}: {title} by {artist} ({album})"
   },
-
   "tray": {
     "icon-size": 18,
-    "spacing": 6
+    "spacing": 6,
+    "tooltip": true,
+    "show-passive-items": true
   },
-
   "pulseaudio": {
     "format": "{icon} {volume:2}%",
     "format-muted": " 0%",
     "format-icons": {
-      "default": ["", "", ""]
+      "default": [
+        "",
+        "",
+        ""
+      ],
+      "headphone": ""
     },
     "on-click": "pavucontrol",
+    "on-click-middle": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/volume --toggle",
     "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
     "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
     "scroll-step": 5,
-    "smooth-scrolling-threshold": 5
+    "smooth-scrolling-threshold": 5,
+    "tooltip": true,
+    "tooltip-format": "Volume: {volume}%  |  Source: {source_name}  |  Port: {port_name}"
   },
-
   "network": {
     "format-icons": [
-      "󰤯",
-      "󰤟",
-      "󰤢",
-      "󰤥",
-      "󰤨"
+      "",
+      "",
+      "",
+      "",
+      ""
     ],
-    "format-ethernet": " ",
+    "format-ethernet": " ",
     "format-wifi": "{icon} ",
-    "format-disconnected": "󰤭",
-    "tooltip-format": "{ifname} via {gwaddr}",
-    "on-click": "nm-connection-editor"
+    "format-disconnected": "",
+    "tooltip": true,
+    "tooltip-format": "Interface: {ifname}\nIP: {ipaddr}/{cidr}\nGateway: {gwaddr}\nSignal: {signalStrength}%\nFreq: {frequency}MHz",
+    "format-linked": " {ifname} (No IP)",
+    "on-click": "nm-connection-editor",
+    "on-click-middle": "~/.local/share/dotfiles/hypr/scripts/network-toggle",
+    "on-click-right": "nmcli radio wifi toggle"
   },
-
   "cpu": {
-    "format": " {usage:2}%",
+    "format": " {usage:2}%",
     "interval": 5,
-    "tooltip": false
+    "tooltip": true,
+    "tooltip-format": "CPU: {usage}%\nFrequency: {frequency}GHz\nLoad: {load}",
+    "states": {
+      "warning": 80,
+      "critical": 95
+    }
   },
-
   "memory": {
     "format": " {percentage:1}%",
     "interval": 10,
     "tooltip": true,
-    "tooltip-format": "{used:0.1f}GiB / {total:0.1f}GiB"
+    "tooltip-format": "Memory: {used:0.1f}GiB / {total:0.1f}GiB ({percentage}%)\nSwap: {swapUsed:0.1f}GiB / {swapTotal:0.1f}GiB ({swapPercent}%)",
+    "states": {
+      "warning": 85,
+      "critical": 95
+    }
   },
-
   "temperature": {
     "critical-threshold": 85,
     "format": " {temperatureC}°C",
+    "format-critical": " {temperatureC}°C",
     "interval": 5,
     "tooltip": true,
-    "tooltip-format": "CPU: {temperatureC}°C  {temperatureF}°F"
+    "tooltip-format": "CPU Temperature: {temperatureC}°C / {temperatureF}°F",
+    "states": {
+      "warning": 75,
+      "critical": 85
+    }
   },
-
   "custom/net-speed": {
     "format": "{}",
     "return-type": "json",
     "interval": 2,
     "exec": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh",
-    "tooltip": false
+    "tooltip": false,
+    "on-click": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh --details",
+    "on-click-middle": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh --reset"
   },
-
   "power-profiles-daemon": {
     "format": "{icon}",
     "format-icons": {
@@ -133,9 +194,13 @@
     "tooltip": true,
     "tooltip-format": "Power Profile: {profile}",
     "on-click": "~/.local/share/dotfiles/waybar/scripts/power-profile-cycle.sh",
-    "on-click-right": "powerprofilesctl set balanced"
+    "on-click-right": "powerprofilesctl set balanced",
+    "states": {
+      "performance": "performance",
+      "balanced": "balanced",
+      "power-saver": "power-saver"
+    }
   },
-
   "battery": {
     "bat": "BAT0",
     "adapter": "AC",
@@ -144,81 +209,46 @@
     "format-plugged": " {capacity:2}%",
     "format-full": " {capacity:2}%",
     "format-alt": "{icon}",
-    "format-icons": ["", "", "", "", ""],
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
     "tooltip": true,
-    "tooltip-format": "{timeTo}  {power}W",
+    "tooltip-format": "Battery: {capacity}%\nStatus: {status}\nTime to {timeTo}: {time}\nPower: {power}W\nCycle count: {cycleCount}\nHealth: {health}%",
     "on-click": "~/.local/share/dotfiles/waybar/scripts/battery-info.sh",
     "states": {
       "warning": 20,
       "critical": 10
     }
   },
-
   "clock": {
     "format": "{:%a %b %d  %H:%M}",
-    "tooltip-format": "{:%A, %B %d %Y}",
-    "interval": 10,
-    "on-click": "~/.local/share/dotfiles/waybar/scripts/calendar.sh"
-  },
-
-  "custom/theme": {
-    "format": "{}",
-    "exec": "~/.local/share/dotfiles/waybar/scripts/theme.sh",
-    "return-type": "json",
-    "on-click": "~/.local/share/dotfiles/waybar/scripts/theme.sh toggle",
-    "tooltip": true
-  },
-
-  "custom/power": {
-    "format": "{}",
-    "exec": "~/.local/share/dotfiles/waybar/scripts/power.sh",
-    "return-type": "json",
-    "on-click": "wlogout",
-    "tooltip": false
-  },
-
-  "custom/settings": {
-    "format": "󰸘",
-    "tooltip": false,
-    "on-click": "~/.local/share/dotfiles/hypr/scripts/settings-menu",
-    "on-click-right": "~/.local/share/dotfiles/themes/theme.sh toggle",
-    "exec-if": "which rofi"
-  },
-  "custom/hint": {
-    "format": "󱨥",
-    "tooltip": false,
-    "on-click": "~/.local/share/dotfiles/hypr/scripts/keyhints-yad",
-    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/keyhints",
-    "exec-if": "which yad"
-  },
-  "custom/cycle_wall": {
-    "format": "󰸉",
-    "tooltip": false,
-    "on-click": "~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch --next",
-    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch",
-    "exec-if": "which hyprctl"
-  },
-  "custom/light_dark": {
-    "format": "{}",
-    "exec": "~/.local/share/dotfiles/waybar/scripts/theme.sh",
-    "on-click": "~/.local/share/dotfiles/themes/theme.sh toggle",
-    "exec-if": "which yad",
-    "interval": 60,
-    "return-type": "json"
-  },
-  "custom/nightlight": {
-    "format": "{}",
-    "exec": "if [ -f /tmp/nightlight-mode ] && [ \"$(cat /tmp/nightlight-mode)\" = \"on\" ]; then echo '{\"text\": \"󰛨\", \"tooltip\": \"Night light ON\", \"class\": \"on\"}'; else echo '{\"text\": \"󰛩\", \"tooltip\": \"Night light OFF\", \"class\": \"off\"}'; fi",
-    "on-click": "~/.local/share/dotfiles/hypr/scripts/nightlight",
+    "format-alt": "{:%H:%M:%S}",
+    "tooltip-format": "{:%A, %B %d %Y}\n{:%I:%M:%S %p}",
     "interval": 5,
-    "return-type": "json"
-  },
-  "custom/swaync": {
-    "format": "{}",
-    "exec": "swaync-client --swaync-command 'get-dnd' 2>/dev/null | grep -q 'true' && echo '{\"text\": \"󰂛\", \"tooltip\": \"Notifications OFF\", \"class\": \"dnd\"}' || echo '{\"text\": \"󰂜\", \"tooltip\": \"Notifications ON\", \"class\": \"\"}'",
-    "on-click": "swaync-client -t -sw",
-    "on-click-right": "swaync-client -d -sw",
-    "interval": 5,
-    "return-type": "json"
+    "on-click": "~/.local/share/dotfiles/waybar/scripts/calendar.sh",
+    "on-click-right": "gnome-calendar",
+    "on-scroll-up": "~/.local/share/dotfiles/waybar/scripts/date-forward.sh",
+    "on-scroll-down": "~/.local/share/dotfiles/waybar/scripts/date-back.sh",
+    "smooth-scrolling-threshold": 5,
+    "calendar": {
+      "mode": "month",
+      "now-interval": 60,
+      "format": {
+        "months": {
+          "now": "<span color='#88c0d0'><b>{}</b></span>",
+          "today": "<span color='#88c0d0'><b>{}</b></span>"
+        },
+        "weekdays": {
+          "today": "<span color='#88c0d0'><b>{}</b></span>"
+        },
+        "days": {
+          "today": "<span color='#88c0d0'><b><u>{}</u></b></span>"
+        }
+      }
+    }
   }
 }

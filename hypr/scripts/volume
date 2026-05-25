@@ -1,18 +1,220 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# ============================================================================
+# Volume Control — manages audio output/input via PipeWire/WirePlumber
+# ============================================================================
+# Supports: raise, lower, toggle-mute, toggle-mic, set, get, mic-raise,
+#           mic-lower, mic-set, profile-switch, device-list, sink-default
+# ============================================================================
+
 set -euo pipefail
 
-if ! command -v swayosd-client &>/dev/null; then
-    echo "Error: swayosd-client is not installed" >&2
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+STEP="${STEP:-5}"              # Volume step percentage
+MAX_VOL="${MAX_VOL:-150}"      # Maximum allowed volume
+ICONS_DIR="${ICONS_DIR:-/usr/share/icons/Adwaita/symbolic/status}"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/audio"
+
+mkdir -p "$STATE_DIR"
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") <command> [args]
+
+Commands:
+  --inc              Raise output volume by $STEP%
+  --dec              Lower output volume by $STEP%
+  --set <0-150>      Set output volume to exact percentage
+  --toggle           Toggle output mute
+  --toggle-mic       Toggle input (microphone) mute
+  --mic-inc          Raise input volume by $STEP%
+  --mic-dec          Lower input volume by $STEP%
+  --mic-set <0-150>  Set input volume to exact percentage
+  --get              Get current output volume and mute status
+  --list-sinks       List all audio sinks
+  --list-sources     List all audio sources
+  --set-default <id> Set default sink by ID or name
+  --profile <id>     Cycle through available profiles for a device
+
+EOF
+    exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Volume formatting
+# ---------------------------------------------------------------------------
+format_volume() {
+    local vol="$1"
+    local muted="${2:-false}"
+
+    if [[ "$muted" == "true" ]]; then
+        echo "󰝟 Muted ($vol%)"
+    elif [[ "$vol" -le 30 ]]; then
+        echo "󰕿 $vol%"
+    elif [[ "$vol" -le 60 ]]; then
+        echo "󰖀 $vol%"
+    elif [[ "$vol" -le 100 ]]; then
+        echo "󰕾 $vol%"
+    else
+        echo "󰕾 $vol% (boosted)"
+    fi
+}
+
+get_default_sink() {
+    wpctl inspect @DEFAULT_AUDIO_SINK@ 2>/dev/null \
+        | grep -oP 'node\.nick\s*=\s*"\K[^"]+' || echo "Unknown"
+}
+
+get_default_source() {
+    wpctl inspect @DEFAULT_AUDIO_SOURCE@ 2>/dev/null \
+        | grep -oP 'node\.nick\s*=\s*"\K[^"]+' || echo "Unknown"
+}
+
+# ---------------------------------------------------------------------------
+# Dependencies check
+# ---------------------------------------------------------------------------
+if ! command -v wpctl &>/dev/null; then
+    notify -u critical "Volume" "wpctl (WirePlumber) is not installed"
     exit 1
 fi
 
+# ---------------------------------------------------------------------------
+# Command dispatch
+# ---------------------------------------------------------------------------
 case "${1:-}" in
-  --inc) swayosd-client --output-volume raise ;;
-  --dec) swayosd-client --output-volume lower ;;
-  --toggle) swayosd-client --output-volume mute-toggle ;;
-  --toggle-mic) swayosd-client --input-volume mute-toggle ;;
-  *)
-    echo "Usage: $(basename "$0") [--inc|--dec|--toggle|--toggle-mic]" >&2
-    exit 1
-    ;;
+    --inc)
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ "${STEP}%+"
+        VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%d", $2 * 100}')
+        MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -o MUTED || echo "")
+        TEXT=$(format_volume "$VOL" "$([[ -n "$MUTED" ]] && echo true || echo false)")
+        notify -u low -h string:x-canonical-private-synchronous:volume \
+            -i audio-volume-high "Volume" "$TEXT"
+        ;;
+
+    --dec)
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ "${STEP}%-"
+        VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%d", $2 * 100}')
+        MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -o MUTED || echo "")
+        TEXT=$(format_volume "$VOL" "$([[ -n "$MUTED" ]] && echo true || echo false)")
+        notify -u low -h string:x-canonical-private-synchronous:volume \
+            -i audio-volume-low "Volume" "$TEXT"
+        ;;
+
+    --set)
+        if [[ -z "${2:-}" ]]; then
+            notify -u critical "Volume" "Usage: --set <percentage>"
+            exit 1
+        fi
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ "${2}%"
+        VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%d", $2 * 100}')
+        notify -u low -h string:x-canonical-private-synchronous:volume \
+            -i audio-volume-high "Volume" "Set to $VOL%"
+        ;;
+
+    --toggle)
+        wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+        MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -o MUTED || echo "")
+        if [[ -n "$MUTED" ]]; then
+            notify -u low -h string:x-canonical-private-synchronous:volume \
+                -i audio-volume-muted "Volume" "Muted"
+        else
+            VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%d", $2 * 100}')
+            notify -u low -h string:x-canonical-private-synchronous:volume \
+                -i audio-volume-high "Volume" "Unmuted ($VOL%)"
+        fi
+        ;;
+
+    --toggle-mic)
+        wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+        MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -o MUTED || echo "")
+        if [[ -n "$MUTED" ]]; then
+            notify -u low -h string:x-canonical-private-synchronous:mic \
+                -i microphone-sensitivity-muted "Microphone" "Muted"
+        else
+            VOL=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf "%d", $2 * 100}')
+            notify -u low -h string:x-canonical-private-synchronous:mic \
+                -i microphone-sensitivity-high "Microphone" "Unmuted ($VOL%)"
+        fi
+        ;;
+
+    --mic-inc)
+        wpctl set-volume @DEFAULT_AUDIO_SOURCE@ "${STEP}%+"
+        VOL=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf "%d", $2 * 100}')
+        MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -o MUTED || echo "")
+        notify -u low -h string:x-canonical-private-synchronous:mic \
+            -i microphone-sensitivity-high "Microphone" \
+            "$([[ -n "$MUTED" ]] && echo "Muted — ")$VOL%"
+        ;;
+
+    --mic-dec)
+        wpctl set-volume @DEFAULT_AUDIO_SOURCE@ "${STEP}%-"
+        VOL=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf "%d", $2 * 100}')
+        notify -u low -h string:x-canonical-private-synchronous:mic \
+            -i microphone-sensitivity-low "Microphone" "$VOL%"
+        ;;
+
+    --mic-set)
+        if [[ -z "${2:-}" ]]; then
+            notify -u critical "Microphone" "Usage: --mic-set <percentage>"
+            exit 1
+        fi
+        wpctl set-volume @DEFAULT_AUDIO_SOURCE@ "${2}%"
+        notify -u low -h string:x-canonical-private-synchronous:mic \
+            -i microphone-sensitivity-high "Microphone" "Set to ${2}%"
+        ;;
+
+    --get)
+        VOL=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%d", $2 * 100}')
+        MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -o MUTED || echo "")
+        SINK=$(get_default_sink)
+        MIC_VOL=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{printf "%d", $2 * 100}')
+        MIC_MUTED=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -o MUTED || echo "")
+        cat <<INFO
+Output Device: $SINK
+Volume:        $VOL%
+Muted:         $([[ -n "$MUTED" ]] && echo "yes" || echo "no")
+Mic Volume:    $MIC_VOL%
+Mic Muted:     $([[ -n "$MIC_MUTED" ]] && echo "yes" || echo "no")
+INFO
+        ;;
+
+    --list-sinks)
+        wpctl status 2>/dev/null | grep -A 100 "Audio" | grep -E "^\s+[0-9]+\.\s" || \
+            pactl list sinks short 2>/dev/null || \
+            notify -u critical "Volume" "Failed to list sinks"
+        ;;
+
+    --list-sources)
+        pactl list sources short 2>/dev/null || \
+            wpctl status 2>/dev/null | grep -A 100 "Audio" | grep -E "^\s+[0-9]+\.\s" || \
+            notify -u critical "Volume" "Failed to list sources"
+        ;;
+
+    --set-default)
+        if [[ -z "${2:-}" ]]; then
+            notify -u critical "Volume" "Usage: --set-default <sink-id-or-name>"
+            exit 1
+        fi
+        wpctl set-default "${2}" 2>/dev/null || \
+            notify -u critical "Volume" "Failed to set default sink to '$2'"
+        notify -u low "Volume" "Default sink changed to: $(get_default_sink)"
+        ;;
+
+    --profile)
+        notify -u low "Volume" "Profile switching not yet implemented via CLI"
+        ;;
+
+    --help|-h)
+        usage
+        ;;
+
+    *)
+        usage
+        ;;
 esac

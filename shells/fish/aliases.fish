@@ -7,6 +7,7 @@ function _x --description "Run command if available"
     end
 end
 
+##### Navigation / CD
 alias .. 'cd ..'
 alias ... 'cd ../..'
 alias .... 'cd ../../..'
@@ -29,6 +30,8 @@ alias bk 'cd -'
 alias x 'exit'
 alias c 'clear'
 alias cls 'clear'
+
+##### LS / Listing
 alias ls 'eza --icons=auto --group-directories-first 2>/dev/null || command ls'
 alias ll 'eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
 alias la 'eza -a --icons=auto --group-directories-first 2>/dev/null || command ls -A'
@@ -73,6 +76,8 @@ alias dotmode 'echo "$DOTFILES_MODE"'
 alias dotpush 'git -C "$DOTFILES_DIR" push'
 alias dotreload 'exec "$SHELL" -l'
 alias dotver 'echo "$DOTFILES_VERSION"'
+
+##### Git
 alias gap 'git add -p'
 alias gcm 'git commit -m'
 alias gcan 'git commit --amend --no-edit'
@@ -105,6 +110,8 @@ alias gwp 'git worktree prune'
 alias grepo 'git init'
 alias gtags 'git tag -l'
 alias gshow 'git show'
+
+##### Docker / Podman
 if type -q docker
     alias dk '_x docker'
     alias dkps '_x docker ps'
@@ -155,6 +162,8 @@ if type -q podman
     alias podup '_x podman compose up -d'
     alias poddown '_x podman compose down'
 end
+
+##### Kubernetes
 if type -q kubectl
     alias kgpw '_x kubectl get pods -w'
     alias kgns '_x kubectl get namespaces'
@@ -183,6 +192,8 @@ if type -q kubectl
     alias kapi '_x kubectl api-resources'
     alias kexplain '_x kubectl explain'
 end
+
+##### Systemd
 if type -q systemctl
     alias scsr '_x systemctl restart'
     alias scse '_x systemctl enable'
@@ -227,6 +238,8 @@ if type -q journalctl
     alias jcdebug '_x journalctl -p debug'
     alias jcboot '_x journalctl -b'
 end
+
+##### Package Managers / Pacman
 if type -q pacman
     alias pac 'sudo pacman'
     alias pacs '_x pacman -Ss'
@@ -296,6 +309,8 @@ if test -n "$_AUR_HELPER"
             alias pikaurf '_aur_fzf'
     end
 end
+
+##### Debian / Ubuntu
 if command -v apt >/dev/null 2>&1; or command -v apt-get >/dev/null 2>&1
     alias apt '_x apt'
     alias aptup 'sudo apt update && sudo apt upgrade -y'
@@ -321,6 +336,8 @@ if command -v apt >/dev/null 2>&1; or command -v apt-get >/dev/null 2>&1
     alias aptupdate 'sudo apt update'
     alias aptdistup 'sudo apt full-upgrade'
 end
+
+##### Fedora / RHEL
 if type -q dnf
     alias dnf '_x dnf'
     alias dnfs '_x dnf search'
@@ -343,6 +360,8 @@ if type -q dnf
     alias dnfchk '_x dnf check-update'
     alias dnfmod '_x dnf module'
 end
+
+##### macOS / Homebrew
 if type -q brew
     alias brew '_x brew'
     alias brews '_x brew search'
@@ -365,6 +384,8 @@ if type -q brew
     alias brewuses '_x brew uses'
     alias brewleaves '_x brew leaves'
 end
+
+##### Flatpak
 if type -q flatpak
     alias flat '_x flatpak'
     alias flats '_x flatpak search'
@@ -376,6 +397,8 @@ if type -q flatpak
     alias flatinfo '_x flatpak info'
     alias flatover '_x flatpak override'
 end
+
+##### Snap
 if type -q snap
     alias snap '_x snap'
     alias snaps '_x snap search'
@@ -386,6 +409,8 @@ if type -q snap
     alias snapinfo '_x snap info'
     alias snapch 'sudo snap changes'
 end
+
+##### Nix / NixOS
 if type -q nix
     alias nix '_x nix'
     alias nixs '_x nix search'
@@ -400,6 +425,8 @@ if type -q nix
     alias nixgc '_x nix store gc'
     alias nixopt '_x nix store optimise'
 end
+
+##### Zypper / openSUSE
 if type -q zypper
     alias zyp 'sudo zypper'
     alias zyps 'zypper search'
@@ -412,6 +439,8 @@ if type -q zypper
     alias zyplr 'zypper lr'
     alias zypprov 'zypper what-provides'
 end
+
+##### Apk / Alpine
 if type -q apk
     alias apk 'apk'
     alias apks 'apk search'
@@ -423,6 +452,8 @@ if type -q apk
     alias apkinfo 'apk info'
     alias apkclean 'apk cache clean'
 end
+
+##### Node / NPM
 if type -q node
     alias node 'node'
     alias nt '_x npm test'
@@ -480,6 +511,8 @@ if type -q yarn
     alias ygl 'yarn global list'
     alias yga 'yarn global add'
 end
+
+##### Python / Pip
 if type -q python3
     alias py '_x python3'
     alias py2 'python2 2>/dev/null || python3'
@@ -507,6 +540,8 @@ if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1
     alias pdown '_x pip download'
     alias phash '_x pip hash'
 end
+
+##### Cargo / Rust
 if type -q cargo
     alias cr '_x cargo'
     alias crb '_x cargo build'
@@ -529,6 +564,8 @@ if type -q cargo
     alias cradd '_x cargo add'
     alias crrm '_x cargo remove'
 end
+
+##### Go
 if type -q go
     alias go '_x go'
     alias gor '_x go run'
@@ -549,6 +586,8 @@ if type -q go
     alias goenv '_x go env'
     alias gop '_x go tool pprof'
 end
+
+##### Terraform
 if type -q terraform
     alias tfv '_x terraform validate'
     alias tff '_x terraform fmt'
@@ -564,6 +603,8 @@ if type -q terraform
     alias tfgraph '_x terraform graph'
     alias tfconsole '_x terraform console'
 end
+
+##### Ansible
 if type -q ansible
     alias an '_x ansible'
     alias anp '_x ansible-playbook'
@@ -573,6 +614,8 @@ if type -q ansible
     alias ancon '_x ansible-config'
     alias aninv '_x ansible-inventory'
 end
+
+##### Helm
 if type -q helm
     alias hl '_x helm'
     alias hls '_x helm list'
@@ -598,6 +641,8 @@ if type -q helm
     alias hlplug '_x helm plugin'
     alias hlpl '_x helm plugin list'
 end
+
+##### Tmux
 if type -q tmux
     alias tad '_x tmux attach -d'
     alias tl '_x tmux list-sessions'
@@ -613,6 +658,8 @@ if type -q tmux
     alias tnext '_x tmux next-window'
     alias tswap '_x tmux swap-window'
 end
+
+##### SSH / Remote
 if type -q ssh
     alias ssh '_x ssh'
     alias ssha '_x ssh -A'
@@ -621,6 +668,8 @@ if type -q ssh
     alias sskr '_x ssh-keygen -R'
     alias ssc '_x ssh-copy-id'
 end
+
+##### Network / Web
 alias myipl 'ip addr show | grep "inet " | awk "{print \$2}" | cut -d/ -f1 | head -1'
 alias weather 'curl -fsSL wttr.in'
 alias portlisten 'ss -tlnp 2>/dev/null || netstat -tlnp'
@@ -743,6 +792,8 @@ alias tac 'tac 2>/dev/null || tail -r'
 alias rev 'rev'
 alias shuf 'shuf'
 alias yes 'yes'
+
+##### System / Security
 if type -q rg
     alias rg 'rg --hidden --glob "!.git"'
     alias rgi 'rg -i --hidden --glob "!.git"'
@@ -810,6 +861,8 @@ alias sv 'nvim 2>/dev/null || command vim'
 alias nv 'nvim'
 alias codel 'code .'
 alias micro 'micro'
+
+##### Dev Tools
 if type -q lazygit
     alias lg 'lazygit'
 end
@@ -831,6 +884,8 @@ if type -q make
     alias mki 'make install'
     alias mkt 'make test'
 end
+
+##### Databases
 if type -q mysql
     alias myq 'mysql'
     alias myqr 'mysql -u root -p'
@@ -855,6 +910,8 @@ if type -q redis-cli
 end
 alias s3 's3cmd'
 alias mc 'mc'
+
+##### Cloud
 if type -q aws
     alias aws 'aws'
     alias awsw 'aws sts get-caller-identity'
@@ -887,6 +944,8 @@ if type -q az
     alias azg 'az group list'
     alias azaks 'az aks list'
 end
+
+##### Media / Design
 if type -q ffmpeg
     alias ffp 'ffprobe'
     alias ffg 'ffplay'
@@ -906,6 +965,8 @@ if type -q nvidia-smi
     alias gpul 'nvidia-smi --query-gpu=index,name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv'
     alias gputop 'nvidia-smi dmon -s pucvmet'
 end
+
+##### Utility / Encoding
 alias matrix 'printf "\01101000\01100101\01101100\01101100\01101111\n"'
 alias coinflip 'awk "BEGIN{srand();print rand()<0.5?\"heads\":\"tails\"}"'
 function dice; echo (random 1 6); end
@@ -934,6 +995,8 @@ alias dsync 'dot_sync'
 alias chmode 'export DOTFILES_MODE'
 function modestat; echo "Mode: $DOTFILES_MODE"; end
 function dotinfo; echo "Dotfiles: $DOTFILES_DIR | Mode: $DOTFILES_MODE | Shell: $SHELL"; end
+
+##### Extended Prefixes
 alias pgit 'git'
 alias pgitst 'git status --short --branch'
 alias pgitadd 'git add'
@@ -1851,6 +1914,7 @@ alias pdu 'dust'
 alias pdf 'duf'
 alias ptop 'btop'
 
+##### Dev / Terminal Tools
 if type -q atuin
     alias atu 'atuin'
     alias atus 'atuin search'
@@ -1906,6 +1970,7 @@ if type -q gh
     alias ghw 'gh workflow'
 end
 
+##### System / Performance
 if type -q fastfetch
     alias ffet 'fastfetch'
     alias ffetl 'fastfetch -l'
@@ -1920,6 +1985,7 @@ if type -q delta
     alias delta 'delta'
 end
 
+##### Data Processing
 if type -q jq
     alias jq 'jq'
     alias jqc 'jq -c'
@@ -1933,6 +1999,7 @@ if type -q yq
     alias yqp 'yq eval -P'
 end
 
+##### CLI / Network Tools
 if type -q glow
     alias glow 'glow'
     alias glows 'glow -s'
@@ -1963,6 +2030,7 @@ if type -q gping
     alias gping 'gping'
 end
 
+##### File / Text Utilities
 if type -q ouch
     alias ouch 'ouch'
     alias ouchd 'ouch decompress'
@@ -1983,6 +2051,7 @@ if command -v tldr >/dev/null 2>&1 || command -v tealdeer >/dev/null 2>&1
     alias tldr 'tldr 2>/dev/null || tealdeer'
 end
 
+##### Docker
 if type -q lazydocker
     alias lzd 'lazydocker'
 end
@@ -1993,6 +2062,7 @@ if type -q vivid
     alias vividt 'vivid themes'
 end
 
+##### Theme / Config
 if type -q chezmoi
     alias chez 'chezmoi'
     alias cheza 'chezmoi apply'
@@ -2006,6 +2076,7 @@ if type -q chezmoi
     alias chezr 'chezmoi re-add'
 end
 
+##### CI / Security
 if type -q act
     alias act 'act'
     alias actl 'act -l'
@@ -2027,6 +2098,7 @@ if type -q vault
     alias vaultw 'vault write'
 end
 
+##### Infrastructure
 if type -q kind
     alias kind 'kind'
     alias kindc 'kind create cluster'
@@ -2055,6 +2127,7 @@ if type -q packer
     alias pkinit 'packer init'
 end
 
+##### Encryption
 if type -q age
     alias age 'age'
     alias agee 'age -e'
@@ -2069,6 +2142,7 @@ if type -q sops
     alias sopsi 'sops -i'
 end
 
+##### Kubernetes
 if type -q argocd
     alias argo 'argocd'
     alias argol 'argocd login'
@@ -2103,6 +2177,7 @@ if type -q talosctl
     alias talc 'talosctl config'
 end
 
+##### Container / Security
 if type -q skopeo
     alias sk 'skopeo'
     alias skc 'skopeo copy'
@@ -2135,6 +2210,7 @@ end
 alias try 'curl -fsSL https://cht.sh'
 alias tldrl 'curl -fsSL https://cheat.sh'
 
+##### Backup / Sync
 if type -q rclone
     alias rcl 'rclone'
     alias rclls 'rclone ls'

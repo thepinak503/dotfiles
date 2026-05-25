@@ -1,12 +1,39 @@
--- Keybindings configuration
-local mainMod = "SUPER"
+-- =============================================================================
+-- KEYBINDINGS CONFIGURATION
+-- =============================================================================
+-- This file defines all keyboard shortcuts for Hyprland.
+-- The SUPER key (Windows/Command key) is the primary modifier.
+-- Each section is organized by category for easy navigation.
+--
+-- Modifier reference:
+--   SUPER  = Windows key / Command key
+--   ALT    = Alt key
+--   CTRL   = Control key
+--   SHIFT  = Shift key
+--
+-- Action reference:
+--   hl.bind(key_combo, action, [options])
+--   hl.dsp.* = dispatch helper (window management, exec, focus, etc.)
+-- =============================================================================
 
--- Launch Applications
+-- Local variables for paths and modifier keys
+local home = os.getenv("HOME")
+local dots = home .. "/.local/share/dotfiles"
+local scripts = dots .. "/hypr/scripts"
+local mainMod = "SUPER"
+local altMod = "ALT"
+
+-- =============================================================================
+-- LAUNCH APPLICATIONS
+-- =============================================================================
+
+-- Terminal emulator
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd("kitty"))
+hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd("kitty --working-directory ~/Projects"))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("rofi -show drun"))
-hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("rofi -show drun -config /home/pinak/.config/rofi/config-full.rasi"))
+hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("rofi -show drun -config " .. home .. "/.config/rofi/config-full.rasi"))
 hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd("kitty btop"))
-hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("rofi -show window -config /home/pinak/.config/rofi/config-full.rasi"))
+hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("rofi -show window -config " .. home .. "/.config/rofi/config-full.rasi"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("nautilus"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("firefox"))
 hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("rofi -show emoji"))
@@ -139,6 +166,12 @@ hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
 
 -- Toggle Waybar hidden
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
+
+-- Reload Waybar
+hl.bind(mainMod .. " + CTRL + B", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/waybar-reload"))
+
+-- Diagnostics
+hl.bind(mainMod .. " + SHIFT + D", hl.dsp.exec_cmd("kitty -e ~/.local/share/dotfiles/hypr/scripts/diagreload"))
 
 -- Theme switching
 hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("~/.local/share/dotfiles/themes/theme.sh light"))

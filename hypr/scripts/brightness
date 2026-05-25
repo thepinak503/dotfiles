@@ -1,16 +1,210 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# ============================================================================
+# Brightness Control — manages display backlight via brightnessctl or ddcutil
+# ============================================================================
+# Supports: raise, lower, set, get, list, max, min, save/restore
+# ============================================================================
+
 set -euo pipefail
 
-if ! command -v swayosd-client &>/dev/null; then
-    echo "Error: swayosd-client is not installed" >&2
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+STEP="${STEP:-5}"              # Brightness step percentage
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/backlight"
+mkdir -p "$STATE_DIR"
+STATE_FILE="$STATE_DIR/brightness"
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") <command> [args]
+
+Commands:
+  --inc              Raise brightness by $STEP%
+  --dec              Lower brightness by $STEP%
+  --set <0-100>      Set brightness to exact percentage
+  --get              Get current brightness value
+  --max              Set brightness to maximum
+  --min              Set brightness to minimum (1%)
+  --save             Save current brightness to state file
+  --restore          Restore brightness from state file
+
+EOF
+    exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Detect brightness backend
+# ---------------------------------------------------------------------------
+detect_backend() {
+    if command -v brightnessctl &>/dev/null; then
+        echo "brightnessctl"
+    elif command -v ddcutil &>/dev/null && [[ -n "${DISPLAY:-}" ]]; then
+        echo "ddcutil"
+    elif command -v light &>/dev/null; then
+        echo "light"
+    elif [[ -d /sys/class/backlight ]]; then
+        echo "sysfs"
+    else
+        echo "none"
+    fi
+}
+
+get_brightness() {
+    local backend
+    backend=$(detect_backend)
+    case "$backend" in
+        brightnessctl)
+            brightnessctl -m | head -1 | awk -F',' '{printf "%d", $4}'
+            ;;
+        light)
+            light -G | awk '{printf "%d", $1}'
+            ;;
+        sysfs)
+            local device
+            device=$(ls /sys/class/backlight 2>/dev/null | head -1)
+            if [[ -n "$device" ]]; then
+                local actual max
+                actual=$(cat "/sys/class/backlight/$device/actual_brightness" 2>/dev/null || echo 0)
+                max=$(cat "/sys/class/backlight/$device/max_brightness" 2>/dev/null || echo 100)
+                echo $(( actual * 100 / max ))
+            else
+                echo "0"
+            fi
+            ;;
+        *)
+            echo "0"
+            ;;
+    esac
+}
+
+set_brightness() {
+    local val="$1"
+    local backend
+    backend=$(detect_backend)
+
+    # Clamp between 1 and 100
+    if [[ "$val" -lt 1 ]]; then val=1; fi
+    if [[ "$val" -gt 100 ]]; then val=100; fi
+
+    case "$backend" in
+        brightnessctl)
+            brightnessctl set "${val}%" 2>/dev/null || notify -u critical "Brightness" "brightnessctl set failed"
+            ;;
+        light)
+            light -S "$val" 2>/dev/null || notify -u critical "Brightness" "light set failed"
+            ;;
+        sysfs)
+            local device actual_max
+            device=$(ls /sys/class/backlight 2>/dev/null | head -1)
+            actual_max=$(cat "/sys/class/backlight/$device/max_brightness" 2>/dev/null || echo 100)
+            local target=$(( val * actual_max / 100 ))
+            echo "$target" > "/sys/class/backlight/$device/brightness" 2>/dev/null || \
+                notify -u critical "Brightness" "sysfs write failed (need root?)"
+            ;;
+        *)
+            notify -u critical "Brightness" "No brightness control backend found"
+            return 1
+            ;;
+    esac
+}
+
+format_brightness() {
+    local val="$1"
+    if [[ "$val" -le 20 ]]; then
+        echo "󰃞 $val%"
+    elif [[ "$val" -le 50 ]]; then
+        echo "󰃝 $val%"
+    elif [[ "$val" -le 80 ]]; then
+        echo "󰃟 $val%"
+    else
+        echo "󰃠 $val%"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Main logic
+# ---------------------------------------------------------------------------
+if [[ "$(detect_backend)" == "none" ]]; then
+    notify -u critical "Brightness" "No brightness control available (install brightnessctl)"
     exit 1
 fi
 
 case "${1:-}" in
-  --inc) swayosd-client --brightness raise ;;
-  --dec) swayosd-client --brightness lower ;;
-  *)
-    echo "Usage: $(basename "$0") [--inc|--dec]" >&2
-    exit 1
-    ;;
+    --inc)
+        CURRENT=$(get_brightness)
+        NEW=$(( CURRENT + STEP ))
+        set_brightness "$NEW"
+        ACTUAL=$(get_brightness)
+        notify -u low -h string:x-canonical-private-synchronous:brightness \
+            -i display-brightness "Brightness" "$(format_brightness "$ACTUAL")"
+        ;;
+
+    --dec)
+        CURRENT=$(get_brightness)
+        NEW=$(( CURRENT - STEP ))
+        set_brightness "$NEW"
+        ACTUAL=$(get_brightness)
+        notify -u low -h string:x-canonical-private-synchronous:brightness \
+            -i display-brightness "Brightness" "$(format_brightness "$ACTUAL")"
+        ;;
+
+    --set)
+        if [[ -z "${2:-}" ]]; then
+            notify -u critical "Brightness" "Usage: --set <percentage>"
+            exit 1
+        fi
+        set_brightness "${2}"
+        ACTUAL=$(get_brightness)
+        notify -u low -h string:x-canonical-private-synchronous:brightness \
+            -i display-brightness "Brightness" "$(format_brightness "$ACTUAL")"
+        ;;
+
+    --get)
+        CURRENT=$(get_brightness)
+        echo "Current brightness: $CURRENT%"
+        ;;
+
+    --max)
+        set_brightness 100
+        notify -u low -h string:x-canonical-private-synchronous:brightness \
+            -i display-brightness "Brightness" "Maximum"
+        ;;
+
+    --min)
+        set_brightness 1
+        notify -u low -h string:x-canonical-private-synchronous:brightness \
+            -i display-brightness "Brightness" "Minimum"
+        ;;
+
+    --save)
+        local cur
+        cur=$(get_brightness)
+        echo "$cur" > "$STATE_FILE"
+        notify -u low "Brightness" "Saved current value ($cur%)"
+        ;;
+
+    --restore)
+        if [[ -f "$STATE_FILE" ]]; then
+            local saved
+            saved=$(cat "$STATE_FILE")
+            set_brightness "$saved"
+            notify -u low "Brightness" "Restored to $saved%"
+        else
+            notify -u low "Brightness" "No saved brightness value found"
+        fi
+        ;;
+
+    --help|-h)
+        usage
+        ;;
+
+    *)
+        usage
+        ;;
 esac

@@ -1,29 +1,201 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# ============================================================================
+# Touchpad Control — enable/disable touchpad with multi-device support
+# ============================================================================
+# Supports: toggle, enable, disable, status, list-devices, tap-toggle,
+#           natural-scroll-toggle, sensitivity
+# ============================================================================
+
 set -euo pipefail
 
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/touchpad"
+mkdir -p "$STATE_DIR"
+STATE_FILE="$STATE_DIR/status"
+TAP_STATE="$STATE_DIR/tap"
+NATURAL_STATE="$STATE_DIR/natural_scroll"
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
-STATUS_FILE="/tmp/hypr-touchpad-status"
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") <command>
 
+Commands:
+  --toggle           Toggle touchpad on/off
+  --on               Enable touchpad
+  --off              Disable touchpad
+  --status           Show current touchpad status
+  --list-devices     List detected touchpad devices
+  --tap-toggle       Toggle tap-to-click
+  --natural-toggle   Toggle natural scrolling
+  --tap-on           Enable tap-to-click
+  --tap-off          Disable tap-to-click
+  --sensitivity <0-1> Set touchpad sensitivity (0.0-1.0)
+  --accel <0-1>      Set pointer acceleration (0.0-1.0)
+
+EOF
+    exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Detect touchpad devices
+# ---------------------------------------------------------------------------
+find_touchpads() {
+    hyprctl devices -j 2>/dev/null | jq -r '.touch[] | "\(.name):\(.address)"' 2>/dev/null || \
+    hyprctl devices 2>/dev/null | grep -i "touchpad\|synaptics\|elantech\|alps" | awk '{print $2}' || \
+    echo ""
+}
+
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
 if ! command -v hyprctl &>/dev/null; then
     notify -u critical "Touchpad" "hyprctl not available"
     exit 1
 fi
 
-toggle() {
-  local state
-  state=$(cat "$STATUS_FILE" 2>/dev/null || echo "off")
-  if [[ "$state" == "on" ]]; then
-    hyprctl keyword "device[syna3067:00-06cb:8265-touchpad]:enabled" false
-    hyprctl keyword "device[synps/2-synaptics-touchpad]:enabled" false
-    printf "off" > "$STATUS_FILE"
-    notify -u low -i "touchpad-disabled" "Touchpad Disabled"
-  else
-    hyprctl keyword "device[syna3067:00-06cb:8265-touchpad]:enabled" true
-    hyprctl keyword "device[synps/2-synaptics-touchpad]:enabled" true
-    printf "on" > "$STATUS_FILE"
-    notify -u low -i "touchpad" "Touchpad Enabled"
-  fi
-}
+if ! command -v jq &>/dev/null; then
+    notify -u critical "Touchpad" "jq is not installed"
+    exit 1
+fi
 
-toggle
+# ---------------------------------------------------------------------------
+# Main logic
+# ---------------------------------------------------------------------------
+case "${1:-}" in
+    --toggle)
+        STATE=$(cat "$STATE_FILE" 2>/dev/null || echo "on")
+        if [[ "$STATE" == "on" ]]; then
+            while IFS=':' read -r name addr; do
+                [[ -z "$name" ]] && continue
+                hyprctl keyword "device[$name]:enabled" false 2>/dev/null || true
+            done < <(find_touchpads)
+            printf "off" > "$STATE_FILE"
+            notify -u low -i input-touchpad "Touchpad" "Disabled"
+        else
+            while IFS=':' read -r name addr; do
+                [[ -z "$name" ]] && continue
+                hyprctl keyword "device[$name]:enabled" true 2>/dev/null || true
+            done < <(find_touchpads)
+            printf "on" > "$STATE_FILE"
+            notify -u low -i input-touchpad "Touchpad" "Enabled"
+        fi
+        ;;
+
+    --on)
+        while IFS=':' read -r name addr; do
+            [[ -z "$name" ]] && continue
+            hyprctl keyword "device[$name]:enabled" true 2>/dev/null || true
+        done < <(find_touchpads)
+        printf "on" > "$STATE_FILE"
+        notify -u low -i input-touchpad "Touchpad" "Enabled"
+        ;;
+
+    --off)
+        while IFS=':' read -r name addr; do
+            [[ -z "$name" ]] && continue
+            hyprctl keyword "device[$name]:enabled" false 2>/dev/null || true
+        done < <(find_touchpads)
+        printf "off" > "$STATE_FILE"
+        notify -u low -i input-touchpad "Touchpad" "Disabled"
+        ;;
+
+    --status)
+        STATE=$(cat "$STATE_FILE" 2>/dev/null || echo "unknown")
+        echo "Touchpad status: $STATE"
+        echo "Detected devices:"
+        find_touchpads | head -10
+        ;;
+
+    --list-devices)
+        echo "Touchpad devices:"
+        find_touchpads
+        ;;
+
+    --tap-toggle)
+        CURRENT=$(hyprctl getoption input:touchpad:disable_while_typing 2>/dev/null | awk 'NR==1{print $2}' || echo "false")
+        if [[ "$CURRENT" == "true" ]]; then
+            while IFS=':' read -r name addr; do
+                [[ -z "$name" ]] && continue
+                hyprctl keyword "device[$name]:tap-to-click" true 2>/dev/null || true
+            done < <(find_touchpads)
+            printf "on" > "$TAP_STATE"
+            notify -u low "Touchpad" "Tap-to-click enabled"
+        else
+            while IFS=':' read -r name addr; do
+                [[ -z "$name" ]] && continue
+                hyprctl keyword "device[$name]:tap-to-click" false 2>/dev/null || true
+            done < <(find_touchpads)
+            printf "off" > "$TAP_STATE"
+            notify -u low "Touchpad" "Tap-to-click disabled"
+        fi
+        ;;
+
+    --natural-toggle)
+        CURRENT=$(hyprctl getoption input:touchpad:natural_scroll 2>/dev/null | awk 'NR==1{print $2}' || echo "false")
+        if [[ "$CURRENT" == "true" ]]; then
+            hyprctl keyword input:touchpad:natural_scroll false 2>/dev/null || true
+            while IFS=':' read -r name addr; do
+                [[ -z "$name" ]] && continue
+                hyprctl keyword "device[$name]:natural_scroll" false 2>/dev/null || true
+            done < <(find_touchpads)
+            notify -u low "Touchpad" "Natural scrolling disabled"
+        else
+            hyprctl keyword input:touchpad:natural_scroll true 2>/dev/null || true
+            while IFS=':' read -r name addr; do
+                [[ -z "$name" ]] && continue
+                hyprctl keyword "device[$name]:natural_scroll" true 2>/dev/null || true
+            done < <(find_touchpads)
+            notify -u low "Touchpad" "Natural scrolling enabled"
+        fi
+        ;;
+
+    --tap-on)
+        while IFS=':' read -r name addr; do
+            [[ -z "$name" ]] && continue
+            hyprctl keyword "device[$name]:tap-to-click" true 2>/dev/null || true
+        done < <(find_touchpads)
+        notify -u low "Touchpad" "Tap-to-click enabled"
+        ;;
+
+    --tap-off)
+        while IFS=':' read -r name addr; do
+            [[ -z "$name" ]] && continue
+            hyprctl keyword "device[$name]:tap-to-click" false 2>/dev/null || true
+        done < <(find_touchpads)
+        notify -u low "Touchpad" "Tap-to-click disabled"
+        ;;
+
+    --sensitivity)
+        if [[ -z "${2:-}" ]]; then
+            notify -u critical "Touchpad" "Usage: --sensitivity <0.0-1.0>"
+            exit 1
+        fi
+        hyprctl keyword input:touchpad:pointer_accel "$2" 2>/dev/null || \
+        hyprctl keyword input:accel_profile "$2" 2>/dev/null || true
+        notify -u low "Touchpad" "Sensitivity set to $2"
+        ;;
+
+    --accel)
+        if [[ -z "${2:-}" ]]; then
+            notify -u critical "Touchpad" "Usage: --accel <0.0-1.0>"
+            exit 1
+        fi
+        hyprctl keyword input:accel_profile "$2" 2>/dev/null || true
+        notify -u low "Touchpad" "Acceleration set to $2"
+        ;;
+
+    --help|-h)
+        usage
+        ;;
+
+    *)
+        usage
+        ;;
+esac

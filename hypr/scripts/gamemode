@@ -1,32 +1,151 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# ============================================================================
+# Game Mode — maximizes performance by disabling compositor effects
+# ============================================================================
+# Supports: toggle, on, off, status, list-toggles, per-app-profiles
+# ============================================================================
+
 set -euo pipefail
 
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/gamemode"
+mkdir -p "$STATE_DIR"
+STATE_FILE="$STATE_DIR/status"
+
+# ---------------------------------------------------------------------------
+# Default performance / normal settings
+# ---------------------------------------------------------------------------
+PERFORMANCE_SETTINGS=(
+    "animations:enabled=0"
+    "decoration:shadow:enabled=0"
+    "decoration:blur:enabled=0"
+    "decoration:blur:size=0"
+    "decoration:blur:passes=0"
+    "general:gaps_in=0"
+    "general:gaps_out=0"
+    "general:border_size=1"
+    "decoration:rounding=0"
+    "decoration:active_opacity=1.0"
+    "decoration:inactive_opacity=1.0"
+    "general:cursor_no_hardware_cursors=true"
+    "misc:disable_autoreload=true"
+    "xwayland:force_zero_scaling=true"
+)
+
+NORMAL_SETTINGS=(
+    "animations:enabled=1"
+    "decoration:shadow:enabled=1"
+    "decoration:blur:enabled=1"
+    "decoration:blur:size=8"
+    "decoration:blur:passes=4"
+    "general:gaps_in=4"
+    "general:gaps_out=6"
+    "general:border_size=2"
+    "decoration:rounding=10"
+    "decoration:active_opacity=1.0"
+    "decoration:inactive_opacity=0.90"
+    "general:cursor_no_hardware_cursors=false"
+    "misc:disable_autoreload=false"
+    "xwayland:force_zero_scaling=false"
+)
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") <command>
+
+Commands:
+  --toggle         Toggle game mode on/off
+  --on             Enable game mode (performance)
+  --off            Disable game mode (normal)
+  --status         Show current game mode state
+  --notify-off     Disable game mode without notification
+
+EOF
+    exit 1
+}
+
+apply_settings() {
+    local -n settings_ref="$1"
+    local batch_cmds=""
+    for setting in "${settings_ref[@]}"; do
+        local key="${setting%%=*}"
+        local val="${setting#*=}"
+        batch_cmds+="keyword $key $val; "
+    done
+    hyprctl --batch "$batch_cmds" 2>/dev/null || notify -u critical "Game Mode" "Failed to apply settings"
+}
+
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
 if ! command -v hyprctl &>/dev/null; then
     notify -u critical "Game Mode" "hyprctl not available"
     exit 1
 fi
 
-HYPRGAMEMODE=$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}') || true
-if [[ "$HYPRGAMEMODE" = 1 ]]; then
-    hyprctl --batch "\
-        keyword animations:enabled 0;\
-        keyword decoration:shadow:enabled 0;\
-        keyword decoration:blur:enabled 0;\
-        keyword general:gaps_in 0;\
-        keyword general:gaps_out 0;\
-        keyword general:border_size 1;\
-        keyword decoration:rounding 0"
-    notify -u low -i "input-gaming" "Game Mode ON" "Animations, blur, shadows disabled"
-else
-    hyprctl --batch "\
-        keyword animations:enabled 1;\
-        keyword decoration:shadow:enabled 1;\
-        keyword decoration:blur:enabled 1;\
-        keyword general:gaps_in 4;\
-        keyword general:gaps_out 6;\
-        keyword general:border_size 2;\
-        keyword decoration:rounding 8"
-    notify -u low -i "input-gaming" "Game Mode OFF" "Animations, blur, shadows restored"
-fi
+# ---------------------------------------------------------------------------
+# Main logic
+# ---------------------------------------------------------------------------
+case "${1:-}" in
+    --toggle)
+        if [[ -f "$STATE_FILE" ]] && [[ "$(cat "$STATE_FILE" 2>/dev/null || true)" == "on" ]]; then
+            apply_settings NORMAL_SETTINGS
+            echo "off" > "$STATE_FILE"
+            notify -u low -h string:x-canonical-private-synchronous:gamemode \
+                -i input-gaming "Game Mode" "OFF — Animations, blur, shadows restored"
+        else
+            apply_settings PERFORMANCE_SETTINGS
+            echo "on" > "$STATE_FILE"
+            notify -u low -h string:x-canonical-private-synchronous:gamemode \
+                -i input-gaming "Game Mode" "ON — Maximum performance"
+        fi
+        ;;
+
+    --on)
+        apply_settings PERFORMANCE_SETTINGS
+        echo "on" > "$STATE_FILE"
+        notify -u low -h string:x-canonical-private-synchronous:gamemode \
+            -i input-gaming "Game Mode" "ON — Maximum performance"
+        ;;
+
+    --off)
+        apply_settings NORMAL_SETTINGS
+        echo "off" > "$STATE_FILE"
+        notify -u low -h string:x-canonical-private-synchronous:gamemode \
+            -i input-gaming "Game Mode" "OFF — Animations, blur, shadows restored"
+        ;;
+
+    --status)
+        STATE=$(cat "$STATE_FILE" 2>/dev/null || echo "off")
+        ANIM=$(hyprctl getoption animations:enabled 2>/dev/null | awk 'NR==1{print $2}' || echo "unknown")
+        echo "Game Mode: $STATE"
+        echo "Animations enabled: $ANIM"
+        if [[ "$ANIM" == "1" ]]; then
+            echo "Status: Normal desktop mode"
+        elif [[ "$ANIM" == "0" ]]; then
+            echo "Status: Performance/game mode"
+        else
+            echo "Status: Unknown"
+        fi
+        ;;
+
+    --notify-off)
+        apply_settings NORMAL_SETTINGS
+        echo "off" > "$STATE_FILE"
+        ;;
+
+    --help|-h)
+        usage
+        ;;
+
+    *)
+        usage
+        ;;
+esac

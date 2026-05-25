@@ -1,60 +1,178 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# ============================================================================
+# Screenshot Utility — full-featured screenshot tool with hyprshot
+# ============================================================================
+# Supports: full screen, region, active window, delayed captures,
+#           clipboard-only, swappy/editor integration, color picker
+# ============================================================================
+
 set -euo pipefail
 
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+SCREENSHOT_DIR="${SCREENSHOT_DIR:-$HOME/Pictures/Screenshots}"
+mkdir -p "$SCREENSHOT_DIR"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [--now|--area|--window|--in5|--in10|--active|--swappy|--clipboard|--color|--menu|--help]
+
+Options:
+  --now        Capture full screen immediately
+  --area       Capture a selected region
+  --window     Capture active window
+  --in5        Capture full screen after 5s delay
+  --in10       Capture full screen after 10s delay
+  --active     Capture active window (same as --window)
+  --swappy     Capture region and open in Swappy editor
+  --clipboard  Capture area directly to clipboard (no file)
+  --color      Pick a color from screen (hyprpicker)
+  --menu       Show interactive rofi menu
+
+EOF
+    exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Capture function with error handling
+# ---------------------------------------------------------------------------
+take_shot() {
+    local cmd="$1"
+    local description="${2:-Screenshot}"
+    local outfile="$SCREENSHOT_DIR/${description}_${TIMESTAMP}.png"
+
+    if eval "$cmd"; then
+        if [[ "$cmd" != *"--clipboard"* ]] && [[ -f "$outfile" ]]; then
+            notify -u low -i image-x-generic "$description" \
+                "Saved: $outfile"
+            # Copy to clipboard if available
+            command -v wl-copy &>/dev/null && wl-copy < "$outfile" || true
+        else
+            notify -u low -i image-x-generic "$description" "Captured to clipboard"
+        fi
+    else
+        local exit_code=$?
+        if [[ "$exit_code" -ne 0 ]] && [[ "$exit_code" -ne 130 ]]; then
+            notify -u critical "$description" "Failed to capture screenshot (exit $exit_code)"
+        fi
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------------------
 if ! command -v hyprshot &>/dev/null; then
     notify -u critical "Screenshot" "hyprshot is not installed"
     exit 1
 fi
 
-take_shot() {
-    local cmd="$1"
-    if eval "$cmd"; then
-        notify -u low "Screenshot" "Screenshot taken successfully"
-    else
-        notify -u critical "Screenshot" "Failed to take screenshot"
-    fi
-}
-
+# ---------------------------------------------------------------------------
+# Main logic
+# ---------------------------------------------------------------------------
 case "${1:-}" in
     --now)
-        take_shot "hyprshot -m output"
+        take_shot "hyprshot -m output -o \"$SCREENSHOT_DIR\" -f \"full_${TIMESTAMP}\"" "Full Screen"
         ;;
+
     --area)
-        take_shot "hyprshot -m region"
+        take_shot "hyprshot -m region -o \"$SCREENSHOT_DIR\" -f \"region_${TIMESTAMP}\"" "Region"
         ;;
-    --window)
-        take_shot "hyprshot -m window"
+
+    --window|--active)
+        take_shot "hyprshot -m window -o \"$SCREENSHOT_DIR\" -f \"window_${TIMESTAMP}\"" "Window"
         ;;
+
     --in5)
-        take_shot "hyprshot -m output --delay 5"
+        notify -u low "Screenshot" "Capturing full screen in 5 seconds..."
+        take_shot "hyprshot -m output -o \"$SCREENSHOT_DIR\" -f \"delayed5_${TIMESTAMP}\" --delay 5" "Full Screen (5s)"
         ;;
+
     --in10)
-        take_shot "hyprshot -m output --delay 10"
+        notify -u low "Screenshot" "Capturing full screen in 10 seconds..."
+        take_shot "hyprshot -m output -o \"$SCREENSHOT_DIR\" -f \"delayed10_${TIMESTAMP}\" --delay 10" "Full Screen (10s)"
         ;;
-    --active)
-        take_shot "hyprshot -m window"
-        ;;
+
     --swappy)
-        take_shot "hyprshot -m region -- swappy -f -"
+        take_shot "hyprshot -m region -o \"$SCREENSHOT_DIR\" -f \"swappy_${TIMESTAMP}\" -- swappy -f -" "Region (Swappy)"
         ;;
-    "")
-        CHOICE=$(printf \
-"󰹑 Full Screen\n󰆞 Region\n Active Window\n󰄴 After 5s\n󰄴 After 10s\n Region to Swappy" \
-        | rofi -dmenu -p "Screenshot" -i)
-        case "$CHOICE" in
-            "󰹑 Full Screen")   take_shot "hyprshot -m output" ;;
-            "󰆞 Region")        take_shot "hyprshot -m region" ;;
-            " Active Window")  take_shot "hyprshot -m window" ;;
-            "󰄴 After 5s")      take_shot "hyprshot -m output --delay 5" ;;
-            "󰄴 After 10s")     take_shot "hyprshot -m output --delay 10" ;;
-            " Region to Swappy") take_shot "hyprshot -m region -- swappy -f -" ;;
-            *)  exit 0 ;;
+
+    --clipboard)
+        take_shot "hyprshot -m region -o /tmp -f \"clipboard_${TIMESTAMP}\" && cat /tmp/clipboard_${TIMESTAMP}.png | wl-copy" "Clipboard"
+        ;;
+
+    --color)
+        if ! command -v hyprpicker &>/dev/null; then
+            notify -u critical "Color Picker" "hyprpicker is not installed"
+            exit 1
+        fi
+        local color
+        color=$(hyprpicker -a -n 2>/dev/null) || true
+        if [[ -n "$color" ]]; then
+            notify -u low -i color-select "Color Picker" "Picked: $color (copied to clipboard)"
+        fi
+        ;;
+
+    --menu)
+        local choice
+        choice=$(printf \
+            "󰹑 Full Screen\n󰆞 Region\n Active Window\n󰄴 After 5s\n󰄴 After 10s\n Region to Swappy\n󰅌 Clipboard Only\n Color Picker" \
+            | rofi -dmenu -p "Screenshot" -i -theme-str 'entry { placeholder: "Take screenshot..."; }')
+        case "$choice" in
+            "󰹑 Full Screen")
+                take_shot "hyprshot -m output -o \"$SCREENSHOT_DIR\" -f \"full_${TIMESTAMP}\"" "Full Screen"
+                ;;
+            "󰆞 Region")
+                take_shot "hyprshot -m region -o \"$SCREENSHOT_DIR\" -f \"region_${TIMESTAMP}\"" "Region"
+                ;;
+            " Active Window")
+                take_shot "hyprshot -m window -o \"$SCREENSHOT_DIR\" -f \"window_${TIMESTAMP}\"" "Window"
+                ;;
+            "󰄴 After 5s")
+                notify -u low "Screenshot" "Capturing in 5 seconds..."
+                take_shot "hyprshot -m output -o \"$SCREENSHOT_DIR\" -f \"delayed5_${TIMESTAMP}\" --delay 5" "Full Screen (5s)"
+                ;;
+            "󰄴 After 10s")
+                notify -u low "Screenshot" "Capturing in 10 seconds..."
+                take_shot "hyprshot -m output -o \"$SCREENSHOT_DIR\" -f \"delayed10_${TIMESTAMP}\" --delay 10" "Full Screen (10s)"
+                ;;
+            " Region to Swappy")
+                take_shot "hyprshot -m region -o \"$SCREENSHOT_DIR\" -f \"swappy_${TIMESTAMP}\" -- swappy -f -" "Region (Swappy)"
+                ;;
+            "󰅌 Clipboard Only")
+                take_shot "hyprshot -m region -o /tmp -f \"clipboard_${TIMESTAMP}\" && cat /tmp/clipboard_${TIMESTAMP}.png | wl-copy" "Clipboard"
+                ;;
+            " Color Picker")
+                if command -v hyprpicker &>/dev/null; then
+                    local color
+                    color=$(hyprpicker -a -n 2>/dev/null) || true
+                    [[ -n "$color" ]] && notify -u low -i color-select "Color Picker" "Picked: $color"
+                else
+                    notify -u critical "Color Picker" "hyprpicker not installed"
+                fi
+                ;;
+            *)
+                exit 0
+                ;;
         esac
         ;;
+
+    "")
+        # Default: show menu
+        "$0" --menu
+        ;;
+
+    --help|-h)
+        usage
+        ;;
+
     *)
-        echo "Usage: $(basename "$0") [--now|--area|--window|--in5|--in10|--active|--swappy]"
-        exit 1
+        usage
         ;;
 esac

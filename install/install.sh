@@ -752,7 +752,11 @@ post_install_fixes() {
     if ! command -v starship >/dev/null 2>&1; then
         if command -v cargo >/dev/null 2>&1; then
             info "Installing starship via cargo (not in $PM repos)"
-            cargo install starship --locked >/dev/null 2>&1 && info "starship installed" || warn "starship install via cargo failed"
+            if cargo install starship --locked >/dev/null 2>&1; then
+                info "starship installed"
+            else
+                warn "starship install via cargo failed"
+            fi
         else
             warn "starship not available via $PM. Install Rust first or use the standalone installer: curl -sS https://starship.rs/install.sh | sh"
         fi
@@ -760,7 +764,11 @@ post_install_fixes() {
     if ! command -v zoxide >/dev/null 2>&1; then
         if command -v cargo >/dev/null 2>&1; then
             info "Installing zoxide via cargo"
-            cargo install zoxide --locked >/dev/null 2>&1 && info "zoxide installed" || warn "zoxide install via cargo failed"
+            if cargo install zoxide --locked >/dev/null 2>&1; then
+                info "zoxide installed"
+            else
+                warn "zoxide install via cargo failed"
+            fi
         elif command -v curl >/dev/null 2>&1; then
             info "Installing zoxide via standalone script"
             _safe_curl_exec https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh >/dev/null 2>&1 || warn "zoxide install failed"
@@ -769,7 +777,11 @@ post_install_fixes() {
     if ! command -v atuin >/dev/null 2>&1 && [ "$PM" != "brew" ] && [ "$PM" != "pacman" ]; then
         if command -v cargo >/dev/null 2>&1; then
             info "Installing atuin via cargo"
-            cargo install atuin --locked >/dev/null 2>&1 && info "atuin installed" || warn "atuin install via cargo failed"
+            if cargo install atuin --locked >/dev/null 2>&1; then
+                info "atuin installed"
+            else
+                warn "atuin install via cargo failed"
+            fi
         elif command -v curl >/dev/null 2>&1; then
             info "Installing atuin via standalone script"
             _safe_curl_exec https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh >/dev/null 2>&1 || warn "atuin install failed"
@@ -778,13 +790,21 @@ post_install_fixes() {
     if ! command -v fastfetch >/dev/null 2>&1 && [ "$PM" != "pacman" ]; then
         if command -v cargo >/dev/null 2>&1; then
             info "Installing fastfetch via cargo"
-            cargo install fastfetch --locked >/dev/null 2>&1 && info "fastfetch installed" || warn "fastfetch install via cargo failed"
+            if cargo install fastfetch --locked >/dev/null 2>&1; then
+                info "fastfetch installed"
+            else
+                warn "fastfetch install via cargo failed"
+            fi
         fi
     fi
     if ! command -v lazygit >/dev/null 2>&1; then
         if command -v go >/dev/null 2>&1; then
             info "Installing lazygit via go"
-            go install github.com/jesseduffield/lazygit@latest >/dev/null 2>&1 && info "lazygit installed" || warn "lazygit install via go failed"
+            if go install github.com/jesseduffield/lazygit@latest >/dev/null 2>&1; then
+                info "lazygit installed"
+            else
+                warn "lazygit install via go failed"
+            fi
         elif command -v cargo >/dev/null 2>&1; then
             :
         fi
@@ -955,19 +975,25 @@ fi
 # =============================================================================
 header "VALIDATING SHELLS"
 if command -v bash >/dev/null 2>&1; then
-    bash -c ". '$DOTFILES_DIR/shells/bash/aliases.bash' 2>/dev/null; . '$DOTFILES_DIR/shells/bash/functions.bash' 2>/dev/null; alias dots >/dev/null 2>&1; type mkcd >/dev/null 2>&1" \
-        && info "Bash behavior check passed" \
-        || warn "Bash behavior check failed (non-critical)"
+    if bash -c ". '$DOTFILES_DIR/shells/bash/aliases.bash' 2>/dev/null; . '$DOTFILES_DIR/core/functions.sh' 2>/dev/null; alias dots >/dev/null 2>&1; type mkcd >/dev/null 2>&1"; then
+        info "Bash behavior check passed"
+    else
+        warn "Bash behavior check failed (non-critical)"
+    fi
 fi
 if command -v zsh >/dev/null 2>&1; then
-    zsh -c ". '$DOTFILES_DIR/shells/zsh/aliases.zsh' 2>/dev/null; . '$DOTFILES_DIR/shells/zsh/functions.zsh' 2>/dev/null; alias dots >/dev/null 2>&1; whence -w mkcd >/dev/null 2>&1" \
-        && info "Zsh behavior check passed" \
-        || warn "Zsh behavior check failed (non-critical)"
+    if zsh -c ". '$DOTFILES_DIR/shells/zsh/aliases.zsh' 2>/dev/null; . '$DOTFILES_DIR/core/functions.sh' 2>/dev/null; alias dots >/dev/null 2>&1; whence -w mkcd >/dev/null 2>&1"; then
+        info "Zsh behavior check passed"
+    else
+        warn "Zsh behavior check failed (non-critical)"
+    fi
 fi
 if command -v fish >/dev/null 2>&1; then
-    fish -c "source '$DOTFILES_DIR/shells/fish/aliases.fish' 2>/dev/null; source '$DOTFILES_DIR/shells/fish/functions.fish' 2>/dev/null; alias dots >/dev/null 2>&1; functions -q mkcd >/dev/null 2>&1" \
-        && info "Fish behavior check passed" \
-        || warn "Fish behavior check failed (non-critical)"
+    if fish -c "source '$DOTFILES_DIR/shells/fish/aliases.fish' 2>/dev/null; source '$DOTFILES_DIR/shells/fish/functions.fish' 2>/dev/null; alias dots >/dev/null 2>&1; functions -q mkcd >/dev/null 2>&1"; then
+        info "Fish behavior check passed"
+    else
+        warn "Fish behavior check failed (non-critical)"
+    fi
 fi
 
 header "CLEANUP"

@@ -1,0 +1,124 @@
+{
+  "layer": "top",
+  "position": "bottom",
+  "height": 30,
+  "margin-top": 4,
+  "margin-bottom": 8,
+  "margin-left": 8,
+  "margin-right": 8,
+  "mod": "dock",
+  "exclusive": true,
+  "passthrough": false,
+  "spacing": 6,
+  "output": null,
+  "blur": true,
+  "all-outputs": false,
+  "modules-left": [
+    "custom/settings",
+    "custom/light_dark",
+    "custom/nightlight",
+    "custom/swaync",
+    "custom/cycle_wall",
+    "custom/screenshot",
+    "custom/blur",
+    "custom/refresh",
+    "custom/gamemode"
+  ],
+  "modules-center": [
+    "custom/quick-commands"
+  ],
+  "modules-right": [
+    "custom/power"
+  ],
+  "custom/settings": {
+    "format": "",
+    "tooltip": true,
+    "tooltip-format": "Open Settings Menu",
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/settings-menu",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/settings-menu --advanced",
+    "exec-if": "which rofi"
+  },
+  "custom/light_dark": {
+    "format": "{}",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/theme.sh",
+    "on-click": "~/.local/share/dotfiles/waybar/scripts/theme.sh toggle",
+    "on-click-right": "~/.local/share/dotfiles/waybar/scripts/theme.sh menu",
+    "exec-if": "which yad",
+    "interval": 60,
+    "return-type": "json",
+    "tooltip": true,
+    "tooltip-format": "Click to toggle theme"
+  },
+  "custom/nightlight": {
+    "format": "{}",
+    "exec": "if [ -f /tmp/nightlight-mode ] && [ \"$(cat /tmp/nightlight-mode)\" = \"on\" ]; then echo '{\"text\":\"\",\"tooltip\":\"Night light ON\",\"class\":\"on\"}'; else echo '{\"text\":\"\",\"tooltip\":\"Night light OFF\",\"class\":\"off\"}'; fi",
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/nightlight",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/nightlight --toggle",
+    "interval": 5,
+    "return-type": "json",
+    "tooltip": true,
+    "tooltip-format": "Click to toggle night light"
+  },
+  "custom/swaync": {
+    "format": "{}",
+    "exec": "swaync-client --swaync-command 'get-dnd' 2>/dev/null | grep -q 'true' && echo '{\"text\":\"\",\"tooltip\":\"Notifications OFF\\nClick: toggle DND\\nRight-click: clear all\",\"class\":\"dnd\"}' || echo '{\"text\":\"\",\"tooltip\":\"Notifications ON\\nClick: toggle DND\\nRight-click: clear all\",\"class\":\"\"}'",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "interval": 5,
+    "return-type": "json"
+  },
+  "custom/cycle_wall": {
+    "format": "",
+    "tooltip": true,
+    "tooltip-format": "Click: next wallpaper\nRight-click: random Nord wallpaper",
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch --next",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch --nord"
+  },
+  "custom/screenshot": {
+    "format": "",
+    "tooltip": true,
+    "tooltip-format": "Click: Swappy editor\nRight-click: fullscreen\nMiddle-click: area",
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/screenshot --swappy",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/screenshot --now",
+    "on-click-middle": "~/.local/share/dotfiles/hypr/scripts/screenshot --area"
+  },
+  "custom/blur": {
+    "format": "{}",
+    "exec": "if [ -f /tmp/hypr-blurmode ]; then MODE=$(cat /tmp/hypr-blurmode); case \"$MODE\" in normal) echo '{\"text\":\"\",\"tooltip\":\"Blur: Normal (passes=4, size=8)\",\"class\":\"on\"}';; low) echo '{\"text\":\"\",\"tooltip\":\"Blur: Low (passes=2, size=4)\",\"class\":\"low\"}';; off) echo '{\"text\":\"\",\"tooltip\":\"Blur: Off\",\"class\":\"off\"}';; esac; else echo '{\"text\":\"\",\"tooltip\":\"Blur: Normal\",\"class\":\"on\"}'; fi",
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/blur-toggle",
+    "interval": 5,
+    "return-type": "json",
+    "tooltip": true,
+    "tooltip-format": "Click to cycle blur modes"
+  },
+  "custom/refresh": {
+    "format": "",
+    "tooltip": true,
+    "tooltip-format": "Refresh all UI (Waybar, theme, etc.)",
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/refresh"
+  },
+  "custom/gamemode": {
+    "format": "",
+    "tooltip": true,
+    "tooltip-format": "Click: toggle game mode\n(disables animations, notifications, night light)",
+    "exec": "if [ -f /tmp/hypr-gamemode ]; then echo '{\"text\":\"🎮\",\"tooltip\":\"Game Mode ON\",\"class\":\"on\"}'; else echo '{\"text\":\"\",\"tooltip\":\"Game Mode OFF\",\"class\":\"off\"}'; fi",
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/gamemode",
+    "interval": 5,
+    "return-type": "json"
+  },
+  "custom/quick-commands": {
+    "format": "{}",
+    "exec": "echo '{\"text\":\"        \",\"tooltip\":\"Quick actions: Lock | Settings | Search\",\"class\":\"\"}'",
+    "on-click": "rofi -show drun",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/keyhints-yad",
+    "interval": 86400,
+    "return-type": "json"
+  },
+  "custom/power": {
+    "format": "",
+    "tooltip": true,
+    "tooltip-format": "Click: Wlogout (power menu)\nRight-click: Logout immediately",
+    "on-click": "wlogout",
+    "on-click-right": "loginctl terminate-session $XDG_SESSION_ID"
+  }
+}

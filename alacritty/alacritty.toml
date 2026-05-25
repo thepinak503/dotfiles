@@ -1,139 +1,256 @@
+# =============================================================================
+# ALACRITTY — TERMINAL EMULATOR CONFIGURATION
+# =============================================================================
+# Comprehensive TOML configuration for the Alacritty terminal emulator.
+# Optimized for performance, visual clarity, and developer workflow.
+# =============================================================================
+
+# =============================================================================
+# ENVIRONMENT VARIABLES
+# =============================================================================
+
 [env]
 TERM = "xterm-256color"
-WINIT_X11_SCALE_FACTOR = "1"
+
+# =============================================================================
+# WINDOW CONFIGURATION
+# =============================================================================
 
 [window]
-dynamic_padding = true
-decorations = "full"
+# Window dimensions (in columns/lines)
+dimensions = { columns = 120, lines = 36 }
+
+# Window position (in pixels)
+position = { x = 0, y = 0 }
+
+# Window padding (pixels)
+padding = { x = 6, y = 6 }
+
+# Window decorations: "Full", "None", "Transparent", "Buttonless", "FullResize"
+decorations = "Full"
+
+# Window opacity (0.0-1.0) — requires compositor
+opacity = 0.92
+
+# Startup mode: "Windowed", "Maximized", "Fullscreen", "SimpleFullscreen"
+startup_mode = "Windowed"
+
+# Dynamic title
+dynamic_title = true
+
+# Window title
 title = "Alacritty"
-opacity = 0.88
-decorations_theme_variant = "Dark"
 
-[window.dimensions]
-columns = 100
-lines = 30
+# Window class (for WM matching)
+class = { instance = "Alacritty", general = "Alacritty" }
 
-[window.class]
-instance = "Alacritty"
-general = "Alacritty"
+# GTK theme variant: "None", "Dark", "Light"
+gtk_theme_variant = "Dark"
+
+# Resize increments (set to cell size for crisp rendering)
+resize_increments = false
+
+# =============================================================================
+# SCROLLBACK
+# =============================================================================
 
 [scrolling]
-history = 100000
-multiplier = 3
+history = 100000            # Scrollback lines
+multiplier = 3              # Scroll speed multiplier (negative = inverted)
+auto_scroll = false         # Auto-scroll to bottom on new output
 
-import = ["~/.local/share/dotfiles/themes/alacritty-dark.toml"]
+# =============================================================================
+# FONT CONFIGURATION
+# =============================================================================
 
 [font]
-size = 11
+normal = { family = "CaskaydiaCove Nerd Font", style = "Regular" }
+bold = { family = "CaskaydiaCove Nerd Font", style = "Bold" }
+italic = { family = "CaskaydiaCove Nerd Font", style = "Italic" }
+bold_italic = { family = "CaskaydiaCove Nerd Font", style = "Bold Italic" }
+size = 11.0
 
-[font.normal]
-family = "CaskaydiaCove Nerd Font Mono"
-style = "Regular"
+# Font offset for fine-tuning
+offset = { x = 0, y = 0 }
 
-[font.bold]
-family = "CaskaydiaCove Nerd Font Mono"
-style = "Bold"
+# Font glyph offset
+glyph_offset = { x = 0, y = 0 }
 
-[font.italic]
-family = "CaskaydiaCove Nerd Font Mono"
-style = "Italic"
+# Font rendering
+builtin_box_drawing = true  # Use built-in box drawing characters for better alignment
 
-[font.bold_italic]
-family = "CaskaydiaCove Nerd Font Mono"
-style = "Bold Italic"
+# =============================================================================
+# COLORS — NORD THEME
+# =============================================================================
 
-[selection]
-semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
-save_to_clipboard = true
+[colors]
+# Default colors
+[colors.primary]
+background = "#2e3440"
+foreground = "#d8dee9"
+
+# Normal colors
+[colors.normal]
+black   = "#3b4252"
+red     = "#bf616a"
+green   = "#a3be8c"
+yellow  = "#ebcb8b"
+blue    = "#81a1c1"
+magenta = "#b48ead"
+cyan    = "#88c0d0"
+white   = "#e5e9f0"
+
+# Bright colors
+[colors.bright]
+black   = "#4c566a"
+red     = "#bf616a"
+green   = "#a3be8c"
+yellow  = "#ebcb8b"
+blue    = "#81a1c1"
+magenta = "#b48ead"
+cyan    = "#8fbcbb"
+white   = "#eceff4"
+
+# Indexed colors (256-color palette overrides)
+[colors.indexed_colors]
+# Uncomment and add specific indexed color overrides as needed
+# { index = 16, color = "#d08770" }
+# { index = 17, color = "#5e81ac" }
+
+# Selection colors
+[colors.selection]
+text = "#2e3440"
+background = "#88c0d0"
+
+# Cursor colors
+[colors.cursor]
+text = "#2e3440"
+cursor = "#88c0d0"
+
+# Vi mode cursor
+[colors.vi_mode_cursor]
+text = "#2e3440"
+cursor = "#88c0d0"
+
+# Search matches
+[colors.search]
+matches = { foreground = "#2e3440", background = "#88c0d0" }
+focused_match = { foreground = "#2e3440", background = "#a3be8c" }
+
+# Footer bar (Hint, Search, Vi mode)
+[colors.footer_bar]
+background = "#3b4252"
+foreground = "#d8dee9"
+
+# Hints
+[colors.hints]
+start = { foreground = "#2e3440", background = "#ebcb8b" }
+end = { foreground = "#2e3440", background = "#88c0d0" }
+
+# Line indicator
+[colors.line_indicator]
+foreground = "#eceff4"
+background = "#3b4252"
+
+# =============================================================================
+# CURSOR STYLE
+# =============================================================================
 
 [cursor]
-style = { shape = "Block", blinking = "On" }
-vi_mode_style = "None"
-unfocused_hollow = true
-thickness = 0.15
+style = { shape = "Beam", blinking = "Off" }  # Block, Underline, Beam
+vi_mode_style = { shape = "Block", blinking = "Off" }
+blink_interval = 750           # Blink interval in ms
+blink_timeout = 5              # Stop blinking after N seconds
+unfocused_hollow = true        # Hollow cursor when window is unfocused
+thickness = 0.15               # Beam cursor thickness
+
+# =============================================================================
+# MOUSE
+# =============================================================================
 
 [mouse]
-hide_when_typing = true
+hide_when_typing = true        # Hide mouse cursor while typing
+bindings = [
+  { mouse = "Right", action = "ExpandSelection" },
+  { mouse = "Middle", action = "PasteSelection" },
+]
 
-[[mouse.bindings]]
-mouse = "Middle"
-action = "PasteSelection"
+# =============================================================================
+# SELECTION
+# =============================================================================
+
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"  # Characters that break word selection
+save_to_clipboard = true                         # Auto-copy selection to clipboard
+
+# =============================================================================
+# HINTS
+# =============================================================================
+
+[hints]
+enabled = [
+  # URLs and paths
+  { regex = "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}|\\\\^⟨⟩`]+", action = "Open", post_processing = true, persistent = false },
+  # IP addresses
+  { regex = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}", action = "Copy", post_processing = true, persistent = false },
+  # Hex colors (web colors)
+  { regex = "#[\\da-fA-F]{6}|#[\\da-fA-F]{8}", action = "Copy", post_processing = false, persistent = false },
+]
+
+# =============================================================================
+# KEY BINDINGS
+# =============================================================================
 
 [keyboard]
-[[keyboard.bindings]]
-key = "Paste"
-action = "Paste"
+bindings = [
+  # Scrolling
+  { key = "PageUp",   mods = "Shift", mode = "~Alt", action = "ScrollPageUp" },
+  { key = "PageDown", mods = "Shift", mode = "~Alt", action = "ScrollPageDown" },
+  { key = "Home",     mods = "Shift", mode = "~Alt", action = "ScrollToTop" },
+  { key = "End",      mods = "Shift", mode = "~Alt", action = "ScrollToBottom" },
 
-[[keyboard.bindings]]
-key = "Copy"
-action = "Copy"
+  # Vi mode
+  { key = "Space",    mods = "Control|Shift", mode = "~Alt", action = "ToggleViMode" },
+  { key = "Space",    mods = "Control|Shift", mode = "Vi",    action = "ToggleViMode" },
 
-[[keyboard.bindings]]
-key = "L"
-mods = "Control"
-action = "ClearLogNotice"
+  # Vi mode movements
+  { key = "Y",        mods = "Control|Shift", mode = "Vi", action = "ViActionYank" },
+  { key = "D",        mods = "Control|Shift", mode = "Vi", action = "ViActionToggleNormalSelection" },
+  { key = "V",        mods = "Control|Shift", mode = "Vi", action = "ViActionToggleLineSelection" },
+  { key = "B",        mods = "Control|Shift", mode = "Vi", action = "ViActionToggleBlockSelection" },
+  { key = "Slash",    mods = "Control|Shift", mode = "Vi", action = "SearchBackward" },
+  { key = "Key3",     mods = "Shift",         mode = "Vi", action = "SearchForward" },
+  { key = "N",        mods = "Control|Shift", mode = "Vi", action = "SearchNext" },
+  { key = "N",        mods = "Control|Shift|Alt", mode = "Vi", action = "SearchPrevious" },
 
-[[keyboard.bindings]]
-key = "L"
-mods = "Control"
-mode = "~Vi"
-chars = "\f"
+  # Font size adjustments
+  { key = "Plus",     mods = "Control", action = "IncreaseFontSize" },
+  { key = "Minus",    mods = "Control", action = "DecreaseFontSize" },
+  { key = "Key0",     mods = "Control", action = "ResetFontSize" },
 
-[[keyboard.bindings]]
-key = "PageUp"
-mods = "Shift"
-mode = "~Alt"
-action = "ScrollPageUp"
+  # Clipboard
+  { key = "V",        mods = "Control|Shift", action = "Paste" },
+  { key = "C",        mods = "Control|Shift", action = "Copy" },
+  { key = "Insert",   mods = "Shift",         action = "PasteSelection" },
 
-[[keyboard.bindings]]
-key = "PageDown"
-mods = "Shift"
-mode = "~Alt"
-action = "ScrollPageDown"
+  # Window management
+  { key = "F11",      mods = "None",   action = "ToggleFullscreen" },
+  { key = "Return",   mods = "Control|Shift", action = "SpawnNewInstance" },
 
-[[keyboard.bindings]]
-key = "Home"
-mods = "Shift"
-mode = "~Alt"
-action = "ScrollToTop"
+  # Search
+  { key = "F",        mods = "Control|Shift", action = "SearchForward" },
+  { key = "B",        mods = "Control|Shift", action = "SearchBackward" },
 
-[[keyboard.bindings]]
-key = "End"
-mods = "Shift"
-mode = "~Alt"
-action = "ScrollToBottom"
+  # URL hints
+  { key = "U",        mods = "Control|Shift", action = "ToggleViMode", mode = "~Vi" },
+]
 
-[[keyboard.bindings]]
-key = "V"
-mods = "Control|Shift"
-action = "Paste"
+# =============================================================================
+# DEBUG SETTINGS
+# =============================================================================
 
-[[keyboard.bindings]]
-key = "C"
-mods = "Control|Shift"
-action = "Copy"
-
-[[keyboard.bindings]]
-key = "F"
-mods = "Control|Shift"
-action = "SearchForward"
-
-[[keyboard.bindings]]
-key = "B"
-mods = "Control|Shift"
-action = "SearchBackward"
-
-[[keyboard.bindings]]
-key = "C"
-mods = "Control|Shift"
-mode = "Vi"
-action = "ClearSelection"
-
-[[keyboard.bindings]]
-key = "Key0"
-mods = "Control"
-action = "ResetFontSize"
-
-[general]
-live_config_reload = true
-working_directory = "None"
+[debug]
+render_timer = false          # Show render timer overlay
+persistent_logging = false    # Keep logging after exit
+log_level = "Warn"            # Error, Warn, Info, Debug, Trace
+renderer = "None"             # Force renderer: "None" (auto), "Glsl3", "Gles2", "Gles2Pixman", "Metal"

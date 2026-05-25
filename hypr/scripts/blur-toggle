@@ -12,7 +12,7 @@ fi
 
 update_state() {
     local current
-    current=$(hyprctl getoption decoration:blur_passes | awk 'NR==1{print $2}') || true
+    current=$(hyprctl getoption decoration:blur:passes | awk 'NR==1{print $2}') || true
     if [[ "$current" == "4" ]]; then
         echo "normal" > "$STATE_FILE"
     elif [[ "$current" == "2" ]]; then
@@ -30,20 +30,17 @@ MODE=$(cat "$STATE_FILE" 2>/dev/null || echo "unknown")
 
 case "$MODE" in
     "normal")
-        hyprctl keyword decoration:blur_passes 2
-        hyprctl keyword decoration:blur_size 4
+        hyprctl eval 'hl.config({ decoration = { blur = { enabled = true, passes = 2, size = 4 } } })' 2>/dev/null || true
         echo "low" > "$STATE_FILE"
         notify -u low "Blur" "Mode: Low (passes=2, size=4)"
         ;;
     "low")
-        hyprctl keyword decoration:blur_passes 0
-        hyprctl keyword decoration:blur_size 0
+        hyprctl eval 'hl.config({ decoration = { blur = { enabled = false, passes = 0, size = 0 } } })' 2>/dev/null || true
         echo "off" > "$STATE_FILE"
         notify -u low "Blur" "Mode: Off"
         ;;
     "off")
-        hyprctl keyword decoration:blur_passes 4
-        hyprctl keyword decoration:blur_size 8
+        hyprctl eval 'hl.config({ decoration = { blur = { enabled = true, passes = 4, size = 8 } } })' 2>/dev/null || true
         echo "normal" > "$STATE_FILE"
         notify -u low "Blur" "Mode: Normal (passes=4, size=8)"
         ;;

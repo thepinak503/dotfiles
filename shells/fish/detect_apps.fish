@@ -53,7 +53,7 @@ end
 
 
 if _detect_app zoxide
-    zoxide init fish | source
+    zoxide init fish 2>/dev/null | source
 end
 
 # =============================================================================
@@ -62,7 +62,7 @@ end
 
 
 if _detect_app atuin
-    atuin init fish | source
+    atuin init fish 2>/dev/null | source
 end
 
 # =============================================================================
@@ -71,7 +71,7 @@ end
 
 
 if _detect_app starship
-    starship init fish --print-full-init | source
+    starship init fish --print-full-init 2>/dev/null | source
 end
 
 # =============================================================================
