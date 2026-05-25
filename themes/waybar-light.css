@@ -1,0 +1,267 @@
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "CaskaydiaCove Nerd Font", "Noto Sans", sans-serif;
+  font-size: 13px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: rgba(236, 239, 244, 0.75);
+  border-radius: 0 0 12px 12px;
+  color: #2e3440;
+  transition: background 0.3s ease;
+}
+
+window#waybar.empty {
+  background: rgba(236, 239, 244, 0.6);
+  border-radius: 0 0 12px 12px;
+}
+
+tooltip {
+  background: rgba(236, 239, 244, 0.95);
+  border: 1px solid #b6beca;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+tooltip label {
+  color: #2e3440;
+  font-size: 12px;
+}
+
+#workspaces {
+  margin: 0 4px;
+  padding: 4px 0;
+}
+
+#workspaces button {
+  padding: 0 8px;
+  margin: 2px 2px;
+  border-radius: 10px;
+  background: rgba(229, 233, 240, 0.6);
+  color: #4c566a;
+  font-weight: normal;
+  font-size: 12px;
+  min-width: 20px;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+#workspaces button.active {
+  background: linear-gradient(135deg, rgba(59, 110, 156, 0.5), rgba(79, 122, 158, 0.3));
+  color: #2e3440;
+  font-weight: bold;
+  min-width: 28px;
+}
+
+#workspaces button.empty {
+  color: #b6beca;
+  background: transparent;
+}
+
+#workspaces button.urgent {
+  background: rgba(191, 97, 106, 0.5);
+  color: #eceff4;
+}
+
+#workspaces button:hover {
+  background: rgba(59, 110, 156, 0.15);
+  color: #3b6e9c;
+}
+
+#window {
+  margin: 0 6px;
+  padding: 0 8px;
+  color: #4c566a;
+  font-size: 12px;
+  border-left: 1px solid rgba(182, 190, 202, 0.5);
+}
+
+window#waybar.empty #window {
+  opacity: 0;
+}
+
+#custom-media {
+  margin: 0;
+  padding: 0 10px;
+  color: #3b6e9c;
+  font-size: 12px;
+  border-radius: 8px;
+  background: rgba(59, 110, 156, 0.06);
+}
+
+#custom-media:hover {
+  background: rgba(59, 110, 156, 0.15);
+}
+
+#tray {
+  margin: 0 2px;
+  padding: 0 4px;
+  border-radius: 8px;
+}
+
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+}
+
+#pulseaudio {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #2e3440;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#pulseaudio:hover {
+  background: rgba(59, 110, 156, 0.1);
+}
+
+#pulseaudio.muted {
+  color: #b6beca;
+}
+
+#network {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #3b6e9c;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#network:hover {
+  background: rgba(59, 110, 156, 0.1);
+}
+
+#network.disconnected {
+  color: #bf616a;
+}
+
+#cpu {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #4f7a9e;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#cpu:hover {
+  background: rgba(79, 122, 158, 0.1);
+}
+
+#memory {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #3b6e9c;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#memory:hover {
+  background: rgba(59, 110, 156, 0.1);
+}
+
+#temperature {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #d08770;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#temperature:hover {
+  background: rgba(208, 135, 112, 0.1);
+}
+
+#temperature.critical {
+  color: #bf616a;
+}
+
+#custom-net-speed {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #3b6e9c;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#custom-net-speed:hover {
+  background: rgba(59, 110, 156, 0.1);
+}
+
+#battery {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #2e3440;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#battery:hover {
+  background: rgba(59, 110, 156, 0.1);
+}
+
+#battery.warning {
+  color: #d08770;
+}
+
+#battery.critical {
+  color: #bf616a;
+}
+
+#battery.charging {
+  color: #3b6e9c;
+}
+
+#clock {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #2e3440;
+  font-weight: bold;
+  font-size: 13px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#clock:hover {
+  color: #3b6e9c;
+  background: rgba(59, 110, 156, 0.08);
+}
+
+#custom-theme {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #2e3440;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+#custom-theme:hover {
+  background: rgba(59, 110, 156, 0.1);
+  color: #3b6e9c;
+}
+
+#custom-theme.light {
+  color: #d08770;
+}
+
+#custom-power {
+  margin: 0 2px;
+  padding: 2px 4px;
+  color: #bf616a;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#custom-power:hover {
+  background: rgba(191, 97, 106, 0.15);
+  color: #3b4252;
+}

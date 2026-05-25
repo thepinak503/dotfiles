@@ -8,14 +8,14 @@
 
 window#waybar {
   background: rgba(46, 52, 64, 0.55);
-  border-radius: 12px;
+  border-radius: 0 0 12px 12px;
   color: #d8dee9;
   transition: background 0.3s ease;
 }
 
 window#waybar.empty {
   background: rgba(46, 52, 64, 0.45);
-  border-radius: 12px;
+  border-radius: 0 0 12px 12px;
 }
 
 tooltip {
@@ -232,6 +232,24 @@ window#waybar.empty #window {
 #clock:hover {
   color: #88c0d0;
   background: rgba(136, 192, 208, 0.08);
+}
+
+#custom-theme {
+  margin: 0 2px;
+  padding: 2px 8px;
+  color: #d8dee9;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+#custom-theme:hover {
+  background: rgba(136, 192, 208, 0.1);
+  color: #88c0d0;
+}
+
+#custom-theme.light {
+  color: #ebcb8b;
 }
 
 #custom-power {

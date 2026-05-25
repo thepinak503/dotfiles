@@ -1,6 +1,6 @@
 {
   "layer": "top",
-  "position": "bottom",
+  "position": "top",
   "height": 40,
   "margin-top": 0,
   "margin-bottom": 8,
@@ -14,7 +14,7 @@
 
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": ["custom/media"],
-  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "temperature", "power-profiles-daemon", "battery", "clock", "custom/power"],
+  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "temperature", "power-profiles-daemon", "battery", "custom/theme", "clock", "custom/power"],
 
   "hyprland/workspaces": {
     "disable-scroll": false,
@@ -159,6 +159,14 @@
     "tooltip-format": "{:%A, %B %d %Y}",
     "interval": 10,
     "on-click": "~/.local/share/dotfiles/waybar/scripts/calendar.sh"
+  },
+
+  "custom/theme": {
+    "format": "{}",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/theme.sh",
+    "return-type": "json",
+    "on-click": "~/.local/share/dotfiles/waybar/scripts/theme.sh toggle",
+    "tooltip": true
   },
 
   "custom/power": {

@@ -5,8 +5,8 @@ hl.config({
         gaps_out    = 8,
         border_size = 2,
         col = {
-            active_border   = { colors = {"rgb(88c0d0)", "rgb(81a1c1)", "rgb(8fbcbb)"}, angle = 45 },
-            inactive_border = "rgb(3b4252)",
+            active_border   = { colors = {theme.accent, theme.accent3, theme.accent2}, angle = 45 },
+            inactive_border = theme.bg_alt,
         },
         layout = "dwindle",
         resize_corner = 2,

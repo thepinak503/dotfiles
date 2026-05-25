@@ -3,111 +3,217 @@
 WALLPAPER_DIR="$HOME/.local/share/dotfiles/wallpapers"
 API_KEY_FILE="$HOME/.local/share/dotfiles/.unsplash_key"
 CACHE_FILE="/tmp/wallpaper-list.json"
-QUIET="${1:-}"
+STATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/hyprland-wallpaper-idx"
+QUIET=""
+MODE="auto"
 
+shopt -s nullglob
 mkdir -p "$WALLPAPER_DIR"
 
-fetch_random_local() {
-  local wallpapers
-  wallpapers=("$WALLPAPER_DIR"/*.{png,jpg,jpeg} 2>/dev/null)
-  for w in "${wallpapers[@]}"; do
-    if [[ -f "$w" ]] && [[ "$(basename "$w")" != "nord_default.png" ]]; then
-      echo "$w"
-      return 0
+usage() {
+    echo "Usage: $(basename "$0") [OPTION]"
+    echo "  --nord       Random Nord wallpaper from local collection"
+    echo "  --next       Next Nord wallpaper in sequence"
+    echo "  --dark       Pick a dark-mode-appropriate Nord wallpaper"
+    echo "  --light      Pick a light-mode-appropriate Nord wallpaper"
+    echo "  --quiet      Suppress notifications"
+    echo "  (no args)    Try Unsplash → GitHub → random local"
+    exit 1
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --nord|--next|--dark|--light) MODE="$1"; shift ;;
+        --quiet|-q) QUIET="--quiet"; shift ;;
+        *) usage ;;
+    esac
+done
+
+apply_wallpaper() {
+    local path="$1"
+    [[ ! -f "$path" ]] && return 1
+    local old
+    old=$(hyprctl hyprpaper listloaded 2>/dev/null)
+    hyprctl hyprpaper preload "$path" >/dev/null 2>&1
+    hyprctl hyprpaper wallpaper ",$path"
+    for img in $old; do
+        if [[ "$img" != "$path" ]]; then
+            hyprctl hyprpaper unload "$img" >/dev/null 2>&1 || true
+        fi
+    done
+    # update hyprpaper.conf for persistence
+    echo "preload = $path" > "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
+    echo "wallpaper = , $path" >> "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
+    [[ -z "$QUIET" ]] && notify-send -u low -i "$path" "Wallpaper" "Changed"
+}
+
+# --- Nord wallpaper helpers ---
+
+list_nord() {
+    local f result=()
+    while IFS= read -r -d $'\0' f; do
+        local base
+        base=$(basename "$f")
+        [[ "$base" == "nord_default.png" || "$base" == "nord_light.png" ]] && continue
+        result+=("$f")
+    done < <(find "$WALLPAPER_DIR" -maxdepth 1 -type f -name 'nord_*' \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' \) -print0 2>/dev/null | sort -z)
+    echo "${result[@]}"
+}
+
+nord_random() {
+    local files=($(list_nord))
+    [[ ${#files[@]} -eq 0 ]] && return 1
+    echo "${files[RANDOM % ${#files[@]}]}"
+}
+
+nord_next() {
+    local files=($(list_nord))
+    [[ ${#files[@]} -eq 0 ]] && return 1
+    local idx=0
+    [[ -f "$STATE_FILE" ]] && idx=$(cat "$STATE_FILE")
+    idx=$(( (idx + 1) % ${#files[@]} ))
+    echo "$idx" > "$STATE_FILE"
+    echo "${files[$idx]}"
+}
+
+nord_dark() {
+    local files=($(list_nord))
+    [[ ${#files[@]} -eq 0 ]] && return 1
+    # prefer darker wallpapers: city rain, outer space, planets, etc.
+    local dark_keywords="cityrain outer_space planets earth_in_space about_to_die lightning"
+    local matches=()
+    for f in "${files[@]}"; do
+        local base
+        base=$(basename "$f")
+        for kw in $dark_keywords; do
+            if echo "$base" | grep -qi "$kw"; then
+                matches+=("$f")
+                break
+            fi
+        done
+    done
+    if [[ ${#matches[@]} -gt 0 ]]; then
+        echo "${matches[RANDOM % ${#matches[@]}]}"
+    else
+        nord_random
     fi
-  done
-  return 1
+}
+
+nord_light() {
+    local files=($(list_nord))
+    [[ ${#files[@]} -eq 0 ]] && return 1
+    # prefer lighter wallpapers: desert, furkapass, abstract, minimal
+    local light_keywords="desert furkapass abstract minimal lighthouse mountain nordhills nordic_triangle"
+    local matches=()
+    for f in "${files[@]}"; do
+        local base
+        base=$(basename "$f")
+        for kw in $light_keywords; do
+            if echo "$base" | grep -qi "$kw"; then
+                matches+=("$f")
+                break
+            fi
+        done
+    done
+    if [[ ${#matches[@]} -gt 0 ]]; then
+        echo "${matches[RANDOM % ${#matches[@]}]}"
+    else
+        nord_random
+    fi
+}
+
+# --- Original fetch helpers ---
+
+fetch_random_local() {
+    local w
+    while IFS= read -r -d $'\0' w; do
+        local base
+        base=$(basename "$w")
+        if [[ -f "$w" ]] && [[ "$base" != "nord_default.png" ]] && [[ "$base" != nord_* ]]; then
+            echo "$w"
+            return 0
+        fi
+    done < <(find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' \) -print0 2>/dev/null)
+    return 1
 }
 
 fetch_github_list() {
-  local api_url="https://api.github.com/repos/linuxdotexe/nordic-wallpapers/contents/wallpapers"
-  if [[ -f "$CACHE_FILE" ]] && [[ $(find "$CACHE_FILE" -mmin +60) ]]; then
-    rm -f "$CACHE_FILE"
-  fi
-  if [[ ! -f "$CACHE_FILE" ]]; then
-    curl -sfL "$api_url" -o "$CACHE_FILE" 2>/dev/null
-  fi
-  if [[ ! -f "$CACHE_FILE" ]]; then
-    return 1
-  fi
-  local urls
-  urls=$(python3 -c "
+    local api_url="https://api.github.com/repos/linuxdotexe/nordic-wallpapers/contents/wallpapers"
+    if [[ -f "$CACHE_FILE" ]] && [[ $(find "$CACHE_FILE" -mmin +60) ]]; then
+        rm -f "$CACHE_FILE"
+    fi
+    if [[ ! -f "$CACHE_FILE" ]]; then
+        curl -sfL "$api_url" -o "$CACHE_FILE" 2>/dev/null
+    fi
+    if [[ ! -f "$CACHE_FILE" ]]; then
+        return 1
+    fi
+    python3 -c "
 import json, random
 with open('$CACHE_FILE') as f:
-  data = json.load(f)
+    data = json.load(f)
 images = [x['download_url'] for x in data if x['name'].lower().endswith(('.png','.jpg','.jpeg'))]
 if images:
-  print(random.choice(images))
-" 2>/dev/null)
-  echo "$urls"
+    print(random.choice(images))
+" 2>/dev/null
 }
 
 download_github() {
-  local url
-  url=$(fetch_github_list)
-  if [[ -z "$url" ]]; then
-    return 1
-  fi
-  local ext="${url##*.}"
-  local path="$WALLPAPER_DIR/fetch_$(date +%s).$ext"
-  curl -sfL "$url" -o "$path" 2>/dev/null
-  echo "$path"
+    local url
+    url=$(fetch_github_list)
+    [[ -z "$url" ]] && return 1
+    local ext="${url##*.}"
+    local path="$WALLPAPER_DIR/fetch_$(date +%s).$ext"
+    curl -sfL "$url" -o "$path" 2>/dev/null && echo "$path"
 }
 
 download_unsplash() {
-  local key
-  key=$(cat "$API_KEY_FILE" 2>/dev/null | tr -d ' \n')
-  if [[ -z "$key" ]]; then
-    return 1
-  fi
-  local json
-  json=$(curl -sfL "https://api.unsplash.com/photos/random?orientation=landscape&query=nature,landscape,minimal&content_filter=high" \
-    -H "Authorization: Client-ID $key" 2>/dev/null)
-  if [[ -z "$json" ]]; then
-    return 1
-  fi
-  local img_url
-  img_url=$(echo "$json" | python3 -c "import json,sys; print(json.load(sys.stdin)['urls']['full'])" 2>/dev/null)
-  if [[ -z "$img_url" ]]; then
-    return 1
-  fi
-  local path="$WALLPAPER_DIR/unsplash_$(date +%s).jpg"
-  curl -sfL "$img_url" -o "$path" 2>/dev/null
-  echo "$path"
+    local key
+    key=$(cat "$API_KEY_FILE" 2>/dev/null | tr -d ' \n')
+    [[ -z "$key" ]] && return 1
+    local json
+    json=$(curl -sfL "https://api.unsplash.com/photos/random?orientation=landscape&query=nature,landscape,minimal&content_filter=high" \
+        -H "Authorization: Client-ID $key" 2>/dev/null) || return 1
+    local img_url
+    img_url=$(echo "$json" | python3 -c "import json,sys; print(json.load(sys.stdin)['urls']['full'])" 2>/dev/null) || return 1
+    local path="$WALLPAPER_DIR/unsplash_$(date +%s).jpg"
+    curl -sfL "$img_url" -o "$path" 2>/dev/null && echo "$path"
 }
 
-apply_wallpaper() {
-  local path="$1"
-  if [[ ! -f "$path" ]]; then
-    return 1
-  fi
-  local old
-  old=$(hyprctl hyprpaper listloaded 2>/dev/null)
-  hyprctl hyprpaper preload "$path" 2>/dev/null
-  hyprctl hyprpaper wallpaper ",$path" 2>/dev/null
-  for img in $old; do
-    if [[ "$img" != "$path" ]]; then
-      hyprctl hyprpaper unload "$img" 2>/dev/null
-    fi
-  done
-  [[ -z "$QUIET" ]] && notify-send -u low -i "$path" "Wallpaper" "Changed"
-}
+# --- Main ---
 
-if [[ -f "$API_KEY_FILE" ]]; then
-  path=$(download_unsplash)
-fi
-
-if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
-  path=$(download_github)
-fi
-
-if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
-  path=$(fetch_random_local)
-fi
+case "$MODE" in
+    --nord)
+        path=$(nord_random)
+        ;;
+    --next)
+        path=$(nord_next)
+        ;;
+    --dark)
+        path=$(nord_dark)
+        ;;
+    --light)
+        path=$(nord_light)
+        ;;
+    auto)
+        if [[ -f "$API_KEY_FILE" ]]; then
+            path=$(download_unsplash)
+        fi
+        if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
+            path=$(download_github)
+        fi
+        if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
+            path=$(fetch_random_local)
+        fi
+        if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
+            path=$(nord_random)
+        fi
+        ;;
+esac
 
 if [[ -f "$path" ]]; then
-  apply_wallpaper "$path"
+    apply_wallpaper "$path"
 else
-  [[ -z "$QUIET" ]] && notify-send -u critical "Wallpaper" "No wallpaper available"
-  exit 1
+    [[ -z "$QUIET" ]] && notify-send -u critical "Wallpaper" "No wallpaper available"
+    exit 1
 fi

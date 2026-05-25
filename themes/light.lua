@@ -1,0 +1,38 @@
+-- Light theme color definitions
+theme = {
+    bg        = "rgb(eceff4)",
+    bg_alt    = "rgb(e5e9f0)",
+    bg_surface= "rgb(d8dee9)",
+    border    = "rgb(b6beca)",
+    fg        = "rgb(2e3440)",
+    fg_bright = "rgb(3b4252)",
+    fg_dim    = "rgb(4c566a)",
+    accent    = "rgb(5e81ac)",
+    accent2   = "rgb(81a1c1)",
+    accent3   = "rgb(88c0d0)",
+    accent4   = "rgb(8fbcbb)",
+    red       = "rgb(bf616a)",
+    orange    = "rgb(d08770)",
+    yellow    = "rgb(ebcb8b)",
+    green     = "rgb(a3be8c)",
+    purple    = "rgb(b48ead)",
+}
+
+theme_rgb = {
+    bg        = "236,239,244",
+    bg_alt    = "229,233,240",
+    bg_surface= "216,222,233",
+    border    = "182,190,202",
+    fg        = "46,52,64",
+    fg_bright = "59,66,82",
+    fg_dim    = "76,86,106",
+    accent    = "94,129,172",
+    accent2   = "129,161,193",
+    accent3   = "136,192,208",
+    accent4   = "143,188,187",
+    red       = "191,97,106",
+    orange    = "208,135,112",
+    yellow    = "235,203,139",
+    green     = "163,190,140",
+    purple    = "180,142,173",
+}

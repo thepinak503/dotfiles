@@ -120,7 +120,7 @@ hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 
 -- Wallpapers
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch"))
-hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd('hyprctl hyprpaper wallpaper ",$(find /home/pinak/.local/share/dotfiles/wallpapers -type f | shuf -n 1)"'))
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch --next"))
 
 -- Clipboard
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
@@ -130,3 +130,7 @@ hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
 
 -- Toggle Waybar hidden
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
+
+-- Theme switching
+hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("~/.local/share/dotfiles/themes/theme.sh light"))
+hl.bind(mainMod .. " + CTRL + SHIFT + T", hl.dsp.exec_cmd("~/.local/share/dotfiles/themes/theme.sh dark"))
