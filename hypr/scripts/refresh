@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+if ! command -v hyprctl &>/dev/null; then
+    notify -u critical "Refresh" "hyprctl not available"
+    exit 1
+fi
+
+if command -v waybar &>/dev/null; then
+    killall -q waybar 2>/dev/null || true
+    sleep 0.2
+    waybar &
+else
+    notify -u low "Refresh" "waybar not found, skipping"
+fi
+
+if command -v swaync-client &>/dev/null; then
+    swaync-client --reload-config 2>/dev/null || true
+else
+    notify -u low "Refresh" "swaync-client not found, skipping"
+fi
+
+hyprctl reload
+notify -u low "Refresh" "Refresh Complete"

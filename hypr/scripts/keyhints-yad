@@ -1,0 +1,134 @@
+#!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+BACKEND=wayland
+
+if ! command -v yad &>/dev/null; then
+    notify -u critical "Keyhints" "yad is not installed"
+    exit 1
+fi
+
+killall -q rofi 2>/dev/null || true
+killall -q yad 2>/dev/null || true
+
+GDK_BACKEND=$BACKEND yad \
+    --center \
+    --title="Keybind Cheatsheet" \
+    --no-buttons \
+    --list \
+    --column=Key: \
+    --column=Description: \
+    --column=Info: \
+    --timeout-indicator=bottom \
+"ESC" "Close this cheatsheet" "" \
+"SUPER = " "Windows key" "(SUPER)" \
+"" "" "" \
+"--- Applications ---" "" "" \
+"SUPER + Return" "Terminal" "kitty" \
+"SUPER + D" "Application launcher" "rofi -show drun" \
+"SUPER + Space" "Full app launcher" "rofi (full config)" \
+"CTRL + SHIFT + Escape" "System monitor" "kitty btop" \
+"SUPER + Tab" "Window switcher" "rofi -show window" \
+"SUPER + E" "File manager" "nautilus" \
+"SUPER + B" "Browser" "firefox" \
+"SUPER + ." "Emoji picker" "rofi -show emoji" \
+"" "" "" \
+"--- Window Management ---" "" "" \
+"SUPER + Q" "Close active window" "kill" \
+"SUPER + Escape" "Power menu" "wlogout" \
+"SUPER + F" "Toggle fullscreen" "" \
+"SUPER + V" "Toggle floating" "" \
+"SUPER + P" "Toggle pseudo layout" "" \
+"SUPER + S" "Toggle split direction" "dwindle" \
+"SUPER + G" "Toggle window group" "" \
+"SUPER + SHIFT + Tab" "Next group window" "" \
+"SUPER + CTRL + Tab" "Previous group window" "" \
+"SUPER + SHIFT + G" "Toggle lock active group" "" \
+"SUPER + CTRL + G" "Move into group forward" "" \
+"SUPER + CTRL + SHIFT + G" "Move out of group" "" \
+"" "" "" \
+"--- Focus Navigation ---" "" "" \
+"SUPER + Left" "Focus left" "" \
+"SUPER + Right" "Focus right" "" \
+"SUPER + K" "Focus up" "" \
+"SUPER + J" "Focus down" "" \
+"" "" "" \
+"--- Move / Swap / Resize ---" "" "" \
+"SUPER + ALT + H" "Move window left" "" \
+"SUPER + ALT + L" "Move window right" "" \
+"SUPER + ALT + K" "Move window up" "" \
+"SUPER + ALT + J" "Move window down" "" \
+"SUPER + ALT + SHIFT + H" "Swap window left" "" \
+"SUPER + ALT + SHIFT + L" "Swap window right" "" \
+"SUPER + ALT + SHIFT + K" "Swap window up" "" \
+"SUPER + ALT + SHIFT + J" "Swap window down" "" \
+"SUPER + SHIFT + H" "Resize window left" "" \
+"SUPER + SHIFT + L" "Resize window right" "" \
+"SUPER + SHIFT + K" "Resize window up" "" \
+"SUPER + SHIFT + J" "Resize window down" "" \
+"" "" "" \
+"--- Workspaces ---" "" "" \
+"SUPER + 1-9" "Switch to workspace N" "" \
+"SUPER + SHIFT + 1-9" "Move window to workspace N" "" \
+"SUPER + mouse_down" "Next workspace" "" \
+"SUPER + mouse_up" "Previous workspace" "" \
+"SUPER + SHIFT + Right" "Focus next workspace (monitor)" "" \
+"SUPER + SHIFT + Left" "Focus prev workspace (monitor)" "" \
+"SUPER + CTRL + Right" "Next workspace (global)" "" \
+"SUPER + CTRL + Left" "Prev workspace (global)" "" \
+"SUPER + SHIFT + ]" "Move window to next ws" "" \
+"SUPER + SHIFT + [" "Move window to prev ws" "" \
+"SUPER + \`" "Toggle scratchpad" "" \
+"SUPER + SHIFT + \`" "Move window to scratchpad" "" \
+"" "" "" \
+"--- Screenshots & Recording ---" "" "" \
+"Print" "Screenshot (full)" "screenshot --now" \
+"SHIFT + Print" "Screenshot (area)" "screenshot --area" \
+"CTRL + Print" "Screenshot (window)" "screenshot --window" \
+"SUPER + SHIFT + S" "Screenshot (area)" "screenshot --area" \
+"SUPER + CTRL + S" "Screenshot (swappy)" "screenshot --swappy" \
+"SUPER + CTRL + SHIFT + S" "Screenshot menu" "" \
+"SUPER + SHIFT + Print" "Screen recording" "wf-recorder" \
+"" "" "" \
+"--- System ---" "" "" \
+"SUPER + L" "Lock screen" "hyprlock" \
+"SUPER + CTRL + Q" "Exit Hyprland" "hyprctl dispatch exit" \
+"SUPER + CTRL + L" "Change layout" "master/dwindle" \
+"SUPER + SHIFT + R" "Reload config" "hyprctl reload" \
+"SUPER + SHIFT + M" "Game mode" "toggle" \
+"SUPER + SHIFT + A" "Transparency toggle" "on/off" \
+"SUPER + T" "Toggle touchpad" "" \
+"SUPER + SHIFT + C" "Color picker" "hyprpicker" \
+"SUPER + N" "Toggle notifications" "swaync" \
+"SUPER + SHIFT + B" "Toggle waybar" "pkill -SIGUSR1" \
+"SUPER + SHIFT + V" "Clipboard manager" "cliphist" \
+"" "" "" \
+"--- Media Keys ---" "" "" \
+"XF86AudioRaiseVolume" "Volume up" "" \
+"XF86AudioLowerVolume" "Volume down" "" \
+"XF86AudioMute" "Mute" "" \
+"XF86MonBrightnessUp" "Brightness up" "" \
+"XF86MonBrightnessDown" "Brightness down" "" \
+"XF86AudioPlay" "Play/Pause" "playerctl" \
+"XF86AudioNext" "Next track" "playerctl" \
+"XF86AudioPrev" "Previous track" "playerctl" \
+"" "" "" \
+"--- Wallpapers & Theme ---" "" "" \
+"SUPER + W" "Random wallpaper" "" \
+"SUPER + SHIFT + W" "Next wallpaper" "" \
+"SUPER + SHIFT + T" "Light theme" "" \
+"SUPER + CTRL + SHIFT + T" "Dark theme" "" \
+"" "" "" \
+"--- Settings ---" "" "" \
+"SUPER + SHIFT + E" "Settings menu" "" \
+"SUPER + ALT + R" "Refresh all" "" \
+"SUPER + ALT + O" "Toggle blur" "" \
+"SUPER + N" "Toggle night light" "" \
+"SUPER + SHIFT + A" "Animations menu" "" \
+"" "" "" \
+"--- Extra ---" "" "" \
+"SUPER + /" "Rofi keybind search" "" \
+"" "" "" \
+"More: https://github.com/JaKooLit/Hyprland-Dots/wiki" "" ""

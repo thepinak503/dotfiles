@@ -1,11 +1,22 @@
 #!/bin/bash
-# Show interactive keybind cheatsheet via rofi
-# Parses keybinds.lua for display
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
 KEYBIND_FILE="$HOME/.local/share/dotfiles/hypr/configs/keybinds.lua"
 
-if [ ! -f "$KEYBIND_FILE" ]; then
-    notify-send -u critical "Keyhints Error" "keybinds.lua not found"
+if ! command -v rofi &>/dev/null; then
+    notify -u critical "Keyhints" "rofi is not installed"
+    exit 1
+fi
+
+if ! command -v python3 &>/dev/null; then
+    notify -u critical "Keyhints" "python3 is not available"
+    exit 1
+fi
+
+if [[ ! -f "$KEYBIND_FILE" ]]; then
+    notify -u critical "Keyhints Error" "keybinds.lua not found"
     exit 1
 fi
 

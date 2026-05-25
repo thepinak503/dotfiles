@@ -14,7 +14,7 @@
 
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": ["custom/media"],
-  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "temperature", "power-profiles-daemon", "battery", "custom/theme", "clock", "custom/power"],
+  "modules-right": ["tray", "pulseaudio", "network", "custom/net-speed", "cpu", "memory", "temperature", "power-profiles-daemon", "battery", "custom/theme", "clock", "custom/power", "custom/settings", "custom/hint", "custom/cycle_wall", "custom/light_dark", "custom/nightlight", "custom/swaync"],
 
   "hyprland/workspaces": {
     "disable-scroll": false,
@@ -175,5 +175,50 @@
     "return-type": "json",
     "on-click": "wlogout",
     "tooltip": false
+  },
+
+  "custom/settings": {
+    "format": "󰸘",
+    "tooltip": false,
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/settings-menu",
+    "on-click-right": "~/.local/share/dotfiles/themes/theme.sh toggle",
+    "exec-if": "which rofi"
+  },
+  "custom/hint": {
+    "format": "󱨥",
+    "tooltip": false,
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/keyhints-yad",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/keyhints",
+    "exec-if": "which yad"
+  },
+  "custom/cycle_wall": {
+    "format": "󰸉",
+    "tooltip": false,
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch --next",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch",
+    "exec-if": "which hyprctl"
+  },
+  "custom/light_dark": {
+    "format": "{}",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/theme.sh",
+    "on-click": "~/.local/share/dotfiles/themes/theme.sh toggle",
+    "exec-if": "which yad",
+    "interval": 60,
+    "return-type": "json"
+  },
+  "custom/nightlight": {
+    "format": "{}",
+    "exec": "if [ -f /tmp/nightlight-mode ] && [ \"$(cat /tmp/nightlight-mode)\" = \"on\" ]; then echo '{\"text\": \"󰛨\", \"tooltip\": \"Night light ON\", \"class\": \"on\"}'; else echo '{\"text\": \"󰛩\", \"tooltip\": \"Night light OFF\", \"class\": \"off\"}'; fi",
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/nightlight",
+    "interval": 5,
+    "return-type": "json"
+  },
+  "custom/swaync": {
+    "format": "{}",
+    "exec": "swaync-client --swaync-command 'get-dnd' 2>/dev/null | grep -q 'true' && echo '{\"text\": \"󰂛\", \"tooltip\": \"Notifications OFF\", \"class\": \"dnd\"}' || echo '{\"text\": \"󰂜\", \"tooltip\": \"Notifications ON\", \"class\": \"\"}'",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "interval": 5,
+    "return-type": "json"
   }
 }

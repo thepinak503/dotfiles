@@ -1,7 +1,15 @@
 #!/bin/bash
+set -euo pipefail
 
-HYPRGAMEMODE=$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}')
-if [ "$HYPRGAMEMODE" = 1 ]; then
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+if ! command -v hyprctl &>/dev/null; then
+    notify -u critical "Game Mode" "hyprctl not available"
+    exit 1
+fi
+
+HYPRGAMEMODE=$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}') || true
+if [[ "$HYPRGAMEMODE" = 1 ]]; then
     hyprctl --batch "\
         keyword animations:enabled 0;\
         keyword decoration:shadow:enabled 0;\
@@ -10,7 +18,7 @@ if [ "$HYPRGAMEMODE" = 1 ]; then
         keyword general:gaps_out 0;\
         keyword general:border_size 1;\
         keyword decoration:rounding 0"
-    notify-send -u low -i "input-gaming" "Game Mode ON" "Animations, blur, shadows disabled"
+    notify -u low -i "input-gaming" "Game Mode ON" "Animations, blur, shadows disabled"
 else
     hyprctl --batch "\
         keyword animations:enabled 1;\
@@ -20,5 +28,5 @@ else
         keyword general:gaps_out 6;\
         keyword general:border_size 2;\
         keyword decoration:rounding 8"
-    notify-send -u low -i "input-gaming" "Game Mode OFF" "Animations, blur, shadows restored"
+    notify -u low -i "input-gaming" "Game Mode OFF" "Animations, blur, shadows restored"
 fi

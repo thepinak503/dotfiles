@@ -1,11 +1,11 @@
 {
   "$schema": "/etc/xdg/swaync/configSchema.json",
-  "positionX": "right",
-  "positionY": "top",
-  "control-center-margin-top": 8,
-  "control-center-margin-bottom": 8,
-  "control-center-margin-right": 8,
-  "control-center-margin-left": 8,
+  "position": "top-right",
+  "control-center-position": "top-right",
+  "control-center-margin-top": 4,
+  "control-center-margin-bottom": 4,
+  "control-center-margin-right": 4,
+  "control-center-margin-left": 4,
   "layer": "overlay",
   "layer-shell": true,
   "control-center-layer": "top",
@@ -22,16 +22,17 @@
   "notification-window-width": 380,
   "keyboard-shortcuts": true,
   "image-visibility": "when-available",
-  "hide-on-clear": true,
+  "hide-on-clear": false,
   "hide-on-action": true,
   "script-fail-notify": true,
+  "transition-time": 200,
   "scripts": {
   },
   "notification-visibility": {
-    "example-name": {
-      "state": "muted",
-      "urgency": "Normal",
-      "app-name": "example"
+    "example-app-name": {
+      "state": "ignored",
+      "urgency": "low",
+      "app-name": "example-app-name"
     }
   },
   "widgets": [
@@ -40,7 +41,9 @@
     "dnd",
     "notifications",
     "mpris",
-    "buttons-grid"
+    "buttons-grid",
+    "volume",
+    "backlight"
   ],
   "widget-config": {
     "inhibitors": {
@@ -61,40 +64,53 @@
       "image-radius": 8
     },
     "buttons-grid": {
-      "actions": [
+      "type": "buttons-grid",
+      "action-buttons": [
         {
-          "label": " Lock",
-          "command": "hyprlock"
+          "label": "󰌾",
+          "type": "toggle",
+          "action": "hyprlock",
+          "active": false
         },
         {
-          "label": " Logout",
-          "command": "hyprctl dispatch exit"
+          "label": "",
+          "type": "toggle",
+          "action": "wlogout",
+          "active": false
         },
         {
-          "label": " Suspend",
-          "command": "systemctl suspend"
+          "label": "󰦛",
+          "type": "toggle",
+          "action": "~/.local/share/dotfiles/hypr/scripts/screenshot --area",
+          "active": false
         },
         {
-          "label": " Reboot",
-          "command": "systemctl reboot"
+          "label": "󰇧",
+          "type": "toggle",
+          "action": "firefox",
+          "active": false
         },
         {
-          "label": "⏻ Shutdown",
-          "command": "systemctl poweroff"
+          "label": "󰖩",
+          "type": "toggle",
+          "action": "nm-connection-editor",
+          "active": false
         },
         {
-          "label": "󰉏 Files",
-          "command": "nautilus"
-        },
-        {
-          "label": "⚙ Settings",
-          "command": "gnome-control-center"
-        },
-        {
-          "label": " Network",
-          "command": "nm-connection-editor"
+          "label": "󰂲",
+          "type": "toggle",
+          "action": "blueman-manager",
+          "active": false
         }
       ]
+    },
+    "volume": {
+      "type": "volume",
+      "label": "󰕾"
+    },
+    "backlight": {
+      "type": "backlight",
+      "label": "󰃟"
     }
   }
 }

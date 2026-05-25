@@ -1,18 +1,28 @@
 #!/bin/bash
+set -euo pipefail
 
-STATUS_FILE="/tmp/touchpad.status"
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+STATUS_FILE="/tmp/hypr-touchpad-status"
+
+if ! command -v hyprctl &>/dev/null; then
+    notify -u critical "Touchpad" "hyprctl not available"
+    exit 1
+fi
 
 toggle() {
-  if [[ -f "$STATUS_FILE" ]] && [[ $(cat "$STATUS_FILE") = "on" ]]; then
+  local state
+  state=$(cat "$STATUS_FILE" 2>/dev/null || echo "off")
+  if [[ "$state" == "on" ]]; then
     hyprctl keyword "device[syna3067:00-06cb:8265-touchpad]:enabled" false
     hyprctl keyword "device[synps/2-synaptics-touchpad]:enabled" false
     printf "off" > "$STATUS_FILE"
-    notify-send -u low -i "touchpad-disabled" "Touchpad Disabled"
+    notify -u low -i "touchpad-disabled" "Touchpad Disabled"
   else
     hyprctl keyword "device[syna3067:00-06cb:8265-touchpad]:enabled" true
     hyprctl keyword "device[synps/2-synaptics-touchpad]:enabled" true
     printf "on" > "$STATUS_FILE"
-    notify-send -u low -i "touchpad" "Touchpad Enabled"
+    notify -u low -i "touchpad" "Touchpad Enabled"
   fi
 }
 

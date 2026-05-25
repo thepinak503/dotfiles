@@ -1,0 +1,229 @@
+#!/bin/bash
+
+set -euo pipefail
+
+json_escape() {
+  printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g; s/\r//g; s/\n/\\n/g'
+}
+
+gpus_json() {
+  local gpu_vendors=() gpu_models=() gpu_drivers=() gpu_types=() gpu_pci=()
+  local has_nvidia=false has_amd=false has_intel=false
+  local nvidia_dev="" amd_dev="" intel_dev="" nvidia_pci="" amd_pci="" intel_pci=""
+
+  # ---- lspci detection ----
+  if command -v lspci &>/dev/null; then
+    while IFS= read -r line; do
+      [[ -z "$line" ]] && continue
+      local vendor="" kernel_driver="" gpu_type="discrete"
+      local lc line_lc
+      lc=$(echo "$line" | tr '[:upper:]' '[:lower:]')
+      pci_id=$(echo "$line" | awk '{print $1}')
+
+      if echo "$lc" | grep -qE '\bnvidia\b'; then
+        vendor="nvidia"; has_nvidia=true; kernel_driver="nvidia"
+        [[ -z "$nvidia_pci" ]] && nvidia_pci="$pci_id"
+      elif echo "$lc" | grep -qE '\bamd\b|advanced micro devices|radeon|ati\b'; then
+        vendor="amd"; has_amd=true; kernel_driver="amdgpu"
+        [[ -z "$amd_pci" ]] && amd_pci="$pci_id"
+      elif echo "$lc" | grep -qE '\bintel\b|genuineintel|intel corporation'; then
+        vendor="intel"; has_intel=true
+        [[ -z "$intel_pci" ]] && intel_pci="$pci_id"
+        if echo "$lc" | grep -qE 'arc\|battlemage\|celestial\|drm\|internal'; then
+          kernel_driver="xe"
+        else
+          kernel_driver="i915"
+        fi
+      fi
+
+      if echo "$lc" | grep -qiE "vga compatible|integrated|igpu|uhd|iris|hd graphics|graphics controller"; then
+        gpu_type="integrated"
+      fi
+
+      if [[ -n "$vendor" ]]; then
+        gpu_vendors+=("$vendor"); gpu_models+=("$line"); gpu_drivers+=("$kernel_driver")
+        gpu_types+=("$gpu_type"); gpu_pci+=("$pci_id")
+      fi
+    done < <(lspci | grep -iE "vga|3d|display" 2>/dev/null || true)
+  fi
+
+  # ---- /sys/class/drm fallback ----
+  if [[ ${#gpu_vendors[@]} -eq 0 ]] && [[ -d /sys/class/drm ]]; then
+    for card in /sys/class/drm/card*; do
+      [[ -L "$card" || ! -d "$card" ]] && continue
+      local vendor="" kernel_driver="" gpu_type="discrete"
+      local vid="" pci_slot=""
+      vid="$(cat "$card/device/vendor" 2>/dev/null)" || continue
+      pci_slot="$(basename "$(readlink "$card/device" 2>/dev/null)" 2>/dev/null || echo "unknown")"
+
+      case "$vid" in
+        0x10de) vendor="nvidia"; has_nvidia=true; kernel_driver="nvidia" ;;
+        0x1002) vendor="amd";    has_amd=true;    kernel_driver="amdgpu" ;;
+        0x8086) vendor="intel";  has_intel=true
+          if lsmod 2>/dev/null | grep -q "xe"; then kernel_driver="xe"; else kernel_driver="i915"; fi ;;
+        *) continue ;;
+      esac
+
+      gpu_vendors+=("$vendor"); gpu_models+=("GPU $vid ($pci_slot)")
+      gpu_drivers+=("$kernel_driver"); gpu_types+=("$gpu_type"); gpu_pci+=("$pci_slot")
+    done
+  fi
+
+  # ---- Module-level fallback ----
+  if [[ ${#gpu_vendors[@]} -eq 0 ]]; then
+    lsmod_out=$(lsmod 2>/dev/null || true)
+    if echo "$lsmod_out" | grep -q "nvidia"; then
+      has_nvidia=true; gpu_vendors+=("nvidia"); gpu_models+=("NVIDIA (kernel module)")
+      gpu_drivers+=("nvidia"); gpu_types+=("discrete"); gpu_pci+=("")
+    fi
+    if command -v lscpu &>/dev/null; then
+      local cpu
+      cpu=$(lscpu 2>/dev/null || echo "")
+      if echo "$cpu" | grep -qi "GenuineIntel"; then
+        has_intel=true; gpu_vendors+=("intel"); gpu_models+=("Intel (integrated)")
+        gpu_drivers+=("i915"); gpu_types+=("integrated"); gpu_pci+=("")
+      elif echo "$cpu" | grep -qi "AuthenticAMD"; then
+        has_amd=true; gpu_vendors+=("amd"); gpu_models+=("AMD APU (integrated)")
+        gpu_drivers+=("amdgpu"); gpu_types+=("integrated"); gpu_pci+=("")
+      fi
+    fi
+  fi
+
+  # ---- Determine DRM device ordering ----
+  local drm_i915="" drm_amdgpu="" drm_nvidia="" drm_xe=""
+  if [[ -d /dev/dri ]]; then
+    for card in /dev/dri/card*; do
+      [[ -e "$card" ]] || continue
+      local num="${card##*/card}" driver=""
+      driver=$(cat "/sys/class/drm/card$num/device/uevent" 2>/dev/null | grep -oP 'DRIVER=\K.*' || true)
+      case "$driver" in
+        i915)    [[ -z "$drm_i915" ]] && drm_i915="$card" ;;
+        amdgpu)  [[ -z "$drm_amdgpu" ]] && drm_amdgpu="$card" ;;
+        nvidia)  [[ -z "$drm_nvidia" ]] && drm_nvidia="$card" ;;
+        xe)      [[ -z "$drm_xe" ]] && drm_xe="$card" ;;
+      esac
+    done
+  fi
+
+  # ---- AQ_DRM_DEVICES: iGPU first (power saving), dGPU second ----
+  local aq_drm_devices=""
+  local aq_parts=()
+  # Order: iGPU (intel/amd integrated) first, then dGPU
+  [[ -n "$drm_i915" ]]   && aq_parts+=("$drm_i915")
+  [[ -n "$drm_xe" ]]     && aq_parts+=("$drm_xe")
+  [[ -n "$drm_amdgpu" ]] && aq_parts+=("$drm_amdgpu")
+  [[ -n "$drm_nvidia" ]] && aq_parts+=("$drm_nvidia")
+  if [[ ${#aq_parts[@]} -gt 0 ]]; then
+    local IFS=":"
+    aq_drm_devices="${aq_parts[*]}"
+    unset IFS
+  fi
+
+  # ---- Primary GPU ----
+  local primary_gpu="unknown"
+  if [[ "$has_nvidia" == true ]]; then
+    primary_gpu="nvidia"
+  elif [[ "$has_amd" == true ]]; then
+    primary_gpu="amd"
+  elif [[ "$has_intel" == true ]]; then
+    primary_gpu="intel"
+  fi
+
+  # ---- Env vars based on GPU composition ----
+  local gbm_backend="" glx_vendor="" libva_driver="" vdpau_driver=""
+  local moz_wayland="1" sdl_video="wayland" gdk_backend="wayland"
+  local qt_platform="wayland;xcb" clutter_backend="wayland"
+  local xdg_current_desktop="Hyprland" xdg_session_type="wayland"
+  local _nv_vk_optimus="" proton_ngx=""
+
+  if [[ "$has_nvidia" == true ]]; then
+    gbm_backend="nvidia-drm"
+    glx_vendor="nvidia"
+    if [[ "$has_amd" == true || "$has_intel" == true ]]; then
+      libva_driver="nvidia"
+      vdpau_driver="nvidia"
+      _nv_vk_optimus="NVIDIA_only"
+      proton_ngx="1"
+    else
+      libva_driver="nvidia"
+      vdpau_driver="nvidia"
+    fi
+  fi
+
+  if [[ "$has_amd" == true && "$has_nvidia" == false ]]; then
+    libva_driver="radeonsi"
+    vdpau_driver="radeonsi"
+  fi
+
+  if [[ "$has_intel" == true && "$has_nvidia" == false ]]; then
+    libva_driver="iHD"
+    vdpau_driver="va_gl"
+  fi
+
+  # ---- Build JSON ----
+  local gpus_json="["
+  local first=true
+  for i in "${!gpu_vendors[@]}"; do
+    if [[ "$first" == true ]]; then first=false; else gpus_json+=","; fi
+    gpus_json+="{\"vendor\":\"$(json_escape "${gpu_vendors[$i]}")\",\"model\":\"$(json_escape "${gpu_models[$i]}")\",\"kernel_driver\":\"$(json_escape "${gpu_drivers[$i]}")\",\"type\":\"$(json_escape "${gpu_types[$i]}")\",\"pci\":\"$(json_escape "${gpu_pci[$i]}")\"}"
+  done
+  gpus_json+="]"
+
+  local env_json="{"
+  local first_env=true
+
+  if [[ -n "$aq_drm_devices" ]]; then
+    env_json+="\"AQ_DRM_DEVICES\":\"$aq_drm_devices\""; first_env=false
+  fi
+  if [[ -n "$gbm_backend" ]]; then
+    [[ "$first_env" == false ]] && env_json+=","
+    env_json+="\"GBM_BACKEND\":\"$gbm_backend\""; first_env=false
+  fi
+  if [[ -n "$glx_vendor" ]]; then
+    [[ "$first_env" == false ]] && env_json+=","
+    env_json+="\"__GLX_VENDOR_LIBRARY_NAME\":\"$glx_vendor\""; first_env=false
+  fi
+  if [[ -n "$_nv_vk_optimus" ]]; then
+    [[ "$first_env" == false ]] && env_json+=","
+    env_json+="\"__VK_LAYER_NV_optimus\":\"$_nv_vk_optimus\""; first_env=false
+  fi
+  if [[ -n "$proton_ngx" ]]; then
+    [[ "$first_env" == false ]] && env_json+=","
+    env_json+="\"PROTON_ENABLE_NGX_UPDATER\":\"$proton_ngx\""; first_env=false
+  fi
+  if [[ -n "$libva_driver" ]]; then
+    [[ "$first_env" == false ]] && env_json+=","
+    env_json+="\"LIBVA_DRIVER_NAME\":\"$libva_driver\""; first_env=false
+  fi
+  if [[ -n "$vdpau_driver" ]]; then
+    [[ "$first_env" == false ]] && env_json+=","
+    env_json+="\"VDPAU_DRIVER\":\"$vdpau_driver\""; first_env=false
+  fi
+  # General Wayland envs
+  [[ "$first_env" == false ]] && env_json+=","
+  env_json+="\"XDG_CURRENT_DESKTOP\":\"$xdg_current_desktop\""
+  env_json+=",\"XDG_SESSION_TYPE\":\"$xdg_session_type\""
+  env_json+=",\"GDK_BACKEND\":\"$gdk_backend\""
+  env_json+=",\"QT_QPA_PLATFORM\":\"$qt_platform\""
+  env_json+=",\"MOZ_ENABLE_WAYLAND\":\"$moz_wayland\""
+  env_json+=",\"SDL_VIDEODRIVER\":\"$sdl_video\""
+  env_json+=",\"CLUTTER_BACKEND\":\"$clutter_backend\""
+  env_json+="}"
+
+  cat <<EOF
+{
+  "gpus": $gpus_json,
+  "primary_gpu": "$primary_gpu",
+  "hyprland_env": $env_json,
+  "has_nvidia": $has_nvidia,
+  "has_amd": $has_amd,
+  "has_intel": $has_intel,
+  "aq_drm_devices": "$aq_drm_devices",
+  "nvidia_pci": "$nvidia_pci",
+  "amd_pci": "$amd_pci",
+  "intel_pci": "$intel_pci"
+}
+EOF
+}
+
+gpus_json

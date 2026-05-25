@@ -1,6 +1,9 @@
 -- Main Hyprland Lua Configuration Entrypoint
 
 require("configs/theme")
+-- Auto-detect GPU and set env vars (generated on each reload)
+hl.exec("~/.local/share/dotfiles/hypr/scripts/set-env > /dev/null 2>&1")
+pcall(require, "configs/env")
 require("configs/monitors")
 require("configs/input")
 require("configs/decor")

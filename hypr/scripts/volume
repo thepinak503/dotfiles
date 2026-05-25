@@ -1,8 +1,18 @@
 #!/bin/bash
+set -euo pipefail
+
+if ! command -v swayosd-client &>/dev/null; then
+    echo "Error: swayosd-client is not installed" >&2
+    exit 1
+fi
 
 case "${1:-}" in
   --inc) swayosd-client --output-volume raise ;;
   --dec) swayosd-client --output-volume lower ;;
   --toggle) swayosd-client --output-volume mute-toggle ;;
   --toggle-mic) swayosd-client --input-volume mute-toggle ;;
+  *)
+    echo "Usage: $(basename "$0") [--inc|--dec|--toggle|--toggle-mic]" >&2
+    exit 1
+    ;;
 esac

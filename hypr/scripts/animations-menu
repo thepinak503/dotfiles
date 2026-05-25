@@ -1,0 +1,40 @@
+#!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+ANIM_DIR="$HOME/.local/share/dotfiles/hypr/animations"
+CONFIG_DIR="$HOME/.local/share/dotfiles/hypr/configs"
+
+if ! command -v rofi &>/dev/null; then
+    notify -u critical "Animation Profiles" "rofi is not installed"
+    exit 1
+fi
+
+if ! command -v hyprctl &>/dev/null; then
+    notify -u critical "Animation Profiles" "hyprctl not available"
+    exit 1
+fi
+
+PROFILES=$(ls -1 "$ANIM_DIR"/*.lua 2>/dev/null | xargs -I{} basename {} .lua)
+
+if [[ -z "$PROFILES" ]]; then
+    notify -u critical "Animation Profiles" "No profiles found in $ANIM_DIR"
+    exit 1
+fi
+
+CHOICE=$(echo "$PROFILES" | rofi -dmenu -p "Animation Profile" -i)
+
+if [[ -z "$CHOICE" ]]; then
+    exit 0
+fi
+
+PROFILE_FILE="$ANIM_DIR/$CHOICE.lua"
+if [[ -f "$PROFILE_FILE" ]]; then
+    cp "$PROFILE_FILE" "$CONFIG_DIR/animations.lua"
+    hyprctl reload
+    notify -u low "Animation Profile" "Switched to: $CHOICE"
+else
+    notify -u critical "Animation Profiles" "Profile '$CHOICE' not found"
+    exit 1
+fi

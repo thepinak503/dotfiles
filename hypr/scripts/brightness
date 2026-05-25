@@ -1,6 +1,16 @@
 #!/bin/bash
+set -euo pipefail
+
+if ! command -v swayosd-client &>/dev/null; then
+    echo "Error: swayosd-client is not installed" >&2
+    exit 1
+fi
 
 case "${1:-}" in
   --inc) swayosd-client --brightness raise ;;
   --dec) swayosd-client --brightness lower ;;
+  *)
+    echo "Usage: $(basename "$0") [--inc|--dec]" >&2
+    exit 1
+    ;;
 esac

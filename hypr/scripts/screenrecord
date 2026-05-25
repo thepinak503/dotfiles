@@ -1,16 +1,29 @@
 #!/bin/bash
-# Screen recording with wf-recorder
-# Starts recording a selected region; saves to ~/Videos/
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+if ! command -v wf-recorder &>/dev/null; then
+    notify -u critical "Screen Recording" "wf-recorder is not installed"
+    exit 1
+fi
 
 mkdir -p "$HOME/Videos"
 
-if pgrep -x wf-recorder > /dev/null; then
-    pkill wf-recorder
-    notify-send -u low "Screen Recording Stopped" "Saved to ~/Videos/"
+if pgrep -x wf-recorder &>/dev/null; then
+    killall -q wf-recorder 2>/dev/null || true
+    notify -u low "Screen Recording Stopped" "Saved to ~/Videos/"
     exit 0
 fi
 
 OUTPUT="$HOME/Videos/recording_$(date +%Y%m%d_%H%M%S).mp4"
-notify-send -u low "Screen Recording" "Select a region to record"
-wf-recorder -g "$(slurp)" -f "$OUTPUT" &>/dev/null &
-notify-send -u low "Screen Recording Started" "Press SUPER+SHIFT+Print to stop"
+
+notify -u low "Screen Recording" "Select a region to record"
+
+REGION=$(slurp 2>/dev/null) || {
+    notify -u critical "Screen Recording" "No region selected"
+    exit 1
+}
+
+wf-recorder -g "$REGION" -f "$OUTPUT" &>/dev/null &
+notify -u low "Screen Recording Started" "Press SUPER+SHIFT+Print to stop"

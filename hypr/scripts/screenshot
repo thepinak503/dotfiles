@@ -1,0 +1,60 @@
+#!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+if ! command -v hyprshot &>/dev/null; then
+    notify -u critical "Screenshot" "hyprshot is not installed"
+    exit 1
+fi
+
+take_shot() {
+    local cmd="$1"
+    if eval "$cmd"; then
+        notify -u low "Screenshot" "Screenshot taken successfully"
+    else
+        notify -u critical "Screenshot" "Failed to take screenshot"
+    fi
+}
+
+case "${1:-}" in
+    --now)
+        take_shot "hyprshot -m output"
+        ;;
+    --area)
+        take_shot "hyprshot -m region"
+        ;;
+    --window)
+        take_shot "hyprshot -m window"
+        ;;
+    --in5)
+        take_shot "hyprshot -m output --delay 5"
+        ;;
+    --in10)
+        take_shot "hyprshot -m output --delay 10"
+        ;;
+    --active)
+        take_shot "hyprshot -m window"
+        ;;
+    --swappy)
+        take_shot "hyprshot -m region -- swappy -f -"
+        ;;
+    "")
+        CHOICE=$(printf \
+"󰹑 Full Screen\n󰆞 Region\n Active Window\n󰄴 After 5s\n󰄴 After 10s\n Region to Swappy" \
+        | rofi -dmenu -p "Screenshot" -i)
+        case "$CHOICE" in
+            "󰹑 Full Screen")   take_shot "hyprshot -m output" ;;
+            "󰆞 Region")        take_shot "hyprshot -m region" ;;
+            " Active Window")  take_shot "hyprshot -m window" ;;
+            "󰄴 After 5s")      take_shot "hyprshot -m output --delay 5" ;;
+            "󰄴 After 10s")     take_shot "hyprshot -m output --delay 10" ;;
+            " Region to Swappy") take_shot "hyprshot -m region -- swappy -f -" ;;
+            *)  exit 0 ;;
+        esac
+        ;;
+    *)
+        echo "Usage: $(basename "$0") [--now|--area|--window|--in5|--in10|--active|--swappy]"
+        exit 1
+        ;;
+esac

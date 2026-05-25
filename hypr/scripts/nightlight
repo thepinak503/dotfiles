@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+STATE_FILE="/tmp/hypr-nightlight"
+
+if ! command -v hyprsunset &>/dev/null; then
+    notify -u critical "Night Light" "hyprsunset is not installed"
+    exit 1
+fi
+
+cleanup() {
+    killall -q hyprsunset 2>/dev/null || true
+}
+trap cleanup EXIT
+
+if [[ -f "$STATE_FILE" ]] && [[ "$(cat "$STATE_FILE" 2>/dev/null || true)" == "on" ]]; then
+    killall -q hyprsunset 2>/dev/null || true
+    echo "off" > "$STATE_FILE"
+    notify -u low "Night Light" "Disabled"
+else
+    hyprsunset --temperature 4500 &
+    echo "on" > "$STATE_FILE"
+    notify -u low "Night Light" "Enabled (4500K)"
+fi

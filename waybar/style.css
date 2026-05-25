@@ -1,3 +1,9 @@
+@define-color background #2e3440;
+@define-color foreground #d8dee9;
+@define-color accent #88c0d0;
+@define-color disabled #4c566a;
+@define-color warning #bf616a;
+
 * {
   border: none;
   border-radius: 0;
@@ -264,4 +270,53 @@ window#waybar.empty #window {
 #custom-power:hover {
   background: rgba(191, 97, 106, 0.15);
   color: #eceff4;
+}
+
+#custom-settings {
+    font-size: 16px;
+    padding: 0 8px;
+}
+#custom-settings:hover {
+    color: @accent;
+}
+#custom-hint {
+    font-size: 16px;
+    padding: 0 8px;
+}
+#custom-hint:hover {
+    color: @accent;
+}
+#custom-cycle_wall {
+    font-size: 16px;
+    padding: 0 8px;
+}
+#custom-cycle_wall:hover {
+    color: @accent;
+}
+#custom-light_dark {
+    font-size: 14px;
+    padding: 0 8px;
+}
+#custom-light_dark:hover {
+    color: @accent;
+}
+#custom-nightlight {
+    font-size: 14px;
+    padding: 0 8px;
+}
+#custom-nightlight.on {
+    color: #ffd700;
+}
+#custom-nightlight.off {
+    color: @disabled;
+}
+#custom-swaync {
+    font-size: 16px;
+    padding: 0 8px;
+}
+#custom-swaync:hover {
+    color: @accent;
+}
+#custom-swaync.dnd {
+    color: #bf616a;
 }

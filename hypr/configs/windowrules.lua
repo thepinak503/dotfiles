@@ -9,12 +9,12 @@ hl.window_rule({ match = { class = "(mpv|vlc|audacious)" }, tag = "+media" })
 hl.window_rule({ match = { class = "(pavucontrol|blueman-manager|nm-connection-editor|gnome-control-center|qt5ct|qt6ct|nwg-look)" }, tag = "+settings" })
 
 -- Opacity & Behavior rules based on tags
-hl.window_rule({ match = { tag = "terminal" }, opacity = "0.92 0.80" })
-hl.window_rule({ match = { tag = "browser" }, opacity = "0.98 0.85" })
-hl.window_rule({ match = { tag = "projects" }, opacity = "0.95 0.82" })
-hl.window_rule({ match = { tag = "im" }, opacity = "0.95 0.86" })
-hl.window_rule({ match = { tag = "filemanager" }, opacity = "0.93 0.80" })
-hl.window_rule({ match = { tag = "media" }, opacity = "0.95 0.82" })
+hl.window_rule({ match = { tag = "terminal" }, opacity = "0.80 0.60" })
+hl.window_rule({ match = { tag = "browser" }, opacity = "0.82 0.65" })
+hl.window_rule({ match = { tag = "projects" }, opacity = "0.80 0.62" })
+hl.window_rule({ match = { tag = "im" }, opacity = "0.82 0.68" })
+hl.window_rule({ match = { tag = "filemanager" }, opacity = "0.80 0.60" })
+hl.window_rule({ match = { tag = "media" }, opacity = "0.82 0.62" })
 hl.window_rule({ match = { tag = "settings" }, float = true, center = true, size = { "60%", "60%" } })
 
 -- Specific window rules

@@ -1,0 +1,66 @@
+#!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+STATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/hyprland-transparency"
+WINDOW_RULES="$HOME/.local/share/dotfiles/hypr/configs/windowrules.lua"
+DECOR_CFG="$HOME/.local/share/dotfiles/hypr/configs/decor.lua"
+
+if ! command -v hyprctl &>/dev/null; then
+    notify -u critical "Transparency" "hyprctl not available"
+    exit 1
+fi
+
+for f in "$WINDOW_RULES" "$DECOR_CFG"; do
+    if [[ ! -f "$f" ]]; then
+        notify -u critical "Transparency" "Required file not found: $f"
+        exit 1
+    fi
+done
+
+if [[ -f "$STATE_FILE" ]] && [[ "$(cat "$STATE_FILE" 2>/dev/null || true)" == "on" ]]; then
+    MODE="off"
+    ACTIVE=0.95 INACTIVE=0.85
+    W_TERM="0.92 0.80" W_BROWSER="0.98 0.85"
+    W_PROJ="0.95 0.82" W_IM="0.95 0.86"
+    W_FILE="0.93 0.80" W_MEDIA="0.95 0.82"
+    W_PIP="0.95 0.75"
+else
+    MODE="on"
+    ACTIVE=0.75 INACTIVE=0.60
+    W_TERM="0.80 0.60" W_BROWSER="0.82 0.65"
+    W_PROJ="0.80 0.62" W_IM="0.82 0.68"
+    W_FILE="0.80 0.60" W_MEDIA="0.82 0.62"
+    W_PIP="0.82 0.60"
+fi
+
+hyprctl eval "
+    hl.config({
+        decoration={
+            active_opacity=$ACTIVE,
+            inactive_opacity=$INACTIVE,
+            fullscreen_opacity=1.0,
+            blur={
+                enabled=true,
+                size=12,
+                passes=4,
+            }
+        }
+    })
+" 2>/dev/null || notify -u critical "Transparency" "Failed to set opacity via hyprctl eval"
+
+sed -i "s/active_opacity[[:space:]]*=[[:space:]]*[0-9.]*,/active_opacity = $ACTIVE,/" "$DECOR_CFG" 2>/dev/null || true
+sed -i "s/inactive_opacity[[:space:]]*=[[:space:]]*[0-9.]*,/inactive_opacity = $INACTIVE,/" "$DECOR_CFG" 2>/dev/null || true
+
+sed -i "s/tag = \"terminal\" }, opacity = \"[0-9.]* [0-9.]*\"/tag = \"terminal\" }, opacity = \"$W_TERM\"/" "$WINDOW_RULES" 2>/dev/null || true
+sed -i "s/tag = \"browser\" }, opacity = \"[0-9.]* [0-9.]*\"/tag = \"browser\" }, opacity = \"$W_BROWSER\"/" "$WINDOW_RULES" 2>/dev/null || true
+sed -i "s/tag = \"projects\" }, opacity = \"[0-9.]* [0-9.]*\"/tag = \"projects\" }, opacity = \"$W_PROJ\"/" "$WINDOW_RULES" 2>/dev/null || true
+sed -i "s/tag = \"im\" }, opacity = \"[0-9.]* [0-9.]*\"/tag = \"im\" }, opacity = \"$W_IM\"/" "$WINDOW_RULES" 2>/dev/null || true
+sed -i "s/tag = \"filemanager\" }, opacity = \"[0-9.]* [0-9.]*\"/tag = \"filemanager\" }, opacity = \"$W_FILE\"/" "$WINDOW_RULES" 2>/dev/null || true
+sed -i "s/tag = \"media\" }, opacity = \"[0-9.]* [0-9.]*\"/tag = \"media\" }, opacity = \"$W_MEDIA\"/" "$WINDOW_RULES" 2>/dev/null || true
+
+hyprctl reload 2>/dev/null || true
+
+echo "$MODE" > "$STATE_FILE"
+notify -u low "Transparency" "$([[ "$MODE" == "on" ]] && echo 'ON — windows are semi-transparent' || echo 'OFF — normal opacity restored')"

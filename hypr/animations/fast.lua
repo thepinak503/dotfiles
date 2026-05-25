@@ -1,0 +1,17 @@
+-- Fast animations
+hl.bezier("overshot", { 0.05, 0.9, 0.1, 1.1 })
+hl.bezier("smoothOut", { 0.36, 0, 0.66, -0.56 })
+hl.bezier("smoothIn", { 0.25, 0.1, 0.25, 1 })
+hl.bezier("smoothWS", { 0.22, 1, 0.36, 1 })
+hl.bezier("fluide", { 0.65, 0, 0.35, 1 })
+
+hl.animation("windows", { style = 1, bezier = "overshot", speed = 0.8, slowdown = 0.3 })
+hl.animation("windowsIn", { style = 1, bezier = "overshot", speed = 0.8, slowdown = 0.3 })
+hl.animation("windowsOut", { style = 1, bezier = "smoothOut", speed = 0.8, slowdown = 0.3 })
+hl.animation("fade", { style = 1, bezier = "smoothIn", speed = 0.8, slowdown = 0.3 })
+hl.animation("fadeIn", { style = 1, bezier = "smoothIn", speed = 0.8, slowdown = 0.3 })
+hl.animation("fadeOut", { style = 1, bezier = "smoothOut", speed = 0.8, slowdown = 0.3 })
+hl.animation("workspaces", { style = 1, bezier = "smoothWS", speed = 0.8, slowdown = 0.3 })
+hl.animation("border", { style = 1, bezier = "fluide", speed = 1, slowdown = 0.3 })
+hl.animation("borderangle", { style = 1, bezier = "fluide", speed = 1, slowdown = 0.3 })
+hl.animation("global", { style = 1, bezier = "fluide", speed = 0.8, slowdown = 0.3 })

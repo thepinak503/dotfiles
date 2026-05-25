@@ -28,7 +28,7 @@ hl.bind(mainMod .. " + CTRL + G", function() hl.dispatch("moveintogroup", "forwa
 hl.bind(mainMod .. " + CTRL + SHIFT + G", function() hl.dispatch("moveoutofgroup") end)
 
 -- Focus
-hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
+hl.bind(mainMod .. " + Left", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + Right", hl.dsp.focus({ direction = "right" }))
 hl.bind(mainMod .. " + K", hl.dsp.focus({ direction = "up" }))
 hl.bind(mainMod .. " + J", hl.dsp.focus({ direction = "down" }))
@@ -76,15 +76,16 @@ hl.bind(mainMod .. " + SHIFT + bracketleft",  hl.dsp.window.move({ workspace = "
 hl.bind(mainMod .. " + grave",         hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + SHIFT + grave", hl.dsp.window.move({ workspace = "special:magic" }))
 
--- Screenshots
-hl.bind("Print",         hl.dsp.exec_cmd("hyprshot -m output"))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd("hyprshot -m region"))
-hl.bind("CTRL + Print",  hl.dsp.exec_cmd("hyprshot -m window"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region"))
-hl.bind(mainMod .. " + CTRL + S",  hl.dsp.exec_cmd("hyprshot -m region --clipboard-only"))
+-- Screenshots (handled by screenshot script)
+hl.bind("Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --now"))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --area"))
+hl.bind("CTRL + Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --window"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --area"))
+hl.bind(mainMod .. " + CTRL + S", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --swappy"))
 
 -- Screen Recording
-hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenrecord"))
+hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --active"))
+hl.bind(mainMod .. " + CTRL + SHIFT + S", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot"))
 
 -- Layout
 hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/changeLayout"))
@@ -98,8 +99,16 @@ hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
 -- Game Mode
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/gamemode"))
 
+-- Animations Menu
+hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/animations-menu"))
+
 -- Keyhints
+hl.bind(mainMod .. " + H", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/keyhints-yad"))
 hl.bind(mainMod .. " + slash", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/keyhints"))
+hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/settings-menu"))
+hl.bind(mainMod .. " + ALT + R", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/refresh"))
+hl.bind(mainMod .. " + ALT + O", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/blur-toggle"))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/nightlight"))
 
 -- Media Keys
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/volume --inc"), { locked = true, repeating = true })
@@ -126,7 +135,7 @@ hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
 
 -- Notifications
-hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
+hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
 
 -- Toggle Waybar hidden
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))

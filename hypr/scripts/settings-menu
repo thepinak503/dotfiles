@@ -1,0 +1,58 @@
+#!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+CONFIG_DIR="$HOME/.local/share/dotfiles/hypr/configs"
+SCRIPTS_DIR="$HOME/.local/share/dotfiles/hypr/scripts"
+
+if ! command -v rofi &>/dev/null; then
+    notify -u critical "Settings" "rofi is not installed"
+    exit 1
+fi
+
+CHOICE=$(printf \
+" Edit Keybinds\n Edit Window Rules\n Edit Decorations\n Edit Animations\n Edit Autostart\n Choose Animation Profile\n Choose Rofi Theme\n Choose Kitty Theme\n Toggle Blur\n Toggle Night Light\n󰄕 Toggle Game Mode\n Refresh All" \
+| rofi -dmenu -p "Settings" -i)
+
+[[ -z "$CHOICE" ]] && exit 0
+
+case "$CHOICE" in
+    " Edit Keybinds")
+        [[ -f "$CONFIG_DIR/keybinds.lua" ]] || { notify -u critical "Settings" "keybinds.lua not found"; exit 1; }
+        kitty -e nano "$CONFIG_DIR/keybinds.lua" ;;
+    " Edit Window Rules")
+        [[ -f "$CONFIG_DIR/windowrules.lua" ]] || { notify -u critical "Settings" "windowrules.lua not found"; exit 1; }
+        kitty -e nano "$CONFIG_DIR/windowrules.lua" ;;
+    " Edit Decorations")
+        [[ -f "$CONFIG_DIR/decor.lua" ]] || { notify -u critical "Settings" "decor.lua not found"; exit 1; }
+        kitty -e nano "$CONFIG_DIR/decor.lua" ;;
+    " Edit Animations")
+        [[ -f "$CONFIG_DIR/animations.lua" ]] || { notify -u critical "Settings" "animations.lua not found"; exit 1; }
+        kitty -e nano "$CONFIG_DIR/animations.lua" ;;
+    " Edit Autostart")
+        [[ -f "$CONFIG_DIR/autostart.lua" ]] || { notify -u critical "Settings" "autostart.lua not found"; exit 1; }
+        kitty -e nano "$CONFIG_DIR/autostart.lua" ;;
+    " Choose Animation Profile")
+        [[ -x "$SCRIPTS_DIR/animations-menu" ]] || { notify -u critical "Settings" "animations-menu not found"; exit 1; }
+        "$SCRIPTS_DIR/animations-menu" ;;
+    " Choose Rofi Theme")
+        notify -u low "Settings" "Rofi theme selector not available" ;;
+    " Choose Kitty Theme")
+        notify -u low "Settings" "Kitty theme selector not available" ;;
+    " Toggle Blur")
+        [[ -x "$SCRIPTS_DIR/blur-toggle" ]] || { notify -u critical "Settings" "blur-toggle not found"; exit 1; }
+        "$SCRIPTS_DIR/blur-toggle" ;;
+    " Toggle Night Light")
+        [[ -x "$SCRIPTS_DIR/nightlight" ]] || { notify -u critical "Settings" "nightlight not found"; exit 1; }
+        "$SCRIPTS_DIR/nightlight" ;;
+    "󰄕 Toggle Game Mode")
+        [[ -x "$SCRIPTS_DIR/gamemode" ]] || { notify -u critical "Settings" "gamemode not found"; exit 1; }
+        "$SCRIPTS_DIR/gamemode" ;;
+    " Refresh All")
+        [[ -x "$SCRIPTS_DIR/refresh" ]] || { notify -u critical "Settings" "refresh not found"; exit 1; }
+        "$SCRIPTS_DIR/refresh" ;;
+    *)
+        notify -u low "Settings" "No valid option selected"
+        exit 1 ;;
+esac

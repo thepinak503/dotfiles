@@ -1,0 +1,54 @@
+#!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
+
+STATE_FILE="/tmp/hypr-blurmode"
+
+if ! command -v hyprctl &>/dev/null; then
+    notify -u critical "Blur Toggle" "hyprctl not available"
+    exit 1
+fi
+
+update_state() {
+    local current
+    current=$(hyprctl getoption decoration:blur_passes | awk 'NR==1{print $2}') || true
+    if [[ "$current" == "4" ]]; then
+        echo "normal" > "$STATE_FILE"
+    elif [[ "$current" == "2" ]]; then
+        echo "low" > "$STATE_FILE"
+    else
+        echo "off" > "$STATE_FILE"
+    fi
+}
+
+if [[ ! -f "$STATE_FILE" ]]; then
+    update_state
+fi
+
+MODE=$(cat "$STATE_FILE" 2>/dev/null || echo "unknown")
+
+case "$MODE" in
+    "normal")
+        hyprctl keyword decoration:blur_passes 2
+        hyprctl keyword decoration:blur_size 4
+        echo "low" > "$STATE_FILE"
+        notify -u low "Blur" "Mode: Low (passes=2, size=4)"
+        ;;
+    "low")
+        hyprctl keyword decoration:blur_passes 0
+        hyprctl keyword decoration:blur_size 0
+        echo "off" > "$STATE_FILE"
+        notify -u low "Blur" "Mode: Off"
+        ;;
+    "off")
+        hyprctl keyword decoration:blur_passes 4
+        hyprctl keyword decoration:blur_size 8
+        echo "normal" > "$STATE_FILE"
+        notify -u low "Blur" "Mode: Normal (passes=4, size=8)"
+        ;;
+    *)
+        update_state
+        notify -u low "Blur" "State file was corrupt, reinitialized"
+        ;;
+esac

@@ -1,4 +1,7 @@
 #!/bin/bash
+set -euo pipefail
+
+notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
 WALLPAPER_DIR="$HOME/.local/share/dotfiles/wallpapers"
 API_KEY_FILE="$HOME/.local/share/dotfiles/.unsplash_key"
@@ -44,7 +47,7 @@ apply_wallpaper() {
     # update hyprpaper.conf for persistence
     echo "preload = $path" > "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
     echo "wallpaper = , $path" >> "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
-    [[ -z "$QUIET" ]] && notify-send -u low -i "$path" "Wallpaper" "Changed"
+    [[ -z "$QUIET" ]] && notify -u low -i "$path" "Wallpaper" "Changed"
 }
 
 # --- Nord wallpaper helpers ---
@@ -214,6 +217,6 @@ esac
 if [[ -f "$path" ]]; then
     apply_wallpaper "$path"
 else
-    [[ -z "$QUIET" ]] && notify-send -u critical "Wallpaper" "No wallpaper available"
+    [[ -z "$QUIET" ]] && notify -u critical "Wallpaper" "No wallpaper available"
     exit 1
 fi
