@@ -56,7 +56,7 @@ tooltip {
 tooltip label {
   color: #d8dee9;
   font-size: 12px;
-  line-height: 1.4;
+  /* line-height: 1.4 — removed, causes SIGSEGV in waybar */
 }
 
 /* =============================================================================
@@ -569,51 +569,4 @@ window#waybar.empty #window {
  * RESPONSIVE BREAKPOINTS
  * ============================================================================= */
 
-@media (max-width: 1024px) {
-  #custom-net-speed {
-    display: none;
-  }
-
-  #temperature {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  #custom-net-speed,
-  #temperature,
-  #power-profiles-daemon {
-    display: none;
-  }
-
-  #workspaces button {
-    min-width: 16px;
-    padding: 0 4px;
-    font-size: 10px;
-  }
-
-  #window {
-    max-width: 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  #tray,
-  #custom-net-speed,
-  #temperature,
-  #power-profiles-daemon,
-  #memory {
-    display: none;
-  }
-
-  #workspaces button {
-    min-width: 12px;
-    padding: 0 2px;
-    margin: 1px;
-  }
-
-  #clock {
-    font-size: 11px;
-    padding: 2px 4px;
-  }
-}
+/* @media blocks removed — unsupported in waybar v0.15, causes exit */
