@@ -104,45 +104,45 @@ hl.bind(mainMod .. " + grave",         hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + SHIFT + grave", hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- Screenshots (handled by screenshot script)
-hl.bind("Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --now"))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --area"))
-hl.bind("CTRL + Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --window"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --area"))
-hl.bind(mainMod .. " + CTRL + S", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --swappy"))
+hl.bind("Print", hl.dsp.exec_cmd(scripts .. "/screenshot --now"))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd(scripts .. "/screenshot --area"))
+hl.bind("CTRL + Print", hl.dsp.exec_cmd(scripts .. "/screenshot --window"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(scripts .. "/screenshot --area"))
+hl.bind(mainMod .. " + CTRL + S", hl.dsp.exec_cmd(scripts .. "/screenshot --swappy"))
 
 -- Screen Recording
-hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot --active"))
-hl.bind(mainMod .. " + CTRL + SHIFT + S", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/screenshot"))
+hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd(scripts .. "/screenshot --active"))
+hl.bind(mainMod .. " + CTRL + SHIFT + S", hl.dsp.exec_cmd(scripts .. "/screenshot"))
 
 -- Layout
-hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/changeLayout"))
+hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd(scripts .. "/changeLayout"))
 
 -- Touchpad Toggle
-hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/touchpad"))
+hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(scripts .. "/touchpad"))
 
 -- Color Picker
 hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
 
 -- Game Mode
-hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/gamemode"))
+hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(scripts .. "/gamemode"))
 
 -- Animations Menu
-hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/animations-menu"))
+hl.bind(mainMod .. " + SHIFT + A", hl.dsp.exec_cmd(scripts .. "/animations-menu"))
 
 -- Keyhints
-hl.bind(mainMod .. " + H", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/keyhints-yad"))
-hl.bind(mainMod .. " + slash", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/keyhints"))
-hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/settings-menu"))
-hl.bind(mainMod .. " + ALT + R", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/refresh"))
-hl.bind(mainMod .. " + ALT + O", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/blur-toggle"))
-hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/nightlight"))
+hl.bind(mainMod .. " + H", hl.dsp.exec_cmd(scripts .. "/keyhints-yad"))
+hl.bind(mainMod .. " + slash", hl.dsp.exec_cmd(scripts .. "/keyhints"))
+hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(scripts .. "/settings-menu"))
+hl.bind(mainMod .. " + ALT + R", hl.dsp.exec_cmd(scripts .. "/refresh"))
+hl.bind(mainMod .. " + ALT + O", hl.dsp.exec_cmd(scripts .. "/blur-toggle"))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(scripts .. "/nightlight"))
 
 -- Media Keys
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/volume --inc"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/volume --dec"), { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/volume --toggle"), { locked = true })
-hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/brightness --inc"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/brightness --dec"), { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(scripts .. "/volume --inc"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(scripts .. "/volume --dec"), { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(scripts .. "/volume --toggle"), { locked = true })
+hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd(scripts .. "/brightness --inc"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd(scripts .. "/brightness --dec"), { locked = true, repeating = true })
 hl.bind("XF86AudioPlay",        hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioNext",        hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPrev",        hl.dsp.exec_cmd("playerctl previous"), { locked = true })
@@ -155,8 +155,8 @@ hl.bind(mainMod .. " + CTRL + Q", hl.dsp.exec_cmd("hyprctl dispatch exit"))
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 
 -- Wallpapers
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch"))
-hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/wallpaper-fetch --next"))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(scripts .. "/wallpaper-fetch"))
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(scripts .. "/wallpaper-fetch --next"))
 
 -- Clipboard
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
@@ -168,11 +168,11 @@ hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
 hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
 
 -- Reload Waybar
-hl.bind(mainMod .. " + CTRL + B", hl.dsp.exec_cmd("~/.local/share/dotfiles/hypr/scripts/waybar-reload"))
+hl.bind(mainMod .. " + CTRL + B", hl.dsp.exec_cmd(scripts .. "/waybar-reload"))
 
 -- Diagnostics
-hl.bind(mainMod .. " + SHIFT + D", hl.dsp.exec_cmd("kitty -e ~/.local/share/dotfiles/hypr/scripts/diagreload"))
+hl.bind(mainMod .. " + SHIFT + D", hl.dsp.exec_cmd("kitty -e " .. scripts .. "/diagreload"))
 
 -- Theme switching
-hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd("~/.local/share/dotfiles/themes/theme.sh light"))
-hl.bind(mainMod .. " + CTRL + SHIFT + T", hl.dsp.exec_cmd("~/.local/share/dotfiles/themes/theme.sh dark"))
+hl.bind(mainMod .. " + SHIFT + T", hl.dsp.exec_cmd(dots .. "/themes/theme.sh light"))
+hl.bind(mainMod .. " + CTRL + SHIFT + T", hl.dsp.exec_cmd(dots .. "/themes/theme.sh dark"))
