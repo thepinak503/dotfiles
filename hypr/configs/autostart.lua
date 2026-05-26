@@ -49,8 +49,7 @@ hl.on("hyprland.start", function ()
     -- Polkit authentication agent (for admin dialogs)
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
-    -- Alternative: polkit-kde-agent
-    -- hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
+    -- Alternative polkit agent: /usr/lib/polkit-kde-authentication-agent-1
 
     -- =========================================================================
     -- DESKTOP PORTALS
@@ -88,16 +87,6 @@ hl.on("hyprland.start", function ()
 
     -- Set up GPU and environment variables (auto-detected)
     hl.exec_cmd(dots .. "/hypr/scripts/set-env > /dev/null 2>&1")
-end)
-
--- =============================================================================
--- COMPOSITOR EVENTS
--- =============================================================================
-
--- Reload all UI when theme changes
-hl.on("theme.change", function ()
-    hl.exec_cmd(dots .. "/hypr/scripts/waybar-reload")
-    hl.exec_cmd(dots .. "/hypr/scripts/refresh")
 end)
 
 -- =============================================================================

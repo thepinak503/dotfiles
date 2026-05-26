@@ -22,8 +22,8 @@ hl.config({
         },
         layout = "dwindle",       -- Default layout: "dwindle" or "master"
         resize_corner = 2,        -- Corner to use for resize cursor (0=none, 1=bottom-right, 2=all)
-        no_border_on_floating = false, -- Show borders on floating windows too
-        gaps_workspaces_only = false,  -- Apply gaps only within workspaces (not monitor edges)
+        -- no_border_on_floating removed in v0.55 (always shows borders)
+        -- gaps_workspaces_only removed in v0.55 (gaps always apply within workspaces)
     },
 
     cursor = {
@@ -57,7 +57,7 @@ hl.config({
             color_inactive = "rgba(0,0,0,0.35)",       -- Inactive shadow color
             offset         = { 3, 5 }, -- Shadow offset (x, y)
             scale          = 0.97,     -- Shadow scale (1.0 = no scaling)
-            ignore_window  = true,     -- Ignore window for shadow calculation
+            -- deprecated shadow field removed in v0.55
         },
 
         -- =====================================================================
@@ -74,8 +74,7 @@ hl.config({
             brightness         = 1.0,         -- Blur brightness
             popups             = true,        -- Blur behind popup windows
             popups_ignorealpha = 0.6,         -- Alpha threshold for popup blur
-            popups_blur_new = true,           -- Apply blur to newly created popups
-            new_optimizations  = true,        -- Use new blur optimizations
+            -- popups_blur_new removed in v0.55
         },
 
         -- =====================================================================

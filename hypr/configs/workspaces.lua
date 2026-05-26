@@ -15,10 +15,8 @@ hl.config({
         smart_split = true,            -- Smart split direction based on cursor position
         smart_resizing = true,         -- Smart resize direction
         permanent_direction_override = true, -- Remember split direction across window changes
-        no_gaps_when_only = false,     -- Remove gaps when only one window is visible
         use_active_for_splits = true,  -- Use active window for split direction
         split_width_multiplier = 1.0,  -- Multiplier for split width calculation
-        pseudotile = false,            -- Enable pseudotiling (tiled windows can be resized like floating)
     },
 
     -- =========================================================================
@@ -29,10 +27,7 @@ hl.config({
         mfact = 0.55,                  -- Master-to-slave area ratio (0.5 = equal)
         orientation = "center",        -- Master position: "left", "right", "top", "bottom", "center"
         slave_count_for_center_master = 0, -- Slaves needed before centering master
-        always_center_master = false,  -- Always center the master window
         new_on_top = true,            -- New windows appear on top of the stack
-        new_on_active = false,        -- New windows become active
-        inherit_fullscreen = true,    -- New windows inherit fullscreen state
         drop_at_cursor = true,        -- New windows appear at cursor position
     },
 
@@ -42,12 +37,8 @@ hl.config({
     binds = {
         workspace_back_and_forth = true,   -- Toggle between last two workspaces
         allow_workspace_cycles = true,     -- Allow cycling past workspace 9 to 1
-        allow_workspace_cycles_monitor = true, -- Cycle workspaces on the same monitor
-        allow_workspace_cycles_all = false,    -- Cycle workspaces across all monitors
-        focus_workspace_on_click = true,   -- Focus workspace when clicking on a window
         movefocus_cycles_fullscreen = true,-- Allow focus cycling through fullscreen windows
         scroll_event_delay = 250,          -- Scroll event debounce (ms)
-        pass_matches_windows = true,       -- Pass keybinds to windows if they match
     },
 
     -- =========================================================================
@@ -66,18 +57,9 @@ hl.config({
         mouse_move_enables_dpms = true,        -- Wake up display from DPMS on mouse move
         key_press_enables_dpms = false,        -- Wake up display from DPMS on key press
         disable_autoreload = true,             -- Disable automatic config reload
-        enable_animations = true,              -- Enable/disable all animations
         always_follow_on_dnd = true,           -- Follow drag-and-drop operations
         layers_hog_keyboard_focus = true,      -- Layer surfaces get keyboard focus
-        render_ahead_of_time = true,           -- Pre-render to reduce latency
-        render_ahead_safezone = 1,             -- Render ahead safezone
-        render_timer_ms = 0,                   -- Manual render timer (0 = use vblank)
-        enable_hyprctl_commands = false,       -- Disable runtime hyprctl changes (security)
-        variable_refresh_rate = true,          -- Enable VRR when possible
-        vblank_drop_interval = 1,              -- Drop vblank intervals (reduce lag)
         background_color = "rgb(2e3440)",      -- Background color
-        new_window_takes_over_fullscreen = 1,  -- 0=never, 1=on demand, 2=always
-        col.background = "rgb(2e3440)",
     },
 
     -- =========================================================================
@@ -90,7 +72,6 @@ hl.config({
         manual_crash = false,          -- Manual crash for testing
         suppress_errors = false,       -- Show all errors
         vfr = true,                    -- Variable frame rate
-        watchdog_timeout = 5,          -- Watchdog timeout (seconds)
         damage_tracking = 0,           -- 0=off, 1=full, 2=partial (debug)
         overlay = false,               -- Show overlay for debugging
     },
@@ -101,7 +82,6 @@ hl.config({
     xwayland = {
         force_zero_scaling = true,             -- Disable XWayland scaling (prevents blurry X11 apps)
         use_nearest_neighbor = false,           -- Use nearest neighbor for XWayland scaling
-        disable_xwayland = false,              -- Enable XWayland (required for many apps)
     },
 })
 

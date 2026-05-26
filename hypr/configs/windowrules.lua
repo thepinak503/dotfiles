@@ -181,8 +181,7 @@ hl.window_rule({ match = { class = "kitty" }, tag = "+terminal" })
 --   idle_inhibit  = Inhibit idle: "always", "fullscreen", "never"
 --   no_blur       = Disable blur behind (true/false)
 --   fullscreen    = Force fullscreen (1=normal, 2=fullscreen, 0=toggle)
---   no_focus      = Don't steal focus (true/false)
---   no_initial_focus = Don't focus on creation (true/false)
+--   (focus-related fields removed in v0.55)
 --   force_isolation = Force window isolation (true/false)
 --   workspace     = Pin to workspace: "unset", "silent", "empty"
 --   monitor       = Pin to monitor by name

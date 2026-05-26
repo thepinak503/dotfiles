@@ -11,9 +11,6 @@
   "control-center-layer": "top",
   "cssPriority": "application",
 
-  // ---------------------------------------------------------------------------
-  // Notification display settings
-  // ---------------------------------------------------------------------------
   "notification-icon-size": 32,
   "notification-body-image-height": 160,
   "notification-body-image-width": 200,
@@ -31,9 +28,6 @@
   "script-fail-notify": true,
   "transition-time": 200,
 
-  // ---------------------------------------------------------------------------
-  // Exec scripts triggered by notifications
-  // ---------------------------------------------------------------------------
   "scripts": {
     "example-script": {
       "exec": "notify-send 'Script triggered'",
@@ -41,9 +35,6 @@
     }
   },
 
-  // ---------------------------------------------------------------------------
-  // Notification visibility rules
-  // ---------------------------------------------------------------------------
   "notification-visibility": {
     "example-app-name": {
       "state": "ignored",
@@ -77,9 +68,6 @@
     }
   },
 
-  // ---------------------------------------------------------------------------
-  // Widget layout and configuration
-  // ---------------------------------------------------------------------------
   "widgets": [
     "inhibitors",
     "title",

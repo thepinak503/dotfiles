@@ -160,12 +160,25 @@ if [ -d "$DOTFILES_DIR/hypr" ]; then
         HVER=$(hyprctl version 2>/dev/null | head -1 | grep -oP 'v\S+' || echo "version unknown")
         echo -e "  ${GREEN}✓${NC} Hyprland is running ($HVER)"
     fi
-    for conf in monitors input decor animations windowrules workspaces keybinds autostart; do
-        if [ -f "$DOTFILES_DIR/hypr/configs/$conf.conf" ]; then
-            echo -e "  ${GREEN}✓${NC} hypr/configs/$conf.conf"
+    for conf in monitors input decor animations windowrules workspaces keybinds autostart devices; do
+        if [ -f "$DOTFILES_DIR/hypr/configs/$conf.lua" ]; then
+            echo -e "  ${GREEN}✓${NC} hypr/configs/$conf.lua"
         else
-            echo -e "  ${RED}✗${NC} hypr/configs/$conf.conf — missing"
-            deduct 2 "Missing Hyprland config: $conf.conf"
+            echo -e "  ${RED}✗${NC} hypr/configs/$conf.lua — missing"
+            deduct 2 "Missing Hyprland config: $conf.lua"
+        fi
+    done
+    if [ -f "$DOTFILES_DIR/hypr/configs/env.lua" ]; then
+        echo -e "  ${GREEN}✓${NC} hypr/configs/env.lua"
+    else
+        echo -e "  ${YELLOW}⚠${NC} hypr/configs/env.lua — optional (pcall)"
+    fi
+    for conf in theme; do
+        if [ -f "$DOTFILES_DIR/hypr/configs/$conf.lua" ]; then
+            echo -e "  ${GREEN}✓${NC} hypr/configs/$conf.lua"
+        else
+            echo -e "  ${RED}✗${NC} hypr/configs/$conf.lua — missing"
+            deduct 2 "Missing Hyprland config: $conf.lua"
         fi
     done
 fi

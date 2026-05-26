@@ -24,13 +24,9 @@
 
 hl.monitor({
     output   = "eDP-1",          -- Laptop built-in display
-    mode     = "preferred",       -- Use the panel's native resolution (e.g., 1920x1080@60)
+    mode     = "preferred",       -- Use the panel's native resolution
     position = "0x0",            -- Top-left corner (primary monitor)
     scale    = 1.0,              -- 1.0 = no scaling, 1.5 = fractional, 2.0 = HiDPI
-    enable   = true,             -- Enable this monitor
-    mirror   = nil,              -- Mirror another monitor's output (e.g., "DP-1")
-    workspace = "1",             -- Default workspace on this monitor
-    autostart = true,            -- Apply configuration automatically
 })
 
 -- =============================================================================
@@ -44,8 +40,6 @@ hl.monitor({
 --     mode     = "1920x1080@144",      -- 1080p at 144Hz
 --     position = "1920x0",             -- To the right of laptop display
 --     scale    = 1.0,
---     enable   = true,
---     workspace = "3",                 -- Workspace 3 starts on this monitor
 -- })
 
 -- =============================================================================
@@ -58,8 +52,6 @@ hl.monitor({
 --     mode     = "2560x1440@165",      -- 1440p at 165Hz
 --     position = "3840x0",             -- To the right of HDMI monitor
 --     scale    = 1.0,
---     enable   = true,
---     workspace = "5",
 -- })
 
 -- =============================================================================
@@ -71,8 +63,6 @@ hl.monitor({
 --     mode     = "3440x1440@100",      -- Ultrawide at 100Hz
 --     position = "1920x0",
 --     scale    = 1.0,
---     enable   = true,
---     workspace = "7",
 -- })
 
 -- =============================================================================
@@ -82,8 +72,8 @@ hl.monitor({
 -- switch to workspace 3, it always appears on the correct display.
 -- Format: hl.workspace(workspace_id, monitor_name)
 
-hl.workspace("1", "eDP-1")
-hl.workspace("2", "eDP-1")
+-- hl.workspace("1", "eDP-1")
+-- hl.workspace("2", "eDP-1")
 -- hl.workspace("3", "HDMI-A-1")
 -- hl.workspace("4", "HDMI-A-1")
 -- hl.workspace("5", "DP-1")
@@ -101,7 +91,7 @@ hl.workspace("2", "eDP-1")
 
 -- hl.monitor({
 --     output   = "eDP-1",
---     enable   = false,
+--     disabled = true,
 -- })
 
 -- =============================================================================

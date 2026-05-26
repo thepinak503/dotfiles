@@ -1,120 +1,64 @@
-/* ============================================================================
- * Wlogout — Session Control Styles
- * ============================================================================
- * Nord-themed logout screen with glass-morphism button aesthetics
- * ============================================================================ */
-
 * {
   background-image: none;
   font-family: "CaskaydiaCove Nerd Font", "Noto Sans", sans-serif;
 }
 
-/* ---------------------------------------------------------------------------
- * Window background — blurred semi-transparent overlay
- * --------------------------------------------------------------------------- */
 window {
-  background-color: rgba(46, 52, 64, 0.70);
+  background-color: rgba(46, 52, 64, 0.65);
 }
 
-/* ---------------------------------------------------------------------------
- * Base button — all session control buttons
- * --------------------------------------------------------------------------- */
 button {
-  background-color: rgba(59, 66, 82, 0.55);
+  background-color: rgba(59, 66, 82, 0.5);
   border: 1px solid rgba(76, 86, 106, 0.5);
-  border-radius: 18px;
+  border-radius: 16px;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 28%;
+  background-size: 32%;
   color: #d8dee9;
   font-size: 14px;
   font-weight: bold;
-  margin: 10px;
-  padding: 20px 32px;
+  margin: 8px;
   outline-style: none;
-  min-width: 120px;
-  min-height: 100px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-/* ---------------------------------------------------------------------------
- * Button hover / focus / active states
- * --------------------------------------------------------------------------- */
 button:focus,
 button:active,
 button:hover {
-  background-color: rgba(67, 76, 94, 0.7);
+  background-color: rgba(67, 76, 94, 0.6);
   border-color: #88c0d0;
   color: #88c0d0;
   border-width: 2px;
-  min-width: 120px;
-  min-height: 100px;
-  box-shadow: 0 6px 20px rgba(136, 192, 208, 0.15);
-  transform: translateY(-2px);
+  min-width: 80px;
+  min-height: 80px;
 }
 
-button:active {
-  transform: translateY(0px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* ---------------------------------------------------------------------------
- * Individual button icon backgrounds
- * --------------------------------------------------------------------------- */
+#Lock,
 #lock {
   background-image: image(url("/usr/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
 }
 
+#Logout,
 #logout {
   background-image: image(url("/usr/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
 }
 
+#Suspend,
 #suspend {
   background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
 }
 
+#Hibernate,
 #hibernate {
   background-image: image(url("/usr/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
 }
 
+#Shutdown,
 #shutdown {
   background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
 }
 
+#Reboot,
 #reboot {
   background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-}
-
-/* ---------------------------------------------------------------------------
- * Hover-specific color overrides for each action
- * --------------------------------------------------------------------------- */
-#lock:hover {
-  border-color: #5e81ac;
-  color: #5e81ac;
-}
-
-#logout:hover {
-  border-color: #b48ead;
-  color: #b48ead;
-}
-
-#suspend:hover {
-  border-color: #ebcb8b;
-  color: #ebcb8b;
-}
-
-#hibernate:hover {
-  border-color: #d08770;
-  color: #d08770;
-}
-
-#shutdown:hover {
-  border-color: #bf616a;
-  color: #bf616a;
-}
-
-#reboot:hover {
-  border-color: #a3be8c;
-  color: #a3be8c;
 }
