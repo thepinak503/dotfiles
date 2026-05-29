@@ -41,7 +41,7 @@ hl.config({
         -- =====================================================================
         -- WINDOW ROUNDING & OPACITY
         -- =====================================================================
-        rounding           = 10,    -- Window corner rounding in pixels
+        rounding           = 12,    -- Window corner rounding in pixels (slightly softer)
         active_opacity     = 1.0,   -- Opacity of active (focused) window
         inactive_opacity   = 0.90,  -- Opacity of inactive windows
         fullscreen_opacity = 1.0,   -- Opacity when fullscreen (always 1.0)
@@ -67,7 +67,7 @@ hl.config({
             enabled            = true,
             size               = 10,          -- Blur strength
             passes             = 3,           -- Blur quality (1-4, higher = slower but smoother)
-            ignore_opacity     = false,       -- Blur behind transparent windows
+            ignore_opacity     = true,        -- True enables premium glassmorphism behind transparent apps!
             xray               = false,       -- X-ray mode (blur behind window content only)
             noise              = 0.01,        -- Blur noise (adds texture, 0.0-1.0)
             contrast           = 0.8,         -- Blur contrast adjustment
@@ -80,8 +80,8 @@ hl.config({
         -- =====================================================================
         -- WINDOW DIM
         -- =====================================================================
-        dim_inactive = false,         -- Dim inactive windows
-        dim_strength = 0.0,           -- Dim strength (0.0-1.0)
+        dim_inactive = true,          -- Dim inactive windows for focus hierarchy
+        dim_strength = 0.1,           -- Subtle dim strength (0.0-1.0)
         dim_special  = 0.15,          -- Dim strength for special workspace
     },
 })
