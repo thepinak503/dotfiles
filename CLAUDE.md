@@ -101,6 +101,7 @@
 ├── hypr/                          # Hyprland WM (Lua API — NOT .conf syntax)
 │   ├── animations/                # Animation presets
 │   │   ├── default.lua
+│   │   ├── elastic.lua            # Physics-based bouncy animations
 │   │   ├── fast.lua
 │   │   └── smooth.lua
 │   ├── configs/                   # Sub-configs required by hyprland.lua
@@ -314,7 +315,7 @@
 | `DOTFILES_DISTRO` | auto-detected | `core/universal.sh` |
 | `DOTFILES_PKG_MANAGER` | auto-detected | `core/universal.sh` |
 | `DOTFILES_INIT` | auto-detected | `core/universal.sh` |
-| `STARSHIP_CONFIG` | `apps/starship-linux.toml` | `modes/ultimate.zsh` |
+| `STARSHIP_CONFIG` | `~/.config/starship.toml` (XDG) | `modes/ultimate.zsh` |
 | `EDITOR` / `VISUAL` | `nvim` (if available) | `.zshrc` |
 | `BAT_THEME` | `TwoDark` | `.zshrc` |
 | `FZF_DEFAULT_OPTS` | `--height=60% --layout=reverse --border` | `modes/ultimate.zsh` |

@@ -175,6 +175,26 @@ One logical change per commit. Descriptive commit message. Do not bundle unrelat
 ### 14 — No temp files outside workspace
 Use `scratch/` for temporary scripts. Never write to `/tmp`, `/home`, or paths outside the repository without explicit user approval.
 
+### 15 — Never set BASH_ENV to .bashrc
+Do NOT export `BASH_ENV=$HOME/.bashrc` or any interactive shell config.
+`BASH_ENV` is sourced by **every non-interactive bash subprocess** — including `makepkg`, `fakeroot`,
+AUR build hooks, and `sudo` scripts. Loading aliases and PATH mutations in those contexts
+corrupts build environments and breaks package managers.
+
+### 16 — Never shadow `find` with `fd`
+Do NOT create `alias find='fd || command find'`. The `fd` command has completely different
+flags and syntax. Scripts that call `find` with standard options will silently break.
+Keep `fd` under its own name.
+
+### 17 — Avoid recursive alias definitions
+Do NOT write `alias tree='_x tree ...'`. The alias expands itself when `eza` is absent,
+causing infinite recursion. Always use `command tree` to bypass alias expansion.
+
+### 18 — No duplicate history setopts across files
+Do not set `setopt SHARE_HISTORY`, `INC_APPEND_HISTORY`, `HIST_IGNORE_DUPS`, etc. in
+both `.zshrc` and mode files. `INC_APPEND_HISTORY` and `SHARE_HISTORY` used simultaneously
+produce conflicting behavior. Set history options once in `.zshrc`.
+
 ---
 
 ## Critical Files
@@ -282,4 +302,4 @@ If unsure whether a change is safe:
 
 ---
 
-*Last updated: 2026-05-26 — from live `tree -A` + full source inspection*
+*Last updated: 2026-05-30 — added rules 15–18 from shell audit; BASH_ENV fix, find alias removal, tree recursion fix, duplicate setopt fix*

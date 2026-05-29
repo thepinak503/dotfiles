@@ -140,9 +140,9 @@ alias lrec='ls -R'
 alias linode='ls -i'
 alias lcolor='ls --color=auto'
 alias lno='ls -N'
-alias lauth='ls -lZ' 2>/dev/null || true
-alias lctx='ls -lZ' 2>/dev/null || true
-alias treed='_x eza -T --only-dirs || _x tree -CAFd 2>/dev/null || echo "tree needed"'
+alias lauth='ls -lZ 2>/dev/null || true'
+alias lctx='ls -lZ 2>/dev/null || true'
+alias treed='_x eza -T --only-dirs --icons=auto || command tree -CAFd 2>/dev/null || echo "tree needed"'
 
 ##### Cat/View/Pager
 alias cat='command cat'
