@@ -1327,7 +1327,13 @@ alias hmc='_x home-manager generations'
 ##### Misc / System utilities
 
 setopt AUTO_CD 2>/dev/null
-cd() { builtin cd "$@" && eza --icons=auto --group-directories-first || command ls; }
+cd() {
+	if [[ -o interactive ]]; then
+		builtin cd "$@" && eza --icons=auto --group-directories-first || command ls
+	else
+		builtin cd "$@"
+	fi
+}
 
 ##### Grep / Diff / Pager
 alias grep='command grep --color=auto'

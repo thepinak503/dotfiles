@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Auto Dark/Light Theme Switcher periodically
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=15min
+
+[Install]
+WantedBy=timers.target

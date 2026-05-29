@@ -11,16 +11,16 @@
   "control-center-layer": "top",
   "cssPriority": "application",
 
-  "notification-icon-size": 32,
+  "notification-icon-size": 36,
   "notification-body-image-height": 160,
   "notification-body-image-width": 200,
   "timeout": 6,
   "timeout-low": 4,
   "timeout-critical": 10,
   "fit-to-screen": true,
-  "control-center-width": 420,
+  "control-center-width": 440,
   "control-center-height": 720,
-  "notification-window-width": 380,
+  "notification-window-width": 400,
   "keyboard-shortcuts": true,
   "image-visibility": "when-available",
   "hide-on-clear": false,
@@ -101,52 +101,60 @@
       "type": "buttons-grid",
       "action-buttons": [
         {
-          "label": "\uF023",
+          "label": "",
           "type": "toggle",
           "action": "hyprlock",
-          "active": false
+          "active": false,
+          "tooltip": "Lock screen"
         },
         {
-          "label": "\uF011",
+          "label": "",
           "type": "toggle",
           "action": "wlogout",
-          "active": false
+          "active": false,
+          "tooltip": "Power menu"
         },
         {
-          "label": "\uF03B",
+          "label": "",
           "type": "toggle",
           "action": "~/.local/share/dotfiles/hypr/scripts/screenshot --area",
-          "active": false
+          "active": false,
+          "tooltip": "Screenshot area"
         },
         {
-          "label": "\uF1FB",
+          "label": "",
           "type": "toggle",
           "action": "firefox",
-          "active": false
+          "active": false,
+          "tooltip": "Browser"
         },
         {
-          "label": "\uF0AC",
+          "label": "",
           "type": "toggle",
           "action": "nm-connection-editor",
-          "active": false
+          "active": false,
+          "tooltip": "Network"
         },
         {
-          "label": "\uF0A0",
+          "label": "",
           "type": "toggle",
           "action": "blueman-manager",
-          "active": false
+          "active": false,
+          "tooltip": "Bluetooth"
         },
         {
-          "label": "\uF07C",
+          "label": "",
           "type": "toggle",
           "action": "thunar",
-          "active": false
+          "active": false,
+          "tooltip": "File manager"
         },
         {
-          "label": "\uF013",
+          "label": "",
           "type": "toggle",
           "action": "~/.local/share/dotfiles/hypr/scripts/settings-menu",
-          "active": false
+          "active": false,
+          "tooltip": "Settings"
         }
       ]
     },

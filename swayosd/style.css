@@ -1,47 +1,30 @@
-/* ============================================================================
- * SwayOSD — On-Screen Display Styles
- * ============================================================================
- * Nord-themed OSD with glass-morphism aesthetics for volume, brightness, etc.
- * ============================================================================ */
-
 window#osd {
-  border-radius: 20px;
+  border-radius: 16px;
   border: 1px solid rgba(76, 86, 106, 0.5);
-  background: rgba(46, 52, 64, 0.75);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  min-width: 280px;
+  background: rgba(46, 52, 64, 0.7);
 }
-
 window#osd #container {
-  margin: 28px;
+  margin: 24px;
 }
-
 window#osd image {
   color: #88c0d0;
-  -gtk-icon-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
 window#osd label {
   color: #d8dee9;
   font-family: "CaskaydiaCove Nerd Font";
   font-weight: bold;
-  font-size: 14px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
-
 window#osd progressbar:disabled,
 window#osd image:disabled {
-  opacity: 0.35;
+  opacity: 0.4;
 }
-
 window#osd progressbar,
 window#osd segmentedprogress {
-  min-height: 10px;
-  border-radius: 5px;
+  min-height: 8px;
+  border-radius: 4px;
   background: transparent;
   border: none;
 }
-
 window#osd trough,
 window#osd segment {
   min-height: inherit;
@@ -49,7 +32,6 @@ window#osd segment {
   border: none;
   background: rgba(76, 86, 106, 0.4);
 }
-
 window#osd progress,
 window#osd segment.active {
   min-height: inherit;
@@ -57,53 +39,9 @@ window#osd segment.active {
   border: none;
   background: linear-gradient(90deg, #5e81ac, #88c0d0, #8fbcbb);
 }
-
 window#osd segment {
   margin-left: 6px;
-  margin-right: 0;
 }
-
 window#osd segment:first-child {
   margin-left: 0;
-}
-
-/* ---------------------------------------------------------------------------
- * Volume-specific OSD styling
- * --------------------------------------------------------------------------- */
-window#osd.volume image {
-  color: #a3be8c;
-}
-
-window#osd.volume progress {
-  background: linear-gradient(90deg, #a3be8c, #88c0d0);
-}
-
-window#osd.volume.muted image {
-  color: #bf616a;
-}
-
-window#osd.volume.muted progress {
-  background: linear-gradient(90deg, #bf616a, #d08770);
-}
-
-/* ---------------------------------------------------------------------------
- * Brightness-specific OSD styling
- * --------------------------------------------------------------------------- */
-window#osd.brightness image {
-  color: #ebcb8b;
-}
-
-window#osd.brightness progress {
-  background: linear-gradient(90deg, #ebcb8b, #d08770);
-}
-
-/* ---------------------------------------------------------------------------
- * Caps Lock / Num Lock OSD styling
- * --------------------------------------------------------------------------- */
-window#osd.capslock image {
-  color: #b48ead;
-}
-
-window#osd.capslock progress {
-  background: linear-gradient(90deg, #b48ead, #88c0d0);
 }

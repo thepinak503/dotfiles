@@ -15,6 +15,7 @@ for _arg in "$@"; do
         --full) INSTALL_PROFILE="full" ;;
         --hyprland) INSTALL_PROFILE="hyprland" ;;
         --macos) INSTALL_PROFILE="macos" ;;
+        --shell-only) INSTALL_PROFILE="shell-only" ;;
         --help|-h)
             echo "Usage: install.sh [OPTIONS]"
             echo ""
@@ -25,6 +26,7 @@ for _arg in "$@"; do
             echo "  --full           Everything (including Hyprland/macOS extras)"
             echo "  --hyprland       Only Hyprland/Wayland ecosystem"
             echo "  --macos          Only macOS extras"
+            echo "  --shell-only    Shell config + core tools only (no DE/WM)"
             echo "  --help, -h      Show this help message"
             exit 0
             ;;
@@ -588,6 +590,36 @@ pkg_name() {
                 *)             echo "$_pkg" ;;
             esac
             ;;
+        eopkg)
+            case "$_pkg" in
+                fd)            echo "fd" ;;
+                bat)           echo "bat" ;;
+                ripgrep)       echo "ripgrep" ;;
+                eza)           echo "eza" ;;
+                starship)      echo "starship" ;;
+                zoxide)        echo "zoxide" ;;
+                fastfetch)     echo "fastfetch" ;;
+                neovim)        echo "neovim" ;;
+                git-delta)     echo "git-delta" ;;
+                gh)            echo "gh" ;;
+                jq)            echo "jq" ;;
+                yq)            echo "yq" ;;
+                tmux)          echo "tmux" ;;
+                btop)          echo "btop" ;;
+                ncdu)          echo "ncdu" ;;
+                tldr)          echo "tldr" ;;
+                fzf)           echo "fzf" ;;
+                docker)        echo "docker" ;;
+                docker-compose) echo "docker-compose" ;;
+                podman)        echo "podman" ;;
+                kubectl)       echo "kubectl" ;;
+                helm)          echo "helm" ;;
+                terraform)     echo "terraform" ;;
+                kitty)         echo "kitty" ;;
+                alacritty)     echo "alacritty" ;;
+                *)             echo "$_pkg" ;;
+            esac
+            ;;
         *) echo "$_pkg" ;;
     esac
 }
@@ -868,6 +900,37 @@ link_configs() {
     else
         safe_link "$DOTFILES_DIR/apps/starship-linux.toml" "$HOME/.config/starship.toml"
     fi
+
+    # Link Hyprland and Wayland ecosystem configs if Hyprland is detected or requested
+    if [ "$DISTRO" != "macos" ] && [ "$DISTRO" != "mac" ]; then
+        if [ "${HYPRLAND_DETECTED:-false}" = true ] || [ "$INSTALL_PROFILE" = "full" ] || [ "$INSTALL_PROFILE" = "hyprland" ]; then
+            mkdir -p "$HOME/.config/hypr"
+            safe_link "$DOTFILES_DIR/hypr/configs" "$HOME/.config/hypr/configs"
+            safe_link "$DOTFILES_DIR/hypr/hyprland.lua" "$HOME/.config/hypr/hyprland.lua"
+            safe_link "$DOTFILES_DIR/hypr/hyprlock.conf" "$HOME/.config/hypr/hyprlock.conf"
+            safe_link "$DOTFILES_DIR/hypr/hyprpaper.conf" "$HOME/.config/hypr/hyprpaper.conf"
+            safe_link "$DOTFILES_DIR/hypr/hypridle.conf" "$HOME/.config/hypr/hypridle.conf"
+            
+            safe_link "$DOTFILES_DIR/waybar" "$HOME/.config/waybar"
+            
+            mkdir -p "$HOME/.config/swaync"
+            safe_link "$DOTFILES_DIR/swaync/config.jsonc" "$HOME/.config/swaync/config.jsonc"
+            safe_link "$DOTFILES_DIR/swaync/style.css" "$HOME/.config/swaync/style.css"
+            
+            safe_link "$DOTFILES_DIR/swayosd" "$HOME/.config/swayosd"
+            safe_link "$DOTFILES_DIR/wlogout" "$HOME/.config/wlogout"
+            safe_link "$DOTFILES_DIR/rofi" "$HOME/.config/rofi"
+            safe_link "$DOTFILES_DIR/kitty" "$HOME/.config/kitty"
+            safe_link "$DOTFILES_DIR/alacritty" "$HOME/.config/alacritty"
+            
+            # Systemd user services
+            mkdir -p "$HOME/.config/systemd/user"
+            safe_link "$DOTFILES_DIR/systemd/user/auto-theme.service" "$HOME/.config/systemd/user/auto-theme.service"
+            safe_link "$DOTFILES_DIR/systemd/user/auto-theme.timer" "$HOME/.config/systemd/user/auto-theme.timer"
+            safe_link "$DOTFILES_DIR/systemd/user/wallpaper-fetch.service" "$HOME/.config/systemd/user/wallpaper-fetch.service"
+            safe_link "$DOTFILES_DIR/systemd/user/wallpaper-fetch.timer" "$HOME/.config/systemd/user/wallpaper-fetch.timer"
+        fi
+    fi
 }
 
 # =============================================================================
@@ -913,8 +976,21 @@ if [ "$DISTRO" = "macos" ] || [ "$PM" = "brew" ]; then
     fi
 fi
 
+# Auto-detect Hyprland: only install desktop components if Hyprland is present
+HYPRLAND_DETECTED=false
+if [ "$DISTRO" != "macos" ] && [ "$DISTRO" != "mac" ]; then
+    if command -v hyprctl >/dev/null 2>&1 || [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+        HYPRLAND_DETECTED=true
+    fi
+fi
+
 # Install by profile
 case "$INSTALL_PROFILE" in
+    shell-only)
+        install_group_shell_tools
+        install_group_dev_tools
+        install_group_git_tools
+        ;;
     minimal)
         install_group_shell_tools
         install_group_dev_tools
@@ -934,8 +1010,11 @@ case "$INSTALL_PROFILE" in
         install_group_git_tools
         install_group_containers
         install_group_cloud
-        if [ "$DISTRO" != "macos" ] && [ "$DISTRO" != "mac" ]; then
+        # Only install Hyprland group if Hyprland is already in use
+        if [ "$HYPRLAND_DETECTED" = true ]; then
             install_group_hyprland
+        elif [ "$DISTRO" != "macos" ] && [ "$DISTRO" != "mac" ]; then
+            info "Hyprland not detected — skipping desktop environment packages"
         fi
         if [ "$DISTRO" = "macos" ] || [ "$DISTRO" = "mac" ]; then
             install_group_macos_extras

@@ -1,0 +1,7 @@
+[Unit]
+Description=Auto Dark/Light Theme Switcher based on Sun coordinates
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/pinak/.local/share/dotfiles/themes/auto-theme.sh

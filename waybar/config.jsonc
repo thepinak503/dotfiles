@@ -9,7 +9,7 @@
   "mod": "dock",
   "exclusive": true,
   "passthrough": false,
-  "spacing": 2,
+  "spacing": 4,
   "output": null,
   "blur": true,
   "all-outputs": false,
@@ -17,36 +17,31 @@
     "hyprland/workspaces",
     "hyprland/window"
   ],
-  "modules-center": [
-    "custom/media"
-  ],
+  "modules-center": [],
   "modules-right": [
-    "tray",
     "pulseaudio",
     "network",
-    "custom/net-speed",
-    "cpu",
-    "memory",
-    "temperature",
-    "power-profiles-daemon",
     "battery",
-    "clock"
+    "custom/clock"
   ],
   "hyprland/workspaces": {
     "disable-scroll": false,
     "all-outputs": false,
     "format": "{icon}",
     "format-icons": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7",
-      "8": "8",
-      "9": "9",
-      "urgent": "!"
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "",
+      "5": "",
+      "6": "",
+      "7": "",
+      "8": "",
+      "9": "",
+      "urgent": "",
+      "default": "",
+      "empty": "",
+      "focused": ""
     },
     "persistent-workspaces": {
       "*": 9
@@ -56,55 +51,14 @@
     "on-scroll-down": "hyprctl dispatch workspace e-1"
   },
   "hyprland/window": {
-    "format": "{}",
-    "rewrite": {
-      "(.*) — Mozilla Firefox": " $1",
-      "(.*) - Visual Studio Code": " $1",
-      "(.*) - Code - OSS": " $1",
-      "(.*) - Obsidian": " $1",
-      "(.*) — Discord": " $1",
-      "(.*) — Signal": " $1",
-      "(.*) — Slack": " $1",
-      "(.*) — Spotify": " $1",
-      "(.*) - Thunar": " $1",
-      "(.*) - Nautilus": " $1",
-      "(.*) - Terminal": " $1",
-      "(.*) — Kitty": " $1",
-      "(.*) - Alacritty": " $1",
-      "(.*) - Neovim": " $1",
-      "(.*) - Vim": " $1",
-      "(.*) - htop": " $1",
-      "(.*) - btop": " $1",
-      "(.*) - Settings": " $1"
-    },
-    "separate-outputs": true,
-    "max-length": 40,
-    "tooltip": true,
-    "tooltip-format": "{title} on {output}"
-  },
-  "custom/media": {
-    "format": "{icon} {text}",
-    "return-type": "json",
+    "format": "{title}",
     "max-length": 50,
-    "exec": "~/.local/share/dotfiles/waybar/scripts/media.sh",
-    "exec-if": "playerctl -l 2>/dev/null | grep -q .",
-    "on-click": "playerctl play-pause",
-    "on-click-middle": "playerctl stop",
-    "on-click-right": "playerctl previous",
-    "on-scroll-up": "playerctl next",
-    "on-scroll-down": "playerctl previous",
-    "smooth-scrolling-threshold": 5,
-    "tooltip": true,
-    "tooltip-format": "Now playing on {playerName}: {title} by {artist} ({album})"
+    "separate-outputs": true,
+    "tooltip": false
   },
-  "tray": {
-    "icon-size": 18,
-    "spacing": 6,
-    "tooltip": true,
-    "show-passive-items": true
-  },
+
   "pulseaudio": {
-    "format": "{icon} {volume:2}%",
+    "format": "{icon} {volume}%",
     "format-muted": " 0%",
     "format-icons": {
       "default": [
@@ -122,7 +76,7 @@
     "scroll-step": 5,
     "smooth-scrolling-threshold": 5,
     "tooltip": true,
-    "tooltip-format": "Volume: {volume}%  |  Source: {source_name}  |  Port: {port_name}"
+    "tooltip-format": "Volume: {volume}%  |  Sink: {desc}  |  Source: {source_desc}"
   },
   "network": {
     "format-icons": [
@@ -142,72 +96,13 @@
     "on-click-middle": "~/.local/share/dotfiles/hypr/scripts/network-toggle",
     "on-click-right": "nmcli radio wifi toggle"
   },
-  "cpu": {
-    "format": " {usage:2}%",
-    "interval": 5,
-    "tooltip": true,
-    "tooltip-format": "CPU: {usage}%\nFrequency: {frequency}GHz\nLoad: {load}",
-    "states": {
-      "warning": 80,
-      "critical": 95
-    }
-  },
-  "memory": {
-    "format": " {percentage:1}%",
-    "interval": 10,
-    "tooltip": true,
-    "tooltip-format": "Memory: {used:0.1f}GiB / {total:0.1f}GiB ({percentage}%)\nSwap: {swapUsed:0.1f}GiB / {swapTotal:0.1f}GiB ({swapPercent}%)",
-    "states": {
-      "warning": 85,
-      "critical": 95
-    }
-  },
-  "temperature": {
-    "critical-threshold": 85,
-    "format": " {temperatureC}°C",
-    "format-critical": " {temperatureC}°C",
-    "interval": 5,
-    "tooltip": true,
-    "tooltip-format": "CPU Temperature: {temperatureC}°C / {temperatureF}°F",
-    "states": {
-      "warning": 75,
-      "critical": 85
-    }
-  },
-  "custom/net-speed": {
-    "format": "{}",
-    "return-type": "json",
-    "interval": 2,
-    "exec": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh",
-    "tooltip": false,
-    "on-click": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh --details",
-    "on-click-middle": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh --reset"
-  },
-  "power-profiles-daemon": {
-    "format": "{icon}",
-    "format-icons": {
-      "default": "",
-      "power-saver": "",
-      "balanced": "",
-      "performance": ""
-    },
-    "tooltip": true,
-    "tooltip-format": "Power Profile: {profile}",
-    "on-click": "~/.local/share/dotfiles/waybar/scripts/power-profile-cycle.sh",
-    "on-click-right": "powerprofilesctl set balanced",
-    "states": {
-      "performance": "performance",
-      "balanced": "balanced",
-      "power-saver": "power-saver"
-    }
-  },
   "battery": {
     "bat": "BAT0",
     "adapter": "AC",
-    "format": "{icon} {capacity:2}%",
-    "format-charging": " {capacity:2}%",
-    "format-plugged": " {capacity:2}%",
-    "format-full": " {capacity:2}%",
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-full": " {capacity}%",
     "format-alt": "{icon}",
     "format-icons": [
       "",
@@ -217,38 +112,23 @@
       ""
     ],
     "tooltip": true,
-    "tooltip-format": "Battery: {capacity}%\nStatus: {status}\nTime to {timeTo}: {time}\nPower: {power}W\nCycle count: {cycleCount}\nHealth: {health}%",
-    "on-click": "~/.local/share/dotfiles/waybar/scripts/battery-info.sh",
+    "tooltip-format": "Battery: {capacity}%\nTime: {time}\nPower: {power}W\nCycles: {cycles}\nHealth: {health}%",
+    "on-click": "~/.local/share/dotfiles/waybar/scripts/battery-info.sh --info",
     "states": {
       "warning": 20,
       "critical": 10
     }
   },
-  "clock": {
-    "format": "{:%a %b %d  %H:%M}",
-    "format-alt": "{:%H:%M:%S}",
-    "tooltip-format": "{:%A, %B %d %Y}\n{:%I:%M:%S %p}",
+  "custom/clock": {
+    "format": "{}",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/clock.sh",
+    "exec-timeout": 10,
     "interval": 5,
+    "return-type": "json",
     "on-click": "~/.local/share/dotfiles/waybar/scripts/calendar.sh",
     "on-click-right": "gnome-calendar",
     "on-scroll-up": "~/.local/share/dotfiles/waybar/scripts/date-forward.sh",
     "on-scroll-down": "~/.local/share/dotfiles/waybar/scripts/date-back.sh",
-    "smooth-scrolling-threshold": 5,
-    "calendar": {
-      "mode": "month",
-      "now-interval": 60,
-      "format": {
-        "months": {
-          "now": "<span color='#88c0d0'><b>{}</b></span>",
-          "today": "<span color='#88c0d0'><b>{}</b></span>"
-        },
-        "weekdays": {
-          "today": "<span color='#88c0d0'><b>{}</b></span>"
-        },
-        "days": {
-          "today": "<span color='#88c0d0'><b><u>{}</u></b></span>"
-        }
-      }
-    }
+    "smooth-scrolling-threshold": 5
   }
 }

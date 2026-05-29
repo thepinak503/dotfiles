@@ -18,16 +18,22 @@
     "custom/light_dark",
     "custom/nightlight",
     "custom/swaync",
+    "custom/bluetooth",
     "custom/cycle_wall",
     "custom/screenshot",
     "custom/blur",
     "custom/refresh",
     "custom/gamemode"
   ],
-  "modules-center": [
-    "custom/quick-commands"
-  ],
+  "modules-center": [],
   "modules-right": [
+    "cpu",
+    "memory",
+    "temperature",
+    "custom/net-speed",
+    "custom/power-profile",
+    "custom/disk",
+    "tray",
     "custom/power"
   ],
   "custom/settings": {
@@ -36,14 +42,15 @@
     "tooltip-format": "Open Settings Menu",
     "on-click": "~/.local/share/dotfiles/hypr/scripts/settings-menu",
     "on-click-right": "~/.local/share/dotfiles/hypr/scripts/settings-menu --advanced",
-    "exec-if": "which rofi"
+    "exec-if": "command -v rofi >/dev/null 2>&1"
   },
   "custom/light_dark": {
     "format": "{}",
     "exec": "~/.local/share/dotfiles/waybar/scripts/theme.sh",
     "on-click": "~/.local/share/dotfiles/waybar/scripts/theme.sh toggle",
     "on-click-right": "~/.local/share/dotfiles/waybar/scripts/theme.sh menu",
-    "exec-if": "which yad",
+    "exec-if": "command -v yad >/dev/null 2>&1",
+    "exec-timeout": 10,
     "interval": 60,
     "return-type": "json",
     "tooltip": true,
@@ -52,8 +59,10 @@
   "custom/nightlight": {
     "format": "{}",
     "exec": "if [ -f /tmp/nightlight-mode ] && [ \"$(cat /tmp/nightlight-mode)\" = \"on\" ]; then echo '{\"text\":\"\",\"tooltip\":\"Night light ON\",\"class\":\"on\"}'; else echo '{\"text\":\"\",\"tooltip\":\"Night light OFF\",\"class\":\"off\"}'; fi",
-    "on-click": "~/.local/share/dotfiles/hypr/scripts/nightlight",
-    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/nightlight --toggle",
+    "exec-if": "command -v hyprctl >/dev/null 2>&1",
+    "exec-timeout": 5,
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/nightlight --toggle",
+    "on-click-right": "~/.local/share/dotfiles/hypr/scripts/nightlight --schedule",
     "interval": 5,
     "return-type": "json",
     "tooltip": true,
@@ -61,11 +70,41 @@
   },
   "custom/swaync": {
     "format": "{}",
-    "exec": "swaync-client --swaync-command 'get-dnd' 2>/dev/null | grep -q 'true' && echo '{\"text\":\"\",\"tooltip\":\"Notifications OFF\\nClick: toggle DND\\nRight-click: clear all\",\"class\":\"dnd\"}' || echo '{\"text\":\"\",\"tooltip\":\"Notifications ON\\nClick: toggle DND\\nRight-click: clear all\",\"class\":\"\"}'",
-    "on-click": "swaync-client -t -sw",
-    "on-click-right": "swaync-client -d -sw",
+    "exec": "swaync-client -D 2>/dev/null | grep -q 'true' && printf '{\"text\":\"\",\"tooltip\":\"Notifications OFF\\\\nClick: toggle DND\\\\nRight-click: clear all\",\"class\":\"dnd\"}\\n' || printf '{\"text\":\"\",\"tooltip\":\"Notifications ON\\\\nClick: toggle DND\\\\nRight-click: clear all\",\"class\":\"\"}\\n'",
+    "exec-if": "command -v swaync-client >/dev/null 2>&1",
+    "exec-timeout": 5,
+    "on-click": "swaync-client -d -sw",
+    "on-click-right": "swaync-client -C -sw",
+    "on-click-middle": "swaync-client -t -sw",
     "interval": 5,
     "return-type": "json"
+  },
+  "custom/media": {
+    "format": "{}",
+    "return-type": "json",
+    "max-length": 60,
+    "exec": "~/.local/share/dotfiles/waybar/scripts/media.sh",
+    "exec-if": "playerctl -l 2>/dev/null | grep -q .",
+    "exec-timeout": 10,
+    "on-click": "playerctl play-pause",
+    "on-click-middle": "playerctl stop",
+    "on-click-right": "playerctl previous",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous",
+    "smooth-scrolling-threshold": 5,
+    "tooltip": true,
+    "tooltip-format": "Now playing on {playerName}: {title} by {artist} ({album})"
+  },
+  "custom/bluetooth": {
+    "format": "{}",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/bluetooth.sh",
+    "exec-if": "command -v bluetoothctl >/dev/null 2>&1",
+    "exec-timeout": 10,
+    "interval": 30,
+    "return-type": "json",
+    "tooltip": true,
+    "on-click": "bluetoothctl show 2>/dev/null | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on",
+    "on-click-right": "blueman-manager 2>/dev/null || bluetoothctl"
   },
   "custom/cycle_wall": {
     "format": "",
@@ -85,6 +124,8 @@
   "custom/blur": {
     "format": "{}",
     "exec": "if [ -f /tmp/hypr-blurmode ]; then MODE=$(cat /tmp/hypr-blurmode); case \"$MODE\" in normal) echo '{\"text\":\"\",\"tooltip\":\"Blur: Normal (passes=4, size=8)\",\"class\":\"on\"}';; low) echo '{\"text\":\"\",\"tooltip\":\"Blur: Low (passes=2, size=4)\",\"class\":\"low\"}';; off) echo '{\"text\":\"\",\"tooltip\":\"Blur: Off\",\"class\":\"off\"}';; esac; else echo '{\"text\":\"\",\"tooltip\":\"Blur: Normal\",\"class\":\"on\"}'; fi",
+    "exec-if": "command -v hyprctl >/dev/null 2>&1",
+    "exec-timeout": 5,
     "on-click": "~/.local/share/dotfiles/hypr/scripts/blur-toggle",
     "interval": 5,
     "return-type": "json",
@@ -102,17 +143,92 @@
     "tooltip": true,
     "tooltip-format": "Click: toggle game mode\n(disables animations, notifications, night light)",
     "exec": "if [ -f /tmp/hypr-gamemode ]; then echo '{\"text\":\"🎮\",\"tooltip\":\"Game Mode ON\",\"class\":\"on\"}'; else echo '{\"text\":\"\",\"tooltip\":\"Game Mode OFF\",\"class\":\"off\"}'; fi",
-    "on-click": "~/.local/share/dotfiles/hypr/scripts/gamemode",
+    "exec-if": "command -v hyprctl >/dev/null 2>&1",
+    "exec-timeout": 5,
+    "on-click": "~/.local/share/dotfiles/hypr/scripts/gamemode --toggle",
     "interval": 5,
     "return-type": "json"
   },
   "custom/quick-commands": {
     "format": "{}",
-    "exec": "echo '{\"text\":\"        \",\"tooltip\":\"Quick actions: Lock | Settings | Search\",\"class\":\"\"}'",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/quick-commands.sh",
+    "exec-if": "command -v rofi >/dev/null 2>&1",
+    "exec-timeout": 10,
     "on-click": "rofi -show drun",
     "on-click-right": "~/.local/share/dotfiles/hypr/scripts/keyhints-yad",
-    "interval": 86400,
-    "return-type": "json"
+    "interval": 300,
+    "return-type": "json",
+    "tooltip": true,
+    "tooltip-format": "Quick actions: L=launcher | R=keybinds"
+  },
+  "cpu": {
+    "format": " {usage}%",
+    "interval": 5,
+    "tooltip": true,
+    "tooltip-format": "CPU: {usage}%\nFrequency: {frequency}GHz\nLoad: {load}%",
+    "states": {
+      "warning": 80,
+      "critical": 95
+    }
+  },
+  "memory": {
+    "format": " {percentage}%",
+    "interval": 10,
+    "tooltip": true,
+    "tooltip-format": "Memory: {used}GiB / {total}GiB ({percentage}%)\nSwap: {swapUsed}GiB / {swapTotal}GiB ({swapPercentage}%)",
+    "states": {
+      "warning": 85,
+      "critical": 95
+    }
+  },
+  "temperature": {
+    "critical-threshold": 85,
+    "format": " {temperatureC}°C",
+    "format-critical": " {temperatureC}°C",
+    "interval": 5,
+    "tooltip": true,
+    "tooltip-format": "CPU Temperature: {temperatureC}°C / {temperatureF}°F",
+    "states": {
+      "warning": 75,
+      "critical": 85
+    }
+  },
+  "custom/net-speed": {
+    "format": "{}",
+    "return-type": "json",
+    "interval": 2,
+    "exec": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh",
+    "exec-if": "command -v ip >/dev/null 2>&1 && command -v awk >/dev/null 2>&1",
+    "exec-timeout": 10,
+    "tooltip": false,
+    "on-click": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh --details",
+    "on-click-middle": "~/.local/share/dotfiles/waybar/scripts/net-speed.sh --reset"
+  },
+  "custom/power-profile": {
+    "format": "{}",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/power-profile.sh",
+    "exec-if": "command -v powerprofilesctl >/dev/null 2>&1",
+    "exec-timeout": 10,
+    "interval": 30,
+    "return-type": "json",
+    "tooltip": true,
+    "tooltip-format": "Power Profile: {text}",
+    "on-click": "~/.local/share/dotfiles/waybar/scripts/power-profile-cycle.sh",
+    "on-click-right": "powerprofilesctl set balanced"
+  },
+  "custom/disk": {
+    "format": "{}",
+    "exec": "~/.local/share/dotfiles/waybar/scripts/disk.sh",
+    "exec-timeout": 10,
+    "interval": 60,
+    "return-type": "json",
+    "tooltip": true
+  },
+  "tray": {
+    "icon-size": 18,
+    "spacing": 6,
+    "tooltip": true,
+    "show-passive-items": true
   },
   "custom/power": {
     "format": "",

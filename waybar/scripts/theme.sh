@@ -54,14 +54,14 @@ case "${1:-}" in
         CURRENT=$(get_current_theme)
         if [[ "$CURRENT" == "dark" ]]; then
             if [[ -x "$THEME_SCRIPT" ]]; then
-                exec "$THEME_SCRIPT" light
+                "$THEME_SCRIPT" light
             else
                 notify-send -a waybar -u critical "Theme Error" "theme.sh not found"
                 exit 1
             fi
         else
             if [[ -x "$THEME_SCRIPT" ]]; then
-                exec "$THEME_SCRIPT" dark
+                "$THEME_SCRIPT" dark
             else
                 notify-send -a waybar -u critical "Theme Error" "theme.sh not found"
                 exit 1

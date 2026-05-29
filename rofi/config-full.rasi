@@ -1,16 +1,25 @@
 @theme "themes/nord"
 
 configuration {
-  modi: "drun";
+  modi: "drun,run,window,emoji";
   show-icons: true;
   drun-display-format: "{name}";
   font: "CaskaydiaCove Nerd Font 14";
-  lines: 6;
-  columns: 2;
-  width: 30;
+  lines: 8;
+  columns: 3;
+  width: 50;
   location: 0;
   terminal: "kitty";
-  disable-history: true;
+  disable-history: false;
   cycle: true;
   sidebar-mode: false;
+  display-drun: "   Apps";
+  display-run: "   Run";
+  display-window: "   Windows";
+  display-emoji: "   Emoji";
+  matching: "fuzzy";
+  sorting-method: "fzf";
+  case-sensitive: false;
+  icon-theme: "Papirus";
+  drun-icon-theme: "Papirus";
 }

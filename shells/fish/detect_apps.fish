@@ -79,7 +79,7 @@ end
 # =============================================================================
 
 
-if _detect_app fastfetch
+if _detect_app fastfetch && status is-interactive
     fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
 end
 

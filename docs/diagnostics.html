@@ -32,11 +32,62 @@
   <main id="content">
 <header class="top"><span>Manual</span><h1>Diagnostics</h1></header>
 
+<section><h2>Centralized Error Trace — <code>dots logcat</code></h2><p><code>dots logcat</code> is a unified error tracing tool that aggregates errors from all dotfiles components into a single, colorized, filterable stream — similar to Android's logcat.</p>
+
+<h3>Usage</h3>
+<pre><code>dots logcat                  # Last 50 errors
+ dots logcat -n 100           # Last 100 entries
+dots logcat -f               # Real-time follow mode
+dots logcat --summary        # Error count by component
+dots logcat -c shell         # Shell errors only
+dots logcat -S ERROR         # Only errors (no warnings/info)
+dots logcat --since "2026-05-01"  # Since May 1st
+dots logcat -c hyprland -S ERROR -f  # Watch Hyprland errors
+dots logcat --json           # Machine-readable JSON output
+dots logcat --watch          # Refresh every 5s
+dots logcat --all            # Show all available entries</code></pre>
+
+<h3>Components</h3>
+<table><thead><tr><th>Component</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>shell</code></td><td>Shell startup errors, syntax errors (zsh/bash/fish)</td></tr>
+<tr><td><code>hyprland</code></td><td>Hyprland config, keybinds, scripts</td></tr>
+<tr><td><code>waybar</code></td><td>Waybar bar configs and modules</td></tr>
+<tr><td><code>swaync</code></td><td>Notification daemon</td></tr>
+<tr><td><code>wlogout</code></td><td>Logout/lock screen</td></tr>
+<tr><td><code>rofi</code></td><td>Application launcher</td></tr>
+<tr><td><code>kitty</code></td><td>Terminal emulator</td></tr>
+<tr><td><code>services</code></td><td>Background daemons (hypridle, swaync, etc.)</td></tr>
+<tr><td><code>theme</code></td><td>Theme switching system</td></tr>
+<tr><td><code>tools</code></td><td>Missing or broken tools</td></tr>
+<tr><td><code>network</code></td><td>Network connectivity</td></tr>
+<tr><td><code>update</code></td><td>Dotfiles update process</td></tr>
+<tr><td><code>dotfiles</code></td><td>General dotfiles operations</td></tr>
+<tr><td><code>system</code></td><td>System info, GPU, kernel</td></tr>
+<tr><td><code>install</code></td><td>Installation process</td></tr>
+<tr><td><code>doctor</code></td><td>Health check results</td></tr>
+</tbody></table>
+
+<h3>Error Summary Example</h3>
+<pre><code>$ dots logcat --summary
+╔══════════════════════════════════════════════════════════════╗
+║           ERROR SUMMARY BY COMPONENT                       ║
+╚══════════════════════════════════════════════════════════════╝
+
+Component      ERRORS  WARNS   INFO     OK
+─────────────────────────────────────────────
+Shell              2       0       0      0
+Hyprland           0       1       3      5
+Waybar             0       0       2      3
+...</code></pre>
+
+<h3>Follow Mode</h3>
+<p>Use <code>dots logcat -f</code> for real-time monitoring. This tails all log files simultaneously and color-codes each new entry by severity and component. Useful when troubleshooting during desktop use.</p></section>
+
 <section><h2>Test Suite</h2><pre><code>bash bin/test_repo.sh
 bash bin/test_all.sh --fast
 git diff --check</code></pre></section>
 <section><h2>Installer Checks</h2><p>The installer validates shell behavior through <code>bash -c</code>, <code>zsh -c</code>, and <code>fish -c</code> when those shells are installed.</p></section>
-<section><h2>Common Files</h2><table><tbody><tr><th>Errors</th><td><code>$DOTFILES_STATE_DIR/errors.log</code></td></tr><tr><th>Mode</th><td><code>$DOTFILES_STATE_DIR/mode</code></td></tr><tr><th>Install date</th><td><code>$DOTFILES_STATE_DIR/install_date</code></td></tr></tbody></table></section>
+<section><h2>Common Files</h2><table><tbody><tr><th>Errors</th><td><code>$DOTFILES_STATE_DIR/errors.log</code></td></tr><tr><th>Logcat</th><td><code>$DOTFILES_DIR/bin/dotlogcat.sh</code></td></tr><tr><th>Doctor</th><td><code>$DOTFILES_STATE_DIR/logs/doctor.log</code></td></tr><tr><th>Update</th><td><code>$DOTFILES_STATE_DIR/autoupdate.log</code></td></tr><tr><th>Runtime</th><td><code>/var/tmp/dotfiles.log</code> (or <code>$DOTFILES_LOG_FILE</code>)</td></tr><tr><th>Mode</th><td><code>$DOTFILES_STATE_DIR/mode</code></td></tr><tr><th>Install date</th><td><code>$DOTFILES_STATE_DIR/install_date</code></td></tr></tbody></table></section>
   </main>
 
   <script>

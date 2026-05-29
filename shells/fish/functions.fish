@@ -39,8 +39,12 @@ function detect_pm --description "Detect package manager"
 end
 
 
-function cd --description "Change directory with ls"
-   builtin cd $argv; and ls -A
+function cd --description "Change directory"
+    if status is-interactive
+        builtin cd $argv; and ls -A
+    else
+        builtin cd $argv
+    end
 end
 
 function back --description "Go to previous directory"
@@ -72,7 +76,11 @@ function take --description "Make and cd into directory"
 end
 
 function pushd --description "Push directory"
-    command pushd $argv[1] >/dev/null; and ls
+    if status is-interactive
+        command pushd $argv[1] >/dev/null; and ls
+    else
+        command pushd $argv[1] >/dev/null
+    end
 end
 
 function popd --description "Pop directory"

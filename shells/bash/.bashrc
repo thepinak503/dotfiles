@@ -45,6 +45,23 @@ if [ -f /etc/bashrc ]; then
 fi
 
 # =============================================================================
+# EXPORTS
+# =============================================================================
+
+[[ -f "$DOTFILES_DIR/shells/bash/exports.bash" ]] && source "$DOTFILES_DIR/shells/bash/exports.bash"
+
+# =============================================================================
+# NON-INTERACTIVE GUARD
+# =============================================================================
+# If sourced from BASH_ENV (e.g. makepkg), only exports and essential PATH
+# setup above are needed. Aliases/functions/prompt are skipped to prevent
+# contaminating build tools' command substitution captures.
+case "$-" in
+    *i*) ;;
+    *) return 0 ;;
+esac
+
+# =============================================================================
 # INTERACTIVE-ONLY SETTINGS
 # =============================================================================
 # stty, shopt, history, and completion only apply to interactive shells.
@@ -78,13 +95,6 @@ case "$-" in
         fi
         ;;
 esac
-
-# =============================================================================
-# EXPORTS
-# =============================================================================
-# Source guarded: file may not exist in minimal installs
-
-[[ -f "$DOTFILES_DIR/shells/bash/exports.bash" ]] && source "$DOTFILES_DIR/shells/bash/exports.bash"
 
 # =============================================================================
 # PROMPT — STARSHIP

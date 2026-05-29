@@ -47,7 +47,7 @@ EOF
 cleanup() {
     killall -q hyprsunset 2>/dev/null || true
 }
-trap cleanup EXIT
+# Do not trap EXIT to allow the background daemon to persist
 
 # ---------------------------------------------------------------------------
 # Dependencies
@@ -95,14 +95,12 @@ case "${1:-}" in
         if [[ -f "$STATE_FILE" ]] && [[ "$(cat "$STATE_FILE" 2>/dev/null || true)" == "on" ]]; then
             disable
         else
-            local temp
             temp=$(get_current_temp)
             enable "$temp"
         fi
         ;;
 
     --on)
-        local temp
         temp=$(get_current_temp)
         enable "$temp"
         ;;
@@ -116,7 +114,7 @@ case "${1:-}" in
             notify -u critical "Night Light" "Usage: --set <temperature>"
             exit 1
         fi
-        local new_temp="$2"
+        new_temp="$2"
         if [[ "$new_temp" -lt 1000 ]]; then new_temp=1000; fi
         if [[ "$new_temp" -gt 8000 ]]; then new_temp=8000; fi
         enable "$new_temp"
@@ -139,7 +137,6 @@ case "${1:-}" in
         ;;
 
     --status)
-        local state temp
         state=$(cat "$STATE_FILE" 2>/dev/null || echo "off")
         temp=$(get_current_temp)
         echo "Night Light: $state"

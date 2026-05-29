@@ -102,18 +102,16 @@ total_down=$(format_speed "$rx2")
 total_up=$(format_speed "$tx2")
 
 # ---------------------------------------------------------------------------
-# Network state detection
+# Network state detection — uses /sys/class/net operstate (never blocks)
 # ---------------------------------------------------------------------------
-# Check connectivity by pinging a reliable host
-online="true"
-if ! ping -c 1 -W 1 1.1.1.1 &>/dev/null && ! ping -c 1 -W 1 8.8.8.8 &>/dev/null; then
-    online="false"
+# Check if the interface has a carrier signal (cable plugged / wifi associated)
+# This is instant — no blocking I/O like ping.
+
+if [[ -f "/sys/class/net/$INTERFACE/operstate" ]]; then
+    operstate=$(cat "/sys/class/net/$INTERFACE/operstate" 2>/dev/null || echo "unknown")
 fi
 
-# ---------------------------------------------------------------------------
-# Output JSON
-# ---------------------------------------------------------------------------
-if [[ "$online" == "true" ]]; then
+if [[ "$operstate" == "up" ]]; then
     printf '{"text":" %s  %s","tooltip":"Interface: %s\\n Download: %s\\n Upload: %s\\n Total DL: %s\\n Total UL: %s","alt":"online","class":"up"}\n' \
         "$down" "$up" "$INTERFACE" "$down" "$up" "$total_down" "$total_up"
 else

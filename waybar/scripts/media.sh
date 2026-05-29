@@ -17,7 +17,7 @@ TRUNCATION_SUFFIX="${TRUNCATION_SUFFIX:-…}"
 # ---------------------------------------------------------------------------
 # Detect available players and get status
 # ---------------------------------------------------------------------------
-playerctl_status=$(playerctl status 2>/dev/null || echo "")
+playerctl_status=$(timeout 5 playerctl status 2>/dev/null || echo "")
 
 # If no player is playing, check for paused players
 if [[ -z "$playerctl_status" ]]; then
@@ -28,12 +28,12 @@ fi
 # ---------------------------------------------------------------------------
 # Get metadata
 # ---------------------------------------------------------------------------
-artist=$(playerctl metadata artist 2>/dev/null || echo "")
-title=$(playerctl metadata title 2>/dev/null || echo "")
-album=$(playerctl metadata album 2>/dev/null || echo "")
-player_name=$(playerctl metadata --format "{{ playerName }}" 2>/dev/null || echo "")
-length=$(playerctl metadata mpris:length 2>/dev/null || echo "0")
-position=$(playerctl position 2>/dev/null || echo "0")
+artist=$(timeout 3 playerctl metadata artist 2>/dev/null || echo "")
+title=$(timeout 3 playerctl metadata title 2>/dev/null || echo "")
+album=$(timeout 3 playerctl metadata album 2>/dev/null || echo "")
+player_name=$(timeout 3 playerctl metadata --format "{{ playerName }}" 2>/dev/null || echo "")
+length=$(timeout 3 playerctl metadata mpris:length 2>/dev/null || echo "0")
+position=$(timeout 3 playerctl position 2>/dev/null || echo "0")
 
 # ---------------------------------------------------------------------------
 # Status icon

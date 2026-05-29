@@ -1,14 +1,3 @@
-/* =============================================================================
- * WAYBAR STYLESHEET — NORD DARK THEME
- * =============================================================================
- * Comprehensive styling for the Waybar status bar.
- * Supports both top and bottom bars with consistent theming.
- * ============================================================================= */
-
-/* =============================================================================
- * GLOBAL DEFAULTS
- * ============================================================================= */
-
 * {
   border: none;
   border-radius: 0;
@@ -18,10 +7,6 @@
   margin: 0;
   padding: 0;
 }
-
-/* =============================================================================
- * WAYBAR WINDOW
- * ============================================================================= */
 
 window#waybar {
   background: rgba(46, 52, 64, 0.55);
@@ -41,10 +26,6 @@ window#waybar.hidden {
   opacity: 0.2;
 }
 
-/* =============================================================================
- * TOOLTIP STYLING
- * ============================================================================= */
-
 tooltip {
   background: rgba(46, 52, 64, 0.92);
   border: 1px solid #4c566a;
@@ -56,12 +37,7 @@ tooltip {
 tooltip label {
   color: #d8dee9;
   font-size: 12px;
-  /* line-height: 1.4 — removed, causes SIGSEGV in waybar */
 }
-
-/* =============================================================================
- * WORKSPACE BUTTONS
- * ============================================================================= */
 
 #workspaces {
   margin: 0 4px;
@@ -75,8 +51,8 @@ tooltip label {
   background: rgba(59, 66, 82, 0.4);
   color: #4c566a;
   font-weight: normal;
-  font-size: 12px;
-  min-width: 20px;
+  font-size: 13px;
+  min-width: 24px;
   transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -84,7 +60,7 @@ tooltip label {
   background: linear-gradient(135deg, rgba(94, 129, 172, 0.6), rgba(136, 192, 208, 0.4));
   color: #eceff4;
   font-weight: bold;
-  min-width: 28px;
+  min-width: 32px;
 }
 
 #workspaces button.empty {
@@ -112,10 +88,6 @@ tooltip label {
   color: #b48ead;
 }
 
-/* =============================================================================
- * WINDOW TITLE
- * ============================================================================= */
-
 #window {
   margin: 0 6px;
   padding: 0 8px;
@@ -128,13 +100,9 @@ window#waybar.empty #window {
   opacity: 0;
 }
 
-/* =============================================================================
- * MEDIA PLAYER
- * ============================================================================= */
-
 #custom-media {
   margin: 0;
-  padding: 0 10px;
+  padding: 0 12px;
   color: #a3be8c;
   font-size: 12px;
   border-radius: 8px;
@@ -155,13 +123,9 @@ window#waybar.empty #window {
   color: #4c566a;
 }
 
-/* =============================================================================
- * SYSTEM TRAY
- * ============================================================================= */
-
 #tray {
   margin: 0 2px;
-  padding: 0 4px;
+  padding: 0 6px;
   border-radius: 8px;
 }
 
@@ -178,13 +142,9 @@ window#waybar.empty #window {
   background: rgba(136, 192, 208, 0.08);
 }
 
-/* =============================================================================
- * PULSEAUDIO (VOLUME)
- * ============================================================================= */
-
 #pulseaudio {
   margin: 0 2px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   color: #d8dee9;
   border-radius: 8px;
   transition: all 0.15s ease;
@@ -202,17 +162,9 @@ window#waybar.empty #window {
   color: #88c0d0;
 }
 
-#pulseaudio.source-muted {
-  color: #bf616a;
-}
-
-/* =============================================================================
- * NETWORK
- * ============================================================================= */
-
 #network {
   margin: 0 2px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   color: #88c0d0;
   border-radius: 8px;
   transition: all 0.15s ease;
@@ -234,13 +186,9 @@ window#waybar.empty #window {
   color: #ebcb8b;
 }
 
-/* =============================================================================
- * CPU
- * ============================================================================= */
-
 #cpu {
   margin: 0 2px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   color: #8fbcbb;
   border-radius: 8px;
   transition: all 0.15s ease;
@@ -258,13 +206,9 @@ window#waybar.empty #window {
   color: #bf616a;
 }
 
-/* =============================================================================
- * MEMORY
- * ============================================================================= */
-
 #memory {
   margin: 0 2px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   color: #81a1c1;
   border-radius: 8px;
   transition: all 0.15s ease;
@@ -282,13 +226,9 @@ window#waybar.empty #window {
   color: #bf616a;
 }
 
-/* =============================================================================
- * TEMPERATURE
- * ============================================================================= */
-
 #temperature {
   margin: 0 2px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   color: #d08770;
   border-radius: 8px;
   font-size: 12px;
@@ -307,13 +247,9 @@ window#waybar.empty #window {
   color: #ebcb8b;
 }
 
-/* =============================================================================
- * NETWORK SPEED
- * ============================================================================= */
-
 #custom-net-speed {
   margin: 0 2px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   color: #a3be8c;
   border-radius: 8px;
   font-size: 12px;
@@ -324,41 +260,66 @@ window#waybar.empty #window {
   background: rgba(163, 190, 140, 0.1);
 }
 
-/* =============================================================================
- * POWER PROFILES
- * ============================================================================= */
-
-#power-profiles-daemon {
+#custom-power-profile {
   margin: 0 2px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.15s ease;
 }
 
-#power-profiles-daemon:hover {
+#custom-power-profile:hover {
   background: rgba(136, 192, 208, 0.1);
 }
 
-#power-profiles-daemon.performance {
+#custom-power-profile.performance {
   color: #bf616a;
 }
 
-#power-profiles-daemon.balanced {
+#custom-power-profile.balanced {
   color: #88c0d0;
 }
 
-#power-profiles-daemon.power-saver {
+#custom-power-profile.power-saver {
   color: #a3be8c;
 }
 
-/* =============================================================================
- * BATTERY
- * ============================================================================= */
+#custom-power-profile.disabled {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  min-height: 0;
+}
+
+#custom-disk {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #a3be8c;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#custom-disk:hover {
+  background: rgba(163, 190, 140, 0.1);
+}
+
+#custom-disk.warning {
+  color: #ebcb8b;
+}
+
+#custom-disk.critical {
+  color: #bf616a;
+}
+
+#custom-disk.error {
+  color: #bf616a;
+}
 
 #battery {
   margin: 0 2px;
-  padding: 2px 8px;
+  padding: 2px 10px;
   color: #d8dee9;
   border-radius: 8px;
   font-size: 12px;
@@ -379,21 +340,13 @@ window#waybar.empty #window {
   animation: battery-critical 0.3s ease-in-out infinite alternate;
 }
 
-#battery.charging {
+#battery.charging, #battery.plugged {
   color: #a3be8c;
 }
 
-#battery.plugged {
-  color: #a3be8c;
-}
-
-/* =============================================================================
- * CLOCK
- * ============================================================================= */
-
-#clock {
+#custom-clock {
   margin: 0 2px;
-  padding: 2px 10px;
+  padding: 2px 12px;
   color: #d8dee9;
   font-weight: bold;
   font-size: 13px;
@@ -401,17 +354,9 @@ window#waybar.empty #window {
   transition: all 0.15s ease;
 }
 
-#clock:hover {
+#custom-clock:hover {
   color: #88c0d0;
   background: rgba(136, 192, 208, 0.08);
-}
-
-#clock.date {
-  color: #81a1c1;
-}
-
-#clock.time {
-  color: #d8dee9;
 }
 
 /* =============================================================================
@@ -422,12 +367,13 @@ window#waybar.empty #window {
 #custom-light_dark,
 #custom-nightlight,
 #custom-swaync,
+#custom-bluetooth,
 #custom-cycle_wall,
 #custom-screenshot,
 #custom-blur,
 #custom-refresh {
   margin: 0 4px;
-  padding: 2px 10px;
+  padding: 2px 12px;
   color: #81a1c1;
   font-size: 16px;
   border-radius: 8px;
@@ -441,67 +387,56 @@ window#waybar.empty #window {
 #custom-cycle_wall:hover,
 #custom-screenshot:hover,
 #custom-blur:hover,
-#custom-refresh:hover {
+#custom-refresh:hover,
+#custom-bluetooth:hover {
   background: rgba(136, 192, 208, 0.12);
   color: #88c0d0;
 }
 
-/* Individual module colors */
-#custom-settings {
-  color: #b48ead;
+#custom-settings { color: #b48ead; }
+#custom-bluetooth { color: #81a1c1; }
+
+#custom-light_dark.dark { color: #ebcb8b; }
+#custom-light_dark.light { color: #d08770; }
+
+#custom-nightlight.on { color: #d08770; }
+
+#custom-swaync.dnd { color: #bf616a; }
+
+#custom-cycle_wall { color: #a3be8c; }
+#custom-cycle_wall:hover { color: #b1d3a0; }
+
+#custom-screenshot { color: #8fbcbb; }
+#custom-screenshot:hover { color: #a9d5d4; }
+
+#custom-blur.on { color: #88c0d0; }
+#custom-blur.low { color: #81a1c1; }
+#custom-blur.off { color: #4c566a; }
+
+#custom-gamemode {
+  margin: 0 4px;
+  padding: 2px 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
 }
 
-#custom-light_dark.dark {
-  color: #ebcb8b;
-}
-
-#custom-light_dark.light {
-  color: #d08770;
-}
-
-#custom-nightlight.on {
-  color: #d08770;
-}
-
-#custom-swaync.dnd {
+#custom-gamemode.on {
   color: #bf616a;
 }
 
-#custom-cycle_wall {
-  color: #a3be8c;
-}
-
-#custom-cycle_wall:hover {
-  color: #b1d3a0;
-}
-
-#custom-screenshot {
-  color: #8fbcbb;
-}
-
-#custom-screenshot:hover {
-  color: #a9d5d4;
-}
-
-#custom-blur.on {
-  color: #88c0d0;
-}
-
-#custom-blur.low {
+#custom-gamemode.off {
   color: #81a1c1;
 }
 
-#custom-blur.off {
-  color: #4c566a;
+#custom-gamemode:hover {
+  background: rgba(136, 192, 208, 0.12);
+  color: #88c0d0;
 }
-
-/* =============================================================================
- * POWER BUTTON
- * ============================================================================= */
 
 #custom-power {
   margin: 0 4px;
-  padding: 2px 10px;
+  padding: 2px 12px;
   font-size: 16px;
   color: #bf616a;
   border-radius: 8px;
@@ -514,59 +449,20 @@ window#waybar.empty #window {
 }
 
 /* =============================================================================
- * CUSTOM MODULE STATES
- * ============================================================================= */
-
-/* Warning state for any module */
-.warning {
-  color: #ebcb8b;
-}
-
-/* Critical state for any module */
-.critical {
-  color: #bf616a;
-}
-
-/* Disabled state for any module */
-.disabled {
-  color: #4c566a;
-}
-
-/* =============================================================================
  * ANIMATIONS
  * ============================================================================= */
 
 @keyframes urgent-pulse {
-  0% {
-    background: rgba(191, 97, 106, 0.5);
-  }
-  100% {
-    background: rgba(191, 97, 106, 0.7);
-  }
+  0%   { background: rgba(191, 97, 106, 0.5); }
+  100% { background: rgba(191, 97, 106, 0.7); }
 }
 
 @keyframes battery-warning {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
-  }
+  0%   { opacity: 1; }
+  100% { opacity: 0.6; }
 }
 
 @keyframes battery-critical {
-  0% {
-    opacity: 1;
-    color: #bf616a;
-  }
-  100% {
-    opacity: 0.5;
-    color: #d08770;
-  }
+  0%   { opacity: 1; color: #bf616a; }
+  100% { opacity: 0.5; color: #d08770; }
 }
-
-/* =============================================================================
- * RESPONSIVE BREAKPOINTS
- * ============================================================================= */
-
-/* @media blocks removed — unsupported in waybar v0.15, causes exit */

@@ -621,7 +621,7 @@ dots doctor
 
 | Test | Reason | Severity |
 |------|--------|----------|
-| `wlogout: MISSING #Lock…` | CSS uses `.label` selectors, test checks `#label` | Cosmetic |
+| `wlogout: MISSING # Lock…` | Labels use Nerd Font icons, test checks CSS ID match on icon labels | Cosmetic |
 | `hyprpaper preload: $HOME/…` | Literal `$HOME` in hyprpaper.conf | Cosmetic |
 | `install/install.sh: SYNTAX ERROR` | `bash -n` false positive on heredoc in sh script | Cosmetic |
 | `MISSING DIR: profiles` | Generated on-demand by `dots profile`, not committed | Expected |

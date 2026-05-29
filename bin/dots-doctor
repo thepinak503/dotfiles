@@ -14,12 +14,28 @@ done
 LOG_FILE="$DOTFILES_STATE_DIR/logs/doctor.log"
 mkdir -p "$(dirname "$LOG_FILE")"
 
-SCORE=100
+# Detect platform
+IS_MACOS=false
+[ "$(uname -s)" = "Darwin" ] && IS_MACOS=true
+
+# Detect Hyprland availability
+HAS_HYPRLAND=false
+if command -v hyprctl >/dev/null 2>&1 || [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+    HAS_HYPRLAND=true
+fi
+
+# Proportional scoring: max 100 pts, scaled down when Hyprland/Wayland unavailable
+# Hyprland/Waybar checks account for ~15 pts of total
+MAX_SCORE=100
+[ "$IS_MACOS" = true ] && MAX_SCORE=$((MAX_SCORE - 15))
+[ "$HAS_HYPRLAND" = false ] && MAX_SCORE=$((MAX_SCORE - 10))
+SCORE=$MAX_SCORE
 DEDUCTIONS=""
 
 deduct() {
     local pts="$1" reason="$2"
     SCORE=$((SCORE - pts))
+    [ "$SCORE" -lt 0 ] && SCORE=0
     DEDUCTIONS="$DEDUCTIONS\n    -${pts}pts  $reason"
 }
 
@@ -153,12 +169,14 @@ check_symlink "$DOTFILES_DIR/shells/zsh/.zshrc" "$HOME/.zshrc" ".zshrc"
 check_symlink "$DOTFILES_DIR/core/.profile" "$HOME/.profile" ".profile"
 check_symlink "$DOTFILES_DIR/apps/git/gitconfig" "$HOME/.gitconfig" ".gitconfig"
 
-# ── 5. HYPRLAND CONFIG ──
+# ── 5. HYPRLAND CONFIG (skipped on macOS or when Hyprland not available) ──
 if [ -d "$DOTFILES_DIR/hypr" ]; then
     echo -e "\n${BOLD}  🖥️  Hyprland Config${NC}"
-    if command -v hyprctl >/dev/null 2>&1; then
+    if [ "$HAS_HYPRLAND" = true ]; then
         HVER=$(hyprctl version 2>/dev/null | head -1 | grep -oP 'v\S+' || echo "version unknown")
         echo -e "  ${GREEN}✓${NC} Hyprland is running ($HVER)"
+    elif [ "$IS_MACOS" = true ]; then
+        echo -e "  ${YELLOW}⚠${NC} macOS — Hyprland not applicable (skipped)"
     fi
     for conf in monitors input decor animations windowrules workspaces keybinds autostart devices; do
         if [ -f "$DOTFILES_DIR/hypr/configs/$conf.lua" ]; then
@@ -183,14 +201,18 @@ if [ -d "$DOTFILES_DIR/hypr" ]; then
     done
 fi
 
-# ── 6. WAYBAR ──
+# ── 6. WAYBAR (skipped on macOS) ──
 if [ -d "$DOTFILES_DIR/waybar" ]; then
     echo -e "\n${BOLD}  📊 Waybar${NC}"
-    if pgrep -x waybar >/dev/null 2>&1; then
-        echo -e "  ${GREEN}✓${NC} Waybar running"
+    if [ "$IS_MACOS" = false ]; then
+        if pgrep -x waybar >/dev/null 2>&1; then
+            echo -e "  ${GREEN}✓${NC} Waybar running"
+        else
+            echo -e "  ${YELLOW}⚠${NC} Waybar not running"
+            [ "$HAS_HYPRLAND" = true ] && deduct 1 "Waybar not running"
+        fi
     else
-        echo -e "  ${YELLOW}⚠${NC} Waybar not running"
-        deduct 1 "Waybar not running"
+        echo -e "  ${YELLOW}⚠${NC} macOS — Waybar not applicable"
     fi
     [ -f "$DOTFILES_DIR/waybar/config.jsonc" ] && echo -e "  ${GREEN}✓${NC} config.jsonc" || { echo -e "  ${RED}✗${NC} config.jsonc missing"; deduct 2 "Waybar config missing"; }
     [ -f "$DOTFILES_DIR/waybar/style.css" ] && echo -e "  ${GREEN}✓${NC} style.css" || { echo -e "  ${RED}✗${NC} style.css missing"; deduct 2 "Waybar CSS missing"; }
@@ -275,10 +297,13 @@ if [ "$(uname -s)" = "Linux" ]; then
     else
         echo -e "  ${YELLOW}⚠${NC} No display detected (TTY?)"
     fi
+elif [ "$IS_MACOS" = true ]; then
+    echo -e "\n${BOLD}  🎨 Display Server${NC}"
+    echo -e "  ${GREEN}✓${NC} macOS — macOS native display"
 fi
 
 # ── FINAL SCORE ──
-MAX_SCORE=100
+# MAX_SCORE is now proportional (set at top)
 [ "$SCORE" -lt 0 ] && SCORE=0
 LETTER=$(grade)
 

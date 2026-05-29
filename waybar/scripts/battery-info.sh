@@ -44,7 +44,18 @@ EOF
 # ---------------------------------------------------------------------------
 read_sys() {
     local file="$1"
-    cat "$file" 2>/dev/null || echo "0"
+    if [[ -f "$file" ]]; then
+        cat "$file" 2>/dev/null | xargs
+    else
+        return 1
+    fi
+}
+
+read_sys_num() {
+    local val
+    val=$(read_sys "$1" || echo "0")
+    val="${val//[!0-9-]/}"
+    echo "${val:-0}"
 }
 
 get_battery_summary() {
@@ -56,24 +67,24 @@ get_battery_summary() {
     local count=0
 
     for bat in "${BAT_PATHS[@]}"; do
-        local cap=$(read_sys "$bat/capacity")
-        local ef=$(read_sys "$bat/energy_full")
-        local efd=$(read_sys "$bat/energy_full_design")
-        local st=$(read_sys "$bat/status")
-        local c=$(read_sys "$bat/cycle_count")
+        local cap=$(read_sys_num "$bat/capacity")
+        local ef=$(read_sys_num "$bat/energy_full")
+        local efd=$(read_sys_num "$bat/energy_full_design")
+        local st=$(read_sys "$bat/status" || echo "Unknown")
+        local c=$(read_sys_num "$bat/cycle_count")
 
         # Fallback to charge_* if energy_* not available
         if [[ "$ef" == "0" ]]; then
-            ef=$(read_sys "$bat/charge_full")
+            ef=$(read_sys_num "$bat/charge_full")
         fi
         if [[ "$efd" == "0" ]]; then
-            efd=$(read_sys "$bat/charge_full_design")
+            efd=$(read_sys_num "$bat/charge_full_design")
         fi
 
-        total_capacity=$(( total_capacity + cap ))
-        total_energy=$(( total_energy + ef ))
-        total_energy_full=$(( total_energy_full + ef ))
-        total_energy_design=$(( total_energy_design + efd ))
+        total_capacity=$(( total_capacity + cap + 0 ))  # +0 ensures numeric
+        total_energy=$(( total_energy + ef + 0 ))
+        total_energy_full=$(( total_energy_full + ef + 0 ))
+        total_energy_design=$(( total_energy_design + efd + 0 ))
         status="$st"
         count=$(( count + 1 ))
     done
@@ -90,25 +101,44 @@ get_battery_summary() {
 
     local on_ac="false"
     if [[ -f "$ADAPTER_PATH/online" ]]; then
-        local ac=$(read_sys "$ADAPTER_PATH/online")
+        local ac=$(read_sys_num "$ADAPTER_PATH/online")
         [[ "$ac" == "1" ]] && on_ac="true"
     fi
 
     # Estimate time remaining
     local time_remaining=""
-    if [[ -f "$(dirname "${BAT_PATHS[0]:-}")/power_now" ]]; then
-        local power_now=$(read_sys "$(dirname "${BAT_PATHS[0]:-}")/power_now")
-        if [[ "$power_now" -gt 0 ]] && [[ "$status" == "Discharging" ]]; then
-            local energy_now=$(read_sys "$(dirname "${BAT_PATHS[0]:-}")/energy_now")
-            if [[ "$energy_now" -gt 0 ]]; then
-                local hours=$(( energy_now * 1000 / power_now / 60 ))
-                local mins=$(( energy_now * 1000 / power_now % 60 ))
-                # Clamp to sensible values
-                if [[ "$hours" -gt 48 ]]; then
-                    time_remaining=">48h"
-                else
-                    time_remaining="${hours}h${mins}m"
-                fi
+    local bat="${BAT_PATHS[0]:-}"
+    if [[ -n "$bat" ]] && [[ "$status" == "Discharging" || "$status" == "Charging" ]]; then
+        local rate=0
+        local current=0
+        if [[ -f "$bat/power_now" ]]; then
+            rate=$(read_sys_num "$bat/power_now")
+            if [[ "$status" == "Discharging" ]]; then
+                current=$(read_sys_num "$bat/energy_now")
+            elif [[ "$status" == "Charging" ]]; then
+                local energy_full=$(read_sys_num "$bat/energy_full")
+                local energy_now=$(read_sys_num "$bat/energy_now")
+                current=$(( energy_full - energy_now ))
+            fi
+        elif [[ -f "$bat/current_now" ]]; then
+            rate=$(read_sys_num "$bat/current_now")
+            if [[ "$status" == "Discharging" ]]; then
+                current=$(read_sys_num "$bat/charge_now")
+            elif [[ "$status" == "Charging" ]]; then
+                local charge_full=$(read_sys_num "$bat/charge_full")
+                local charge_now=$(read_sys_num "$bat/charge_now")
+                current=$(( charge_full - charge_now ))
+            fi
+        fi
+
+        if [[ "$rate" -gt 0 ]] && [[ "$current" -gt 0 ]]; then
+            local total_mins=$(( current * 60 / rate ))
+            local hours=$(( total_mins / 60 ))
+            local mins=$(( total_mins % 60 ))
+            if [[ "$hours" -gt 48 ]]; then
+                time_remaining=">48h"
+            else
+                time_remaining="${hours}h${mins}m"
             fi
         fi
     fi
@@ -171,16 +201,16 @@ eval "$(get_battery_summary)"
 case "${1:-}" in
     --info)
         # Collect detailed info for first battery
-        local bat="${BAT_PATHS[0]}"
-        local manufacturer=$(read_sys "$bat/manufacturer" 2>/dev/null || echo "Unknown")
-        local model=$(read_sys "$bat/model_name" 2>/dev/null || echo "Unknown")
-        local technology=$(read_sys "$bat/technology" 2>/dev/null || echo "Unknown")
-        local cycle_count=$(read_sys "$bat/cycle_count" 2>/dev/null || echo "N/A")
-        local voltage=$(read_sys "$bat/voltage_now" 2>/dev/null || echo "0")
-        local raw_temp=$(read_sys "$bat/temp" 2>/dev/null || echo "0")
+        bat="${BAT_PATHS[0]}"
+        manufacturer=$(read_sys "$bat/manufacturer" 2>/dev/null || echo "Unknown")
+        model=$(read_sys "$bat/model_name" 2>/dev/null || echo "Unknown")
+        technology=$(read_sys "$bat/technology" 2>/dev/null || echo "Unknown")
+        cycle_count=$(read_sys "$bat/cycle_count" 2>/dev/null || echo "N/A")
+        voltage=$(read_sys "$bat/voltage_now" 2>/dev/null || echo "0")
+        raw_temp=$(read_sys "$bat/temp" 2>/dev/null || echo "0")
 
         voltage=$(awk "BEGIN { printf \"%.3f\", $voltage / 1000000 }")
-        local temp="N/A"
+        temp="N/A"
         if [[ "$raw_temp" != "0" ]]; then
             temp=$(awk "BEGIN { printf \"%.1f\", $raw_temp / 10 }")
         fi
@@ -225,7 +255,7 @@ case "${1:-}" in
         ;;
 
     --waybar|"")
-        local class=""
+        class=""
         if [[ "$on_ac" == "true" ]]; then
             class="charging"
         elif [[ "$capacity" -le 10 ]]; then
@@ -236,7 +266,7 @@ case "${1:-}" in
             class="normal"
         fi
 
-        local tooltip="Battery: ${capacity}%%"
+        tooltip="Battery: ${capacity}%%"
         [[ -n "$status" ]] && tooltip="$tooltip\nStatus: $status"
         [[ -n "$time_remaining" ]] && tooltip="$tooltip\nRemaining: $time_remaining"
         [[ -n "$health" ]] && tooltip="$tooltip\nHealth: ${health}%%"

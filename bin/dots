@@ -22,6 +22,8 @@ ${BOLD}COMMANDS${NC}
   ${GREEN}profile${NC}      Switch machine profile (laptop/desktop/work/gaming/lowpower)
   ${GREEN}reload${NC}       Hot-reload configs (waybar, hypr, kitty, tmux, shell)
   ${GREEN}logs${NC}         View dotfiles logs
+  ${GREEN}logcat${NC}       Unified error trace (aggregate all errors)
+  ${GREEN}errors${NC}       Show error summary by component
   ${GREEN}install${NC}      Run the cross-distro installer
   ${GREEN}docs${NC}         Open documentation website
   ${GREEN}benchmark${NC}    Benchmark shell startup times
@@ -34,6 +36,9 @@ ${BOLD}EXAMPLES${NC}
   dots update              # Pull + snapshot
   dots profile laptop      # Switch to laptop profile
   dots reload waybar       # Reload only waybar
+  dots logcat -f           # Watch errors in real time
+  dots logcat --summary    # Error count by component
+  dots logcat -c shell     # Show only shell errors
   dots safe                # Launch rescue shell
 EOF
 }
@@ -394,6 +399,10 @@ cmd_safe() {
     fi
 }
 
+cmd_logcat() {
+    bash "$DOTFILES_DIR/bin/dotlogcat.sh" "$@"
+}
+
 main() {
     local CMD="${1:-help}"
     shift 2>/dev/null || true
@@ -406,6 +415,7 @@ main() {
         profile|prof)           cmd_profile "$@" ;;
         reload|restart)         cmd_reload "$@" ;;
         logs|log)               cmd_logs "$@" ;;
+        logcat|errors|trace)    cmd_logcat "$@" ;;
         install|fix|setup)      cmd_install "$@" ;;
         docs|doc|helpme)        cmd_docs "$@" ;;
         benchmark|bench)        cmd_benchmark "$@" ;;

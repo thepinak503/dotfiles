@@ -3,6 +3,8 @@
 # Application Detection Module - Bash
 # =============================================================================
 
+# Non-interactive shells (e.g. makepkg) should not run app detection
+[[ $- != *i* ]] && return
 
 # =============================================================================
 # Helper Function

@@ -1,0 +1,142 @@
+# =============================================================================
+# Cross-Distro CI — validates shell syntax, sourcing flow, and test suite
+# across all supported Linux distributions and macOS.
+#
+# Runs on every push/PR to main. Does NOT require Hyprland.
+# =============================================================================
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Shell syntax + sourcing check (fast, ~30s) ──
+  shellcheck:
+    name: Shell syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shell checkers
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq bash zsh fish shellcheck 2>/dev/null
+          # Install checkbashisms
+          sudo apt-get install -y -qq devscripts 2>/dev/null || true
+
+      - name: Run test_repo.sh
+        run: bash bin/test_repo.sh
+
+      - name: Run test suite (no desktop required)
+        run: bash tests/run_tests.sh
+
+      - name: Shellcheck all scripts
+        run: |
+          find . -name '*.sh' -not -path './.git/*' -exec shellcheck -s bash {} + 2>/dev/null || true
+
+  # ── Cross-distro syntax validation in Docker ──
+  distro-checks:
+    name: ${{ matrix.distro }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - archlinux:latest
+          - debian:stable
+          - ubuntu:latest
+          - fedora:latest
+          - alpine:latest
+          - rockylinux:9
+    container:
+      image: ${{ matrix.distro }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install base tools
+        run: |
+          case "$(cat /etc/os-release 2>/dev/null | grep '^ID=')" in
+            *arch*)
+              pacman -Sy --noconfirm --needed bash zsh fish coreutils grep sed gawk findutils diffutils
+              ;;
+            *debian*|*ubuntu*)
+              apt-get update -qq
+              apt-get install -y -qq bash zsh fish coreutils grep sed gawk findutils diffutils
+              ;;
+            *fedora*|*rocky*|*rhel*)
+              dnf install -y bash zsh fish coreutils grep sed gawk findutils diffutils
+              ;;
+            *alpine*)
+              apk add bash zsh fish coreutils grep sed gawk findutils diffutils
+              ;;
+          esac
+
+      - name: Validate shell syntax
+        run: |
+          # Check POSIX compat for core/ files
+          for f in core/aliases.sh core/functions.sh core/universal.sh; do
+            [ -f "$f" ] && bash -n "$f" && echo "✓ $f" || { echo "✗ $f"; exit 1; }
+          done
+
+          # Check bash syntax for all bash scripts
+          for f in $(find . -name '*.bash' -not -path './.git/*' 2>/dev/null); do
+            bash -n "$f" && echo "✓ $f" || { echo "✗ $f"; exit 1; }
+          done
+
+          # Check zsh syntax for all zsh scripts
+          for f in $(find . -name '*.zsh' -not -path './.git/*' 2>/dev/null); do
+            zsh -n "$f" && echo "✓ $f" || { echo "✗ $f"; exit 1; }
+          done
+
+          # Check fish syntax for all fish scripts
+          for f in $(find . -name '*.fish' -not -path './.git/*' 2>/dev/null); do
+            fish --no-execute "$f" && echo "✓ $f" || { echo "✗ $f"; exit 1; }
+          done
+
+      - name: Validate core sourcing flow
+        run: |
+          # Simulate the source chain for bash
+          bash -c '
+            source core/universal.sh 2>/dev/null && echo "✓ core/universal.sh sources OK" || echo "✗ core/universal.sh"
+            source core/aliases.sh 2>/dev/null && echo "✓ core/aliases.sh sources OK" || echo "✗ core/aliases.sh"
+            source core/functions.sh 2>/dev/null && echo "✓ core/functions.sh sources OK" || echo "✗ core/functions.sh"
+          '
+
+      - name: Validate installer syntax
+        run: |
+          bash -n install/install.sh && echo "✓ install.sh syntax OK" || exit 1
+          bash -n install/uninstall.sh && echo "✓ uninstall.sh syntax OK" || exit 1
+
+      - name: Validate bin/ scripts syntax
+        run: |
+          for f in bin/*.sh bin/dots bin/dots-doctor bin/dotlogcat.sh; do
+            [ -f "$f" ] && bash -n "$f" && echo "✓ $f" || { echo "✗ $f"; exit 1; }
+          done
+
+  # ── macOS syntax check ──
+  macos-check:
+    name: macOS (shell syntax)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install fish (bash+zsh come built-in)
+        run: |
+          brew install fish 2>/dev/null || true
+
+      - name: Validate shell syntax on macOS
+        run: |
+          bash -n core/universal.sh
+          bash -n shells/bash/aliases.bash
+          zsh -n shells/zsh/aliases.zsh
+          zsh -n shells/zsh/exports.zsh
+          fish --no-execute shells/fish/aliases.fish
+          fish --no-execute shells/fish/functions.fish
+
+      - name: Validate macOS-specific paths
+        run: |
+          [ -f apps/brew/Brewfile ] && echo "✓ Brewfile exists"
+          [ -f apps/starship-mac.toml ] && echo "✓ starship-mac.toml exists"

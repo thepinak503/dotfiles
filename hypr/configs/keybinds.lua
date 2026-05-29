@@ -31,7 +31,7 @@ local altMod = "ALT"
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd("kitty"))
 hl.bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd("kitty --working-directory ~/Projects"))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd("rofi -show drun"))
-hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("rofi -show drun -config " .. home .. "/.config/rofi/config-full.rasi"))
+hl.bind(altMod .. " + Space", hl.dsp.exec_cmd("rofi -show drun -config " .. home .. "/.config/rofi/config-full.rasi"))
 hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd("kitty btop"))
 hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("rofi -show window -config " .. home .. "/.config/rofi/config-full.rasi"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("nautilus"))
