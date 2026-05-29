@@ -21,6 +21,9 @@ if coords=$(curl -s --max-time 5 https://ipapi.co/json/ 2>/dev/null); then
     if command -v jq &>/dev/null; then
         LAT=$(echo "$coords" | jq -r '.latitude // 18.5211')
         LNG=$(echo "$coords" | jq -r '.longitude // 73.8502')
+        # Validate coordinates are valid float numbers to prevent injection/malformed input
+        if [[ ! "$LAT" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then LAT="18.5211"; fi
+        if [[ ! "$LNG" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then LNG="73.8502"; fi
     fi
 fi
 
