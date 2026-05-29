@@ -137,25 +137,30 @@ gpus_json() {
   local _nv_vk_optimus="" proton_ngx=""
 
   if [[ "$has_nvidia" == true ]]; then
-    gbm_backend="nvidia-drm"
-    glx_vendor="nvidia"
-    if [[ "$has_amd" == true || "$has_intel" == true ]]; then
+    if [[ -n "${drm_nvidia:-}" && "${aq_parts[0]:-}" == "$drm_nvidia" ]]; then
+      gbm_backend="nvidia-drm"
+      glx_vendor="nvidia"
       libva_driver="nvidia"
       vdpau_driver="nvidia"
+    else
+      # Hybrid setup: iGPU is the primary display renderer
+      gbm_backend=""
+      glx_vendor=""
+      if [[ "$has_intel" == true ]]; then
+        libva_driver="iHD"
+        vdpau_driver="va_gl"
+      elif [[ "$has_amd" == true ]]; then
+        libva_driver="radeonsi"
+        vdpau_driver="radeonsi"
+      fi
+      # Keep offloading support
       _nv_vk_optimus="NVIDIA_only"
       proton_ngx="1"
-    else
-      libva_driver="nvidia"
-      vdpau_driver="nvidia"
     fi
-  fi
-
-  if [[ "$has_amd" == true && "$has_nvidia" == false ]]; then
+  elif [[ "$has_amd" == true ]]; then
     libva_driver="radeonsi"
     vdpau_driver="radeonsi"
-  fi
-
-  if [[ "$has_intel" == true && "$has_nvidia" == false ]]; then
+  elif [[ "$has_intel" == true ]]; then
     libva_driver="iHD"
     vdpau_driver="va_gl"
   fi

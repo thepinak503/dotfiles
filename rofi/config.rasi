@@ -20,17 +20,6 @@ configuration {
     display-filebrowser:         "   Files";
     display-combi:               "   Search";
 
-    /* Layout */
-    location:                    center;
-    x-offset:                    0;
-    y-offset:                    0;
-    width:                       40;
-    height:                      60;
-    fixed-num-lines:             false;
-    padding:                     12;
-    spacing:                     8;
-    margin:                      0;
-
     /* Behavior */
     show-icons:                  true;
     icon-theme:                  "Papirus";
@@ -63,11 +52,6 @@ configuration {
     auto-select-delay:           0;
     filtered:                    true;
     timeout:                     { action: "kb-cancel"; delay: 0; };
-
-    /* Scrollbar */
-    scrollbar:                   true;
-    scroll-method:               0;
-    scroll-width:                6;
 
     /* Pointer */
     normal-window:               false;

@@ -5,10 +5,6 @@ configuration {
   show-icons: true;
   drun-display-format: "{name}";
   font: "CaskaydiaCove Nerd Font 14";
-  lines: 8;
-  columns: 3;
-  width: 50;
-  location: 0;
   terminal: "kitty";
   disable-history: false;
   cycle: true;
@@ -22,4 +18,14 @@ configuration {
   case-sensitive: false;
   icon-theme: "Papirus";
   drun-icon-theme: "Papirus";
+}
+
+window {
+  width: 50%;
+  location: center;
+}
+
+listview {
+  lines: 8;
+  columns: 3;
 }

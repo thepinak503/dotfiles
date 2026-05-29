@@ -4,9 +4,9 @@
 -- Configure input settings for specific devices (touchpads, keyboards, mice).
 -- Use 'hyprctl devices' to list all connected input devices with their names.
 --
--- NOTE: Per-device touchpad/keyboard/mouse settings via hl.device() are not
--- supported in Hyprland v0.55+. Use global input settings in input.lua instead,
--- or set per-device via hyprctl keyword at runtime.
+-- NOTE: Per-device touchpad/keyboard/mouse settings via hl.device() are fully
+-- supported. Use this to override global input configurations for specific hardware.
+-- Example: hl.device({ name = "my-device-name", enabled = true, sensitivity = -0.5 })
 -- =============================================================================
 
 -- =============================================================================

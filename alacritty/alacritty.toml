@@ -44,8 +44,8 @@ title = "Alacritty"
 # Window class (for WM matching)
 class = { instance = "Alacritty", general = "Alacritty" }
 
-# GTK theme variant: "None", "Dark", "Light"
-gtk_theme_variant = "Dark"
+# Window decorations theme variant: "None", "Dark", "Light"
+decorations_theme_variant = "Light"
 
 # Resize increments (set to cell size for crisp rendering)
 resize_increments = false

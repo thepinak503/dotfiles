@@ -81,6 +81,27 @@ case "${1:-}" in
         fi
         ;;
 
+    menu)
+        if ! command -v rofi &>/dev/null; then
+            notify-send -a "Theme Menu" -u critical "Error" "rofi is not installed"
+            exit 1
+        fi
+        OPTIONS="Dark Theme\nLight Theme"
+        CHOICE=$(echo -e "$OPTIONS" | rofi -dmenu -p "Select Theme" -i)
+        case "$CHOICE" in
+            "Dark Theme")
+                if [[ -x "$THEME_SCRIPT" ]]; then
+                    "$THEME_SCRIPT" dark
+                fi
+                ;;
+            "Light Theme")
+                if [[ -x "$THEME_SCRIPT" ]]; then
+                    "$THEME_SCRIPT" light
+                fi
+                ;;
+        esac
+        ;;
+
     status|"")
         CURRENT=$(get_current_theme)
         if [[ "$CURRENT" == "dark" ]]; then

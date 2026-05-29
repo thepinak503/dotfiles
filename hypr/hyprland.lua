@@ -23,6 +23,12 @@ require("configs/theme")
 -- These are typically set by the set-env script in autostart.
 -- Use pcall to gracefully handle missing env file.
 
+-- Synchronously generate env variables before loading
+local home = os.getenv("HOME")
+if home then
+    os.execute(home .. "/.local/share/dotfiles/hypr/scripts/set-env > /dev/null 2>&1")
+end
+
 pcall(require, "configs/env")
 
 -- =============================================================================

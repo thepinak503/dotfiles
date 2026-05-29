@@ -72,7 +72,7 @@ hl.config({
         manual_crash = false,          -- Manual crash for testing
         suppress_errors = false,       -- Show all errors
         vfr = true,                    -- Variable frame rate
-        damage_tracking = 0,           -- 0=off, 1=full, 2=partial (debug)
+        damage_tracking = 2,           -- 0=off, 1=partial, 2=full
         overlay = false,               -- Show overlay for debugging
     },
 
