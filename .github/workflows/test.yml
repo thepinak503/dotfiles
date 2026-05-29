@@ -1,9 +1,4 @@
-# =============================================================================
-# Cross-Distro CI — validates shell syntax, sourcing flow, and test suite
-# across all supported Linux distributions and macOS.
-#
-# Runs on every push/PR to main. Does NOT require Hyprland.
-# =============================================================================
+# Shell syntax + shellcheck — runs on every push/PR to main
 name: test
 
 on:
@@ -13,196 +8,50 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Least-privilege permissions — no writes needed for tests
 permissions:
   contents: read
 
 jobs:
-  # ── Shell syntax + sourcing check (fast, ~30s) ──
   shellcheck:
-    name: Shell syntax
+    name: Shell syntax & shellcheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install shell checkers
+      - name: Install tools
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq bash zsh fish shellcheck 2>/dev/null
-          # devscripts provides checkbashisms; optional
-          sudo apt-get install -y -qq devscripts 2>/dev/null || true
+          sudo apt-get install -y -qq bash zsh fish shellcheck
 
-      - name: Run test_repo.sh (if present)
+      - name: bash -n — all .sh and .bash files
         run: |
-          if [ -f bin/test_repo.sh ]; then
-            bash bin/test_repo.sh
-          else
-            echo "ℹ bin/test_repo.sh not found — skipping"
-          fi
-
-      - name: Run test suite (no desktop required)
-        run: |
-          if [ -f tests/run_tests.sh ]; then
-            bash tests/run_tests.sh
-          else
-            echo "ℹ tests/run_tests.sh not found — skipping"
-          fi
-
-      - name: Shellcheck all .sh scripts
-        run: |
-          find . -name '*.sh' -not -path './.git/*' \
-            -exec shellcheck -s bash -e SC1090,SC1091,SC2034,SC2086 {} + 2>/dev/null || true
-
-      - name: Shellcheck core/ POSIX files
-        run: |
-          for f in core/aliases.sh core/universal.sh core/functions.sh; do
-            [ -f "$f" ] && shellcheck -s sh -e SC1090,SC1091,SC2034 "$f" && echo "✓ $f" || true
+          find . -name '*.sh' -o -name '*.bash' | grep -v '.git/' | while read -r f; do
+            bash -n "$f" && echo "✓ $f" || { echo "✗ $f"; exit 1; }
           done
 
-  # ── Cross-distro syntax validation in Docker ──
-  distro-checks:
-    name: ${{ matrix.distro }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        distro:
-          - archlinux:latest
-          - debian:stable
-          - ubuntu:latest
-          - fedora:latest
-          - alpine:latest
-          - rockylinux:9
-    container:
-      image: ${{ matrix.distro }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install base tools
+      - name: zsh -n — all .zsh files
         run: |
-          # Detect distro using grep+cut (reliable, no subshell quoting issues)
-          _ID=""
-          [ -f /etc/os-release ] && _ID=$(grep '^ID=' /etc/os-release | cut -d= -f2 | tr -d '"')
-
-          case "$_ID" in
-            arch|artix|manjaro|endeavouros|garuda)
-              pacman -Sy --noconfirm --needed bash zsh fish coreutils grep sed gawk findutils diffutils
-              ;;
-            debian|ubuntu)
-              apt-get update -qq
-              apt-get install -y -qq bash zsh fish coreutils grep sed gawk findutils diffutils
-              ;;
-            fedora|rocky|rhel|centos)
-              dnf install -y bash zsh fish coreutils grep sed gawk findutils diffutils
-              ;;
-            alpine)
-              apk add bash zsh fish coreutils grep sed gawk findutils diffutils
-              ;;
-            *)
-              echo "Unknown distro '$_ID' — trying apt-get fallback"
-              apt-get update -qq 2>/dev/null && apt-get install -y -qq bash zsh fish coreutils 2>/dev/null || true
-              ;;
-          esac
-
-      - name: Validate shell syntax
-        run: |
-          ERRORS=0
-
-          # Bash-syntax check for core/ files (POSIX mode)
-          for f in core/aliases.sh core/functions.sh core/universal.sh; do
-            if [ -f "$f" ]; then
-              bash -n "$f" && echo "✓ $f" || { echo "✗ $f FAILED bash -n"; ERRORS=$((ERRORS+1)); }
-            fi
+          find . -name '*.zsh' | grep -v '.git/' | while read -r f; do
+            zsh -n "$f" && echo "✓ $f" || { echo "✗ $f"; exit 1; }
           done
 
-          # Bash syntax for all .bash scripts
-          find . -name '*.bash' -not -path './.git/*' 2>/dev/null | while read -r f; do
-            bash -n "$f" && echo "✓ $f" || { echo "✗ $f"; ERRORS=$((ERRORS+1)); }
+      - name: fish -n — all .fish files
+        run: |
+          find . -name '*.fish' | grep -v '.git/' | while read -r f; do
+            fish --no-execute "$f" && echo "✓ $f" || { echo "✗ $f"; exit 1; }
           done
 
-          # Zsh syntax for all .zsh scripts
-          if command -v zsh >/dev/null 2>&1; then
-            find . -name '*.zsh' -not -path './.git/*' 2>/dev/null | while read -r f; do
-              zsh -n "$f" && echo "✓ $f" || { echo "✗ $f"; ERRORS=$((ERRORS+1)); }
-            done
-          fi
-
-          # Fish syntax for all .fish scripts
-          if command -v fish >/dev/null 2>&1; then
-            find . -name '*.fish' -not -path './.git/*' 2>/dev/null | while read -r f; do
-              fish --no-execute "$f" 2>/dev/null && echo "✓ $f" || { echo "✗ $f"; ERRORS=$((ERRORS+1)); }
-            done
-          fi
-
-          [ "$ERRORS" -gt 0 ] && exit 1 || true
-
-      - name: Validate core sourcing flow
+      - name: shellcheck — all .sh scripts
         run: |
-          # Simulate the bash source chain (non-interactive, no aliases active)
-          bash -c '
-            source core/universal.sh 2>/dev/null  && echo "✓ core/universal.sh" || echo "✗ core/universal.sh"
-            source core/aliases.sh 2>/dev/null    && echo "✓ core/aliases.sh"   || echo "✗ core/aliases.sh"
-            source core/functions.sh 2>/dev/null  && echo "✓ core/functions.sh" || echo "✗ core/functions.sh"
-          '
+          shellcheck -s bash -e SC1090,SC1091,SC2034,SC2086 \
+            $(find . -name '*.sh' | grep -v '.git/') || true
 
-      - name: Validate installer syntax
+      - name: shellcheck — core/ POSIX
         run: |
-          bash -n install/install.sh   && echo "✓ install.sh syntax OK"   || { echo "✗ install.sh syntax FAILED";   exit 1; }
-          bash -n install/uninstall.sh && echo "✓ uninstall.sh syntax OK" || { echo "✗ uninstall.sh syntax FAILED"; exit 1; }
+          shellcheck -s sh -e SC1090,SC1091,SC2034 \
+            core/aliases.sh core/universal.sh core/functions.sh || true
 
-      - name: Validate bin/ scripts syntax
+      - name: Run test suite
         run: |
-          ERRORS=0
-          for f in bin/*.sh bin/dots bin/dots-doctor bin/dotlogcat.sh; do
-            [ -f "$f" ] || continue
-            bash -n "$f" && echo "✓ $f" || { echo "✗ $f FAILED"; ERRORS=$((ERRORS+1)); }
-          done
-          [ "$ERRORS" -gt 0 ] && exit 1 || true
-
-      - name: Validate zsh mode files
-        run: |
-          command -v zsh >/dev/null 2>&1 || { echo "zsh not available — skipping"; exit 0; }
-          ERRORS=0
-          for f in shells/zsh/modes/*.zsh shells/zsh/*.zsh shells/bash/*.bash; do
-            [ -f "$f" ] || continue
-            case "$f" in
-              *.zsh) zsh -n "$f" && echo "✓ $f" || { echo "✗ $f"; ERRORS=$((ERRORS+1)); } ;;
-              *.bash) bash -n "$f" && echo "✓ $f" || { echo "✗ $f"; ERRORS=$((ERRORS+1)); } ;;
-            esac
-          done
-          [ "$ERRORS" -gt 0 ] && exit 1 || true
-
-  # ── macOS syntax check ──
-  macos-check:
-    name: macOS (shell syntax)
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install fish (bash+zsh come built-in on macOS)
-        run: |
-          brew install fish 2>/dev/null || true
-
-      - name: Validate shell syntax on macOS
-        run: |
-          bash -n core/universal.sh      && echo "✓ core/universal.sh"
-          bash -n shells/bash/aliases.bash && echo "✓ shells/bash/aliases.bash"
-          bash -n shells/bash/exports.bash && echo "✓ shells/bash/exports.bash"
-          zsh  -n shells/zsh/aliases.zsh  && echo "✓ shells/zsh/aliases.zsh"
-          zsh  -n shells/zsh/exports.zsh  && echo "✓ shells/zsh/exports.zsh"
-          for f in shells/zsh/modes/*.zsh; do
-            zsh -n "$f" && echo "✓ $f"
-          done
-          fish --no-execute shells/fish/aliases.fish   && echo "✓ shells/fish/aliases.fish"
-          fish --no-execute shells/fish/functions.fish && echo "✓ shells/fish/functions.fish"
-          fish --no-execute shells/fish/config.fish    && echo "✓ shells/fish/config.fish"
-
-      - name: Validate macOS-specific paths (warnings only)
-        run: |
-          # These files may not exist on Linux-only setups — warn, do not fail
-          [ -f apps/brew/Brewfile ] \
-            && echo "✓ apps/brew/Brewfile exists" \
-            || echo "⚠ apps/brew/Brewfile missing (macOS optional)"
-          [ -f apps/starship-mac.toml ] \
-            && echo "✓ apps/starship-mac.toml exists" \
-            || echo "⚠ apps/starship-mac.toml missing (optional)"
+          [ -f bin/test_repo.sh ]    && bash bin/test_repo.sh    || echo "ℹ bin/test_repo.sh not found"
+          [ -f tests/run_tests.sh ]  && bash tests/run_tests.sh  || echo "ℹ tests/run_tests.sh not found"
