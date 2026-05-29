@@ -377,10 +377,10 @@ show_summary() {
         sev=$(detect_severity "$line")
         comp=$(detect_component "$line")
         case "$sev" in
-            ERROR) ERROR_COUNTS["$comp"]=$((ERROR_COUNTS["$comp"] + 1)) ;;
-            WARN)  WARN_COUNTS["$comp"]=$((WARN_COUNTS["$comp"] + 1)) ;;
-            INFO)  INFO_COUNTS["$comp"]=$((INFO_COUNTS["$comp"] + 1)) ;;
-            OK)    OK_COUNTS["$comp"]=$((OK_COUNTS["$comp"] + 1)) ;;
+            ERROR) ERROR_COUNTS["$comp"]=$(( ${ERROR_COUNTS["$comp"]:-0} + 1 )) ;;
+            WARN)  WARN_COUNTS["$comp"]=$(( ${WARN_COUNTS["$comp"]:-0} + 1 )) ;;
+            INFO)  INFO_COUNTS["$comp"]=$(( ${INFO_COUNTS["$comp"]:-0} + 1 )) ;;
+            OK)    OK_COUNTS["$comp"]=$(( ${OK_COUNTS["$comp"]:-0} + 1 )) ;;
         esac
     done < "$tmp_file"
 
@@ -389,7 +389,8 @@ show_summary() {
     echo -e "${BOLD}╚══════════════════════════════════════════════════════════════╝${NC}"
     echo ""
 
-    # Collect all components
+    # Collect all components (temporarily bypass unbound check for potentially empty arrays)
+    set +u
     local all_comps
     all_comps=$( (
         for k in "${!ERROR_COUNTS[@]}"; do echo "$k"; done
@@ -397,6 +398,7 @@ show_summary() {
         for k in "${!INFO_COUNTS[@]}"; do echo "$k"; done
         for k in "${!OK_COUNTS[@]}"; do echo "$k"; done
     ) | sort -u)
+    set -u
 
     local total_errors=0 total_warns=0
     printf "  ${BOLD}%-12s %6s %6s %6s %6s${NC}\n" "Component" "ERRORS" "WARNS" "INFO" "OK"
