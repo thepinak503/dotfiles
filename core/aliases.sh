@@ -47,12 +47,12 @@ alias lh='command ls -lhS'
 alias lr='command ls -lR'
 alias le="command ls | grep -o '.[^.]*$' | sort | uniq"
 alias lw='command ls -ldh $(pwd)'
-alias ls='_x eza --group-directories-first --icons 2>/dev/null || _x exa --group-directories-first 2>/dev/null || command ls --color=auto 2>/dev/null || command ls -G'
-alias ll='_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || command ls -l'
-alias la='_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || command ls -la'
-alias lal='_x eza -la --group-directories-first --icons 2>/dev/null || _x exa -la 2>/dev/null || command ls -la'
-alias lsl='_x eza -l --group-directories-first --icons 2>/dev/null || _x exa -l 2>/dev/null || command ls -l'
-alias tree='_x eza -T --icons 2>/dev/null || _x tree 2>/dev/null || echo "tree/eza needed"'
+alias ls='_x eza --group-directories-first --icons || _x exa --group-directories-first || command ls --color=auto || command ls -G'
+alias ll='_x eza -l --group-directories-first --icons || _x exa -l || command ls -l'
+alias la='_x eza -la --group-directories-first --icons || _x exa -la || command ls -la'
+alias lal='_x eza -la --group-directories-first --icons || _x exa -la || command ls -la'
+alias lsl='_x eza -l --group-directories-first --icons || _x exa -l || command ls -l'
+alias tree='_x eza -T --icons || _x tree 2>/dev/null || echo "tree/eza needed"'
 alias dirs='ls -d */'
 alias ldir='ls -d */'
 alias lf='find . -maxdepth 1 -type f -exec command ls -lh {} + 2>/dev/null | sort -k5 -h'
@@ -881,18 +881,18 @@ alias trace='traceroute'
 
 
 alias ip='ip -br addr'
-alias myip='_x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || echo "N/A"'
+alias myip='_x dig +short myip.opendns.com @resolver1.opendns.com || _x curl -s ifconfig.me 2>/dev/null || echo "N/A"'
 
 alias dns='_x dig +short'
-alias flush='_x sudo resolvectl flush-caches 2>/dev/null || _x sudo systemd-resolve --flush-caches 2>/dev/null || _x sudo killall -HUP mDNSResponder 2>/dev/null || echo "no flush"'
+alias flush='_x sudo resolvectl flush-caches || _x sudo systemd-resolve --flush-caches || _x sudo killall -HUP mDNSResponder 2>/dev/null || echo "no flush"'
 alias speed='_x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | _x python3 - 2>/dev/null || echo "speedtest-cli needed"'
 
 alias weather3='_x curl -fsSL "wttr.in?F" 2>/dev/null || echo "curl needed"'
 alias moon='_x curl -fsSL "wttr.in/Moon" 2>/dev/null || echo "curl needed"'
 alias dnst='dig +short'
 alias iftop='sudo iftop'
-alias ping='_x prettyping 2>/dev/null || command ping'
-alias dig='_x dog 2>/dev/null || command dig'
+alias ping='_x prettyping || command ping'
+alias dig='_x dog || command dig'
 
 if command -v dig >/dev/null 2>&1; then
     alias dns='dig +short'
@@ -951,18 +951,18 @@ alias psaux='ps aux'
 alias psf='ps auxf'
 alias psxl='ps aux --forest'
 alias psymod='lsmod'
-alias top='_x btop 2>/dev/null || _x htop 2>/dev/null || command top'
+alias top='_x btop || _x htop || command top'
 
 # -----------------------------------------------------------------------------
 # Text Processing
 # -----------------------------------------------------------------------------
 
 
-alias gri='grep -i'
-alias grr='grep -r'
-alias grri='grep -ri'
-alias grl='grep -rl'
-alias grc='grep -c'
+alias gri='command grep -i'
+alias grr='command grep -r'
+alias grri='command grep -ri'
+alias grl='command grep -rl'
+alias grc='command grep -c'
 alias uniqc='sort | uniq -c | sort -rn'
 alias wcw='wc -w'
 alias column='column -t'
@@ -972,11 +972,11 @@ alias taill='tail -100'
 alias headl='head -100'
 alias nl='nl -ba'
 alias tac='tac 2>/dev/null || tail -r'
-alias grepw='grep -w'
-alias grepr='grep -r'
-alias grex='grep -r --exclude-dir=.git --exclude-dir=node_modules'
-alias grep='_x rg --color=auto 2>/dev/null || command grep --color=auto'
-alias diff='_x delta 2>/dev/null || command diff --color=auto 2>/dev/null || command diff'
+alias grepw='command grep -w'
+alias grepr='command grep -r'
+alias grex='command grep -r --exclude-dir=.git --exclude-dir=node_modules'
+alias grep='_x rg --color=auto || command grep --color=auto'
+alias diff='_x delta || command diff --color=auto || command diff'
 
 if command -v rg >/dev/null 2>&1; then
     alias rg='rg --hidden --glob "!.git"'
@@ -1013,12 +1013,12 @@ alias mount='mount | column -t'
 
 alias mkdir='mkdir -p'
 alias bc='bc -l'
-alias find='_x fd 2>/dev/null || command find'
-alias cat='_x bat --style=plain --paging=never 2>/dev/null || _x batcat --style=plain --paging=never 2>/dev/null || command cat'
+alias find='_x fd || command find'
+alias cat='command cat'
 alias fd='_x fd 2>/dev/null || find'
 alias ff='find . -type f -name'
 
-alias wget='_x wget 2>/dev/null || _x curl -fSL -o 2>/dev/null || echo "no download tool"'
+alias wget='_x wget || _x curl -fSL -o 2>/dev/null || echo "no download tool"'
 
 if command -v fd >/dev/null 2>&1; then
     alias fd='fd --hidden'
@@ -1185,7 +1185,7 @@ fi
 # Hashing / Encoding
 alias randpw='openssl rand -base64 16 2>/dev/null || python3 -c "import secrets; print(secrets.token_urlsafe(16))"'
 alias sha='shasum -a 256'
-alias md5sum='md5 2>/dev/null || command md5sum'
+alias md5sum='md5 || command md5sum'
 alias hex='xxd'
 alias base64e='base64'
 alias base64d='base64 -d'
@@ -1255,11 +1255,11 @@ alias clhist='HISTSIZE=0; HISTSIZE=5000'
 alias histgrep='history | grep -i'
 alias cleanshell='env - bash --norc --noprofile'
 alias topcmds='topcommands'
-alias port='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null || echo "no port tool"'
-alias ports='_x ss -tulpn 2>/dev/null || _x netstat -tulpn 2>/dev/null || _x lsof -i -n -P 2>/dev/null'
+alias port='_x ss -tlnp || _x netstat -tlnp 2>/dev/null || echo "no port tool"'
+alias ports='_x ss -tulpn || _x netstat -tulpn || _x lsof -i -n -P 2>/dev/null'
 
-alias listen='_x ss -tlnp 2>/dev/null || _x netstat -tlnp 2>/dev/null'
-alias connections='_x ss -tunp 2>/dev/null || _x netstat -tunp 2>/dev/null'
+alias listen='_x ss -tlnp || _x netstat -tlnp 2>/dev/null'
+alias connections='_x ss -tunp || _x netstat -tunp 2>/dev/null'
 alias dsstore='find . -name ".DS_Store" -type f -delete -print 2>/dev/null'
 alias mirrorsite='_x wget -m -k -K -E -e robots=off 2>/dev/null || echo "wget needed"'
 alias sep='printf "=%.0s" $(seq 1 $(tput cols))'
@@ -1269,7 +1269,7 @@ alias idg='id -g'
 alias idu='id -u'
 alias shuffle='shuf'
 alias rsample='shuf -n'
-alias man='_x tldr 2>/dev/null || command man'
+alias man='_x tldr || command man'
 
 # -----------------------------------------------------------------------------
 # Development Tools — Tmux / Editors / Lazygit / Just
@@ -1294,8 +1294,8 @@ if command -v tmux >/dev/null 2>&1; then
 fi
 
 # Editors
-alias vim='nvim 2>/dev/null || command vim'
-alias sv='nvim 2>/dev/null || command vim'
+alias vim='nvim || command vim'
+alias sv='nvim || command vim'
 alias nv='nvim'
 alias codel='code .'
 

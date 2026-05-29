@@ -87,18 +87,18 @@ alias setu='set -u'
 alias setpipefail='setopt pipefail'
 
 ##### List/File tools
-alias ls='eza --icons=auto --group-directories-first 2>/dev/null || command ls'
-alias ll='eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
-alias la='eza -a --icons=auto --group-directories-first 2>/dev/null || command ls -A'
-alias lal='eza -la --icons=auto --group-directories-first 2>/dev/null || command ls -la'
-alias lsl='eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
+alias ls='eza --icons=auto --group-directories-first || command ls'
+alias ll='eza -l --icons=auto --group-directories-first || command ls -l'
+alias la='eza -a --icons=auto --group-directories-first || command ls -A'
+alias lal='eza -la --icons=auto --group-directories-first || command ls -la'
+alias lsl='eza -l --icons=auto --group-directories-first || command ls -l'
 alias lsa='ls -a'
 alias lsd='ls -d */'
 alias lsdot='ls -d .*'
 alias lsf='ls -F'
 alias lsbig='ls -lS | head -20'
 alias lshidden='ls -d .* 2>/dev/null'
-alias tree='_x eza -T --icons 2>/dev/null || _x tree -CAhF --dirsfirst 2>/dev/null || echo "tree needed"'
+alias tree='_x eza -T --icons || _x tree -CAhF --dirsfirst 2>/dev/null || echo "tree needed"'
 alias ltree='eza --tree --level=3 --icons=auto 2>/dev/null || find . -maxdepth 3 -print'
 alias l1='ls -1'
 alias l='ls -CF'
@@ -133,11 +133,11 @@ alias lcolor='ls --color=auto'
 alias lno='ls -N'
 alias lauth='ls -lZ' 2>/dev/null || true
 alias lctx='ls -lZ' 2>/dev/null || true
-alias treed='_x eza -T --only-dirs 2>/dev/null || _x tree -CAFd 2>/dev/null || echo "tree needed"'
+alias treed='_x eza -T --only-dirs || _x tree -CAFd 2>/dev/null || echo "tree needed"'
 
 ##### Cat/View/Pager
-alias cat='bat --paging=never 2>/dev/null || command cat'
-alias find='fd 2>/dev/null || command find'
+alias cat='command cat'
+alias find='fd || command find'
 alias duh='du -sh'
 alias dfh='df -h'
 alias freeh='free -h'
@@ -891,6 +891,9 @@ alias pacget='_x pacman -Sw'
 alias pacwget='_x pacman -Sw'
 command -v pacman-mirrors >/dev/null 2>&1 && alias pacmir='sudo pacman-mirrors -f 5'
 command -v pacman-mirrors >/dev/null 2>&1 && alias pacmiru='sudo pacman-mirrors -u'
+command -v rate-mirrors >/dev/null 2>&1 && alias ratemir='rate-mirrors --save /tmp/arch-mirrorlist arch && sudo cp /tmp/arch-mirrorlist /etc/pacman.d/mirrorlist'
+command -v rate-mirrors >/dev/null 2>&1 && alias ratemirc='rate-mirrors --save /tmp/cachyos-mirrorlist cachyos && sudo cp /tmp/cachyos-mirrorlist /etc/pacman.d/cachyos-mirrorlist'
+command -v rate-mirrors >/dev/null 2>&1 && alias ratemirall='rate-mirrors --save /tmp/arch-mirrorlist arch && sudo cp /tmp/arch-mirrorlist /etc/pacman.d/mirrorlist; rate-mirrors --save /tmp/cachyos-mirrorlist cachyos && sudo cp /tmp/cachyos-mirrorlist /etc/pacman.d/cachyos-mirrorlist; rate-mirrors --save /tmp/archlinuxcn-mirrorlist archlinuxcn && sudo cp /tmp/archlinuxcn-mirrorlist /etc/pacman.d/archlinuxcn-mirrorlist; rate-mirrors --save /tmp/blackarch-mirrorlist blackarch && sudo cp /tmp/blackarch-mirrorlist /etc/pacman.d/blackarch-mirrorlist; rate-mirrors --save /tmp/chaotic-mirrorlist chaotic-aur && sudo cp /tmp/chaotic-mirrorlist /etc/pacman.d/chaotic-mirrorlist; rate-mirrors --save /tmp/arch4edu-mirrorlist arch4edu && sudo cp /tmp/arch4edu-mirrorlist /etc/pacman.d/arch4edu-mirrorlist'
 alias pact='pactree' 2>/dev/null || true
 alias pactd='pactree -d' 2>/dev/null || true
 alias pactr='pactree -r' 2>/dev/null || true
@@ -1324,7 +1327,7 @@ alias hmc='_x home-manager generations'
 ##### Misc / System utilities
 
 setopt AUTO_CD 2>/dev/null
-cd() { builtin cd "$@" && eza --icons=auto --group-directories-first 2>/dev/null || command ls; }
+cd() { builtin cd "$@" && eza --icons=auto --group-directories-first || command ls; }
 
 ##### Grep / Diff / Pager
 alias grep='command grep --color=auto'
@@ -1338,10 +1341,17 @@ alias grepx='command grep -r --exclude-dir=.git --exclude-dir=node_modules --exc
 alias grepp='command grep -r --include="*.py"'
 alias grepj='command grep -r --include="*.js" --include="*.ts"'
 alias grepc='command grep -r --include="*.c" --include="*.h" --include="*.cpp" --include="*.hpp"'
-alias diff='command diff --color=auto 2>/dev/null || command diff'
+alias gri='command grep -i'
+alias grr='command grep -r'
+alias grri='command grep -ri'
+alias grl='command grep -rl'
+alias grc='command grep -c'
+alias grepw='command grep -w'
+alias grex='command grep -r --exclude-dir=.git --exclude-dir=node_modules'
+alias diff='command diff --color=auto || command diff'
 alias w='command w 2>/dev/null || echo "no w"'
 alias wdiff='command diff --side-by-side --width=160'
-alias vdiff='_x nvim -d 2>/dev/null || _x vimdiff 2>/dev/null || echo "no vimdiff"'
+alias vdiff='_x nvim -d || _x vimdiff 2>/dev/null || echo "no vimdiff"'
 alias less='command less -RFX'
 alias more='command less'
 alias zgrep='command zgrep --color=auto'
@@ -1362,7 +1372,7 @@ alias umnt='_x sudo umount 2>/dev/null || echo "no umount"'
 ##### Power / System info
 alias mem='_x free -h 2>/dev/null || echo "no mem info"'
 alias cpu='_x lscpu 2>/dev/null || echo "no cpu info"'
-alias disk='_x df -h 2>/dev/null || _x df 2>/dev/null'
+alias disk='_x df -h || _x df 2>/dev/null'
 alias disks='_x lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT 2>/dev/null || echo "no disk tool"'
 alias sensors='_x sensors 2>/dev/null || echo "no sensors"'
 temp() { cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null | head -1 | awk '{print $1/1000 "°C"}' || echo "no temp info"; }
@@ -1383,7 +1393,7 @@ alias weather='_x curl -fsSL wttr.in 2>/dev/null || echo "curl needed"'
 alias tl='_x tldr 2>/dev/null || echo "tldr needed"'
 
 ##### Network / Containers
-alias wifi='_x nmtui 2>/dev/null || _x nmcli 2>/dev/null || echo "no network tool"'
+alias wifi='_x nmtui || _x nmcli 2>/dev/null || echo "no network tool"'
 alias bt='_x bluetoothctl 2>/dev/null || echo "no bluetooth"'
 alias docker='_x docker'
 alias dockercom='_x docker compose'

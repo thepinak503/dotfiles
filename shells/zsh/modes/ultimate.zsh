@@ -6,11 +6,11 @@
 # =============================================================================
 
 # =============================================================================
-alias ls='eza --icons=auto --group-directories-first 2>/dev/null || command ls'
-alias ll='eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
-alias la='eza -a --icons=auto --group-directories-first 2>/dev/null || command ls -A'
-alias lal='eza -la --icons=auto --group-directories-first 2>/dev/null || command ls -la'
-alias lsl='eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
+alias ls='eza --icons=auto --group-directories-first || command ls'
+alias ll='eza -l --icons=auto --group-directories-first || command ls -l'
+alias la='eza -a --icons=auto --group-directories-first || command ls -A'
+alias lal='eza -la --icons=auto --group-directories-first || command ls -la'
+alias lsl='eza -l --icons=auto --group-directories-first || command ls -l'
 
 alias ..='cd ..'
 alias ...='cd ../..'

@@ -32,11 +32,11 @@ alias c 'clear'
 alias cls 'clear'
 
 ##### LS / Listing
-alias ls 'eza --icons=auto --group-directories-first 2>/dev/null || command ls'
-alias ll 'eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
-alias la 'eza -a --icons=auto --group-directories-first 2>/dev/null || command ls -A'
-alias lal 'eza -la --icons=auto --group-directories-first 2>/dev/null || command ls -la'
-alias lsl 'eza -l --icons=auto --group-directories-first 2>/dev/null || command ls -l'
+alias ls 'eza --icons=auto --group-directories-first || command ls'
+alias ll 'eza -l --icons=auto --group-directories-first || command ls -l'
+alias la 'eza -a --icons=auto --group-directories-first || command ls -A'
+alias lal 'eza -la --icons=auto --group-directories-first || command ls -la'
+alias lsl 'eza -l --icons=auto --group-directories-first || command ls -l'
 alias lsa 'ls -a'
 alias lsd 'ls -d */'
 alias lsdot 'ls -d .*'
@@ -48,9 +48,9 @@ alias ltree 'eza --tree --level=3 --icons=auto 2>/dev/null || find . -maxdepth 3
 alias l1 'ls -1'
 alias lh 'ls -lhS'
 alias lr 'ls -lR'
-alias cat 'bat --paging=never 2>/dev/null || command cat'
-alias grep 'rg 2>/dev/null || command grep'
-alias find 'fd 2>/dev/null || command find'
+alias cat 'command cat'
+alias grep 'command grep --color=auto'
+alias find '_x fd || command find'
 alias duh 'du -sh'
 alias dfh 'df -h'
 alias freeh 'free -h'
@@ -856,8 +856,8 @@ alias caldate 'cal'
 alias nproc 'nproc 2>/dev/null || sysctl -n hw.ncpu'
 alias release 'cat /etc/os-release 2>/dev/null || cat /usr/lib/os-release'
 alias arch 'uname -m'
-alias vim 'nvim 2>/dev/null || command vim'
-alias sv 'nvim 2>/dev/null || command vim'
+alias vim 'nvim || command vim'
+alias sv 'nvim || command vim'
 alias nv 'nvim'
 alias codel 'code .'
 alias micro 'micro'
@@ -972,7 +972,7 @@ alias coinflip 'awk "BEGIN{srand();print rand()<0.5?\"heads\":\"tails\"}"'
 function dice; echo (random 1 6); end
 alias randpw 'openssl rand -base64 16 2>/dev/null || python3 -c "import secrets; print(secrets.token_urlsafe(16))"'
 alias sha 'shasum -a 256'
-alias md5sum 'md5 2>/dev/null || command md5sum'
+alias md5sum 'md5 || command md5sum'
 alias hex 'xxd'
 alias base64e 'base64'
 alias base64d 'base64 -d'
@@ -990,7 +990,7 @@ alias info 'info'
 alias what 'type'
 alias ali 'alias'
 alias envg 'env | grep'
-alias fn='functions 2>/dev/null || command -v'
+alias fn='functions || command -v'
 alias dsync 'dot_sync'
 alias chmode 'export DOTFILES_MODE'
 function modestat; echo "Mode: $DOTFILES_MODE"; end
@@ -3476,6 +3476,9 @@ alias pacf "pacman -F"
 alias pacfs "pacman -Fs"
 alias pacmir "'sudo pacman-mirrors -f 5' 2>/dev/null || true"
 alias pacmiru "'sudo pacman-mirrors -u' 2>/dev/null || true"
+alias ratemir "'rate-mirrors --save /tmp/arch-mirrorlist arch; and sudo cp /tmp/arch-mirrorlist /etc/pacman.d/mirrorlist' 2>/dev/null || true"
+alias ratemirc "'rate-mirrors --save /tmp/cachyos-mirrorlist cachyos; and sudo cp /tmp/cachyos-mirrorlist /etc/pacman.d/cachyos-mirrorlist' 2>/dev/null || true"
+alias ratemirall "'rate-mirrors --save /tmp/arch-mirrorlist arch; and sudo cp /tmp/arch-mirrorlist /etc/pacman.d/mirrorlist; and rate-mirrors --save /tmp/cachyos-mirrorlist cachyos; and sudo cp /tmp/cachyos-mirrorlist /etc/pacman.d/cachyos-mirrorlist; and rate-mirrors --save /tmp/archlinuxcn-mirrorlist archlinuxcn; and sudo cp /tmp/archlinuxcn-mirrorlist /etc/pacman.d/archlinuxcn-mirrorlist; and rate-mirrors --save /tmp/blackarch-mirrorlist blackarch; and sudo cp /tmp/blackarch-mirrorlist /etc/pacman.d/blackarch-mirrorlist; and rate-mirrors --save /tmp/chaotic-mirrorlist chaotic-aur; and sudo cp /tmp/chaotic-mirrorlist /etc/pacman.d/chaotic-mirrorlist; and rate-mirrors --save /tmp/arch4edu-mirrorlist arch4edu; and sudo cp /tmp/arch4edu-mirrorlist /etc/pacman.d/arch4edu-mirrorlist' 2>/dev/null || true"
 alias pact "'pactree' 2>/dev/null || true"
 alias pactd "'pactree -d' 2>/dev/null || true"
 alias pactr "'pactree -r' 2>/dev/null || true"

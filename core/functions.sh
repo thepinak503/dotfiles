@@ -2423,7 +2423,7 @@ stamp() { printf "%s" "$(date '+%F %T')  $*"; [ $# -gt 0 ] && echo; }
 
 stampcmd() { local o; o="$("$@" 2>&1)"; stamp "$o"; }
 
-clip() { if [ $# -gt 0 ]; then _x xclip -selection clipboard < "$1" 2>/dev/null || _x wl-copy < "$1" 2>/dev/null || _x pbcopy < "$1" 2>/dev/null; else _x xclip -selection clipboard 2>/dev/null || _x wl-copy 2>/dev/null || _x pbcopy 2>/dev/null; fi; }
+clip() { if [ $# -gt 0 ]; then _x xclip -selection clipboard < "$1" || _x wl-copy < "$1" || _x pbcopy < "$1" 2>/dev/null; else _x xclip -selection clipboard || _x wl-copy || _x pbcopy 2>/dev/null; fi; }
 
 path_remove() { PATH="$(echo -n "$PATH" | awk -v RS=: -v ORS=: "\$0 != \"$1\"" | sed 's/:$//')"; }
 
@@ -2454,7 +2454,7 @@ extract() { [ $# -eq 0 ] && { echo "usage: extract <file>"; return 1; }; for f i
 
 colors() { for i in {0..15}; do printf "\e[48;5;${i}m  \e[0m"; done; echo; for i in {16..231}; do printf "\e[48;5;${i}m \e[0m"; (( (i-16)%36==35 )) && echo; done; echo; for i in {232..255}; do printf "\e[48;5;${i}m  \e[0m"; done; echo; }
 
-wanip() { _x dig +short myip.opendns.com @resolver1.opendns.com 2>/dev/null || _x curl -s ifconfig.me 2>/dev/null || _x curl -s icanhazip.com 2>/dev/null; }
+wanip() { _x dig +short myip.opendns.com @resolver1.opendns.com || _x curl -s ifconfig.me || _x curl -s icanhazip.com 2>/dev/null; }
 
 # -----------------------------------------------------------------------------
 
@@ -2478,20 +2478,20 @@ _linux_only() { _is_linux && "$@" || echo "Linux only" >&2; }
 
 
 ip_show() { if _is_linux; then _x ip addr show "$@"; else _x ifconfig "$@"; fi; }
-disk_usage() { if _is_linux; then _x df -h "$@"; else _x df -h "$@" 2>/dev/null || _x df "$@"; fi; }
-mem_info() { if _is_linux; then _x free -h; else _x vm_stat 2>/dev/null || _x free -h; fi; }
+disk_usage() { if _is_linux; then _x df -h "$@"; else _x df -h "$@" || _x df "$@"; fi; }
+mem_info() { if _is_linux; then _x free -h; else _x vm_stat || _x free -h; fi; }
 cpu_info() { if _is_linux; then _x lscpu; else _x sysctl -n machdep.cpu.brand_string; fi; }
-pkg_list() { if _is_linux; then _x pacman -Q 2>/dev/null || _x dpkg -l 2>/dev/null || _x rpm -qa 2>/dev/null; else _x brew list 2>/dev/null; fi; }
+pkg_list() { if _is_linux; then _x pacman -Q || _x dpkg -l || _x rpm -qa 2>/dev/null; else _x brew list 2>/dev/null; fi; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
 
 
-service_list() { if _is_linux; then _x systemctl list-units --type=service 2>/dev/null || _x service --status-all 2>/dev/null; else _x launchctl list 2>/dev/null; fi; }
+service_list() { if _is_linux; then _x systemctl list-units --type=service || _x service --status-all 2>/dev/null; else _x launchctl list 2>/dev/null; fi; }
 ssh_keys() { for k in "$HOME"/.ssh/id_*; do [ -f "$k" ] && echo "${k##*/}"; done; }
-open_file() { _x xdg-open "$@" 2>/dev/null || _x open "$@" 2>/dev/null || echo "no opener"; }
-copy_cmd() { _x xclip -selection clipboard "$@" 2>/dev/null || _x wl-copy "$@" 2>/dev/null || _x pbcopy "$@" 2>/dev/null || echo "no clipboard tool"; }
-paste_cmd() { _x xclip -selection clipboard -o 2>/dev/null || _x wl-paste 2>/dev/null || _x pbpaste 2>/dev/null || echo "no clipboard tool"; }
+open_file() { _x xdg-open "$@" || _x open "$@" 2>/dev/null || echo "no opener"; }
+copy_cmd() { _x xclip -selection clipboard "$@" || _x wl-copy "$@" || _x pbcopy "$@" 2>/dev/null || echo "no clipboard tool"; }
+paste_cmd() { _x xclip -selection clipboard -o || _x wl-paste || _x pbpaste 2>/dev/null || echo "no clipboard tool"; }
 
 cdf() { cd "$(dirname "$(find . -name "$1" -maxdepth 5 -type f 2>/dev/null | head -1)")" 2>/dev/null || echo "not found: $1"; }
 swap() { mv "$1" "${1}.bak" && mv "$2" "$1" && mv "${1}.bak" "$2"; }

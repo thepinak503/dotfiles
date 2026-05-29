@@ -15,11 +15,11 @@
 # Fallback: ls with colorized output
 
 if command -v eza >/dev/null 2>&1; then
-    alias ls='eza --icons=auto --group-directories-first --time-style=long-iso 2>/dev/null || command ls --color=auto'
-    alias ll='eza -l --icons=auto --group-directories-first --time-style=long-iso --git 2>/dev/null || command ls -l --color=auto'
-    alias la='eza -a --icons=auto --group-directories-first 2>/dev/null || command ls -A --color=auto'
-    alias lal='eza -la --icons=auto --group-directories-first --time-style=long-iso --git 2>/dev/null || command ls -la --color=auto'
-    alias lsl='eza -l --icons=auto --group-directories-first --time-style=long-iso 2>/dev/null || command ls -l --color=auto'
+    alias ls='eza --icons=auto --group-directories-first --time-style=long-iso || command ls --color=auto'
+    alias ll='eza -l --icons=auto --group-directories-first --time-style=long-iso --git || command ls -l --color=auto'
+    alias la='eza -a --icons=auto --group-directories-first || command ls -A --color=auto'
+    alias lal='eza -la --icons=auto --group-directories-first --time-style=long-iso --git || command ls -la --color=auto'
+    alias lsl='eza -l --icons=auto --group-directories-first --time-style=long-iso || command ls -l --color=auto'
     alias lt='eza -T --level=2 --icons=auto --group-directories-first 2>/dev/null || tree -L 2'
     alias lta='eza -T --level=3 --icons=auto --group-directories-first -a 2>/dev/null || tree -L 3 -a'
     alias lsf='eza --icons=auto --group-directories-first --only-files 2>/dev/null || ls -p'

@@ -1479,7 +1479,7 @@ sysinfo_compare() {
 
 net_scan() { _x nmap -sn "${1:-192.168.1.0/24}" 2>/dev/null || echo "nmap needed"; }
 net_scan_ports() { _x nmap -sT "${1:-192.168.1.1}" 2>/dev/null || echo "nmap needed"; }
-net_trace() { _x mtr -r -c 10 "${1:-8.8.8.8}" 2>/dev/null || _x traceroute "${1:-8.8.8.8}" 2>/dev/null || echo "no trace tool"; }
+net_trace() { _x mtr -r -c 10 "${1:-8.8.8.8}" || _x traceroute "${1:-8.8.8.8}" 2>/dev/null || echo "no trace tool"; }
 net_bw() { _x iperf3 -c "$1" 2>/dev/null || echo "iperf3 needed"; }
 net_bw_server() { _x iperf3 -s 2>/dev/null || echo "iperf3 needed"; }
 net_bw_test() { _x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | python3 - --simple 2>/dev/null || echo "speedtest-cli needed"; }
