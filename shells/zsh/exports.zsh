@@ -197,8 +197,12 @@ fi
 # SHELLS
 # -----------------------------------------------------------------------------
 
-if command -v bash >/dev/null 2>&1; then
-    export BASH_ENV="${BASH_ENV:-$HOME/.bashrc}"
+if command -v bash > /dev/null 2>&1; then
+    # NOTE: BASH_ENV is intentionally NOT set here.
+    # Setting BASH_ENV=$HOME/.bashrc causes every non-interactive bash process
+    # (makepkg, fakeroot, AUR build hooks, sudo scripts) to source the full
+    # .bashrc, which pollutes build environments with aliases and PATH changes
+    # and was the root cause of package update failures.
     export BASH_LOADABLES_PATH="${BASH_LOADABLES_PATH:-/usr/lib/bash}"
 fi
 

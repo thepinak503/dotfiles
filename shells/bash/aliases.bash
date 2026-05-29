@@ -107,7 +107,7 @@ alias lsdot='ls -d .*'
 alias lsf='ls -F'
 alias lsbig='ls -lS | head -20'
 alias lshidden='ls -d .* 2>/dev/null'
-alias tree='_x eza -T --icons || _x tree -CAhF --dirsfirst 2>/dev/null || echo "tree needed"'
+alias tree='_x eza -T --icons=auto --group-directories-first || command tree -CAhF --dirsfirst 2>/dev/null || echo "tree/eza needed"'
 alias ltree='eza --tree --level=3 --icons=auto 2>/dev/null || find . -maxdepth 3 -print'
 alias l1='ls -1'
 alias l='ls -CF'
@@ -146,7 +146,7 @@ alias treed='_x eza -T --only-dirs || _x tree -CAFd 2>/dev/null || echo "tree ne
 
 ##### Cat/View/Pager
 alias cat='command cat'
-alias find='fd || command find'
+# Note: 'find' is NOT aliased — fd has different syntax and shadowing system find breaks scripts
 alias duh='du -sh'
 alias dfh='df -h'
 alias freeh='free -h'

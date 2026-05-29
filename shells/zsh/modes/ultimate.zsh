@@ -115,8 +115,19 @@ alias meminfo='free -h 2>/dev/null || vm_stat 2>/dev/null'
 
 alias psg='ps aux | grep -v grep | grep -i'
 
-alias update='sudo apt update && sudo apt upgrade -y 2>/dev/null || sudo dnf upgrade -y 2>/dev/null || sudo pacman -Syu 2>/dev/null || brew update && brew upgrade 2>/dev/null'
-alias cleanup='sudo apt autoremove -y 2>/dev/null || sudo dnf autoremove -y 2>/dev/null || sudo pacman -Rns $(pacman -Qtdq) 2>/dev/null || brew cleanup 2>/dev/null'
+# Distro-aware update — detects the correct package manager instead of blindly chaining
+update() {
+    if command -v paru > /dev/null 2>&1; then paru -Syu
+    elif command -v yay > /dev/null 2>&1; then yay -Syu
+    elif command -v pacman > /dev/null 2>&1; then sudo pacman -Syu
+    elif command -v apt > /dev/null 2>&1; then sudo apt update && sudo apt upgrade -y
+    elif command -v dnf > /dev/null 2>&1; then sudo dnf upgrade -y
+    elif command -v zypper > /dev/null 2>&1; then sudo zypper update -y
+    elif command -v brew > /dev/null 2>&1; then brew update && brew upgrade
+    else echo "update: no known package manager found" >&2; return 1
+    fi
+}
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq 2>/dev/null) 2>/dev/null || sudo apt autoremove -y 2>/dev/null || sudo dnf autoremove -y 2>/dev/null || brew cleanup 2>/dev/null || true'
 
 # =============================================================================
 
@@ -141,12 +152,11 @@ alias reload='source ~/.zshrc'
 # =============================================================================
 
 # =============================================================================
-if command -v starship >/dev/null 2>&1; then
-    if [[ "$(uname)" == "Darwin" ]]; then
-        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-mac.toml"
-    else
-        export STARSHIP_CONFIG="$DOTFILES_DIR/apps/starship-linux.toml"
-    fi
+if command -v starship > /dev/null 2>&1; then
+    # Use the centrally configured starship.toml from XDG; fall back gracefully if absent
+    _starship_cfg="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
+    [[ -f "$_starship_cfg" ]] && export STARSHIP_CONFIG="$_starship_cfg"
+    unset _starship_cfg
 fi
 
 # =============================================================================
@@ -159,30 +169,17 @@ fi
 # =============================================================================
 
 # =============================================================================
-export HISTSIZE=100000
-export SAVEHIST=100000
-export HISTFILE=~/.zsh_history
-export HISTTIMEFORMAT="%F %T "
+# History settings are defined in .zshrc to avoid conflicts with INC_APPEND_HISTORY + SHARE_HISTORY
+# export HISTSIZE / SAVEHIST / HISTFILE are set there too
 
 # =============================================================================
 
 # =============================================================================
-setopt AUTO_CD
-setopt CD_SILENT
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
+# Zsh options set in .zshrc — only add supplemental ones not already set there
 setopt GLOB_COMPLETE
 setopt GLOB_DOTS
 setopt HASH_LISTALL
 setopt HIST_VERIFY
-setopt APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_FIND_NO_DUPS
-setopt INC_APPEND_HISTORY
-setopt SHARE_HISTORY
-setopt EXTENDED_HISTORY
 
 # =============================================================================
 

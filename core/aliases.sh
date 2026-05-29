@@ -52,7 +52,7 @@ alias ll='_x eza -l --group-directories-first --icons || _x exa -l || command ls
 alias la='_x eza -la --group-directories-first --icons || _x exa -la || command ls -la'
 alias lal='_x eza -la --group-directories-first --icons || _x exa -la || command ls -la'
 alias lsl='_x eza -l --group-directories-first --icons || _x exa -l || command ls -l'
-alias tree='_x eza -T --icons || _x tree 2>/dev/null || echo "tree/eza needed"'
+alias tree='_x eza -T --icons=auto --group-directories-first || command tree -CAhF --dirsfirst 2>/dev/null || echo "tree/eza needed"'
 alias dirs='ls -d */'
 alias ldir='ls -d */'
 alias lf='find . -maxdepth 1 -type f -exec command ls -lh {} + 2>/dev/null | sort -k5 -h'
