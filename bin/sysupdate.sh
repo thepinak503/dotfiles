@@ -23,3 +23,11 @@ else
 fi
 
 echo "✅ Update Complete!"
+echo "🚀 Generating System Summary..."
+sleep 1
+clear
+if command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+elif command -v neofetch >/dev/null 2>&1; then
+    neofetch
+fi

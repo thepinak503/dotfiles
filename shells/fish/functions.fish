@@ -6498,6 +6498,18 @@ end
 function decrypt_aes --description "AES decrypt file"
     _x openssl enc -aes-256-cbc -d -in $argv[1] -out (string replace -r '\.enc$' '' $argv[1]) 2>/dev/null; or echo "openssl needed"
 end
+# =============================================================================
+# DATE & TIME
+# =============================================================================
+function now
+    date +"%T"
+end
+function today
+    date +"%d/%m/%Y"
+end
+function time
+    date +"%H:%M:%S"
+end
 
 function disk_usage --description "Disk usage"
     _x df -h $argv[1] 2>/dev/null

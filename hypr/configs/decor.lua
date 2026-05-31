@@ -72,8 +72,10 @@ hl.config({
             noise              = 0.01,        -- Blur noise (adds texture, 0.0-1.0)
             contrast           = 0.8,         -- Blur contrast adjustment
             brightness         = 1.0,         -- Blur brightness
+            vibrancy           = 0.1696,      -- JaKooLit-style ultra glassmorphism
+            vibrancy_darkness  = 0.0,
             popups             = true,        -- Blur behind popup windows
-            popups_ignorealpha = 0.6,         -- Alpha threshold for popup blur
+            popups_ignorealpha = 0.2,         -- Alpha threshold for popup blur
             -- popups_blur_new removed in v0.55
         },
 

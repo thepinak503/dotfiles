@@ -13,6 +13,10 @@ alias -g X='| xargs'
 alias -g N='> /dev/null 2>&1'
 alias -g S='| sort'
 alias -g U='| uniq -c'
+##### Date & Time
+alias now='date +"%T"'
+alias today='date +"%d/%m/%Y"'
+alias time='date +"%H:%M:%S"'
 
 ##### Navigation
 alias ..='cd ..'

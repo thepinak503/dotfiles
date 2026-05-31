@@ -137,6 +137,10 @@ shopt -u expand_aliases
 case $- in *i*) if command -v fastfetch >/dev/null; then
     fastfetch -c ~/.config/fastfetch/config.jsonc 2>/dev/null
 fi;; esac
+##### Date & Time
+alias now='date +"%T"'
+alias today='date +"%d/%m/%Y"'
+alias time='date +"%H:%M:%S"'
 
 [[ -f "$DOTFILES_DIR/core/system-detect.sh" ]] && source "$DOTFILES_DIR/core/system-detect.sh"
 [[ -f "$DOTFILES_DIR/core/os_detect.sh" ]] && source "$DOTFILES_DIR/core/os_detect.sh"

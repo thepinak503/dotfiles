@@ -33,6 +33,9 @@ hl.curve("ws_switch",   { type = "bezier", points = { {0.68, -0.6}, {0.32, 1.6} 
 -- ease_in_out: Gentle, modern smooth fade transitions
 hl.curve("ease_in_out", { type = "bezier", points = { {0.25, 1.0},  {0.5, 1.0} } })
 
+-- md3_decel: Material Design 3 deceleration (The JaKooLit/macOS glassy fade)
+hl.curve("md3_decel",   { type = "bezier", points = { {0.05, 0.7},  {0.1, 1.0} } })
+
 -- =============================================================================
 -- WINDOW ANIMATIONS
 -- =============================================================================
@@ -61,10 +64,10 @@ hl.animation({ leaf = "borderangle",      enabled = true, speed = 30, bezier = "
 -- =============================================================================
 
 -- General window fade/opacity
-hl.animation({ leaf = "fade",             enabled = true, speed = 5,  bezier = "ease_in_out" })
+hl.animation({ leaf = "fade",             enabled = true, speed = 3,  bezier = "md3_decel" })
 
 -- Inactive window dimming overlay
-hl.animation({ leaf = "fadeDim",          enabled = true, speed = 5,  bezier = "ease_in_out" })
+hl.animation({ leaf = "fadeDim",          enabled = true, speed = 3,  bezier = "md3_decel" })
 
 -- =============================================================================
 -- WORKSPACE ANIMATIONS
