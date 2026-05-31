@@ -156,7 +156,7 @@ hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 
 -- Wallpapers
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(scripts .. "/wallpaper-fetch"))
-hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(scripts .. "/wallpaper-fetch --next"))
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(scripts .. "/wallpaper-fetch --any"))
 
 -- Clipboard
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))

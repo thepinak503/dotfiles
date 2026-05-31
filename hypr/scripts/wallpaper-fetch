@@ -26,7 +26,7 @@ usage() {
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --nord|--next|--dark|--light) MODE="$1"; shift ;;
+        --nord|--next|--dark|--light|--any) MODE="$1"; shift ;;
         --quiet|-q) QUIET="--quiet"; shift ;;
         *) usage ;;
     esac
@@ -38,15 +38,16 @@ apply_wallpaper() {
     local old
     old=$(hyprctl hyprpaper listloaded 2>/dev/null || true)
     hyprctl hyprpaper preload "$path" >/dev/null 2>&1 || true
-    hyprctl hyprpaper wallpaper ",$path" 2>/dev/null || true
+    hyprctl hyprpaper wallpaper ",$path" >/dev/null 2>&1 || true
     for img in $old; do
         if [[ "$img" != "$path" ]]; then
             hyprctl hyprpaper unload "$img" >/dev/null 2>&1 || true
         fi
     done
     # update hyprpaper.conf for persistence
-    echo "preload = $path" > "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
-    echo "wallpaper = , $path" >> "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
+    echo "ipc = on" > "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
+    echo "preload = $path" >> "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
+    echo "wallpaper = ,$path" >> "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
     [[ -z "$QUIET" ]] && notify -u low -i "$path" "Wallpaper" "Changed"
 }
 
@@ -186,6 +187,16 @@ download_unsplash() {
     curl -sfL "$img_url" -o "$path" 2>/dev/null && echo "$path"
 }
 
+download_wallhaven() {
+    local url="https://wallhaven.cc/api/v1/search?categories=111&purity=100&sorting=random&ratios=16x9,16x10"
+    local img_url
+    img_url=$(curl -sfL "$url" | python3 -c "import sys, json; data=json.load(sys.stdin).get('data', []); print(data[0]['path']) if data else sys.exit(1)" 2>/dev/null)
+    [[ -z "$img_url" ]] && return 1
+    local ext="${img_url##*.}"
+    local path="$WALLPAPER_DIR/wallhaven_$(date +%s).$ext"
+    curl -sfL "$img_url" -o "$path" 2>/dev/null && echo "$path"
+}
+
 # --- Main ---
 
 case "$MODE" in
@@ -201,15 +212,19 @@ case "$MODE" in
     --light)
         path=$(nord_light)
         ;;
-    auto)
-        if [[ -f "$API_KEY_FILE" ]]; then
-            path=$(download_unsplash)
+    auto|--any)
+        path=$(download_wallhaven)
+        if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
+            if [[ -f "$API_KEY_FILE" ]]; then
+                path=$(download_unsplash)
+            fi
         fi
         if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
             path=$(download_github)
         fi
         if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
-            path=$(fetch_random_local)
+            local wp_dir="$HOME/Pictures/Wallpapers"
+            path=$(find "$wp_dir" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" \) 2>/dev/null | shuf -n 1)
         fi
         if [[ -z "$path" ]] || [[ ! -f "$path" ]]; then
             path=$(nord_random)
