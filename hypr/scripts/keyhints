@@ -1,9 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
+
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
-KEYBIND_FILE="$HOME/.local/share/dotfiles/hypr/configs/keybinds.lua"
+KEYBIND_FILE="$DOTFILES_DIR/hypr/configs/keybinds.lua"
 
 if ! command -v rofi &>/dev/null; then
     notify -u critical "Keyhints" "rofi is not installed"

@@ -3,7 +3,9 @@
 
 set -euo pipefail
 
-"$HOME/.local/share/dotfiles/hypr/scripts/diagnose"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
+
+"$DOTFILES_DIR/hypr/scripts/diagnose"
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

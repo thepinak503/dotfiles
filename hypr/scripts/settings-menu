@@ -1,10 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
+
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
-CONFIG_DIR="$HOME/.local/share/dotfiles/hypr/configs"
-SCRIPTS_DIR="$HOME/.local/share/dotfiles/hypr/scripts"
+CONFIG_DIR="$DOTFILES_DIR/hypr/configs"
+SCRIPTS_DIR="$DOTFILES_DIR/hypr/scripts"
 
 if ! command -v rofi &>/dev/null; then
     notify -u critical "Settings" "rofi is not installed"

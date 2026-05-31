@@ -1,11 +1,11 @@
 #!/bin/bash
 # Reload waybar only
 
-DOTFILES="$HOME/.local/share/dotfiles"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
 
 pkill -9 -x waybar 2>/dev/null
 sleep 0.5
 
 # Use nohup to survive executor cleanup
-nohup waybar -c "$DOTFILES/waybar/config.jsonc" -s "$DOTFILES/waybar/style.css" >/dev/null 2>&1 &
-nohup waybar -c "$DOTFILES/waybar/config-bottom.jsonc" -s "$DOTFILES/waybar/style.css" >/dev/null 2>&1 &
+nohup waybar -c "$DOTFILES_DIR/waybar/config.jsonc" -s "$DOTFILES_DIR/waybar/style.css" >/dev/null 2>&1 &
+nohup waybar -c "$DOTFILES_DIR/waybar/config-bottom.jsonc" -s "$DOTFILES_DIR/waybar/style.css" >/dev/null 2>&1 &

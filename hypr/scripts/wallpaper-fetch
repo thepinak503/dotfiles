@@ -1,10 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
+
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
-WALLPAPER_DIR="$HOME/.local/share/dotfiles/wallpapers"
-API_KEY_FILE="$HOME/.local/share/dotfiles/.unsplash_key"
+WALLPAPER_DIR="$DOTFILES_DIR/wallpapers"
+API_KEY_FILE="$DOTFILES_DIR/.unsplash_key"
 CACHE_FILE="/tmp/wallpaper-list.json"
 STATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/hyprland-wallpaper-idx"
 QUIET=""
@@ -45,9 +47,9 @@ apply_wallpaper() {
         fi
     done
     # update hyprpaper.conf for persistence
-    echo "ipc = on" > "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
-    echo "preload = $path" >> "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
-    echo "wallpaper = ,$path" >> "$HOME/.local/share/dotfiles/hypr/hyprpaper.conf"
+    echo "ipc = on" > "$DOTFILES_DIR/hypr/hyprpaper.conf"
+    echo "preload = $path" >> "$DOTFILES_DIR/hypr/hyprpaper.conf"
+    echo "wallpaper = ,$path" >> "$DOTFILES_DIR/hypr/hyprpaper.conf"
     [[ -z "$QUIET" ]] && notify -u low -i "$path" "Wallpaper" "Changed"
 }
 

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
+
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
 if ! command -v hyprctl &>/dev/null; then
@@ -12,7 +14,7 @@ if command -v waybar &>/dev/null; then
     killall -q waybar 2>/dev/null || true
     sleep 0.2
     waybar & disown
-    waybar -c "$HOME/.local/share/dotfiles/waybar/config-bottom.jsonc" -s "$HOME/.local/share/dotfiles/waybar/style.css" & disown
+    waybar -c "$DOTFILES_DIR/waybar/config-bottom.jsonc" -s "$DOTFILES_DIR/waybar/style.css" & disown
 else
     notify -u low "Refresh" "waybar not found, skipping"
 fi

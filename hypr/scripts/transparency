@@ -1,11 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
+
 notify() { notify-send -a "Hyprland" -r 9999 "$@"; }
 
 STATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/hyprland-transparency"
-WINDOW_RULES="$HOME/.local/share/dotfiles/hypr/configs/windowrules.lua"
-DECOR_CFG="$HOME/.local/share/dotfiles/hypr/configs/decor.lua"
+WINDOW_RULES="$DOTFILES_DIR/hypr/configs/windowrules.lua"
+DECOR_CFG="$DOTFILES_DIR/hypr/configs/decor.lua"
 
 if ! command -v hyprctl &>/dev/null; then
     notify -u critical "Transparency" "hyprctl not available"
