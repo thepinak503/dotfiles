@@ -78,31 +78,10 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + SHIFT + mouse:272", hl.dsp.window.resize(), { mouse = true })
 
 -- Active window resize (keyboard)
--- hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.resize({ x = -30, y = 0, relative = true }), { repeating = true })
--- hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.resize({ x = 30, y = 0, relative = true }), { repeating = true })
--- hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.resize({ x = 0, y = -30, relative = true }), { repeating = true })
--- hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.resize({ x = 0, y = 30, relative = true }), { repeating = true })
-
--- =============================================================================
--- RESIZE SUBMAP (Advanced Window Management)
--- =============================================================================
-hl.bind(mainMod, "R", function() hl.dispatch("submap", "resize") end)
-hl.config({
-    submap = {
-        resize = {
-            binde = {
-                { "", "h", "resizeactive", "-20 0" },
-                { "", "l", "resizeactive", "20 0" },
-                { "", "k", "resizeactive", "0 -20" },
-                { "", "j", "resizeactive", "0 20" },
-            },
-            bind = {
-                { "", "escape", "submap", "reset" },
-                { "", "return", "submap", "reset" },
-            }
-        }
-    }
-})
+hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.resize({ x = -30, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.resize({ x = 30, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.resize({ x = 0, y = -30, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.resize({ x = 0, y = 30, relative = true }), { repeating = true })
 
 -- Workspaces 1-9
 for i = 1, 9 do
