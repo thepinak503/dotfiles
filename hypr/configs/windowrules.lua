@@ -116,6 +116,19 @@ hl.window_rule({ match = { fullscreen = true }, idle_inhibit = "fullscreen" })
 hl.window_rule({ match = { class = "(mpv|vlc|spotify)" }, idle_inhibit = "always" })
 
 -- =============================================================================
+-- AUTHENTICATION & SECURITY (CINEMATIC DIMMING)
+-- =============================================================================
+-- Dim the rest of the screen when a password prompt appears for ultimate focus
+hl.window_rule({ match = { class = "polkit-gnome-authentication-agent-1" }, float = true, center = true })
+hl.window_rule({ match = { class = "org.kde.polkit-kde-authentication-agent-1" }, float = true, center = true })
+
+-- =============================================================================
+-- DIALOGS, FILE PICKERS, & POPUPS
+-- =============================================================================
+hl.window_rule({ match = { title = ".*(Open|Save|Choose|Select|Upload)( File| Folder| As)?.*" }, float = true, center = true, size = { "60%", "60%" } })
+hl.window_rule({ match = { title = ".*(Confirm|Warning|Error|Alert|Message|Properties|Settings).*" }, float = true, center = true })
+
+-- =============================================================================
 -- ADDITIONAL APPLICATION RULES
 -- =============================================================================
 
@@ -124,7 +137,8 @@ hl.window_rule({ match = { class = "flameshot" }, float = true })
 hl.window_rule({ match = { class = "org.gnome.Calculator" }, float = true, size = { "30%", "40%" } })
 hl.window_rule({ match = { class = "org.gnome.Nautilus" }, float = false })
 hl.window_rule({ match = { class = "Lxappearance" }, float = true })
-hl.window_rule({ match = { class = "imv" }, float = true })
+hl.window_rule({ match = { class = "imv" }, float = true, center = true, keep_aspect_ratio = true })
+hl.window_rule({ match = { class = "mpv" }, float = true, center = true, keep_aspect_ratio = true, size = { "60%", "60%" } })
 hl.window_rule({ match = { class = "qt5ct" }, float = true })
 hl.window_rule({ match = { class = "qt6ct" }, float = true })
 hl.window_rule({ match = { class = "nwg-look" }, float = true })

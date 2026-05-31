@@ -11,11 +11,11 @@
 # =============================================================================
 
 if command -v eza >/dev/null 2>&1; then
-    alias ls='eza --icons=auto --group-directories-first 2>/dev/null || ls --color=auto'
-    alias ll='eza -l --icons=auto --group-directories-first 2>/dev/null || ls -l'
-    alias la='eza -a --icons=auto --group-directories-first 2>/dev/null || ls -A'
-    alias lal='eza -la --icons=auto --group-directories-first 2>/dev/null || ls -la'
-    alias lsl='eza -l --icons=auto --group-directories-first 2>/dev/null || ls -l'
+    alias ls='eza --icons=auto --group-directories-first 2>/dev/null || ls --color=auto 2>/dev/null || ls -G'
+    alias ll='eza -l --icons=auto --group-directories-first 2>/dev/null || ls -l --color=auto 2>/dev/null || ls -lG'
+    alias la='eza -a --icons=auto --group-directories-first 2>/dev/null || ls -A --color=auto 2>/dev/null || ls -AG'
+    alias lal='eza -la --icons=auto --group-directories-first 2>/dev/null || ls -la --color=auto 2>/dev/null || ls -laG'
+    alias lsl='eza -l --icons=auto --group-directories-first 2>/dev/null || ls -l --color=auto 2>/dev/null || ls -lG'
 elif command -v exa >/dev/null 2>&1; then
     alias ls='exa --icons --group-directories-first'
     alias ll='exa -l --icons --group-directories-first'
@@ -127,8 +127,8 @@ alias meminfo='free -h 2>/dev/null || vm_stat'
 alias diskinfo='df -h'
 alias psg='ps aux | grep -v grep | grep -i'
 alias top='btop 2>/dev/null || htop 2>/dev/null || top'
-alias update='sudo apt update && sudo apt upgrade -y 2>/dev/null || sudo dnf upgrade -y 2>/dev/null || sudo pacman -Syu 2>/dev/null || brew update && brew upgrade'
-alias cleanup='sudo apt autoremove -y 2>/dev/null || sudo dnf autoremove -y 2>/dev/null || sudo pacman -Rns $(pacman -Qtdq) 2>/dev/null || brew cleanup'
+alias update='bash ~/.local/share/dotfiles/bin/sysupdate.sh'
+alias cleanup='bash ~/.local/share/dotfiles/bin/syscleanup.sh'
 alias journal='journalctl -xe --no-pager -n 50 2>/dev/null'
 alias sysinfo='fastfetch 2>/dev/null || neofetch 2>/dev/null'
 alias kernel='uname -a'

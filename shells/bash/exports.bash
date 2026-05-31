@@ -819,3 +819,12 @@ if command -v argocd >/dev/null 2>&1; then
 fi
 
 # =============================================================================
+# Absolute Performance & Parallelism (Speeds up compilations massively)
+export MAKEFLAGS="-j$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+export NINJAJOBS="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+export GOMAXPROCS="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+export CTEST_PARALLEL_LEVEL="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git 2>/dev/null || find . -type d -not -path '*/\.git/*'"
+# =============================================================================

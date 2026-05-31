@@ -96,8 +96,17 @@ export GOFLAGS="${GOFLAGS:--mod=mod}"
 # Tools
 export FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND:-rg --files --hidden --follow --no-ignore-vcs}"
 export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:---color=16 --height=40% --layout=reverse --border}"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --exclude .git 2>/dev/null || find . -type d -not -path '*/\.git/*'"
 export BAT_THEME="${BAT_THEME:-Nord}"
 export BAT_STYLE="${BAT_STYLE:-numbers,changes}"
+
+# Absolute Performance & Parallelism (Speeds up compilations massively)
+export MAKEFLAGS="-j$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+export NINJAJOBS="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+export GOMAXPROCS="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+export CTEST_PARALLEL_LEVEL="$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+
 export DELTA_FEATURES="${DELTA_FEATURES:-+line-numbers}"
 export EZA_COLORS="${EZA_COLORS:-di=36:ex=32}"
 export LESS="${LESS:-RFX}"

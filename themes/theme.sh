@@ -165,19 +165,9 @@ if command -v hyprctl >/dev/null 2>&1; then
     hyprctl reload 2>/dev/null || true
 fi
 
-# Waybar
+# Waybar (Graceful Hot-Reload for absolute cinema experience)
 if pgrep -x waybar >/dev/null 2>&1; then
-    killall waybar 2>/dev/null || true
-    sleep 0.3
-    if systemctl --user is-system-running >/dev/null 2>&1; then
-        systemctl --user stop waybar-top waybar-bottom 2>/dev/null || true
-        systemctl --user reset-failed waybar-top waybar-bottom 2>/dev/null || true
-        systemd-run --user --slice=app.slice --unit=waybar-top waybar -c "$REPO_DIR/waybar/config.jsonc" -s "$REPO_DIR/waybar/style.css"
-        systemd-run --user --slice=app.slice --unit=waybar-bottom waybar -c "$REPO_DIR/waybar/config-bottom.jsonc" -s "$REPO_DIR/waybar/style.css"
-    else
-        waybar -c "$REPO_DIR/waybar/config.jsonc" -s "$REPO_DIR/waybar/style.css" >/dev/null 2>&1 & disown
-        waybar -c "$REPO_DIR/waybar/config-bottom.jsonc" -s "$REPO_DIR/waybar/style.css" >/dev/null 2>&1 & disown
-    fi
+    killall -SIGUSR2 waybar 2>/dev/null || true
 fi
 
 # Swaync

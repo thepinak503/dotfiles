@@ -1,5 +1,18 @@
 #!/usr/bin/env zsh
 # Zsh-specific aliases - 2000 unique, no duplicates
+##### Zsh Global Aliases (The Ultimate Power-User Feature)
+# Global aliases allow you to pipe instantly. Example: `cat file.txt G error` -> `cat file.txt | grep -i error`
+alias -g G='| grep -i'
+alias -g L='| less'
+alias -g C='| wc -l'
+alias -g H='| head'
+alias -g T='| tail'
+alias -g F='| fzf'
+alias -g B='| bat'
+alias -g X='| xargs'
+alias -g N='> /dev/null 2>&1'
+alias -g S='| sort'
+alias -g U='| uniq -c'
 
 ##### Navigation
 alias ..='cd ..'
@@ -135,8 +148,16 @@ alias lauth='ls -lZ 2>/dev/null || true'
 alias lctx='ls -lZ 2>/dev/null || true'
 alias treed='_x eza -T --only-dirs --icons=auto || command tree -CAFd 2>/dev/null || echo "tree needed"'
 
-##### Cat/View/Pager
-alias cat='command cat'
+##### Cat/View/Pager (Syntax Highlighting)
+if command -v bat >/dev/null 2>&1; then
+    alias cat='bat --style=plain --paging=never'
+    alias cata='bat --style=full --paging=never'
+elif command -v batcat >/dev/null 2>&1; then
+    alias cat='batcat --style=plain --paging=never'
+    alias cata='batcat --style=full --paging=never'
+else
+    alias cat='command cat'
+fi
 # Note: 'find' is NOT aliased — fd has different syntax; shadowing system find breaks scripts
 alias duh='du -sh'
 alias dfh='df -h'

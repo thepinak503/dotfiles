@@ -9,9 +9,9 @@
 }
 
 window#waybar {
-  background: rgba(46, 52, 64, 0.55);
-  border-radius: 12px;
-  border: 1px solid rgba(76, 86, 106, 0.4);
+  background: rgba(30, 34, 42, 0.85);
+  border-radius: 100px;
+  border: 1px solid rgba(136, 192, 208, 0.3);
   color: #d8dee9;
   transition: background 0.3s ease, border-color 0.3s ease;
 }
@@ -45,9 +45,9 @@ tooltip label {
 }
 
 #workspaces button {
-  padding: 0 8px;
-  margin: 2px 2px;
-  border-radius: 10px;
+  padding: 0 10px;
+  margin: 4px 2px;
+  border-radius: 100px;
   background: rgba(59, 66, 82, 0.4);
   color: #4c566a;
   font-weight: normal;
@@ -57,10 +57,11 @@ tooltip label {
 }
 
 #workspaces button.active {
-  background: linear-gradient(135deg, rgba(94, 129, 172, 0.6), rgba(136, 192, 208, 0.4));
-  color: #eceff4;
-  font-weight: bold;
-  min-width: 32px;
+  background: linear-gradient(120deg, #88c0d0, #81a1c1);
+  color: #2e3440;
+  font-weight: 900;
+  min-width: 36px;
+  box-shadow: 0 0 10px rgba(136, 192, 208, 0.4);
 }
 
 #workspaces button.empty {

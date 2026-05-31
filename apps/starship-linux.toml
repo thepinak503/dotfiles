@@ -19,7 +19,7 @@ ${custom.root_warning}
 [░▒▓](bg:#a3aed2 fg:#090c0c)\
 $username\
 $hostname\
-[ 🐧 ](bg:#a3aed2 fg:#090c0c)\
+$os\
 [](bg:#769ff0 fg:#a3aed2)\
 $directory\
 [](fg:#769ff0 bg:#394260)\
@@ -125,7 +125,6 @@ style = "fg:#ff6b6b"
 format = '[$symbol]($style) '
 symbol = "💀"
 allow_windows = false
-detect_env_vars = ['SUDO_UID', 'SUDO_USER', 'SUDO_GID', 'SUDO_COMMAND', 'SUDO_PS1']
 
 # ─────────────────────────────────────────────────────────────────────────────────
 #  SECTION 2: IDENTITY — User · Host · Shell · Level · IP
@@ -162,6 +161,17 @@ disabled = false
 style = "fg:#6c7086"
 format = '[$localipv4]($style) '
 ssh_only = true
+
+[os]
+disabled = false
+style = "bg:#a3aed2 fg:#090c0c bold"
+format = "[ $symbol]($style)"
+[os.symbols]
+Arch = " "
+Debian = " "
+Ubuntu = " "
+Macos = " "
+Linux = " "
 
 # ─────────────────────────────────────────────────────────────────────────────────
 #  SECTION 3: DIRECTORY
@@ -881,26 +891,6 @@ format = '[[ $symbol($ram_used) ](fg:#a0a9cb bg:#212736)]($style)'
 disabled = false
 threshold = 75
 
-[os]
-disabled = true
-style = "bg:#212736"
-format = '[[ $symbol]($style) ]'
-symbols = {
-  Arch = "  ",
-  Debian = "  ",
-  Fedora = "  ",
-  NixOS = "  ",
-  Ubuntu = "  ",
-  Macos = "  ",
-  Windows = "  ",
-  Alpine = "  ",
-  CentOS = "  ",
-  Manjaro = "  ",
-  Mint = "  ",
-  RedHat = "  ",
-  SUSE = "  ",
-  Void = "  ",
-}
 
 # ─────────────────────────────────────────────────────────────────────────────────
 #  SECTION 11: TIME · BATTERY · DURATION · STATUS · JOBS

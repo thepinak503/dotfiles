@@ -162,4 +162,87 @@ unset _expand_aliases_was_on
   unset _du_file _du_age
 }
 
+# =============================================================================
+# ULTIMATE CINEMATIC FEATURES (Bash)
+# =============================================================================
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
+
+function x() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *.tar.zst)   tar --zstd -xf "$1" ;;
+            *.zst)       unzstd "$1"      ;;
+            *)           echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file!"
+    fi
+}
+
+function cheat() {
+    if [ -z "$1" ]; then
+        echo "Usage: cheat <language> <query>"
+        return 1
+    fi
+    curl -s "cht.sh/$1/$2" | bat --style=plain --language="$1"
+}
+
+function weather() {
+    curl -s "wttr.in/${1:-}?m"
+}
+
+fkill() {
+    local pid
+    if [ "$UID" != "0" ]; then
+        pid=$(ps -f -u $UID | sed 1d | fzf -m --prompt="Kill> " | awk '{print $2}')
+    else
+        pid=$(ps -ef | sed 1d | fzf -m --prompt="Kill> " | awk '{print $2}')
+    fi
+    if [ "x$pid" != "x" ]; then
+        echo $pid | xargs kill -${1:-9}
+        echo "💀 Killed process: $pid"
+    fi
+}
+
+fgbr() {
+    local branches branch
+    branches=$(git branch -a) &&
+    branch=$(echo "$branches" | fzf --prompt="Checkout branch> " | sed "s/.* //" | sed "s#remotes/[^/]*/##") &&
+    git checkout "$branch"
+}
+
+cpfile() {
+    if [ -z "$1" ]; then
+        echo "Usage: cpfile <filename>"
+        return 1
+    fi
+    if command -v wl-copy >/dev/null 2>&1; then
+        cat "$1" | wl-copy && echo "📋 Copied $1 to Wayland clipboard!"
+    elif command -v xclip >/dev/null 2>&1; then
+        cat "$1" | xclip -sel clip && echo "📋 Copied $1 to X11 clipboard!"
+    elif command -v pbcopy >/dev/null 2>&1; then
+        cat "$1" | pbcopy && echo "📋 Copied $1 to macOS clipboard!"
+    else
+        echo "❌ No clipboard utility found (wl-copy, xclip, pbcopy)."
+    fi
+}
+
 true

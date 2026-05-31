@@ -110,3 +110,13 @@ set -gx DOTNET_CLI_TELEMETRY_OPTOUT 1
 set -gx KUBE_EDITOR nvim
 set -gx GH_EDITOR nvim
 set -gx AWS_PAGER ""
+
+# Absolute Performance & Parallelism (Speeds up compilations massively)
+set -l cores (nproc 2>/dev/null; or sysctl -n hw.ncpu 2>/dev/null; or echo 4)
+set -gx MAKEFLAGS "-j$cores"
+set -gx NINJAJOBS "$cores"
+set -gx GOMAXPROCS "$cores"
+set -gx CTEST_PARALLEL_LEVEL "$cores"
+
+set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
+set -gx FZF_ALT_C_COMMAND "fd --type d --hidden --exclude .git 2>/dev/null; or find . -type d -not -path '*/\.git/*'"

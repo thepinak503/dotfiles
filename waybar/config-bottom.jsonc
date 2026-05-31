@@ -49,7 +49,6 @@
     "exec": "~/.local/share/dotfiles/waybar/scripts/theme.sh",
     "on-click": "~/.local/share/dotfiles/waybar/scripts/theme.sh toggle",
     "on-click-right": "~/.local/share/dotfiles/waybar/scripts/theme.sh menu",
-    "exec-if": "command -v yad >/dev/null 2>&1",
     "exec-timeout": 10,
     "interval": 60,
     "return-type": "json",

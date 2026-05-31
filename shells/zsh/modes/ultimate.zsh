@@ -116,6 +116,7 @@ alias meminfo='free -h 2>/dev/null || vm_stat 2>/dev/null'
 alias psg='ps aux | grep -v grep | grep -i'
 
 # Distro-aware update — detects the correct package manager instead of blindly chaining
+unalias update 2>/dev/null || true
 update() {
     if command -v paru > /dev/null 2>&1; then paru -Syu
     elif command -v yay > /dev/null 2>&1; then yay -Syu
@@ -127,7 +128,7 @@ update() {
     else echo "update: no known package manager found" >&2; return 1
     fi
 }
-alias cleanup='sudo pacman -Rns $(pacman -Qtdq 2>/dev/null) 2>/dev/null || sudo apt autoremove -y 2>/dev/null || sudo dnf autoremove -y 2>/dev/null || brew cleanup 2>/dev/null || true'
+alias cleanup='bash ~/.local/share/dotfiles/bin/syscleanup.sh'
 
 # =============================================================================
 

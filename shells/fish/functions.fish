@@ -41,7 +41,18 @@ end
 
 function cd --description "Change directory"
     if status is-interactive
-        builtin cd $argv; and ls -A
+        builtin cd $argv
+        if test $status -eq 0
+            echo ""
+            if type -q eza
+                eza --icons=auto --group-directories-first
+            else if type -q exa
+                exa --icons
+            else
+                ls --color=auto 2>/dev/null; or ls -G
+            end
+            echo ""
+        end
     else
         builtin cd $argv
     end
@@ -6507,4 +6518,89 @@ function archive_list --description "List archive contents"
         case '*.rar'; _x unrar l $argv[1]
     end 2>/dev/null
 end
+# =============================================================================
+# ULTIMATE CINEMATIC FEATURES (Fish)
+# =============================================================================
+function y --description "Yazi with cwd-on-exit"
+    set -l tmp (mktemp -t "yazi-cwd.XXXXXX")
+    yazi $argv --cwd-file="$tmp"
+    if set -l cwd (cat -- "$tmp"); and test -n "$cwd"; and test "$cwd" != "$PWD"
+        cd -- "$cwd"
+    end
+    rm -f -- "$tmp"
+end
 
+function x --description "Universal extractor"
+    if test -f "$argv[1]"
+        switch "$argv[1]"
+            case '*.tar.bz2'; tar xjf "$argv[1]"
+            case '*.tar.gz'; tar xzf "$argv[1]"
+            case '*.bz2'; bunzip2 "$argv[1]"
+            case '*.rar'; unrar x "$argv[1]"
+            case '*.gz'; gunzip "$argv[1]"
+            case '*.tar'; tar xf "$argv[1]"
+            case '*.tbz2'; tar xjf "$argv[1]"
+            case '*.tgz'; tar xzf "$argv[1]"
+            case '*.zip'; unzip "$argv[1]"
+            case '*.Z'; uncompress "$argv[1]"
+            case '*.7z'; 7z x "$argv[1]"
+            case '*.tar.zst'; tar --zstd -xf "$argv[1]"
+            case '*.zst'; unzstd "$argv[1]"
+            case '*'; echo "'$argv[1]' cannot be extracted via x()"
+        end
+    else
+        echo "'$argv[1]' is not a valid file!"
+    end
+end
+
+function cheat --description "Instant Cheatsheets"
+    if test -z "$argv[1]"
+        echo "Usage: cheat <language> <query>"
+        return 1
+    end
+    curl -s "cht.sh/$argv[1]/$argv[2]" | bat --style=plain --language="$argv[1]"
+end
+
+function weather --description "Instant Weather"
+    if test -z "$argv[1]"
+        curl -s "wttr.in/?m"
+    else
+        curl -s "wttr.in/$argv[1]?m"
+    end
+end
+
+function fkill --description "Fuzzy kill process"
+    set -l pid
+    if test (id -u) -ne 0
+        set pid (ps -f -u (id -u) | sed 1d | fzf -m --prompt="Kill> " | awk '{print $2}')
+    else
+        set pid (ps -ef | sed 1d | fzf -m --prompt="Kill> " | awk '{print $2}')
+    end
+    if test -n "$pid"
+        echo $pid | xargs kill -9
+        echo "💀 Killed process: $pid"
+    end
+end
+
+function fgbr --description "Fuzzy checkout git branch"
+    set -l branch (git branch -a | fzf --prompt="Checkout branch> " | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+    if test -n "$branch"
+        git checkout "$branch"
+    end
+end
+
+function cpfile --description "Cross platform file copy"
+    if test -z "$argv[1]"
+        echo "Usage: cpfile <filename>"
+        return 1
+    end
+    if type -q wl-copy
+        cat "$argv[1]" | wl-copy; and echo "📋 Copied $argv[1] to Wayland clipboard!"
+    else if type -q xclip
+        cat "$argv[1]" | xclip -sel clip; and echo "📋 Copied $argv[1] to X11 clipboard!"
+    else if type -q pbcopy
+        cat "$argv[1]" | pbcopy; and echo "📋 Copied $argv[1] to macOS clipboard!"
+    else
+        echo "❌ No clipboard utility found (wl-copy, xclip, pbcopy)."
+    end
+end

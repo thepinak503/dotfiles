@@ -94,8 +94,8 @@ alias sysinfo='cat /etc/os-release 2>/dev/null | head -5 || sw_vers 2>/dev/null 
 # PACKAGE MANAGEMENT
 # =============================================================================
 
-alias update='sudo apt update && sudo apt upgrade -y 2>/dev/null || sudo dnf upgrade -y 2>/dev/null || sudo pacman -Syu 2>/dev/null || brew update && brew upgrade 2>/dev/null || echo "Package manager not found"'
-alias cleanup='sudo apt autoremove -y 2>/dev/null || sudo dnf autoremove -y 2>/dev/null || sudo pacman -Rns $(pacman -Qtdq) 2>/dev/null || brew cleanup 2>/dev/null || echo "Cleanup not available"'
+alias update='bash ~/.local/share/dotfiles/bin/sysupdate.sh'
+alias cleanup='bash ~/.local/share/dotfiles/bin/syscleanup.sh'
 
 # =============================================================================
 # NETWORK

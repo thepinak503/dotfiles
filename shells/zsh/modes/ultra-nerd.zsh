@@ -15,11 +15,11 @@
 # Fallback: ls with colorized output
 
 if command -v eza >/dev/null 2>&1; then
-    alias ls='eza --icons=auto --group-directories-first --time-style=long-iso || command ls --color=auto'
-    alias ll='eza -l --icons=auto --group-directories-first --time-style=long-iso --git || command ls -l --color=auto'
-    alias la='eza -a --icons=auto --group-directories-first || command ls -A --color=auto'
-    alias lal='eza -la --icons=auto --group-directories-first --time-style=long-iso --git || command ls -la --color=auto'
-    alias lsl='eza -l --icons=auto --group-directories-first --time-style=long-iso || command ls -l --color=auto'
+    alias ls='eza --icons=auto --group-directories-first --time-style=long-iso || ls --color=auto 2>/dev/null || ls -G'
+    alias ll='eza -l --icons=auto --group-directories-first --time-style=long-iso --git || ls -l --color=auto 2>/dev/null || ls -lG'
+    alias la='eza -a --icons=auto --group-directories-first || ls -A --color=auto 2>/dev/null || ls -AG'
+    alias lal='eza -la --icons=auto --group-directories-first --time-style=long-iso --git || ls -la --color=auto 2>/dev/null || ls -laG'
+    alias lsl='eza -l --icons=auto --group-directories-first --time-style=long-iso || ls -l --color=auto 2>/dev/null || ls -lG'
     alias lt='eza -T --level=2 --icons=auto --group-directories-first 2>/dev/null || tree -L 2'
     alias lta='eza -T --level=3 --icons=auto --group-directories-first -a 2>/dev/null || tree -L 3 -a'
     alias lsf='eza --icons=auto --group-directories-first --only-files 2>/dev/null || ls -p'
@@ -308,8 +308,8 @@ alias diskusagea='du -sh .[!.]* * 2>/dev/null | sort -rh'
 alias psinfo='ps auxf 2>/dev/null'
 alias psg='ps aux | grep -v grep | grep -i'
 alias top='btop 2>/dev/null || htop 2>/dev/null || top'
-alias update='sudo apt update && sudo apt upgrade -y 2>/dev/null || sudo dnf upgrade -y 2>/dev/null || sudo pacman -Syu 2>/dev/null || brew update && brew upgrade 2>/dev/null'
-alias cleanup='sudo apt autoremove -y 2>/dev/null || sudo dnf autoremove -y 2>/dev/null || sudo pacman -Rns $(pacman -Qtdq) 2>/dev/null || brew cleanup 2>/dev/null'
+alias update='bash ~/.local/share/dotfiles/bin/sysupdate.sh'
+alias cleanup='bash ~/.local/share/dotfiles/bin/syscleanup.sh'
 alias journal='journalctl -xe --no-pager -n 50 2>/dev/null || log show --last 1h 2>/dev/null'
 alias jf='journalctl -f 2>/dev/null'
 alias ju='journalctl -u 2>/dev/null'
@@ -566,4 +566,115 @@ treev() {
     else
         find "$dir" -maxdepth "$depth" | sed 's|[^/]*/|- |g'
     fi
+}
+
+# =============================================================================
+# ULTIMATE CINEMATIC FEATURES
+# =============================================================================
+
+# 1. Auto-LS on Directory Change
+# Every time you cd, automatically list the contents of the directory gorgeously.
+function chpwd() {
+    echo "" # Add a breathing space before listing
+    if command -v eza >/dev/null 2>&1; then
+        eza --icons=auto --group-directories-first
+    elif command -v exa >/dev/null 2>&1; then
+        exa --icons
+    else
+        ls --color=auto 2>/dev/null || ls -G
+    fi
+    echo "" # Add a breathing space after listing
+}
+
+# 2. Interactive Process Killer (fkill)
+# Searches processes with FZF and kills the selected one(s).
+fkill() {
+    local pid
+    if [ "$UID" != "0" ]; then
+        pid=$(ps -f -u $UID | sed 1d | fzf -m --prompt="Kill> " | awk '{print $2}')
+    else
+        pid=$(ps -ef | sed 1d | fzf -m --prompt="Kill> " | awk '{print $2}')
+    fi
+    if [ "x$pid" != "x" ]; then
+        echo $pid | xargs kill -${1:-9}
+        echo "💀 Killed process: $pid"
+    fi
+}
+
+# 3. Interactive Git Branch Switcher (fgbr)
+# Switch git branches instantly using FZF
+fgbr() {
+    local branches branch
+    branches=$(git branch -a) &&
+    branch=$(echo "$branches" | fzf --prompt="Checkout branch> " | sed "s/.* //" | sed "s#remotes/[^/]*/##") &&
+    git checkout "$branch"
+}
+
+# 4. OS-Aware File Copier
+# Copies a file's contents to the clipboard instantly on ANY OS
+cpfile() {
+    if [ -z "$1" ]; then
+        echo "Usage: cpfile <filename>"
+        return 1
+    fi
+    if command -v wl-copy >/dev/null 2>&1; then
+        cat "$1" | wl-copy && echo "📋 Copied $1 to Wayland clipboard!"
+    elif command -v xclip >/dev/null 2>&1; then
+        cat "$1" | xclip -sel clip && echo "📋 Copied $1 to X11 clipboard!"
+    elif command -v pbcopy >/dev/null 2>&1; then
+        cat "$1" | pbcopy && echo "📋 Copied $1 to macOS clipboard!"
+    else
+        echo "❌ No clipboard utility found (wl-copy, xclip, pbcopy)."
+    fi
+}
+
+# 5. Yazi with cwd-on-exit (y)
+# The best file manager experience. When you exit Yazi, your terminal instantly follows.
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
+
+# 6. Ultimate Extractor (x)
+# Extracts ANY archive format instantly without needing to remember the flag.
+function x() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *.tar.zst)   tar --zstd -xf "$1" ;;
+            *.zst)       unzstd "$1"      ;;
+            *)           echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file!"
+    fi
+}
+
+# 7. Instant Cheatsheets (cheat)
+# Fetches code snippets from cht.sh via curl and bats them!
+function cheat() {
+    if [ -z "$1" ]; then
+        echo "Usage: cheat <language> <query>"
+        return 1
+    fi
+    curl -s "cht.sh/$1/$2" | bat --style=plain --language="$1"
+}
+
+# 8. Instant Weather (weather)
+function weather() {
+    curl -s "wttr.in/${1:-}?m"
 }
