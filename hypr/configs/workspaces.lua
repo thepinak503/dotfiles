@@ -58,8 +58,13 @@ hl.config({
         key_press_enables_dpms = false,        -- Wake up display from DPMS on key press
         disable_autoreload = true,             -- Disable automatic config reload
         always_follow_on_dnd = true,           -- Follow drag-and-drop operations
+        vrr = 1,                               -- Enable VRR (1=on, 0=off, 2=fullscreen)
+        vfr = true,                            -- Variable frame rate (saves battery)
         layers_hog_keyboard_focus = true,      -- Layer surfaces get keyboard focus
         background_color = "rgb(2e3440)",      -- Background color
+        focus_on_activate = true,              -- Focus apps that request it
+        render_ahead_of_time = false,          -- Lower latency (if false, safer. if true, tearing issues)
+        mouse_move_focuses_monitor = true,     -- Move focus when mouse changes monitor
     },
 
     -- =========================================================================
@@ -83,7 +88,32 @@ hl.config({
         force_zero_scaling = true,             -- Disable XWayland scaling (prevents blurry X11 apps)
         use_nearest_neighbor = false,           -- Use nearest neighbor for XWayland scaling
     },
+
+    -- =========================================================================
+    -- EXPERIMENTAL & TEARING
+    -- =========================================================================
+    general = {
+        allow_tearing = true,                  -- Allow tearing for latency-sensitive apps (games)
+    },
+    
+    -- =========================================================================
+    -- WORKSPACE RULES (SMART GAPS & BINDINGS)
+    -- =========================================================================
+    -- Smart gaps (no gaps when only one window is open on a workspace)
+    -- (Requires a workspace rule for each workspace or wildcard)
 })
+
+-- Default workspaces for certain apps
+hl.window_rule({ match = { class = "^firefox$" }, workspace = "2" })
+hl.window_rule({ match = { class = "^google-chrome.*" }, workspace = "2" })
+hl.window_rule({ match = { class = "^discord$" }, workspace = "7" })
+hl.window_rule({ match = { class = "^WebCord$" }, workspace = "7" })
+hl.window_rule({ match = { class = "^telegram.*" }, workspace = "7" })
+hl.window_rule({ match = { class = "^Spotify$" }, workspace = "8" })
+
+-- Smart gaps rule: no border/gap when only 1 window is visible
+hl.workspace_rule({ match = { name = "w[tv1]" }, gapsin = 0, gapsout = 0, border = false })
+hl.workspace_rule({ match = { name = "f[1]" }, gapsin = 0, gapsout = 0, border = false })
 
 -- =============================================================================
 -- LAYOUT REFERENCE

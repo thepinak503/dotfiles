@@ -154,13 +154,57 @@ hl.window_rule({ match = { class = "qt5ct" }, center = true })
 hl.window_rule({ match = { class = "qt6ct" }, center = true })
 hl.window_rule({ match = { class = "nwg-look" }, center = true })
 
--- Pin floating windows (always on top)
-hl.window_rule({ match = { class = "flameshot" }, pin = true })
+-- Games & Tearing Optimization
+hl.window_rule({ match = { class = "^steam$" }, tag = "+games" })
+hl.window_rule({ match = { class = "^steam_app_.*" }, tag = "+games" })
+hl.window_rule({ match = { class = "^gamescope$" }, tag = "+games", fullscreen = true })
+hl.window_rule({ match = { class = "^heroic$" }, tag = "+games" })
+hl.window_rule({ match = { class = "^lutris$" }, tag = "+games" })
+hl.window_rule({ match = { class = "^minetest$" }, tag = "+games" })
+hl.window_rule({ match = { class = "^Minecraft.*$" }, tag = "+games" })
 
--- Games
-hl.window_rule({ match = { class = "steam" }, tag = "+games" })
-hl.window_rule({ match = { class = "steam_app.*" }, tag = "+games" })
-hl.window_rule({ match = { class = "gamescope" }, fullscreen = true })
+-- Force tearing on games (requires general.allow_tearing = true)
+hl.window_rule({ match = { tag = "games" }, force_tearing = true })
+
+-- Utilities & Popups
+hl.window_rule({ match = { class = "^1Password$" }, float = true, center = true })
+hl.window_rule({ match = { class = "^org.keepassxc.KeePassXC$" }, float = true, center = true })
+hl.window_rule({ match = { class = "^Bitwarden$" }, float = true, center = true })
+hl.window_rule({ match = { class = "^org.gnome.Calculator$" }, float = true, size = { "25%", "35%" } })
+hl.window_rule({ match = { class = "^gnome-system-monitor$" }, float = true, size = { "50%", "60%" } })
+hl.window_rule({ match = { class = "^file-roller$" }, float = true, center = true })
+hl.window_rule({ match = { class = "^org.gnome.FileRoller$" }, float = true, center = true })
+hl.window_rule({ match = { class = "^xdg-desktop-portal.*" }, float = true, center = true })
+hl.window_rule({ match = { class = "^polkit-kde-authentication-agent-1$" }, float = true, dimaround = true })
+hl.window_rule({ match = { class = "^polkit-gnome-authentication-agent-1$" }, float = true, dimaround = true })
+
+-- Developer Tools
+hl.window_rule({ match = { class = "^Godot$" }, float = false })
+hl.window_rule({ match = { class = "^Unity$" }, float = false })
+hl.window_rule({ match = { class = "^blender$" }, float = false })
+hl.window_rule({ match = { title = "Developer Tools.*" }, float = true, center = true, size = { "70%", "70%" } })
+hl.window_rule({ match = { class = "^postman$" }, opacity = "0.95 0.90" })
+
+-- Picture-in-Picture & Media enhancements
+hl.window_rule({ match = { title = "^(Picture-in-Picture)$" }, float = true, pin = true, opacity = "1.0 0.8", size = { "25%", "25%" }, move = { "74%", "4%" }, keep_aspect_ratio = true })
+hl.window_rule({ match = { title = "^(Picture in picture)$" }, float = true, pin = true, opacity = "1.0 0.8", size = { "25%", "25%" }, move = { "74%", "4%" }, keep_aspect_ratio = true })
+hl.window_rule({ match = { class = "^imv$" }, float = true, center = true, keep_aspect_ratio = true })
+hl.window_rule({ match = { class = "^mpv$" }, float = true, center = true, keep_aspect_ratio = true, size = { "60%", "60%" } })
+hl.window_rule({ match = { class = "^Spotify$" }, opacity = "0.85 0.75" })
+
+-- Messaging overlays
+hl.window_rule({ match = { class = "^telegram-desktop$", title = "^Media viewer$" }, float = true, center = true, fullscreen = true })
+hl.window_rule({ match = { class = "^discord$", title = "^Discord Updater$" }, float = true, center = true })
+hl.window_rule({ match = { class = "^slack$", title = "^Slack - Huddle$" }, float = true, pin = true })
+
+-- File managers behavior
+hl.window_rule({ match = { class = "^org.gnome.Nautilus$" }, float = false })
+hl.window_rule({ match = { class = "^thunar$" }, float = false })
+hl.window_rule({ match = { class = "^yazi$" }, float = false })
+hl.window_rule({ match = { class = "^nemo$" }, float = false })
+
+-- Fixes for sharing screens on Wayland
+hl.window_rule({ match = { class = "^xwaylandvideobridge$" }, opacity = "0.0 0.0", no_anim = true, max_size = { 1, 1 }, no_shadow = true, no_blur = true, no_focus = true })
 
 -- =============================================================================
 -- BORDER ANIMATION OVERRIDES

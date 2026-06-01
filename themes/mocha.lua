@@ -1,0 +1,38 @@
+-- Dark theme (Nord) color definitions
+theme = {
+    bg        = "rgb(1e1e2e)",
+    bg_alt    = "rgb(181825)",
+    bg_surface= "rgb(313244)",
+    border    = "rgb(45475a)",
+    fg        = "rgb(cdd6f4)",
+    fg_bright = "rgb(f5e0dc)",
+    fg_dim    = "rgb(bac2de)",
+    accent    = "rgb(89b4fa)",
+    accent2   = "rgb(94e2d5)",
+    accent3   = "rgb(bac2de)",
+    accent4   = "rgb(89dceb)",
+    red       = "rgb(f38ba8)",
+    orange    = "rgb(fab387)",
+    yellow    = "rgb(f9e2af)",
+    green     = "rgb(a6e3a1)",
+    purple    = "rgb(cba6f7)",
+}
+
+theme_rgb = {
+    bg        = "30,30,46",
+    bg_alt    = "24,24,37",
+    bg_surface= "49,50,68",
+    border    = "69,71,90",
+    fg        = "205,214,244",
+    fg_bright = "245,224,220",
+    fg_dim    = "186,194,222",
+    accent    = "137,180,250",
+    accent2   = "148,226,213",
+    accent3   = "186,194,222",
+    accent4   = "137,220,235",
+    red       = "243,139,168",
+    orange    = "250,179,135",
+    yellow    = "249,226,175",
+    green     = "166,227,161",
+    purple    = "203,166,247",
+}

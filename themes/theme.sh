@@ -6,16 +6,17 @@ THEMES_DIR="$REPO_DIR/themes"
 STATE_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/hyprland-theme"
 
 usage() {
-    echo "Usage: $0 {dark|light}"
+    echo "Usage: $0 {dark|light|mocha}"
     echo "  dark   — Apply Nord dark theme"
     echo "  light  — Apply light theme"
+    echo "  mocha  — Apply Catppuccin Mocha theme"
     exit 1
 }
 
 if [ $# -ne 1 ]; then usage; fi
 
 case "$1" in
-    dark|light) THEME="$1" ;;
+    dark|light|mocha) THEME="$1" ;;
     *) usage ;;
 esac
 
@@ -165,9 +166,12 @@ if command -v hyprctl >/dev/null 2>&1; then
     hyprctl reload 2>/dev/null || true
 fi
 
-# Waybar (Graceful Hot-Reload for absolute cinema experience)
+# Waybar (Kill and restart to ensure both instances load correct configs)
 if pgrep -x waybar >/dev/null 2>&1; then
-    killall -SIGUSR2 waybar 2>/dev/null || true
+    killall waybar 2>/dev/null || true
+    sleep 0.2
+    waybar >/dev/null 2>&1 & disown
+    waybar -c "$REPO_DIR/waybar/config-bottom.jsonc" -s "$REPO_DIR/waybar/style.css" >/dev/null 2>&1 & disown
 fi
 
 # Swaync

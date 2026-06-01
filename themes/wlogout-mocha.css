@@ -1,0 +1,38 @@
+* {
+  background-image: none;
+  font-family: "CaskaydiaCove Nerd Font", "Noto Sans", sans-serif;
+}
+
+window {
+  background-color: rgba(46, 52, 64, 0.65);
+}
+
+button {
+  background-color: rgba(59, 66, 82, 0.5);
+  border: 1px solid rgba(76, 86, 106, 0.5);
+  border-radius: 18px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 32%;
+  color: #cdd6f4;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px;
+  padding: 20px 16px;
+  min-width: 110px;
+  min-height: 70px;
+  outline-style: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+button:focus,
+button:active,
+button:hover {
+  background-color: rgba(67, 76, 94, 0.6);
+  border-color: #89b4fa;
+  color: #89b4fa;
+  border-width: 2px;
+  transform: scale(1.08);
+}
+

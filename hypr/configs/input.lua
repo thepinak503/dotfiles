@@ -40,6 +40,19 @@ hl.config({
             middle_button_emulation = false,-- Three-finger tap for middle click
         },
     },
+    
+    -- =====================================================================
+    -- GESTURES (NATIVE WORKSPACE SWIPING)
+    -- =====================================================================
+    gestures = {
+        workspace_swipe = true,
+        workspace_swipe_fingers = 3,
+        workspace_swipe_distance = 300,
+        workspace_swipe_invert = true,
+        workspace_swipe_min_speed_to_force = 30,
+        workspace_swipe_cancel_ratio = 0.5,
+        workspace_swipe_create_new = true,
+    }
 })
 
 -- =============================================================================

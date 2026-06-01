@@ -26,6 +26,7 @@ Commands:
   toggle     Toggle between dark and light themes
   dark       Set dark theme
   light      Set light theme
+  mocha      Set Mocha theme
   status     Output current theme as waybar JSON (default)
 
 EOF
@@ -59,6 +60,13 @@ case "${1:-}" in
                 notify-send -a waybar -u critical "Theme Error" "theme.sh not found"
                 exit 1
             fi
+        elif [[ "$CURRENT" == "light" ]]; then
+            if [[ -x "$THEME_SCRIPT" ]]; then
+                "$THEME_SCRIPT" mocha
+            else
+                notify-send -a waybar -u critical "Theme Error" "theme.sh not found"
+                exit 1
+            fi
         else
             if [[ -x "$THEME_SCRIPT" ]]; then
                 "$THEME_SCRIPT" dark
@@ -81,12 +89,18 @@ case "${1:-}" in
         fi
         ;;
 
+    mocha)
+        if [[ -x "$THEME_SCRIPT" ]]; then
+            exec "$THEME_SCRIPT" mocha
+        fi
+        ;;
+
     menu)
         if ! command -v rofi &>/dev/null; then
             notify-send -a "Theme Menu" -u critical "Error" "rofi is not installed"
             exit 1
         fi
-        OPTIONS="Dark Theme\nLight Theme"
+        OPTIONS="Dark Theme\nLight Theme\nMocha Theme"
         CHOICE=$(echo -e "$OPTIONS" | rofi -dmenu -p "Select Theme" -i)
         case "$CHOICE" in
             "Dark Theme")
@@ -99,6 +113,11 @@ case "${1:-}" in
                     "$THEME_SCRIPT" light
                 fi
                 ;;
+            "Mocha Theme")
+                if [[ -x "$THEME_SCRIPT" ]]; then
+                    "$THEME_SCRIPT" mocha
+                fi
+                ;;
         esac
         ;;
 
@@ -106,8 +125,10 @@ case "${1:-}" in
         CURRENT=$(get_current_theme)
         if [[ "$CURRENT" == "dark" ]]; then
             printf '{"text":"","tooltip":"Dark Mode — click to toggle","class":"dark","alt":"dark"}\n'
-        else
+        elif [[ "$CURRENT" == "light" ]]; then
             printf '{"text":"","tooltip":"Light Mode — click to toggle","class":"light","alt":"light"}\n'
+        else
+            printf '{"text":"","tooltip":"Mocha Mode — click to toggle","class":"mocha","alt":"mocha"}\n'
         fi
         ;;
 

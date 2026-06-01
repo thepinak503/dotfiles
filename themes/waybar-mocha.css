@@ -1,0 +1,468 @@
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "CaskaydiaCove Nerd Font", "Noto Sans", "Font Awesome 6 Free", sans-serif;
+  font-size: 13px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+window#waybar {
+  background: rgba(46, 52, 64, 0.55);
+  border-radius: 12px;
+  border: 1px solid rgba(76, 86, 106, 0.4);
+  color: #cdd6f4;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+window#waybar.empty {
+  background: rgba(46, 52, 64, 0.45);
+  border-radius: 12px;
+  border: 1px solid rgba(76, 86, 106, 0.3);
+}
+
+window#waybar.hidden {
+  opacity: 0.2;
+}
+
+tooltip {
+  background: rgba(46, 52, 64, 0.92);
+  border: 1px solid #45475a;
+  border-radius: 10px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+tooltip label {
+  color: #cdd6f4;
+  font-size: 12px;
+}
+
+#workspaces {
+  margin: 0 4px;
+  padding: 4px 0;
+}
+
+#workspaces button {
+  padding: 0 8px;
+  margin: 2px 2px;
+  border-radius: 10px;
+  background: rgba(59, 66, 82, 0.4);
+  color: #45475a;
+  font-weight: normal;
+  font-size: 13px;
+  min-width: 24px;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+#workspaces button.active {
+  background: linear-gradient(135deg, rgba(94, 129, 172, 0.6), rgba(136, 192, 208, 0.4));
+  color: #f5e0dc;
+  font-weight: bold;
+  min-width: 32px;
+}
+
+#workspaces button.empty {
+  color: #313244;
+  background: transparent;
+}
+
+#workspaces button.urgent {
+  background: rgba(191, 97, 106, 0.5);
+  color: #f5e0dc;
+  animation: urgent-pulse 1s ease-in-out infinite;
+}
+
+#workspaces button:hover {
+  background: rgba(136, 192, 208, 0.2);
+  color: #89b4fa;
+}
+
+#workspaces button.persistent {
+  color: #45475a;
+}
+
+#workspaces button.special {
+  background: rgba(180, 142, 173, 0.3);
+  color: #cba6f7;
+}
+
+#window {
+  margin: 0 6px;
+  padding: 0 8px;
+  color: #bac2de;
+  font-size: 12px;
+  border-left: 1px solid rgba(76, 86, 106, 0.3);
+}
+
+window#waybar.empty #window {
+  opacity: 0;
+}
+
+#custom-media {
+  margin: 0;
+  padding: 0 12px;
+  color: #a6e3a1;
+  font-size: 12px;
+  border-radius: 8px;
+  background: rgba(163, 190, 140, 0.06);
+  transition: all 0.2s ease;
+}
+
+#custom-media:hover {
+  background: rgba(163, 190, 140, 0.15);
+  color: #b1d3a0;
+}
+
+#custom-media.paused {
+  color: #45475a;
+}
+
+#custom-media.stopped {
+  color: #45475a;
+}
+
+#tray {
+  margin: 0 2px;
+  padding: 0 6px;
+  border-radius: 8px;
+}
+
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+  background: rgba(235, 203, 139, 0.1);
+}
+
+#tray > .active {
+  background: rgba(136, 192, 208, 0.08);
+}
+
+#pulseaudio {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #cdd6f4;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#pulseaudio:hover {
+  background: rgba(136, 192, 208, 0.1);
+}
+
+#pulseaudio.muted {
+  color: #45475a;
+}
+
+#pulseaudio.bluetooth {
+  color: #89b4fa;
+}
+
+#network {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #89b4fa;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#network:hover {
+  background: rgba(136, 192, 208, 0.1);
+}
+
+#network.disconnected {
+  color: #f38ba8;
+}
+
+#network.disabled {
+  color: #45475a;
+}
+
+#network.linked {
+  color: #f9e2af;
+}
+
+#cpu {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #94e2d5;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#cpu:hover {
+  background: rgba(143, 188, 187, 0.1);
+}
+
+#cpu.warning {
+  color: #f9e2af;
+}
+
+#cpu.critical {
+  color: #f38ba8;
+}
+
+#memory {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #bac2de;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#memory:hover {
+  background: rgba(129, 161, 193, 0.1);
+}
+
+#memory.warning {
+  color: #f9e2af;
+}
+
+#memory.critical {
+  color: #f38ba8;
+}
+
+#temperature {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #fab387;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#temperature:hover {
+  background: rgba(208, 135, 112, 0.1);
+}
+
+#temperature.critical {
+  color: #f38ba8;
+}
+
+#temperature.warning {
+  color: #f9e2af;
+}
+
+#custom-net-speed {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #a6e3a1;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#custom-net-speed:hover {
+  background: rgba(163, 190, 140, 0.1);
+}
+
+#custom-power-profile {
+  margin: 0 2px;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+#custom-power-profile:hover {
+  background: rgba(136, 192, 208, 0.1);
+}
+
+#custom-power-profile.performance {
+  color: #f38ba8;
+}
+
+#custom-power-profile.balanced {
+  color: #89b4fa;
+}
+
+#custom-power-profile.power-saver {
+  color: #a6e3a1;
+}
+
+#custom-power-profile.disabled {
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  min-height: 0;
+}
+
+#custom-disk {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #a6e3a1;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#custom-disk:hover {
+  background: rgba(163, 190, 140, 0.1);
+}
+
+#custom-disk.warning {
+  color: #f9e2af;
+}
+
+#custom-disk.critical {
+  color: #f38ba8;
+}
+
+#custom-disk.error {
+  color: #f38ba8;
+}
+
+#battery {
+  margin: 0 2px;
+  padding: 2px 10px;
+  color: #cdd6f4;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+#battery:hover {
+  background: rgba(136, 192, 208, 0.1);
+}
+
+#battery.warning {
+  color: #f9e2af;
+  animation: battery-warning 0.5s ease-in-out infinite alternate;
+}
+
+#battery.critical {
+  color: #f38ba8;
+  animation: battery-critical 0.3s ease-in-out infinite alternate;
+}
+
+#battery.charging, #battery.plugged {
+  color: #a6e3a1;
+}
+
+#custom-clock {
+  margin: 0 2px;
+  padding: 2px 12px;
+  color: #cdd6f4;
+  font-weight: bold;
+  font-size: 13px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#custom-clock:hover {
+  color: #89b4fa;
+  background: rgba(136, 192, 208, 0.08);
+}
+
+/* =============================================================================
+ * BOTTOM BAR MODULES
+ * ============================================================================= */
+
+#custom-settings,
+#custom-light_dark,
+#custom-nightlight,
+#custom-swaync,
+#custom-bluetooth,
+#custom-cycle_wall,
+#custom-screenshot,
+#custom-blur,
+#custom-refresh {
+  margin: 0 4px;
+  padding: 2px 12px;
+  color: #bac2de;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#custom-settings:hover,
+#custom-light_dark:hover,
+#custom-nightlight:hover,
+#custom-swaync:hover,
+#custom-cycle_wall:hover,
+#custom-screenshot:hover,
+#custom-blur:hover,
+#custom-refresh:hover,
+#custom-bluetooth:hover {
+  background: rgba(136, 192, 208, 0.12);
+  color: #89b4fa;
+}
+
+#custom-settings { color: #cba6f7; }
+#custom-bluetooth { color: #bac2de; }
+
+#custom-light_dark.dark { color: #f9e2af; }
+#custom-light_dark.light { color: #fab387; }
+
+#custom-nightlight.on { color: #fab387; }
+
+#custom-swaync.dnd { color: #f38ba8; }
+
+#custom-cycle_wall { color: #a6e3a1; }
+#custom-cycle_wall:hover { color: #b1d3a0; }
+
+#custom-screenshot { color: #94e2d5; }
+#custom-screenshot:hover { color: #a9d5d4; }
+
+#custom-blur.on { color: #89b4fa; }
+#custom-blur.low { color: #bac2de; }
+#custom-blur.off { color: #45475a; }
+
+#custom-gamemode {
+  margin: 0 4px;
+  padding: 2px 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#custom-gamemode.on {
+  color: #f38ba8;
+}
+
+#custom-gamemode.off {
+  color: #bac2de;
+}
+
+#custom-gamemode:hover {
+  background: rgba(136, 192, 208, 0.12);
+  color: #89b4fa;
+}
+
+#custom-power {
+  margin: 0 4px;
+  padding: 2px 12px;
+  font-size: 16px;
+  color: #f38ba8;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+#custom-power:hover {
+  background: rgba(191, 97, 106, 0.15);
+  color: #f5e0dc;
+}
+
+/* =============================================================================
+ * ANIMATIONS
+ * ============================================================================= */
+
+@keyframes urgent-pulse {
+  0%   { background: rgba(191, 97, 106, 0.5); }
+  100% { background: rgba(191, 97, 106, 0.7); }
+}
+
+@keyframes battery-warning {
+  0%   { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes battery-critical {
+  0%   { opacity: 1; color: #f38ba8; }
+  100% { opacity: 0.5; color: #fab387; }
+}
