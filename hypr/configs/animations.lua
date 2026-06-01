@@ -41,10 +41,13 @@ hl.curve("md3_decel",   { type = "bezier", points = { {0.05, 0.7},  {0.1, 1.0} }
 -- =============================================================================
 
 -- Window open: Pop-in scale transition from 80% to 100% with bounce
-hl.animation({ leaf = "windows",          enabled = true, speed = 3,  bezier = "win_open",  style = "popin 80%" })
+hl.animation({ leaf = "windows",          enabled = true, speed = 4,  bezier = "win_open",  style = "popin 80%" })
 
 -- Window close: Pop-out scale transition to 80% with quick fade out
 hl.animation({ leaf = "windowsOut",       enabled = true, speed = 3,  bezier = "win_close", style = "popin 80%" })
+
+-- Window In: specific entrance animation
+hl.animation({ leaf = "windowsIn",        enabled = true, speed = 4,  bezier = "win_open",  style = "popin 80%" })
 
 -- Window move/resize: Highly responsive spring effect
 hl.animation({ leaf = "windowsMove",      enabled = true, speed = 2.5,  bezier = "bounce",    style = "slide" })
@@ -77,4 +80,12 @@ hl.animation({ leaf = "fadeDim",          enabled = true, speed = 3,  bezier = "
 hl.animation({ leaf = "workspaces",       enabled = true, speed = 3,  bezier = "ws_switch", style = "slide" })
 
 -- Special workspace (scratchpad) transitions
-hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 3,  bezier = "ws_switch", style = "slide" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 4,  bezier = "ws_switch", style = "slidefadevert 20%" })
+
+-- =============================================================================
+-- LAYER ANIMATIONS (Rofi, Waybar, Notifications)
+-- =============================================================================
+
+hl.animation({ leaf = "layers",           enabled = true, speed = 4,  bezier = "md3_decel", style = "fade" })
+hl.animation({ leaf = "layersIn",         enabled = true, speed = 4,  bezier = "win_open",  style = "popin 80%" })
+hl.animation({ leaf = "layersOut",        enabled = true, speed = 3,  bezier = "win_close", style = "popin 80%" })

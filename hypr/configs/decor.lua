@@ -51,13 +51,12 @@ hl.config({
         -- =====================================================================
         shadow = {
             enabled        = true,
-            range          = 16,       -- Shadow blur range (pixels)
-            render_power   = 4,        -- Shadow render quality (higher = smoother)
-            color          = "rgba(0,0,0,0.55)",       -- Active shadow color
-            color_inactive = "rgba(0,0,0,0.35)",       -- Inactive shadow color
-            offset         = { 3, 5 }, -- Shadow offset (x, y)
+            range          = 30,       -- High shadow blur range
+            render_power   = 3,        -- Balanced shadow render quality
+            color          = "rgba(0,0,0,0.70)",       -- Deep active shadow
+            color_inactive = "rgba(0,0,0,0.45)",       -- Deep inactive shadow
+            offset         = { 0, 8 }, -- Floating shadow offset (straight down)
             scale          = 0.97,     -- Shadow scale (1.0 = no scaling)
-            -- deprecated shadow field removed in v0.55
         },
 
         -- =====================================================================
@@ -65,18 +64,17 @@ hl.config({
         -- =====================================================================
         blur = {
             enabled            = true,
-            size               = 10,          -- Blur strength
-            passes             = 3,           -- Blur quality (1-4, higher = slower but smoother)
+            size               = 12,          -- Ultimate blur strength
+            passes             = 4,           -- Ultra-high blur quality (4 passes for butter smooth glass)
             ignore_opacity     = true,        -- True enables premium glassmorphism behind transparent apps!
-            xray               = false,       -- X-ray mode (blur behind window content only)
-            noise              = 0.01,        -- Blur noise (adds texture, 0.0-1.0)
-            contrast           = 0.8,         -- Blur contrast adjustment
-            brightness         = 1.0,         -- Blur brightness
+            xray               = true,        -- X-ray mode for layered transparency depth
+            noise              = 0.0117,      -- Very subtle noise
+            contrast           = 0.8916,      -- Higher contrast for punchy glass
+            brightness         = 0.8172,      -- Slightly darkened behind blur
             vibrancy           = 0.1696,      -- JaKooLit-style ultra glassmorphism
             vibrancy_darkness  = 0.0,
             popups             = true,        -- Blur behind popup windows
             popups_ignorealpha = 0.2,         -- Alpha threshold for popup blur
-            -- popups_blur_new removed in v0.55
         },
 
         -- =====================================================================

@@ -42,7 +42,10 @@ hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("rofi -show emoji"))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("wlogout --protocol layer-shell"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("hyprctl dispatch fullscreen 1")) -- Maximize (keep gaps/bar)
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("hyprctl dispatch centerwindow"))
+hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd("hyprctl dispatch pin"))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
 
@@ -82,6 +85,12 @@ hl.bind(mainMod .. " + SHIFT + H", hl.dsp.window.resize({ x = -30, y = 0, relati
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.window.resize({ x = 30, y = 0, relative = true }), { repeating = true })
 hl.bind(mainMod .. " + SHIFT + K", hl.dsp.window.resize({ x = 0, y = -30, relative = true }), { repeating = true })
 hl.bind(mainMod .. " + SHIFT + J", hl.dsp.window.resize({ x = 0, y = 30, relative = true }), { repeating = true })
+
+-- Move window precisely (floating mode fine-tuning)
+hl.bind(mainMod .. " + CTRL + H", hl.dsp.exec_cmd("hyprctl dispatch moveactive -30 0"), { repeating = true })
+hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd("hyprctl dispatch moveactive 30 0"), { repeating = true })
+hl.bind(mainMod .. " + CTRL + K", hl.dsp.exec_cmd("hyprctl dispatch moveactive 0 -30"), { repeating = true })
+hl.bind(mainMod .. " + CTRL + J", hl.dsp.exec_cmd("hyprctl dispatch moveactive 0 30"), { repeating = true })
 
 -- Workspaces 1-9
 for i = 1, 9 do
