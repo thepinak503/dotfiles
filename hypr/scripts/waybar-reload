@@ -1,11 +1,16 @@
 #!/bin/bash
 # Reload waybar only
 
+# Detach from parent (Waybar) to survive its death
+if [ "$1" != "--detached" ]; then
+    setsid "$0" --detached >/dev/null 2>&1 &
+    exit 0
+fi
+
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
 
-pkill -9 -x waybar 2>/dev/null
+pkill -9 -x waybar 2>/dev/null || true
 sleep 0.5
 
-# Use nohup to survive executor cleanup
-nohup waybar -c "$DOTFILES_DIR/waybar/config.jsonc" -s "$DOTFILES_DIR/waybar/style.css" >/dev/null 2>&1 &
-nohup waybar -c "$DOTFILES_DIR/waybar/config-bottom.jsonc" -s "$DOTFILES_DIR/waybar/style.css" >/dev/null 2>&1 &
+waybar -c "$DOTFILES_DIR/waybar/config.jsonc" -s "$DOTFILES_DIR/waybar/style.css" >/dev/null 2>&1 &
+waybar -c "$DOTFILES_DIR/waybar/config-bottom.jsonc" -s "$DOTFILES_DIR/waybar/style.css" >/dev/null 2>&1 &
