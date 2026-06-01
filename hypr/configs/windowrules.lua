@@ -163,9 +163,6 @@ hl.window_rule({ match = { class = "^lutris$" }, tag = "+games" })
 hl.window_rule({ match = { class = "^minetest$" }, tag = "+games" })
 hl.window_rule({ match = { class = "^Minecraft.*$" }, tag = "+games" })
 
--- Force tearing on games (requires general.allow_tearing = true)
-hl.window_rule({ match = { tag = "games" }, force_tearing = true })
-
 -- Utilities & Popups
 hl.window_rule({ match = { class = "^1Password$" }, float = true, center = true })
 hl.window_rule({ match = { class = "^org.keepassxc.KeePassXC$" }, float = true, center = true })
@@ -175,8 +172,8 @@ hl.window_rule({ match = { class = "^gnome-system-monitor$" }, float = true, siz
 hl.window_rule({ match = { class = "^file-roller$" }, float = true, center = true })
 hl.window_rule({ match = { class = "^org.gnome.FileRoller$" }, float = true, center = true })
 hl.window_rule({ match = { class = "^xdg-desktop-portal.*" }, float = true, center = true })
-hl.window_rule({ match = { class = "^polkit-kde-authentication-agent-1$" }, float = true, dimaround = true })
-hl.window_rule({ match = { class = "^polkit-gnome-authentication-agent-1$" }, float = true, dimaround = true })
+hl.window_rule({ match = { class = "^polkit-kde-authentication-agent-1$" }, float = true })
+hl.window_rule({ match = { class = "^polkit-gnome-authentication-agent-1$" }, float = true })
 
 -- Developer Tools
 hl.window_rule({ match = { class = "^Godot$" }, float = false })

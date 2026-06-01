@@ -57,13 +57,10 @@ hl.config({
         mouse_move_enables_dpms = true,        -- Wake up display from DPMS on mouse move
         key_press_enables_dpms = false,        -- Wake up display from DPMS on key press
         disable_autoreload = true,             -- Disable automatic config reload
-        always_follow_on_dnd = true,           -- Follow drag-and-drop operations
         vrr = 1,                               -- Enable VRR (1=on, 0=off, 2=fullscreen)
-        vfr = true,                            -- Variable frame rate (saves battery)
         layers_hog_keyboard_focus = true,      -- Layer surfaces get keyboard focus
         background_color = "rgb(2e3440)",      -- Background color
         focus_on_activate = true,              -- Focus apps that request it
-        render_ahead_of_time = false,          -- Lower latency (if false, safer. if true, tearing issues)
         mouse_move_focuses_monitor = true,     -- Move focus when mouse changes monitor
     },
 
@@ -111,9 +108,7 @@ hl.window_rule({ match = { class = "^WebCord$" }, workspace = "7" })
 hl.window_rule({ match = { class = "^telegram.*" }, workspace = "7" })
 hl.window_rule({ match = { class = "^Spotify$" }, workspace = "8" })
 
--- Smart gaps rule: no border/gap when only 1 window is visible
-hl.workspace_rule({ match = { name = "w[tv1]" }, gapsin = 0, gapsout = 0, border = false })
-hl.workspace_rule({ match = { name = "f[1]" }, gapsin = 0, gapsout = 0, border = false })
+-- Smart gaps removed due to wrapper incompatibility
 
 -- =============================================================================
 -- LAYOUT REFERENCE
