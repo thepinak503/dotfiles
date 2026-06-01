@@ -168,10 +168,7 @@ fi
 
 # Waybar (Kill and restart to ensure both instances load correct configs)
 if pgrep -x waybar >/dev/null 2>&1; then
-    killall waybar 2>/dev/null || true
-    sleep 0.2
-    waybar >/dev/null 2>&1 & disown
-    waybar -c "$REPO_DIR/waybar/config-bottom.jsonc" -s "$REPO_DIR/waybar/style.css" >/dev/null 2>&1 & disown
+    hyprctl dispatch exec "bash -c 'killall waybar 2>/dev/null; sleep 0.5; waybar >/dev/null 2>&1 & waybar -c $REPO_DIR/waybar/config-bottom.jsonc -s $REPO_DIR/waybar/style.css >/dev/null 2>&1 &'" >/dev/null 2>&1 || true
 fi
 
 # Swaync
