@@ -18,12 +18,12 @@
     nord15:                     rgba(180, 142, 173, 100%);
 
     background-color:           transparent;
-    text-color:                 var(nord4);
+    text-color:                 #2e3440;
 }
 
 window {
-    background-color:           #2e3440;
-    border-color:               #4c566a;
+    background-color:           #eceff4;
+    border-color:               #b6beca;
     border:                     1px;
     border-radius:              12px;
     padding:                    8px;
@@ -35,7 +35,7 @@ mainbox {
 }
 
 inputbar {
-    background-color:           #3b4252;
+    background-color:           #e5e9f0;
     border-radius:              8px;
     padding:                    6px 10px;
     spacing:                    8px;
@@ -43,11 +43,11 @@ inputbar {
 }
 
 prompt {
-    text-color:                 var(nord8);
+    text-color:                 var(nord10);
 }
 
 entry {
-    text-color:                 var(nord6);
+    text-color:                 var(nord0);
     placeholder-color:          var(nord3);
 }
 
@@ -63,7 +63,7 @@ element {
     padding:                    8px 12px;
     border-radius:              8px;
     background-color:           transparent;
-    text-color:                 var(nord4);
+    text-color:                 #2e3440;
     cursor:                     pointer;
     spacing:                    8px;
 }
@@ -74,29 +74,29 @@ element icon {
 
 element normal.normal {
     background-color:           transparent;
-    text-color:                 var(nord4);
+    text-color:                 #2e3440;
 }
 
 element selected.normal {
-    background-color:           #434c5e;
-    text-color:                 var(nord8);
+    background-color:           #d8dee9;
+    text-color:                 var(nord10);
 }
 
 element selected {
-    background-color:           #434c5e;
-    text-color:                 var(nord8);
+    background-color:           #d8dee9;
+    text-color:                 var(nord10);
 }
 
 button {
     text-color:                 var(nord9);
     border-radius:              8px;
     padding:                    6px 12px;
-    background-color:           #3b4252;
+    background-color:           #e5e9f0;
 }
 
 scrollbar {
     width:                      4px;
     border-radius:              2px;
-    background-color:           #3b4252;
-    handle-color:               #88c0d0;
+    background-color:           #e5e9f0;
+    handle-color:               #5e81ac;
 }

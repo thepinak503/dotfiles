@@ -45,7 +45,7 @@ title = "Alacritty"
 class = { instance = "Alacritty", general = "Alacritty" }
 
 # Window decorations theme variant: "None", "Dark", "Light"
-decorations_theme_variant = "Dark"
+decorations_theme_variant = "Light"
 
 # Resize increments (set to cell size for crisp rendering)
 resize_increments = false

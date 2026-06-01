@@ -12,8 +12,8 @@
   "display": {
     "separator": "  ➤  ",
     "color": {
-      "keys": "38;5;110",
-      "title": "38;5;152"
+      "keys": "38;5;24",
+      "title": "38;5;23"
     },
     "size": {
       "binaryPrefix": "si"

@@ -14,7 +14,7 @@
 -- =============================================================================
 -- Must be loaded first so all other configs can reference theme variables
 
-require("configs/theme")
+pcall(require, "configs/theme")
 
 -- =============================================================================
 -- ENVIRONMENT VARIABLES
@@ -36,63 +36,63 @@ pcall(require, "configs/env")
 -- =============================================================================
 -- Display layout, resolution, refresh rate, scaling, workspace assignments
 
-require("configs/monitors")
+pcall(require, "configs/monitors")
 
 -- =============================================================================
 -- INPUT CONFIGURATION
 -- =============================================================================
 -- Keyboard layout, mouse/touchpad settings, gestures
 
-require("configs/input")
+pcall(require, "configs/input")
 
 -- =============================================================================
 -- DECORATIONS
 -- =============================================================================
 -- Borders, shadows, blur, gaps, window rounding, opacity
 
-require("configs/decor")
+pcall(require, "configs/decor")
 
 -- =============================================================================
 -- ANIMATIONS
 -- =============================================================================
 -- Window open/close animations, workspace transitions, borders, fades
 
-require("configs/animations")
+pcall(require, "configs/animations")
 
 -- =============================================================================
 -- WINDOW RULES
 -- =============================================================================
 -- Per-application window behavior: floating, opacity, sizing, tiling rules
 
-require("configs/windowrules")
+pcall(require, "configs/windowrules")
 
 -- =============================================================================
 -- WORKSPACE & MISC SETTINGS
 -- =============================================================================
 -- Dwindle/Master layout, binds, misc, debug, xwayland
 
-require("configs/workspaces")
+pcall(require, "configs/workspaces")
 
 -- =============================================================================
 -- KEYBINDINGS
 -- =============================================================================
 -- All keyboard shortcuts organized by category
 
-require("configs/keybinds")
+pcall(require, "configs/keybinds")
 
 -- =============================================================================
 -- AUTOSTART
 -- =============================================================================
 -- Applications and services to launch on startup
 
-require("configs/autostart")
+pcall(require, "configs/autostart")
 
 -- =============================================================================
 -- PER-DEVICE CONFIGURATION
 -- =============================================================================
 -- Input settings for specific devices (touchpads, keyboards, mice)
 
-require("configs/devices")
+pcall(require, "configs/devices")
 
 -- =============================================================================
 -- LOAD ORDER NOTES
