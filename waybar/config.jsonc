@@ -46,7 +46,7 @@
     "persistent-workspaces": {
       "*": 9
     },
-    "on-click": "hyprctl dispatch workspace 1",
+    "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch workspace e+1",
     "on-scroll-down": "hyprctl dispatch workspace e-1"
   },
