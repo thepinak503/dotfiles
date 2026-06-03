@@ -253,7 +253,7 @@ fi
 if command -v rustc >/dev/null 2>&1; then
     export CARGO_HOME="${CARGO_HOME:-$HOME/.cargo}"
     export RUSTUP_HOME="${RUSTUP_HOME:-$HOME/.rustup}"
-    export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-}"
+    export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$CARGO_HOME/target}"
     export CARGO_NET_GIT_FETCH_WITH_CLI="${CARGO_NET_GIT_FETCH_WITH_CLI:-true}"
     export PATH="$CARGO_HOME/bin${PATH:+:$PATH}"
 fi
