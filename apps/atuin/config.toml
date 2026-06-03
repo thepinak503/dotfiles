@@ -16,7 +16,7 @@ strip_trailing_whitespace = true
 
 [daemon]
 enabled = true
-autostart = false
+autostart = true
 
 [search]
 recency_score_multiplier = 2.0

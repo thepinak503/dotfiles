@@ -74,7 +74,6 @@ export XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}"
 
 # Wayland
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$UID}"
-export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
 
 # Development
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/npm/npmrc"
