@@ -1449,3 +1449,6 @@ alias dkstats='_x docker stats --no-stream'
 alias hd='_x helm delete'
 alias stt='_x systemctl status'
 alias str='_x systemctl restart'
+
+##### GRUB
+alias grub-update='sudo grub-mkconfig -o /boot/grub/grub.cfg'

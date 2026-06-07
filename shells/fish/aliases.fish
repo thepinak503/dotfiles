@@ -3805,3 +3805,6 @@ alias hme "home-manager edit"
 alias hmc "home-manager generations"
 alias cpy "_x xclip -selection clipboard 2>/dev/null; or _x wl-copy 2>/dev/null; or _x pbcopy 2>/dev/null"
 alias pst "_x xclip -selection clipboard -o 2>/dev/null; or _x wl-paste 2>/dev/null; or _x pbpaste 2>/dev/null"
+
+##### GRUB
+alias grub-update 'sudo grub-mkconfig -o /boot/grub/grub.cfg'
