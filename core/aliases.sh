@@ -1016,7 +1016,7 @@ alias mount='mount | column -t'
 
 alias mkdir='mkdir -p'
 alias bc='bc -l'
-find() { _x fd "$@" || command find "$@"; }
+alias find='command find'
 alias cat='command cat'
 alias fd='_x fd 2>/dev/null || find'
 alias ff='find . -type f -name'
