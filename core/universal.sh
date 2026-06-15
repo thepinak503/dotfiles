@@ -1040,14 +1040,13 @@ secaudit() {
             echo ""
             echo "SSH keys found:"
             for keyfile in "$HOME/.ssh/id_"*; do
-                if [ -f "$keyfile" ] && [[ ! "$keyfile" == *.pub ]]; then
-                    local key_perms
+                if [ -f "$keyfile" ] && [ "${keyfile%.pub}" = "$keyfile" ]; then
                     if command -v stat >/dev/null 2>&1; then
-                        key_perms=$(stat -c "%a" "$keyfile" 2>/dev/null)
-                        if [ "$key_perms" = "600" ]; then
-                            echo "✓ $(basename "$keyfile"): $key_perms (correct)"
+                        _ssh_key_perms=$(stat -c "%a" "$keyfile" 2>/dev/null)
+                        if [ "$_ssh_key_perms" = "600" ]; then
+                            echo "✓ $(basename "$keyfile"): $_ssh_key_perms (correct)"
                         else
-                            echo "⚠️  $(basename "$keyfile"): $key_perms (should be 600!)"
+                            echo "⚠️  $(basename "$keyfile"): $_ssh_key_perms (should be 600!)"
                         fi
                     else
                         echo "  $(basename "$keyfile")"

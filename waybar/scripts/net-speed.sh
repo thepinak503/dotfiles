@@ -107,6 +107,7 @@ total_up=$(format_speed "$tx2")
 # Check if the interface has a carrier signal (cable plugged / wifi associated)
 # This is instant — no blocking I/O like ping.
 
+operstate="unknown"
 if [[ -f "/sys/class/net/$INTERFACE/operstate" ]]; then
     operstate=$(cat "/sys/class/net/$INTERFACE/operstate" 2>/dev/null || echo "unknown")
 fi

@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -e
+set -euo pipefail
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
 DOTFILES_STATE_DIR="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}"
 VERSION="2.0.0"
@@ -50,10 +50,10 @@ warn() { printf "  ${YELLOW}⚠${NC} %s\n" "$1"; }
 error() { printf "  ${RED}✗${NC} %s\n" "$1" >&2; }
 _safe_curl_exec() {
     _url="$1" _shell="${2:-sh}" _tmp="/tmp/dots_install_$$.sh"
-    curl -fsSL "$_url" -o "$_tmp" 2>/dev/null || { warn "download failed: $_url"; return 1; }
+    curl -fsSL --connect-timeout 15 --max-time 120 "$_url" -o "$_tmp" 2>/dev/null || { warn "download failed: $_url"; return 1; }
     [ -s "$_tmp" ] && head -c2 "$_tmp" | grep -q '^#!' || { warn "invalid/missing script from $_url"; rm -f "$_tmp"; return 1; }
     chmod +x "$_tmp"
-    "$_shell" "$_tmp" 2>&1 || true
+    "$_shell" "$_tmp" 2>&1
     _ret=$?; rm -f "$_tmp"; return $_ret
 }
 
@@ -881,18 +881,29 @@ link_configs() {
     mkdir -p "$BACKUP_DIR"
     backup_existing() {
         src="$1"; dst="$2"
-        if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+        if [ -e "$dst" ]; then
             fname=$(basename "$dst")
-            timestamp=$(date +"%Y%m%d-%H%M%S")
-            mv "$dst" "$BACKUP_DIR/${fname}.bak"
-            info "Backed up existing $dst to $BACKUP_DIR/${fname}.bak"
+            ts=$(date +"%Y%m%d-%H%M%S")
+            _counter=0
+            _bakpath="$BACKUP_DIR/${fname}.bak.${ts}"
+            while [ -e "$_bakpath" ]; do
+                _counter=$((_counter + 1))
+                _bakpath="$BACKUP_DIR/${fname}.bak.${ts}.${_counter}"
+            done
+            cp -P "$dst" "$_bakpath" 2>/dev/null || true
+            rm -f "$dst"
+            info "Backed up existing $dst to $_bakpath"
         fi
     }
     safe_link() {
         src="$1"; dst="$2"
-        backup_existing "$src" "$dst"
-        ln -nsf "$src" "$dst"
-        info "Linked $(basename "$dst")"
+        if [ -e "$src" ] || [ -L "$src" ]; then
+            backup_existing "$src" "$dst"
+            ln -nsf "$src" "$dst"
+            info "Linked $(basename "$dst")"
+        else
+            warn "Source missing: $src"
+        fi
     }
 
     safe_link "$DOTFILES_DIR/shells/bash/.bashrc" "$HOME/.bashrc"

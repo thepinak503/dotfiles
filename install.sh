@@ -4,7 +4,7 @@
 # Installs dotfiles to ~/.local/share/dotfiles and creates symlinks in ~
 # =============================================================================
 
-set -e
+set -euo pipefail
 DOTFILES_REPO="https://github.com/thepinak503/dotfiles.git"
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}"
 DOTFILES_STATE_DIR="${DOTFILES_STATE_DIR:-$HOME/.local/share/dotfiles}"
@@ -30,10 +30,20 @@ fi
 
 if [ -d "$DOTFILES_DIR" ]; then
     printf "${GREEN}✓${NC} Dotfiles directory exists. Updating...\n"
-    (cd "$DOTFILES_DIR" && git pull origin main 2>/dev/null) || true
+    if ! (cd "$DOTFILES_DIR" && git pull --ff-only origin main); then
+        printf "${RED}✗ Failed to update dotfiles. Check for uncommitted changes:${NC}\n"
+        printf "  cd %s && git status\n" "$DOTFILES_DIR"
+        exit 1
+    fi
 else
     printf "${GREEN}✓${NC} Cloning dotfiles to $DOTFILES_DIR...\n"
     git clone "$DOTFILES_REPO" "$DOTFILES_DIR"
+fi
+
+# Validate install script exists
+if [ ! -f "$DOTFILES_DIR/install/install.sh" ]; then
+    printf "${RED}✗ Install script not found after clone/update.${NC}\n"
+    exit 1
 fi
 
 # Make executable

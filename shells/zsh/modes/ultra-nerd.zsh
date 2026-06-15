@@ -15,22 +15,17 @@
 # Fallback: ls with colorized output
 
 if command -v eza >/dev/null 2>&1; then
-    alias ls='eza --icons=auto --group-directories-first --time-style=long-iso || ls --color=auto 2>/dev/null || ls -G'
-    alias ll='eza -l --icons=auto --group-directories-first --time-style=long-iso --git || ls -l --color=auto 2>/dev/null || ls -lG'
-    alias la='eza -a --icons=auto --group-directories-first || ls -A --color=auto 2>/dev/null || ls -AG'
-    alias lal='eza -la --icons=auto --group-directories-first --time-style=long-iso --git || ls -la --color=auto 2>/dev/null || ls -laG'
-    alias lsl='eza -l --icons=auto --group-directories-first --time-style=long-iso || ls -l --color=auto 2>/dev/null || ls -lG'
-    alias lt='eza -T --level=2 --icons=auto --group-directories-first 2>/dev/null || tree -L 2'
-    alias lta='eza -T --level=3 --icons=auto --group-directories-first -a 2>/dev/null || tree -L 3 -a'
-    alias lsf='eza --icons=auto --group-directories-first --only-files 2>/dev/null || ls -p'
-    alias lsd='eza --icons=auto --group-directories-first --only-dirs 2>/dev/null || ls -d */'
+    lt() { eza -T --level=2 --icons=auto --group-directories-first "$@" 2>/dev/null || tree -L 2 "$@"; }
+    lta() { eza -T --level=3 --icons=auto --group-directories-first -a "$@" 2>/dev/null || tree -L 3 -a "$@"; }
+    lsf() { eza --icons=auto --group-directories-first --only-files "$@" 2>/dev/null || ls -p "$@"; }
+    lsd() { eza --icons=auto --group-directories-first --only-dirs "$@" 2>/dev/null || ls -d */ "$@"; }
 elif command -v exa >/dev/null 2>&1; then
     alias ls='exa --icons --group-directories-first'
     alias ll='exa -l --icons --group-directories-first --git'
     alias la='exa -a --icons --group-directories-first'
     alias lal='exa -la --icons --group-directories-first --git'
     alias lsl='exa -l --icons --group-directories-first'
-    alias lt='exa -T --level=2 --icons'
+    lt() { exa -T --level=2 --icons "$@"; }
 fi
 
 # =============================================================================
@@ -307,7 +302,6 @@ alias diskusage='du -sh * 2>/dev/null'
 alias diskusagea='du -sh .[!.]* * 2>/dev/null | sort -rh'
 alias psinfo='ps auxf 2>/dev/null'
 alias psg='ps aux | grep -v grep | grep -i'
-alias top='btop 2>/dev/null || htop 2>/dev/null || top'
 alias update='bash ~/.local/share/dotfiles/bin/sysupdate.sh'
 alias cleanup='bash ~/.local/share/dotfiles/bin/syscleanup.sh'
 alias journal='journalctl -xe --no-pager -n 50 2>/dev/null || log show --last 1h 2>/dev/null'

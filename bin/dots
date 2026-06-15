@@ -298,14 +298,14 @@ cmd_reload() {
             fi
             ;;
         kitty)
-            if command -v kitty >/dev/null 2>&1 && command -v kitty @ >/dev/null 2>&1; then
+            if command -v kitty >/dev/null 2>&1; then
                 kitty @ load-config 2>/dev/null && info "Kitty reloaded" || warn "Kitty reload failed (no running instance?)"
             else
-                warn "Kitty not found or no running instance"
+                warn "Kitty not found"
             fi
             ;;
         tmux)
-            if command -v tmux >/dev/null 2>&1 && tmux info >/dev/null 2>&1; then
+            if command -v tmux >/dev/null 2>&1 && tmux list-sessions >/dev/null 2>&1; then
                 tmux source-file "$HOME/.tmux.conf" 2>/dev/null && info "Tmux reloaded" || warn "Tmux reload failed"
             else
                 warn "Tmux not running"

@@ -90,7 +90,7 @@ sysinfo_quick() { echo "$(distribution) $(kernel_version) $(memory_usage) $(disk
 confirm() { printf "%s [y/N] " "$*"; read -r _ans; case "$_ans" in [yY]|[yY][eE][sS]) return 0;; *) echo "aborted" >&2; return 1;; esac; }
 trash_put() { mkdir -p "$HOME/.local/share/Trash/files"; for f in "$@"; do [ -e "$f" ] || continue; local _ts; _ts=$(date +%s); mv "$f" "$HOME/.local/share/Trash/files/$(basename "$f").$_ts"; done; }
 trash_list() { ls -la "$HOME/.local/share/Trash/files" 2>/dev/null || echo "trash is empty"; }
-trash_empty() { rm -rf "$HOME/.local/share/Trash/files"/* "$HOME/.local/share/Trash/info"/* 2>/dev/null; echo "trash cleared"; }
+trash_empty() { [ -d "$HOME/.local/share/Trash/files" ] && rm -rf "$HOME/.local/share/Trash/files"/* "$HOME/.local/share/Trash/info"/* 2>/dev/null; echo "trash cleared"; }
 trash_restore() { local _f="$1"; [ -z "$_f" ] && { echo "usage: trash_restore <file>"; return 1; }; local _src="$HOME/.local/share/Trash/files/$_f"; [ -f "$_src" ] && mv "$_src" "./$_f" && echo "restored: $_f" || echo "not found in trash"; }
 scan_secrets() { git -C "${1:-.}" grep -In \
     -e '-----BEGIN.*PRIVATE KEY' -e '-----BEGIN CERTIFICATE' \
@@ -223,8 +223,8 @@ docker_stop_latest() { docker ps -ql | xargs -r docker stop; }
 docker_rm_all() { docker ps -aq | xargs -r docker rm 2>/dev/null || true; }
 docker_rm_exited() { docker ps -a -q -f status=exited | xargs -r docker rm 2>/dev/null || true; }
 docker_rm_stopped() { docker container prune -f; }
-docker_rmi_dangling() { docker rmi $(docker images -f dangling=true -q) 2>/dev/null || true; }
-docker_rmi_all() { docker rmi $(docker images -q) 2>/dev/null || true; }
+docker_rmi_dangling() { docker images -f dangling=true -q | xargs -r docker rmi 2>/dev/null || true; }
+docker_rmi_all() { docker images -q | xargs -r docker rmi 2>/dev/null || true; }
 docker_prune_all() { docker system prune -af --volumes; }
 docker_prune_images() { docker image prune -af; }
 docker_prune_containers() { docker container prune -f; }
@@ -235,7 +235,7 @@ docker_prune_networks() { docker network prune -f; }
 # -----------------------------------------------------------------------------
 
 
-docker_clean_all() { docker system prune -af --volumes && docker rmi $(docker images -q) 2>/dev/null || true; }
+docker_clean_all() { docker system prune -af --volumes && docker images -q | xargs -r docker rmi 2>/dev/null || true; }
 docker_exec_sh() { docker exec -it "$1" /bin/sh; }
 docker_exec_bash() { docker exec -it "$1" /bin/bash; }
 docker_logs_tail() { docker logs --tail "${2:-100}" -f "$1"; }
@@ -422,7 +422,7 @@ pkg_list_installed() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) pacman -Q 2>/
 pkg_list_outdated() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) pacman -Qu 2>/dev/null;; yay) yay -Qu 2>/dev/null;; apt|apt-get) apt list --upgradable 2>/dev/null;; dnf) dnf check-update 2>/dev/null;; brew) brew outdated 2>/dev/null;; *) echo "not supported";; esac; }
 pkg_clean_cache() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) sudo pacman -Sc 2>/dev/null;; apt|apt-get) sudo apt clean 2>/dev/null;; dnf) sudo dnf clean all 2>/dev/null;; brew) brew cleanup 2>/dev/null;; *) echo "not supported";; esac; }
 pkg_show_info() { case "${DOTFILES_PKG_MANAGER:-}" in pacman) pacman -Qi "$@" 2>/dev/null;; yay) yay -Qi "$@" 2>/dev/null;; apt|apt-get) apt show "$@" 2>/dev/null;; dnf) dnf info "$@" 2>/dev/null;; brew) brew info "$@" 2>/dev/null;; zypper) zypper info "$@" 2>/dev/null;; *) echo "unknown";; esac; }
-pacman_clean_orphans() { sudo pacman -Rns $(pacman -Qtdq) 2>/dev/null || echo "no orphans"; }
+pacman_clean_orphans() { pacman -Qtdq | xargs -r sudo pacman -Rns 2>/dev/null || echo "no orphans"; }
 pacman_list_orphans() { pacman -Qtd 2>/dev/null || echo "no orphans"; }
 pacman_list_explicit() { pacman -Qe 2>/dev/null; }
 pacman_verify_pkg() { pacman -Qk "$@" 2>/dev/null; }
@@ -593,7 +593,7 @@ find_largest() { find "${1:-.}" -type f -exec ls -s {} + 2>/dev/null | sort -rn 
 # -----------------------------------------------------------------------------
 
 
-find_largest_dirs() { du -sh "${1:-.}"/*/ 2>/dev/null | sort -rh | head "${2:-20}"; }
+find_largest_dirs() { local _dir="${1:-.}"; [ -d "$_dir" ] || { echo "not a directory: $_dir" >&2; return 1; }; du -sh "$_dir"/*/ 2>/dev/null | sort -rh | head "${2:-20}"; }
 find_newest() { find "${1:-.}" -type f -print0 2>/dev/null | xargs -0 ls -lt | head "${2:-20}"; }
 find_oldest() { find "${1:-.}" -type f -print0 2>/dev/null | xargs -0 ls -ltr | head "${2:-20}"; }
 find_empty_files() { find "${1:-.}" -type f -empty 2>/dev/null; }
@@ -602,7 +602,7 @@ find_duplicates() { find "${1:-.}" -type f -exec md5sum {} + 2>/dev/null | sort 
 copy_with_progress() { rsync -ah --progress "$1" "$2"; }
 copy_and_cd() { cp -r "$1" "$2" && cd "$2"; }
 move_and_cd() { mv "$1" "$2" && cd "$2"; }
-rename_extension() { for f in *."$1"; do mv "$f" "${f%.$1}.$2"; done; }
+rename_extension() { local _ext="$1" _new="$2"; for f in *."$_ext"; do [ -f "$f" ] && mv "$f" "${f%.$_ext}.$_new"; done; }
 symlink_force() { ln -sf "$1" "$2"; }
 # -----------------------------------------------------------------------------
 
@@ -629,7 +629,7 @@ grep_count() { grep -c "$@"; }
 grep_word() { grep -w "$@"; }
 sed_replace() { sed -i "s/$1/$2/g" "$3"; }
 sed_delete() { sed -i "$1d" "$2"; }
-awk_column() { awk "{print \$$1}" "$2"; }
+awk_column() { awk -v col="$1" '{print $col}' "$2"; }
 awk_calc() { awk "BEGIN{print $*}"; }
 sort_by_size() { ls -lS "$@"; }
 sort_by_time() { ls -lt "$@"; }
@@ -809,11 +809,11 @@ gpg_list_keys() { gpg --list-keys 2>/dev/null || true; }
 
 
 gpg_list_secret_keys() { gpg --list-secret-keys 2>/dev/null || true; }
-gpg_export_key() { gpg --export -a "$1" > "${1}.asc"; }
+gpg_export_key() { [ -n "$1" ] || { echo "error: key ID required" >&2; return 1; }; gpg --export -a "$1" > "${1}.asc"; }
 gpg_export_secret_key() { gpg --export-secret-keys -a "$1"; }
 gpg_import_key() { gpg --import "$1"; }
 gpg_encrypt_file() { gpg -e -r "$1" "$2"; }
-gpg_decrypt_file() { gpg -d "$1" > "${1%.gpg}"; }
+gpg_decrypt_file() { local _out="${1%.gpg}"; [ "$_out" != "$1" ] || { echo "error: input must end in .gpg" >&2; return 1; }; gpg -d "$1" > "$_out"; }
 gpg_sign_file() { gpg -s "$1"; }
 gpg_verify_file() { gpg --verify "$1"; }
 gpg_recv_keys() { gpg --recv-keys "$@"; }
@@ -897,10 +897,10 @@ bin_to_dec() { echo "$((2#$1))" 2>/dev/null; }
 dec_to_bin() { python3 -c "print(bin($1)[2:])" 2>/dev/null; }
 byte_convert() { python3 -c "size=$1; units=['B','KB','MB','GB','TB']; i=0; while size>1024 and i<4: size/=1024; i+=1; print(f'{size:.2f} {units[i]}')" 2>/dev/null; }
 time_convert() { python3 -c "s=$1; h=s//3600; m=(s%3600)//60; s=s%60; print(f'{h}h {m}m {s}s')" 2>/dev/null; }
-csv_sum() { awk -F, "{sum+=\$$1} END {print sum}" "$2"; }
-csv_avg() { awk -F, "{sum+=\$$1; count++} END {print sum/count}" "$2"; }
-csv_max() { awk -F, "NR==1||\$$1>max{max=\$$1} END {print max}" "$2"; }
-csv_min() { awk -F, "NR==1||\$$1<min{min=\$$1} END {print min}" "$2"; }
+csv_sum() { awk -F, -v col="$1" '{sum+=$col} END {print sum}' "$2"; }
+csv_avg() { awk -F, -v col="$1" '{sum+=$col; count++} END {print sum/count}' "$2"; }
+csv_max() { awk -F, -v col="$1" 'NR==1||$col>max{max=$col} END {print max}' "$2"; }
+csv_min() { awk -F, -v col="$1" 'NR==1||$col<min{min=$col} END {print min}' "$2"; }
 csv_head() { head -n "${2:-10}" "$1" | column -t -s,; }
 csv_tail() { tail -n "${2:-10}" "$1" | column -t -s,; }
 csv_cols() { head -1 "$1" | tr ',' '\n' | nl; }
@@ -999,7 +999,7 @@ gpg_decrypt_asymmetric() { gpg -d "$1"; }
 gpg_encrypt_sym() { gpg -c "$1"; }
 gpg_decrypt_sym() { gpg -d "$1"; }
 gpg_sign_detached() { gpg --detach-sign "$1"; }
-gpg_verify_detached() { gpg --verify "$1"{,.sig} 2>/dev/null || gpg --verify "$1"{,.asc}; }
+gpg_verify_detached() { gpg --verify "$1.sig" "$1" 2>/dev/null || gpg --verify "$1.asc" "$1"; }
 gpg_export_key_armor() { gpg --export -a "$1"; }
 gpg_export_secret_key_armor() { gpg --export-secret-keys -a "$1"; }
 gpg_import_key_armor() { gpg --import "$1"; }
@@ -2118,9 +2118,9 @@ file_insert_line() { sed -i "$1i\\$2" "$3"; }
 file_append_line() { echo "$1" >> "$2"; }
 file_prepend_line() { sed -i "1i\\$1" "$2"; }
 file_encrypt_aes() { openssl enc -aes-256-cbc -salt -in "$1" -out "${1}.enc"; }
-file_decrypt_aes() { openssl enc -d -aes-256-cbc -in "$1" -out "${1%.enc}"; }
+file_decrypt_aes() { local _out="${1%.enc}"; [ "$_out" != "$1" ] || { echo "error: input must end in .enc" >&2; return 1; }; openssl enc -d -aes-256-cbc -in "$1" -out "$_out"; }
 file_encrypt_gpg() { gpg -c "$1"; }
-file_decrypt_gpg() { gpg -d "$1" > "${1%.gpg}"; }
+file_decrypt_gpg() { local _out="${1%.gpg}"; [ "$_out" != "$1" ] || { echo "error: input must end in .gpg" >&2; return 1; }; gpg -d "$1" > "$_out"; }
 file_compress_gzip() { gzip -k "$1"; }
 file_compress_bzip2() { bzip2 -k "$1"; }
 file_compress_xz() { xz -k "$1"; }
@@ -2392,9 +2392,9 @@ package_json_init() { echo -e "{\n  \"name\": \"$1\",\n  \"version\": \"1.0.0\",
 
 # _x defined in core/aliases.sh
 
-bak() { for f in "$@"; do [ -f "$f" ] || { echo "usage: bak file"; return 1; }; [[ $f =~ \.bak\..* ]] && continue; local b; b="$f.bak.$(date '+%F_%T' | sed 's/:/-/g')"; while [ -f "$b" ]; do sleep 1; b="$f.bak.$(date '+%F_%T' | sed 's/:/-/g')"; done; cp -av "$f" "$b"; done; }
+bak() { for f in "$@"; do [ -f "$f" ] || { echo "usage: bak file"; return 1; }; case "$f" in *.bak.*) continue;; esac; _bak_b="$f.bak.$(date '+%F_%T' | sed 's/:/-/g')"; while [ -f "$_bak_b" ]; do sleep 1; _bak_b="$f.bak.$(date '+%F_%T' | sed 's/:/-/g')"; done; cp -av "$f" "$_bak_b"; done; }
 
-unbak() { for f in "$@"; do local d b; d="$(dirname "$f")"; f="${f##*/}"; b="$(find "$d" -name "$f.bak.*" -o -name "$f.*.bak" 2>/dev/null | sort | tail -1)"; [ -n "$b" ] && cp -av "$b" "$d/$f" || echo "no backup for $f"; done; }
+unbak() { for f in "$@"; do _ubak_d="$(dirname "$f")"; _ubak_f="${f##*/}"; _ubak_b="$(find "$_ubak_d" -name "$_ubak_f.bak.*" -o -name "$_ubak_f.*.bak" 2>/dev/null | sort | tail -1)"; [ -n "$_ubak_b" ] && cp -av "$_ubak_b" "$_ubak_d/$_ubak_f" || echo "no backup for $f"; done; }
 
 orig() { for f in "$@"; do [ -f "$f" ] || { echo "missing: $f"; return 1; }; [ -f "$f.org" ] && { echo "$f.org exists"; return 1; }; done; for f in "$@"; do cp -av "$f" "$f.org"; done; }
 
@@ -2425,7 +2425,7 @@ stampcmd() { local o; o="$("$@" 2>&1)"; stamp "$o"; }
 
 clip() { if [ $# -gt 0 ]; then _x xclip -selection clipboard < "$1" || _x wl-copy < "$1" || _x pbcopy < "$1" 2>/dev/null; else _x xclip -selection clipboard || _x wl-copy || _x pbcopy 2>/dev/null; fi; }
 
-path_remove() { PATH="$(echo -n "$PATH" | awk -v RS=: -v ORS=: "\$0 != \"$1\"" | sed 's/:$//')"; }
+path_remove() { PATH="$(echo -n "$PATH" | awk -v RS=: -v ORS=: -v pat="$1" '$0 != pat' | sed 's/:$//')"; }
 
 # -----------------------------------------------------------------------------
 
@@ -2494,7 +2494,7 @@ copy_cmd() { _x xclip -selection clipboard "$@" || _x wl-copy "$@" || _x pbcopy 
 paste_cmd() { _x xclip -selection clipboard -o || _x wl-paste || _x pbpaste 2>/dev/null || echo "no clipboard tool"; }
 
 cdf() { cd "$(dirname "$(find . -name "$1" -maxdepth 5 -type f 2>/dev/null | head -1)")" 2>/dev/null || echo "not found: $1"; }
-swap() { mv "$1" "${1}.bak" && mv "$2" "$1" && mv "${1}.bak" "$2"; }
+swap() { local _tmp; _tmp="$(mktemp)" || return 1; mv "$2" "$_tmp" && mv "$1" "$2" && mv "$_tmp" "$1"; }
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
@@ -2649,11 +2649,13 @@ sys_update() {
 
 
 disk_usage() {
+    shopt -s nullglob
     if [ $# -eq 0 ]; then
         du -sh -- * .[!.]* 2>/dev/null | sort -rh
     else
         du -shc "$@" 2>/dev/null | sort -rh
     fi
+    shopt -u nullglob
 }
 
 # -----------------------------------------------------------------------------

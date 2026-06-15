@@ -11,12 +11,6 @@
 # FILE LISTING — Basic
 # =============================================================================
 
-alias ls='ls --color=auto 2>/dev/null || ls -G'
-alias ll='ls -lh --color=auto 2>/dev/null || ls -lhG'
-alias la='ls -Ah --color=auto 2>/dev/null || ls -AhG'
-alias lal='ls -Alh --color=auto 2>/dev/null || ls -AlhG'
-alias lsl='ls -lh --color=auto 2>/dev/null || ls -lhG'
-
 # =============================================================================
 # DIRECTORY NAVIGATION
 # =============================================================================

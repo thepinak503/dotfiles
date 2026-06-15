@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-cd ~/.local/share/dotfiles/themes
+set -euo pipefail
+THEMES_DIR="${DOTFILES_DIR:-$HOME/.local/share/dotfiles}/themes"
+cd "$THEMES_DIR" || { echo "ERROR: themes dir not found at $THEMES_DIR" >&2; exit 1; }
 
 # Define replacements
 declare -A colors=(
@@ -37,6 +39,7 @@ declare -A colors=(
 )
 
 # Loop over dark files
+shopt -s nullglob
 for dark_file in *dark*; do
   mocha_file="${dark_file/dark/mocha}"
   cp "$dark_file" "$mocha_file"

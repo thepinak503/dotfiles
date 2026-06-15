@@ -243,7 +243,6 @@ fi
 # SYSTEM MONITORING
 # =============================================================================
 
-alias top='btop 2>/dev/null || htop 2>/dev/null || top'
 alias cpuinfo='lscpu'
 alias meminfo='free -h'
 alias diskinfo='df -h'

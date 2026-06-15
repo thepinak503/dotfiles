@@ -48,7 +48,7 @@ mkdir -p "$WORK_DIR" "$DEST_DIR"
 ZIP_FILE="$WORK_DIR/meslo.zip"
 
 echo "Downloading $FONT_NAME..."
-if ! curl -L -sSf -o "$ZIP_FILE" "$FONT_RELEASE_ZIP_URL"; then
+if !     curl -L -sSf --connect-timeout 15 --max-time 300 -o "$ZIP_FILE" "$FONT_RELEASE_ZIP_URL"; then
   echo "Failed to download fonts from $FONT_RELEASE_ZIP_URL" >&2
   exit 1
 fi

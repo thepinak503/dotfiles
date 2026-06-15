@@ -104,19 +104,15 @@ alias setu='set -u'
 alias setpipefail='setopt pipefail'
 
 ##### List/File tools
-alias ls='eza --icons=auto --group-directories-first || command ls'
-alias ll='eza -l --icons=auto --group-directories-first || command ls -l'
-alias la='eza -a --icons=auto --group-directories-first || command ls -A'
-alias lal='eza -la --icons=auto --group-directories-first || command ls -la'
-alias lsl='eza -l --icons=auto --group-directories-first || command ls -l'
+
 alias lsa='ls -a'
 alias lsd='ls -d */'
 alias lsdot='ls -d .*'
 alias lsf='ls -F'
 alias lsbig='ls -lS | head -20'
 alias lshidden='ls -d .* 2>/dev/null'
-alias tree='_x eza -T --icons=auto --group-directories-first || command tree -CAhF --dirsfirst 2>/dev/null || echo "tree needed"'
-alias ltree='eza --tree --level=3 --icons=auto 2>/dev/null || find . -maxdepth 3 -print'
+
+
 alias l1='ls -1'
 alias l='ls -CF'
 alias lk='ls -lSr'
@@ -150,7 +146,7 @@ alias lcolor='ls --color=auto'
 alias lno='ls -N'
 alias lauth='ls -lZ 2>/dev/null || true'
 alias lctx='ls -lZ 2>/dev/null || true'
-alias treed='_x eza -T --only-dirs --icons=auto || command tree -CAFd 2>/dev/null || echo "tree needed"'
+
 
 ##### Cat/View/Pager (Syntax Highlighting)
 if command -v bat >/dev/null 2>&1; then
@@ -326,8 +322,8 @@ alias gbisgood='git bisect good'
 alias gbisbad='git bisect bad'
 alias gbisr='git bisect reset'
 alias gbissta='git bisect start'
-alias glaz='lazygit 2>/dev/null || git'
-alias lg='lazygit 2>/dev/null || git'
+glaz() { lazygit "$@" 2>/dev/null || git "$@"; }
+lg() { lazygit "$@" 2>/dev/null || git "$@"; }
 alias ghc='gh'
 alias ghs='gh status'
 alias ghp='gh pr'
@@ -441,7 +437,7 @@ alias dkver='_x docker version'
 alias dksys='_x docker system'
 alias dkx='_x docker exec -it'
 alias dkb='_x docker build'
-alias dklzd='lazydocker 2>/dev/null || docker'
+dklzd() { lazydocker "$@" 2>/dev/null || docker "$@"; }
 alias dksc='_x docker scout' 2>/dev/null || true
 alias dkscout='_x docker scout' 2>/dev/null || true
 
@@ -966,10 +962,10 @@ alias paruup='_x paru -Syu'
 alias parudev='_x paru -S --devel'
 alias parunews='_x paru -P --news'
 alias paruclean='_x paru -Sc'
-alias aur='_x yay 2>/dev/null || paru 2>/dev/null || echo "No AUR helper found"'
-alias aurs='_x yay -Ss 2>/dev/null || paru -Ss'
-alias auri='_x yay -S 2>/dev/null || paru -S'
-alias aurup='_x yay -Syu 2>/dev/null || paru -Syu'
+aur() { _x yay "$@" 2>/dev/null || paru "$@" 2>/dev/null || echo "No AUR helper found" >&2; }
+aurs() { _x yay -Ss "$@" 2>/dev/null || paru -Ss "$@"; }
+auri() { _x yay -S "$@" 2>/dev/null || paru -S "$@"; }
+aurup() { _x yay -Syu "$@" 2>/dev/null || paru -Syu "$@"; }
 
 ##### Debian/Ubuntu/APT
 alias apt='_x apt'
@@ -1379,10 +1375,10 @@ alias grl='command grep -rl'
 alias grc='command grep -c'
 alias grepw='command grep -w'
 alias grex='command grep -r --exclude-dir=.git --exclude-dir=node_modules'
-alias diff='command diff --color=auto || command diff'
-alias w='command w 2>/dev/null || echo "no w"'
+
+w() { command w "$@" 2>/dev/null || echo "no w"; }
 alias wdiff='command diff --side-by-side --width=160'
-alias vdiff='_x nvim -d || _x vimdiff 2>/dev/null || echo "no vimdiff"'
+vdiff() { _x nvim -d "$@" || _x vimdiff "$@" 2>/dev/null || echo "no vimdiff"; }
 alias less='command less -RFX'
 alias more='command less'
 alias zgrep='command zgrep --color=auto'
@@ -1390,7 +1386,7 @@ alias zgrep='command zgrep --color=auto'
 ##### File / Mount / Perms
 alias mkit='mkdir -p'
 alias mkdir='mkdir -p'
-alias rmdir='_x rmdir 2>/dev/null || rm -rf'
+alias rmdir='_x rmdir'
 alias rmall='rm -rf ./*'
 alias lnb='ln -sf'
 alias lnv='ln -sfv'
@@ -1421,7 +1417,7 @@ alias datefmt='date "+%Y-%m-%d %H:%M:%S"'
 alias cal='cal -3 2>/dev/null || cal 2>/dev/null'
 alias week='date +%V'
 alias weather='_x curl -fsSL wttr.in 2>/dev/null || echo "curl needed"'
-alias tl='_x tldr 2>/dev/null || echo "tldr needed"'
+tl() { _x tldr "$@" 2>/dev/null || echo "tldr needed"; }
 
 ##### Network / Containers
 alias wifi='_x nmtui || _x nmcli 2>/dev/null || echo "no network tool"'

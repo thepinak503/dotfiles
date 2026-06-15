@@ -260,10 +260,10 @@ else echo -e "  ${YELLOW}⚠${NC} Unknown package manager"; deduct 1 "Unknown pa
 if [ -n "$MISSING_TOOLS" ] && [ "$AUTO_FIX" = true ]; then
     echo -e "\n${BOLD}  🔧 Auto-Fixing Missing Tools${NC}"
     PM=""
+    command -v brew >/dev/null 2>&1 && PM="brew"
     command -v pacman >/dev/null 2>&1 && PM="pacman"
     command -v apt-get >/dev/null 2>&1 && PM="apt"
     command -v dnf >/dev/null 2>&1 && PM="dnf"
-    command -v brew >/dev/null 2>&1 && PM="brew"
     if [ -n "$PM" ]; then
         for tool in $MISSING_TOOLS; do
             PKG="$tool"
@@ -276,10 +276,10 @@ if [ -n "$MISSING_TOOLS" ] && [ "$AUTO_FIX" = true ]; then
             if [ -n "$PKG" ]; then
                 echo -e "    Installing $tool..."
                 case "$PM" in
-                    pacman) sudo pacman -S --noconfirm "$PKG" >/dev/null 2>&1 && echo -e "    ${GREEN}Installed $tool${NC}" || echo -e "    ${YELLOW}Failed to install $tool${NC}" ;;
-                    apt)    sudo apt-get install -y "$PKG" >/dev/null 2>&1 && echo -e "    ${GREEN}Installed $tool${NC}" || echo -e "    ${YELLOW}Failed to install $tool${NC}" ;;
-                    dnf)    sudo dnf install -y "$PKG" >/dev/null 2>&1 && echo -e "    ${GREEN}Installed $tool${NC}" || echo -e "    ${YELLOW}Failed to install $tool${NC}" ;;
-                    brew)   brew install "$PKG" >/dev/null 2>&1 && echo -e "    ${GREEN}Installed $tool${NC}" || echo -e "    ${YELLOW}Failed to install $tool${NC}" ;;
+                    pacman) sudo -n pacman -S --noconfirm "$PKG" >/dev/null && echo -e "    ${GREEN}Installed $tool${NC}" || echo -e "    ${YELLOW}Failed to install $tool${NC}" ;;
+                    apt)    sudo -n apt-get install -y "$PKG" >/dev/null && echo -e "    ${GREEN}Installed $tool${NC}" || echo -e "    ${YELLOW}Failed to install $tool${NC}" ;;
+                    dnf)    sudo -n dnf install -y "$PKG" >/dev/null && echo -e "    ${GREEN}Installed $tool${NC}" || echo -e "    ${YELLOW}Failed to install $tool${NC}" ;;
+                    brew)   brew install "$PKG" >/dev/null && echo -e "    ${GREEN}Installed $tool${NC}" || echo -e "    ${YELLOW}Failed to install $tool${NC}" ;;
                 esac
             fi
         done

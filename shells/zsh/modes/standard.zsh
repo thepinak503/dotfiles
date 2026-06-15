@@ -11,11 +11,6 @@
 # =============================================================================
 
 if command -v eza >/dev/null 2>&1; then
-    alias ls='eza --icons=auto --group-directories-first 2>/dev/null || ls --color=auto 2>/dev/null || ls -G'
-    alias ll='eza -l --icons=auto --group-directories-first 2>/dev/null || ls -l --color=auto 2>/dev/null || ls -lG'
-    alias la='eza -a --icons=auto --group-directories-first 2>/dev/null || ls -A --color=auto 2>/dev/null || ls -AG'
-    alias lal='eza -la --icons=auto --group-directories-first 2>/dev/null || ls -la --color=auto 2>/dev/null || ls -laG'
-    alias lsl='eza -l --icons=auto --group-directories-first 2>/dev/null || ls -l --color=auto 2>/dev/null || ls -lG'
 elif command -v exa >/dev/null 2>&1; then
     alias ls='exa --icons --group-directories-first'
     alias ll='exa -l --icons --group-directories-first'
@@ -126,7 +121,6 @@ alias cpuinfo='lscpu 2>/dev/null || sysctl -n machdep.cpu.brand_string'
 alias meminfo='free -h 2>/dev/null || vm_stat'
 alias diskinfo='df -h'
 alias psg='ps aux | grep -v grep | grep -i'
-alias top='btop 2>/dev/null || htop 2>/dev/null || top'
 alias update='bash ~/.local/share/dotfiles/bin/sysupdate.sh'
 alias cleanup='bash ~/.local/share/dotfiles/bin/syscleanup.sh'
 alias journal='journalctl -xe --no-pager -n 50 2>/dev/null'

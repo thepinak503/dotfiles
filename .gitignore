@@ -10,3 +10,10 @@ docs/data.js
 logs/
 .unsplash_key
 .antigravitycli/
+*.key
+*.pem
+*.env
+secrets/
+credentials/
+*.secret
+.env.*

@@ -47,12 +47,12 @@ alias lh='command ls -lhS'
 alias lr='command ls -lR'
 alias le="command ls | grep -o '.[^.]*$' | sort | uniq"
 alias lw='command ls -ldh $(pwd)'
-alias ls='_x eza --group-directories-first --icons || _x exa --group-directories-first || command ls --color=auto || command ls -G'
-alias ll='_x eza -l --group-directories-first --icons || _x exa -l || command ls -l'
-alias la='_x eza -la --group-directories-first --icons || _x exa -la || command ls -la'
-alias lal='_x eza -la --group-directories-first --icons || _x exa -la || command ls -la'
-alias lsl='_x eza -l --group-directories-first --icons || _x exa -l || command ls -l'
-alias tree='_x eza -T --icons=auto --group-directories-first || command tree -CAhF --dirsfirst 2>/dev/null || echo "tree/eza needed"'
+ls() { _x eza --group-directories-first --icons "$@" || _x exa --group-directories-first "$@" || command ls --color=auto "$@" || command ls -G "$@"; }
+ll() { _x eza -l --group-directories-first --icons "$@" || _x exa -l "$@" || command ls -l "$@"; }
+la() { _x eza -la --group-directories-first --icons "$@" || _x exa -la "$@" || command ls -la "$@"; }
+lal() { _x eza -la --group-directories-first --icons "$@" || _x exa -la "$@" || command ls -la "$@"; }
+lsl() { _x eza -l --group-directories-first --icons "$@" || _x exa -l "$@" || command ls -l "$@"; }
+tree() { _x eza -T --icons=auto --group-directories-first "$@" || command tree -CAhF --dirsfirst "$@" 2>/dev/null || echo "tree/eza needed"; }
 alias dirs='ls -d */'
 alias ldir='ls -d */'
 alias lf='find . -maxdepth 1 -type f -exec command ls -lh {} + 2>/dev/null | sort -k5 -h'
@@ -124,7 +124,7 @@ alias gwp='git worktree prune'
 alias grepo='git init'
 alias gtags='git tag -l'
 alias gshow='git show'
-alias gwip='git add -A && git rm $(git ls-files --deleted) 2>/dev/null; git commit --no-verify -m "wip"'
+alias gwip='git add -A && git ls-files --deleted | xargs -r git rm 2>/dev/null; git commit --no-verify -m "wip"'
 alias gwipe='git reset --hard && git clean --force -df'
 alias nah='git reset --hard && git clean -df'
 gbage() { for k in $(git branch -a | sed 's/^..//;s/ ->.*//' 2>/dev/null); do echo -e "$(git show --pretty=format:"%ci %cr" "$k" -- 2>/dev/null | head -1)\t$k"; done | sort -r; }
@@ -796,7 +796,7 @@ fi
 
 if command -v python3 >/dev/null 2>&1; then
     alias py='_x python3'
-    alias py2='python2 2>/dev/null || python3'
+    py2() { python2 "$@" 2>/dev/null || python3 "$@"; }
     alias py3='_x python3'
     alias pipup='_x python3 -m pip install --upgrade pip'
     alias venv='_x python3 -m venv .venv'
@@ -811,7 +811,7 @@ if command -v python3 >/dev/null 2>&1; then
 fi
 
 if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
-    alias pip='pip3 2>/dev/null || pip'
+    pip() { pip3 "$@" 2>/dev/null || command pip "$@"; }
     alias pi='_x pip install'
     alias piu='_x pip install --upgrade'
     alias pir='_x pip install -r requirements.txt'
@@ -823,11 +823,11 @@ if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
     alias phash='_x pip hash'
 fi
 
-alias json='python3 -m json.tool 2>/dev/null || echo "python3 needed"'
-alias xml='_x xmllint --format - 2>/dev/null || echo "xmllint needed"'
-alias yaml='_x python3 -c "import sys,yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, default_flow_style=False)" 2>/dev/null || echo "python3+yaml needed"'
-alias csv='_x python3 -c "import sys,csv; r=csv.reader(sys.stdin); [print(l) for l in r]" 2>/dev/null || column -t -s, 2>/dev/null'
-alias ts='_x python3 -c "import sys,json; [print(json.dumps(eval(l))) for l in sys.stdin]" 2>/dev/null'
+json() { python3 -m json.tool "$@" 2>/dev/null || echo "python3 needed"; }
+xml() { _x xmllint --format - "$@" 2>/dev/null || echo "xmllint needed"; }
+yaml() { _x python3 -c "import sys,yaml; yaml.dump(yaml.safe_load(sys.stdin), sys.stdout, default_flow_style=False)" "$@" 2>/dev/null || echo "python3+yaml needed"; }
+csv() { _x python3 -c "import sys,csv; r=csv.reader(sys.stdin); [print(l) for l in r]" "$@" 2>/dev/null || column -t -s, "$@" 2>/dev/null; }
+alias ts='_x python3 -c "import sys,json,ast; [print(json.dumps(ast.literal_eval(l))) for l in sys.stdin]" 2>/dev/null'
 alias math='_x python3 -c'
 alias rstring='_x python3 -c "import secrets; print(secrets.token_hex())"'
 
@@ -883,19 +883,19 @@ alias nst='netstat -tulanp 2>/dev/null || ss -tulanp'
 alias trace='traceroute'
 
 
-alias ip='ip -br addr'
+alias ipb='ip -br addr'
 alias myip='_x dig +short myip.opendns.com @resolver1.opendns.com || _x curl -s ifconfig.me 2>/dev/null || echo "N/A"'
 
 alias dns='_x dig +short'
 alias flush='_x sudo resolvectl flush-caches || _x sudo systemd-resolve --flush-caches || _x sudo killall -HUP mDNSResponder 2>/dev/null || echo "no flush"'
-alias speed='_x curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py 2>/dev/null | _x python3 - 2>/dev/null || echo "speedtest-cli needed"'
+alias speed='_x speedtest-cli 2>/dev/null || echo "speedtest-cli needed"'
 
 alias weather3='_x curl -fsSL "wttr.in?F" 2>/dev/null || echo "curl needed"'
 alias moon='_x curl -fsSL "wttr.in/Moon" 2>/dev/null || echo "curl needed"'
 alias dnst='dig +short'
 alias iftop='sudo iftop'
-alias ping='_x prettyping || command ping'
-alias dig='_x dog || command dig'
+ping() { _x prettyping "$@" || command ping "$@"; }
+dig() { _x dog "$@" || command dig "$@"; }
 
 if command -v dig >/dev/null 2>&1; then
     alias dns='dig +short'
@@ -917,7 +917,7 @@ if command -v curl >/dev/null 2>&1; then
     alias cur='curl -fsSL'
     alias curh='curl -I'
     alias curv='curl -v'
-    alias curj='curl -s | jq .'
+    curj() { curl -s "$@" | jq .; }
     alias curd='curl -X DELETE'
     alias curp='curl -X POST'
     alias curu='curl -X PUT'
@@ -954,7 +954,7 @@ alias psaux='ps aux'
 alias psf='ps auxf'
 alias psxl='ps aux --forest'
 alias psymod='lsmod'
-alias top='_x btop || _x htop || command top'
+top() { _x btop "$@" || _x htop "$@" || command top "$@"; }
 
 # -----------------------------------------------------------------------------
 # Text Processing
@@ -966,7 +966,7 @@ alias grr='command grep -r'
 alias grri='command grep -ri'
 alias grl='command grep -rl'
 alias grc='command grep -c'
-alias uniqc='sort | uniq -c | sort -rn'
+uniqc() { sort "$@" | uniq -c | sort -rn; }
 alias wcw='wc -w'
 alias column='column -t'
 alias diffy='diff -y'
@@ -974,12 +974,12 @@ alias tair='tail -f'
 alias taill='tail -100'
 alias headl='head -100'
 alias nl='nl -ba'
-alias tac='tac 2>/dev/null || tail -r'
+tac() { tac "$@" 2>/dev/null || tail -r "$@"; }
 alias grepw='command grep -w'
 alias grepr='command grep -r'
 alias grex='command grep -r --exclude-dir=.git --exclude-dir=node_modules'
-alias grep='_x rg --color=auto || command grep --color=auto'
-alias diff='_x delta || command diff --color=auto || command diff'
+grep() { _x rg --color=auto "$@" || command grep --color=auto "$@"; }
+diff() { _x delta "$@" || command diff --color=auto "$@" || command diff "$@"; }
 
 if command -v rg >/dev/null 2>&1; then
     alias rg='rg --hidden --glob "!.git"'
@@ -1016,12 +1016,12 @@ alias mount='mount | column -t'
 
 alias mkdir='mkdir -p'
 alias bc='bc -l'
-alias find='_x fd || command find'
+find() { _x fd "$@" || command find "$@"; }
 alias cat='command cat'
 alias fd='_x fd 2>/dev/null || find'
 alias ff='find . -type f -name'
 
-alias wget='_x wget || _x curl -fSL -o 2>/dev/null || echo "no download tool"'
+wget() { _x wget "$@" || echo "no download tool (install wget or curl)"; }
 
 if command -v fd >/dev/null 2>&1; then
     alias fd='fd --hidden'
@@ -1039,7 +1039,7 @@ if command -v lsof >/dev/null 2>&1; then
     alias lsofn='lsof -nP'
 fi
 
-alias lsof='_x lsof -i -P -n 2>/dev/null || echo "lsof needed"'
+lsof() { _x lsof -i -P -n "$@" 2>/dev/null || echo "lsof needed"; }
 
 # -----------------------------------------------------------------------------
 # Archive Operations
@@ -1188,7 +1188,7 @@ fi
 # Hashing / Encoding
 alias randpw='openssl rand -base64 16 2>/dev/null || python3 -c "import secrets; print(secrets.token_urlsafe(16))"'
 alias sha='shasum -a 256'
-alias md5sum='md5 || command md5sum'
+md5sum() { md5 "$@" || command md5sum "$@"; }
 alias hex='xxd'
 alias base64e='base64'
 alias base64d='base64 -d'
@@ -1198,7 +1198,7 @@ alias urldec='_x python3 -c "import urllib.parse,sys; print(urllib.parse.unquote
 
 # Shell / System Utilities
 alias please='sudo'
-alias pathlines='printf "%s\n" ${PATH//:/\\n}'
+alias pathlines='printf "%s\n" $(echo "$PATH" | tr ":" "\n")'
 alias mkdirp='mkdir -p'
 alias focus='printf "\033c" && date +"%F %T"'
 alias h='history'
@@ -1264,7 +1264,7 @@ alias ports='_x ss -tulpn || _x netstat -tulpn || _x lsof -i -n -P 2>/dev/null'
 alias listen='_x ss -tlnp || _x netstat -tlnp 2>/dev/null'
 alias connections='_x ss -tunp || _x netstat -tunp 2>/dev/null'
 alias dsstore='find . -name ".DS_Store" -type f -delete -print 2>/dev/null'
-alias mirrorsite='_x wget -m -k -K -E -e robots=off 2>/dev/null || echo "wget needed"'
+mirrorsite() { _x wget -m -k -K -E -e robots=off "$@" 2>/dev/null || echo "wget needed"; }
 alias sep='printf "=%.0s" $(seq 1 $(tput cols))'
 countfiles() { echo "$(find . -type f 2>/dev/null | wc -l) files"; echo "$(find . -type l 2>/dev/null | wc -l) links"; echo "$(find . -type d 2>/dev/null | wc -l) directories"; }
 alias tstamp='stamp'
@@ -1272,7 +1272,7 @@ alias idg='id -g'
 alias idu='id -u'
 alias shuffle='shuf'
 alias rsample='shuf -n'
-alias man='_x tldr || command man'
+alias man='command man'
 
 # -----------------------------------------------------------------------------
 # Development Tools — Tmux / Editors / Lazygit / Just
@@ -1297,8 +1297,8 @@ if command -v tmux >/dev/null 2>&1; then
 fi
 
 # Editors
-alias vim='nvim || command vim'
-alias sv='nvim || command vim'
+vim() { nvim "$@" || command vim "$@"; }
+sv() { nvim "$@" || command vim "$@"; }
 alias nv='nvim'
 alias codel='code .'
 
@@ -1405,7 +1405,7 @@ if command -v navi >/dev/null 2>&1; then
 fi
 
 if command -v tldr >/dev/null 2>&1 || command -v tealdeer >/dev/null 2>&1; then
-    alias tldr='command tldr 2>/dev/null || tealdeer'
+    tldr() { command tldr "$@" 2>/dev/null || tealdeer "$@"; }
 fi
 
 if command -v vivid >/dev/null 2>&1; then

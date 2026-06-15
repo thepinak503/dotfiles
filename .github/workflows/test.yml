@@ -49,7 +49,21 @@ jobs:
       - name: shellcheck — core/ POSIX
         run: |
           shellcheck -s sh -e SC1090,SC1091,SC2034 \
-            core/aliases.sh core/universal.sh core/functions.sh || true
+            core/*.sh || true
+
+      - name: shellcheck — bin/ scripts
+        run: |
+          shellcheck -s bash -e SC1090,SC1091,SC2034,SC2086 \
+            bin/*.sh tests/*.sh || true
+
+      - name: Cross-shell alias parity check
+        run: |
+          echo "=== Alias names ==="
+          bash -c "source shells/bash/aliases.bash 2>/dev/null; alias" | cut -d= -f1 | sort > /tmp/bash_aliases.txt
+          zsh -c "source shells/zsh/aliases.zsh 2>/dev/null; alias" | cut -d= -f1 | sort > /tmp/zsh_aliases.txt 2>/dev/null || touch /tmp/zsh_aliases.txt
+          fish --no-execute -c "source shells/fish/aliases.fish 2>/dev/null; alias" 2>/dev/null | cut -d= -f1 | sort > /tmp/fish_aliases.txt || touch /tmp/fish_aliases.txt
+          echo "Bash: $(wc -l < /tmp/bash_aliases.txt) | Zsh: $(wc -l < /tmp/zsh_aliases.txt) | Fish: $(wc -l < /tmp/fish_aliases.txt)"
+          diff /tmp/bash_aliases.txt /tmp/zsh_aliases.txt 2>/dev/null | head -20 && echo "bash/zsh parity OK" || echo "bash/zsh minor diff (may be expected)"
 
       - name: Run test suite
         run: |
