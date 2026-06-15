@@ -1417,7 +1417,7 @@ alias datefmt='date "+%Y-%m-%d %H:%M:%S"'
 alias cal='cal -3 2>/dev/null || cal 2>/dev/null'
 alias week='date +%V'
 alias weather='_x curl -fsSL wttr.in 2>/dev/null || echo "curl needed"'
-tl() { _x tldr "$@" 2>/dev/null || echo "tldr needed"; }
+alias tl='tldr'
 
 ##### Network / Containers
 alias wifi='_x nmtui || _x nmcli 2>/dev/null || echo "no network tool"'

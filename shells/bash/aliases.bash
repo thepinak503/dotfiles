@@ -1398,7 +1398,7 @@ alias dmesg='_x dmesg -T 2>/dev/null | tail -20 || echo "no dmesg"'
 alias dmesgw='_x dmesg -T 2>/dev/null | grep -i "error\|warn\|fail" | tail -20 || echo "no dmesg"'
 alias last='last -n 20 2>/dev/null || echo "no last"'
 alias who='who -a 2>/dev/null || who 2>/dev/null'
-alias w='w 2>/dev/null || echo "no w"'
+alias w='command w'
 alias id='id 2>/dev/null'
 alias uptime='uptime 2>/dev/null'
 
@@ -1423,7 +1423,7 @@ alias weather7='_x curl -fsSL "wttr.in?format=j1" 2>/dev/null | _x python3 -m js
 alias moon='_x curl -fsSL "wttr.in/Moon?format=j1" 2>/dev/null | _x python3 -c "import sys,json; d=json.load(sys.stdin); print(d[\"current_condition\"][0][\"moon_phase\"])" 2>/dev/null'
 cheat() { _x curl -fsSL "cheat.sh/$1" 2>/dev/null; }
 explain() { _x curl -fsSL "cheat.sh/$1?q" 2>/dev/null; }
-tl() { _x tldr "$@" 2>/dev/null || echo "tldr needed"; }
+alias tl='tldr'
 alias qr='_x qrencode -t ansiutf8 2>/dev/null || echo "qrencode needed"'
 alias qrread='_x zbarcam --raw || _x zbarimg 2>/dev/null || echo "zbar needed"'
 
