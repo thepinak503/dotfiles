@@ -102,7 +102,7 @@ case "$OS" in
         if [ -f /etc/os-release ]; then
             . /etc/os-release
             DISTRO=$ID
-            DISTRO_FAMILY=$ID_LIKE
+            DISTRO_FAMILY=${ID_LIKE:-}
         elif [ -f /etc/debian_version ]; then
             DISTRO="debian"
         elif [ -f /etc/arch-release ]; then
