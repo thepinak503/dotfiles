@@ -62,8 +62,15 @@ fi
 
 
 if _detect_app atuin; then
-    [[ -f /usr/share/bash-preexec/bash-preexec.sh ]] && source /usr/share/bash-preexec/bash-preexec.sh
+    # Source bash-preexec hooks (needed by atuin for bash)
+    _prex="$DOTFILES_DIR/shells/bash/bash-preexec.sh"
+    if [[ -f "$_prex" ]]; then
+        source "$_prex"
+    elif [[ -f /usr/share/bash-preexec/bash-preexec.sh ]]; then
+        source /usr/share/bash-preexec/bash-preexec.sh
+    fi
     eval "$(atuin init bash 2>/dev/null)" || true
+    unset _prex
 fi
 
 # =============================================================================
