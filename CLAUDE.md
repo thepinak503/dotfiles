@@ -423,6 +423,8 @@ SUPER+SHIFT+W   → wallpaper-fetch --next
 SUPER+N         → nightlight
 SUPER+SHIFT+T   → theme.sh light
 SUPER+CTRL+SHIFT+T → theme.sh dark
+SUPER+M         → fullscreen maximize (keep gaps/bar)
+SUPER+O         → changeLayout (toggle dwindle ↔ master)
 SUPER+SHIFT+A   → animations-menu
 SUPER+ALT+O     → blur-toggle
 SUPER+SHIFT+D   → diagreload (in kitty)

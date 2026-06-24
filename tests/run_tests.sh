@@ -81,7 +81,15 @@ while IFS= read -r line; do
   [ -z "$cmd" ] && continue
   cmd="${cmd/#\~/$HOME}"
   if echo "$cmd" | grep -q '/'; then
-    [ -x "$cmd" ] && g "$cmd" || b "NOT EXECUTABLE: $cmd"
+    _guarded=0
+    grep -qF -- "test -x $cmd" hypr/configs/autostart.lua 2>/dev/null && _guarded=1 || true
+    if [ -x "$cmd" ]; then
+      g "$cmd"
+    elif [ "$_guarded" = "1" ]; then
+      y "NOT EXECUTABLE (guarded): $cmd"
+    else
+      b "NOT EXECUTABLE: $cmd"
+    fi
   else
     check_cmd "$cmd" && g "command: $cmd" || y "command: $cmd NOT FOUND"
   fi

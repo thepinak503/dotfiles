@@ -201,7 +201,7 @@ hl.window_rule({ match = { class = "^yazi$" }, float = false })
 hl.window_rule({ match = { class = "^nemo$" }, float = false })
 
 -- Fixes for sharing screens on Wayland
-hl.window_rule({ match = { class = "^xwaylandvideobridge$" }, opacity = "0.0 0.0", no_anim = true, max_size = { 1, 1 }, no_shadow = true, no_blur = true, no_focus = true })
+hl.window_rule({ match = { class = "^xwaylandvideobridge$" }, opacity = "0.0 0.0", no_anim = true, max_size = { 1, 1 }, no_shadow = true, no_blur = true })
 
 -- =============================================================================
 -- BORDER ANIMATION OVERRIDES

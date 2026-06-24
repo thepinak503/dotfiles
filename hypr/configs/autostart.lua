@@ -47,19 +47,21 @@ hl.on("hyprland.start", function ()
     -- =========================================================================
 
     -- Polkit authentication agent (for admin dialogs)
-    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
-
-    -- Alternative polkit agent: /usr/lib/polkit-kde-authentication-agent-1
+    -- Try common polkit agent paths
+    if os.execute("test -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1") then
+        hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    elseif os.execute("test -x /usr/lib/polkit-kde-authentication-agent-1") then
+        hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
+    end
 
     -- =========================================================================
     -- DESKTOP PORTALS
     -- =========================================================================
 
     -- XDG Desktop Portal for Hyprland (file picker, screen capture, etc.)
-    hl.exec_cmd("/usr/lib/xdg-desktop-portal-hyprland")
-
-    -- Generic XDG Desktop Portal (fallback for non-Hyprland portals)
-    -- hl.exec_cmd("/usr/lib/xdg-desktop-portal")
+    if os.execute("test -x /usr/lib/xdg-desktop-portal-hyprland") then
+        hl.exec_cmd("/usr/lib/xdg-desktop-portal-hyprland")
+    end
 
     -- =========================================================================
     -- SYSTEM TRAY APPLICATIONS

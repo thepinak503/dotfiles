@@ -124,7 +124,7 @@ hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd(scripts .. "/screenshot -
 hl.bind(mainMod .. " + CTRL + SHIFT + S", hl.dsp.exec_cmd(scripts .. "/screenshot"))
 
 -- Layout
-hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd(scripts .. "/changeLayout"))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd(scripts .. "/changeLayout"))
 
 -- Touchpad Toggle
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(scripts .. "/touchpad"))
