@@ -1,0 +1,13 @@
+[Unit]
+Description=Atuin shell history daemon
+Documentation=https://atuin.sh/docs/daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/atuin daemon start
+ExecStop=/usr/bin/atuin daemon stop
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

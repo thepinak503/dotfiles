@@ -952,6 +952,10 @@ link_configs() {
             safe_link "$DOTFILES_DIR/systemd/user/auto-theme.timer" "$HOME/.config/systemd/user/auto-theme.timer"
             safe_link "$DOTFILES_DIR/systemd/user/wallpaper-fetch.service" "$HOME/.config/systemd/user/wallpaper-fetch.service"
             safe_link "$DOTFILES_DIR/systemd/user/wallpaper-fetch.timer" "$HOME/.config/systemd/user/wallpaper-fetch.timer"
+            safe_link "$DOTFILES_DIR/systemd/user/atuin-daemon.service" "$HOME/.config/systemd/user/atuin-daemon.service"
+            systemctl --user daemon-reload 2>/dev/null || true
+            systemctl --user enable atuin-daemon.service 2>/dev/null || true
+            systemctl --user start atuin-daemon.service 2>/dev/null || true
         fi
     fi
 }
